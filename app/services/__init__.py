@@ -12,9 +12,19 @@ from app.services.document_store import (
     DocumentStore,
     DocumentStoreError,
 )
+from app.services.source_registry import (
+    SourceAccessDeniedError,
+    SourceNotFoundError,
+    SourceRegistry,
+    SourceRegistryError,
+)
 
 __all__ = [
     "DocumentNotFoundError",
     "DocumentStore",
     "DocumentStoreError",
+    "SourceAccessDeniedError",
+    "SourceNotFoundError",
+    "SourceRegistry",
+    "SourceRegistryError",
 ]
