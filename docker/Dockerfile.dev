@@ -1,0 +1,46 @@
+# GOFR-IQ Development Image
+# Extends gofr-base:latest with project-specific dev tools
+FROM gofr-base:latest
+
+# Switch to root for package installation
+USER root
+
+# Install additional dev tools
+RUN apt-get update && apt-get install -y \
+    gh \
+    openssh-server \
+    dnsutils \
+    net-tools \
+    netcat-openbsd \
+    telnet \
+    lsof \
+    htop \
+    strace \
+    tcpdump \
+    vim \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create project directories
+RUN mkdir -p /home/gofr/devroot/gofr-iq/data \
+    && mkdir -p /home/gofr/devroot/gofr-common \
+    && chown -R gofr:gofr /home/gofr/devroot
+
+# Copy entrypoint
+COPY docker/entrypoint-dev.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /home/gofr/devroot/gofr-iq
+
+# SSH config for git operations
+RUN mkdir -p /home/gofr/.ssh && chmod 700 /home/gofr/.ssh
+
+# Create venv (will be populated by entrypoint)
+RUN uv venv /home/gofr/devroot/gofr-iq/.venv --python=python3.11
+
+# Standard GOFR ports (gofr-iq uses 8060-8062)
+EXPOSE 8060 8061 8062
+
+USER gofr
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["tail", "-f", "/dev/null"]
