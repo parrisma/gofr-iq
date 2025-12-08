@@ -70,6 +70,14 @@ from app.services.language_detector import (
     detect_language,
     detect_language_with_confidence,
 )
+from app.services.query_service import (
+    QueryFilters,
+    QueryResponse,
+    QueryResult,
+    QueryService,
+    ScoringWeights,
+    create_query_service,
+)
 from app.services.source_registry import (
     SourceAccessDeniedError,
     SourceNotFoundError,
@@ -101,7 +109,12 @@ __all__ = [
     "LanguageDetector",
     "LanguageResult",
     "NodeLabel",
+    "QueryFilters",
+    "QueryResponse",
+    "QueryResult",
+    "QueryService",
     "RelationType",
+    "ScoringWeights",
     "SimilarityResult",
     "SourceAccessDeniedError",
     "SourceNotFoundError",
@@ -117,6 +130,7 @@ __all__ = [
     "create_embedding_index",
     "create_graph_index",
     "create_ingest_service",
+    "create_query_service",
     "detect_language",
     "detect_language_with_confidence",
     "DeterministicEmbeddingFunction",

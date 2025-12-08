@@ -1,23 +1,24 @@
-"""MCP Query Tools - Phase 8.
+"""MCP Query Tools - Phase 8 & 12.
 
-Provides MCP tool for document retrieval by GUID.
-Full query/search functionality will be added in Phase 12.
+Provides MCP tools for document retrieval and search.
 
 Tools:
 - get_document: Retrieve a document by its GUID
+- query_documents: Search documents with semantic similarity and filters
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 from datetime import date, datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.document_store import DocumentNotFoundError, DocumentStore
+from app.services.query_service import QueryFilters, QueryService
 
 if TYPE_CHECKING:
     pass
@@ -26,12 +27,17 @@ if TYPE_CHECKING:
 ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
 
 
-def register_query_tools(mcp: FastMCP, document_store: DocumentStore) -> None:
+def register_query_tools(
+    mcp: FastMCP,
+    document_store: DocumentStore,
+    query_service: Optional[QueryService] = None,
+) -> None:
     """Register query tools with the MCP server.
 
     Args:
         mcp: FastMCP server instance
         document_store: DocumentStore for document retrieval
+        query_service: QueryService for semantic search (optional)
     """
 
     @mcp.tool(
@@ -123,3 +129,140 @@ def register_query_tools(mcp: FastMCP, document_store: DocumentStore) -> None:
                 message=f"Failed to retrieve document: {e!s}",
                 recovery_strategy="Check the GUID format and try again.",
             )
+
+    # Only register query_documents if query_service is provided
+    if query_service is not None:
+
+        @mcp.tool(
+            name="query_documents",
+            description="Search documents using semantic similarity with optional filters. "
+            "Returns ranked results based on relevance, trust scores, and recency.",
+        )
+        def query_documents(
+            query: str,
+            group_guids: list[str],
+            n_results: int = 10,
+            regions: list[str] | None = None,
+            sectors: list[str] | None = None,
+            companies: list[str] | None = None,
+            languages: list[str] | None = None,
+            date_from: str | None = None,
+            date_to: str | None = None,
+            include_graph_context: bool = True,
+        ) -> ToolResponse:
+            """Search documents using semantic similarity.
+
+            Args:
+                query: Natural language search query
+                group_guids: List of group GUIDs the user has access to
+                n_results: Maximum number of results to return (default: 10)
+                regions: Filter by region codes (e.g., ["APAC", "EMEA"])
+                sectors: Filter by sectors (e.g., ["Technology", "Finance"])
+                companies: Filter by company tickers (e.g., ["AAPL", "MSFT"])
+                languages: Filter by language codes (e.g., ["en", "zh"])
+                date_from: Start date in YYYY-MM-DD format
+                date_to: End date in YYYY-MM-DD format
+                include_graph_context: Include related entities from graph (default: True)
+
+            Returns:
+                JSON response with:
+                - query: Original query text
+                - results: List of matching documents with:
+                    - document_guid: Document identifier
+                    - title: Document title
+                    - content_snippet: Relevant excerpt
+                    - score: Combined relevance score (0-1)
+                    - similarity_score: Semantic similarity
+                    - trust_score: Source trust contribution
+                    - source_name: Source name
+                    - language: Document language
+                    - created_at: Creation timestamp
+                    - graph_context: Related entities (if enabled)
+                - total_found: Total matching documents
+                - filters_applied: Active filters
+                - execution_time_ms: Query execution time
+
+            Errors:
+                - QUERY_SERVICE_UNAVAILABLE: Search service is not configured
+                - INVALID_DATE: Date format is invalid
+                - QUERY_ERROR: Search failed
+            """
+            try:
+                # Parse dates if provided
+                date_from_obj: datetime | None = None
+                date_to_obj: datetime | None = None
+
+                if date_from:
+                    try:
+                        parsed = date.fromisoformat(date_from)
+                        date_from_obj = datetime.combine(parsed, datetime.min.time())
+                    except ValueError:
+                        return error_response(
+                            error_code="INVALID_DATE",
+                            message=f"Invalid date_from format: {date_from}",
+                            recovery_strategy="Use YYYY-MM-DD format (e.g., '2025-01-01').",
+                        )
+
+                if date_to:
+                    try:
+                        parsed = date.fromisoformat(date_to)
+                        date_to_obj = datetime.combine(parsed, datetime.max.time())
+                    except ValueError:
+                        return error_response(
+                            error_code="INVALID_DATE",
+                            message=f"Invalid date_to format: {date_to}",
+                            recovery_strategy="Use YYYY-MM-DD format (e.g., '2025-12-31').",
+                        )
+
+                # Build filters
+                filters = QueryFilters(
+                    date_from=date_from_obj,
+                    date_to=date_to_obj,
+                    regions=regions,
+                    sectors=sectors,
+                    companies=companies,
+                    languages=languages,
+                )
+
+                # Execute query
+                response = query_service.query(
+                    query_text=query,
+                    group_guids=group_guids,
+                    n_results=n_results,
+                    filters=filters,
+                    include_graph_context=include_graph_context,
+                )
+
+                # Format results
+                results_data = []
+                for result in response.results:
+                    results_data.append({
+                        "document_guid": result.document_guid,
+                        "title": result.title,
+                        "content_snippet": result.content_snippet,
+                        "score": result.score,
+                        "similarity_score": result.similarity_score,
+                        "trust_score": result.trust_score,
+                        "source_guid": result.source_guid,
+                        "source_name": result.source_name,
+                        "language": result.language,
+                        "created_at": result.created_at.isoformat() if result.created_at else None,
+                        "graph_context": result.graph_context,
+                    })
+
+                return success_response(
+                    data={
+                        "query": response.query,
+                        "results": results_data,
+                        "total_found": response.total_found,
+                        "filters_applied": response.filters_applied,
+                        "execution_time_ms": response.execution_time_ms,
+                    }
+                )
+
+            except Exception as e:
+                return error_response(
+                    error_code="QUERY_ERROR",
+                    message=f"Search failed: {e!s}",
+                    recovery_strategy="Check your query and filters, then try again.",
+                )
