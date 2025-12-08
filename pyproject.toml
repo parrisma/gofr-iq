@@ -9,6 +9,7 @@ requires-python = ">=3.11"
 # Core deps (mcp, pydantic, fastapi, uvicorn, starlette, sse-starlette, PyJWT, httpx, mcpo) come from gofr-common
 dependencies = [
     # Project-specific dependencies only
+    "neo4j>=6.0.3",
 ]
 
 [project.optional-dependencies]

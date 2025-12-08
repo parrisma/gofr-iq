@@ -1,0 +1,20 @@
+# Neo4j server for GOFR-IQ
+# Provides graph database for entity relationships
+#
+# Build: ./build-neo4j.sh
+# Run:   ./start-neo4j.sh [-e] [-p BOLT_PORT] [-w HTTP_PORT]
+
+FROM neo4j:5.26-community
+
+# Install APOC plugin for advanced procedures
+ENV NEO4J_PLUGINS='["apoc"]'
+
+# Default configuration
+ENV NEO4J_AUTH=neo4j/testpassword
+ENV NEO4J_apoc_export_file_enabled=true
+ENV NEO4J_apoc_import_file_enabled=true
+ENV NEO4J_apoc_import_file_use__neo4j__config=true
+ENV NEO4J_dbms_security_procedures_unrestricted=apoc.*
+
+# Expose ports
+EXPOSE 7474 7687

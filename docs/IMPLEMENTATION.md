@@ -719,12 +719,24 @@ test/
 
 | Step | Description | Tests |
 |------|-------------|-------|
+| 11.0 | Create Neo4j Docker container (Dockerfile.neo4j, build/start/stop scripts) | Manual: container runs |
 | 11.1 | Create `app/services/graph_index.py` - init Neo4j | `test_neo4j_connection` |
 | 11.2 | Create schema (Source, NewsStory, Company, Sector, Region) | `test_neo4j_schema` |
 | 11.3 | Add document node creation | `test_create_news_story_node` |
 | 11.4 | Add relationships (PRODUCED_BY, MENTIONS) | `test_create_relationships` |
 | 11.5 | Add graph traversal queries | `test_graph_traversal` |
 | 11.6 | Integrate with ingest service | `test_ingest_creates_graph_nodes` |
+
+**Docker Setup (Step 11.0):**
+- `docker/Dockerfile.neo4j` - Neo4j Community Edition with APOC plugins
+- `docker/build-neo4j.sh` - Build the Neo4j image
+- `docker/start-neo4j.sh` - Start Neo4j with options:
+  - `-e` Ephemeral mode (no volume persistence)
+  - `-r` Recreate volume (fresh database)
+  - `-p PORT` Bolt port (default: 7687 or GOFR_IQ_NEO4J_BOLT_PORT)
+  - `-w PORT` HTTP port (default: 7474 or GOFR_IQ_NEO4J_HTTP_PORT)
+  - `-n NETWORK` Docker network (default: gofr-net)
+- `docker/stop-neo4j.sh` - Stop Neo4j with `-v` to remove volume
 
 **Exit Criteria:** `pytest test/test_graph_index.py` passes
 
