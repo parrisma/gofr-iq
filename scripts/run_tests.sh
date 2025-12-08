@@ -29,6 +29,11 @@ export GOFRIQ_MCP_PORT="${GOFRIQ_MCP_PORT:-8060}"
 export GOFRIQ_WEB_PORT="${GOFRIQ_WEB_PORT:-8062}"
 export GOFRIQ_MCPO_PORT="${GOFRIQ_MCPO_PORT:-8061}"
 
+# ChromaDB configuration for tests
+# Use 'gofr-iq-chromadb' hostname when running in Docker network, localhost otherwise
+export GOFRIQ_CHROMADB_HOST="${GOFRIQ_CHROMADB_HOST:-gofr-iq-chromadb}"
+export GOFRIQ_CHROMADB_PORT="${GOFRIQ_CHROMADB_PORT:-8000}"
+
 # Use centralized paths from gofriq.env or fallback
 TEST_DATA_ROOT="${GOFRIQ_DATA:-test/data}"
 STORAGE_DIR="${GOFRIQ_STORAGE:-${TEST_DATA_ROOT}/storage}"
@@ -45,6 +50,7 @@ print_header() {
     echo "MCP Port: ${GOFRIQ_MCP_PORT}"
     echo "Web Port: ${GOFRIQ_WEB_PORT}"
     echo "MCPO Port: ${GOFRIQ_MCPO_PORT}"
+    echo "ChromaDB: ${GOFRIQ_CHROMADB_HOST}:${GOFRIQ_CHROMADB_PORT}"
     echo "Storage Dir: ${STORAGE_DIR}"
     echo
 }

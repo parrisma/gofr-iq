@@ -191,6 +191,54 @@ def shared_server_manager(
 
 
 # =============================================================================
+# ChromaDB Fixtures
+# =============================================================================
+
+
+@pytest.fixture(scope="session")
+def chromadb_config() -> dict[str, str | int]:
+    """Provide ChromaDB server configuration from environment.
+    
+    Returns:
+        Dictionary with host and port for ChromaDB server.
+    """
+    return {
+        "host": os.environ.get("GOFRIQ_CHROMADB_HOST", "gofr-iq-chromadb"),
+        "port": int(os.environ.get("GOFRIQ_CHROMADB_PORT", "8000")),
+    }
+
+
+@pytest.fixture
+def embedding_index(chromadb_config: dict[str, str | int]) -> Generator:
+    """Provide an EmbeddingIndex connected to ChromaDB server.
+    
+    Creates a unique collection for each test and cleans up after.
+    
+    Yields:
+        Configured EmbeddingIndex instance.
+    """
+    import uuid
+    from app.services.embedding_index import EmbeddingIndex
+    
+    # Create unique collection name for this test
+    collection_name = f"test_{uuid.uuid4().hex[:8]}"
+    
+    index = EmbeddingIndex(
+        host=str(chromadb_config["host"]),
+        port=int(chromadb_config["port"]),
+        collection_name=collection_name,
+    )
+    
+    yield index
+    
+    # Cleanup: delete the test collection
+    try:
+        index.client.delete_collection(collection_name)
+    except Exception:
+        pass  # Collection may not exist
+
+
+# =============================================================================
 # Pytest Markers
 # =============================================================================
 

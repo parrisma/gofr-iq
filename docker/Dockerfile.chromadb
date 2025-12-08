@@ -1,0 +1,14 @@
+# ChromaDB server for GOFR-IQ
+# Provides vector storage and similarity search
+#
+# Build: ./build-chromadb.sh
+# Run:   ./start-chromadb.sh [-e] [-p PORT]
+
+FROM chromadb/chroma:0.6.3
+
+# Test-friendly defaults
+ENV IS_PERSISTENT=TRUE
+ENV ANONYMIZED_TELEMETRY=FALSE
+ENV ALLOW_RESET=TRUE
+
+EXPOSE 8000
