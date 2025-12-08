@@ -6,9 +6,22 @@ This package contains all service layer modules:
 - language_detector: Language detection for documents
 - duplicate_detector: Duplicate document detection
 - ingest_service: Document ingestion orchestration
+- audit_service: Audit logging for all operations
 - query_service: Query orchestration
 """
 
+from app.services.audit_service import (
+    AuditEntry,
+    AuditEventType,
+    AuditService,
+    create_audit_service,
+    log_document_ingest,
+    log_document_query,
+    log_document_retrieve,
+    log_source_create,
+    log_source_delete,
+    log_source_update,
+)
 from app.services.document_store import (
     DocumentNotFoundError,
     DocumentStore,
@@ -48,6 +61,9 @@ from app.services.source_registry import (
 )
 
 __all__ = [
+    "AuditEntry",
+    "AuditEventType",
+    "AuditService",
     "CandidateDocument",
     "DocumentNotFoundError",
     "DocumentStore",
@@ -70,9 +86,16 @@ __all__ = [
     "check_duplicate",
     "compute_content_hash",
     "cosine_similarity",
+    "create_audit_service",
     "create_ingest_service",
     "detect_language",
     "detect_language_with_confidence",
+    "log_document_ingest",
+    "log_document_query",
+    "log_document_retrieve",
+    "log_source_create",
+    "log_source_delete",
+    "log_source_update",
     "normalize_text",
     "tokenize",
 ]
