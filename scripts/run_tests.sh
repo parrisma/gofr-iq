@@ -1,6 +1,7 @@
 #!/bin/bash
 # gofr-iq Test Runner
 # Runs pytest with proper environment configuration
+# Optionally manages ephemeral test infrastructure (ChromaDB, Neo4j)
 
 set -euo pipefail
 
@@ -14,6 +15,7 @@ NC='\033[0m'
 # Locate project root relative to this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+DOCKER_DIR="${PROJECT_ROOT}/docker"
 cd "${PROJECT_ROOT}"
 
 # Source centralized environment configuration in TEST mode
@@ -33,6 +35,12 @@ export GOFRIQ_MCPO_PORT="${GOFRIQ_MCPO_PORT:-8061}"
 # Use 'gofr-iq-chromadb' hostname when running in Docker network, localhost otherwise
 export GOFRIQ_CHROMADB_HOST="${GOFRIQ_CHROMADB_HOST:-gofr-iq-chromadb}"
 export GOFRIQ_CHROMADB_PORT="${GOFRIQ_CHROMADB_PORT:-8000}"
+
+# Neo4j configuration for tests
+export GOFRIQ_NEO4J_HOST="${GOFRIQ_NEO4J_HOST:-gofr-iq-neo4j}"
+export GOFRIQ_NEO4J_BOLT_PORT="${GOFRIQ_NEO4J_BOLT_PORT:-7687}"
+export GOFRIQ_NEO4J_HTTP_PORT="${GOFRIQ_NEO4J_HTTP_PORT:-7474}"
+export GOFRIQ_NEO4J_PASSWORD="${GOFRIQ_NEO4J_PASSWORD:-testpassword}"
 
 # Use centralized paths from gofriq.env or fallback
 TEST_DATA_ROOT="${GOFRIQ_DATA:-test/data}"
@@ -65,15 +73,81 @@ cleanup_environment() {
     echo -e "${GREEN}Cleanup complete${NC}\n"
 }
 
+# Infrastructure management functions
+start_test_infra() {
+    echo -e "${BLUE}Starting ephemeral test infrastructure...${NC}"
+    
+    # Check if docker compose is available
+    if ! command -v docker &> /dev/null; then
+        echo -e "${RED}Docker not available. Skipping infrastructure setup.${NC}"
+        return 1
+    fi
+    
+    cd "${DOCKER_DIR}"
+    
+    # Start test containers
+    docker compose -f docker-compose.test.yml up -d --build
+    
+    # Wait for health checks
+    echo -e "${YELLOW}Waiting for services to be healthy...${NC}"
+    local max_wait=90
+    local elapsed=0
+    
+    while [ $elapsed -lt $max_wait ]; do
+        local chroma_health=$(docker inspect --format='{{.State.Health.Status}}' gofr-iq-chromadb-test 2>/dev/null || echo "starting")
+        local neo4j_health=$(docker inspect --format='{{.State.Health.Status}}' gofr-iq-neo4j-test 2>/dev/null || echo "starting")
+        
+        if [ "$chroma_health" = "healthy" ] && [ "$neo4j_health" = "healthy" ]; then
+            echo -e "${GREEN}Test infrastructure is ready${NC}"
+            
+            # Update environment to point to test containers
+            export GOFRIQ_CHROMADB_HOST="gofr-iq-chromadb-test"
+            export GOFRIQ_CHROMADB_PORT="8000"
+            export GOFRIQ_NEO4J_HOST="gofr-iq-neo4j-test"
+            export GOFRIQ_NEO4J_BOLT_PORT="7687"
+            export GOFRIQ_NEO4J_HTTP_PORT="7474"
+            
+            cd "${PROJECT_ROOT}"
+            return 0
+        fi
+        
+        sleep 2
+        elapsed=$((elapsed + 2))
+        printf "."
+    done
+    
+    echo -e "\n${RED}Infrastructure did not become healthy in ${max_wait}s${NC}"
+    docker compose -f docker-compose.test.yml logs
+    cd "${PROJECT_ROOT}"
+    return 1
+}
+
+stop_test_infra() {
+    echo -e "${YELLOW}Stopping test infrastructure...${NC}"
+    
+    if command -v docker &> /dev/null; then
+        cd "${DOCKER_DIR}"
+        docker compose -f docker-compose.test.yml down -v 2>/dev/null || true
+        cd "${PROJECT_ROOT}"
+    fi
+    
+    echo -e "${GREEN}Test infrastructure stopped${NC}"
+}
+
 print_header
 
 CLEANUP_ONLY=false
+WITH_INFRA=false
 PYTEST_ARGS=()
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --cleanup-only)
             CLEANUP_ONLY=true
+            shift
+            ;;
+        --with-infra|--infra)
+            WITH_INFRA=true
             shift
             ;;
         --phase)
@@ -166,6 +240,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  --cleanup-only        Only clean up test environment, don't run tests"
+            echo "  --with-infra          Start ephemeral ChromaDB/Neo4j containers for tests"
             echo "  --phase <N>           Run tests for implementation phase N (0-18)"
             echo "  --file, -f <file>     Run a specific test file"
             echo "  --pattern, -k <pat>   Run tests matching pattern"
@@ -195,12 +270,14 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Examples:"
             echo "  $0                          Run all tests"
+            echo "  $0 --with-infra             Run all tests with ephemeral containers"
             echo "  $0 --phase 0                Run Phase 0 (infrastructure) tests"
             echo "  $0 --phase infrastructure   Same as --phase 0"
             echo "  $0 -f test/test_hello.py    Run specific test file"
             echo "  $0 -k test_config           Run tests matching pattern"
             echo "  $0 -q                       Quick run (no integration tests)"
             echo "  $0 -v --tb=short            Pass args directly to pytest"
+            echo "  $0 --cleanup-only --with-infra  Clean up and stop test containers"
             exit 0
             ;;
         *)
@@ -212,10 +289,26 @@ done
 
 if [ "$CLEANUP_ONLY" = true ]; then
     cleanup_environment
+    if [ "$WITH_INFRA" = true ]; then
+        stop_test_infra
+    fi
     exit 0
 fi
 
+# Set up trap to clean up infrastructure on exit
+if [ "$WITH_INFRA" = true ]; then
+    trap 'stop_test_infra' EXIT
+fi
+
 cleanup_environment
+
+# Start test infrastructure if requested
+if [ "$WITH_INFRA" = true ]; then
+    if ! start_test_infra; then
+        echo -e "${RED}Failed to start test infrastructure. Aborting.${NC}"
+        exit 1
+    fi
+fi
 
 # Seed default token store if missing
 if [ ! -f "${GOFRIQ_TOKEN_STORE}" ]; then

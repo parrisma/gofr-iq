@@ -1,0 +1,144 @@
+# GOFR-IQ Docker Compose - Development Stack
+# 
+# Usage:
+#   docker compose up -d                    # Start all services
+#   docker compose up -d chromadb neo4j    # Start only databases
+#   docker compose down                     # Stop all services
+#   docker compose down -v                  # Stop and remove volumes
+#
+# Services:
+#   - chromadb: Vector database for embeddings
+#   - neo4j: Graph database for entity relationships
+#   - dev: Development container with MCP/MCPO/Web servers
+#
+# Profiles:
+#   - default: chromadb + neo4j (databases only)
+#   - dev: all services including dev container
+
+name: gofr-iq
+
+services:
+  # ==========================================================================
+  # ChromaDB - Vector Database
+  # ==========================================================================
+  chromadb:
+    image: gofr-iq-chromadb:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.chromadb
+    container_name: gofr-iq-chromadb
+    hostname: gofr-iq-chromadb
+    restart: unless-stopped
+    ports:
+      - "${GOFRIQ_CHROMADB_PORT:-8100}:8000"
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+      - ALLOW_RESET=TRUE
+    volumes:
+      - chromadb-data:/chroma/chroma
+      - chromadb-logs:/var/log/chroma
+    networks:
+      - gofr-net
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/8000 && echo -e 'GET /api/v2/heartbeat HTTP/1.0\r\nHost: localhost\r\n\r\n' >&3 && head -1 <&3 | grep -q '200 OK'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # ==========================================================================
+  # Neo4j - Graph Database
+  # ==========================================================================
+  neo4j:
+    image: gofr-iq-neo4j:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.neo4j
+    container_name: gofr-iq-neo4j
+    hostname: gofr-iq-neo4j
+    restart: unless-stopped
+    ports:
+      - "${GOFRIQ_NEO4J_HTTP_PORT:-7474}:7474"
+      - "${GOFRIQ_NEO4J_BOLT_PORT:-7687}:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/${GOFRIQ_NEO4J_PASSWORD:-testpassword}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=1G
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+    networks:
+      - gofr-net
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7474"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  # ==========================================================================
+  # Development Container (optional - use profile 'dev')
+  # ==========================================================================
+  dev:
+    image: gofr-iq-dev:latest
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: gofr-iq-dev
+    hostname: gofr-iq-dev
+    profiles:
+      - dev
+    depends_on:
+      chromadb:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    ports:
+      - "${GOFRIQ_MCP_PORT:-8060}:8060"
+      - "${GOFRIQ_MCPO_PORT:-8061}:8061"
+      - "${GOFRIQ_WEB_PORT:-8062}:8062"
+    environment:
+      - GOFRIQ_ENV=development
+      - GOFRIQ_DEBUG=true
+      - GOFRIQ_LOG_LEVEL=DEBUG
+      - GOFRIQ_CHROMADB_HOST=gofr-iq-chromadb
+      - GOFRIQ_CHROMADB_PORT=8000
+      - GOFRIQ_NEO4J_HOST=gofr-iq-neo4j
+      - GOFRIQ_NEO4J_BOLT_PORT=7687
+      - GOFRIQ_NEO4J_HTTP_PORT=7474
+      - GOFRIQ_NEO4J_PASSWORD=${GOFRIQ_NEO4J_PASSWORD:-testpassword}
+    volumes:
+      - ..:/home/gofr/devroot/gofr-iq:rw
+      - dev-data:/home/gofr/devroot/gofr-iq/data:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    networks:
+      - gofr-net
+
+# ==========================================================================
+# Networks
+# ==========================================================================
+networks:
+  gofr-net:
+    name: gofr-net
+    external: true
+
+# ==========================================================================
+# Volumes - Persistent (for development/production)
+# ==========================================================================
+volumes:
+  chromadb-data:
+    name: gofr-iq-chromadb-data
+  chromadb-logs:
+    name: gofr-iq-chromadb-logs
+  neo4j-data:
+    name: gofr-iq-neo4j-data
+  neo4j-logs:
+    name: gofr-iq-neo4j-logs
+  dev-data:
+    name: gofr-iq-dev-data

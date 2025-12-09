@@ -4,11 +4,15 @@
 # Build: ./build-chromadb.sh
 # Run:   ./start-chromadb.sh [-e] [-p PORT]
 
-FROM chromadb/chroma:0.6.3
+FROM chromadb/chroma:1.0.12
 
 # Test-friendly defaults
 ENV IS_PERSISTENT=TRUE
 ENV ANONYMIZED_TELEMETRY=FALSE
 ENV ALLOW_RESET=TRUE
+
+# Override base image health check - use bash tcp since curl not available in 1.x images
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
+    CMD ["bash", "-c", "exec 3<>/dev/tcp/localhost/8000 && echo -e 'GET /api/v2/heartbeat HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n' >&3 && head -1 <&3 | grep -q '200 OK'"]
 
 EXPOSE 8000

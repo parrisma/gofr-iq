@@ -4,7 +4,7 @@
 # Build: ./build-neo4j.sh
 # Run:   ./start-neo4j.sh [-e] [-p BOLT_PORT] [-w HTTP_PORT]
 
-FROM neo4j:5.26-community
+FROM neo4j:5.26.18-community
 
 # Install APOC plugin for advanced procedures
 ENV NEO4J_PLUGINS='["apoc"]'
@@ -15,6 +15,10 @@ ENV NEO4J_apoc_export_file_enabled=true
 ENV NEO4J_apoc_import_file_enabled=true
 ENV NEO4J_apoc_import_file_use__neo4j__config=true
 ENV NEO4J_dbms_security_procedures_unrestricted=apoc.*
+
+# Health check for container orchestration
+HEALTHCHECK --interval=10s --timeout=5s --start-period=60s --retries=5 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1
 
 # Expose ports
 EXPOSE 7474 7687

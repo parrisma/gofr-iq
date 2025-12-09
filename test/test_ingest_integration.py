@@ -5,7 +5,8 @@ and handles failures with rollback.
 """
 
 import uuid
-from unittest.mock import MagicMock, patch, ANY
+from dataclasses import dataclass
+from unittest.mock import MagicMock
 
 import pytest
 from app.models import Source, SourceType, TrustLevel
@@ -21,6 +22,14 @@ from app.services import (
 from app.services.graph_index import NodeLabel
 
 
+@dataclass
+class IngestTestContext:
+    """Context for ingest integration tests."""
+    service: IngestService
+    source: Source
+    group_guid: str
+
+
 @pytest.fixture
 def mock_embedding_index():
     index = MagicMock(spec=EmbeddingIndex)
@@ -34,7 +43,7 @@ def mock_graph_index():
 
 
 @pytest.fixture
-def ingest_service_with_indexes(
+def ingest_context(
     tmp_path,
     mock_embedding_index,
     mock_graph_index,
@@ -51,7 +60,6 @@ def ingest_service_with_indexes(
         source_type=SourceType.NEWS_AGENCY,
         trust_level=TrustLevel.HIGH,
     )
-    # We'll use source.source_guid in tests
 
     service = IngestService(
         document_store=document_store,
@@ -61,23 +69,22 @@ def ingest_service_with_indexes(
         embedding_index=mock_embedding_index,
         graph_index=mock_graph_index,
     )
-    # Attach source to service for easy access in tests
-    service._test_source = source
-    service._test_group_guid = group_guid
-    return service
+    
+    return IngestTestContext(
+        service=service,
+        source=source,
+        group_guid=group_guid
+    )
 
 
-def test_ingest_calls_indexes(ingest_service_with_indexes, mock_embedding_index, mock_graph_index):
+def test_ingest_calls_indexes(ingest_context, mock_embedding_index, mock_graph_index):
     """Test that ingest calls embed_document and create_document_node."""
     
-    source = ingest_service_with_indexes._test_source
-    group_guid = ingest_service_with_indexes._test_group_guid
-    
-    result = ingest_service_with_indexes.ingest(
+    result = ingest_context.service.ingest(
         title="Test Document",
         content="This is a test document.",
-        source_guid=source.source_guid,
-        group_guid=group_guid,
+        source_guid=ingest_context.source.source_guid,
+        group_guid=ingest_context.group_guid,
     )
 
     assert result.is_success
@@ -95,27 +102,25 @@ def test_ingest_calls_indexes(ingest_service_with_indexes, mock_embedding_index,
     assert call_args.kwargs["title"] == "Test Document"
 
 
-def test_ingest_fails_and_rolls_back_on_embedding_error(ingest_service_with_indexes, mock_embedding_index, mock_graph_index):
+def test_ingest_fails_and_rolls_back_on_embedding_error(ingest_context, mock_embedding_index, mock_graph_index):
     """Test that ingest fails and rolls back if embedding fails."""
-    
-    source = ingest_service_with_indexes._test_source
-    group_guid = ingest_service_with_indexes._test_group_guid
     
     # Simulate embedding failure
     mock_embedding_index.embed_document.side_effect = Exception("Embedding failed")
 
-    result = ingest_service_with_indexes.ingest(
+    result = ingest_context.service.ingest(
         title="Test Document",
         content="This is a test document.",
-        source_guid=source.source_guid,
-        group_guid=group_guid,
+        source_guid=ingest_context.source.source_guid,
+        group_guid=ingest_context.group_guid,
     )
 
     assert result.is_failed
+    assert result.error is not None
     assert "Embedding failed" in result.error
 
     # Verify document was deleted from store
-    assert not ingest_service_with_indexes.document_store.exists(result.guid, group_guid)
+    assert not ingest_context.service.document_store.exists(result.guid, ingest_context.group_guid)
 
     # Verify rollback calls
     mock_embedding_index.delete_document.assert_called_once_with(result.guid)
@@ -127,27 +132,25 @@ def test_ingest_fails_and_rolls_back_on_embedding_error(ingest_service_with_inde
     mock_graph_index.delete_node.assert_called_once_with(NodeLabel.DOCUMENT, result.guid)
 
 
-def test_ingest_fails_and_rolls_back_on_graph_error(ingest_service_with_indexes, mock_embedding_index, mock_graph_index):
+def test_ingest_fails_and_rolls_back_on_graph_error(ingest_context, mock_embedding_index, mock_graph_index):
     """Test that ingest fails and rolls back if graph indexing fails."""
-    
-    source = ingest_service_with_indexes._test_source
-    group_guid = ingest_service_with_indexes._test_group_guid
     
     # Simulate graph failure
     mock_graph_index.create_document_node.side_effect = Exception("Graph failed")
 
-    result = ingest_service_with_indexes.ingest(
+    result = ingest_context.service.ingest(
         title="Test Document",
         content="This is a test document.",
-        source_guid=source.source_guid,
-        group_guid=group_guid,
+        source_guid=ingest_context.source.source_guid,
+        group_guid=ingest_context.group_guid,
     )
 
     assert result.is_failed
+    assert result.error is not None
     assert "Graph failed" in result.error
 
     # Verify document was deleted from store
-    assert not ingest_service_with_indexes.document_store.exists(result.guid, group_guid)
+    assert not ingest_context.service.document_store.exists(result.guid, ingest_context.group_guid)
 
     # Verify embedding was called (since it's first)
     mock_embedding_index.embed_document.assert_called_once()

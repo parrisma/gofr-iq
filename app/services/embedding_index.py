@@ -35,6 +35,11 @@ class DeterministicEmbeddingFunction:
         self.dimensions = dimensions
 
     @staticmethod
+    def is_legacy() -> bool:
+        """Return whether this is a legacy embedding function (required by ChromaDB)"""
+        return True
+
+    @staticmethod
     def name() -> str:
         """Return the name of this embedding function (required by ChromaDB)"""
         return "deterministic-test"
@@ -178,6 +183,8 @@ class EmbeddingIndex:
         self.port = port or 8000
         
         # Use provided embedding function or default to deterministic (for testing)
+        # Note: For HTTP client mode, custom embedding functions must be registered
+        # server-side. We only use custom functions for ephemeral/local modes.
         self._embedding_function = embedding_function or DeterministicEmbeddingFunction()
 
         # Initialize ChromaDB client
@@ -188,6 +195,12 @@ class EmbeddingIndex:
                 port=self.port,
                 settings=ChromaSettings(anonymized_telemetry=False),
             )
+            # For HTTP mode, don't pass custom embedding function
+            # The server will use its default embedding function
+            self._collection = self._client.get_or_create_collection(
+                name=collection_name,
+                metadata={"hnsw:space": "cosine"},  # Use cosine similarity
+            )
         elif persist_directory:
             # Local persistent mode
             persist_directory.mkdir(parents=True, exist_ok=True)
@@ -195,18 +208,23 @@ class EmbeddingIndex:
                 path=str(persist_directory),
                 settings=ChromaSettings(anonymized_telemetry=False),
             )
+            # Get or create collection with embedding function
+            self._collection = self._client.get_or_create_collection(
+                name=collection_name,
+                metadata={"hnsw:space": "cosine"},  # Use cosine similarity
+                embedding_function=cast(Any, self._embedding_function),
+            )
         else:
             # Local ephemeral mode
             self._client = chromadb.EphemeralClient(
                 settings=ChromaSettings(anonymized_telemetry=False)
             )
-
-        # Get or create collection with embedding function
-        self._collection = self._client.get_or_create_collection(
-            name=collection_name,
-            metadata={"hnsw:space": "cosine"},  # Use cosine similarity
-            embedding_function=cast(Any, self._embedding_function),
-        )
+            # Get or create collection with embedding function
+            self._collection = self._client.get_or_create_collection(
+                name=collection_name,
+                metadata={"hnsw:space": "cosine"},  # Use cosine similarity
+                embedding_function=cast(Any, self._embedding_function),
+            )
 
     @property
     def client(self) -> Any:

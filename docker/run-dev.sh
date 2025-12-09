@@ -79,7 +79,10 @@ if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
     docker rm "$CONTAINER_NAME" 2>/dev/null || true
 fi
 
-# Run container
+# Get docker socket group ID for proper permissions
+DOCKER_GID=$(stat -c '%g' /var/run/docker.sock 2>/dev/null || echo "999")
+
+# Run container with Docker socket mounted for Docker-in-Docker
 docker run -d \
     --name "$CONTAINER_NAME" \
     --network "$DOCKER_NETWORK" \
@@ -88,6 +91,8 @@ docker run -d \
     -p ${WEB_PORT}:8062 \
     -v "$PROJECT_ROOT:/home/gofr/devroot/gofr-iq:rw" \
     -v ${VOLUME_NAME}:/home/gofr/devroot/gofr-iq/data:rw \
+    -v /var/run/docker.sock:/var/run/docker.sock:rw \
+    --group-add ${DOCKER_GID} \
     -e GOFRIQ_ENV=development \
     -e GOFRIQ_DEBUG=true \
     -e GOFRIQ_LOG_LEVEL=DEBUG \

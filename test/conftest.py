@@ -208,6 +208,34 @@ def chromadb_config() -> dict[str, str | int]:
     }
 
 
+@pytest.fixture(scope="session")
+def chromadb_available(chromadb_config: dict[str, str | int]) -> bool:
+    """Check if ChromaDB server is available and compatible.
+    
+    Returns:
+        True if ChromaDB server is reachable and API-compatible, False otherwise.
+    """
+    try:
+        import chromadb
+        client = chromadb.HttpClient(
+            host=str(chromadb_config["host"]),
+            port=int(chromadb_config["port"]),
+        )
+        client.heartbeat()
+        
+        # Test actual collection creation to verify API compatibility
+        test_collection_name = "api_test_collection"
+        try:
+            client.get_or_create_collection(name=test_collection_name)
+            client.delete_collection(test_collection_name)
+            return True
+        except Exception:
+            # API incompatibility (version mismatch)
+            return False
+    except Exception:
+        return False
+
+
 @pytest.fixture
 def embedding_index(chromadb_config: dict[str, str | int]) -> Generator:
     """Provide an EmbeddingIndex connected to ChromaDB server.
@@ -239,6 +267,97 @@ def embedding_index(chromadb_config: dict[str, str | int]) -> Generator:
 
 
 # =============================================================================
+# Neo4j Fixtures  
+# =============================================================================
+
+
+@pytest.fixture(scope="session")
+def neo4j_config() -> dict[str, str | int]:
+    """Provide Neo4j server configuration from environment.
+    
+    Returns:
+        Dictionary with URI, user, and password for Neo4j server.
+    """
+    host = os.environ.get("GOFRIQ_NEO4J_HOST", "gofr-iq-neo4j")
+    port = int(os.environ.get("GOFRIQ_NEO4J_BOLT_PORT", "7687"))
+    return {
+        "uri": f"bolt://{host}:{port}",
+        "user": "neo4j",
+        "password": os.environ.get("GOFRIQ_NEO4J_PASSWORD", "testpassword"),
+    }
+
+
+@pytest.fixture(scope="session")
+def neo4j_available(neo4j_config: dict[str, str | int]) -> bool:
+    """Check if Neo4j server is available.
+    
+    Returns:
+        True if Neo4j server is reachable, False otherwise.
+    """
+    try:
+        from app.services.graph_index import GraphIndex
+        index = GraphIndex(
+            uri=str(neo4j_config["uri"]),
+            password=str(neo4j_config["password"]),
+        )
+        result = index.verify_connectivity()
+        index.close()
+        return result
+    except Exception:
+        return False
+
+
+@pytest.fixture
+def graph_index(neo4j_config: dict[str, str | int]) -> Generator:
+    """Provide a GraphIndex connected to Neo4j server.
+    
+    Creates a clean state for each test and clears after.
+    
+    Yields:
+        Configured GraphIndex instance.
+    """
+    from app.services.graph_index import GraphIndex
+    
+    index = GraphIndex(
+        uri=str(neo4j_config["uri"]),
+        password=str(neo4j_config["password"]),
+    )
+    
+    # Clear before test
+    index.clear()
+    index.init_schema()
+    
+    yield index
+    
+    # Cleanup after test
+    try:
+        index.clear()
+    except Exception:
+        pass
+    finally:
+        index.close()
+
+
+# =============================================================================
+# Combined Infrastructure Fixtures
+# =============================================================================
+
+
+@pytest.fixture(scope="session")
+def infra_available(chromadb_available: bool, neo4j_available: bool) -> dict[str, bool]:
+    """Check availability of all infrastructure components.
+    
+    Returns:
+        Dictionary with availability status for each component.
+    """
+    return {
+        "chromadb": chromadb_available,
+        "neo4j": neo4j_available,
+        "all": chromadb_available and neo4j_available,
+    }
+
+
+# =============================================================================
 # Pytest Markers
 # =============================================================================
 
@@ -252,5 +371,17 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
         "markers",
         "slow: mark test as slow (may be skipped in quick runs)",
+    )
+    config.addinivalue_line(
+        "markers",
+        "requires_chromadb: mark test as requiring ChromaDB server",
+    )
+    config.addinivalue_line(
+        "markers",
+        "requires_neo4j: mark test as requiring Neo4j server",
+    )
+    config.addinivalue_line(
+        "markers",
+        "requires_infra: mark test as requiring all infrastructure (ChromaDB + Neo4j)",
     )
 
