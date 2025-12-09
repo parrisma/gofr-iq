@@ -136,7 +136,8 @@ def register_query_tools(
         @mcp.tool(
             name="query_documents",
             description="Search documents using semantic similarity with optional filters. "
-            "Returns ranked results based on relevance, trust scores, and recency.",
+            "Returns ranked results based on relevance, trust scores, and recency. "
+            "Supports impact-based filtering for high-impact news.",
         )
         def query_documents(
             query: str,
@@ -148,6 +149,10 @@ def register_query_tools(
             languages: list[str] | None = None,
             date_from: str | None = None,
             date_to: str | None = None,
+            min_impact_score: float | None = None,
+            impact_tiers: list[str] | None = None,
+            event_types: list[str] | None = None,
+            client_guid: str | None = None,
             include_graph_context: bool = True,
         ) -> ToolResponse:
             """Search documents using semantic similarity.
@@ -162,6 +167,13 @@ def register_query_tools(
                 languages: Filter by language codes (e.g., ["en", "zh"])
                 date_from: Start date in YYYY-MM-DD format
                 date_to: End date in YYYY-MM-DD format
+                min_impact_score: Minimum impact score (0-100). Higher = more significant news.
+                impact_tiers: Filter by impact tiers (e.g., ["PLATINUM", "GOLD"]).
+                    Options: PLATINUM (>90), GOLD (70-89), SILVER (50-69), BRONZE (30-49), STANDARD (<30)
+                event_types: Filter by event types (e.g., ["EARNINGS_BEAT", "M&A_ANNOUNCE"]).
+                    Common types: EARNINGS_BEAT, EARNINGS_MISS, GUIDANCE_RAISE, GUIDANCE_CUT,
+                    M&A_ANNOUNCE, M&A_RUMOR, ACTIVIST, FDA_APPROVAL, CENTRAL_BANK
+                client_guid: Optional client GUID to personalize results based on portfolio/watchlist
                 include_graph_context: Include related entities from graph (default: True)
 
             Returns:
@@ -177,6 +189,9 @@ def register_query_tools(
                     - source_name: Source name
                     - language: Document language
                     - created_at: Creation timestamp
+                    - impact_score: Impact score (0-100) if available
+                    - impact_tier: Impact tier (PLATINUM/GOLD/SILVER/BRONZE/STANDARD)
+                    - event_type: Event type code if classified
                     - graph_context: Related entities (if enabled)
                 - total_found: Total matching documents
                 - filters_applied: Active filters
@@ -222,6 +237,10 @@ def register_query_tools(
                     sectors=sectors,
                     companies=companies,
                     languages=languages,
+                    min_impact_score=min_impact_score,
+                    impact_tiers=impact_tiers,
+                    event_types=event_types,
+                    client_guid=client_guid,
                 )
 
                 # Execute query
@@ -236,7 +255,7 @@ def register_query_tools(
                 # Format results
                 results_data = []
                 for result in response.results:
-                    results_data.append({
+                    result_item = {
                         "document_guid": result.document_guid,
                         "title": result.title,
                         "content_snippet": result.content_snippet,
@@ -248,7 +267,15 @@ def register_query_tools(
                         "language": result.language,
                         "created_at": result.created_at.isoformat() if result.created_at else None,
                         "graph_context": result.graph_context,
-                    })
+                    }
+                    # Add impact fields if available
+                    if hasattr(result, "impact_score") and result.impact_score is not None:
+                        result_item["impact_score"] = result.impact_score
+                    if hasattr(result, "impact_tier") and result.impact_tier is not None:
+                        result_item["impact_tier"] = result.impact_tier
+                    if hasattr(result, "event_type") and result.event_type is not None:
+                        result_item["event_type"] = result.event_type
+                    results_data.append(result_item)
 
                 return success_response(
                     data={

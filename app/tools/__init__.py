@@ -20,6 +20,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from app.tools.client_tools import register_client_tools
+from app.tools.graph_tools import register_graph_tools
 from app.tools.ingest_tools import register_ingest_tools
 from app.tools.query_tools import register_query_tools
 from app.tools.source_tools import register_source_tools
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
 
 __all__ = [
     "register_client_tools",
+    "register_graph_tools",
     "register_ingest_tools",
     "register_source_tools",
     "register_query_tools",
@@ -60,3 +62,4 @@ def register_all_tools(
     
     if graph_index is not None:
         register_client_tools(mcp, graph_index)
+        register_graph_tools(mcp, graph_index)

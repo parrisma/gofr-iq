@@ -34,6 +34,10 @@ class QueryFilters:
         companies: Filter by company tickers/names
         sources: Filter by source GUIDs
         languages: Filter by language codes
+        min_impact_score: Minimum impact score (0-100)
+        impact_tiers: Filter by impact tiers (PLATINUM, GOLD, SILVER, BRONZE, STANDARD)
+        event_types: Filter by event type codes
+        client_guid: Client GUID for personalization
     """
 
     date_from: Optional[datetime] = None
@@ -43,6 +47,10 @@ class QueryFilters:
     companies: Optional[list[str]] = None
     sources: Optional[list[str]] = None
     languages: Optional[list[str]] = None
+    min_impact_score: Optional[float] = None
+    impact_tiers: Optional[list[str]] = None
+    event_types: Optional[list[str]] = None
+    client_guid: Optional[str] = None
 
 
 @dataclass
@@ -84,6 +92,9 @@ class QueryResult:
         created_at: Document creation timestamp
         metadata: Additional document metadata
         graph_context: Related entities from graph
+        impact_score: Document impact score (0-100)
+        impact_tier: Impact tier (PLATINUM/GOLD/SILVER/BRONZE/STANDARD)
+        event_type: Event type code
     """
 
     document_guid: str
@@ -99,6 +110,9 @@ class QueryResult:
     created_at: Optional[datetime] = None
     metadata: dict = field(default_factory=dict)
     graph_context: dict = field(default_factory=dict)
+    impact_score: Optional[float] = None
+    impact_tier: Optional[str] = None
+    event_type: Optional[str] = None
 
 
 @dataclass
