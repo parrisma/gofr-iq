@@ -3,6 +3,8 @@
 Re-exports configuration from gofr_common.config with GOFR_IQ prefix.
 """
 
+import os
+from dataclasses import dataclass
 from pathlib import Path
 
 from gofr_common.config import (
@@ -21,6 +23,43 @@ _ENV_PREFIX = "GOFR_IQ"
 
 # Project root for default data directory
 _PROJECT_ROOT = Path(__file__).parent.parent
+
+
+@dataclass
+class LLMSettings:
+    """LLM service configuration
+    
+    Attributes:
+        api_key: OpenRouter API key (required for LLM features)
+        base_url: OpenRouter API base URL
+        chat_model: Model for chat completions
+        embedding_model: Model for embeddings
+        max_retries: Maximum retry attempts
+        timeout: Request timeout in seconds
+    """
+    api_key: str | None = None
+    base_url: str = "https://openrouter.ai/api/v1"
+    chat_model: str = "anthropic/claude-3.5-sonnet"
+    embedding_model: str = "openai/text-embedding-3-small"
+    max_retries: int = 3
+    timeout: int = 60
+    
+    @property
+    def is_available(self) -> bool:
+        """Check if LLM service is configured"""
+        return self.api_key is not None and len(self.api_key) > 0
+
+
+def get_llm_settings() -> LLMSettings:
+    """Get LLM settings from environment variables"""
+    return LLMSettings(
+        api_key=os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"),
+        base_url=os.environ.get("GOFR_IQ_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+        chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "anthropic/claude-3.5-sonnet"),
+        embedding_model=os.environ.get("GOFR_IQ_EMBEDDING_MODEL", "openai/text-embedding-3-small"),
+        max_retries=int(os.environ.get("GOFR_IQ_LLM_MAX_RETRIES", "3")),
+        timeout=int(os.environ.get("GOFR_IQ_LLM_TIMEOUT", "60")),
+    )
 
 
 class Config(BaseConfig):
@@ -72,7 +111,9 @@ __all__ = [
     "AuthSettings",
     "StorageSettings",
     "LogSettings",
+    "LLMSettings",
     "get_settings",
+    "get_llm_settings",
     "reset_settings",
     "get_public_storage_dir",
     "get_default_storage_dir",

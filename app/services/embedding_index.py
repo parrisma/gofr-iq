@@ -3,16 +3,25 @@
 Provides semantic embedding storage and similarity search for documents.
 Supports chunking for long documents and cross-language search via
 multilingual embedding models.
+
+Embedding Functions:
+- DeterministicEmbeddingFunction: Hash-based embeddings for testing
+- LLMEmbeddingFunction: Real embeddings via OpenRouter API
 """
+
+from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional, Protocol, cast
+from typing import TYPE_CHECKING, Any, Optional, Protocol, cast
 
 import chromadb
 from chromadb.api.types import Documents, Embeddings
 from chromadb.config import Settings as ChromaSettings
+
+if TYPE_CHECKING:
+    from app.services.llm_service import LLMService
 
 
 class EmbeddingProvider(Protocol):
@@ -61,6 +70,93 @@ class DeterministicEmbeddingFunction:
         for text in input:
             embeddings.append(self._embed_text(str(text) if text else ""))
         return cast(Embeddings, embeddings)
+
+    def embed_documents(self, input: list[str]) -> Embeddings:
+        """Embed a list of documents (required by ChromaDB)"""
+        return self(cast(Documents, input))
+
+    def embed_query(self, input: str) -> Embeddings:
+        """Embed a single query (required by ChromaDB)
+        
+        Returns a list containing the single query embedding.
+        """
+        return self(cast(Documents, [input]))
+
+
+class LLMEmbeddingFunction:
+    """Embedding function using LLM service via OpenRouter API
+    
+    Generates real embeddings using OpenRouter's embedding models.
+    Default model: openai/text-embedding-3-small (1536 dimensions)
+    
+    Implements the ChromaDB EmbeddingFunction interface.
+    
+    Example:
+        >>> from app.services.llm_service import create_llm_service
+        >>> llm_service = create_llm_service()
+        >>> embed_fn = LLMEmbeddingFunction(llm_service)
+        >>> embeddings = embed_fn(["Hello world"])
+    """
+
+    def __init__(
+        self,
+        llm_service: LLMService,
+        model: str | None = None,
+        batch_size: int = 100,
+    ) -> None:
+        """Initialize LLM embedding function
+        
+        Args:
+            llm_service: LLM service instance for API calls
+            model: Embedding model to use (uses service default if not specified)
+            batch_size: Maximum texts to embed per API call
+        """
+        self._llm_service = llm_service
+        self._model = model
+        self._batch_size = batch_size
+        self._dimensions: int | None = None
+
+    @staticmethod
+    def is_legacy() -> bool:
+        """Return whether this is a legacy embedding function (required by ChromaDB)"""
+        return True
+
+    @staticmethod
+    def name() -> str:
+        """Return the name of this embedding function (required by ChromaDB)"""
+        return "openrouter-llm"
+
+    @property
+    def dimensions(self) -> int:
+        """Get embedding dimensions (determined on first call)"""
+        if self._dimensions is None:
+            # Probe with a test embedding to get dimensions
+            result = self._llm_service.generate_embeddings(["test"], self._model)
+            self._dimensions = result.dimensions
+        return self._dimensions
+
+    def __call__(self, input: Documents) -> Embeddings:
+        """Generate embeddings from texts (batch)
+        
+        Args:
+            input: List of texts to embed
+            
+        Returns:
+            List of embedding vectors
+        """
+        if not input:
+            return cast(Embeddings, [])
+
+        all_embeddings: list[list[float]] = []
+        texts = [str(t) if t else "" for t in input]
+
+        # Process in batches
+        for i in range(0, len(texts), self._batch_size):
+            batch = texts[i : i + self._batch_size]
+            result = self._llm_service.generate_embeddings(batch, self._model)
+            all_embeddings.extend(result.embeddings)
+
+        return cast(Embeddings, all_embeddings)
 
     def embed_documents(self, input: list[str]) -> Embeddings:
         """Embed a list of documents (required by ChromaDB)"""
@@ -582,4 +678,38 @@ def create_embedding_index(
         embedding_function=embedding_function,
         host=host,
         port=port,
+    )
+
+
+def create_llm_embedding_function(
+    llm_service: LLMService | None = None,
+    model: str | None = None,
+    batch_size: int = 100,
+) -> LLMEmbeddingFunction:
+    """Factory function to create an LLM-based embedding function
+    
+    Creates an embedding function that uses OpenRouter API for
+    real semantic embeddings.
+    
+    Args:
+        llm_service: LLM service instance (creates new one if not provided)
+        model: Embedding model to use (uses service default if not specified)
+        batch_size: Maximum texts to embed per API call
+        
+    Returns:
+        Configured LLMEmbeddingFunction instance
+        
+    Example:
+        >>> embed_fn = create_llm_embedding_function()
+        >>> index = create_embedding_index(embedding_function=embed_fn)
+    """
+    if llm_service is None:
+        from app.services.llm_service import create_llm_service
+
+        llm_service = create_llm_service()
+
+    return LLMEmbeddingFunction(
+        llm_service=llm_service,
+        model=model,
+        batch_size=batch_size,
     )

@@ -23,19 +23,39 @@ This document outlines the iterative plan to upgrade the Gofr-IQ platform with a
 
 ## Phase 2: LLM Service Integration (OpenRouter)
 
-**Objective**: Enable the application to perform semantic reasoning and extraction using an external LLM (via OpenRouter).
+**Objective**: Enable the application to perform semantic reasoning, extraction, and embedding generation using an external LLM (via OpenRouter).
 
 ### Tasks
-1.  **Configuration**: Add `OPENROUTER_API_KEY` and `LLM_MODEL` to `app/config.py` and environment variables.
+1.  **Configuration**: Add `GOFR_IQ_OPENROUTER_API_KEY`, `GOFR_IQ_LLM_MODEL`, and `GOFR_IQ_EMBEDDING_MODEL` to `app/config.py` and environment variables.
 2.  **LLM Service**: Create `app/services/llm_service.py`.
     *   Implement a client for OpenRouter (compatible with OpenAI API).
     *   Add methods for `chat_completion` with support for structured outputs (JSON mode) and system prompts.
-    *   Implement error handling and retries.
-3.  **Integration Tests**: Create `test/test_llm_service.py` (mocked) and `test/test_integration_llm.py` (live, requiring key).
+    *   Add methods for `generate_embedding` to produce vectors for ChromaDB storage.
+    *   Implement error handling, retries, and rate limiting.
+3.  **Embedding Integration**: Update `app/services/embedding_index.py` to optionally use the LLM service for embeddings.
+    *   When `GOFR_IQ_OPENROUTER_API_KEY` is set, use OpenRouter embeddings instead of ChromaDB's default.
+    *   Support configurable embedding model (e.g., `text-embedding-3-small`).
+    *   Maintain backward compatibility with ChromaDB's built-in embeddings when no API key is provided.
+4.  **Unit Tests**: Create `test/test_llm_service.py` (mocked tests for all methods).
+5.  **Integration Tests**: Create `test/test_integration_llm.py` (live tests, skipped when API key not available).
+    *   Test chat completion with structured JSON output.
+    *   Test embedding generation and verify vector dimensions.
+    *   Test embedding storage/retrieval through ChromaDB with LLM-generated embeddings.
+
+### Test Support
+*   Tests should auto-detect LLM capability via environment variable presence.
+*   When `GOFR_IQ_OPENROUTER_API_KEY` is not set:
+    *   Unit tests use mocked responses.
+    *   Integration tests are skipped with clear message.
+*   When API key is set:
+    *   Live integration tests verify end-to-end functionality.
+    *   Use low-cost models for testing (e.g., `meta-llama/llama-3.1-8b-instruct`).
 
 ### Deliverable
-*   `app/services/llm_service.py`
-*   `test/test_llm_service.py`
+*   `app/services/llm_service.py` with `chat_completion()` and `generate_embedding()` methods
+*   Updated `app/services/embedding_index.py` with LLM embedding support
+*   `test/test_llm_service.py` (mocked unit tests)
+*   `test/test_integration_llm.py` (live integration tests, conditionally skipped)
 
 ---
 

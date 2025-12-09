@@ -11,7 +11,9 @@ Full ingest flow (Phase 7 - file-only):
 4. Detect language (auto-detect if not provided)
 5. Check for duplicates
 6. Store to canonical file store
-7. Return { guid, status, duplicate_of?, language }
+7. LLM extraction (impact score, events, instruments)
+8. Update graph with extracted entities
+9. Return { guid, status, duplicate_of?, language }
 
 External indexing (Elasticsearch, ChromaDB, Neo4j) will be added in later phases.
 """
@@ -35,6 +37,9 @@ from app.services.source_registry import SourceNotFoundError, SourceRegistry
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+    from app.prompts.graph_extraction import GraphExtractionResult
+    from app.services.llm_service import LLMService
 
 __all__ = [
     "IngestError",
@@ -103,6 +108,7 @@ class IngestResult:
         word_count: Number of words in content
         error: Error message if failed
         created_at: Timestamp when document was created
+        extraction: LLM extraction result (impact, events, instruments)
     """
 
     guid: str
@@ -114,6 +120,7 @@ class IngestResult:
     word_count: int = 0
     error: str | None = None
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    extraction: "GraphExtractionResult | None" = None
 
     @property
     def is_success(self) -> bool:
@@ -146,6 +153,8 @@ class IngestResult:
             result["duplicate_score"] = self.duplicate_score
         if self.error:
             result["error"] = self.error
+        if self.extraction:
+            result["extraction"] = self.extraction.to_dict()
         return result
 
 
@@ -165,12 +174,17 @@ class IngestService:
     4. Detect language
     5. Check duplicates
     6. Store to file
+    7. LLM extraction (if available)
+    8. Update graph with extracted entities
 
     Attributes:
         document_store: Storage for documents
         source_registry: Registry for source validation
         language_detector: Language detection service
         duplicate_detector: Duplicate detection service
+        embedding_index: Optional embedding index for semantic search
+        graph_index: Optional graph index for entity relationships
+        llm_service: Optional LLM service for content extraction
         max_word_count: Maximum allowed word count (default 20,000)
     """
 
@@ -180,7 +194,133 @@ class IngestService:
     duplicate_detector: DuplicateDetector = field(default_factory=DuplicateDetector)
     embedding_index: EmbeddingIndex | None = None
     graph_index: GraphIndex | None = None
+    llm_service: "LLMService | None" = None
     max_word_count: int = 20_000
+
+    def _extract_graph_entities(
+        self,
+        doc: Document,
+    ) -> "GraphExtractionResult | None":
+        """Extract graph entities from document using LLM
+        
+        Args:
+            doc: Document to analyze
+            
+        Returns:
+            Extraction result or None if LLM not available
+        """
+        # Import here to avoid circular imports
+        from app.prompts.graph_extraction import (
+            GRAPH_EXTRACTION_SYSTEM_PROMPT,
+            build_extraction_prompt,
+            create_default_result,
+            parse_extraction_response,
+        )
+        from app.services.llm_service import ChatMessage, LLMServiceError
+
+        if not self.llm_service or not self.llm_service.is_available:
+            return None
+            
+        try:
+            # Build the extraction prompt
+            user_prompt = build_extraction_prompt(
+                content=doc.content,
+                title=doc.title,
+                source_name=doc.metadata.get("source_name"),
+                published_at=doc.metadata.get("published_at"),
+            )
+            
+            # Call LLM with system prompt
+            result = self.llm_service.chat_completion(
+                messages=[
+                    ChatMessage(role="system", content=GRAPH_EXTRACTION_SYSTEM_PROMPT),
+                    ChatMessage(role="user", content=user_prompt),
+                ],
+                json_mode=True,
+                temperature=0.1,  # Low temperature for consistent extraction
+                max_tokens=1000,
+            )
+            
+            # Parse the response
+            return parse_extraction_response(result.content)
+            
+        except LLMServiceError as e:
+            # Log but don't fail ingestion
+            print(f"LLM extraction failed for {doc.guid}: {e}")
+            return create_default_result()
+
+    def _apply_extraction_to_graph(
+        self,
+        document_guid: str,
+        extraction: GraphExtractionResult,
+    ) -> None:
+        """Apply extracted entities to the graph
+        
+        Creates relationships between the document and:
+        - EventTypes (TRIGGERED_BY)
+        - Instruments (AFFECTS)
+        
+        Args:
+            document_guid: Document GUID
+            extraction: Extraction result from LLM
+        """
+        if not self.graph_index:
+            return
+            
+        # Get primary event type code
+        primary_event = extraction.primary_event
+        event_code = primary_event.event_type if primary_event else None
+        
+        # Set document impact properties
+        self.graph_index.set_document_impact(
+            document_guid=document_guid,
+            impact_score=extraction.impact_score,
+            impact_tier=extraction.impact_tier,
+            event_type_code=event_code,
+        )
+        
+        # Create AFFECTS relationships for instruments
+        for inst in extraction.instruments:
+            if not inst.ticker:
+                continue
+                
+            # Ensure instrument exists (create if not)
+            try:
+                self.graph_index.create_instrument(
+                    ticker=inst.ticker,
+                    name=inst.name or inst.ticker,
+                    instrument_type="STOCK",  # Default type
+                    exchange="UNKNOWN",  # Will be updated when full instrument data available
+                )
+            except Exception:
+                pass  # Instrument may already exist
+                
+            # Map direction to expected values
+            direction_map = {
+                "UP": "positive",
+                "DOWN": "negative",
+                "MIXED": "neutral",
+                "NEUTRAL": "neutral",
+            }
+            direction = direction_map.get(inst.direction, "neutral")
+            
+            # Map magnitude to numeric value
+            magnitude_map = {
+                "HIGH": 0.05,
+                "MODERATE": 0.02,
+                "LOW": 0.01,
+            }
+            magnitude = magnitude_map.get(inst.magnitude, 0.01)
+            
+            try:
+                self.graph_index.add_document_affects(
+                    document_guid=document_guid,
+                    instrument_guid=inst.ticker,
+                    direction=direction,
+                    magnitude=magnitude,
+                )
+            except Exception as e:
+                print(f"Failed to create AFFECTS for {inst.ticker}: {e}")
 
     def ingest(
         self,
@@ -290,6 +430,13 @@ class IngestService:
                     metadata=doc.metadata,
                 )
 
+            # Step 10: LLM extraction (if configured)
+            extraction = self._extract_graph_entities(doc)
+
+            # Step 11: Update graph with extracted entities (if extraction succeeded)
+            if extraction and self.graph_index:
+                self._apply_extraction_to_graph(doc.guid, extraction)
+
         except Exception as e:
             # Rollback on failure
             print(f"Error indexing document {doc.guid}: {e}. Rolling back.")
@@ -324,7 +471,7 @@ class IngestService:
                 created_at=doc.created_at,
             )
 
-        # Step 10: Register with duplicate detector for future checks
+        # Step 12: Register with duplicate detector for future checks
         self.duplicate_detector.register(doc_guid, title, content)
 
         # Determine status
@@ -339,6 +486,7 @@ class IngestService:
             duplicate_score=dup_result.score if dup_result.is_duplicate else None,
             word_count=word_count,
             created_at=doc.created_at,
+            extraction=extraction,
         )
 
     def ingest_from_input(
@@ -443,6 +591,7 @@ def create_ingest_service(
     max_word_count: int = 20_000,
     embedding_index: EmbeddingIndex | None = None,
     graph_index: GraphIndex | None = None,
+    llm_service: LLMService | None = None,
 ) -> IngestService:
     """Create an IngestService with standard configuration.
 
@@ -451,6 +600,7 @@ def create_ingest_service(
         max_word_count: Maximum word count (default 20,000)
         embedding_index: Optional embedding index
         graph_index: Optional graph index
+        llm_service: Optional LLM service for content extraction
 
     Returns:
         Configured IngestService
@@ -469,5 +619,6 @@ def create_ingest_service(
         duplicate_detector=duplicate_detector,
         embedding_index=embedding_index,
         graph_index=graph_index,
+        llm_service=llm_service,
         max_word_count=max_word_count,
     )

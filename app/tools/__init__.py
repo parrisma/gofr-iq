@@ -6,6 +6,7 @@ Tools are organized by functionality:
 - ingest_tools: Document ingestion operations
 - source_tools: Source registry operations
 - query_tools: Document retrieval and search
+- client_tools: Client management and personalized feeds
 
 Usage:
     from app.tools import register_all_tools
@@ -18,6 +19,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from app.tools.client_tools import register_client_tools
 from app.tools.ingest_tools import register_ingest_tools
 from app.tools.query_tools import register_query_tools
 from app.tools.source_tools import register_source_tools
@@ -25,9 +27,10 @@ from app.tools.source_tools import register_source_tools
 if TYPE_CHECKING:
     from mcp.server.fastmcp import FastMCP
 
-    from app.services import DocumentStore, IngestService, SourceRegistry
+    from app.services import DocumentStore, GraphIndex, IngestService, SourceRegistry
 
 __all__ = [
+    "register_client_tools",
     "register_ingest_tools",
     "register_source_tools",
     "register_query_tools",
@@ -40,6 +43,7 @@ def register_all_tools(
     document_store: "DocumentStore",
     source_registry: "SourceRegistry",
     ingest_service: "IngestService",
+    graph_index: "GraphIndex | None" = None,
 ) -> None:
     """Register all MCP tools with the server.
 
@@ -48,7 +52,11 @@ def register_all_tools(
         document_store: DocumentStore instance for document operations
         source_registry: SourceRegistry instance for source operations
         ingest_service: IngestService instance for ingestion operations
+        graph_index: GraphIndex instance for client/graph operations (optional)
     """
     register_ingest_tools(mcp, ingest_service)
     register_source_tools(mcp, source_registry)
     register_query_tools(mcp, document_store)
+    
+    if graph_index is not None:
+        register_client_tools(mcp, graph_index)
