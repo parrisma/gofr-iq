@@ -34,7 +34,7 @@ This document details the implementation plan for the APAC Brokerage News Reposi
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              CLIENT LAYER                                    │
+│                              CLIENT LAYER                                   │
 │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                      │
 │  │   MCP       │    │   MCPO      │    │   Web API   │                      │
 │  │  (8060)     │    │  (8061)     │    │   (8062)    │                      │
@@ -44,7 +44,7 @@ This document details the implementation plan for the APAC Brokerage News Reposi
           └──────────────────┼──────────────────┘
                              ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         AUTH & ACCESS CONTROL                                │
+│                         AUTH & ACCESS CONTROL                               │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │  Token Validation → Group Resolution → Scope Enforcement            │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
@@ -59,7 +59,7 @@ This document details the implementation plan for the APAC Brokerage News Reposi
          └────────────────────┼────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         CANONICAL DOCUMENT STORE                             │
+│                         CANONICAL DOCUMENT STORE                            │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │  data/documents/{group}/{YYYY-MM-DD}/{GUID}.json                    │    │
 │  │  data/sources/{source_guid}.json                                    │    │

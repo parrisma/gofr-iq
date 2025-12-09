@@ -28,6 +28,8 @@ from typing import TYPE_CHECKING, Any
 from app.models import Document, DocumentCreate, count_words
 from app.services.document_store import DocumentNotFoundError, DocumentStore
 from app.services.duplicate_detector import DuplicateDetector, DuplicateResult
+from app.services.embedding_index import EmbeddingIndex
+from app.services.graph_index import GraphIndex, NodeLabel
 from app.services.language_detector import LanguageDetector, LanguageResult
 from app.services.source_registry import SourceNotFoundError, SourceRegistry
 
@@ -176,6 +178,8 @@ class IngestService:
     source_registry: SourceRegistry
     language_detector: LanguageDetector = field(default_factory=LanguageDetector)
     duplicate_detector: DuplicateDetector = field(default_factory=DuplicateDetector)
+    embedding_index: EmbeddingIndex | None = None
+    graph_index: GraphIndex | None = None
     max_word_count: int = 20_000
 
     def ingest(
@@ -261,7 +265,66 @@ class IngestService:
         # Step 7: Store to file
         self.document_store.save(doc)
 
-        # Step 8: Register with duplicate detector for future checks
+        # Step 8 & 9: Indexing with Rollback
+        try:
+            # Step 8: Index in ChromaDB (if configured)
+            if self.embedding_index:
+                self.embedding_index.embed_document(
+                    document_guid=doc.guid,
+                    content=doc.content,
+                    group_guid=doc.group_guid,
+                    source_guid=doc.source_guid,
+                    language=doc.language,
+                    metadata=doc.metadata,
+                )
+
+            # Step 9: Index in Neo4j (if configured)
+            if self.graph_index:
+                self.graph_index.create_document_node(
+                    document_guid=doc.guid,
+                    source_guid=doc.source_guid,
+                    group_guid=doc.group_guid,
+                    title=doc.title,
+                    language=doc.language,
+                    created_at=doc.created_at,
+                    metadata=doc.metadata,
+                )
+
+        except Exception as e:
+            # Rollback on failure
+            print(f"Error indexing document {doc.guid}: {e}. Rolling back.")
+
+            # 1. Remove from file store
+            try:
+                self.document_store.delete(doc.guid, doc.group_guid, doc.created_at)
+            except Exception as rollback_error:
+                print(f"CRITICAL: Failed to rollback file store for {doc.guid}: {rollback_error}")
+
+            # 2. Remove from embedding index
+            if self.embedding_index:
+                try:
+                    self.embedding_index.delete_document(doc.guid)
+                except Exception as rollback_error:
+                    print(f"CRITICAL: Failed to rollback embedding index for {doc.guid}: {rollback_error}")
+
+            # 3. Remove from graph index
+            if self.graph_index:
+                try:
+                    self.graph_index.delete_node(NodeLabel.DOCUMENT, doc.guid)
+                except Exception as rollback_error:
+                    print(f"CRITICAL: Failed to rollback graph index for {doc.guid}: {rollback_error}")
+
+            return IngestResult(
+                guid=doc_guid,
+                status=IngestStatus.FAILED,
+                language=lang_result.language,
+                language_detected=language_detected,
+                word_count=word_count,
+                error=f"Indexing failed: {str(e)}",
+                created_at=doc.created_at,
+            )
+
+        # Step 10: Register with duplicate detector for future checks
         self.duplicate_detector.register(doc_guid, title, content)
 
         # Determine status
@@ -378,12 +441,16 @@ class IngestService:
 def create_ingest_service(
     storage_path: str | Path,
     max_word_count: int = 20_000,
+    embedding_index: EmbeddingIndex | None = None,
+    graph_index: GraphIndex | None = None,
 ) -> IngestService:
     """Create an IngestService with standard configuration.
 
     Args:
         storage_path: Path to storage directory
         max_word_count: Maximum word count (default 20,000)
+        embedding_index: Optional embedding index
+        graph_index: Optional graph index
 
     Returns:
         Configured IngestService
@@ -400,5 +467,7 @@ def create_ingest_service(
         source_registry=source_registry,
         language_detector=language_detector,
         duplicate_detector=duplicate_detector,
+        embedding_index=embedding_index,
+        graph_index=graph_index,
         max_word_count=max_word_count,
     )

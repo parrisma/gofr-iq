@@ -28,6 +28,8 @@ from app.config import get_settings
 from app.services import (
     DocumentStore,
     DuplicateDetector,
+    EmbeddingIndex,
+    GraphIndex,
     IngestService,
     LanguageDetector,
     SourceRegistry,
@@ -64,11 +66,24 @@ def create_mcp_server(
     language_detector = LanguageDetector()
     duplicate_detector = DuplicateDetector()
 
+    # Initialize indexes
+    # Note: In production, these would connect to real services
+    # For now, we use defaults (ephemeral/local) or env vars
+    embedding_index = EmbeddingIndex(
+        persist_directory=storage_path / "chroma",
+    )
+    
+    # Graph index requires Neo4j connection
+    # We initialize it but handle connection errors gracefully in service
+    graph_index = GraphIndex()
+
     ingest_service = IngestService(
         document_store=document_store,
         source_registry=source_registry,
         language_detector=language_detector,
         duplicate_detector=duplicate_detector,
+        embedding_index=embedding_index,
+        graph_index=graph_index,
     )
 
     # Create MCP server
