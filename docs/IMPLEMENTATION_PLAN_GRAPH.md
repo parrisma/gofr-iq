@@ -129,17 +129,29 @@ This document outlines the iterative plan to upgrade the Gofr-IQ platform with a
 
 ## Phase 6: End-to-End Integration Testing
 
-**Objective**: Verify the entire pipeline from ingestion to client-specific retrieval.
+**Objective**: Verify the entire pipeline from ingestion to client-specific retrieval with proper group-based content isolation.
 
 ### Tasks
-1.  **Test Data**: Create a set of synthetic news articles (Earnings beat, M&A rumor, Macro event).
-2.  **Test Personas**: Define 3 client profiles (Hedge Fund, Long-Only, Quant) in the test setup.
-3.  **Integration Test Suite** (`test/test_integration_graph_ranking.py`):
-    *   **Step 1**: Ingest articles (mocking LLM extraction or using a deterministic fake).
-    *   **Step 2**: Verify Graph State (Nodes and relationships created correctly).
-    *   **Step 3**: Query as Hedge Fund -> Expect high volatility/recent news.
-    *   **Step 4**: Query as Long-Only -> Expect fundamental/major news.
-    *   **Step 5**: Verify permissioning (Client A cannot see Client B's feed).
+1.  **Test Groups**: Define 3 test groups representing different content sources:
+    *   **Group A** ("Sales Team NYC"): Internal sales intelligence
+    *   **Group B** ("Reuters Feed"): Premium newswire content
+    *   **Group C** ("Alternative Data"): Proprietary data vendor
+2.  **Test Data**: Create synthetic news articles distributed across groups:
+    *   Group A: Tech earnings (AAPL, NVDA), M&A rumors from sales contacts
+    *   Group B: Macro events (Fed decisions), official announcements
+    *   Group C: Quant signals, alternative data insights
+3.  **Test Clients**: Define 3 client profiles with different group access permissions:
+    *   **Hedge Fund client**: Has tokens for Groups A, B, C (full access)
+    *   **Long-Only client**: Has tokens for Groups A, B only (no alternative data)
+    *   **Basic client**: Has token for Group B only (newswire only)
+4.  **Integration Test Suite** (`test/test_integration_graph_ranking.py`):
+    *   **Step 1**: Create groups, sources, and ingest articles with correct group ownership (mocking LLM extraction).
+    *   **Step 2**: Verify Graph State - documents have correct `IN_GROUP` relationships.
+    *   **Step 3**: Verify ChromaDB isolation - embeddings tagged with group metadata.
+    *   **Step 4**: Query with Group B token only -> Only see Group B documents.
+    *   **Step 5**: Query with Groups A,B tokens -> See A and B content, never C.
+    *   **Step 6**: Query with all tokens (A,B,C) -> See everything.
+    *   **Step 7**: Client feed uses passed group_guids to filter content appropriately.
 
 ### Deliverable
 *   `test/test_integration_graph_ranking.py`
