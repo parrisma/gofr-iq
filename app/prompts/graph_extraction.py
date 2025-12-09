@@ -36,21 +36,26 @@ Your task is to analyze news text and extract:
 4. **Company Mentions**: Extract all company references
 5. **Summary**: One-line headline summary
 
-## Impact Scoring Guidelines
+## Impact Scoring Guidelines (Calibrated to Market Research)
 
-**Impact Score (0-100)**:
-- 90-100: Market-moving events (M&A, major scandal, FDA binary decisions)
-- 70-89: High impact (earnings surprises >20%, activist stakes, guidance changes)
-- 50-69: Notable impact (analyst upgrades, index changes, insider transactions)
-- 30-49: Moderate impact (contracts, management changes, product launches)
-- 0-29: Routine news (press releases, minor updates)
+**Impact Score (0-100)** - Calibrated to expected absolute abnormal return:
+- 90-100: PLATINUM - Market-moving (>5% expected move)
+  - M&A target announcement (15-25% median), fraud/scandal (8-12%), FDA binary (5-10%)
+- 75-89: GOLD - High impact (3-5% expected move)
+  - Earnings shock (>20% beat/miss = 3-4%), activist 13D (5-7%), guidance cut (2-3%)
+- 50-74: SILVER - Notable (1-3% expected move)
+  - Analyst upgrade/downgrade (1.5-2.5%), index add/delete (3-5%), insider >$1M (1-2%)
+- 30-49: BRONZE - Moderate (0.5-1% expected move)
+  - Conference presentation, small contracts, CFO change, routine filings
+- 0-29: STANDARD - Routine (<0.5% expected move)
+  - Press releases, minor personnel, marketing, routine regulatory
 
-**Impact Tiers**:
-- `PLATINUM`: Top 1% - Major market-moving events (>5% stock move expected)
-- `GOLD`: Next 2% - High impact events (3-5% move expected)
-- `SILVER`: Next 10% - Notable events (1-3% move expected)
-- `BRONZE`: Next 20% - Moderate events (0.5-1% move expected)
-- `STANDARD`: Bottom 67% - Routine news (<0.5% move expected)
+**Impact Tiers** (with time-decay rates):
+- `PLATINUM`: Top 1% - Major market-moving events (decay λ=0.05, ~14 day half-life)
+- `GOLD`: Next 2% - High impact events (decay λ=0.10, ~7 day half-life)
+- `SILVER`: Next 10% - Notable events (decay λ=0.15, ~4.6 day half-life)
+- `BRONZE`: Next 20% - Moderate events (decay λ=0.20, ~3.5 day half-life)
+- `STANDARD`: Bottom 67% - Routine news (decay λ=0.30, ~2.3 day half-life)
 
 ## Event Types
 
@@ -134,6 +139,28 @@ Respond with ONLY valid JSON in this exact structure:
 6. If event type is unclear, use "OTHER"
 7. Summary should be <100 characters
 8. Include all mentioned companies, even if not traded
+
+## Scoring Edge Cases & Calibration
+
+**Downgrade triggers:**
+- Rumors without named sources: -20 points from base
+- Old news (>24h): automatically BRONZE or lower
+- Analysis/opinion pieces: cap at SILVER unless containing material info
+- Sector-wide news: distribute impact, cap individual at SILVER
+
+**Upgrade triggers:**
+- Named insider sources: +10 points
+- Multiple corroborating sources: +15 points
+- Binary regulatory outcome: minimum GOLD
+- First reporting of material event: +10 points
+
+**Peer read-through:**
+- When primary company is affected, related peers get 30-50% of impact score
+- Mark peer instruments with "PEER_READTHROUGH" in reason field
+
+**Market-cap considerations:**
+- Mega-cap (>$200B): same $ event = lower % impact, adjust down 10-15 points
+- Small-cap (<$2B): higher volatility, adjust up 5-10 points
 """
 
 

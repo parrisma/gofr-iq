@@ -372,6 +372,33 @@ class GraphIndex:
                 ON (c.name)
                 """
             )
+            
+            # Index for Group lookups (critical for permission queries)
+            session.run(
+                """
+                CREATE INDEX group_guid_lookup IF NOT EXISTS
+                FOR (g:Group)
+                ON (g.guid)
+                """
+            )
+            
+            # Index for EventType lookups
+            session.run(
+                """
+                CREATE INDEX eventtype_code IF NOT EXISTS
+                FOR (e:EventType)
+                ON (e.code)
+                """
+            )
+            
+            # Composite index for client feed queries (impact + date)
+            session.run(
+                """
+                CREATE INDEX document_feed_query IF NOT EXISTS
+                FOR (d:Document)
+                ON (d.impact_tier, d.impact_score, d.created_at)
+                """
+            )
 
     def create_node(
         self,
@@ -1207,11 +1234,15 @@ class GraphIndex:
         OPTIONAL MATCH (c)-[:HAS_PORTFOLIO]->(p:Portfolio)-[holds:HOLDS]->(inst)
         OPTIONAL MATCH (c)-[:HAS_WATCHLIST]->(w:Watchlist)-[:WATCHES]->(inst)
         
+        // Scoring weights calibrated to graph_architecture.md:
+        // - Position weight * 100: Higher positions get proportionally more weight
+        // - Watchlist: 50 points (elevated from 25 - watchlist = active interest)
+        // - Benchmark constituent: add 30 points via separate query if needed
         WITH d, inst, affects, holds, w,
              CASE WHEN holds IS NOT NULL THEN holds.weight * 100 ELSE 0 END AS position_boost,
-             CASE WHEN w IS NOT NULL THEN 25 ELSE 0 END AS watchlist_boost,
-             d.impact_score AS base_score,
-             d.decay_lambda AS decay_lambda
+             CASE WHEN w IS NOT NULL THEN 50 ELSE 0 END AS watchlist_boost,
+             COALESCE(d.impact_score, 0) AS base_score,
+             COALESCE(d.decay_lambda, 0.15) AS decay_lambda
         
         WHERE (holds IS NOT NULL OR w IS NOT NULL OR inst IS NULL)
         
