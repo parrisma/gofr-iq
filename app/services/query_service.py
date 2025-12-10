@@ -61,15 +61,17 @@ class ScoringWeights:
         semantic: Weight for semantic similarity score (0-1)
         trust: Weight for source trust level boost (0-1)
         recency: Weight for recency boost (0-1)
+        graph_boost: Bonus score for graph-expanded results (0-1)
     """
 
-    semantic: float = 0.7
+    semantic: float = 0.6
     trust: float = 0.2
     recency: float = 0.1
+    graph_boost: float = 0.1  # Bonus for graph-discovered docs
 
     def __post_init__(self) -> None:
         """Validate weights sum to 1.0"""
-        total = self.semantic + self.trust + self.recency
+        total = self.semantic + self.trust + self.recency + self.graph_boost
         if abs(total - 1.0) > 0.01:
             raise ValueError(f"Scoring weights must sum to 1.0, got {total}")
 
@@ -86,6 +88,7 @@ class QueryResult:
         similarity_score: Raw semantic similarity score
         trust_score: Source trust level contribution
         recency_score: Recency contribution
+        graph_score: Graph relationship contribution (for expanded results)
         source_guid: Source this document came from
         source_name: Source name
         language: Document language
@@ -95,6 +98,7 @@ class QueryResult:
         impact_score: Document impact score (0-100)
         impact_tier: Impact tier (PLATINUM/GOLD/SILVER/BRONZE/STANDARD)
         event_type: Event type code
+        discovered_via: How this result was found ('semantic', 'graph', 'both')
     """
 
     document_guid: str
@@ -104,6 +108,7 @@ class QueryResult:
     similarity_score: float
     trust_score: float = 0.0
     recency_score: float = 0.0
+    graph_score: float = 0.0
     source_guid: str = ""
     source_name: str = ""
     language: str = ""
@@ -113,6 +118,7 @@ class QueryResult:
     impact_score: Optional[float] = None
     impact_tier: Optional[str] = None
     event_type: Optional[str] = None
+    discovered_via: str = "semantic"
 
 
 @dataclass
@@ -176,8 +182,12 @@ class QueryService:
         filters: Optional[QueryFilters] = None,
         weights: Optional[ScoringWeights] = None,
         include_graph_context: bool = True,
+        enable_graph_expansion: bool = True,
     ) -> QueryResponse:
-        """Execute hybrid search query
+        """Execute hybrid search query with graph-expanded retrieval
+
+        Combines semantic similarity search (ChromaDB) with graph traversal (Neo4j)
+        to surface related documents that pure semantic search would miss.
 
         Args:
             query_text: Search query text
@@ -185,10 +195,11 @@ class QueryService:
             n_results: Maximum number of results to return
             filters: Optional query filters
             weights: Optional custom scoring weights
-            include_graph_context: Whether to include graph enrichment
+            include_graph_context: Whether to include graph enrichment metadata
+            enable_graph_expansion: Whether to expand results via graph traversal
 
         Returns:
-            QueryResponse with ranked results
+            QueryResponse with ranked results from both semantic and graph sources
         """
         import time
 
@@ -215,12 +226,26 @@ class QueryService:
             similarity_results=filtered_results,
             weights=weights,
         )
+        
+        # Track semantic result GUIDs to avoid duplicates
+        semantic_guids = {r.document_guid for r in query_results}
 
-        # Step 4: Add graph context if enabled
+        # Step 4: Graph-expanded retrieval (NEW)
+        if enable_graph_expansion and self.graph_index:
+            graph_expanded = self._expand_via_graph(
+                semantic_results=query_results,
+                group_guids=group_guids,
+                weights=weights,
+                exclude_guids=semantic_guids,
+                max_expansion=n_results,  # Up to n_results additional docs
+            )
+            query_results.extend(graph_expanded)
+
+        # Step 5: Add graph context if enabled
         if include_graph_context and self.graph_index:
             query_results = self._enrich_with_graph_context(query_results)
 
-        # Step 5: Sort by final score and limit
+        # Step 6: Sort by final score and limit
         query_results.sort(key=lambda r: r.score, reverse=True)
         query_results = query_results[:n_results]
 
@@ -229,7 +254,7 @@ class QueryService:
         return QueryResponse(
             query=query_text,
             results=query_results,
-            total_found=len(filtered_results),
+            total_found=len(filtered_results) + len([r for r in query_results if r.discovered_via == "graph"]),
             filters_applied=self._filters_to_dict(filters),
             execution_time_ms=execution_time,
         )
@@ -429,6 +454,189 @@ class QueryService:
             except ValueError:
                 return None
         return None
+
+    def _expand_via_graph(
+        self,
+        semantic_results: list[QueryResult],
+        group_guids: list[str],
+        weights: ScoringWeights,
+        exclude_guids: set[str],
+        max_expansion: int = 10,
+    ) -> list[QueryResult]:
+        """Expand results via graph traversal to find related documents
+        
+        This is the key hybrid integration: starting from semantic hits,
+        traverse the graph to find documents connected via:
+        - Shared instruments (AFFECTS relationships)
+        - Peer companies (PEER_OF relationships)
+        - Same event types (TRIGGERED_BY relationships)
+        - Shared companies (MENTIONS relationships)
+        
+        Args:
+            semantic_results: Initial results from semantic search
+            group_guids: Permitted groups for access control
+            weights: Scoring weights (graph_boost used for expanded docs)
+            exclude_guids: Document GUIDs to exclude (already in results)
+            max_expansion: Maximum number of expanded results
+            
+        Returns:
+            List of graph-expanded QueryResults
+        """
+        if not self.graph_index:
+            return []
+            
+        expanded_docs: dict[str, dict[str, Any]] = {}  # guid -> {score, via, ...}
+        
+        # For each semantic result, traverse the graph
+        for result in semantic_results[:5]:  # Limit traversal to top 5
+            try:
+                # Get instruments this document affects
+                instruments = self._get_document_instruments(result.document_guid)
+                
+                for inst_ticker in instruments:
+                    # Find other documents affecting the same instrument
+                    related = self._get_documents_affecting_instrument(
+                        ticker=inst_ticker,
+                        group_guids=group_guids,
+                        limit=5,
+                    )
+                    for doc_guid, doc_data in related.items():
+                        if doc_guid not in exclude_guids and doc_guid not in expanded_docs:
+                            doc_data["via"] = f"instrument:{inst_ticker}"
+                            doc_data["via_doc"] = result.document_guid
+                            expanded_docs[doc_guid] = doc_data
+                    
+                    # Find documents affecting peer instruments
+                    peer_tickers = self._get_peer_instruments(inst_ticker)
+                    for peer_ticker in peer_tickers[:3]:  # Limit peer traversal
+                        peer_related = self._get_documents_affecting_instrument(
+                            ticker=peer_ticker,
+                            group_guids=group_guids,
+                            limit=3,
+                        )
+                        for doc_guid, doc_data in peer_related.items():
+                            if doc_guid not in exclude_guids and doc_guid not in expanded_docs:
+                                doc_data["via"] = f"peer:{inst_ticker}→{peer_ticker}"
+                                doc_data["via_doc"] = result.document_guid
+                                expanded_docs[doc_guid] = doc_data
+                                
+            except Exception:
+                continue  # Don't fail on graph traversal errors
+                
+        # Convert to QueryResults with graph-based scoring
+        graph_results: list[QueryResult] = []
+        now = datetime.now()
+        
+        for doc_guid, doc_data in list(expanded_docs.items())[:max_expansion]:
+            # Calculate scores for graph-discovered documents
+            trust_level = self._get_trust_level(doc_data.get("source_guid", ""))
+            recency_score = self._calculate_recency_score(doc_data, now)
+            
+            # Graph-discovered docs get the graph_boost instead of semantic score
+            # Their "semantic" contribution is 0, but they get full graph_boost
+            combined_score = (
+                weights.trust * trust_level
+                + weights.recency * recency_score
+                + weights.graph_boost * 1.0  # Full graph boost for discovered docs
+            )
+            
+            graph_results.append(QueryResult(
+                document_guid=doc_guid,
+                title=doc_data.get("title", ""),
+                content_snippet=doc_data.get("content", "")[:500],
+                score=combined_score,
+                similarity_score=0.0,  # Not from semantic search
+                trust_score=trust_level,
+                recency_score=recency_score,
+                graph_score=weights.graph_boost,
+                source_guid=doc_data.get("source_guid", ""),
+                source_name=doc_data.get("source_name", ""),
+                language=doc_data.get("language", ""),
+                created_at=self._parse_datetime(doc_data.get("created_at")),
+                metadata={"discovered_via": doc_data.get("via", "graph")},
+                graph_context={"via": doc_data.get("via"), "via_doc": doc_data.get("via_doc")},
+                impact_score=doc_data.get("impact_score"),
+                impact_tier=doc_data.get("impact_tier"),
+                event_type=doc_data.get("event_type"),
+                discovered_via="graph",
+            ))
+            
+        return graph_results
+
+    def _get_document_instruments(self, document_guid: str) -> list[str]:
+        """Get instruments affected by a document (via AFFECTS relationship)"""
+        if not self.graph_index:
+            return []
+            
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (d:Document {guid: $guid})-[:AFFECTS]->(i:Instrument)
+                    RETURN i.ticker AS ticker
+                    """,
+                    guid=document_guid,
+                )
+                return [record["ticker"] for record in result if record["ticker"]]
+        except Exception:
+            return []
+
+    def _get_peer_instruments(self, ticker: str) -> list[str]:
+        """Get peer instruments (via PEER_OF relationship)"""
+        if not self.graph_index:
+            return []
+            
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (i1:Instrument {ticker: $ticker})-[:PEER_OF]-(i2:Instrument)
+                    RETURN DISTINCT i2.ticker AS ticker
+                    LIMIT 5
+                    """,
+                    ticker=ticker,
+                )
+                return [record["ticker"] for record in result if record["ticker"]]
+        except Exception:
+            return []
+
+    def _get_documents_affecting_instrument(
+        self,
+        ticker: str,
+        group_guids: list[str],
+        limit: int = 10,
+    ) -> dict[str, dict[str, Any]]:
+        """Get documents that affect an instrument, respecting group permissions"""
+        if not self.graph_index:
+            return {}
+            
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (d:Document)-[:AFFECTS]->(i:Instrument {ticker: $ticker})
+                    MATCH (d)-[:IN_GROUP]->(g:Group)
+                    WHERE g.guid IN $group_guids
+                    OPTIONAL MATCH (d)-[:PRODUCED_BY]->(s:Source)
+                    RETURN d.guid AS guid, d.title AS title, d.content AS content,
+                           d.created_at AS created_at, d.language AS language,
+                           d.impact_score AS impact_score, d.impact_tier AS impact_tier,
+                           d.event_type AS event_type,
+                           s.guid AS source_guid, s.name AS source_name
+                    ORDER BY d.created_at DESC
+                    LIMIT $limit
+                    """,
+                    ticker=ticker,
+                    group_guids=group_guids,
+                    limit=limit,
+                )
+                return {
+                    record["guid"]: dict(record)
+                    for record in result
+                    if record["guid"]
+                }
+        except Exception:
+            return {}
 
     def _enrich_with_graph_context(
         self, results: list[QueryResult]

@@ -308,7 +308,7 @@ class TestQueryServiceInit:
         source_registry: SourceRegistry,
     ) -> None:
         """Test QueryService with custom scoring weights"""
-        weights = ScoringWeights(semantic=0.8, trust=0.15, recency=0.05)
+        weights = ScoringWeights(semantic=0.7, trust=0.15, recency=0.05, graph_boost=0.1)
         service = QueryService(
             embedding_index=embedding_index_test,
             document_store=document_store,
@@ -726,15 +726,16 @@ class TestTrustLevelScoring:
     def test_scoring_weights(self) -> None:
         """Test ScoringWeights validation"""
         # Valid weights
-        weights = ScoringWeights(semantic=0.7, trust=0.2, recency=0.1)
-        assert weights.semantic == 0.7
+        weights = ScoringWeights(semantic=0.6, trust=0.2, recency=0.1, graph_boost=0.1)
+        assert weights.semantic == 0.6
         assert weights.trust == 0.2
         assert weights.recency == 0.1
+        assert weights.graph_boost == 0.1
 
     def test_scoring_weights_invalid(self) -> None:
         """Test that invalid weights raise error"""
         with pytest.raises(ValueError, match="Scoring weights must sum to 1.0"):
-            ScoringWeights(semantic=0.5, trust=0.3, recency=0.1)
+            ScoringWeights(semantic=0.5, trust=0.3, recency=0.1, graph_boost=0.2)
 
     def test_custom_scoring_weights(
         self,
@@ -749,7 +750,7 @@ class TestTrustLevelScoring:
             index_document(embedding_index_test, doc)
 
         # Query with custom weights (trust-heavy)
-        custom_weights = ScoringWeights(semantic=0.5, trust=0.4, recency=0.1)
+        custom_weights = ScoringWeights(semantic=0.4, trust=0.4, recency=0.1, graph_boost=0.1)
         response = query_service.query(
             query_text="technology",
             group_guids=[test_group.group_guid],
