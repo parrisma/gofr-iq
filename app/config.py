@@ -39,7 +39,7 @@ class LLMSettings:
     """
     api_key: str | None = None
     base_url: str = "https://openrouter.ai/api/v1"
-    chat_model: str = "anthropic/claude-3.5-sonnet"
+    chat_model: str = "anthropic/claude-opus-4"
     embedding_model: str = "openai/text-embedding-3-small"
     max_retries: int = 3
     timeout: int = 60
@@ -55,7 +55,7 @@ def get_llm_settings() -> LLMSettings:
     return LLMSettings(
         api_key=os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"),
         base_url=os.environ.get("GOFR_IQ_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
-        chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "anthropic/claude-3.5-sonnet"),
+        chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "anthropic/claude-opus-4"),
         embedding_model=os.environ.get("GOFR_IQ_EMBEDDING_MODEL", "openai/text-embedding-3-small"),
         max_retries=int(os.environ.get("GOFR_IQ_LLM_MAX_RETRIES", "3")),
         timeout=int(os.environ.get("GOFR_IQ_LLM_TIMEOUT", "60")),

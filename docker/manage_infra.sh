@@ -1,6 +1,7 @@
 #!/bin/bash
 # GOFR-IQ Infrastructure Management
 # Start/stop/restart all infrastructure containers (ChromaDB, Neo4j)
+# Includes automatic rolling backup management
 #
 # Usage: 
 #   ./manage_infra.sh start [--test]     # Start infrastructure (--test for ephemeral)
@@ -9,6 +10,9 @@
 #   ./manage_infra.sh status             # Show status of all containers
 #   ./manage_infra.sh logs [service]     # Show logs (chromadb, neo4j, or all)
 #   ./manage_infra.sh clean              # Stop and remove all volumes
+#   ./manage_infra.sh backup             # Run backup for all services
+#   ./manage_infra.sh backup-list        # List available backups
+#   ./manage_infra.sh restore <service> <file>  # Restore from backup
 
 set -e
 
@@ -210,6 +214,49 @@ do_clean() {
     fi
 }
 
+do_backup() {
+    echo "======================================================================="
+    echo "Running GOFR-IQ Backup"
+    echo "======================================================================="
+    
+    if [ -f "$SCRIPT_DIR/backup.sh" ]; then
+        bash "$SCRIPT_DIR/backup.sh" "${SERVICE:-all}"
+    else
+        log_error "Backup script not found: $SCRIPT_DIR/backup.sh"
+        exit 1
+    fi
+}
+
+do_backup_list() {
+    if [ -f "$SCRIPT_DIR/backup.sh" ]; then
+        bash "$SCRIPT_DIR/backup.sh" --list
+    else
+        log_error "Backup script not found: $SCRIPT_DIR/backup.sh"
+        exit 1
+    fi
+}
+
+do_restore() {
+    local service="${1:-}"
+    local backup_file="${2:-}"
+    
+    if [ -z "$service" ] || [ -z "$backup_file" ]; then
+        log_error "Usage: $0 restore <neo4j|chromadb> <backup_file>"
+        exit 1
+    fi
+    
+    echo "======================================================================="
+    echo "Restoring GOFR-IQ $service from backup"
+    echo "======================================================================="
+    
+    if [ -f "$SCRIPT_DIR/backup.sh" ]; then
+        bash "$SCRIPT_DIR/backup.sh" "--restore-$service" "$backup_file"
+    else
+        log_error "Backup script not found: $SCRIPT_DIR/backup.sh"
+        exit 1
+    fi
+}
+
 # Main
 case "$ACTION" in
     start)
@@ -230,19 +277,31 @@ case "$ACTION" in
     clean)
         do_clean
         ;;
+    backup)
+        do_backup
+        ;;
+    backup-list)
+        do_backup_list
+        ;;
+    restore)
+        do_restore "$SERVICE" "$2"
+        ;;
     *)
-        echo "Usage: $0 {start|stop|restart|status|logs|clean} [--test]"
+        echo "Usage: $0 {start|stop|restart|status|logs|clean|backup|backup-list|restore} [--test]"
         echo ""
         echo "Commands:"
-        echo "  start     Start infrastructure containers"
-        echo "  stop      Stop infrastructure containers"
-        echo "  restart   Restart infrastructure containers"
-        echo "  status    Show status of containers"
-        echo "  logs      Show container logs (optionally specify service)"
-        echo "  clean     Remove all containers and volumes"
+        echo "  start        Start infrastructure containers"
+        echo "  stop         Stop infrastructure containers"
+        echo "  restart      Restart infrastructure containers"
+        echo "  status       Show status of containers"
+        echo "  logs         Show container logs (optionally specify service)"
+        echo "  clean        Remove all containers and volumes"
+        echo "  backup       Run backup for all services (or specify: neo4j, chromadb)"
+        echo "  backup-list  List available backups"
+        echo "  restore      Restore from backup: restore <neo4j|chromadb> <file>"
         echo ""
         echo "Options:"
-        echo "  --test    Use ephemeral test containers"
+        echo "  --test    Use ephemeral test containers (no backups)"
         exit 1
         ;;
 esac

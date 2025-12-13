@@ -342,8 +342,10 @@ class QueryService:
         weights: ScoringWeights,
     ) -> list[QueryResult]:
         """Build query results with scoring"""
+        from datetime import timezone
+        
         results: list[QueryResult] = []
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
 
         # Group results by document to avoid duplicates
         doc_results: dict[str, list[SimilarityResult]] = {}
@@ -419,7 +421,7 @@ class QueryService:
                 }
                 return trust_map.get(source.trust_level.value, 0.5)
         except Exception:
-            pass
+            pass  # nosec B110
 
         return 0.5  # Default trust
 
@@ -427,9 +429,17 @@ class QueryService:
         self, metadata: dict[str, Any], now: datetime
     ) -> float:
         """Calculate recency score (0-1, newer = higher)"""
+        from datetime import timezone
+        
         created_at = self._parse_datetime(metadata.get("created_at"))
         if not created_at:
             return 0.5  # Default for unknown dates
+
+        # Ensure both datetimes are timezone-aware for comparison
+        if created_at.tzinfo is None:
+            created_at = created_at.replace(tzinfo=timezone.utc)
+        if now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
 
         # Calculate days since creation
         days_old = (now - created_at).days
@@ -521,7 +531,7 @@ class QueryService:
                                 expanded_docs[doc_guid] = doc_data
                                 
             except Exception:
-                continue  # Don't fail on graph traversal errors
+                continue  # nosec B112 - Don't fail on graph traversal errors
                 
         # Convert to QueryResults with graph-based scoring
         graph_results: list[QueryResult] = []
@@ -654,7 +664,7 @@ class QueryService:
                 if companies:
                     context["companies"] = companies
             except Exception:
-                pass
+                pass  # nosec B110
 
             # Get related documents (same source or shared companies)
             try:
@@ -662,7 +672,7 @@ class QueryService:
                 if related:
                     context["related_documents"] = related[:5]  # Limit
             except Exception:
-                pass
+                pass  # nosec B110
 
             result.graph_context = context
 

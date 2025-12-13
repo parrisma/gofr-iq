@@ -303,7 +303,7 @@ class DocumentStore:
                         return documents
                 except Exception:
                     # Skip invalid files
-                    continue
+                    continue  # nosec B112
 
         return documents
 
@@ -353,7 +353,7 @@ class DocumentStore:
                     if limit and len(documents) >= limit:
                         return documents
                 except Exception:
-                    continue
+                    continue  # nosec B112
 
         return documents
 

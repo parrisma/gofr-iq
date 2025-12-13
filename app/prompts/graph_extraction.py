@@ -41,14 +41,31 @@ Your task is to analyze news text and extract:
 **Impact Score (0-100)** - Calibrated to expected absolute abnormal return:
 - 90-100: PLATINUM - Market-moving (>5% expected move)
   - M&A target announcement (15-25% median), fraud/scandal (8-12%), FDA binary (5-10%)
+  - **Antitrust ruling against FAANG/mega-cap (GOOGL, AAPL, AMZN, META, MSFT) = PLATINUM**
+  - CEO fraud/resignation under pressure, major regulatory action
 - 75-89: GOLD - High impact (3-5% expected move)
   - Earnings shock (>20% beat/miss = 3-4%), activist 13D (5-7%), guidance cut (2-3%)
+  - **Mega-cap earnings beat/miss (AAPL, MSFT, GOOGL, AMZN, NVDA) = GOLD minimum**
+  - **"Strong sales", "record revenue", "sales growth" from major companies = GOLD (treat as earnings-equivalent)**
+  - Production delays for major product lines, significant price cuts
+  - Major supply chain warnings from key suppliers (TSMC, Samsung)
 - 50-74: SILVER - Notable (1-3% expected move)
   - Analyst upgrade/downgrade (1.5-2.5%), index add/delete (3-5%), insider >$1M (1-2%)
+  - Product adoption milestones, market share gains/losses
+  - **Supply chain/commodity news affecting major industries (EV batteries, semiconductors, oil) = SILVER minimum (55+)**
+  - **Industry-wide trends with clear investment implications = SILVER**
 - 30-49: BRONZE - Moderate (0.5-1% expected move)
   - Conference presentation, small contracts, CFO change, routine filings
+  - Generic sector commentary without specific data or catalysts
 - 0-29: STANDARD - Routine (<0.5% expected move)
   - Press releases, minor personnel, marketing, routine regulatory
+
+**IMPORTANT: Do NOT under-score these events!**
+- Any earnings beat/miss from a major company (>$50B market cap) should be GOLD (75+)
+- "Strong sales" or "record" language from major companies = treat as earnings beat = GOLD
+- Supply chain disruptions affecting major industries = SILVER minimum (55+)
+- Antitrust/regulatory action against mega-caps = PLATINUM (90+)
+- Even "in-line" earnings from mega-caps are newsworthy = SILVER (60+)
 
 **Impact Tiers** (with time-decay rates):
 - `PLATINUM`: Top 1% - Major market-moving events (decay λ=0.05, ~14 day half-life)
@@ -59,12 +76,26 @@ Your task is to analyze news text and extract:
 
 ## Event Types
 
-Classify the primary event type from this list:
-- `EARNINGS_BEAT`: Earnings exceeded expectations
+**CRITICAL: Use specific event types, NOT generic sentiment!**
+
+Prefer specific types over POSITIVE_SENTIMENT/NEGATIVE_SENTIMENT:
+- If article mentions "beat expectations", "exceeded estimates", "strong results" → `EARNINGS_BEAT`
+- If article mentions "missed expectations", "fell short", "weak results" → `EARNINGS_MISS`
+- If article mentions "raised guidance", "outlook improved" → `GUIDANCE_RAISE`
+- If article mentions "cut guidance", "lowered outlook", "delayed production" → `GUIDANCE_CUT`
+- If article mentions "strong sales", "record sales", "sales growth" → `EARNINGS_BEAT` (treat as revenue beat)
+- If article mentions "supply chain", "commodity prices", "industry trends" → `MACRO_DATA`
+- If article mentions "antitrust", "regulatory ruling", "court decision" → `LEGAL_RULING`
+- If article mentions "layoffs", "headwinds", "challenges" without specific event → `NEGATIVE_SENTIMENT`
+
+**"Strong sales" = EARNINGS_BEAT**: When a company reports "strong sales", "record revenue", or "sales beat", classify as `EARNINGS_BEAT` even if EPS is not mentioned. Revenue performance IS earnings performance.
+
+Complete event type list:
+- `EARNINGS_BEAT`: Earnings exceeded expectations (revenue OR EPS beat, "strong sales", "record revenue")
 - `EARNINGS_MISS`: Earnings below expectations
 - `EARNINGS_WARNING`: Pre-announcement or warning
 - `GUIDANCE_RAISE`: Forward guidance increased
-- `GUIDANCE_CUT`: Forward guidance reduced
+- `GUIDANCE_CUT`: Forward guidance reduced, production delays, timeline pushed back
 - `M&A_ANNOUNCE`: M&A announcement (deal confirmed)
 - `M&A_RUMOR`: M&A speculation/rumor
 - `IPO`: Initial public offering
@@ -80,18 +111,41 @@ Classify the primary event type from this list:
 - `RATING_DOWNGRADE`: Analyst downgrade
 - `FDA_APPROVAL`: Regulatory/FDA approval
 - `FDA_REJECTION`: Regulatory/FDA rejection
-- `LEGAL_RULING`: Major litigation outcome
+- `LEGAL_RULING`: Major litigation outcome (antitrust, patent, class action) - **antitrust against mega-caps = PLATINUM**
 - `FRAUD_SCANDAL`: Fraud or accounting scandal
 - `MGMT_CHANGE`: CEO/CFO/executive change
 - `PRODUCT_LAUNCH`: Major product announcement
 - `CONTRACT_WIN`: Major contract win
 - `CONTRACT_LOSS`: Major contract loss
-- `MACRO_DATA`: Macroeconomic data release
+- `MACRO_DATA`: Macroeconomic data release, supply chain reports, industry/commodity trends
 - `CENTRAL_BANK`: Central bank decision
 - `GEOPOLITICAL`: Geopolitical event
-- `POSITIVE_SENTIMENT`: General positive news
-- `NEGATIVE_SENTIMENT`: General negative news
+- `POSITIVE_SENTIMENT`: General positive news (ONLY if no specific event applies)
+- `NEGATIVE_SENTIMENT`: General negative news (ONLY if no specific event applies)
 - `OTHER`: Unclassified event
+
+## Instrument Extraction
+
+**CRITICAL: Only extract instruments that are the PRIMARY SUBJECT of the article.**
+
+DO extract:
+- The main company being reported on
+- Companies directly named in the headline
+- Companies with specific news/data in the article
+
+DO NOT extract:
+- Competitors merely mentioned for context (e.g., "unlike rival Samsung...")
+- Peer companies without specific news about them
+- Industry ETFs unless the article is specifically about the ETF
+- Companies mentioned only in passing or for comparison
+
+Example - Article: "Tesla cuts prices in China amid competition from BYD and NIO"
+- ✅ Extract: TSLA (primary subject, took action)
+- ❌ Do NOT extract: BYD, NIO (mentioned as competitors, no specific news about them)
+
+Example - Article: "Apple beats earnings, iPhone outsells Samsung Galaxy"
+- ✅ Extract: AAPL (primary subject with earnings)
+- ❌ Do NOT extract: SSNLF (mentioned for comparison only)
 
 ## Instrument Direction
 
@@ -136,9 +190,9 @@ Respond with ONLY valid JSON in this exact structure:
 3. Confidence scores should be 0.0-1.0
 4. Magnitude: "HIGH" (>3%), "MODERATE" (1-3%), "LOW" (<1%)
 5. If no instruments can be identified, return empty list
-6. If event type is unclear, use "OTHER"
+6. If event type is unclear, use "OTHER" (prefer specific types over SENTIMENT)
 7. Summary should be <100 characters
-8. Include all mentioned companies, even if not traded
+8. Include all mentioned companies in "companies" field, but only PRIMARY subjects in "instruments"
 
 ## Scoring Edge Cases & Calibration
 
@@ -146,21 +200,23 @@ Respond with ONLY valid JSON in this exact structure:
 - Rumors without named sources: -20 points from base
 - Old news (>24h): automatically BRONZE or lower
 - Analysis/opinion pieces: cap at SILVER unless containing material info
-- Sector-wide news: distribute impact, cap individual at SILVER
+- Sector-wide news without company-specific catalyst: cap at BRONZE
 
 **Upgrade triggers:**
 - Named insider sources: +10 points
 - Multiple corroborating sources: +15 points
 - Binary regulatory outcome: minimum GOLD
 - First reporting of material event: +10 points
+- Mega-cap company (AAPL, MSFT, GOOGL, AMZN, NVDA, TSLA, META): +10 points for material events
 
 **Peer read-through:**
 - When primary company is affected, related peers get 30-50% of impact score
 - Mark peer instruments with "PEER_READTHROUGH" in reason field
+- But do NOT include peers in instruments list unless they have specific news
 
 **Market-cap considerations:**
-- Mega-cap (>$200B): same $ event = lower % impact, adjust down 10-15 points
-- Small-cap (<$2B): higher volatility, adjust up 5-10 points
+- Mega-cap (>$200B): Material events still warrant GOLD/PLATINUM (do not under-score)
+- Small-cap (<$2B): Higher volatility, adjust up 5-10 points
 """
 
 

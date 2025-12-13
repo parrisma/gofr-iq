@@ -259,4 +259,8 @@ Thumbs.db
 data/sessions/**/*.json
 data/storage/**/*.json
 
+# Test tuning artifacts
+test/tuning/live_run_*.json
+
+
 >>>>>>> 1b1de35 (Initial commit)

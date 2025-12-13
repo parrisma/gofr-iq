@@ -28,6 +28,8 @@ services:
       - IS_PERSISTENT=FALSE
       - ANONYMIZED_TELEMETRY=FALSE
       - ALLOW_RESET=TRUE
+      # Disable backups for ephemeral test containers
+      - GOFR_BACKUP_ENABLED=false
     ports:
       - "${GOFRIQ_TEST_CHROMADB_PORT:-8101}:8000"
     tmpfs:
@@ -52,6 +54,8 @@ services:
     container_name: gofr-iq-neo4j-test
     hostname: gofr-iq-neo4j-test
     environment:
+      # Disable backups for ephemeral test containers
+      - GOFR_BACKUP_ENABLED=false
       - NEO4J_AUTH=neo4j/testpassword
       - NEO4J_PLUGINS=["apoc"]
       - NEO4J_apoc_export_file_enabled=true
@@ -59,16 +63,16 @@ services:
       - NEO4J_apoc_import_file_use__neo4j__config=true
       - NEO4J_dbms_security_procedures_unrestricted=apoc.*
       # Smaller memory for test instances
-      - NEO4J_dbms_memory_heap_initial__size=256m
-      - NEO4J_dbms_memory_heap_max__size=512m
+      - NEO4J_server_memory_heap_initial__size=256m
+      - NEO4J_server_memory_heap_max__size=512m
       # Disable some features for faster startup
-      - NEO4J_dbms_tx__log_rotation_retention__policy=1 files
+      - NEO4J_db_tx__log_rotation_retention__policy=1 files
     ports:
       - "${GOFRIQ_TEST_NEO4J_HTTP_PORT:-7475}:7474"
       - "${GOFRIQ_TEST_NEO4J_BOLT_PORT:-7688}:7687"
-    tmpfs:
-      - /data:size=512M
-      - /logs:size=64M
+    volumes:
+      - neo4j-test-data:/data
+      - neo4j-test-logs:/logs
     networks:
       - gofr-test-net
     healthcheck:
@@ -85,3 +89,10 @@ networks:
   gofr-test-net:
     name: gofr-test-net
     driver: bridge
+
+# ==========================================================================
+# Volumes - Ephemeral volumes for test data (removed with docker compose down -v)
+# ==========================================================================
+volumes:
+  neo4j-test-data:
+  neo4j-test-logs:

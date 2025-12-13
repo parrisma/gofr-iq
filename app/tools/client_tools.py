@@ -105,7 +105,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     default_impact_threshold=int(impact_threshold),
                 )
             except Exception:
-                pass  # Type may already exist
+                pass  # nosec B110 - Type may already exist
             
             # Create the client with settings in properties
             graph_index.create_client(
@@ -347,7 +347,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     exchange="UNKNOWN",
                 )
             except Exception:
-                pass  # May already exist
+                pass  # nosec B110 - May already exist
             
             # Add holding
             graph_index.add_holding(
@@ -432,7 +432,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     exchange="UNKNOWN",
                 )
             except Exception:
-                pass  # May already exist
+                pass  # nosec B110 - May already exist
             
             # Add to watchlist (WATCHES relationship)
             props: dict[str, Any] = {}

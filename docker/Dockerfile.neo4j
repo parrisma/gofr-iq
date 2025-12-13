@@ -1,5 +1,5 @@
 # Neo4j server for GOFR-IQ
-# Provides graph database for entity relationships
+# Provides graph database for entity relationships with automatic rolling backups
 #
 # Build: ./build-neo4j.sh
 # Run:   ./start-neo4j.sh [-e] [-p BOLT_PORT] [-w HTTP_PORT]
@@ -16,9 +16,27 @@ ENV NEO4J_apoc_import_file_enabled=true
 ENV NEO4J_apoc_import_file_use__neo4j__config=true
 ENV NEO4J_dbms_security_procedures_unrestricted=apoc.*
 
+# Backup configuration defaults
+ENV GOFR_BACKUP_ENABLED=true
+ENV GOFR_BACKUP_ON_STARTUP=true
+ENV GOFR_BACKUP_RETENTION=7
+ENV GOFR_BACKUP_MAX_COUNT=10
+ENV GOFR_BACKUP_DIR=/backups
+
+# Copy and set up custom entrypoint for backup support
+COPY entrypoint-neo4j.sh /entrypoint-neo4j.sh
+RUN chmod +x /entrypoint-neo4j.sh
+
+# Create backup directory
+RUN mkdir -p /backups/neo4j /backups/logs
+
 # Health check for container orchestration
 HEALTHCHECK --interval=10s --timeout=5s --start-period=60s --retries=5 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1
 
 # Expose ports
 EXPOSE 7474 7687
+
+# Use custom entrypoint that handles backups
+ENTRYPOINT ["/entrypoint-neo4j.sh"]
+CMD ["neo4j"]

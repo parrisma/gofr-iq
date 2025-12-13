@@ -140,7 +140,7 @@ class TestLLMSettings:
         """Test default settings values"""
         settings = LLMSettings()
         assert settings.base_url == "https://openrouter.ai/api/v1"
-        assert settings.chat_model == "anthropic/claude-3.5-sonnet"
+        assert settings.chat_model == "anthropic/claude-opus-4"
         assert settings.embedding_model == "openai/text-embedding-3-small"
         assert settings.max_retries == 3
         assert settings.timeout == 60

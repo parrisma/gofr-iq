@@ -285,15 +285,17 @@ class IngestService:
                 continue
                 
             # Ensure instrument exists (create if not)
+            instrument_guid = f"{inst.ticker}:UNKNOWN"
             try:
-                self.graph_index.create_instrument(
+                node = self.graph_index.create_instrument(
                     ticker=inst.ticker,
                     name=inst.name or inst.ticker,
                     instrument_type="STOCK",  # Default type
                     exchange="UNKNOWN",  # Will be updated when full instrument data available
                 )
+                instrument_guid = node.guid
             except Exception:
-                pass  # Instrument may already exist
+                pass  # nosec B110 - Instrument may already exist
                 
             # Map direction to expected values
             direction_map = {
@@ -315,7 +317,7 @@ class IngestService:
             try:
                 self.graph_index.add_document_affects(
                     document_guid=document_guid,
-                    instrument_guid=inst.ticker,
+                    instrument_guid=instrument_guid,
                     direction=direction,
                     magnitude=magnitude,
                 )
@@ -409,13 +411,19 @@ class IngestService:
         try:
             # Step 8: Index in ChromaDB (if configured)
             if self.embedding_index:
+                # Include title and created_at in embedding metadata for query results
+                embedding_metadata = {
+                    "title": doc.title,
+                    "created_at": doc.created_at.isoformat() if doc.created_at else "",
+                    **(doc.metadata or {}),
+                }
                 self.embedding_index.embed_document(
                     document_guid=doc.guid,
                     content=doc.content,
                     group_guid=doc.group_guid,
                     source_guid=doc.source_guid,
                     language=doc.language,
-                    metadata=doc.metadata,
+                    metadata=embedding_metadata,
                 )
 
             # Step 9: Index in Neo4j (if configured)

@@ -337,7 +337,7 @@ class SourceRegistry:
                     sources.append(source)
                 except Exception:
                     # Skip invalid source files
-                    continue
+                    continue  # nosec B112
 
         return sources
 

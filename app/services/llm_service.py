@@ -222,7 +222,7 @@ class LLMService:
                             "message", response.text
                         )
                     except Exception:
-                        pass
+                        pass  # nosec B110
                     raise LLMAPIError(response.status_code, error_detail)
 
                 return response.json()  # type: ignore[no-any-return]

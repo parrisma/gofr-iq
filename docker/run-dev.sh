@@ -92,6 +92,7 @@ docker run -d \
     -v "$PROJECT_ROOT:/home/gofr/devroot/gofr-iq:rw" \
     -v ${VOLUME_NAME}:/home/gofr/devroot/gofr-iq/data:rw \
     -v /var/run/docker.sock:/var/run/docker.sock:rw \
+    -v /home/parris3142/devroot/gofr-plot:/home/gofr/devroot/gofr-plot:ro \
     --group-add ${DOCKER_GID} \
     -e GOFRIQ_ENV=development \
     -e GOFRIQ_DEBUG=true \

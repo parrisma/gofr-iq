@@ -72,6 +72,23 @@ class TestCodeQuality:
 
         pytest.skip("pyright not found - install with: pip install pyright")
 
+    @pytest.fixture
+    def bandit_executable(self, project_root):
+        """Get the path to the bandit executable."""
+        venv_bandit = project_root / ".venv" / "bin" / "bandit"
+        if venv_bandit.exists():
+            return str(venv_bandit)
+
+        # Try system bandit
+        try:
+            result = subprocess.run(["which", "bandit"], capture_output=True, text=True, check=False)
+            if result.returncode == 0:
+                return result.stdout.strip()
+        except Exception:
+            pass
+
+        pytest.skip("bandit not found - install with: pip install bandit")
+
     def test_no_linting_errors(self, project_root, ruff_executable):
         """
         ZERO TOLERANCE: Enforce that there are no linting errors in the codebase.
@@ -222,6 +239,27 @@ class TestCodeQuality:
             ]
 
             pytest.fail("\n".join(error_message))
+
+    def test_security_bandit(self, project_root, bandit_executable):
+        """
+        ZERO TOLERANCE: Enforce that there are no security vulnerabilities.
+
+        This test runs bandit on the app directory and fails if any security
+        issues are found.
+        """
+        # Run bandit
+        result = subprocess.run(
+            [bandit_executable, "-r", "app", "-c", "pyproject.toml"],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+        )
+
+        if result.returncode != 0:
+            pytest.fail(
+                f"\n\nSECURITY VULNERABILITIES FOUND:\n\n{result.stdout}\n\n"
+                "Please fix the security issues or mark false positives with # nosec."
+            )
 
     def test_ruff_configuration_exists(self, project_root):
         """Verify that ruff configuration exists in pyproject.toml."""

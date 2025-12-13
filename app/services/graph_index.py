@@ -211,7 +211,7 @@ class GraphIndex:
         self,
         uri: str = DEFAULT_URI,
         username: str = "neo4j",
-        password: str = "testpassword",
+        password: str = "testpassword",  # nosec B107
         database: str = "neo4j",
     ) -> None:
         """Initialize graph index
@@ -1439,7 +1439,7 @@ class GraphIndex:
 def create_graph_index(
     uri: str = "bolt://localhost:7687",
     username: str = "neo4j",
-    password: str = "testpassword",
+    password: str = "testpassword",  # nosec B107
     database: str = "neo4j",
 ) -> GraphIndex:
     """Factory function to create a graph index

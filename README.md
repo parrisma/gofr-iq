@@ -1,71 +1,65 @@
-# GOFR-IQ: MCP Server Template
+# GOFR-IQ: APAC Brokerage News Repository
 
-GOFR-IQ is a Model Context Protocol (MCP) server project. This is a clean starting point for building MCP-based services.
+MCP server for ingesting, indexing, and querying financial news with graph-based ranking and client-specific relevance scoring.
 
-## 🚀 Features
+## Features
 
-- **gofr-common Integration**: Uses shared authentication, logging, config, and web modules
-- **Docker Development**: Containerized development environment
-- **Standard Ports**: 8060 (MCP), 8061 (MCPO), 8062 (Web)
+- **Document Ingestion**: Multi-language support (EN, ZH, JA, KO), duplicate detection, 20K word limit
+- **Hybrid Search**: ChromaDB embeddings + Neo4j graph traversal
+- **Graph-Based Ranking**: LLM-extracted impact scores, event types, instrument mentions
+- **Client Personalization**: Portfolio/watchlist-aware news feeds with time decay
+- **Group Access Control**: JWT-based permission boundaries
 
-## 🏗️ Project Structure
+## Architecture
 
 ```
-gofr-iq/
-├── app/
-│   ├── auth/           # Re-exports from gofr_common.auth
-│   ├── exceptions/     # Re-exports from gofr_common.exceptions
-│   ├── logger/         # Re-exports from gofr_common.logger
-│   └── config.py       # Project config with GOFR_IQ prefix
-├── docker/
-│   ├── Dockerfile.dev
-│   ├── build-dev.sh
-│   ├── run-dev.sh
-│   └── entrypoint-dev.sh
-├── lib/
-│   └── gofr-common/    # Git submodule
-├── scripts/
-│   ├── gofriq.env
-│   ├── restart_servers.sh
-│   └── token_manager.sh
-└── test/
-    └── test_hello.py
+MCP (8060) ─┐
+MCPO (8061) ├─► Services ─► ChromaDB (embeddings) + Neo4j (graph)
+Web (8062) ─┘
 ```
 
-## 🛠️ Getting Started
-
-### Prerequisites
-
-- Docker
-- gofr-base:latest image (from gofr-common)
-
-### Build and Run
+## Quick Start
 
 ```bash
-cd docker
-./build-dev.sh
-./run-dev.sh
-```
+# Build and run
+cd docker && ./build-dev.sh && ./run-dev.sh
 
-### Enter Container
-
-```bash
+# Enter container
 docker exec -it gofr-iq-dev bash
-source .venv/bin/activate
+
+# Run tests (auto-starts Neo4j + ChromaDB)
+bash scripts/run_tests.sh
+
+# Start MCP server
+python -m app.main_mcp --no-auth
 ```
 
-### Run Tests
+## MCP Tools
+
+| Tool | Purpose |
+|------|---------|
+| `ingest_document` | Store document with LLM extraction |
+| `query_documents` | Semantic search with impact filters |
+| `get_client_feed` | Ranked news for client portfolio |
+| `explore_graph` | Traverse relationships |
+| `get_instrument_news` | News by ticker |
+
+## Configuration
+
+Set in `scripts/gofriq.env`:
+- `GOFR_IQ_OPENROUTER_API_KEY` - LLM for extraction (optional)
+- `GOFR_IQ_CHROMADB_HOST` - ChromaDB endpoint
+- `GOFR_IQ_NEO4J_URI` - Neo4j endpoint
+
+## Tests
+
+605 tests, 76% coverage. Infrastructure containers auto-start.
 
 ```bash
-pytest test/
+bash scripts/run_tests.sh          # Full suite with infra
+bash scripts/run_tests.sh --no-infra  # Unit tests only
 ```
 
-## 📦 Dependencies
-
-Core dependencies come from `gofr-common`:
-- mcp, pydantic, fastapi, uvicorn, starlette
-- PyJWT, httpx, mcpo
-
-## 📝 License
+## License
 
 MIT

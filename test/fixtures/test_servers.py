@@ -194,6 +194,9 @@ class ServerManager:
             # gofr-common compatible vars
             "GOFR_IQ_JWT_SECRET": self.jwt_secret,
             "GOFR_IQ_TOKEN_STORE": str(self.logs_dir / "gofriq_tokens_test.json"),
+            "GOFR_IQ_MCP_PORT": str(self.mcp_port),
+            "GOFR_IQ_MCPO_PORT": str(self.mcpo_port),
+            "GOFR_IQ_WEB_PORT": str(self.web_port),
         })
         return env
     
@@ -255,29 +258,20 @@ class ServerManager:
         """
         server = self._servers[name]
         
-        # Check if main app module exists
-        app_main = self.project_root / "app" / "main.py"
-        if not app_main.exists():
-            return []  # Server not implemented yet
-        
         if name == "mcp":
             return [
-                "uv", "run", "python", "-m", "app.main",
-                "--mode", "mcp",
+                "uv", "run", "python", "-m", "app.main_mcp",
                 "--port", str(server.port),
                 "--host", server.host,
             ]
         elif name == "mcpo":
+            # MCPO uses env vars for configuration
             return [
-                "uv", "run", "python", "-m", "app.main",
-                "--mode", "mcpo",
-                "--port", str(server.port),
-                "--host", server.host,
+                "uv", "run", "python", "-m", "app.main_mcpo",
             ]
         elif name == "web":
             return [
-                "uv", "run", "python", "-m", "app.main",
-                "--mode", "web",
+                "uv", "run", "python", "-m", "app.main_web",
                 "--port", str(server.port),
                 "--host", server.host,
             ]

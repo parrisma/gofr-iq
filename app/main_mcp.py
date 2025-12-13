@@ -1,0 +1,134 @@
+"""GOFR-IQ MCP Server - Main Entry Point.
+
+This module provides the main entry point for the MCP server.
+The server exposes tools for document ingestion, source management, and document retrieval.
+
+Usage:
+    # Run with standard options
+    python -m app.main_mcp
+
+    # Run with custom host and port
+    python -m app.main_mcp --host 0.0.0.0 --port 8060
+
+    # Run without authentication (development only)
+    python -m app.main_mcp --no-auth
+
+Environment Variables:
+    GOFR_IQ_STORAGE_DIR: Base directory for document storage
+    GOFR_IQ_MCP_PORT: Port for MCP server (default: 8060)
+    GOFR_IQ_LOG_LEVEL: Logging level (default: INFO)
+    GOFR_IQ_AUTH_ENABLED: Enable/disable authentication (default: true)
+    GOFR_IQ_JWT_SECRET: JWT secret for authentication
+"""
+
+from __future__ import annotations
+
+import argparse
+import logging
+import os
+import sys
+
+from app.config import get_settings
+from app.logger import ConsoleLogger
+from app.mcp_server.mcp_server import create_mcp_server
+
+logger = ConsoleLogger(name="main_mcp", level=logging.INFO)
+
+if __name__ == "__main__":
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(
+        description="gofr-iq MCP Server - APAC Brokerage News Repository"
+    )
+    parser.add_argument(
+        "--host",
+        type=str,
+        default=None,
+        help="Host address to bind to (default: from env or 0.0.0.0)",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=None,
+        help="Port number to listen on (default: from env or 8060)",
+    )
+    parser.add_argument(
+        "--storage-dir",
+        type=str,
+        default=None,
+        help="Storage directory for documents (default: from env)",
+    )
+    parser.add_argument(
+        "--no-auth",
+        action="store_true",
+        help="Disable authentication (WARNING: insecure, for development only)",
+    )
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        default="INFO",
+        help="Logging level for all components (default: INFO)",
+    )
+    args = parser.parse_args()
+
+    # Parse log level
+    log_level = getattr(logging, args.log_level.upper(), logging.INFO)
+
+    # Create logger for startup messages
+    startup_logger = ConsoleLogger(name="startup", level=log_level)
+
+    try:
+        # Determine auth requirement
+        # Check command line first, then environment variable
+        if args.no_auth:
+            require_auth = False
+            startup_logger.warning("Authentication disabled via --no-auth flag")
+        else:
+            # Check environment variable
+            auth_enabled = os.environ.get("GOFR_IQ_AUTH_ENABLED", "true").lower()
+            require_auth = auth_enabled not in ("false", "0", "no")
+            if not require_auth:
+                startup_logger.warning("Authentication disabled via GOFR_IQ_AUTH_ENABLED")
+
+        # Build settings from environment and CLI args
+        settings = get_settings(require_auth=require_auth)
+
+        # Override with CLI arguments if provided
+        host = args.host or os.environ.get("GOFR_IQ_MCP_HOST", "0.0.0.0")  # nosec B104
+        port = args.port or settings.server.mcp_port
+        storage_dir = args.storage_dir or settings.storage.storage_dir
+
+        startup_logger.info(
+            "Starting GOFR-IQ MCP Server",
+            host=host,
+            port=port,
+            storage_dir=str(storage_dir),
+            auth_enabled=require_auth,
+            log_level=args.log_level,
+        )
+
+        # Create and run server
+        mcp = create_mcp_server(
+            storage_dir=storage_dir,
+            mcp_port=port,
+            host=host,
+            log_level=args.log_level,
+            require_auth=require_auth,
+        )
+
+        print(f"Starting GOFR-IQ MCP Server on {host}:{port}...")
+        print(f"Storage directory: {storage_dir}")
+        print(f"Authentication: {'Enabled' if require_auth else 'Disabled'}")
+        print("Transport: HTTP Streamable")
+        print("Press Ctrl+C to stop")
+        print()
+
+        # Run the server with HTTP streamable transport (NOT stdio or SSE)
+        mcp.run(transport="streamable-http")
+
+    except KeyboardInterrupt:
+        print("\nServer stopped")
+        sys.exit(0)
+    except Exception as e:
+        startup_logger.error("FATAL: Failed to start MCP server", error=str(e))
+        sys.exit(1)

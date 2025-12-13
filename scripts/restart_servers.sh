@@ -213,7 +213,11 @@ export GOFR_WEB_HOST="$GOFRIQ_HOST"
 export GOFR_NETWORK="$GOFRIQ_DOCKER_NETWORK"
 
 # Extra args for MCP server (project-specific)
-export GOFR_MCP_EXTRA_ARGS="--web-url http://$GOFRIQ_HOST:$GOFRIQ_WEB_PORT"
+# GOFR-IQ doesn't need web-url arg
+export GOFR_MCP_EXTRA_ARGS=""
+
+# Extra args for Web server - disable auth for development
+export GOFR_WEB_EXTRA_ARGS="--no-auth"
 
 # Call shared script
 source "$COMMON_SCRIPTS/restart_servers.sh" "${PASSTHROUGH_ARGS[@]}"

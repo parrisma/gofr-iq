@@ -1,0 +1,61 @@
+# GOFR-IQ Production Image
+# Minimal runtime container for MCP, MCPO, and Web servers
+#
+# Build:
+#   ./docker/build-base.sh  # First time only
+#   ./docker/build-prod.sh
+#
+# Run:
+#   docker compose -f docker/docker-compose.yml up -d
+
+FROM gofr-iq_base:latest
+
+# Switch to root for user/group setup
+USER root
+
+# Add Unix group 'gofr-iq' with auto-allocated GID
+RUN groupadd --system gofr-iq
+
+# Add user 'gofr-iq' with auto-allocated UID and assign to group 'gofr-iq'
+RUN useradd --system --gid gofr-iq --home-dir /home/gofr-iq --create-home gofr-iq
+
+# Create application directory and data directories
+RUN mkdir -p /home/gofr-iq/app \
+    && mkdir -p /home/gofr-iq/data/storage \
+    && mkdir -p /home/gofr-iq/data/auth \
+    && mkdir -p /home/gofr-iq/logs \
+    && chown -R gofr-iq:gofr-iq /home/gofr-iq
+
+# Copy project files
+COPY --chown=gofr-iq:gofr-iq pyproject.toml /home/gofr-iq/
+COPY --chown=gofr-iq:gofr-iq README.md /home/gofr-iq/
+COPY --chown=gofr-iq:gofr-iq app/ /home/gofr-iq/app/
+COPY --chown=gofr-iq:gofr-iq lib/ /home/gofr-iq/lib/
+
+# Switch to gofr-iq user
+USER gofr-iq
+WORKDIR /home/gofr-iq
+
+# Create a UV virtual environment for production
+RUN uv venv /home/gofr-iq/.venv --python=python3.11
+
+# Set environment variables to use the venv
+ENV VIRTUAL_ENV=/home/gofr-iq/.venv
+ENV PATH="/home/gofr-iq/.venv/bin:$PATH"
+
+# Install dependencies using UV and pyproject.toml
+# First install gofr-common from lib/, then the main project
+RUN uv pip install -e ./lib/gofr-common && uv pip install -e .
+
+# Environment defaults
+ENV GOFR_IQ_ENV=PROD \
+    GOFR_IQ_LOG_LEVEL=INFO
+
+# Expose ports
+# 8060: MCP Server
+# 8061: MCPO Server
+# 8062: Web Server
+EXPOSE 8060 8061 8062
+
+# Default command to run the MCP server
+CMD ["python", "-m", "app.main"]
