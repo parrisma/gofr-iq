@@ -1,11 +1,6 @@
-"""MCP Graph Tools - Phase 5.
+"""MCP Graph Tools.
 
-Provides MCP tools for graph exploration and market context.
-
-Tools:
-- explore_graph: Traverse from a node to discover related entities
-- get_market_context: Get market context for an instrument (events, peers)
-- get_instrument_news: Get news affecting a specific instrument
+Provides knowledge graph exploration and market context.
 """
 
 from __future__ import annotations
@@ -27,17 +22,15 @@ ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
 
 
 def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
-    """Register graph exploration tools with the MCP server.
-
-    Args:
-        mcp: FastMCP server instance
-        graph_index: GraphIndex for graph queries
-    """
+    """Register graph exploration tools with the MCP server."""
 
     @mcp.tool(
         name="explore_graph",
-        description="Traverse the knowledge graph from a starting node to discover related entities. "
-        "Use this to answer questions like 'What else affects AAPL?' or 'What companies are peers of TSLA?'",
+        description=(
+            "Traverse the knowledge graph to explore relationships. "
+            "Use for questions like 'What else affects AAPL?' or 'What are TSLA's peers?' "
+            "Discovers connected entities like companies, documents, events, and sectors."
+        ),
     )
     def explore_graph(
         node_type: str,
@@ -46,45 +39,19 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         max_depth: int = 1,
         limit: int = 20,
     ) -> ToolResponse:
-        """Explore relationships from a node in the graph.
+        """Traverse relationships from a starting node.
 
         Args:
-            node_type: Type of the starting node. Options:
-                - INSTRUMENT: Stock, ETF, etc. (use ticker as node_id, e.g., "AAPL")
-                - COMPANY: Company entity (use ticker/name as node_id)
-                - DOCUMENT: News document (use GUID as node_id)
-                - EVENT_TYPE: Event category (use code as node_id, e.g., "EARNINGS_BEAT")
-                - SECTOR: Industry sector (use name as node_id)
-                - CLIENT: Client profile (use GUID as node_id)
-            node_id: Identifier for the node (ticker, GUID, or name depending on type)
-            relationship_types: Optional list of relationship types to traverse. Options:
-                - AFFECTS: Documents affecting instruments
-                - TRIGGERED_BY: Documents triggering events
-                - MENTIONS: Documents mentioning companies
-                - PEER_OF: Peer companies
-                - CONSTITUENT_OF: Index constituents
-                - ISSUED_BY: Instrument issuer
-                - HOLDS: Portfolio holdings
-                - WATCHES: Watchlist instruments
-                If not specified, all relationships are traversed.
-            max_depth: Maximum traversal depth (1-3, default: 1)
-            limit: Maximum number of related nodes to return (default: 20)
+            node_type: INSTRUMENT (ticker), COMPANY, DOCUMENT (guid), EVENT_TYPE, SECTOR, CLIENT
+            node_id: Identifier (ticker like "AAPL", or GUID, or name)
+            relationship_types: Filter traversal - AFFECTS, PEER_OF, MENTIONS, HOLDS, WATCHES, etc.
+            max_depth: How far to traverse (1-3, default: 1)
+            limit: Max related nodes to return (default: 20)
 
         Returns:
-            JSON response with:
-            - start_node: Starting node information
-            - relationships: List of discovered relationships with:
-                - relationship_type: Type of relationship
-                - target_node: Related node information
-                - properties: Relationship properties (weight, confidence, etc.)
-            - total_found: Total relationships discovered
-            - depth: Actual traversal depth
-
-        Errors:
-            - NODE_NOT_FOUND: Starting node doesn't exist
-            - INVALID_NODE_TYPE: Unknown node type
-            - INVALID_RELATIONSHIP: Unknown relationship type
-            - GRAPH_ERROR: Graph query failed
+            start_node: Starting point info
+            relationships: Connected nodes with type, properties, confidence
+            total_found: Number of relationships discovered
         """
         try:
             # Validate node type
@@ -196,8 +163,11 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
     @mcp.tool(
         name="get_market_context",
-        description="Get comprehensive market context for an instrument including "
-        "recent events, peer companies, index memberships, and related factors.",
+        description=(
+            "Get market context for a stock. "
+            "Use when you need background on a ticker: peers, recent events, index memberships. "
+            "Good for 'Tell me about AAPL' or 'What's the context around TSLA?'"
+        ),
     )
     def get_market_context(
         ticker: str,
@@ -209,25 +179,19 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """Get market context for an instrument.
 
         Args:
-            ticker: Instrument ticker symbol (e.g., "AAPL", "TSLA")
-            include_peers: Include peer companies (default: True)
-            include_events: Include recent events affecting this instrument (default: True)
+            ticker: Stock symbol (e.g., "AAPL", "700.HK")
+            include_peers: Include similar companies (default: True)
+            include_events: Include recent news/events (default: True)
             include_indices: Include index memberships (default: True)
-            days_back: Look back period for events in days (default: 30)
+            days_back: How many days of history (default: 30)
 
         Returns:
-            JSON response with:
-            - instrument: Instrument details (ticker, name, type, exchange)
-            - company: Issuing company information
-            - peers: List of peer companies with correlation
-            - recent_events: Recent documents/events affecting this instrument
-            - indices: Index memberships
-            - sector: Sector classification
-            - statistics: Key statistics (if available)
-
-        Errors:
-            - INSTRUMENT_NOT_FOUND: Instrument doesn't exist
-            - MARKET_CONTEXT_ERROR: Failed to retrieve context
+            instrument: Basic info (ticker, name, exchange)
+            company: Issuer details
+            peers: Similar companies with correlation
+            recent_events: Recent news affecting this stock
+            indices: Index memberships (S&P 500, etc.)
+            sector: Industry classification
         """
         try:
             # Get the instrument
@@ -362,8 +326,11 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
     @mcp.tool(
         name="get_instrument_news",
-        description="Get news documents that affect a specific instrument, "
-        "sorted by impact and recency. Useful for understanding what's driving price movements.",
+        description=(
+            "Get news affecting a specific stock. "
+            "Use for 'What news is moving AAPL?' or 'Why is TSLA down?' "
+            "Returns articles sorted by impact and recency."
+        ),
     )
     def get_instrument_news(
         ticker: str,
@@ -372,32 +339,18 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         min_impact_score: float | None = None,
         limit: int = 20,
     ) -> ToolResponse:
-        """Get news affecting an instrument.
+        """Get news affecting a stock.
 
         Args:
-            ticker: Instrument ticker symbol (e.g., "AAPL")
-            group_guids: List of group GUIDs for permission filtering
-            days_back: Look back period in days (default: 7)
-            min_impact_score: Minimum impact score (0-100)
-            limit: Maximum number of documents (default: 20)
+            ticker: Stock symbol (e.g., "AAPL", "BABA")
+            group_guids: Groups to search within
+            days_back: How many days back (default: 7)
+            min_impact_score: Min importance 0-100
+            limit: Max articles (default: 20)
 
         Returns:
-            JSON response with:
-            - ticker: Instrument ticker
-            - articles: List of documents with:
-                - document_guid: Document identifier
-                - title: Document title
-                - impact_score: Impact score (0-100)
-                - impact_tier: Impact tier
-                - event_type: Event type if classified
-                - magnitude: Impact magnitude on this instrument
-                - direction: Impact direction (positive/negative/neutral)
-                - created_at: Document timestamp
-            - total_found: Total matching documents
-
-        Errors:
-            - INSTRUMENT_NOT_FOUND: Instrument doesn't exist
-            - NEWS_QUERY_ERROR: Failed to retrieve news
+            articles: News with title, impact_score, event_type, direction (positive/negative)
+            total_found: Number of matching articles
         """
         try:
             # Verify instrument exists

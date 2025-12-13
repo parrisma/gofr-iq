@@ -1,10 +1,6 @@
-"""MCP Source Tools - Phase 8.
+"""MCP Source Tools.
 
-Provides MCP tools for source registry operations.
-
-Tools:
-- list_sources: List all registered sources with optional filtering
-- get_source: Get detailed information about a specific source
+Provides news source registry operations.
 """
 
 from __future__ import annotations
@@ -26,17 +22,15 @@ ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
 
 
 def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None:
-    """Register source tools with the MCP server.
-
-    Args:
-        mcp: FastMCP server instance
-        source_registry: SourceRegistry for source operations
-    """
+    """Register source tools with the MCP server."""
 
     @mcp.tool(
         name="list_sources",
-        description="List all registered news sources. "
-        "Optionally filter by group, region, or type.",
+        description=(
+            "List available news sources. "
+            "Use to find source_guids before ingesting documents, "
+            "or to discover sources by region/type."
+        ),
     )
     def list_sources(
         group_guid: str | None = None,
@@ -47,15 +41,14 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         """List registered news sources.
 
         Args:
-            group_guid: Filter sources by group GUID (optional)
-            region: Filter by region code, e.g., 'APAC', 'JP', 'CN' (optional)
-            source_type: Filter by source type, e.g., 'news_agency', 'broker', 'analyst' (optional)
-            active_only: If True (default), only return active sources
+            group_guid: Filter by group (optional)
+            region: Filter by region: APAC, JP, CN, HK, SG, AU, KR, TW, etc.
+            source_type: Filter by type: news_agency, broker, analyst, regulator
+            active_only: Only return active sources (default: True)
 
         Returns:
-            JSON response with:
-            - sources: List of source objects with guid, name, type, region, languages
-            - count: Total number of matching sources
+            sources: List with guid, name, type, region, languages, trust_level
+            count: Total matching sources
         """
         try:
             # Get access groups if group_guid provided

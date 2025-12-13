@@ -1,9 +1,6 @@
-"""MCP Ingest Tools - Phase 8.
+"""MCP Ingest Tools.
 
-Provides MCP tool for document ingestion into the news repository.
-
-Tool:
-- ingest_document: Ingest a new document with validation, language detection, and duplicate checking
+Provides document ingestion into the APAC brokerage news repository.
 """
 
 from __future__ import annotations
@@ -31,17 +28,15 @@ ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
 
 
 def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
-    """Register ingest tools with the MCP server.
-
-    Args:
-        mcp: FastMCP server instance
-        ingest_service: IngestService for document ingestion
-    """
+    """Register ingest tools with the MCP server."""
 
     @mcp.tool(
         name="ingest_document",
-        description="Ingest a news document into the repository. "
-        "Validates source, detects language, checks for duplicates, and stores the document.",
+        description=(
+            "Add a news article to the repository. "
+            "Use when you have news content to store. "
+            "Automatically detects language and checks for duplicates."
+        ),
     )
     def ingest_document(
         title: str,
@@ -51,30 +46,22 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
         language: str | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> ToolResponse:
-        """Ingest a document into the news repository.
+        """Ingest a news document.
 
         Args:
-            title: Document title (required, non-empty)
-            content: Document content (required, non-empty)
-            source_guid: GUID of the registered source (required, valid UUID)
-            group_guid: GUID of the group this document belongs to (required, valid UUID)
-            language: Optional language code (e.g., 'en', 'zh', 'ja'). Auto-detected if not provided.
-            metadata: Optional metadata dictionary for additional document attributes
+            title: Article headline
+            content: Full article text
+            source_guid: Source identifier (use list_sources to find valid sources)
+            group_guid: Group this document belongs to
+            language: Language code (en/zh/ja) - auto-detected if omitted
+            metadata: Optional extra attributes
 
         Returns:
-            JSON response with ingestion result including:
-            - guid: The assigned document GUID
-            - status: "success" or "duplicate"
-            - language: The document language
-            - language_detected: Whether language was auto-detected
-            - word_count: Number of words in the document
-            - duplicate_of: If duplicate, the GUID of the original document
-
-        Errors:
-            - INVALID_SOURCE: The source_guid doesn't exist or isn't accessible
-            - WORD_COUNT_EXCEEDED: Document exceeds the maximum word count limit
-            - VALIDATION_ERROR: Invalid input parameters
-            - INGEST_ERROR: General ingestion failure
+            guid: Assigned document ID
+            status: "success" or "duplicate"
+            language: Detected/provided language
+            word_count: Document length
+            duplicate_of: Original document ID if duplicate
         """
         try:
             result = ingest_service.ingest(

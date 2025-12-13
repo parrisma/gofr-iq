@@ -1,10 +1,6 @@
-"""MCP Query Tools - Phase 8 & 12.
+"""MCP Query Tools.
 
-Provides MCP tools for document retrieval and search.
-
-Tools:
-- get_document: Retrieve a document by its GUID
-- query_documents: Search documents with semantic similarity and filters
+Provides document retrieval and semantic search.
 """
 
 from __future__ import annotations
@@ -32,51 +28,29 @@ def register_query_tools(
     document_store: DocumentStore,
     query_service: Optional[QueryService] = None,
 ) -> None:
-    """Register query tools with the MCP server.
-
-    Args:
-        mcp: FastMCP server instance
-        document_store: DocumentStore for document retrieval
-        query_service: QueryService for semantic search (optional)
-    """
+    """Register query tools with the MCP server."""
 
     @mcp.tool(
         name="get_document",
-        description="Retrieve a document from the repository by its GUID. "
-        "Returns the full document content and metadata.",
+        description=(
+            "Retrieve a specific document by ID. "
+            "Use when you have a document_guid and need the full content."
+        ),
     )
     def get_document(
         guid: str,
         group_guid: str,
         date_hint: str | None = None,
     ) -> ToolResponse:
-        """Get a document by its GUID.
+        """Get a document by GUID.
 
         Args:
-            guid: The document GUID to retrieve
-            group_guid: The group GUID (required for access control and path resolution)
-            date_hint: Optional date hint in YYYY-MM-DD format to speed up lookup.
-                      If not provided, all date partitions will be searched.
+            guid: Document identifier
+            group_guid: Group for access control
+            date_hint: YYYY-MM-DD to speed up lookup (optional)
 
         Returns:
-            JSON response with full document data including:
-            - guid: Document unique identifier
-            - source_guid: Source that produced this document
-            - group_guid: Owning group
-            - title: Document title
-            - content: Full document content
-            - language: Document language code
-            - language_detected: Whether language was auto-detected
-            - word_count: Number of words
-            - version: Document version number
-            - duplicate_of: If duplicate, the original document GUID
-            - duplicate_score: Similarity score if duplicate
-            - created_at: Creation timestamp
-            - updated_at: Last update timestamp
-            - metadata: Additional document metadata
-
-        Errors:
-            - DOCUMENT_NOT_FOUND: The document doesn't exist or isn't accessible
+            Full document with title, content, metadata, timestamps
         """
         try:
             # Parse date hint if provided
@@ -135,9 +109,11 @@ def register_query_tools(
 
         @mcp.tool(
             name="query_documents",
-            description="Search documents using semantic similarity with optional filters. "
-            "Returns ranked results based on relevance, trust scores, and recency. "
-            "Supports impact-based filtering for high-impact news.",
+            description=(
+                "Search news articles by topic, company, or event. "
+                "Use for questions like 'What news about Apple?' or 'Recent M&A activity in APAC'. "
+                "Returns ranked results with relevance scores."
+            ),
         )
         def query_documents(
             query: str,
@@ -155,52 +131,28 @@ def register_query_tools(
             client_guid: str | None = None,
             include_graph_context: bool = True,
         ) -> ToolResponse:
-            """Search documents using semantic similarity.
+            """Search documents using natural language.
 
             Args:
-                query: Natural language search query
-                group_guids: List of group GUIDs the user has access to
-                n_results: Maximum number of results to return (default: 10)
-                regions: Filter by region codes (e.g., ["APAC", "EMEA"])
-                sectors: Filter by sectors (e.g., ["Technology", "Finance"])
-                companies: Filter by company tickers (e.g., ["AAPL", "MSFT"])
-                languages: Filter by language codes (e.g., ["en", "zh"])
-                date_from: Start date in YYYY-MM-DD format
-                date_to: End date in YYYY-MM-DD format
-                min_impact_score: Minimum impact score (0-100). Higher = more significant news.
-                impact_tiers: Filter by impact tiers (e.g., ["PLATINUM", "GOLD"]).
-                    Options: PLATINUM (>90), GOLD (70-89), SILVER (50-69), BRONZE (30-49), STANDARD (<30)
-                event_types: Filter by event types (e.g., ["EARNINGS_BEAT", "M&A_ANNOUNCE"]).
-                    Common types: EARNINGS_BEAT, EARNINGS_MISS, GUIDANCE_RAISE, GUIDANCE_CUT,
-                    M&A_ANNOUNCE, M&A_RUMOR, ACTIVIST, FDA_APPROVAL, CENTRAL_BANK
-                client_guid: Optional client GUID to personalize results based on portfolio/watchlist
-                include_graph_context: Include related entities from graph (default: True)
+                query: What to search for (e.g., "earnings surprises", "China tech regulation")
+                group_guids: Groups to search within
+                n_results: Max results (default: 10)
+                regions: Filter by region (APAC, JP, CN, HK, etc.)
+                sectors: Filter by sector (Technology, Finance, Healthcare, etc.)
+                companies: Filter by ticker (AAPL, 9988.HK, etc.)
+                languages: Filter by language (en, zh, ja)
+                date_from: Start date (YYYY-MM-DD)
+                date_to: End date (YYYY-MM-DD)
+                min_impact_score: Minimum importance 0-100 (higher = bigger market impact)
+                impact_tiers: Filter by tier (PLATINUM/GOLD/SILVER/BRONZE/STANDARD)
+                event_types: Filter by event (EARNINGS_BEAT, M&A_ANNOUNCE, FDA_APPROVAL, etc.)
+                client_guid: Personalize results for this client's portfolio/watchlist
+                include_graph_context: Include related entities (default: True)
 
             Returns:
-                JSON response with:
-                - query: Original query text
-                - results: List of matching documents with:
-                    - document_guid: Document identifier
-                    - title: Document title
-                    - content_snippet: Relevant excerpt
-                    - score: Combined relevance score (0-1)
-                    - similarity_score: Semantic similarity
-                    - trust_score: Source trust contribution
-                    - source_name: Source name
-                    - language: Document language
-                    - created_at: Creation timestamp
-                    - impact_score: Impact score (0-100) if available
-                    - impact_tier: Impact tier (PLATINUM/GOLD/SILVER/BRONZE/STANDARD)
-                    - event_type: Event type code if classified
-                    - graph_context: Related entities (if enabled)
-                - total_found: Total matching documents
-                - filters_applied: Active filters
-                - execution_time_ms: Query execution time
-
-            Errors:
-                - QUERY_SERVICE_UNAVAILABLE: Search service is not configured
-                - INVALID_DATE: Date format is invalid
-                - QUERY_ERROR: Search failed
+                results: Ranked articles with title, snippet, scores, source, timestamps
+                total_found: Total matches
+                execution_time_ms: Query time
             """
             try:
                 # Parse dates if provided

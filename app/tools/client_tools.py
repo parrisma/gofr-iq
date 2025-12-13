@@ -1,12 +1,6 @@
-"""MCP Client Tools - Phase 4.
+"""MCP Client Tools.
 
-Provides MCP tools for client profile management and personalized news feeds.
-
-Tools:
-- create_client: Create a new client with optional portfolio and watchlist
-- get_client_feed: Get personalized news feed for a client
-- add_to_portfolio: Add a holding to client's portfolio
-- add_to_watchlist: Add an instrument to client's watchlist
+Provides client profile management and personalized news feeds.
 """
 
 from __future__ import annotations
@@ -28,17 +22,15 @@ ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
 
 
 def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
-    """Register client tools with the MCP server.
-
-    Args:
-        mcp: FastMCP server instance
-        graph_index: GraphIndex for client/portfolio management
-    """
+    """Register client tools with the MCP server."""
 
     @mcp.tool(
         name="create_client",
-        description="Create a new client profile for personalized news feeds. "
-        "Clients can have portfolios (holdings) and watchlists (instruments of interest).",
+        description=(
+            "Create a client profile for personalized news. "
+            "Use when setting up a new user who needs tailored news feeds "
+            "based on their portfolio and interests."
+        ),
     )
     def create_client(
         name: str,
@@ -54,38 +46,18 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """Create a new client profile.
 
         Args:
-            name: Client name (e.g., "Citadel", "BlackRock Global Allocation")
-            group_guid: Group GUID this client belongs to (for permissions)
-            client_type: Type of client. Options:
-                - HEDGE_FUND: Active trading, high alert frequency (default)
-                - LONG_ONLY: Buy-and-hold, fundamental focus
-                - QUANT: Systematic/algorithmic, data-driven
-                - PENSION: Long-term, lower turnover
-                - FAMILY_OFFICE: Multi-asset, balanced approach
-            alert_frequency: How often to receive alerts:
-                - realtime: Immediate alerts (default for hedge funds)
-                - hourly: Hourly digest
-                - daily: Daily digest
-                - weekly: Weekly summary
-            impact_threshold: Minimum impact score (0-100) to include in feed.
-                Lower = more news, Higher = only major events. Default: 50.0
-            mandate_type: Investment mandate (e.g., "equity_long_short", "global_macro")
-            benchmark: Benchmark index (e.g., "SPY", "QQQ")
-            horizon: Investment horizon (e.g., "short", "medium", "long")
-            esg_constrained: Whether ESG constraints apply
+            name: Client name (e.g., "Citadel", "BlackRock")
+            group_guid: Group for permissions
+            client_type: HEDGE_FUND, LONG_ONLY, QUANT, PENSION, or FAMILY_OFFICE
+            alert_frequency: realtime, hourly, daily, or weekly
+            impact_threshold: Min impact score 0-100 for alerts (default: 50)
+            mandate_type: Investment style (e.g., "equity_long_short")
+            benchmark: Benchmark ticker (e.g., "SPY")
+            horizon: short, medium, or long
+            esg_constrained: Apply ESG filters
 
         Returns:
-            JSON response with created client details including:
-            - client_guid: Unique identifier for the client
-            - name: Client name
-            - client_type: Client type code
-            - group_guid: Associated group
-            - profile: Client profile settings
-
-        Errors:
-            - CLIENT_EXISTS: A client with this name already exists in the group
-            - INVALID_CLIENT_TYPE: Unknown client type
-            - CREATE_ERROR: General creation failure
+            client_guid, portfolio_guid, watchlist_guid, profile settings
         """
         import uuid
 
@@ -178,8 +150,11 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
     @mcp.tool(
         name="get_client_feed",
-        description="Get a personalized news feed for a client based on their portfolio, "
-        "watchlist, and preferences. Returns ranked articles with relevance scores.",
+        description=(
+            "Get a personalized news feed for a client. "
+            "Shows relevant news based on their portfolio holdings and watchlist. "
+            "Results ranked by impact and relevance to client's positions."
+        ),
     )
     def get_client_feed(
         client_guid: str,
@@ -192,43 +167,18 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     ) -> ToolResponse:
         """Get personalized news feed for a client.
 
-        The feed is ranked by:
-        1. Impact score of the news
-        2. Relevance to portfolio holdings (weighted by position size)
-        3. Relevance to watchlist instruments
-        4. Time decay (recent news ranked higher)
-
         Args:
-            client_guid: The client GUID to get feed for
-            group_guids: List of group GUIDs the client can access (for permissions)
-            limit: Maximum number of articles to return (default: 20)
-            min_impact_score: Only include news with impact >= this score (0-100)
-            impact_tiers: Filter by impact tiers. Options:
-                - PLATINUM: Market-moving events (>5% stock moves)
-                - GOLD: High impact events (3-5% moves)
-                - SILVER: Notable events (1-3% moves)
-                - BRONZE: Moderate events (0.5-1% moves)
-                - STANDARD: Routine news (<0.5% moves)
-            include_portfolio: Include news affecting portfolio holdings (default: True)
-            include_watchlist: Include news affecting watchlist instruments (default: True)
+            client_guid: Client to get feed for
+            group_guids: Groups client can access
+            limit: Max articles (default: 20)
+            min_impact_score: Min importance 0-100
+            impact_tiers: PLATINUM, GOLD, SILVER, BRONZE, STANDARD
+            include_portfolio: Include news for holdings (default: True)
+            include_watchlist: Include news for watched stocks (default: True)
 
         Returns:
-            JSON response with ranked news feed:
-            - articles: List of articles with:
-                - document_guid: Document identifier
-                - title: Article title
-                - impact_score: Impact score (0-100)
-                - impact_tier: Impact classification
-                - relevance_score: Personalized relevance score
-                - affected_instruments: List of tickers mentioned
-                - created_at: Publication timestamp
-            - total_count: Number of articles returned
-            - filters_applied: Summary of filters used
-
-        Errors:
-            - CLIENT_NOT_FOUND: The client_guid doesn't exist
-            - NO_PERMISSIONS: Client doesn't have access to any of the specified groups
-            - FEED_ERROR: General feed retrieval failure
+            articles: Ranked list with title, impact, relevance, affected tickers
+            total_count: Number of articles
         """
         try:
             # Validate client exists
@@ -289,8 +239,10 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
     @mcp.tool(
         name="add_to_portfolio",
-        description="Add a stock holding to a client's portfolio. "
-        "News affecting portfolio holdings will be prioritized in the client's feed.",
+        description=(
+            "Add a stock holding to a client's portfolio. "
+            "News about portfolio holdings gets higher priority in the client's feed."
+        ),
     )
     def add_to_portfolio(
         client_guid: str,
@@ -302,22 +254,14 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """Add a holding to client's portfolio.
 
         Args:
-            client_guid: The client GUID
-            ticker: Stock ticker symbol (e.g., "AAPL", "MSFT")
-            weight: Portfolio weight as decimal (e.g., 0.10 for 10%)
-            shares: Number of shares held (optional)
-            avg_cost: Average cost basis per share (optional)
+            client_guid: Client to update
+            ticker: Stock symbol (e.g., "AAPL", "9988.HK")
+            weight: Portfolio weight as decimal (0.10 = 10%)
+            shares: Number of shares (optional)
+            avg_cost: Cost basis per share (optional)
 
         Returns:
-            JSON response with:
-            - ticker: The ticker added
-            - weight: Portfolio weight
-            - message: Confirmation message
-
-        Errors:
-            - CLIENT_NOT_FOUND: The client doesn't exist
-            - PORTFOLIO_NOT_FOUND: Client doesn't have a portfolio
-            - ADD_ERROR: General failure
+            Confirmation with ticker, weight, shares added
         """
         try:
             # Get client's portfolio
@@ -377,8 +321,10 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
     @mcp.tool(
         name="add_to_watchlist",
-        description="Add an instrument to a client's watchlist. "
-        "News affecting watchlist instruments will be included in the client's feed.",
+        description=(
+            "Add a stock to a client's watchlist. "
+            "Use to track stocks the client is interested in but doesn't hold."
+        ),
     )
     def add_to_watchlist(
         client_guid: str,
@@ -388,20 +334,12 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """Add an instrument to client's watchlist.
 
         Args:
-            client_guid: The client GUID
-            ticker: Stock ticker symbol (e.g., "AAPL", "TSLA")
-            alert_threshold: Optional minimum impact score for alerts on this ticker
+            client_guid: Client to update
+            ticker: Stock symbol (e.g., "TSLA", "700.HK")
+            alert_threshold: Min impact score 0-100 for alerts on this ticker
 
         Returns:
-            JSON response with:
-            - ticker: The ticker added
-            - alert_threshold: Alert threshold if set
-            - message: Confirmation message
-
-        Errors:
-            - CLIENT_NOT_FOUND: The client doesn't exist
-            - WATCHLIST_NOT_FOUND: Client doesn't have a watchlist
-            - ADD_ERROR: General failure
+            Confirmation with ticker added
         """
         try:
             # Get client's watchlist
