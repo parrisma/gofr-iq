@@ -1,385 +1,416 @@
 #!/bin/bash
-# gofr-iq Test Runner
-# Runs pytest with proper environment configuration
-# Optionally manages ephemeral test infrastructure (ChromaDB, Neo4j)
+# =============================================================================
+# GOFR-IQ Test Runner
+# =============================================================================
+# Standardized test runner script with consistent configuration across all
+# GOFR projects. This script:
+# - Sets up virtual environment and PYTHONPATH
+# - Configures test ports for MCP and Web servers
+# - Supports coverage reporting
+# - Supports Docker execution
+# - Supports test categories (unit, integration, all)
+# - Manages server lifecycle for integration tests
+# - Supports optional ChromaDB/Neo4j infrastructure
+#
+# Usage:
+#   ./scripts/run_tests.sh                          # Run all tests
+#   ./scripts/run_tests.sh test/mcp/                # Run specific test directory
+#   ./scripts/run_tests.sh -k "iq"                  # Run tests matching keyword
+#   ./scripts/run_tests.sh -v                       # Run with verbose output
+#   ./scripts/run_tests.sh --coverage               # Run with coverage report
+#   ./scripts/run_tests.sh --coverage-html          # Run with HTML coverage report
+#   ./scripts/run_tests.sh --docker                 # Run tests in Docker container
+#   ./scripts/run_tests.sh --unit                   # Run unit tests only (no servers)
+#   ./scripts/run_tests.sh --integration            # Run integration tests (with servers)
+#   ./scripts/run_tests.sh --no-servers             # Run without starting servers
+#   ./scripts/run_tests.sh --stop                   # Stop servers only
+#   ./scripts/run_tests.sh --cleanup-only           # Clean environment only
+# =============================================================================
 
-set -euo pipefail
+set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
-# Colors for status output
+# =============================================================================
+# CONFIGURATION
+# =============================================================================
+
+# Get script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+cd "${PROJECT_ROOT}"
+
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m'
+NC='\033[0m' # No Color
 
-# Locate project root relative to this script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-DOCKER_DIR="${PROJECT_ROOT}/docker"
-cd "${PROJECT_ROOT}"
+# Project-specific configuration
+PROJECT_NAME="gofr-iq"
+ENV_PREFIX="GOFR_IQ"
+CONTAINER_NAME="gofr-iq-dev"
+TEST_DIR="test"
+COVERAGE_SOURCE="app"
+LOG_DIR="${PROJECT_ROOT}/logs"
 
-# Source centralized environment configuration in TEST mode
-export GOFRIQ_ENV="TEST"
-if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
+# Activate virtual environment
+VENV_DIR="${PROJECT_ROOT}/.venv"
+if [ -f "${VENV_DIR}/bin/activate" ]; then
+    source "${VENV_DIR}/bin/activate"
+    echo "Activated venv: ${VENV_DIR}"
+else
+    echo -e "${YELLOW}Warning: Virtual environment not found at ${VENV_DIR}${NC}"
+fi
+
+# Source centralized environment configuration
+export GOFR_IQ_ENV="TEST"
+if [ -f "${SCRIPT_DIR}/gofr-iq.env" ]; then
+    source "${SCRIPT_DIR}/gofr-iq.env"
+elif [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
+    # Legacy support
     source "${SCRIPT_DIR}/gofriq.env"
 fi
 
-# Shared authentication configuration for tests
-export GOFRIQ_JWT_SECRET="test-secret-key-for-secure-testing-do-not-use-in-production"
-export GOFRIQ_TOKEN_STORE="${GOFRIQ_TOKEN_STORE:-${GOFRIQ_LOGS}/gofriq_tokens_test.json}"
-export GOFRIQ_MCP_PORT="${GOFRIQ_MCP_PORT:-8060}"
-export GOFRIQ_WEB_PORT="${GOFRIQ_WEB_PORT:-8062}"
-export GOFRIQ_MCPO_PORT="${GOFRIQ_MCPO_PORT:-8061}"
+# Set up PYTHONPATH for gofr-common discovery
+if [ -d "${PROJECT_ROOT}/lib/gofr-common/src" ]; then
+    export PYTHONPATH="${PROJECT_ROOT}:${PROJECT_ROOT}/lib/gofr-common/src:${PYTHONPATH:-}"
+elif [ -d "${PROJECT_ROOT}/../gofr-common/src" ]; then
+    export PYTHONPATH="${PROJECT_ROOT}:${PROJECT_ROOT}/../gofr-common/src:${PYTHONPATH:-}"
+else
+    export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
+fi
 
-# ChromaDB configuration for tests
-# When running tests from host, connect to localhost mapped ports
-export GOFRIQ_CHROMADB_HOST="${GOFRIQ_CHROMADB_HOST:-localhost}"
-export GOFRIQ_CHROMADB_PORT="${GOFRIQ_CHROMADB_PORT:-8101}"
+# Test configuration - use standardized GOFR_IQ_ prefix
+export GOFR_IQ_JWT_SECRET="test-secret-key-for-secure-testing-do-not-use-in-production"
+export GOFR_IQ_TOKEN_STORE="${GOFR_IQ_TOKEN_STORE:-${LOG_DIR}/${PROJECT_NAME}_tokens_test.json}"
+export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT:-8020}"
+export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT:-8022}"
+export GOFR_IQ_MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8021}"
 
-# Neo4j configuration for tests
-export GOFRIQ_NEO4J_HOST="${GOFRIQ_NEO4J_HOST:-localhost}"
-export GOFRIQ_NEO4J_BOLT_PORT="${GOFRIQ_NEO4J_BOLT_PORT:-7688}"
-export GOFRIQ_NEO4J_HTTP_PORT="${GOFRIQ_NEO4J_HTTP_PORT:-7475}"
-export GOFRIQ_NEO4J_PASSWORD="${GOFRIQ_NEO4J_PASSWORD:-testpassword}"
+# Infrastructure (ChromaDB, Neo4j) - for tests connecting to external services
+# Use container names on gofr-net network (not localhost, since we're in a container)
+export GOFR_IQ_CHROMA_HOST="${GOFR_IQ_CHROMA_HOST:-gofr-iq-chromadb}"
+export GOFR_IQ_CHROMA_PORT="${GOFR_IQ_CHROMA_PORT:-8000}"
+export GOFR_IQ_NEO4J_HOST="${GOFR_IQ_NEO4J_HOST:-gofr-iq-neo4j}"
+export GOFR_IQ_NEO4J_BOLT_PORT="${GOFR_IQ_NEO4J_BOLT_PORT:-7687}"
+export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
 
-# Use centralized paths from gofriq.env or fallback
-TEST_DATA_ROOT="${GOFRIQ_DATA:-test/data}"
-STORAGE_DIR="${GOFRIQ_STORAGE:-${TEST_DATA_ROOT}/storage}"
+# Legacy variable mapping for backward compatibility
+export GOFRIQ_JWT_SECRET="${GOFR_IQ_JWT_SECRET}"
+export GOFRIQ_TOKEN_STORE="${GOFR_IQ_TOKEN_STORE}"
+export GOFRIQ_MCP_PORT="${GOFR_IQ_MCP_PORT}"
+export GOFRIQ_WEB_PORT="${GOFR_IQ_WEB_PORT}"
 
 # Ensure directories exist
-mkdir -p "${STORAGE_DIR}" "${GOFRIQ_LOGS}"
+mkdir -p "${LOG_DIR}"
+mkdir -p "${GOFR_IQ_STORAGE:-${PROJECT_ROOT}/data/storage}"
+
+# =============================================================================
+# HELPER FUNCTIONS
+# =============================================================================
 
 print_header() {
-    echo -e "${GREEN}=== GOFR-IQ Test Runner ===${NC}"
+    echo -e "${GREEN}=== ${PROJECT_NAME} Test Runner ===${NC}"
     echo "Project root: ${PROJECT_ROOT}"
-    echo "Environment: ${GOFRIQ_ENV:-NONE}"
-    echo "JWT Secret: ${GOFRIQ_JWT_SECRET:0:20}..."
-    echo "Token store: ${GOFRIQ_TOKEN_STORE}"
-    echo "MCP Port: ${GOFRIQ_MCP_PORT}"
-    echo "Web Port: ${GOFRIQ_WEB_PORT}"
-    echo "MCPO Port: ${GOFRIQ_MCPO_PORT}"
-    echo "ChromaDB: ${GOFRIQ_CHROMADB_HOST}:${GOFRIQ_CHROMADB_PORT}"
-    echo "Storage Dir: ${STORAGE_DIR}"
-    
-    if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
-        echo "OpenRouter Key: Set"
+    echo "Environment: ${GOFR_IQ_ENV}"
+    echo "JWT Secret: ${GOFR_IQ_JWT_SECRET:0:20}..."
+    echo "Token store: ${GOFR_IQ_TOKEN_STORE}"
+    echo "MCP Port: ${GOFR_IQ_MCP_PORT}"
+    echo "Web Port: ${GOFR_IQ_WEB_PORT}"
+    echo "ChromaDB: ${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}"
+    echo "Neo4j: ${GOFR_IQ_NEO4J_HOST}:${GOFR_IQ_NEO4J_BOLT_PORT}"
+    echo ""
+}
+
+port_in_use() {
+    local port=$1
+    if command -v lsof >/dev/null 2>&1; then
+        lsof -i ":${port}" >/dev/null 2>&1
+    elif command -v ss >/dev/null 2>&1; then
+        ss -tuln | grep -q ":${port} "
+    elif command -v netstat >/dev/null 2>&1; then
+        netstat -tuln | grep -q ":${port} "
     else
-        echo "OpenRouter Key: Not Set (LLM tests will skip)"
+        timeout 1 bash -c "cat < /dev/null > /dev/tcp/127.0.0.1/${port}" >/dev/null 2>&1
     fi
-    echo
+}
+
+free_port() {
+    local port=$1
+    if ! port_in_use "$port"; then
+        return 0
+    fi
+    if command -v lsof >/dev/null 2>&1; then
+        lsof -ti ":${port}" | xargs -r kill -9 2>/dev/null || true
+    elif command -v ss >/dev/null 2>&1; then
+        ss -lptn "sport = :${port}" 2>/dev/null | grep -o 'pid=[0-9]*' | cut -d'=' -f2 | xargs -r kill -9 2>/dev/null || true
+    fi
+    sleep 1
+}
+
+stop_servers() {
+    echo "Stopping server processes..."
+    pkill -9 -f "python.*main_mcp" 2>/dev/null || true
+    pkill -9 -f "python.*main_web" 2>/dev/null || true
+    pkill -9 -f "mcpo" 2>/dev/null || true
+    sleep 2
+    
+    if ps aux | grep -E "python.*(main_mcp|main_web)|mcpo" | grep -v grep >/dev/null 2>&1; then
+        echo -e "${RED}WARNING: Some server processes still running${NC}"
+        return 1
+    fi
+    echo "All server processes stopped"
+    return 0
+}
+
+start_chromadb() {
+    echo -e "${YELLOW}Starting ChromaDB container...${NC}"
+    
+    # Check if container already running
+    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-chromadb$"; then
+        echo -e "${GREEN}ChromaDB container already running${NC}"
+        return 0
+    fi
+    
+    # Start container directly without waiting in the script
+    # (the script will fail to connect to localhost from inside dev container)
+    docker run -d \
+        --name gofr-iq-chromadb \
+        --network gofr-net \
+        -p "${GOFR_IQ_CHROMA_PORT}:8000" \
+        gofr-iq-chromadb:latest >/dev/null 2>&1 || {
+        echo -e "${RED}Failed to start ChromaDB container${NC}"
+        return 1
+    }
+    
+    # Wait for ChromaDB to be ready (check via Docker network using v2 API)
+    echo -n "Waiting for ChromaDB"
+    for i in {1..30}; do
+        if curl -s "http://${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}/api/v2/heartbeat" >/dev/null 2>&1; then
+            echo -e " ${GREEN}✓${NC}"
+            return 0
+        fi
+        echo -n "."
+        sleep 1
+    done
+    echo -e " ${RED}✗${NC}"
+    echo -e "${RED}ChromaDB failed to start${NC}"
+    docker logs gofr-iq-chromadb 2>&1 | tail -20 || true
+    return 1
+}
+
+start_neo4j() {
+    echo -e "${YELLOW}Starting Neo4j container...${NC}"
+    
+    # Check if container already running
+    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-neo4j$"; then
+        echo -e "${GREEN}Neo4j container already running${NC}"
+        return 0
+    fi
+    
+    # Start container directly without waiting in the script
+    docker run -d \
+        --name gofr-iq-neo4j \
+        --network gofr-net \
+        -p "${GOFR_IQ_NEO4J_BOLT_PORT}:7687" \
+        -p 7474:7474 \
+        -e NEO4J_AUTH="neo4j/${GOFR_IQ_NEO4J_PASSWORD}" \
+        -e NEO4J_PLUGINS='["apoc"]' \
+        gofr-iq-neo4j:latest >/dev/null 2>&1 || {
+        echo -e "${RED}Failed to start Neo4j container${NC}"
+        return 1
+    }
+    
+    # Wait for Neo4j to be ready
+    echo -n "Waiting for Neo4j"
+    for i in {1..60}; do
+        if docker exec gofr-iq-neo4j cypher-shell -u neo4j -p "${GOFR_IQ_NEO4J_PASSWORD}" "RETURN 1" >/dev/null 2>&1; then
+            echo -e " ${GREEN}✓${NC}"
+            return 0
+        fi
+        echo -n "."
+        sleep 1
+    done
+    echo -e " ${RED}✗${NC}"
+    echo -e "${RED}Neo4j failed to start${NC}"
+    docker logs gofr-iq-neo4j 2>&1 | tail -20 || true
+    return 1
+}
+
+stop_infrastructure() {
+    echo -e "${YELLOW}Stopping infrastructure containers...${NC}"
+    
+    # Stop ChromaDB if running
+    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-chromadb$"; then
+        docker stop gofr-iq-chromadb >/dev/null 2>&1 || true
+        docker rm gofr-iq-chromadb >/dev/null 2>&1 || true
+    fi
+    
+    # Stop Neo4j if running
+    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-neo4j$"; then
+        docker stop gofr-iq-neo4j >/dev/null 2>&1 || true
+        docker rm gofr-iq-neo4j >/dev/null 2>&1 || true
+    fi
+    
+    echo "Infrastructure containers stopped"
 }
 
 cleanup_environment() {
     echo -e "${YELLOW}Cleaning up test environment...${NC}"
+    stop_servers || true
+    stop_infrastructure || true
     
-    # Empty token store (create empty JSON object)
-    echo "{}" > "${GOFRIQ_TOKEN_STORE}" 2>/dev/null || true
-    echo "Token store emptied: ${GOFRIQ_TOKEN_STORE}"
+    # Empty token store
+    echo "{}" > "${GOFR_IQ_TOKEN_STORE}" 2>/dev/null || true
+    echo "Token store emptied: ${GOFR_IQ_TOKEN_STORE}"
     
-    echo -e "${GREEN}Cleanup complete${NC}\n"
+    echo -e "${GREEN}Cleanup complete${NC}"
 }
 
-# Infrastructure management functions
-verify_connectivity() {
-    echo -e "${BLUE}Verifying connectivity to test infrastructure...${NC}"
+start_mcp_server() {
+    local log_file="${LOG_DIR}/${PROJECT_NAME}_mcp_test.log"
+    echo -e "${YELLOW}Starting MCP server on port ${GOFR_IQ_MCP_PORT}...${NC}"
     
-    # Use internal container names and ports (since we connect to the network)
-    local chroma_host="gofr-iq-chromadb-test"
-    local chroma_port="8000"
-    local neo4j_host="gofr-iq-neo4j-test"
-    local neo4j_http_port="7474"
-    local neo4j_bolt_port="7687"
-    
-    local chroma_url="http://${chroma_host}:${chroma_port}/api/v2/heartbeat"
-    local neo4j_url="http://${neo4j_host}:${neo4j_http_port}"
-    
-    local max_retries=30
-    local retry_count=0
-    
-    # Verify ChromaDB
-    echo -n "Checking ChromaDB at ${chroma_url}..."
-    while ! curl -s --fail "${chroma_url}" > /dev/null; do
-        retry_count=$((retry_count + 1))
-        if [ $retry_count -ge $max_retries ]; then
-            echo -e "\n${RED}✗ Failed to connect to ChromaDB after ${max_retries} attempts${NC}"
-            return 1
-        fi
-        sleep 1
-        echo -n "."
-    done
-    echo -e " ${GREEN}OK${NC}"
+    free_port "${GOFR_IQ_MCP_PORT}"
+    rm -f "${log_file}"
 
-    # Verify Neo4j HTTP
-    retry_count=0
-    echo -n "Checking Neo4j HTTP at ${neo4j_url}..."
-    while ! curl -s "${neo4j_url}" > /dev/null; do
-        retry_count=$((retry_count + 1))
-        if [ $retry_count -ge $max_retries ]; then
-            echo -e "\n${RED}✗ Failed to connect to Neo4j after ${max_retries} attempts${NC}"
-            return 1
-        fi
-        sleep 1
-        echo -n "."
-    done
-    echo -e " ${GREEN}OK${NC}"
-    
-    # Verify Neo4j database is ready (can execute queries)
-    retry_count=0
-    local db_max_retries=60
-    echo -n "Waiting for Neo4j database to be ready..."
-    while ! uv run python -c "
-from neo4j import GraphDatabase
-driver = GraphDatabase.driver('bolt://${neo4j_host}:${neo4j_bolt_port}', auth=('neo4j', 'testpassword'))
-with driver.session() as session:
-    session.run('RETURN 1')
-driver.close()
-" 2>/dev/null; do
-        retry_count=$((retry_count + 1))
-        if [ $retry_count -ge $db_max_retries ]; then
-            echo -e "\n${RED}✗ Neo4j database not ready after ${db_max_retries} attempts${NC}"
-            return 1
-        fi
-        sleep 2
-        echo -n "."
-    done
-    echo -e " ${GREEN}OK${NC}"
-    
-    return 0
-}
+    nohup uv run python app/main_mcp.py \
+        --port "${GOFR_IQ_MCP_PORT}" \
+        --jwt-secret "${GOFR_IQ_JWT_SECRET}" \
+        --token-store "${GOFR_IQ_TOKEN_STORE}" \
+        > "${log_file}" 2>&1 &
+    MCP_PID=$!
+    echo "MCP PID: ${MCP_PID}"
 
-start_test_infra() {
-    echo -e "${BLUE}Starting ephemeral test infrastructure...${NC}"
-    
-    # Check if docker compose is available
-    if ! command -v docker &> /dev/null; then
-        echo -e "${RED}Docker not available. Skipping infrastructure setup.${NC}"
-        return 1
-    fi
-    
-    cd "${DOCKER_DIR}"
-    
-    # Start test containers
-    docker compose -f docker-compose.test.yml up -d --build
-    
-    # Connect this container to the test network so we can access containers by name
-    echo -e "${BLUE}Connecting dev container to test network...${NC}"
-    if docker network connect gofr-test-net $(hostname) 2>/dev/null; then
-        echo "Connected to gofr-test-net"
-    else
-        echo "Already connected or failed to connect (ignoring)"
-    fi
-    
-    # Wait for health checks
-    echo -e "${YELLOW}Waiting for services to be healthy...${NC}"
-    local max_wait=90
-    local elapsed=0
-    
-    while [ $elapsed -lt $max_wait ]; do
-        local chroma_health=$(docker inspect --format='{{.State.Health.Status}}' gofr-iq-chromadb-test 2>/dev/null || echo "starting")
-        local neo4j_health=$(docker inspect --format='{{.State.Health.Status}}' gofr-iq-neo4j-test 2>/dev/null || echo "starting")
-        
-        if [ "$chroma_health" = "healthy" ] && [ "$neo4j_health" = "healthy" ]; then
-            echo -e "${GREEN}Docker containers are healthy${NC}"
-            
-            # Verify actual connectivity from host
-            if verify_connectivity; then
-                # Update environment to point to test containers
-                export GOFRIQ_CHROMADB_HOST="gofr-iq-chromadb-test"
-                export GOFRIQ_CHROMADB_PORT="8000"
-                export GOFRIQ_NEO4J_HOST="gofr-iq-neo4j-test"
-                export GOFRIQ_NEO4J_BOLT_PORT="7687"
-                export GOFRIQ_NEO4J_HTTP_PORT="7474"
-                
-                cd "${PROJECT_ROOT}"
-                return 0
-            else
-                echo -e "${RED}Connectivity check failed${NC}"
-                docker compose -f docker-compose.test.yml logs
-                cd "${PROJECT_ROOT}"
-                return 1
-            fi
+    echo -n "Waiting for MCP server"
+    for _ in {1..30}; do
+        if ! kill -0 ${MCP_PID} 2>/dev/null; then
+            echo -e " ${RED}✗${NC}"
+            tail -20 "${log_file}"
+            return 1
         fi
-        
-        sleep 2
-        elapsed=$((elapsed + 2))
-        printf "."
+        if port_in_use "${GOFR_IQ_MCP_PORT}"; then
+            echo -e " ${GREEN}✓${NC}"
+            return 0
+        fi
+        echo -n "."
+        sleep 0.5
     done
-    
-    echo -e "\n${RED}Infrastructure did not become healthy in ${max_wait}s${NC}"
-    docker compose -f docker-compose.test.yml logs
-    cd "${PROJECT_ROOT}"
+    echo -e " ${RED}✗${NC}"
+    tail -20 "${log_file}"
     return 1
 }
 
-stop_test_infra() {
-    echo -e "${YELLOW}Stopping test infrastructure...${NC}"
+start_web_server() {
+    local log_file="${LOG_DIR}/${PROJECT_NAME}_web_test.log"
+    echo -e "${YELLOW}Starting Web server on port ${GOFR_IQ_WEB_PORT}...${NC}"
     
-    if command -v docker &> /dev/null; then
-        cd "${DOCKER_DIR}"
-        docker compose -f docker-compose.test.yml down -v 2>/dev/null || true
-        cd "${PROJECT_ROOT}"
-    fi
-    
-    echo -e "${GREEN}Test infrastructure stopped${NC}"
+    free_port "${GOFR_IQ_WEB_PORT}"
+    rm -f "${log_file}"
+
+    nohup uv run python app/main_web.py \
+        --port "${GOFR_IQ_WEB_PORT}" \
+        --jwt-secret "${GOFR_IQ_JWT_SECRET}" \
+        --token-store "${GOFR_IQ_TOKEN_STORE}" \
+        > "${log_file}" 2>&1 &
+    WEB_PID=$!
+    echo "Web PID: ${WEB_PID}"
+
+    echo -n "Waiting for Web server"
+    for _ in {1..30}; do
+        if ! kill -0 ${WEB_PID} 2>/dev/null; then
+            echo -e " ${RED}✗${NC}"
+            tail -20 "${log_file}"
+            return 1
+        fi
+        if port_in_use "${GOFR_IQ_WEB_PORT}"; then
+            echo -e " ${GREEN}✓${NC}"
+            return 0
+        fi
+        echo -n "."
+        sleep 0.5
+    done
+    echo -e " ${RED}✗${NC}"
+    tail -20 "${log_file}"
+    return 1
 }
 
-print_header
+# =============================================================================
+# ARGUMENT PARSING
+# =============================================================================
 
+USE_DOCKER=false
+START_SERVERS=true
+COVERAGE=false
+COVERAGE_HTML=false
+RUN_UNIT=false
+RUN_INTEGRATION=false
+RUN_ALL=false
+STOP_ONLY=false
 CLEANUP_ONLY=false
-WITH_INFRA=true  # Default: start infrastructure for tests
-NO_INFRA=false
 PYTEST_ARGS=()
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        --docker)
+            USE_DOCKER=true
+            shift
+            ;;
+        --coverage|--cov)
+            COVERAGE=true
+            shift
+            ;;
+        --coverage-html)
+            COVERAGE=true
+            COVERAGE_HTML=true
+            shift
+            ;;
+        --unit)
+            RUN_UNIT=true
+            START_SERVERS=false
+            shift
+            ;;
+        --integration)
+            RUN_INTEGRATION=true
+            START_SERVERS=true
+            shift
+            ;;
+        --all)
+            RUN_ALL=true
+            START_SERVERS=true
+            shift
+            ;;
+        --no-servers|--without-servers)
+            START_SERVERS=false
+            shift
+            ;;
+        --with-servers|--start-servers)
+            START_SERVERS=true
+            shift
+            ;;
+        --stop|--stop-servers)
+            STOP_ONLY=true
+            shift
+            ;;
         --cleanup-only)
             CLEANUP_ONLY=true
             shift
             ;;
-        --with-infra|--infra)
-            WITH_INFRA=true
-            shift
-            ;;
-        --no-infra)
-            WITH_INFRA=false
-            NO_INFRA=true
-            shift
-            ;;
-        --phase)
-            # Run tests for a specific implementation phase
-            # Maps phase numbers to test files/patterns
-            PHASE="$2"
-            case "$PHASE" in
-                0|infrastructure)
-                    PYTEST_ARGS+=("test/test_infrastructure.py" "-v")
-                    ;;
-                1|models)
-                    PYTEST_ARGS+=("test/test_models.py" "-v")
-                    ;;
-                2|group-registry)
-                    PYTEST_ARGS+=("-k" "group_registry or test_group" "-v")
-                    ;;
-                3|document-store)
-                    PYTEST_ARGS+=("-k" "document_store or test_document" "-v")
-                    ;;
-                4|source-registry)
-                    PYTEST_ARGS+=("-k" "source_registry or test_source" "-v")
-                    ;;
-                5|access-control)
-                    PYTEST_ARGS+=("-k" "access_control or test_access" "-v")
-                    ;;
-                6|language)
-                    PYTEST_ARGS+=("-k" "language" "-v")
-                    ;;
-                7|duplicate)
-                    PYTEST_ARGS+=("-k" "duplicate" "-v")
-                    ;;
-                8|llm|extraction)
-                    PYTEST_ARGS+=("-k" "llm or extraction" "-v")
-                    ;;
-                9|ingest)
-                    PYTEST_ARGS+=("-k" "ingest" "-v")
-                    ;;
-                10|mcp)
-                    PYTEST_ARGS+=("-k" "mcp" "-v")
-                    ;;
-                10a|mcp-server|mcp-integration)
-                    # MCP server integration tests (starts actual server)
-                    PYTEST_ARGS+=("test/test_mcp_server_integration.py" "-v" "-m" "integration")
-                    ;;
-                11|audit)
-                    PYTEST_ARGS+=("-k" "audit" "-v")
-                    ;;
-                12|chroma)
-                    PYTEST_ARGS+=("-k" "chroma" "-v")
-                    ;;
-                13|neo4j)
-                    PYTEST_ARGS+=("-k" "neo4j" "-v")
-                    ;;
-                14|query)
-                    PYTEST_ARGS+=("-k" "query" "-v")
-                    ;;
-                15|web)
-                    PYTEST_ARGS+=("-k" "web" "-v")
-                    ;;
-                16|admin)
-                    PYTEST_ARGS+=("-k" "admin or rebuild" "-v")
-                    ;;
-                17|docker|integration)
-                    PYTEST_ARGS+=("-m" "integration" "-v")
-                    ;;
-                18|elastic)
-                    PYTEST_ARGS+=("-k" "elastic" "-v")
-                    ;;
-                *)
-                    echo -e "${RED}Unknown phase: $PHASE${NC}"
-                    echo "Valid phases: 0-18, infrastructure, models, group-registry, etc."
-                    exit 1
-                    ;;
-            esac
-            shift 2
-            ;;
-        --file|-f)
-            # Run a specific test file
-            PYTEST_ARGS+=("$2" "-v")
-            shift 2
-            ;;
-        --pattern|-k)
-            # Run tests matching a pattern
-            PYTEST_ARGS+=("-k" "$2" "-v")
-            shift 2
-            ;;
-        --quick|-q)
-            # Quick run - only fast tests (exclude integration)
-            PYTEST_ARGS+=("-m" "not integration" "-v")
-            shift
-            ;;
         --help|-h)
-            echo "Usage: $0 [options] [pytest args]"
+            echo "Usage: $0 [OPTIONS] [PYTEST_ARGS...]"
             echo ""
             echo "Options:"
-            echo "  --cleanup-only        Only clean up test environment, don't run tests"
-            echo "  --with-infra          Start ephemeral ChromaDB/Neo4j containers (DEFAULT)"
-            echo "  --no-infra            Skip infrastructure startup (faster, uses existing)"
-            echo "  --phase <N>           Run tests for implementation phase N (0-18)"
-            echo "  --file, -f <file>     Run a specific test file"
-            echo "  --pattern, -k <pat>   Run tests matching pattern"
-            echo "  --quick, -q           Run only fast tests (exclude integration)"
-            echo "  --help, -h            Show this help message"
-            echo ""
-            echo "Implementation Phases:"
-            echo "  0  - Test infrastructure (TestDataStore, fixtures)"
-            echo "  1  - Pydantic models (Group, Source, Document, Query)"
-            echo "  2  - Group registry"
-            echo "  3  - Canonical document store"
-            echo "  4  - Source registry"
-            echo "  5  - Group access control"
-            echo "  6  - Language detection"
-            echo "  7  - Duplicate detection"
-            echo "  8  - LLM extraction service"
-            echo "  9  - Basic ingest service"
-            echo "  10  - Basic MCP tools (unit tests)"
-            echo "  10a - MCP server integration (starts real server)"
-            echo "  11 - Audit logging"
-            echo "  12 - ChromaDB integration"
-            echo "  13 - Neo4j integration"
-            echo "  14 - Query service (hybrid search)"
-            echo "  15 - Web API"
-            echo "  16 - Index rebuild & admin tools"
-            echo "  17 - All integration tests"
-            echo "  18 - Elasticsearch (optional)"
-            echo ""
-            echo "Examples:"
-            echo "  $0                          Run all tests"
-            echo "  $0 --with-infra             Run all tests with ephemeral containers"
-            echo "  $0 --phase 0                Run Phase 0 (infrastructure) tests"
-            echo "  $0 --phase infrastructure   Same as --phase 0"
-            echo "  $0 --phase mcp-server       Run MCP server integration tests"
-            echo "  $0 -f test/test_hello.py    Run specific test file"
-            echo "  $0 -k test_config           Run tests matching pattern"
-            echo "  $0 -q                       Quick run (no integration tests)"
-            echo "  $0 -v --tb=short            Pass args directly to pytest"
-            echo "  $0 --cleanup-only --with-infra  Clean up and stop test containers"
+            echo "  --docker         Run tests inside Docker container"
+            echo "  --coverage       Run with coverage report"
+            echo "  --coverage-html  Run with HTML coverage report"
+            echo "  --unit           Run unit tests only (no servers)"
+            echo "  --integration    Run integration tests (with servers)"
+            echo "  --all            Run all test categories"
+            echo "  --no-servers     Don't start test servers"
+            echo "  --with-servers   Start test servers (default)"
+            echo "  --stop           Stop servers and exit"
+            echo "  --cleanup-only   Clean environment and exit"
+            echo "  --help, -h       Show this help message"
             exit 0
             ;;
         *)
@@ -389,78 +420,137 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-if [ "$CLEANUP_ONLY" = true ]; then
-    cleanup_environment
-    if [ "$WITH_INFRA" = true ]; then
-        stop_test_infra
-    fi
+# =============================================================================
+# MAIN EXECUTION
+# =============================================================================
+
+print_header
+
+# Handle stop-only mode
+if [ "$STOP_ONLY" = true ]; then
+    echo -e "${YELLOW}Stopping servers and exiting...${NC}"
+    stop_servers
     exit 0
 fi
 
-# Set up trap to clean up infrastructure on exit
-if [ "$WITH_INFRA" = true ]; then
-    trap 'stop_test_infra' EXIT
+# Handle cleanup-only mode
+if [ "$CLEANUP_ONLY" = true ]; then
+    cleanup_environment
+    exit 0
 fi
 
+# Clean up before starting
 cleanup_environment
 
-# Start test infrastructure if requested
-if [ "$WITH_INFRA" = true ]; then
-    if ! start_test_infra; then
-        echo -e "${RED}Failed to start test infrastructure. Aborting.${NC}"
+# Initialize token store
+if [ ! -f "${GOFR_IQ_TOKEN_STORE}" ]; then
+    echo "{}" > "${GOFR_IQ_TOKEN_STORE}"
+fi
+
+# Start servers if needed
+MCP_PID=""
+WEB_PID=""
+if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
+    echo -e "${GREEN}=== Starting Test Infrastructure ===${NC}"
+    
+    # Start infrastructure containers
+    start_chromadb || { stop_servers; stop_infrastructure; exit 1; }
+    start_neo4j || { stop_servers; stop_infrastructure; exit 1; }
+    echo ""
+    
+    echo -e "${GREEN}=== Starting Test Servers ===${NC}"
+    start_mcp_server || { stop_servers; stop_infrastructure; exit 1; }
+    start_web_server || { stop_servers; stop_infrastructure; exit 1; }
+    echo ""
+fi
+
+# Build coverage arguments
+COVERAGE_ARGS=""
+if [ "$COVERAGE" = true ]; then
+    COVERAGE_ARGS="--cov=${COVERAGE_SOURCE} --cov-report=term-missing"
+    if [ "$COVERAGE_HTML" = true ]; then
+        COVERAGE_ARGS="${COVERAGE_ARGS} --cov-report=html:htmlcov"
+    fi
+    echo -e "${BLUE}Coverage reporting enabled${NC}"
+fi
+
+# =============================================================================
+# RUN TESTS
+# =============================================================================
+
+echo -e "${GREEN}=== Running Tests ===${NC}"
+set +e
+TEST_EXIT_CODE=0
+
+if [ "$USE_DOCKER" = true ]; then
+    # Docker execution
+    if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+        echo -e "${RED}Container ${CONTAINER_NAME} is not running.${NC}"
+        echo "Run: ./docker/run-dev.sh to create it"
         exit 1
     fi
-fi
-
-# Seed default token store if missing
-if [ ! -f "${GOFRIQ_TOKEN_STORE}" ]; then
-    echo -e "${BLUE}Seeding bootstrap token store...${NC}"
-    echo "{}" > "${GOFRIQ_TOKEN_STORE}"
-fi
-
-echo -e "${GREEN}=== Running Code Quality Tests First ===${NC}"
-set +e
-uv run python -m pytest test/code_quality/ -v
-CODE_QUALITY_EXIT_CODE=$?
-set -e
-
-if [ $CODE_QUALITY_EXIT_CODE -ne 0 ]; then
-    echo
-    echo -e "${RED}=== Code Quality Tests Failed ===${NC}"
-    echo -e "${RED}Fix linting and type errors before running other tests.${NC}"
     
-    # Clean up token store
-    echo -e "${YELLOW}Cleaning up token store...${NC}"
-    echo "{}" > "${GOFRIQ_TOKEN_STORE}" 2>/dev/null || true
-    echo "Token store emptied"
-    
-    exit $CODE_QUALITY_EXIT_CODE
-fi
+    DOCKER_CMD="cd /home/gofr/devroot/${PROJECT_NAME} && source .venv/bin/activate && pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}"
+    docker exec "${CONTAINER_NAME}" bash -c "${DOCKER_CMD}"
+    TEST_EXIT_CODE=$?
 
-echo -e "${GREEN}✓ Code Quality Tests Passed${NC}"
-echo
+elif [ "$RUN_UNIT" = true ]; then
+    echo -e "${BLUE}Running unit tests only (no servers)...${NC}"
+    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS} -k "not integration"
+    TEST_EXIT_CODE=$?
 
-echo -e "${GREEN}=== Running Remaining Tests ===${NC}"
-set +e
-if [ ${#PYTEST_ARGS[@]} -eq 0 ]; then
-    # Run with coverage reporting
-    uv run python -m pytest test/ -v --ignore=test/code_quality/ --cov=app --cov-report=term-missing --cov-report=xml
+elif [ "$RUN_INTEGRATION" = true ]; then
+    echo -e "${BLUE}Running integration tests (with servers)...${NC}"
+    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}
+    TEST_EXIT_CODE=$?
+
+elif [ "$RUN_ALL" = true ]; then
+    echo -e "${BLUE}Running ALL tests...${NC}"
+    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}
+    TEST_EXIT_CODE=$?
+
+elif [ ${#PYTEST_ARGS[@]} -eq 0 ]; then
+    # Default: run all tests
+    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}
+    TEST_EXIT_CODE=$?
 else
-    uv run python -m pytest "${PYTEST_ARGS[@]}"
+    # Custom arguments
+    uv run python -m pytest "${PYTEST_ARGS[@]}" ${COVERAGE_ARGS}
+    TEST_EXIT_CODE=$?
 fi
-TEST_EXIT_CODE=$?
 set -e
 
-# Clean up token store after tests
-echo -e "${YELLOW}Cleaning up token store...${NC}"
-echo "{}" > "${GOFRIQ_TOKEN_STORE}" 2>/dev/null || true
-echo "Token store emptied"
+# =============================================================================
+# CLEANUP
+# =============================================================================
 
-echo
+if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
+    echo ""
+    echo -e "${YELLOW}Stopping test servers...${NC}"
+    stop_servers || true
+    echo -e "${YELLOW}Stopping infrastructure containers...${NC}"
+    stop_infrastructure || true
+fi
+
+# Clean up token store
+echo -e "${YELLOW}Cleaning up token store...${NC}"
+echo "{}" > "${GOFR_IQ_TOKEN_STORE}" 2>/dev/null || true
+
+# =============================================================================
+# RESULTS
+# =============================================================================
+
+echo ""
 if [ $TEST_EXIT_CODE -eq 0 ]; then
     echo -e "${GREEN}=== Tests Passed ===${NC}"
+    if [ "$COVERAGE" = true ] && [ "$COVERAGE_HTML" = true ]; then
+        echo -e "${BLUE}HTML coverage report: ${PROJECT_ROOT}/htmlcov/index.html${NC}"
+    fi
 else
     echo -e "${RED}=== Tests Failed (exit code: ${TEST_EXIT_CODE}) ===${NC}"
+    echo "Server logs:"
+    echo "  MCP: ${LOG_DIR}/${PROJECT_NAME}_mcp_test.log"
+    echo "  Web: ${LOG_DIR}/${PROJECT_NAME}_web_test.log"
 fi
 
 exit $TEST_EXIT_CODE

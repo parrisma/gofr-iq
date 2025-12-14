@@ -26,7 +26,9 @@ from __future__ import annotations
 import argparse
 import logging
 import os
+import secrets
 import sys
+from pathlib import Path
 
 from app.config import get_settings
 from app.logger import ConsoleLogger
@@ -58,6 +60,18 @@ if __name__ == "__main__":
         help="Storage directory for documents (default: from env)",
     )
     parser.add_argument(
+        "--jwt-secret",
+        type=str,
+        default=None,
+        help="JWT secret key (default: from GOFR_IQ_JWT_SECRET env var)",
+    )
+    parser.add_argument(
+        "--token-store",
+        type=str,
+        default=None,
+        help="Path to token store file (default: {data_dir}/auth/tokens.json)",
+    )
+    parser.add_argument(
         "--no-auth",
         action="store_true",
         help="Disable authentication (WARNING: insecure, for development only)",
@@ -78,6 +92,10 @@ if __name__ == "__main__":
     startup_logger = ConsoleLogger(name="startup", level=log_level)
 
     try:
+        # Resolve authentication configuration
+        jwt_secret = args.jwt_secret or os.getenv("GOFR_IQ_JWT_SECRET")
+        token_store_path = args.token_store or os.getenv("GOFR_IQ_TOKEN_STORE")
+        
         # Determine auth requirement
         # Check command line first, then environment variable
         if args.no_auth:
@@ -89,14 +107,33 @@ if __name__ == "__main__":
             require_auth = auth_enabled not in ("false", "0", "no")
             if not require_auth:
                 startup_logger.warning("Authentication disabled via GOFR_IQ_AUTH_ENABLED")
+            
+            # Auto-generate secret for development if not provided
+            if require_auth and not jwt_secret:
+                env = os.getenv("GOFRIQ_ENV", os.getenv("GOFR_IQ_ENV", "PROD"))
+                if env.upper() not in ["PROD", "PRODUCTION"]:
+                    jwt_secret = f"dev-secret-{secrets.token_hex(16)}"
+                    startup_logger.info("Auto-generated development JWT secret")
+                else:
+                    startup_logger.error(
+                        "FATAL: JWT secret required in production",
+                        help="Set GOFR_IQ_JWT_SECRET environment variable or use --jwt-secret flag",
+                    )
+                    sys.exit(1)
 
         # Build settings from environment and CLI args
-        settings = get_settings(require_auth=require_auth)
+        settings = get_settings(require_auth=False)
 
         # Override with CLI arguments if provided
         host = args.host or os.environ.get("GOFR_IQ_MCP_HOST", "0.0.0.0")  # nosec B104
         port = args.port or settings.server.mcp_port
         storage_dir = args.storage_dir or settings.storage.storage_dir
+
+        # Use resolved auth configuration
+        if require_auth:
+            settings.auth.jwt_secret = jwt_secret
+            settings.auth.token_store_path = Path(token_store_path) if token_store_path else None
+            settings.auth.require_auth = True
 
         startup_logger.info(
             "Starting GOFR-IQ MCP Server",

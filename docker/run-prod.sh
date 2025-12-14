@@ -1,102 +1,106 @@
-#!/bin/sh
+#!/bin/bash
+# Run gofr-iq production container with proper volumes and networking
+set -e
 
-# Usage: ./run-prod.sh [-n NETWORK] [-w WEB_PORT] [-m MCP_PORT]
-# Defaults: NETWORK=gofr-net, WEB_PORT=8062, MCP_PORT=8060
-# Example: ./run-prod.sh -n my-network -w 9062 -m 9060
+CONTAINER_NAME="gofr-iq-prod"
+IMAGE_NAME="gofr-iq-prod:latest"
+NETWORK_NAME="gofr-net"
 
-# Default values (can be overridden by env vars or command line)
-DOCKER_NETWORK="${GOFR_IQ_NETWORK:-gofr-net}"
-WEB_PORT=8062
-MCP_PORT=8060
+# Port assignments for gofr-iq
+MCP_PORT="${GOFR_IQ_MCP_PORT:-8020}"
+MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8021}"
+WEB_PORT="${GOFR_IQ_WEB_PORT:-8022}"
 
-# Parse command line arguments
-while getopts "n:w:m:h" opt; do
-    case $opt in
-        n)
-            DOCKER_NETWORK=$OPTARG
-            ;;
-        w)
-            WEB_PORT=$OPTARG
-            ;;
-        m)
-            MCP_PORT=$OPTARG
-            ;;
-        h)
-            echo "Usage: $0 [-n NETWORK] [-w WEB_PORT] [-m MCP_PORT]"
-            echo "  -n NETWORK   Docker network to attach to (default: gofr-net)"
-            echo "  -w WEB_PORT  Port to expose web server on (default: 8062)"
-            echo "  -m MCP_PORT  Port to expose MCP server on (default: 8060)"
-            echo ""
-            echo "Environment Variables:"
-            echo "  GOFR_IQ_NETWORK  Default network (default: gofr-net)"
-            exit 0
-            ;;
-        \?)
-            echo "Usage: $0 [-n NETWORK] [-w WEB_PORT] [-m MCP_PORT]"
-            exit 1
-            ;;
-    esac
+# JWT Secret (required)
+JWT_SECRET="${GOFR_IQ_JWT_SECRET:-}"
+
+if [ -z "$JWT_SECRET" ]; then
+    echo "ERROR: GOFR_IQ_JWT_SECRET environment variable is required"
+    echo "Usage: GOFR_IQ_JWT_SECRET=your-secret ./run-prod.sh"
+    exit 1
+fi
+
+# Neo4j connection (optional)
+NEO4J_URI="${NEO4J_URI:-bolt://gofr-neo4j:7687}"
+NEO4J_USER="${NEO4J_USER:-neo4j}"
+NEO4J_PASSWORD="${NEO4J_PASSWORD:-}"
+
+# ChromaDB connection (optional)
+CHROMA_HOST="${CHROMA_HOST:-gofr-chroma}"
+CHROMA_PORT="${CHROMA_PORT:-8000}"
+
+echo "=== gofr-iq Production Container ==="
+
+# Create network if it doesn't exist
+if ! docker network inspect ${NETWORK_NAME} >/dev/null 2>&1; then
+    echo "Creating network: ${NETWORK_NAME}"
+    docker network create ${NETWORK_NAME}
+fi
+
+# Create volumes if they don't exist
+for vol in gofr-iq-data gofr-iq-logs; do
+    if ! docker volume inspect ${vol} >/dev/null 2>&1; then
+        echo "Creating volume: ${vol}"
+        docker volume create ${vol}
+    fi
 done
 
-# Create docker network if it doesn't exist
-echo "Checking for ${DOCKER_NETWORK} network..."
-if ! docker network inspect ${DOCKER_NETWORK} >/dev/null 2>&1; then
-    echo "Creating ${DOCKER_NETWORK} network..."
-    docker network create ${DOCKER_NETWORK}
-else
-    echo "Network ${DOCKER_NETWORK} already exists"
+# Stop existing container if running
+if docker ps -q -f name=${CONTAINER_NAME} | grep -q .; then
+    echo "Stopping existing container..."
+    docker stop ${CONTAINER_NAME}
 fi
 
-# Create docker volume for persistent data if it doesn't exist
-echo "Checking for gofr-iq_data volume..."
-if ! docker volume inspect gofr-iq_data >/dev/null 2>&1; then
-    echo "Creating gofr-iq_data volume..."
-    docker volume create gofr-iq_data
-    VOLUME_CREATED=true
-else
-    echo "Volume gofr-iq_data already exists"
-    VOLUME_CREATED=false
+# Remove existing container if exists
+if docker ps -aq -f name=${CONTAINER_NAME} | grep -q .; then
+    echo "Removing existing container..."
+    docker rm ${CONTAINER_NAME}
 fi
 
-# Stop and remove existing container if it exists
-echo "Stopping existing gofr-iq_prod container..."
-docker stop gofr-iq_prod 2>/dev/null || true
-
-echo "Removing existing gofr-iq_prod container..."
-docker rm gofr-iq_prod 2>/dev/null || true
-
-echo "Starting new gofr-iq_prod container..."
-echo "Network: $DOCKER_NETWORK"
-echo "Mounting gofr-iq_data volume to /home/gofr-iq/data in container"
-echo "Web port: $WEB_PORT, MCP port: $MCP_PORT"
+echo "Starting ${CONTAINER_NAME}..."
+echo "  MCP Port:  ${MCP_PORT}"
+echo "  MCPO Port: ${MCPO_PORT}"
+echo "  Web Port:  ${WEB_PORT}"
 
 docker run -d \
---name gofr-iq_prod \
---network ${DOCKER_NETWORK} \
--v gofr-iq_data:/home/gofr-iq/data \
--p $WEB_PORT:8062 \
--p $MCP_PORT:8060 \
-gofr-iq_prod:latest
+    --name ${CONTAINER_NAME} \
+    --network ${NETWORK_NAME} \
+    -v gofr-iq-data:/home/gofr-iq/data \
+    -v gofr-iq-logs:/home/gofr-iq/logs \
+    -p ${MCP_PORT}:8020 \
+    -p ${MCPO_PORT}:8021 \
+    -p ${WEB_PORT}:8022 \
+    -e JWT_SECRET="${JWT_SECRET}" \
+    -e MCP_PORT=8020 \
+    -e MCPO_PORT=8021 \
+    -e WEB_PORT=8022 \
+    -e NEO4J_URI="${NEO4J_URI}" \
+    -e NEO4J_USER="${NEO4J_USER}" \
+    -e NEO4J_PASSWORD="${NEO4J_PASSWORD}" \
+    -e CHROMA_HOST="${CHROMA_HOST}" \
+    -e CHROMA_PORT="${CHROMA_PORT}" \
+    ${IMAGE_NAME}
 
-if docker ps -q -f name=gofr-iq_prod | grep -q .; then
-    echo "Container gofr-iq_prod is now running"
-    
-    # Fix volume permissions if it was just created
-    if [ "$VOLUME_CREATED" = true ]; then
-        echo "Fixing permissions on newly created volume..."
-        docker exec -u root gofr-iq_prod chown -R gofr-iq:gofr-iq /home/gofr-iq/data
-        echo "Volume permissions fixed"
-    fi
-    
+# Wait for container to start
+sleep 2
+
+if docker ps -q -f name=${CONTAINER_NAME} | grep -q .; then
     echo ""
-    echo "HTTP REST API available at http://localhost:$WEB_PORT"
-    echo "MCP Streamable HTTP Server available at http://localhost:$MCP_PORT/mcp/"
-    echo "Persistent data stored in Docker volume: gofr-iq_data"
+    echo "=== Container Started Successfully ==="
+    echo "MCP Server:  http://localhost:${MCP_PORT}/mcp"
+    echo "MCPO Server: http://localhost:${MCPO_PORT}"
+    echo "Web Server:  http://localhost:${WEB_PORT}"
     echo ""
-    echo "To view logs: docker logs -f gofr-iq_prod"
-    echo "To stop: docker stop gofr-iq_prod"
+    echo "Volumes:"
+    echo "  Data: gofr-iq-data"
+    echo "  Logs: gofr-iq-logs"
+    echo ""
+    echo "Commands:"
+    echo "  Logs:   docker logs -f ${CONTAINER_NAME}"
+    echo "  Stop:   ./stop-prod.sh"
+    echo "  Shell:  docker exec -it ${CONTAINER_NAME} bash"
 else
-    echo "ERROR: Container gofr-iq_prod failed to start"
-    docker logs gofr-iq_prod
+    echo "ERROR: Container failed to start"
+    docker logs ${CONTAINER_NAME}
     exit 1
 fi

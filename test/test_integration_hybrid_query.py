@@ -283,6 +283,8 @@ class TestHybridQueryIntegration:
     Set GOFR_IQ_USE_LIVE_LLM=1 to use real LLM for embeddings and extraction.
     
     In live mode, captured data is saved to test/tuning/ for analysis.
+    
+    Note: Requires ChromaDB to be running. Use --with-servers to auto-start infrastructure.
     """
 
     @pytest.fixture(scope="class", autouse=True)
