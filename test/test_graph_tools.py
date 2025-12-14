@@ -1,6 +1,9 @@
 """Tests for Graph Tools
 
 Unit tests for the MCP graph exploration tools.
+
+NOTE: These tools are NOT exposed by the default MCP server configuration.
+They remain available for direct use but are not registered via register_all_tools.
 """
 
 from __future__ import annotations

@@ -141,7 +141,7 @@ The `gofr-iq` system demonstrates a high level of maturity for a pre-production 
 
 - [ ] **Tests**: Run `scripts/run_tests.sh` (Must pass 100%).
 - [ ] **Lint**: Run `ruff check .` and `mypy .`.
-- [ ] **Security**: Verify `GOFRIQ_JWT_SECRET` is set and not default.
+- [ ] **Security**: Verify `GOFR_IQ_JWT_SECRET` is set and not default.
 - [ ] **Infrastructure**: Check Neo4j and ChromaDB connectivity.
 - [ ] **Data**: Run `scripts/storage_manager.sh verify` to ensure index consistency.
 - [ ] **Docs**: Update `IMPLEMENTATION.md` if architecture changed.

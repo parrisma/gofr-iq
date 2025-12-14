@@ -6,17 +6,19 @@ CONTAINER_NAME="gofr-iq-prod"
 IMAGE_NAME="gofr-iq-prod:latest"
 NETWORK_NAME="gofr-net"
 
-# Port assignments for gofr-iq
-MCP_PORT="${GOFR_IQ_MCP_PORT:-8020}"
-MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8021}"
-WEB_PORT="${GOFR_IQ_WEB_PORT:-8022}"
+source "$(dirname "$0")/../lib/gofr-common/config/gofr_ports.sh"
+MCP_PORT="${GOFR_IQ_MCP_PORT}"
+MCPO_PORT="${GOFR_IQ_MCPO_PORT}"
+WEB_PORT="${GOFR_IQ_WEB_PORT}"
 
-# JWT Secret (required)
+# JWT Secret and Auth Configuration
 JWT_SECRET="${GOFR_IQ_JWT_SECRET:-}"
+AUTH_DISABLED="${GOFR_IQ_AUTH_DISABLED:-false}"
 
-if [ -z "$JWT_SECRET" ]; then
-    echo "ERROR: GOFR_IQ_JWT_SECRET environment variable is required"
+if [ "$AUTH_DISABLED" = "false" ] && [ -z "$JWT_SECRET" ]; then
+    echo "ERROR: GOFR_IQ_JWT_SECRET environment variable is required OR set GOFR_IQ_AUTH_DISABLED=true"
     echo "Usage: GOFR_IQ_JWT_SECRET=your-secret ./run-prod.sh"
+    echo "   OR: GOFR_IQ_AUTH_DISABLED=true ./run-prod.sh"
     exit 1
 fi
 
@@ -67,13 +69,14 @@ docker run -d \
     --network ${NETWORK_NAME} \
     -v gofr-iq-data:/home/gofr-iq/data \
     -v gofr-iq-logs:/home/gofr-iq/logs \
-    -p ${MCP_PORT}:8020 \
-    -p ${MCPO_PORT}:8021 \
-    -p ${WEB_PORT}:8022 \
+    -p ${MCP_PORT}:${MCP_PORT} \
+    -p ${MCPO_PORT}:${MCPO_PORT} \
+    -p ${WEB_PORT}:${WEB_PORT} \
     -e JWT_SECRET="${JWT_SECRET}" \
-    -e MCP_PORT=8020 \
-    -e MCPO_PORT=8021 \
-    -e WEB_PORT=8022 \
+    -e GOFR_IQ_AUTH_DISABLED="${AUTH_DISABLED}" \
+    -e GOFR_IQ_MCP_PORT=${MCP_PORT} \
+    -e GOFR_IQ_MCPO_PORT=${MCPO_PORT} \
+    -e GOFR_IQ_WEB_PORT=${WEB_PORT} \
     -e NEO4J_URI="${NEO4J_URI}" \
     -e NEO4J_USER="${NEO4J_USER}" \
     -e NEO4J_PASSWORD="${NEO4J_PASSWORD}" \

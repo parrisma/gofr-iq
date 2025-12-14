@@ -3,11 +3,29 @@
 # Starts MCP, MCPO, and Web servers via supervisor
 set -e
 
-# Environment variables with defaults
-export JWT_SECRET="${JWT_SECRET:-changeme}"
-export MCP_PORT="${MCP_PORT:-8020}"
-export MCPO_PORT="${MCPO_PORT:-8021}"
-export WEB_PORT="${WEB_PORT:-8022}"
+
+# Environment variables
+# JWT_SECRET is optional if auth is disabled
+AUTH_DISABLED="${GOFR_IQ_AUTH_DISABLED:-false}"
+if [ "$AUTH_DISABLED" = "false" ] && [ -z "$JWT_SECRET" ]; then
+	echo "ERROR: JWT_SECRET must be set in the environment or set GOFR_IQ_AUTH_DISABLED=true for no-auth mode." >&2
+	exit 1
+fi
+export GOFR_IQ_AUTH_DISABLED="$AUTH_DISABLED"
+
+# Port configuration - use GOFR_IQ_*_PORT naming with defaults
+MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
+MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8081}"
+WEB_PORT="${GOFR_IQ_WEB_PORT:-8082}"
+
+export MCP_PORT
+export MCPO_PORT
+export WEB_PORT
+export GOFR_IQ_MCP_PORT="$MCP_PORT"
+export GOFR_IQ_MCPO_PORT="$MCPO_PORT"
+export GOFR_IQ_WEB_PORT="$WEB_PORT"
+# Set JWT_SECRET to empty string if not set (for supervisor config compatibility)
+export JWT_SECRET="${JWT_SECRET:-}"
 
 # gofr-iq specific environment
 export GOFR_IQ_DATA_DIR="${GOFR_IQ_DATA_DIR:-/home/gofr-iq/data}"
@@ -27,10 +45,10 @@ export CHROMA_PORT="${CHROMA_PORT:-8000}"
 VENV_PATH="/home/gofr-iq/.venv"
 
 echo "=== gofr-iq Production Container ==="
-echo "MCP Port:  ${MCP_PORT}"
-echo "MCPO Port: ${MCPO_PORT}"
-echo "Web Port:  ${WEB_PORT}"
-echo "Data Dir:  ${GOFR_IQ_DATA_DIR}"
+echo "MCP Port:-  ${MCP_PORT}"
+echo "MCPO Port:- ${MCPO_PORT}"
+echo "Web Port:-  ${WEB_PORT}"
+echo "Data Dir:-  ${GOFR_IQ_DATA_DIR}"
 
 # Ensure data directories exist with correct permissions
 mkdir -p "${GOFR_IQ_DATA_DIR}" "${GOFR_IQ_STORAGE_DIR}" "${GOFR_IQ_AUTH_DIR}"
@@ -52,17 +70,17 @@ autostart=true
 autorestart=true
 stdout_logfile=/home/gofr-iq/logs/mcp.log
 stderr_logfile=/home/gofr-iq/logs/mcp-error.log
-environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",MCP_PORT="%(ENV_MCP_PORT)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
+environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",GOFR_IQ_AUTH_DISABLED="%(ENV_GOFR_IQ_AUTH_DISABLED)s",MCP_PORT="%(ENV_MCP_PORT)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
 
 [program:mcpo]
-command=${VENV_PATH}/bin/mcpo --host 0.0.0.0 --port ${MCPO_PORT} -- ${VENV_PATH}/bin/python -m app.main_mcp
+command=${VENV_PATH}/bin/mcpo --host 0.0.0.0 --port ${MCPO_PORT} --server-type streamable-http -- http://localhost:${MCP_PORT}/mcp
 directory=/home/gofr-iq
 user=gofr-iq
 autostart=true
 autorestart=true
 stdout_logfile=/home/gofr-iq/logs/mcpo.log
 stderr_logfile=/home/gofr-iq/logs/mcpo-error.log
-environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
+environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",GOFR_IQ_AUTH_DISABLED="%(ENV_GOFR_IQ_AUTH_DISABLED)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
 
 [program:web]
 command=${VENV_PATH}/bin/python -m app.main_web
@@ -72,7 +90,7 @@ autostart=true
 autorestart=true
 stdout_logfile=/home/gofr-iq/logs/web.log
 stderr_logfile=/home/gofr-iq/logs/web-error.log
-environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",WEB_PORT="%(ENV_WEB_PORT)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
+environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",GOFR_IQ_AUTH_DISABLED="%(ENV_GOFR_IQ_AUTH_DISABLED)s",WEB_PORT="%(ENV_WEB_PORT)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
 EOF
 
 echo "Starting supervisor..."

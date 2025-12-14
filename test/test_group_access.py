@@ -34,7 +34,7 @@ def auth_service() -> AuthService:
     return AuthService(
         secret_key="test-secret-key-for-unit-tests",
         token_store_path=":memory:",
-        env_prefix="GOFRIQ_TEST",
+        env_prefix="GOFR_IQ_TEST",
     )
 
 

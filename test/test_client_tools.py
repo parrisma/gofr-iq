@@ -1,6 +1,9 @@
 """Tests for Client Tools
 
 Unit tests for the MCP client tools for client management and personalized feeds.
+
+NOTE: These tools are NOT exposed by the default MCP server configuration.
+They remain available for direct use but are not registered via register_all_tools.
 """
 
 from __future__ import annotations

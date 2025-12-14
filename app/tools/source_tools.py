@@ -167,3 +167,90 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
                 message=f"Failed to retrieve source: {e!s}",
                 recovery_strategy="Check the source_guid format and try again.",
             )
+
+    @mcp.tool(
+        name="create_source",
+        description=(
+            "Create a new news source in the repository. "
+            "Use to register a new data provider before ingesting documents from it."
+        ),
+    )
+    def create_source(
+        name: str,
+        group_guid: str,
+        source_type: str = "other",
+        region: str | None = None,
+        languages: list[str] | None = None,
+        trust_level: str = "unverified",
+    ) -> ToolResponse:
+        """Create a new news source.
+
+        Args:
+            name: Human-readable source name (e.g., "Reuters", "Bloomberg")
+            group_guid: Group this source belongs to
+            source_type: Type of source: news_agency, broker, analyst, regulator, other
+            region: Geographic region: APAC, JP, CN, HK, SG, AU, KR, TW, US, EU, etc.
+            languages: Languages provided (default: ["en"])
+            trust_level: Credibility level: high, medium, low, unverified
+
+        Returns:
+            source_guid: The newly created source identifier
+            name: Source name
+            type: Source type
+            region: Geographic region
+            languages: Supported languages
+            trust_level: Trust level assigned
+        """
+        try:
+            from app.models.source import SourceType, TrustLevel
+
+            # Convert string parameters to enums
+            try:
+                source_type_enum = SourceType(source_type.lower())
+            except ValueError:
+                return error_response(
+                    error_code="INVALID_SOURCE_TYPE",
+                    message=f"Invalid source type: {source_type}",
+                    recovery_strategy="Valid types: news_agency, broker, analyst, regulator, other",
+                )
+
+            try:
+                trust_level_enum = TrustLevel(trust_level.lower())
+            except ValueError:
+                return error_response(
+                    error_code="INVALID_TRUST_LEVEL",
+                    message=f"Invalid trust level: {trust_level}",
+                    recovery_strategy="Valid levels: verified, trusted, standard, unverified",
+                )
+
+            # Create the source
+            source = source_registry.create(
+                name=name,
+                group_guid=group_guid,
+                source_type=source_type_enum,
+                region=region,
+                languages=languages or ["en"],
+                trust_level=trust_level_enum,
+            )
+
+            return success_response(
+                data={
+                    "source_guid": source.source_guid,
+                    "group_guid": source.group_guid,
+                    "name": source.name,
+                    "type": source.type.value if source.type else None,
+                    "region": source.region,
+                    "languages": source.languages,
+                    "trust_level": source.trust_level.value if source.trust_level else None,
+                    "active": source.active,
+                    "created_at": source.created_at.isoformat() if source.created_at else None,
+                },
+                message=f"Source '{name}' created successfully",
+            )
+
+        except Exception as e:
+            return error_response(
+                error_code="CREATE_SOURCE_ERROR",
+                message=f"Failed to create source: {e!s}",
+                recovery_strategy="Check the input parameters and try again.",
+            )

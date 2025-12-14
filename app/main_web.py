@@ -27,15 +27,21 @@ if __name__ == "__main__":
     parser.add_argument(
         "--host",
         type=str,
-        default=None,
+        default=os.environ.get("GOFR_IQ_WEB_HOST", "0.0.0.0"),
         help="Host address to bind to (default: from env or 0.0.0.0)",
     )
     parser.add_argument(
         "--port",
         type=int,
-        default=None,
-        help="Port number to listen on (default: from env or 8062)",
+        default=int(os.environ.get("GOFR_IQ_WEB_PORT", 8082)),
+        help="Port number to listen on (default: from env or gofr-common config)",
     )
+    parser.add_argument(
+            "--auth-disabled",
+            action="store_true",
+            default=os.environ.get("GOFR_IQ_AUTH_DISABLED", "true").lower() in ("1", "true", "yes"),
+            help="Disable authentication (default: true, can be overridden by GOFR_IQ_AUTH_DISABLED)",
+        )
     parser.add_argument(
         "--jwt-secret",
         type=str,
@@ -61,6 +67,8 @@ if __name__ == "__main__":
         help="Logging level for all components (default: INFO)",
     )
     args = parser.parse_args()
+    print(f"[WEB] Starting on host={args.host} port={args.port}")
+    print(f"[WEB] Startup: auth_disabled={args.auth_disabled}")
 
     # Parse log level
     log_level = getattr(logging, args.log_level.upper(), logging.INFO)
@@ -69,11 +77,12 @@ if __name__ == "__main__":
         # Resolve authentication configuration
         jwt_secret = args.jwt_secret or os.getenv("GOFR_IQ_JWT_SECRET")
         token_store_path = args.token_store or os.getenv("GOFR_IQ_TOKEN_STORE")
-        require_auth = not args.no_auth
+        # Auth is disabled if --no-auth OR --auth-disabled is set
+        require_auth = not (args.no_auth or args.auth_disabled)
         
         # Auto-generate secret for development if not provided
         if require_auth and not jwt_secret:
-            env = os.getenv("GOFRIQ_ENV", os.getenv("GOFR_IQ_ENV", "PROD"))
+            env = os.getenv("GOFR_IQ_ENV", os.getenv("GOFR_IQ_ENV", "PROD"))
             if env.upper() not in ["PROD", "PRODUCTION"]:
                 jwt_secret = f"dev-secret-{secrets.token_hex(16)}"
                 logger.info("Auto-generated development JWT secret")

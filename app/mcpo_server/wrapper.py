@@ -16,14 +16,25 @@ from app.logger import ConsoleLogger
 logger = ConsoleLogger(name="mcpo_wrapper", level=logging.INFO)
 
 
+# Import canonical port configuration from gofr-common
+try:
+    from gofr_common.config import GOFR_IQ_PORTS
+    _DEFAULT_MCP_PORT = GOFR_IQ_PORTS.mcp
+    _DEFAULT_MCPO_PORT = GOFR_IQ_PORTS.mcpo
+except ImportError:
+    import os
+    _DEFAULT_MCP_PORT = int(os.environ.get("GOFR_IQ_MCP_PORT", 8080))
+    _DEFAULT_MCPO_PORT = int(os.environ.get("GOFR_IQ_MCPO_PORT", 8081))
+
+
 class MCPOWrapper:
-    """Wrapper for MCPO proxy server."""
+    """Wrapper class for running MCPO proxy server."""
 
     def __init__(
         self,
         mcp_host: str = "localhost",
-        mcp_port: int = 8060,
-        mcpo_port: int = 8061,
+        mcp_port: int = _DEFAULT_MCP_PORT,
+        mcpo_port: int = _DEFAULT_MCPO_PORT,
         mcpo_api_key: Optional[str] = None,
         auth_token: Optional[str] = None,
         use_auth: bool = False,
@@ -166,8 +177,8 @@ class MCPOWrapper:
 
 def start_mcpo_wrapper(
     mcp_host: str = "localhost",
-    mcp_port: int = 8060,
-    mcpo_port: int = 8061,
+    mcp_port: int = _DEFAULT_MCP_PORT,
+    mcpo_port: int = _DEFAULT_MCPO_PORT,
     mcpo_api_key: Optional[str] = None,
     auth_token: Optional[str] = None,
     use_auth: bool = False,
@@ -175,9 +186,9 @@ def start_mcpo_wrapper(
     """Start MCPO wrapper for GOFR-IQ MCP server.
 
     Args:
-        mcp_host: Host where MCP server is running (default: localhost)
-        mcp_port: Port where MCP server is listening (default: 8060)
-        mcpo_port: Port for MCPO proxy to listen on (default: 8061)
+        mcp_host: Hostname where MCP server is running (default: localhost)
+        mcp_port: Port where MCP server is listening (from gofr-common config)
+        mcpo_port: Port for MCPO proxy to listen on (from gofr-common config)
         mcpo_api_key: API key for client -> MCPO (default: from env or None for no auth)
         auth_token: JWT token for MCPO -> MCP (default: from env or None)
         use_auth: Whether to use authenticated mode (default: False)

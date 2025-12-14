@@ -33,9 +33,9 @@ from gofr_common.logger import (
 )
 
 # Configuration from environment (using GOFR_IQ prefix for consistency)
-LOG_LEVEL_STR = os.environ.get("GOFR_IQ_LOG_LEVEL", os.environ.get("GOFRIQ_LOG_LEVEL", "INFO")).upper()
-LOG_FILE = os.environ.get("GOFR_IQ_LOG_FILE", os.environ.get("GOFRIQ_LOG_FILE"))
-LOG_JSON = os.environ.get("GOFR_IQ_LOG_JSON", os.environ.get("GOFRIQ_LOG_JSON", "false")).lower() == "true"
+LOG_LEVEL_STR = os.environ.get("GOFR_IQ_LOG_LEVEL", os.environ.get("GOFR_IQ_LOG_LEVEL", "INFO")).upper()
+LOG_FILE = os.environ.get("GOFR_IQ_LOG_FILE", os.environ.get("GOFR_IQ_LOG_FILE"))
+LOG_JSON = os.environ.get("GOFR_IQ_LOG_JSON", os.environ.get("GOFR_IQ_LOG_JSON", "false")).lower() == "true"
 
 # Map string level to logging constant
 LOG_LEVEL = getattr(logging, LOG_LEVEL_STR, logging.INFO)

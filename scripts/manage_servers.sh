@@ -3,9 +3,12 @@
 # Wrapper for the shared restart_servers.sh script
 # Also manages infrastructure containers (ChromaDB, Neo4j)
 #
-# Usage: ./restart_servers.sh [--kill-all] [--env PROD|TEST] [--host HOST] 
-#        [--mcp-port PORT] [--mcpo-port PORT] [--web-port PORT]
-#        [--infra-only] [--no-infra] [--stop-infra]
+# Usage: 
+#   ./restart_servers.sh --prod             # Start infra + servers (Docker containers)
+#   ./restart_servers.sh --dev              # Start infra + servers (local Python, needs devcontainer)
+#   ./restart_servers.sh --infra-only       # Start only infrastructure
+#   ./restart_servers.sh --stop             # Stop all servers
+#   ./restart_servers.sh --stop-infra       # Stop infrastructure
 
 set -e
 
@@ -26,9 +29,15 @@ if [ -d "$SCRIPT_DIR/../lib/gofr-common/scripts" ]; then
     COMMON_SCRIPTS="$SCRIPT_DIR/../lib/gofr-common/scripts"
 fi
 
-# Source centralized configuration (defaults to PROD for restart script)
-export GOFRIQ_ENV="${GOFRIQ_ENV:-PROD}"
-source "$SCRIPT_DIR/gofriq.env"
+
+
+# Source centralized port configuration
+source "$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.sh"
+gofr_ports_list
+export GOFR_IQ_ENV="${GOFR_IQ_ENV:-PROD}"
+if [ -f "$SCRIPT_DIR/gofriq.env" ]; then
+    source "$SCRIPT_DIR/gofriq.env"
+fi
 
 # Infrastructure management functions
 start_infra() {
@@ -70,27 +79,12 @@ start_infra() {
 
 stop_infra() {
     echo -e "${YELLOW}Stopping infrastructure containers...${NC}"
-    
     if command -v docker &> /dev/null; then
         cd "${DOCKER_DIR}"
         docker compose -f docker-compose.yml stop chromadb neo4j 2>/dev/null || true
         cd "${PROJECT_ROOT}"
     fi
-    
     echo -e "${GREEN}Infrastructure stopped${NC}"
-}
-
-infra_status() {
-    echo -e "${BLUE}Infrastructure status:${NC}"
-    
-    if ! command -v docker &> /dev/null; then
-        echo "Docker not available"
-        return
-    fi
-    
-    cd "${DOCKER_DIR}"
-    docker compose -f docker-compose.yml ps chromadb neo4j 2>/dev/null || echo "No containers running"
-    cd "${PROJECT_ROOT}"
 }
 
 # Parse command line arguments (these override env vars)
@@ -103,30 +97,30 @@ SHOW_HELP=false
 while [[ $# -gt 0 ]]; do
     case $1 in
         --env)
-            export GOFRIQ_ENV="$2"
+            export GOFR_IQ_ENV="$2"
             shift 2
             ;;
         --host)
-            export GOFRIQ_HOST="$2"
+            export GOFR_IQ_HOST="$2"
             shift 2
             ;;
         --mcp-port)
-            export GOFRIQ_MCP_PORT="$2"
+            export GOFR_IQ_MCP_PORT="$2"
             shift 2
             ;;
         --mcpo-port)
-            export GOFRIQ_MCPO_PORT="$2"
+            export GOFR_IQ_MCPO_PORT="$2"
             shift 2
             ;;
         --web-port)
-            export GOFRIQ_WEB_PORT="$2"
+            export GOFR_IQ_WEB_PORT="$2"
             shift 2
             ;;
-        --infra-only)
+        --infra-only|--infra)
             INFRA_ONLY=true
             shift
             ;;
-        --no-infra)
+        --no-infra|--servers-only)
             NO_INFRA=true
             shift
             ;;
@@ -134,7 +128,7 @@ while [[ $# -gt 0 ]]; do
             STOP_INFRA=true
             shift
             ;;
-        --kill-all)
+        --prod|--docker|--dev|--local|--kill-all|--stop)
             # Pass through to common script
             PASSTHROUGH_ARGS+=("$1")
             shift
@@ -154,27 +148,32 @@ done
 if [ "$SHOW_HELP" = true ]; then
     echo "GOFR-IQ Server Restart Script"
     echo ""
-    echo "Usage: $0 [options]"
+    echo "Usage: $0 <mode> [options]"
     echo ""
-    echo "Server Options:"
-    echo "  --kill-all            Kill all running servers"
+    echo "MODE (required):"
+    echo "  --prod, --docker      Run servers as Docker containers (works from host)"
+    echo "  --dev, --local        Run servers as local Python (requires devcontainer)"
+    echo ""
+    echo "INFRASTRUCTURE OPTIONS:"
+    echo "  --infra-only          Only start infrastructure (ChromaDB, Neo4j)"
+    echo "  --no-infra            Skip infrastructure, only start servers"
+    echo "  --stop-infra          Stop infrastructure containers"
+    echo ""
+    echo "SERVER OPTIONS:"
+    echo "  --stop, --kill-all    Stop all running servers"
     echo "  --env PROD|TEST       Set environment mode (default: PROD)"
     echo "  --host HOST           Set server host"
     echo "  --mcp-port PORT       Set MCP server port"
     echo "  --mcpo-port PORT      Set MCPO proxy port"
     echo "  --web-port PORT       Set web server port"
     echo ""
-    echo "Infrastructure Options:"
-    echo "  --infra-only          Only start infrastructure (ChromaDB, Neo4j)"
-    echo "  --no-infra            Skip infrastructure, only restart servers"
-    echo "  --stop-infra          Stop infrastructure containers"
-    echo ""
-    echo "Examples:"
-    echo "  $0                    Start infra + servers"
+    echo "EXAMPLES:"
+    echo "  $0 --prod             Start everything with Docker containers"
+    echo "  $0 --dev              Start everything with local Python"
     echo "  $0 --infra-only       Only start ChromaDB and Neo4j"
-    echo "  $0 --no-infra         Only restart MCP/Web servers"
+    echo "  $0 --prod --no-infra  Only start server containers (infra already running)"
+    echo "  $0 --stop             Stop all servers"
     echo "  $0 --stop-infra       Stop infrastructure containers"
-    echo "  $0 --kill-all         Kill all servers and stop infra"
     exit 0
 fi
 
@@ -185,7 +184,9 @@ if [ "$STOP_INFRA" = true ]; then
 fi
 
 # Re-source after env vars may have changed
-source "$SCRIPT_DIR/gofriq.env"
+if [ -f "$SCRIPT_DIR/gofriq.env" ]; then
+    source "$SCRIPT_DIR/gofriq.env"
+fi
 
 # Start infrastructure if not disabled
 if [ "$NO_INFRA" = false ]; then
@@ -200,17 +201,18 @@ fi
 
 # Map project-specific vars to common vars
 export GOFR_PROJECT_NAME="gofr-iq"
-export GOFR_PROJECT_ROOT="$GOFRIQ_ROOT"
-export GOFR_LOGS_DIR="$GOFRIQ_LOGS"
-export GOFR_DATA_DIR="$GOFRIQ_DATA"
-export GOFR_ENV="$GOFRIQ_ENV"
-export GOFR_MCP_PORT="$GOFRIQ_MCP_PORT"
-export GOFR_MCPO_PORT="$GOFRIQ_MCPO_PORT"
-export GOFR_WEB_PORT="$GOFRIQ_WEB_PORT"
-export GOFR_MCP_HOST="$GOFRIQ_HOST"
-export GOFR_MCPO_HOST="$GOFRIQ_HOST"
-export GOFR_WEB_HOST="$GOFRIQ_HOST"
-export GOFR_NETWORK="$GOFRIQ_DOCKER_NETWORK"
+export GOFR_PROJECT_ROOT="$GOFR_IQ_ROOT"
+export GOFR_LOGS_DIR="$GOFR_IQ_LOGS"
+export GOFR_DATA_DIR="$GOFR_IQ_DATA"
+export GOFR_ENV="$GOFR_IQ_ENV"
+export GOFR_MCP_PORT="$GOFR_IQ_MCP_PORT"
+export GOFR_MCPO_PORT="$GOFR_IQ_MCPO_PORT"
+export GOFR_WEB_PORT="$GOFR_IQ_WEB_PORT"
+export GOFR_MCP_HOST="$GOFR_IQ_HOST"
+export GOFR_MCPO_HOST="$GOFR_IQ_HOST"
+export GOFR_WEB_HOST="$GOFR_IQ_HOST"
+export GOFR_NETWORK="$GOFR_IQ_DOCKER_NETWORK"
+export GOFR_DOCKER_DIR="$DOCKER_DIR"
 
 # Extra args for MCP server (project-specific)
 # GOFR-IQ doesn't need web-url arg
@@ -218,6 +220,9 @@ export GOFR_MCP_EXTRA_ARGS=""
 
 # Extra args for Web server - disable auth for development
 export GOFR_WEB_EXTRA_ARGS="--no-auth"
+
+# Export port configuration for docker-compose
+export GOFR_IQ_MCP_PORT GOFR_IQ_MCPO_PORT GOFR_IQ_WEB_PORT
 
 # Call shared script
 source "$COMMON_SCRIPTS/restart_servers.sh" "${PASSTHROUGH_ARGS[@]}"

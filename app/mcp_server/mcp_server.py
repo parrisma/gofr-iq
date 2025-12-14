@@ -19,6 +19,8 @@ from app.services import (
     GraphIndex,
     IngestService,
     LanguageDetector,
+    LLMService,
+    QueryService,
     SourceRegistry,
 )
 from app.tools import register_all_tools
@@ -79,6 +81,17 @@ def create_mcp_server(
         graph_index=graph_index,
     )
 
+    # Create query service for semantic search
+    query_service = QueryService(
+        embedding_index=embedding_index,
+        document_store=document_store,
+        source_registry=source_registry,
+        graph_index=graph_index,
+    )
+
+    # Create LLM service for health checks
+    llm_service = LLMService()
+
     # Create MCP server
     server = FastMCP(
         name="gofr-iq",
@@ -86,9 +99,12 @@ def create_mcp_server(
 
 Available tools:
 - ingest_document: Ingest news documents with validation and language detection
+- query_documents: Search for news articles by topic, company, or event
 - list_sources: List registered news sources with optional filtering
 - get_source: Get detailed information about a specific source
+- create_source: Register a new news source
 - get_document: Retrieve a document by its GUID
+- health_check: Check health of Neo4j, ChromaDB, and LLM API connections
 
 All documents are scoped by group_guid for access control.""",
         port=port,
@@ -102,7 +118,10 @@ All documents are scoped by group_guid for access control.""",
         document_store=document_store,
         source_registry=source_registry,
         ingest_service=ingest_service,
+        query_service=query_service,
         graph_index=graph_index,
+        embedding_index=embedding_index,
+        llm_service=llm_service,
     )
 
     return server

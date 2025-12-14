@@ -8,14 +8,14 @@ Usage:
     python -m app.main_mcp
 
     # Run with custom host and port
-    python -m app.main_mcp --host 0.0.0.0 --port 8060
+    python -m app.main_mcp --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT:-8080}
 
     # Run without authentication (development only)
     python -m app.main_mcp --no-auth
 
 Environment Variables:
     GOFR_IQ_STORAGE_DIR: Base directory for document storage
-    GOFR_IQ_MCP_PORT: Port for MCP server (default: 8060)
+    GOFR_IQ_MCP_PORT: Port for MCP server (from gofr-common config)
     GOFR_IQ_LOG_LEVEL: Logging level (default: INFO)
     GOFR_IQ_AUTH_ENABLED: Enable/disable authentication (default: true)
     GOFR_IQ_JWT_SECRET: JWT secret for authentication
@@ -44,14 +44,20 @@ if __name__ == "__main__":
     parser.add_argument(
         "--host",
         type=str,
-        default=None,
+        default=os.environ.get("GOFR_IQ_MCP_HOST", "0.0.0.0"),
         help="Host address to bind to (default: from env or 0.0.0.0)",
     )
     parser.add_argument(
         "--port",
         type=int,
-        default=None,
-        help="Port number to listen on (default: from env or 8060)",
+        default=int(os.environ.get("GOFR_IQ_MCP_PORT", 8080)),
+        help="Port number to listen on (default: from env or gofr-common config)",
+    )
+    parser.add_argument(
+        "--auth-disabled",
+        action="store_true",
+        default=os.environ.get("GOFR_IQ_AUTH_DISABLED", "true").lower() in ("1", "true", "yes"),
+        help="Disable authentication (default: true, can be overridden by GOFR_IQ_AUTH_DISABLED)",
     )
     parser.add_argument(
         "--storage-dir",
@@ -85,6 +91,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # Explicitly log host/port for debugging
+    print(f"[MCP] Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}")
+
     # Parse log level
     log_level = getattr(logging, args.log_level.upper(), logging.INFO)
 
@@ -110,7 +119,7 @@ if __name__ == "__main__":
             
             # Auto-generate secret for development if not provided
             if require_auth and not jwt_secret:
-                env = os.getenv("GOFRIQ_ENV", os.getenv("GOFR_IQ_ENV", "PROD"))
+                env = os.getenv("GOFR_IQ_ENV", os.getenv("GOFR_IQ_ENV", "PROD"))
                 if env.upper() not in ["PROD", "PRODUCTION"]:
                     jwt_secret = f"dev-secret-{secrets.token_hex(16)}"
                     startup_logger.info("Auto-generated development JWT secret")

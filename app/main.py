@@ -8,7 +8,7 @@ Usage:
     python -m app.main
 
     # For uvicorn compatibility
-    uvicorn app.main:mcp.streamable_http_app --host 0.0.0.0 --port 8060
+    uvicorn app.main:mcp.streamable_http_app --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT:-8080}
 """
 
 from __future__ import annotations

@@ -21,11 +21,16 @@ if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
 fi
 
 # Configuration with environment variable fallbacks
-HOST="${GOFR_IQ_MCP_HOST:-${GOFRIQ_HOST:-0.0.0.0}}"
-PORT="${GOFR_IQ_MCP_PORT:-${GOFRIQ_MCP_PORT:-8060}}"
+HOST="${GOFR_IQ_MCP_HOST:-${GOFR_IQ_HOST:-0.0.0.0}}"
+# Source gofriq.env for canonical port definitions
+if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
+    source "${SCRIPT_DIR}/gofriq.env"
+fi
+
+PORT="${GOFR_IQ_MCP_PORT:-${GOFR_IQ_MCP_PORT}}"
 NO_AUTH="${GOFR_IQ_NO_AUTH:-false}"
 LOG_LEVEL="${GOFR_IQ_LOG_LEVEL:-INFO}"
-STORAGE_DIR="${GOFR_IQ_STORAGE_DIR:-${GOFRIQ_STORAGE}}"
+STORAGE_DIR="${GOFR_IQ_STORAGE_DIR:-${GOFR_IQ_STORAGE}}"
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -55,7 +60,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  --host HOST           Host to bind to (default: 0.0.0.0)"
-            echo "  --port PORT           Port to run MCP server on (default: 8060)"
+            echo "  --port PORT           Port to run MCP server on (default: from gofriq.env)"
             echo "  --storage-dir DIR     Storage directory for documents"
             echo "  --no-auth             Disable authentication"
             echo "  --log-level LEVEL     Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)"
@@ -63,7 +68,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Environment Variables:"
             echo "  GOFR_IQ_MCP_HOST         Default host (default: 0.0.0.0)"
-            echo "  GOFR_IQ_MCP_PORT         Default port (default: 8060)"
+            echo "  GOFR_IQ_MCP_PORT         Default port (from gofriq.env)"
             echo "  GOFR_IQ_STORAGE_DIR      Storage directory"
             echo "  GOFR_IQ_NO_AUTH          Set to 'true' to disable auth"
             echo "  GOFR_IQ_LOG_LEVEL        Logging level (default: INFO)"

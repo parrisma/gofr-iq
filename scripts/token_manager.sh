@@ -27,7 +27,7 @@ source "$SCRIPT_DIR/gofriq.env"
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --env)
-            export GOFRIQ_ENV="$2"
+            export GOFR_IQ_ENV="$2"
             shift 2
             ;;
         *)
@@ -36,14 +36,14 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Re-source gofriq.env with potentially updated GOFRIQ_ENV
+# Re-source gofriq.env with potentially updated GOFR_IQ_ENV
 source "$SCRIPT_DIR/gofriq.env"
 
 # Map project-specific vars to common vars
 export GOFR_PROJECT_NAME="gofr-iq"
-export GOFR_PROJECT_ROOT="$GOFRIQ_ROOT"
-export GOFR_TOKEN_STORE="$GOFRIQ_TOKEN_STORE"
-export GOFR_ENV="$GOFRIQ_ENV"
+export GOFR_PROJECT_ROOT="$GOFR_IQ_ROOT"
+export GOFR_TOKEN_STORE="$GOFR_IQ_TOKEN_STORE"
+export GOFR_ENV="$GOFR_IQ_ENV"
 export GOFR_ENV_VAR_PREFIX="GOFRIQ"
 export GOFR_TOKEN_MODULE="app.auth.token_manager"
 

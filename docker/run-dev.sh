@@ -18,11 +18,12 @@ GOFR_GID=1000
 CONTAINER_NAME="gofr-iq-dev"
 IMAGE_NAME="gofr-iq-dev:latest"
 
-# Defaults from environment or hardcoded (gofr-iq uses 8060-8062)
-MCP_PORT="${GOFRIQ_MCP_PORT:-8060}"
-MCPO_PORT="${GOFRIQ_MCPO_PORT:-8061}"
-WEB_PORT="${GOFRIQ_WEB_PORT:-8062}"
-DOCKER_NETWORK="${GOFRIQ_DOCKER_NETWORK:-gofr-net}"
+source "$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.sh"
+# Add 200 to dev ports to separate from prod (8080 -> 8280, 8081 -> 8281, 8082 -> 8282)
+MCP_PORT=$((GOFR_IQ_MCP_PORT + 200))
+MCPO_PORT=$((GOFR_IQ_MCPO_PORT + 200))
+WEB_PORT=$((GOFR_IQ_WEB_PORT + 200))
+DOCKER_NETWORK="${GOFR_IQ_DOCKER_NETWORK:-gofr-net}"
 
 # Parse command line arguments
 while [ $# -gt 0 ]; do
@@ -86,17 +87,17 @@ DOCKER_GID=$(stat -c '%g' /var/run/docker.sock 2>/dev/null || echo "999")
 docker run -d \
     --name "$CONTAINER_NAME" \
     --network "$DOCKER_NETWORK" \
-    -p ${MCP_PORT}:8060 \
-    -p ${MCPO_PORT}:8061 \
-    -p ${WEB_PORT}:8062 \
+    -p ${MCP_PORT}:${MCP_PORT} \
+    -p ${MCPO_PORT}:${MCPO_PORT} \
+    -p ${WEB_PORT}:${WEB_PORT} \
     -v "$PROJECT_ROOT:/home/gofr/devroot/gofr-iq:rw" \
     -v ${VOLUME_NAME}:/home/gofr/devroot/gofr-iq/data:rw \
     -v /var/run/docker.sock:/var/run/docker.sock:rw \
     -v /home/parris3142/devroot/gofr-plot:/home/gofr/devroot/gofr-plot:ro \
     --group-add ${DOCKER_GID} \
-    -e GOFRIQ_ENV=development \
-    -e GOFRIQ_DEBUG=true \
-    -e GOFRIQ_LOG_LEVEL=DEBUG \
+    -e GOFR_IQ_ENV=development \
+    -e GOFR_IQ_DEBUG=true \
+    -e GOFR_IQ_LOG_LEVEL=DEBUG \
     "$IMAGE_NAME"
 
 echo ""

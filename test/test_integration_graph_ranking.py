@@ -13,7 +13,8 @@ Clients query across whatever groups they have permission tokens for.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from test.test_articles import get_test_articles  # type: ignore[import]
 from unittest.mock import MagicMock
 
 import pytest
@@ -41,17 +42,7 @@ class GroupDef:
     description: str
 
 
-@dataclass
-class ArticleDef:
-    """A synthetic test article."""
-    title: str
-    content: str
-    group_guid: str
-    impact_score: float
-    impact_tier: str
-    event_type: str
-    instruments: list[str] = field(default_factory=list)
-    companies: list[str] = field(default_factory=list)
+
 
 
 # Define our 3 test groups (content sources) with proper UUID format
@@ -73,72 +64,9 @@ TEST_GROUPS = {
     ),
 }
 
-# Define synthetic articles for each group
-TEST_ARTICLES = [
-    # Group A: Sales intelligence
-    ArticleDef(
-        title="AAPL: Major institutional buyer accumulating",
-        content="Sources indicate a large institutional buyer has been accumulating AAPL shares over the past week. Volume analysis suggests position building ahead of earnings.",
-        group_guid=TEST_GROUPS["A"].guid,
-        impact_score=75,
-        impact_tier="GOLD",
-        event_type="INSIDER_TXN",
-        instruments=["AAPL"],
-        companies=["Apple Inc."],
-    ),
-    ArticleDef(
-        title="NVDA: M&A rumors from buy-side contacts",
-        content="Multiple buy-side contacts report hearing rumors of potential NVDA acquisition target. Unconfirmed but generating significant interest.",
-        group_guid=TEST_GROUPS["A"].guid,
-        impact_score=65,
-        impact_tier="SILVER",
-        event_type="M&A_RUMOR",
-        instruments=["NVDA"],
-        companies=["NVIDIA"],
-    ),
-    # Group B: Reuters newswire
-    ArticleDef(
-        title="Federal Reserve holds rates steady, signals future cuts",
-        content="The Federal Reserve held interest rates steady at its latest meeting but signaled potential rate cuts in 2025 if inflation continues to moderate.",
-        group_guid=TEST_GROUPS["B"].guid,
-        impact_score=85,
-        impact_tier="PLATINUM",
-        event_type="CENTRAL_BANK",
-        instruments=["SPY", "QQQ", "TLT"],
-        companies=[],
-    ),
-    ArticleDef(
-        title="Microsoft announces 10% dividend increase",
-        content="Microsoft Corporation announced a 10% increase to its quarterly dividend, raising it to $0.83 per share from $0.75.",
-        group_guid=TEST_GROUPS["B"].guid,
-        impact_score=55,
-        impact_tier="SILVER",
-        event_type="DIVIDEND_CHANGE",
-        instruments=["MSFT"],
-        companies=["Microsoft"],
-    ),
-    # Group C: Alternative data
-    ArticleDef(
-        title="Satellite imagery shows Tesla factory output surge",
-        content="Analysis of satellite imagery indicates Tesla Fremont factory parking lots are at record capacity, suggesting strong Q4 production.",
-        group_guid=TEST_GROUPS["C"].guid,
-        impact_score=70,
-        impact_tier="GOLD",
-        event_type="PRODUCT_LAUNCH",
-        instruments=["TSLA"],
-        companies=["Tesla"],
-    ),
-    ArticleDef(
-        title="Credit card data: Consumer spending momentum accelerating",
-        content="Aggregated credit card transaction data shows consumer discretionary spending up 8% YoY, beating expectations across retail sector.",
-        group_guid=TEST_GROUPS["C"].guid,
-        impact_score=60,
-        impact_tier="SILVER",
-        event_type="MACRO_DATA",
-        instruments=["XRT", "XLY"],
-        companies=[],
-    ),
-]
+
+# Use only the first 10 articles for this test suite
+TEST_ARTICLES = get_test_articles(TEST_GROUPS)[:10]
 
 
 # =============================================================================

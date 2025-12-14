@@ -180,17 +180,17 @@ class ServerManager:
         """
         env = os.environ.copy()
         env.update({
-            "GOFRIQ_ENV": "TEST",
-            "GOFRIQ_ROOT": str(self.project_root),
-            "GOFRIQ_DATA": str(self.data_dir),
-            "GOFRIQ_LOGS": str(self.logs_dir),
-            "GOFRIQ_STORAGE": str(self.data_dir / "storage"),
-            "GOFRIQ_TOKEN_STORE": str(self.logs_dir / "gofriq_tokens_test.json"),
-            "GOFRIQ_HOST": self.host,
-            "GOFRIQ_MCP_PORT": str(self.mcp_port),
-            "GOFRIQ_MCPO_PORT": str(self.mcpo_port),
-            "GOFRIQ_WEB_PORT": str(self.web_port),
-            "GOFRIQ_JWT_SECRET": self.jwt_secret,
+            "GOFR_IQ_ENV": "TEST",
+            "GOFR_IQ_ROOT": str(self.project_root),
+            "GOFR_IQ_DATA": str(self.data_dir),
+            "GOFR_IQ_LOGS": str(self.logs_dir),
+            "GOFR_IQ_STORAGE": str(self.data_dir / "storage"),
+            "GOFR_IQ_TOKEN_STORE": str(self.logs_dir / "gofriq_tokens_test.json"),
+            "GOFR_IQ_HOST": self.host,
+            "GOFR_IQ_MCP_PORT": str(self.mcp_port),
+            "GOFR_IQ_MCPO_PORT": str(self.mcpo_port),
+            "GOFR_IQ_WEB_PORT": str(self.web_port),
+            "GOFR_IQ_JWT_SECRET": self.jwt_secret,
             # gofr-common compatible vars
             "GOFR_IQ_JWT_SECRET": self.jwt_secret,
             "GOFR_IQ_TOKEN_STORE": str(self.logs_dir / "gofriq_tokens_test.json"),

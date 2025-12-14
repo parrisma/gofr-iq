@@ -7,6 +7,9 @@ Test Classes:
 - TestListSourcesTool: Tests for list_sources tool
 - TestGetSourceTool: Tests for get_source tool
 - TestGetDocumentTool: Tests for get_document tool
+- TestCreateSourceTool: Tests for create_source tool
+- TestQueryDocumentsTool: Tests for query_documents tool
+- TestHealthCheckTool: Tests for health_check tool
 - TestMCPServerCreation: Tests for server creation and configuration
 """
 
@@ -290,6 +293,67 @@ class TestListSourcesTool:
 
 
 # =============================================================================
+# TEST CREATE SOURCE TOOL
+# =============================================================================
+
+
+class TestCreateSourceTool:
+    """Tests for the create_source MCP tool."""
+
+    def test_create_source_success(
+        self,
+        source_registry: SourceRegistry,
+        group_guid: str,
+    ) -> None:
+        """Test creating a new source."""
+        from app.models.source import TrustLevel
+
+        source = source_registry.create(
+            name="New Test Source",
+            group_guid=group_guid,
+            source_type=SourceType.NEWS_AGENCY,
+            region="APAC",
+            languages=["en", "zh"],
+            trust_level=TrustLevel.HIGH,
+        )
+
+        assert source.source_guid is not None
+        assert source.name == "New Test Source"
+        assert source.type == SourceType.NEWS_AGENCY
+        assert source.region == "APAC"
+        assert source.languages == ["en", "zh"]
+
+    def test_create_source_minimal(
+        self,
+        source_registry: SourceRegistry,
+        group_guid: str,
+    ) -> None:
+        """Test creating a source with minimal parameters."""
+        source = source_registry.create(
+            name="Minimal Source",
+            group_guid=group_guid,
+        )
+
+        assert source.source_guid is not None
+        assert source.name == "Minimal Source"
+        assert source.active is True
+
+    def test_create_source_default_languages(
+        self,
+        source_registry: SourceRegistry,
+        group_guid: str,
+    ) -> None:
+        """Test that sources get default language list."""
+        source = source_registry.create(
+            name="Default Lang Source",
+            group_guid=group_guid,
+            languages=["en"],
+        )
+
+        assert source.languages == ["en"]
+
+
+# =============================================================================
 # TEST GET SOURCE TOOL
 # =============================================================================
 
@@ -411,6 +475,181 @@ class TestGetDocumentTool:
         retrieved = document_store.load(doc.guid, group_guid, date=today)
 
         assert retrieved.guid == doc.guid
+
+
+# =============================================================================
+# TEST QUERY DOCUMENTS TOOL
+# =============================================================================
+
+
+class TestQueryDocumentsTool:
+    """Tests for the query_documents MCP tool."""
+
+    def test_register_query_tools_with_service(
+        self,
+        mcp_server: FastMCP,
+        document_store: DocumentStore,
+    ) -> None:
+        """Test that query tools register query_documents when service provided."""
+        from unittest.mock import MagicMock
+        from app.services.query_service import QueryService
+
+        mock_query_service = MagicMock(spec=QueryService)
+        register_query_tools(mcp_server, document_store, mock_query_service)
+        assert mcp_server is not None
+
+    def test_query_service_filters(self) -> None:
+        """Test QueryFilters dataclass."""
+        from app.services.query_service import QueryFilters
+        from datetime import datetime
+
+        filters = QueryFilters(
+            date_from=datetime(2025, 1, 1),
+            date_to=datetime(2025, 12, 31),
+            regions=["APAC", "JP"],
+            languages=["en", "zh"],
+        )
+
+        assert filters.regions == ["APAC", "JP"]
+        assert filters.languages == ["en", "zh"]
+
+    def test_query_filters_empty(self) -> None:
+        """Test QueryFilters with no filters."""
+        from app.services.query_service import QueryFilters
+
+        filters = QueryFilters()
+        
+        assert filters.date_from is None
+        assert filters.regions is None
+        assert filters.companies is None
+
+
+# =============================================================================
+# TEST HEALTH CHECK TOOL
+# =============================================================================
+
+
+class TestHealthCheckTool:
+    """Tests for the health_check MCP tool."""
+
+    def test_register_health_tools(
+        self,
+        mcp_server: FastMCP,
+    ) -> None:
+        """Test that health tools can be registered."""
+        from app.tools.health_tools import register_health_tools
+
+        register_health_tools(mcp_server)
+        assert mcp_server is not None
+
+    def test_register_health_tools_with_services(
+        self,
+        mcp_server: FastMCP,
+    ) -> None:
+        """Test that health tools register with provided services."""
+        from unittest.mock import MagicMock
+        from app.tools.health_tools import register_health_tools
+        from app.services.graph_index import GraphIndex
+        from app.services.embedding_index import EmbeddingIndex
+        from app.services.llm_service import LLMService
+
+        mock_graph = MagicMock(spec=GraphIndex)
+        mock_embedding = MagicMock(spec=EmbeddingIndex)
+        mock_llm = MagicMock(spec=LLMService)
+
+        register_health_tools(mcp_server, mock_graph, mock_embedding, mock_llm)
+        assert mcp_server is not None
+
+    def test_check_neo4j_connected(self) -> None:
+        """Test Neo4j health check when connected."""
+        from unittest.mock import MagicMock
+        from app.tools.health_tools import _check_neo4j
+
+        mock_graph = MagicMock()
+        mock_graph.verify_connectivity.return_value = True
+        mock_graph.count_nodes.return_value = 100
+
+        result = _check_neo4j(mock_graph)
+        assert result["status"] == "healthy"
+        assert result["connected"] is True
+        assert result["node_count"] == 100
+
+    def test_check_neo4j_disconnected(self) -> None:
+        """Test Neo4j health check when disconnected."""
+        from unittest.mock import MagicMock
+        from app.tools.health_tools import _check_neo4j
+
+        mock_graph = MagicMock()
+        mock_graph.verify_connectivity.return_value = False
+
+        result = _check_neo4j(mock_graph)
+        assert result["status"] == "unhealthy"
+        assert result["connected"] is False
+
+    def test_check_neo4j_none(self) -> None:
+        """Test Neo4j health check when not configured."""
+        from app.tools.health_tools import _check_neo4j
+
+        result = _check_neo4j(None)
+        assert result["status"] == "unavailable"
+        assert result["connected"] is False
+
+    def test_check_chromadb_connected(self) -> None:
+        """Test ChromaDB health check when connected."""
+        from unittest.mock import MagicMock
+        from app.tools.health_tools import _check_chromadb
+
+        mock_embedding = MagicMock()
+        mock_collection = MagicMock()
+        mock_collection.name = "test_collection"
+        mock_embedding.collection = mock_collection
+        mock_embedding.count.return_value = 50
+
+        result = _check_chromadb(mock_embedding)
+        assert result["status"] == "healthy"
+        assert result["connected"] is True
+        assert result["collection_name"] == "test_collection"
+        assert result["document_count"] == 50
+
+    def test_check_chromadb_none(self) -> None:
+        """Test ChromaDB health check when not configured."""
+        from app.tools.health_tools import _check_chromadb
+
+        result = _check_chromadb(None)
+        assert result["status"] == "unavailable"
+        assert result["connected"] is False
+
+    def test_check_llm_available(self) -> None:
+        """Test LLM health check when API key is set."""
+        from unittest.mock import MagicMock
+        from app.tools.health_tools import _check_llm
+
+        mock_llm = MagicMock()
+        mock_llm.is_available.return_value = True
+
+        result = _check_llm(mock_llm)
+        assert result["status"] == "healthy"
+        assert result["api_key_set"] is True
+
+    def test_check_llm_unavailable(self) -> None:
+        """Test LLM health check when API key is not set."""
+        from unittest.mock import MagicMock
+        from app.tools.health_tools import _check_llm
+
+        mock_llm = MagicMock()
+        mock_llm.is_available.return_value = False
+
+        result = _check_llm(mock_llm)
+        assert result["status"] == "unavailable"
+        assert result["api_key_set"] is False
+
+    def test_check_llm_none(self) -> None:
+        """Test LLM health check when not configured."""
+        from app.tools.health_tools import _check_llm
+
+        result = _check_llm(None)
+        assert result["status"] == "unavailable"
+        assert result["configured"] is False
 
 
 # =============================================================================

@@ -433,10 +433,10 @@ class TestServerManager:
         
         env = manager.get_env()
         
-        assert env["GOFRIQ_ENV"] == "TEST"
-        assert env["GOFRIQ_DATA"] == str(tmp_path / "data")
-        assert env["GOFRIQ_JWT_SECRET"] == "test-secret"
-        assert "GOFRIQ_MCP_PORT" in env
+        assert env["GOFR_IQ_ENV"] == "TEST"
+        assert env["GOFR_IQ_DATA"] == str(tmp_path / "data")
+        assert env["GOFR_IQ_JWT_SECRET"] == "test-secret"
+        assert "GOFR_IQ_MCP_PORT" in env
     
     def test_server_manager_status_when_stopped(self, tmp_path: Path):
         """Test server status reporting when not running."""

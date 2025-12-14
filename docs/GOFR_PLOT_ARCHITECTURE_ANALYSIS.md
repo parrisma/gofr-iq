@@ -103,6 +103,7 @@ async def handle_call_tool(name: str, arguments: dict):
 ```
 
 **Key Features:**
+
 - Native MCP protocol support
 - Streamable HTTP transport (modern standard)
 - Tool definitions with JSON Schema
@@ -128,6 +129,7 @@ class MCPOWrapper:
 ```
 
 **Key Features:**
+
 - Spawns `mcpo` as subprocess
 - Converts MCP tools → REST endpoints
 - Auto-generates OpenAPI specification
@@ -155,6 +157,7 @@ class GraphWebServer:
 ```
 
 **Key Features:**
+
 - Full FastAPI capabilities
 - Automatic OpenAPI docs (`/docs`, `/redoc`)
 - Request/response validation (Pydantic)
@@ -317,6 +320,7 @@ python -m app.main_${SERVER_TYPE} \
 | **Dependency Order** | MCP → MCPO → WEB in restart scripts |
 
 This architecture provides:
+
 - **Flexibility**: Choose interface per use case
 - **Consistency**: Same auth, rate limits, logging everywhere
 - **Maintainability**: Single codebase, shared services

@@ -39,8 +39,8 @@ def test_env() -> dict[str, str]:
         Dictionary of environment variables for test mode.
     """
     return {
-        "GOFRIQ_ENV": "TEST",
-        "GOFRIQ_JWT_SECRET": "test-secret-key-for-testing-do-not-use-in-prod",
+        "GOFR_IQ_ENV": "TEST",
+        "GOFR_IQ_JWT_SECRET": "test-secret-key-for-testing-do-not-use-in-prod",
         "GOFR_IQ_JWT_SECRET": "test-secret-key-for-testing-do-not-use-in-prod",
     }
 
@@ -203,8 +203,8 @@ def chromadb_config() -> dict[str, str | int]:
         Dictionary with host and port for ChromaDB server.
     """
     return {
-        "host": os.environ.get("GOFRIQ_CHROMADB_HOST", "gofr-iq-chromadb"),
-        "port": int(os.environ.get("GOFRIQ_CHROMADB_PORT", "8000")),
+        "host": os.environ.get("GOFR_IQ_CHROMADB_HOST", "gofr-iq-chromadb"),
+        "port": int(os.environ.get("GOFR_IQ_CHROMADB_PORT", "8000")),
     }
 
 
@@ -278,12 +278,12 @@ def neo4j_config() -> dict[str, str | int]:
     Returns:
         Dictionary with URI, user, and password for Neo4j server.
     """
-    host = os.environ.get("GOFRIQ_NEO4J_HOST", "gofr-iq-neo4j")
-    port = int(os.environ.get("GOFRIQ_NEO4J_BOLT_PORT", "7687"))
+    host = os.environ.get("GOFR_IQ_NEO4J_HOST", "gofr-iq-neo4j")
+    port = int(os.environ.get("GOFR_IQ_NEO4J_BOLT_PORT", "7687"))
     return {
         "uri": f"bolt://{host}:{port}",
         "user": "neo4j",
-        "password": os.environ.get("GOFRIQ_NEO4J_PASSWORD", "testpassword"),
+        "password": os.environ.get("GOFR_IQ_NEO4J_PASSWORD", "testpassword"),
     }
 
 

@@ -16,9 +16,14 @@ if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
 fi
 
 # Set defaults
+# Source gofriq.env for canonical port definitions
+if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
+    source "${SCRIPT_DIR}/gofriq.env"
+fi
+
 export GOFR_IQ_MCP_HOST="${GOFR_IQ_MCP_HOST:-localhost}"
-export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT:-8060}"
-export GOFR_IQ_MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8061}"
+export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT:-${GOFR_IQ_MCP_PORT}}"
+export GOFR_IQ_MCPO_PORT="${GOFR_IQ_MCPO_PORT:-${GOFR_IQ_MCPO_PORT}}"
 
 echo "=== Starting GOFR-IQ MCPO Wrapper ==="
 echo "MCP Server: http://${GOFR_IQ_MCP_HOST}:${GOFR_IQ_MCP_PORT}/mcp"

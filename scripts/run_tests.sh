@@ -83,9 +83,10 @@ fi
 # Test configuration - use standardized GOFR_IQ_ prefix
 export GOFR_IQ_JWT_SECRET="test-secret-key-for-secure-testing-do-not-use-in-production"
 export GOFR_IQ_TOKEN_STORE="${GOFR_IQ_TOKEN_STORE:-${LOG_DIR}/${PROJECT_NAME}_tokens_test.json}"
-export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT:-8020}"
-export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT:-8022}"
-export GOFR_IQ_MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8021}"
+# Test ports are intentionally different from production (8080/8081/8082) to avoid conflicts
+export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT:-8180}"
+export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT:-8182}"
+export GOFR_IQ_MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8181}"
 
 # Infrastructure (ChromaDB, Neo4j) - for tests connecting to external services
 # Use container names on gofr-net network (not localhost, since we're in a container)
@@ -96,10 +97,10 @@ export GOFR_IQ_NEO4J_BOLT_PORT="${GOFR_IQ_NEO4J_BOLT_PORT:-7687}"
 export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
 
 # Legacy variable mapping for backward compatibility
-export GOFRIQ_JWT_SECRET="${GOFR_IQ_JWT_SECRET}"
-export GOFRIQ_TOKEN_STORE="${GOFR_IQ_TOKEN_STORE}"
-export GOFRIQ_MCP_PORT="${GOFR_IQ_MCP_PORT}"
-export GOFRIQ_WEB_PORT="${GOFR_IQ_WEB_PORT}"
+export GOFR_IQ_JWT_SECRET="${GOFR_IQ_JWT_SECRET}"
+export GOFR_IQ_TOKEN_STORE="${GOFR_IQ_TOKEN_STORE}"
+export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT}"
+export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT}"
 
 # Ensure directories exist
 mkdir -p "${LOG_DIR}"

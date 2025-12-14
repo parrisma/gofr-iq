@@ -18,78 +18,159 @@ name: gofr-iq
 
 services:
   # ==========================================================================
+  # INFRASTRUCTURE (Shared)
+  # ==========================================================================
+  neo4j:
+    image: gofr-neo4j:latest
+    container_name: gofr-iq-neo4j
+    hostname: gofr-neo4j
+    restart: unless-stopped
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - gofr-iq-neo4j-data:/data
+      - gofr-iq-neo4j-logs:/logs
+    environment:
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-gofr-neo4j-password}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=1G
+    networks:
+      - gofr-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7474"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  chromadb:
+    image: gofr-chroma:latest
+    container_name: gofr-iq-chromadb
+    hostname: gofr-chroma
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - gofr-iq-chroma-data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+      - ANONYMIZED_TELEMETRY=FALSE
+    networks:
+      - gofr-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ==========================================================================
   # 1. MCP Server (Core Logic)
   # ==========================================================================
   mcp:
-    image: gofr-iq_prod:latest
+    image: gofr-iq-prod:latest
     container_name: gofr-iq-mcp
     restart: unless-stopped
+    user: gofr-iq
+    working_dir: /home/gofr-iq
+    entrypoint: ["/home/gofr-iq/.venv/bin/python"]
     # Use new MCP entry point with HTTP streamable transport
-    command: python -m app.main_mcp --host 0.0.0.0 --port 8060 --no-auth
+    command: ["-m", "app.main_mcp", "--host", "0.0.0.0", "--port", "8080", "--no-auth"]
     environment:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_LOG_LEVEL=INFO
       - GOFR_IQ_AUTH_ENABLED=false
+      - GOFR_IQ_AUTH_DISABLED=true
       # Infrastructure connections
-      - GOFRIQ_CHROMADB_HOST=gofr-iq-chromadb
-      - GOFRIQ_CHROMADB_PORT=8000
-      - GOFRIQ_NEO4J_HOST=gofr-iq-neo4j
-      - GOFRIQ_NEO4J_BOLT_PORT=7687
-      - GOFRIQ_NEO4J_PASSWORD=${GOFRIQ_NEO4J_PASSWORD:-testpassword}
+      - GOFR_IQ_CHROMADB_HOST=gofr-iq-chromadb
+      - GOFR_IQ_CHROMADB_PORT=8000
+      - GOFR_IQ_NEO4J_HOST=gofr-iq-neo4j
+      - GOFR_IQ_NEO4J_BOLT_PORT=7687
+      - GOFR_IQ_NEO4J_PASSWORD=${GOFR_IQ_NEO4J_PASSWORD:-testpassword}
       - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
     ports:
-      - "8060:8060"
+      - "${GOFR_IQ_MCP_PORT:-8080}:${GOFR_IQ_MCP_PORT:-8080}"
     volumes:
-      - gofr_iq_data:/home/gofr-iq/data
+      - gofr-iq-data:/home/gofr-iq/data
     networks:
       - gofr-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -o /dev/null http://localhost:8080/mcp || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   # ==========================================================================
   # 2. MCPO Server (OpenAPI Wrapper)
   # ==========================================================================
   mcpo:
-    image: gofr-iq_prod:latest
+    image: gofr-iq-prod:latest
     container_name: gofr-iq-mcpo
     restart: unless-stopped
+    user: gofr-iq
+    working_dir: /home/gofr-iq
+    entrypoint: ["/bin/sh", "-c"]
     depends_on:
       - mcp
-    command: >
-      sh -c "uv tool run mcpo --host 0.0.0.0 --port 8061 --server-type streamable-http -- http://gofr-iq-mcp:8060/mcp"
+    command:
+      - "/home/gofr-iq/.venv/bin/mcpo --host 0.0.0.0 --port 8081 --server-type streamable-http -- http://gofr-iq-mcp:8080/mcp"
     environment:
       - GOFR_IQ_ENV=PROD
+      - GOFR_IQ_AUTH_DISABLED=true
     ports:
-      - "8061:8061"
+      - "${GOFR_IQ_MCPO_PORT:-8081}:${GOFR_IQ_MCPO_PORT:-8081}"
     volumes:
-      - gofr_iq_data:/home/gofr-iq/data
+      - gofr-iq-data:/home/gofr-iq/data
     networks:
       - gofr-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   # ==========================================================================
   # 3. Web Server (FastAPI docs/admin) - Phase 3 Placeholder
   # ==========================================================================
   web:
-    image: gofr-iq_prod:latest
+    image: gofr-iq-prod:latest
     container_name: gofr-iq-web
     restart: unless-stopped
+    user: gofr-iq
+    working_dir: /home/gofr-iq
+    entrypoint: ["/home/gofr-iq/.venv/bin/python"]
     # TODO: Phase 3 - Implement web server entry point (app.main_web)
     # For now, uses MCP server as a placeholder
-    command: python -m app.main_mcp --host 0.0.0.0 --port 8060 --no-auth
+    command: ["-m", "app.main_mcp", "--host", "0.0.0.0", "--port", "8082", "--no-auth"]
     environment:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_LOG_LEVEL=INFO
       - GOFR_IQ_AUTH_ENABLED=false
+      - GOFR_IQ_AUTH_DISABLED=true
       # Infrastructure connections
-      - GOFRIQ_CHROMADB_HOST=gofr-iq-chromadb
-      - GOFRIQ_CHROMADB_PORT=8000
-      - GOFRIQ_NEO4J_HOST=gofr-iq-neo4j
-      - GOFRIQ_NEO4J_BOLT_PORT=7687
-      - GOFRIQ_NEO4J_PASSWORD=${GOFRIQ_NEO4J_PASSWORD:-testpassword}
+      - GOFR_IQ_CHROMADB_HOST=gofr-iq-chromadb
+      - GOFR_IQ_CHROMADB_PORT=8000
+      - GOFR_IQ_NEO4J_HOST=gofr-iq-neo4j
+      - GOFR_IQ_NEO4J_BOLT_PORT=7687
+      - GOFR_IQ_NEO4J_PASSWORD=${GOFR_IQ_NEO4J_PASSWORD:-testpassword}
     ports:
-      - "8062:8060"
+      - "${GOFR_IQ_WEB_PORT:-8082}:${GOFR_IQ_WEB_PORT:-8082}"
     volumes:
-      - gofr_iq_data:/home/gofr-iq/data
+      - gofr-iq-data:/home/gofr-iq/data
     networks:
       - gofr-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -o /dev/null http://localhost:8082/mcp || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
 # ==========================================================================
 # Networks
@@ -103,11 +184,20 @@ networks:
 # Volumes - Persistent
 # ==========================================================================
 volumes:
-  gofr_iq_data:
-    name: gofr-iq_data
+  gofr-iq-neo4j-data:
+    name: gofr-iq-neo4j-data
     external: false
-  gofr_iq_backups:
+  gofr-iq-neo4j-logs:
+    name: gofr-iq-neo4j-logs
+    external: false
+  gofr-iq-chroma-data:
+    name: gofr-iq-chroma-data
+    external: false
+  gofr-iq-data:
+    name: gofr-iq-data
+    external: false
+  gofr-iq-backups:
     name: gofr-iq-backups
     external: false
-  prod-logs:
+  gofr-iq-prod-logs:
     name: gofr-iq-prod-logs

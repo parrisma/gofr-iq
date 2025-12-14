@@ -17,8 +17,8 @@ Usage:
     python -m app.main_mcpo
 
 Environment Variables:
-    GOFR_IQ_MCP_PORT: Port for MCP server (default: 8060)
-    GOFR_IQ_MCPO_PORT: Port for MCPO proxy (default: 8061)
+    GOFR_IQ_MCP_PORT: Port for MCP server (from gofr-common config)
+    GOFR_IQ_MCPO_PORT: Port for MCPO proxy (from gofr-common config)
     GOFR_IQ_MCPO_API_KEY: Optional API key for MCPO authentication
     GOFR_IQ_JWT_TOKEN: Optional JWT token for MCP server authentication
     GOFR_IQ_MCPO_MODE: 'auth' or 'public' (default: public)
@@ -31,18 +31,31 @@ import sys
 
 from app.mcpo_server.wrapper import start_mcpo_wrapper
 
+# Import canonical port configuration from gofr-common
+try:
+    from gofr_common.config import GOFR_IQ_PORTS
+    DEFAULT_MCP_PORT = GOFR_IQ_PORTS.mcp
+    DEFAULT_MCPO_PORT = GOFR_IQ_PORTS.mcpo
+except ImportError:
+    # Fallback if gofr-common not available
+    import os
+    DEFAULT_MCP_PORT = int(os.environ.get("GOFR_IQ_MCP_PORT", 8080))
+    DEFAULT_MCPO_PORT = int(os.environ.get("GOFR_IQ_MCPO_PORT", 8081))
+
 
 def main():
     """Main function to start MCPO wrapper."""
 
-    # Get configuration from environment
+    # Get configuration from environment (defaults from gofr-common)
     mcp_host = os.environ.get("GOFR_IQ_MCP_HOST", "localhost")
-    mcp_port = int(os.environ.get("GOFR_IQ_MCP_PORT", "8060"))
-    mcpo_port = int(os.environ.get("GOFR_IQ_MCPO_PORT", "8061"))
+    mcp_port = int(os.environ.get("GOFR_IQ_MCP_PORT", str(DEFAULT_MCP_PORT)))
+    mcpo_port = int(os.environ.get("GOFR_IQ_MCPO_PORT", str(DEFAULT_MCPO_PORT)))
 
-    print("Starting MCPO wrapper for GOFR-IQ MCP server...")
-    print(f"  MCP server: http://{mcp_host}:{mcp_port}/mcp")
-    print(f"  MCPO proxy: http://localhost:{mcpo_port}")
+    auth_disabled = os.environ.get("GOFR_IQ_AUTH_DISABLED", "true").lower() in ("1", "true", "yes")
+    print(f"[MCPO] Starting on host=0.0.0.0 port={mcpo_port}")
+    print(f"[MCPO] Connecting to MCP at http://{mcp_host}:{mcp_port}/mcp")
+    print(f"[MCPO] Proxy available at http://localhost:{mcpo_port}")
+    print(f"[MCPO] Startup: auth_disabled={auth_disabled}")
 
     # Check for API key
     mcpo_api_key = os.environ.get("GOFR_IQ_MCPO_API_KEY")

@@ -14,7 +14,7 @@
 #   GOFR_BACKUP_DIR          - Backup directory (default: /backups)
 #   GOFR_BACKUP_RETENTION    - Days to keep backups (default: 7)
 #   GOFR_BACKUP_MAX_COUNT    - Max backups per service (default: 10)
-#   GOFRIQ_NEO4J_PASSWORD    - Neo4j password (default: testpassword)
+#   GOFR_IQ_NEO4J_PASSWORD    - Neo4j password (default: testpassword)
 
 set -e
 
@@ -22,7 +22,7 @@ set -e
 BACKUP_DIR="${GOFR_BACKUP_DIR:-/backups}"
 BACKUP_RETENTION="${GOFR_BACKUP_RETENTION:-7}"
 BACKUP_MAX_COUNT="${GOFR_BACKUP_MAX_COUNT:-10}"
-NEO4J_PASSWORD="${GOFRIQ_NEO4J_PASSWORD:-testpassword}"
+NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
 NEO4J_CONTAINER="${GOFR_NEO4J_CONTAINER:-gofr-iq-neo4j}"
 CHROMADB_CONTAINER="${GOFR_CHROMADB_CONTAINER:-gofr-iq-chromadb}"
 
