@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--host",
         type=str,
-        default=os.environ.get("GOFR_IQ_WEB_HOST", "0.0.0.0"),
+        default=os.environ.get("GOFR_IQ_WEB_HOST", "0.0.0.0"),  # nosec B104 - intentional for container/server deployment
         help="Host address to bind to (default: from env or 0.0.0.0)",
     )
     parser.add_argument(

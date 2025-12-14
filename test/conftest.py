@@ -41,7 +41,6 @@ def test_env() -> dict[str, str]:
     return {
         "GOFR_IQ_ENV": "TEST",
         "GOFR_IQ_JWT_SECRET": "test-secret-key-for-testing-do-not-use-in-prod",
-        "GOFR_IQ_JWT_SECRET": "test-secret-key-for-testing-do-not-use-in-prod",
     }
 
 

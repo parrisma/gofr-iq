@@ -25,7 +25,6 @@ Environment Variables:
     GOFR_IQ_TOKEN_STORE    Path to token store (default: data/auth/tokens.json)
 """
 
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -46,7 +45,5 @@ try:
     subprocess.run(args, check=True)
 except subprocess.CalledProcessError as e:
     sys.exit(e.returncode)
-except KeyboardInterrupt:
-    sys.exit(130)
 except KeyboardInterrupt:
     sys.exit(130)

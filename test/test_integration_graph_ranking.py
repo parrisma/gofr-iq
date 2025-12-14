@@ -22,7 +22,7 @@ import pytest
 
 # Add test directory to path for local imports
 sys.path.insert(0, str(Path(__file__).parent))
-from test_articles import ArticleDef, get_test_articles  # type: ignore[import]
+from test_articles import get_test_articles  # type: ignore[import]
 
 from app.models.source import Source, SourceType, TrustLevel
 from app.services.document_store import DocumentStore

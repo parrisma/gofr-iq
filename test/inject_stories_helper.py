@@ -1,7 +1,12 @@
-
 import argparse
+import sys
+from pathlib import Path
+
 import requests
-from test.test_articles import get_test_articles
+
+# Add test directory to path for local imports
+sys.path.insert(0, str(Path(__file__).parent))
+from test_articles import get_test_articles  # type: ignore[import]
 
 def inject_all_stories_via_mcpo(mcpo_url: str, test_groups: dict) -> None:
     """

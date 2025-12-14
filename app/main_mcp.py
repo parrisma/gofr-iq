@@ -35,7 +35,6 @@ import uvicorn
 from app.config import get_settings
 from app.logger import ConsoleLogger
 from app.mcp_server.mcp_server import create_mcp_server
-from gofr_common.web import create_mcp_starlette_app
 
 logger = ConsoleLogger(name="main_mcp", level=logging.INFO)
 
@@ -47,7 +46,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--host",
         type=str,
-        default=os.environ.get("GOFR_IQ_MCP_HOST", "0.0.0.0"),
+        default=os.environ.get("GOFR_IQ_MCP_HOST", "0.0.0.0"),  # nosec B104 - intentional for container/server deployment
         help="Host address to bind to (default: from env or 0.0.0.0)",
     )
     parser.add_argument(
@@ -95,7 +94,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Explicitly log host/port for debugging
-    print(f"[MCP] Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}")
+    print(f"[MCP] Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}")  # nosec B104 - just logging, not binding
 
     # Parse log level
     log_level = getattr(logging, args.log_level.upper(), logging.INFO)

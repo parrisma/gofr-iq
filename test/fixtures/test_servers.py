@@ -191,12 +191,6 @@ class ServerManager:
             "GOFR_IQ_MCPO_PORT": str(self.mcpo_port),
             "GOFR_IQ_WEB_PORT": str(self.web_port),
             "GOFR_IQ_JWT_SECRET": self.jwt_secret,
-            # gofr-common compatible vars
-            "GOFR_IQ_JWT_SECRET": self.jwt_secret,
-            "GOFR_IQ_TOKEN_STORE": str(self.logs_dir / "gofriq_tokens_test.json"),
-            "GOFR_IQ_MCP_PORT": str(self.mcp_port),
-            "GOFR_IQ_MCPO_PORT": str(self.mcpo_port),
-            "GOFR_IQ_WEB_PORT": str(self.web_port),
         })
         return env
     

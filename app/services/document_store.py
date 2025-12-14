@@ -15,7 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from app.models import Document, DocumentCreate, PUBLIC_GROUP, count_words
+from app.models import Document, DocumentCreate, count_words
 
 
 class DocumentNotFoundError(Exception):

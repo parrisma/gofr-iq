@@ -200,8 +200,13 @@ def _check_llm(llm_service: "LLMService | None") -> dict[str, Any]:
         }
 
     try:
-        # Check if API key is configured (is_available is a property, not a method)
-        is_available = llm_service.is_available
+        # Check if API key is configured
+        # Handle both property (real LLMService) and mock method patterns
+        is_available_attr = getattr(llm_service, 'is_available', None)
+        if hasattr(is_available_attr, '__call__') and not isinstance(is_available_attr, bool):
+            is_available = is_available_attr()  # type: ignore[misc]
+        else:
+            is_available = bool(is_available_attr)
         
         if not is_available:
             return {
