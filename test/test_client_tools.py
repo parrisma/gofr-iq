@@ -4,19 +4,50 @@ Unit tests for the MCP client tools for client management and personalized feeds
 
 NOTE: These tools are NOT exposed by the default MCP server configuration.
 They remain available for direct use but are not registered via register_all_tools.
+
+Group Access Control:
+    These tests mock the auth context to simulate authenticated requests.
+    Tools no longer accept group_guid/group_guids as parameters - they extract
+    the group from the JWT token in the request context.
 """
 
 from __future__ import annotations
 
 import json
 from typing import Any
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 from mcp.server.fastmcp import FastMCP
 
 from app.services.graph_index import GraphIndex, GraphNode, NodeLabel, RelationType
 from app.tools.client_tools import register_client_tools
+
+
+# ============================================================================
+# Test Group Constants
+# ============================================================================
+
+TEST_GROUP = "test-group-123"
+TEST_PUBLIC_GROUP = "public"
+
+
+# ============================================================================
+# Auth Context Helper
+# ============================================================================
+
+
+def with_auth_context(group: str = TEST_GROUP):
+    """Decorator to mock auth context for a test function."""
+    def decorator(fn):
+        @patch('app.services.group_service.get_write_group_from_context')
+        @patch('app.services.group_service.get_permitted_groups_from_context')
+        def wrapper(mock_permitted, mock_write, *args, **kwargs):
+            mock_write.return_value = group
+            mock_permitted.return_value = [TEST_PUBLIC_GROUP, group]
+            return fn(*args, **kwargs)
+        return wrapper
+    return decorator
 
 
 # ============================================================================
@@ -99,12 +130,15 @@ class TestToolRegistration:
 class TestCreateClient:
     """Tests for create_client tool"""
 
+    @patch('app.tools.client_tools.get_write_group_from_context')
     def test_create_client_success(
         self,
+        mock_write_group: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test successful client creation"""
+        mock_write_group.return_value = TEST_GROUP
         register_client_tools(mcp_server, mock_graph_index)
         
         # Mock return values
@@ -132,10 +166,9 @@ class TestCreateClient:
         # Get the tool function
         tool_fn = get_tool_fn(mcp_server, "create_client")
         
-        # Call the tool
+        # Call the tool - no group_guid parameter needed
         response = tool_fn(
             name="Test Fund",
-            group_guid="group-123",
             client_type="HEDGE_FUND",
         )
         
@@ -145,13 +178,17 @@ class TestCreateClient:
         assert "client_guid" in result["data"]
         assert result["data"]["name"] == "Test Fund"
         assert result["data"]["client_type"] == "HEDGE_FUND"
+        assert result["data"]["group_guid"] == TEST_GROUP
 
+    @patch('app.tools.client_tools.get_write_group_from_context')
     def test_create_client_with_profile(
         self,
+        mock_write_group: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test client creation with profile options"""
+        mock_write_group.return_value = TEST_GROUP
         register_client_tools(mcp_server, mock_graph_index)
         
         mock_graph_index.create_client.return_value = GraphNode(
@@ -177,9 +214,9 @@ class TestCreateClient:
         
         tool_fn = get_tool_fn(mcp_server, "create_client")
         
+        # Call without group_guid - extracted from context
         response = tool_fn(
             name="Long Only Fund",
-            group_guid="group-123",
             client_type="LONG_ONLY",
             mandate_type="equity_long_only",
             benchmark="SPY",
@@ -203,12 +240,15 @@ class TestCreateClient:
 class TestGetClientFeed:
     """Tests for get_client_feed tool"""
 
+    @patch('app.tools.client_tools.get_permitted_groups_from_context')
     def test_get_feed_success(
         self,
+        mock_permitted_groups: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test successful feed retrieval"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
         register_client_tools(mcp_server, mock_graph_index)
         
         # Mock client exists
@@ -242,9 +282,9 @@ class TestGetClientFeed:
         
         tool_fn = get_tool_fn(mcp_server, "get_client_feed")
         
+        # Call without group_guids - extracted from context
         response = tool_fn(
             client_guid="client-123",
-            group_guids=["group-1", "group-2"],
             limit=10,
         )
         
@@ -255,12 +295,15 @@ class TestGetClientFeed:
         assert len(result["data"]["articles"]) == 2
         assert result["data"]["articles"][0]["title"] == "Apple Beats Earnings"
 
+    @patch('app.tools.client_tools.get_permitted_groups_from_context')
     def test_get_feed_with_filters(
         self,
+        mock_permitted_groups: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test feed with impact filters"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
         register_client_tools(mcp_server, mock_graph_index)
         
         mock_graph_index.get_node.return_value = GraphNode(
@@ -272,9 +315,9 @@ class TestGetClientFeed:
         
         tool_fn = get_tool_fn(mcp_server, "get_client_feed")
         
+        # Call without group_guids
         response = tool_fn(
             client_guid="client-123",
-            group_guids=["group-1"],
             min_impact_score=70,
             impact_tiers=["PLATINUM", "GOLD"],
         )
@@ -285,21 +328,24 @@ class TestGetClientFeed:
         assert result["data"]["filters_applied"]["min_impact_score"] == 70
         assert result["data"]["filters_applied"]["impact_tiers"] == ["PLATINUM", "GOLD"]
 
+    @patch('app.tools.client_tools.get_permitted_groups_from_context')
     def test_get_feed_client_not_found(
         self,
+        mock_permitted_groups: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test feed when client doesn't exist"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP]
         register_client_tools(mcp_server, mock_graph_index)
         
         mock_graph_index.get_node.return_value = None
         
         tool_fn = get_tool_fn(mcp_server, "get_client_feed")
         
+        # Call without group_guids
         response = tool_fn(
             client_guid="nonexistent",
-            group_guids=["group-1"],
         )
         
         result = parse_response(response)

@@ -29,10 +29,19 @@ class SourceNotFoundError(Exception):
 class SourceAccessDeniedError(Exception):
     """Raised when access to a source is denied."""
 
-    def __init__(self, guid: str, group_guid: str) -> None:
+    def __init__(
+        self,
+        guid: str,
+        group_guid: str,
+        permitted_groups: list[str] | None = None,
+    ) -> None:
         self.guid = guid
         self.group_guid = group_guid
-        super().__init__(f"Access denied to source {guid} for group {group_guid}")
+        self.permitted_groups = permitted_groups or []
+        msg = f"Access denied: source {guid} belongs to group '{group_guid}'"
+        if permitted_groups:
+            msg += f", not in permitted groups {permitted_groups}"
+        super().__init__(msg)
 
 
 class SourceRegistryError(Exception):
@@ -253,7 +262,9 @@ class SourceRegistry:
                     source = self._load_from_path(file_path)
                     # If access_groups specified, verify access
                     if access_groups and source.group_guid not in access_groups:
-                        raise SourceAccessDeniedError(source_guid, source.group_guid)
+                        raise SourceAccessDeniedError(
+                            source_guid, source.group_guid, access_groups
+                        )
                     return source
 
             raise SourceNotFoundError(source_guid)

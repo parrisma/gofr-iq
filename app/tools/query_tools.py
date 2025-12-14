@@ -1,19 +1,27 @@
 """MCP Query Tools.
 
 Provides document retrieval and semantic search.
+
+Group Access Control:
+    - Read operations use permitted groups from the authenticated token
+    - Anonymous users can only access the public group
+    - The group is extracted from the JWT token, not from client parameters
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 from datetime import date, datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Annotated, Optional
+
+from pydantic import Field
 
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.document_store import DocumentNotFoundError, DocumentStore
+from app.services.group_service import get_permitted_groups_from_context
 from app.services.query_service import QueryFilters, QueryService
 
 if TYPE_CHECKING:
@@ -34,25 +42,45 @@ def register_query_tools(
         name="get_document",
         description=(
             "Retrieve a specific document by ID. "
-            "Use when you have a document_guid and need the full content."
+            "Use when you have a document_guid and need the full content. "
+            "Only returns documents from groups you have access to."
         ),
     )
     def get_document(
-        guid: str,
-        group_guid: str,
-        date_hint: str | None = None,
+        guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the document to retrieve",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        date_hint: Annotated[str | None, Field(
+            default=None,
+            pattern=r"^\d{4}-\d{2}-\d{2}$",
+            description="Document creation date in YYYY-MM-DD format to speed up lookup (optional)",
+            examples=["2025-12-08", "2025-01-15"],
+        )] = None,
     ) -> ToolResponse:
         """Get a document by GUID.
 
+        Access is limited to documents in groups you have permission to read.
+        Anonymous users can only access documents in the public group.
+
         Args:
-            guid: Document identifier
-            group_guid: Group for access control
+            guid: Document UUID (36-char format)
             date_hint: YYYY-MM-DD to speed up lookup (optional)
 
         Returns:
-            Full document with title, content, metadata, timestamps
+            Full document with:
+            - guid: Document UUID
+            - title, content: Document text
+            - group_guid: Group name/identifier (string like 'reuters-feed')
+            - metadata, timestamps, and other fields
         """
         try:
+            # Get permitted groups from authentication context
+            permitted_groups = get_permitted_groups_from_context()
+
             # Parse date hint if provided
             date_obj: datetime | None = None
             if date_hint:
@@ -67,8 +95,12 @@ def register_query_tools(
                         recovery_strategy="Use YYYY-MM-DD format for date_hint (e.g., '2025-12-08').",
                     )
 
-            # Load document
-            doc = document_store.load(guid, group_guid, date=date_obj)
+            # Load document with access check
+            doc = document_store.load_with_access_check(
+                guid=guid,
+                permitted_groups=permitted_groups,
+                date=date_obj,
+            )
 
             # Format full document response
             doc_data = {
@@ -98,6 +130,14 @@ def register_query_tools(
             )
 
         except Exception as e:
+            error_msg = str(e)
+            # Check for access denied errors
+            if "access denied" in error_msg.lower():
+                return error_response(
+                    error_code="ACCESS_DENIED",
+                    message=f"Access denied to document: {guid}",
+                    recovery_strategy="You do not have permission to access this document's group.",
+                )
             return error_response(
                 error_code="GET_DOCUMENT_ERROR",
                 message=f"Failed to retrieve document: {e!s}",
@@ -112,30 +152,82 @@ def register_query_tools(
             description=(
                 "Search news articles by topic, company, or event. "
                 "Use for questions like 'What news about Apple?' or 'Recent M&A activity in APAC'. "
-                "Returns ranked results with relevance scores."
+                "Returns ranked results with relevance scores. "
+                "Only searches groups you have access to."
             ),
         )
         def query_documents(
-            query: str,
-            group_guids: list[str],
-            n_results: int = 10,
-            regions: list[str] | None = None,
-            sectors: list[str] | None = None,
-            companies: list[str] | None = None,
-            languages: list[str] | None = None,
-            date_from: str | None = None,
-            date_to: str | None = None,
-            min_impact_score: float | None = None,
-            impact_tiers: list[str] | None = None,
-            event_types: list[str] | None = None,
-            client_guid: str | None = None,
-            include_graph_context: bool = True,
+            query: Annotated[str, Field(
+                min_length=1,
+                max_length=1000,
+                description="Natural language search query (e.g., 'earnings surprises', 'China tech regulation')",
+            )],
+            n_results: Annotated[int, Field(
+                default=10,
+                ge=1,
+                le=100,
+                description="Max results to return (default: 10, max: 100)",
+            )] = 10,
+            regions: Annotated[list[str] | None, Field(
+                default=None,
+                description="Filter by region codes: APAC, JP, CN, HK, SG, AU, KR, TW, US, EU",
+            )] = None,
+            sectors: Annotated[list[str] | None, Field(
+                default=None,
+                description="Filter by sector: Technology, Finance, Healthcare, Energy, Consumer, etc.",
+            )] = None,
+            companies: Annotated[list[str] | None, Field(
+                default=None,
+                description="Filter by ticker symbols: AAPL, 9988.HK, BABA, etc.",
+            )] = None,
+            languages: Annotated[list[str] | None, Field(
+                default=None,
+                description="Filter by language codes: en, zh, ja",
+            )] = None,
+            date_from: Annotated[str | None, Field(
+                default=None,
+                pattern=r"^\d{4}-\d{2}-\d{2}$",
+                description="Start date filter in YYYY-MM-DD format",
+                examples=["2025-01-01"],
+            )] = None,
+            date_to: Annotated[str | None, Field(
+                default=None,
+                pattern=r"^\d{4}-\d{2}-\d{2}$",
+                description="End date filter in YYYY-MM-DD format",
+                examples=["2025-12-31"],
+            )] = None,
+            min_impact_score: Annotated[float | None, Field(
+                default=None,
+                ge=0.0,
+                le=100.0,
+                description="Minimum importance score 0-100 (higher = bigger market impact)",
+            )] = None,
+            impact_tiers: Annotated[list[str] | None, Field(
+                default=None,
+                description="Filter by impact tier: PLATINUM, GOLD, SILVER, BRONZE, STANDARD",
+            )] = None,
+            event_types: Annotated[list[str] | None, Field(
+                default=None,
+                description="Filter by event type: EARNINGS_BEAT, EARNINGS_MISS, M&A_ANNOUNCE, FDA_APPROVAL, GUIDANCE_RAISE, GUIDANCE_CUT, etc.",
+            )] = None,
+            client_guid: Annotated[str | None, Field(
+                default=None,
+                min_length=36,
+                max_length=36,
+                description="Client UUID to personalize results for their portfolio/watchlist",
+            )] = None,
+            include_graph_context: Annotated[bool, Field(
+                default=True,
+                description="Include related entities from knowledge graph (default: True)",
+            )] = True,
         ) -> ToolResponse:
             """Search documents using natural language.
 
+            Search is automatically limited to groups you have permission to access.
+            Anonymous users can only search the public group.
+
             Args:
-                query: What to search for (e.g., "earnings surprises", "China tech regulation")
-                group_guids: Groups to search within
+                query: What to search for (e.g., 'earnings surprises', 'China tech regulation')
                 n_results: Max results (default: 10)
                 regions: Filter by region (APAC, JP, CN, HK, etc.)
                 sectors: Filter by sector (Technology, Finance, Healthcare, etc.)
@@ -155,6 +247,9 @@ def register_query_tools(
                 execution_time_ms: Query time
             """
             try:
+                # Get permitted groups from authentication context
+                group_guids = get_permitted_groups_from_context()
+
                 # Parse dates if provided
                 date_from_obj: datetime | None = None
                 date_to_obj: datetime | None = None

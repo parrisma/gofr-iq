@@ -5,6 +5,7 @@ This module provides file-based storage for documents with:
 - Group partitioning
 - Date-based subdirectories
 - Document versioning support
+- Group-based access control
 """
 
 from __future__ import annotations
@@ -14,7 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from app.models import Document, DocumentCreate, count_words
+from app.models import Document, DocumentCreate, PUBLIC_GROUP, count_words
 
 
 class DocumentNotFoundError(Exception):
@@ -27,6 +28,19 @@ class DocumentNotFoundError(Exception):
         if group_guid:
             msg += f" in group {group_guid}"
         super().__init__(msg)
+
+
+class DocumentAccessDeniedError(Exception):
+    """Raised when access to a document is denied due to group restrictions."""
+
+    def __init__(self, guid: str, group_guid: str, permitted_groups: list[str]) -> None:
+        self.guid = guid
+        self.group_guid = group_guid
+        self.permitted_groups = permitted_groups
+        super().__init__(
+            f"Access denied: document {guid} belongs to group '{group_guid}', "
+            f"not in permitted groups {permitted_groups}"
+        )
 
 
 class DocumentStoreError(Exception):
@@ -157,6 +171,84 @@ class DocumentStore:
             raise
         except Exception as e:
             raise DocumentStoreError(f"Failed to load document {guid}: {e}") from e
+
+    def load_with_access_check(
+        self,
+        guid: str,
+        permitted_groups: list[str],
+        date: datetime | str | None = None,
+    ) -> Document:
+        """Load a document with group access validation.
+        
+        Searches for the document across all permitted groups and validates
+        that the document belongs to one of them.
+
+        Args:
+            guid: Document GUID
+            permitted_groups: List of group GUIDs the user can access
+            date: Optional date to narrow search (YYYY-MM-DD string or datetime)
+
+        Returns:
+            The loaded Document
+
+        Raises:
+            DocumentNotFoundError: If document doesn't exist in any permitted group
+            DocumentAccessDeniedError: If document exists but user lacks access
+            DocumentStoreError: If load fails
+        """
+        # Try each permitted group
+        for group_guid in permitted_groups:
+            try:
+                doc = self.load(guid, group_guid, date)
+                return doc
+            except DocumentNotFoundError:
+                continue
+        
+        # Document not found in any permitted group
+        # Check if it exists in another group (for better error message)
+        for group_dir in self._documents_path.iterdir():
+            if group_dir.is_dir() and group_dir.name not in permitted_groups:
+                for date_dir in group_dir.iterdir():
+                    if date_dir.is_dir():
+                        file_path = date_dir / f"{guid}.json"
+                        if file_path.exists():
+                            raise DocumentAccessDeniedError(
+                                guid=guid,
+                                group_guid=group_dir.name,
+                                permitted_groups=permitted_groups,
+                            )
+        
+        raise DocumentNotFoundError(guid, None)
+
+    def list_by_permitted_groups(
+        self,
+        permitted_groups: list[str],
+        date: datetime | str | None = None,
+        limit: int | None = None,
+    ) -> list[Document]:
+        """List documents from all permitted groups.
+
+        Args:
+            permitted_groups: List of group GUIDs to include
+            date: Optional date filter (YYYY-MM-DD)
+            limit: Maximum number of documents to return
+
+        Returns:
+            List of documents from all permitted groups, sorted by created_at desc
+        """
+        documents: list[Document] = []
+        
+        for group_guid in permitted_groups:
+            group_docs = self.list_by_group(group_guid, date, limit=None)
+            documents.extend(group_docs)
+        
+        # Sort by created_at descending
+        documents.sort(key=lambda d: d.created_at, reverse=True)
+        
+        if limit:
+            documents = documents[:limit]
+        
+        return documents
 
     def _load_from_path(self, file_path: Path) -> Document:
         """Load a document from a specific path.

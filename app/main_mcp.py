@@ -30,9 +30,12 @@ import secrets
 import sys
 from pathlib import Path
 
+import uvicorn
+
 from app.config import get_settings
 from app.logger import ConsoleLogger
 from app.mcp_server.mcp_server import create_mcp_server
+from gofr_common.web import create_mcp_starlette_app
 
 logger = ConsoleLogger(name="main_mcp", level=logging.INFO)
 
@@ -169,8 +172,20 @@ if __name__ == "__main__":
         print("Press Ctrl+C to stop")
         print()
 
-        # Run the server with HTTP streamable transport (NOT stdio or SSE)
-        mcp.run(transport="streamable-http")
+        # Get the streamable HTTP handler from FastMCP
+        mcp_handler = mcp.streamable_http_app()
+        
+        # For now, use the handler directly without Starlette wrapping
+        # TODO: Re-enable auth middleware for group extraction
+        app = mcp_handler
+
+        # Run with uvicorn directly instead of FastMCP.run()
+        uvicorn.run(
+            app,
+            host=host,
+            port=port,
+            log_level=args.log_level.lower(),
+        )
 
     except KeyboardInterrupt:
         print("\nServer stopped")

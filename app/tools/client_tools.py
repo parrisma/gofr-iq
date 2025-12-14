@@ -1,18 +1,29 @@
 """MCP Client Tools.
 
 Provides client profile management and personalized news feeds.
+
+Group Access Control:
+    - Client creation requires authentication
+    - Feeds are filtered to groups the user has access to
+    - Portfolio/watchlist operations require client access
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Annotated, Any
+
+from pydantic import Field
 
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
+from app.services.group_service import (
+    get_permitted_groups_from_context,
+    get_write_group_from_context,
+)
 
 if TYPE_CHECKING:
     pass
@@ -29,39 +40,81 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         description=(
             "Create a client profile for personalized news. "
             "Use when setting up a new user who needs tailored news feeds "
-            "based on their portfolio and interests."
+            "based on their portfolio and interests. "
+            "Requires authentication - client is created in your token's group."
         ),
     )
     def create_client(
-        name: str,
-        group_guid: str,
-        client_type: str = "HEDGE_FUND",
-        alert_frequency: str = "realtime",
-        impact_threshold: float = 50.0,
-        mandate_type: str | None = None,
-        benchmark: str | None = None,
-        horizon: str | None = None,
-        esg_constrained: bool = False,
+        name: Annotated[str, Field(
+            min_length=1,
+            max_length=255,
+            description="Client name (e.g., 'Citadel', 'BlackRock')",
+        )],
+        client_type: Annotated[str, Field(
+            default="HEDGE_FUND",
+            description="Client type: HEDGE_FUND, LONG_ONLY, QUANT, PENSION, or FAMILY_OFFICE",
+        )] = "HEDGE_FUND",
+        alert_frequency: Annotated[str, Field(
+            default="realtime",
+            description="Alert frequency: realtime, hourly, daily, or weekly",
+        )] = "realtime",
+        impact_threshold: Annotated[float, Field(
+            default=50.0,
+            ge=0.0,
+            le=100.0,
+            description="Minimum impact score 0-100 for alerts (default: 50)",
+        )] = 50.0,
+        mandate_type: Annotated[str | None, Field(
+            default=None,
+            description="Investment mandate style (e.g., 'equity_long_short', 'global_macro')",
+        )] = None,
+        benchmark: Annotated[str | None, Field(
+            default=None,
+            description="Benchmark ticker symbol (e.g., 'SPY', 'QQQ')",
+        )] = None,
+        horizon: Annotated[str | None, Field(
+            default=None,
+            description="Investment horizon: short, medium, or long",
+        )] = None,
+        esg_constrained: Annotated[bool, Field(
+            default=False,
+            description="Apply ESG filters to news feed",
+        )] = False,
     ) -> ToolResponse:
         """Create a new client profile.
 
+        The client is automatically created in the group associated with
+        your authentication token. The group is a string identifier like
+        'reuters-feed' or 'sales-team-nyc', not a UUID.
+        Anonymous users cannot create clients.
+
         Args:
-            name: Client name (e.g., "Citadel", "BlackRock")
-            group_guid: Group for permissions
+            name: Client name (e.g., 'Citadel', 'BlackRock')
             client_type: HEDGE_FUND, LONG_ONLY, QUANT, PENSION, or FAMILY_OFFICE
             alert_frequency: realtime, hourly, daily, or weekly
             impact_threshold: Min impact score 0-100 for alerts (default: 50)
-            mandate_type: Investment style (e.g., "equity_long_short")
-            benchmark: Benchmark ticker (e.g., "SPY")
+            mandate_type: Investment style (e.g., 'equity_long_short')
+            benchmark: Benchmark ticker (e.g., 'SPY')
             horizon: short, medium, or long
             esg_constrained: Apply ESG filters
 
         Returns:
-            client_guid, portfolio_guid, watchlist_guid, profile settings
+            client_guid, portfolio_guid, watchlist_guid, profile settings,
+            group_guid: Group name/identifier (string like 'reuters-feed')
         """
         import uuid
 
         try:
+            # Get write group from authentication context
+            group_guid = get_write_group_from_context()
+            
+            if group_guid is None:
+                return error_response(
+                    error_code="AUTH_REQUIRED",
+                    message="Authentication required to create clients",
+                    recovery_strategy="Provide a valid Bearer token in the Authorization header.",
+                )
+
             client_guid = str(uuid.uuid4())
             
             # Create client type if it doesn't exist
@@ -153,23 +206,51 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         description=(
             "Get a personalized news feed for a client. "
             "Shows relevant news based on their portfolio holdings and watchlist. "
-            "Results ranked by impact and relevance to client's positions."
+            "Results ranked by impact and relevance to client's positions. "
+            "Only includes news from groups you have access to."
         ),
     )
     def get_client_feed(
-        client_guid: str,
-        group_guids: list[str],
-        limit: int = 20,
-        min_impact_score: float | None = None,
-        impact_tiers: list[str] | None = None,
-        include_portfolio: bool = True,
-        include_watchlist: bool = True,
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to get feed for",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        limit: Annotated[int, Field(
+            default=20,
+            ge=1,
+            le=100,
+            description="Maximum articles to return (default: 20, max: 100)",
+        )] = 20,
+        min_impact_score: Annotated[float | None, Field(
+            default=None,
+            ge=0.0,
+            le=100.0,
+            description="Minimum importance score 0-100 to filter articles",
+        )] = None,
+        impact_tiers: Annotated[list[str] | None, Field(
+            default=None,
+            description="Filter by impact tiers: PLATINUM, GOLD, SILVER, BRONZE, STANDARD",
+        )] = None,
+        include_portfolio: Annotated[bool, Field(
+            default=True,
+            description="Include news for portfolio holdings (default: True)",
+        )] = True,
+        include_watchlist: Annotated[bool, Field(
+            default=True,
+            description="Include news for watched stocks (default: True)",
+        )] = True,
     ) -> ToolResponse:
         """Get personalized news feed for a client.
 
+        Feed is automatically limited to groups you have permission to access.
+        Groups are string identifiers like 'reuters-feed' or 'public', not UUIDs.
+        Anonymous users only see news from the public group.
+
         Args:
-            client_guid: Client to get feed for
-            group_guids: Groups client can access
+            client_guid: UUID of the client to get feed for (36-char format)
             limit: Max articles (default: 20)
             min_impact_score: Min importance 0-100
             impact_tiers: PLATINUM, GOLD, SILVER, BRONZE, STANDARD
@@ -181,6 +262,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             total_count: Number of articles
         """
         try:
+            # Get permitted groups from authentication context
+            group_guids = get_permitted_groups_from_context()
+
             # Validate client exists
             client_node = graph_index.get_node(NodeLabel.CLIENT, client_guid)
             if not client_node:
@@ -234,7 +318,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             return error_response(
                 error_code="FEED_ERROR",
                 message=f"Failed to retrieve feed: {e!s}",
-                recovery_strategy="Check the client_guid and group_guids are valid.",
+                recovery_strategy="Check the client_guid is valid.",
             )
 
     @mcp.tool(
@@ -245,17 +329,41 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         ),
     )
     def add_to_portfolio(
-        client_guid: str,
-        ticker: str,
-        weight: float,
-        shares: int | None = None,
-        avg_cost: float | None = None,
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to update",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        ticker: Annotated[str, Field(
+            min_length=1,
+            max_length=20,
+            description="Stock ticker symbol (e.g., 'AAPL', '9988.HK', '700.HK')",
+            examples=["AAPL", "TSLA", "9988.HK"],
+        )],
+        weight: Annotated[float, Field(
+            gt=0.0,
+            le=1.0,
+            description="Portfolio weight as decimal (0.10 = 10%, 0.05 = 5%)",
+            examples=[0.10, 0.05, 0.25],
+        )],
+        shares: Annotated[int | None, Field(
+            default=None,
+            ge=1,
+            description="Number of shares held (optional)",
+        )] = None,
+        avg_cost: Annotated[float | None, Field(
+            default=None,
+            gt=0.0,
+            description="Average cost basis per share in USD (optional)",
+        )] = None,
     ) -> ToolResponse:
         """Add a holding to client's portfolio.
 
         Args:
-            client_guid: Client to update
-            ticker: Stock symbol (e.g., "AAPL", "9988.HK")
+            client_guid: UUID of the client to update (36-char format)
+            ticker: Stock symbol (e.g., 'AAPL', '9988.HK')
             weight: Portfolio weight as decimal (0.10 = 10%)
             shares: Number of shares (optional)
             avg_cost: Cost basis per share (optional)
@@ -327,15 +435,31 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         ),
     )
     def add_to_watchlist(
-        client_guid: str,
-        ticker: str,
-        alert_threshold: float | None = None,
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to update",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        ticker: Annotated[str, Field(
+            min_length=1,
+            max_length=20,
+            description="Stock ticker symbol to watch (e.g., 'TSLA', '700.HK')",
+            examples=["TSLA", "BABA", "700.HK"],
+        )],
+        alert_threshold: Annotated[float | None, Field(
+            default=None,
+            ge=0.0,
+            le=100.0,
+            description="Minimum impact score 0-100 to trigger alerts for this ticker",
+        )] = None,
     ) -> ToolResponse:
         """Add an instrument to client's watchlist.
 
         Args:
-            client_guid: Client to update
-            ticker: Stock symbol (e.g., "TSLA", "700.HK")
+            client_guid: UUID of the client to update (36-char format)
+            ticker: Stock symbol (e.g., 'TSLA', '700.HK')
             alert_threshold: Min impact score 0-100 for alerts on this ticker
 
         Returns:

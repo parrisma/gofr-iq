@@ -14,6 +14,11 @@ from typing import Annotated, Any
 from pydantic import BaseModel, Field, field_validator
 
 
+# Public group constant - default for unauthenticated requests
+PUBLIC_GROUP = "public"
+"""Default group for unauthenticated requests. Readable by all."""
+
+
 class Permission(str, Enum):
     """Valid permission levels for token access.
     

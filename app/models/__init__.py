@@ -17,7 +17,7 @@ from .document import (
     count_words,
     validate_word_count,
 )
-from .group import Group, GroupMetadata, Permission, TokenPermissions
+from .group import Group, GroupMetadata, Permission, TokenPermissions, PUBLIC_GROUP
 from .query import (
     DocumentResult,
     GraphQueryRequest,
@@ -44,6 +44,7 @@ __all__ = [
     "GroupMetadata",
     "Permission",
     "TokenPermissions",
+    "PUBLIC_GROUP",
     # Query models
     "DocumentResult",
     "GraphQueryRequest",

@@ -1,1 +1,8 @@
-{}
+{
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncm91cCI6InNoYXJlZC10ZXN0IiwiaWF0IjoxNzY1NzIxNjM4LCJleHAiOjE3NjU3MjUyMzgsIm5iZiI6MTc2NTcyMTYzOCwiYXVkIjoiZ29mcl9pcS1hcGkifQ.c4_vbm1APp_RXpIggtuAfc8DPKy5fJE8B6kbUcn9-lk": {
+    "group": "shared-test",
+    "issued_at": "2025-12-14T14:13:58.195635",
+    "expires_at": "2025-12-14T15:13:58.195635",
+    "not_before": "2025-12-14T14:13:58.195635"
+  }
+}

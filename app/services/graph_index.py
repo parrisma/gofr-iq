@@ -1272,24 +1272,43 @@ class GraphIndex:
             )
             return [dict(record) for record in result]
 
-    def get_documents_by_source(self, source_guid: str) -> list[GraphNode]:
+    def get_documents_by_source(
+        self,
+        source_guid: str,
+        permitted_groups: list[str] | None = None,
+    ) -> list[GraphNode]:
         """Get all documents produced by a source
 
         Args:
             source_guid: Source GUID
+            permitted_groups: If provided, only return docs in these groups
 
         Returns:
             List of document GraphNodes
         """
         with self._get_session() as session:
-            result = session.run(
-                """
+            if permitted_groups:
+                query = """
                 MATCH (d:Document)-[:PRODUCED_BY]->(s:Source {guid: $source_guid})
+                MATCH (d)-[:IN_GROUP]->(g:Group)
+                WHERE g.guid IN $permitted_groups
                 RETURN d
                 ORDER BY d.created_at DESC
-                """,
-                source_guid=source_guid,
-            )
+                """
+                result = session.run(
+                    query,
+                    source_guid=source_guid,
+                    permitted_groups=permitted_groups,
+                )
+            else:
+                result = session.run(
+                    """
+                    MATCH (d:Document)-[:PRODUCED_BY]->(s:Source {guid: $source_guid})
+                    RETURN d
+                    ORDER BY d.created_at DESC
+                    """,
+                    source_guid=source_guid,
+                )
             return [
                 GraphNode(
                     label=NodeLabel.DOCUMENT,
@@ -1299,24 +1318,43 @@ class GraphIndex:
                 for record in result
             ]
 
-    def get_documents_mentioning_company(self, company_ticker: str) -> list[GraphNode]:
+    def get_documents_mentioning_company(
+        self,
+        company_ticker: str,
+        permitted_groups: list[str] | None = None,
+    ) -> list[GraphNode]:
         """Get all documents mentioning a company
 
         Args:
             company_ticker: Company ticker symbol
+            permitted_groups: If provided, only return docs in these groups
 
         Returns:
             List of document GraphNodes
         """
         with self._get_session() as session:
-            result = session.run(
-                """
+            if permitted_groups:
+                query = """
                 MATCH (d:Document)-[:MENTIONS]->(c:Company {guid: $ticker})
+                MATCH (d)-[:IN_GROUP]->(g:Group)
+                WHERE g.guid IN $permitted_groups
                 RETURN d
                 ORDER BY d.created_at DESC
-                """,
-                ticker=company_ticker,
-            )
+                """
+                result = session.run(
+                    query,
+                    ticker=company_ticker,
+                    permitted_groups=permitted_groups,
+                )
+            else:
+                result = session.run(
+                    """
+                    MATCH (d:Document)-[:MENTIONS]->(c:Company {guid: $ticker})
+                    RETURN d
+                    ORDER BY d.created_at DESC
+                    """,
+                    ticker=company_ticker,
+                )
             return [
                 GraphNode(
                     label=NodeLabel.DOCUMENT,
@@ -1331,6 +1369,7 @@ class GraphIndex:
         document_guid: str,
         max_depth: int = 2,
         limit: int = 10,
+        permitted_groups: list[str] | None = None,
     ) -> TraversalResult:
         """Find documents related to a given document
 
@@ -1343,22 +1382,38 @@ class GraphIndex:
             document_guid: Starting document GUID
             max_depth: Maximum relationship depth
             limit: Maximum results
+            permitted_groups: If provided, only return docs in these groups
 
         Returns:
             TraversalResult with related nodes and relationships
         """
         with self._get_session() as session:
             # Find documents via shared companies
-            result = session.run(
-                """
+            if permitted_groups:
+                query_company = """
                 MATCH (d1:Document {guid: $guid})-[:MENTIONS]->(c:Company)<-[:MENTIONS]-(d2:Document)
-                WHERE d1 <> d2
+                MATCH (d2)-[:IN_GROUP]->(g:Group)
+                WHERE d1 <> d2 AND g.guid IN $permitted_groups
                 RETURN DISTINCT d2, c, 'company' as via
                 LIMIT $limit
-                """,
-                guid=document_guid,
-                limit=limit,
-            )
+                """
+                result = session.run(
+                    query_company,
+                    guid=document_guid,
+                    limit=limit,
+                    permitted_groups=permitted_groups,
+                )
+            else:
+                result = session.run(
+                    """
+                    MATCH (d1:Document {guid: $guid})-[:MENTIONS]->(c:Company)<-[:MENTIONS]-(d2:Document)
+                    WHERE d1 <> d2
+                    RETURN DISTINCT d2, c, 'company' as via
+                    LIMIT $limit
+                    """,
+                    guid=document_guid,
+                    limit=limit,
+                )
 
             nodes: list[GraphNode] = []
             relationships: list[GraphRelationship] = []
@@ -1380,16 +1435,31 @@ class GraphIndex:
                     nodes.append(company_node)
 
             # Also find documents from same source
-            result2 = session.run(
-                """
+            if permitted_groups:
+                query_source = """
                 MATCH (d1:Document {guid: $guid})-[:PRODUCED_BY]->(s:Source)<-[:PRODUCED_BY]-(d2:Document)
-                WHERE d1 <> d2
+                MATCH (d2)-[:IN_GROUP]->(g:Group)
+                WHERE d1 <> d2 AND g.guid IN $permitted_groups
                 RETURN DISTINCT d2, s, 'source' as via
                 LIMIT $limit
-                """,
-                guid=document_guid,
-                limit=limit,
-            )
+                """
+                result2 = session.run(
+                    query_source,
+                    guid=document_guid,
+                    limit=limit,
+                    permitted_groups=permitted_groups,
+                )
+            else:
+                result2 = session.run(
+                    """
+                    MATCH (d1:Document {guid: $guid})-[:PRODUCED_BY]->(s:Source)<-[:PRODUCED_BY]-(d2:Document)
+                    WHERE d1 <> d2
+                    RETURN DISTINCT d2, s, 'source' as via
+                    LIMIT $limit
+                    """,
+                    guid=document_guid,
+                    limit=limit,
+                )
 
             for record in result2:
                 doc_node = GraphNode(

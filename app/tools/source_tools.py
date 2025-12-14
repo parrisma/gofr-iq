@@ -1,17 +1,28 @@
 """MCP Source Tools.
 
 Provides news source registry operations.
+
+Group Access Control:
+    - List/get operations use permitted groups from the authenticated token
+    - Create operations write to the group associated with the token
+    - Anonymous users can only access the public group
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated
+
+from pydantic import Field
 
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
+from app.services.group_service import (
+    get_permitted_groups_from_context,
+    get_write_group_from_context,
+)
 from app.services.source_registry import SourceNotFoundError, SourceRegistry
 
 if TYPE_CHECKING:
@@ -29,19 +40,30 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         description=(
             "List available news sources. "
             "Use to find source_guids before ingesting documents, "
-            "or to discover sources by region/type."
+            "or to discover sources by region/type. "
+            "Only returns sources from groups you have access to."
         ),
     )
     def list_sources(
-        group_guid: str | None = None,
-        region: str | None = None,
-        source_type: str | None = None,
-        active_only: bool = True,
+        region: Annotated[str | None, Field(
+            default=None,
+            description="Filter by region code: APAC, JP, CN, HK, SG, AU, KR, TW, US, EU, etc.",
+        )] = None,
+        source_type: Annotated[str | None, Field(
+            default=None,
+            description="Filter by type: news_agency, broker, analyst, regulator, other",
+        )] = None,
+        active_only: Annotated[bool, Field(
+            default=True,
+            description="Only return active sources (default: True)",
+        )] = True,
     ) -> ToolResponse:
         """List registered news sources.
 
+        Results are automatically limited to groups you have permission to access.
+        Anonymous users can only see sources in the public group.
+
         Args:
-            group_guid: Filter by group (optional)
             region: Filter by region: APAC, JP, CN, HK, SG, AU, KR, TW, etc.
             source_type: Filter by type: news_agency, broker, analyst, regulator
             active_only: Only return active sources (default: True)
@@ -51,8 +73,8 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             count: Total matching sources
         """
         try:
-            # Get access groups if group_guid provided
-            access_groups = [group_guid] if group_guid else None
+            # Get permitted groups from authentication context
+            access_groups = get_permitted_groups_from_context()
 
             # Query sources with individual filter params
             from app.models.source import SourceType
@@ -93,17 +115,27 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
 
     @mcp.tool(
         name="get_source",
-        description="Get detailed information about a specific news source by its GUID.",
+        description=(
+            "Get detailed information about a specific news source by its GUID. "
+            "Only returns sources from groups you have access to."
+        ),
     )
     def get_source(
-        source_guid: str,
-        group_guid: str | None = None,
+        source_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the source to retrieve (36-char UUID format)",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
     ) -> ToolResponse:
         """Get detailed source information.
 
+        Access is automatically limited to groups you have permission to read.
+        Anonymous users can only access sources in the public group.
+
         Args:
-            source_guid: The GUID of the source to retrieve
-            group_guid: Optional group GUID for access control validation
+            source_guid: The UUID of the source to retrieve (36-char format)
 
         Returns:
             JSON response with full source details including:
@@ -124,8 +156,8 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             - SOURCE_NOT_FOUND: The source_guid doesn't exist or isn't accessible
         """
         try:
-            # Get access groups if group_guid provided
-            access_groups = [group_guid] if group_guid else None
+            # Get permitted groups from authentication context
+            access_groups = get_permitted_groups_from_context()
 
             source = source_registry.get(source_guid, access_groups=access_groups)
 
@@ -162,6 +194,14 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             )
 
         except Exception as e:
+            error_msg = str(e)
+            # Check for access denied errors
+            if "access denied" in error_msg.lower():
+                return error_response(
+                    error_code="ACCESS_DENIED",
+                    message=f"Access denied to source: {source_guid}",
+                    recovery_strategy="You do not have permission to access this source's group.",
+                )
             return error_response(
                 error_code="GET_SOURCE_ERROR",
                 message=f"Failed to retrieve source: {e!s}",
@@ -172,36 +212,68 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         name="create_source",
         description=(
             "Create a new news source in the repository. "
-            "Use to register a new data provider before ingesting documents from it."
+            "Use to register a new data provider before ingesting documents from it. "
+            "Requires authentication - source is created in your token's group."
         ),
     )
     def create_source(
-        name: str,
-        group_guid: str,
-        source_type: str = "other",
-        region: str | None = None,
-        languages: list[str] | None = None,
-        trust_level: str = "unverified",
+        name: Annotated[str, Field(
+            min_length=1,
+            max_length=255,
+            description="Human-readable source name (e.g., 'Reuters', 'Bloomberg')",
+        )],
+        source_type: Annotated[str, Field(
+            default="other",
+            description="Type of source: news_agency, broker, analyst, regulator, other",
+        )] = "other",
+        region: Annotated[str | None, Field(
+            default=None,
+            description="Geographic region: APAC, JP, CN, HK, SG, AU, KR, TW, US, EU, etc.",
+        )] = None,
+        languages: Annotated[list[str] | None, Field(
+            default=None,
+            description="Languages provided as ISO 639-1 codes (default: ['en'])",
+        )] = None,
+        trust_level: Annotated[str, Field(
+            default="unverified",
+            description="Credibility level: verified, trusted, standard, unverified",
+        )] = "unverified",
     ) -> ToolResponse:
         """Create a new news source.
 
+        The source is automatically created in the group associated with
+        your authentication token. The group is a string identifier like
+        'reuters-feed' or 'sales-team-nyc', not a UUID.
+        Anonymous users cannot create sources.
+
         Args:
-            name: Human-readable source name (e.g., "Reuters", "Bloomberg")
-            group_guid: Group this source belongs to
+            name: Human-readable source name (e.g., 'Reuters', 'Bloomberg')
             source_type: Type of source: news_agency, broker, analyst, regulator, other
             region: Geographic region: APAC, JP, CN, HK, SG, AU, KR, TW, US, EU, etc.
-            languages: Languages provided (default: ["en"])
-            trust_level: Credibility level: high, medium, low, unverified
+            languages: Languages provided as ISO 639-1 codes (default: ['en'])
+            trust_level: Credibility level: verified, trusted, standard, unverified
 
         Returns:
-            source_guid: The newly created source identifier
+            source_guid: The newly created source identifier (UUID)
             name: Source name
             type: Source type
             region: Geographic region
             languages: Supported languages
             trust_level: Trust level assigned
+            group_guid: Group name/identifier (string like 'reuters-feed')
         """
         try:
+            # Get write group from authentication context
+            # Anonymous users cannot write - they get None
+            group_guid = get_write_group_from_context()
+            
+            if group_guid is None:
+                return error_response(
+                    error_code="AUTH_REQUIRED",
+                    message="Authentication required to create sources",
+                    recovery_strategy="Provide a valid Bearer token in the Authorization header.",
+                )
+
             from app.models.source import SourceType, TrustLevel
 
             # Convert string parameters to enums

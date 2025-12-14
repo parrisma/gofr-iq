@@ -1,18 +1,25 @@
 """MCP Graph Tools.
 
 Provides knowledge graph exploration and market context.
+
+Group Access Control:
+    - Document queries are filtered to groups the user has access to
+    - Anonymous users only see documents in the public group
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Annotated, Any
+
+from pydantic import Field
 
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
+from app.services.group_service import get_permitted_groups_from_context
 
 if TYPE_CHECKING:
     pass
@@ -33,17 +40,37 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         ),
     )
     def explore_graph(
-        node_type: str,
-        node_id: str,
-        relationship_types: list[str] | None = None,
-        max_depth: int = 1,
-        limit: int = 20,
+        node_type: Annotated[str, Field(
+            description="Type of node to start from: INSTRUMENT (ticker), COMPANY, DOCUMENT (guid), EVENT_TYPE, SECTOR, CLIENT",
+            examples=["INSTRUMENT", "COMPANY", "DOCUMENT", "SECTOR"],
+        )],
+        node_id: Annotated[str, Field(
+            min_length=1,
+            description="Identifier of the starting node (ticker like 'AAPL', GUID, or name)",
+            examples=["AAPL", "TSLA", "Technology"],
+        )],
+        relationship_types: Annotated[list[str] | None, Field(
+            default=None,
+            description="Filter traversal by relationship types: AFFECTS, PEER_OF, MENTIONS, HOLDS, WATCHES, ISSUED_BY, BELONGS_TO, etc.",
+        )] = None,
+        max_depth: Annotated[int, Field(
+            default=1,
+            ge=1,
+            le=3,
+            description="How far to traverse (1-3 hops, default: 1)",
+        )] = 1,
+        limit: Annotated[int, Field(
+            default=20,
+            ge=1,
+            le=100,
+            description="Max related nodes to return (default: 20)",
+        )] = 20,
     ) -> ToolResponse:
         """Traverse relationships from a starting node.
 
         Args:
             node_type: INSTRUMENT (ticker), COMPANY, DOCUMENT (guid), EVENT_TYPE, SECTOR, CLIENT
-            node_id: Identifier (ticker like "AAPL", or GUID, or name)
+            node_id: Identifier (ticker like 'AAPL', or GUID, or name)
             relationship_types: Filter traversal - AFFECTS, PEER_OF, MENTIONS, HOLDS, WATCHES, etc.
             max_depth: How far to traverse (1-3, default: 1)
             limit: Max related nodes to return (default: 20)
@@ -170,16 +197,35 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         ),
     )
     def get_market_context(
-        ticker: str,
-        include_peers: bool = True,
-        include_events: bool = True,
-        include_indices: bool = True,
-        days_back: int = 30,
+        ticker: Annotated[str, Field(
+            min_length=1,
+            max_length=20,
+            description="Stock ticker symbol (e.g., 'AAPL', '700.HK', 'BABA')",
+            examples=["AAPL", "TSLA", "700.HK", "9988.HK"],
+        )],
+        include_peers: Annotated[bool, Field(
+            default=True,
+            description="Include similar/peer companies (default: True)",
+        )] = True,
+        include_events: Annotated[bool, Field(
+            default=True,
+            description="Include recent news/events affecting this stock (default: True)",
+        )] = True,
+        include_indices: Annotated[bool, Field(
+            default=True,
+            description="Include index memberships like S&P 500 (default: True)",
+        )] = True,
+        days_back: Annotated[int, Field(
+            default=30,
+            ge=1,
+            le=365,
+            description="How many days of event history (default: 30)",
+        )] = 30,
     ) -> ToolResponse:
         """Get market context for an instrument.
 
         Args:
-            ticker: Stock symbol (e.g., "AAPL", "700.HK")
+            ticker: Stock symbol (e.g., 'AAPL', '700.HK')
             include_peers: Include similar companies (default: True)
             include_events: Include recent news/events (default: True)
             include_indices: Include index memberships (default: True)
@@ -329,21 +375,44 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         description=(
             "Get news affecting a specific stock. "
             "Use for 'What news is moving AAPL?' or 'Why is TSLA down?' "
-            "Returns articles sorted by impact and recency."
+            "Returns articles sorted by impact and recency. "
+            "Only includes news from groups you have access to."
         ),
     )
     def get_instrument_news(
-        ticker: str,
-        group_guids: list[str],
-        days_back: int = 7,
-        min_impact_score: float | None = None,
-        limit: int = 20,
+        ticker: Annotated[str, Field(
+            min_length=1,
+            max_length=20,
+            description="Stock ticker symbol (e.g., 'AAPL', 'BABA', '700.HK')",
+            examples=["AAPL", "TSLA", "BABA"],
+        )],
+        days_back: Annotated[int, Field(
+            default=7,
+            ge=1,
+            le=365,
+            description="How many days back to search (default: 7)",
+        )] = 7,
+        min_impact_score: Annotated[float | None, Field(
+            default=None,
+            ge=0.0,
+            le=100.0,
+            description="Minimum importance score 0-100 to filter articles",
+        )] = None,
+        limit: Annotated[int, Field(
+            default=20,
+            ge=1,
+            le=100,
+            description="Max articles to return (default: 20)",
+        )] = 20,
     ) -> ToolResponse:
         """Get news affecting a stock.
 
+        Results are automatically limited to groups you have permission to access.
+        Groups are string identifiers like 'reuters-feed' or 'public', not UUIDs.
+        Anonymous users only see news from the public group.
+
         Args:
-            ticker: Stock symbol (e.g., "AAPL", "BABA")
-            group_guids: Groups to search within
+            ticker: Stock symbol (e.g., 'AAPL', 'BABA')
             days_back: How many days back (default: 7)
             min_impact_score: Min importance 0-100
             limit: Max articles (default: 20)
@@ -353,6 +422,9 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             total_found: Number of matching articles
         """
         try:
+            # Get permitted groups from authentication context
+            group_guids = get_permitted_groups_from_context()
+
             # Verify instrument exists
             instrument = graph_index.get_instrument(ticker.upper())
             if not instrument:

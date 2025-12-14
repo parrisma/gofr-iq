@@ -1,18 +1,24 @@
 """MCP Ingest Tools.
 
 Provides document ingestion into the APAC brokerage news repository.
+
+Group Access Control:
+    - Documents are written to the group associated with the authenticated token
+    - Anonymous users cannot ingest documents (requires authentication)
+    - The group is extracted from the JWT token, not from client parameters
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Annotated, Any
+
+from pydantic import Field, ValidationError
 
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
-from pydantic import ValidationError
-
+from app.services.group_service import get_write_group_from_context
 from app.services.ingest_service import (
     IngestError,
     IngestService,
@@ -35,24 +41,50 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
         description=(
             "Add a news article to the repository. "
             "Use when you have news content to store. "
-            "Automatically detects language and checks for duplicates."
+            "Automatically detects language and checks for duplicates. "
+            "Requires authentication - documents are stored in your token's group."
         ),
     )
     def ingest_document(
-        title: str,
-        content: str,
-        source_guid: str,
-        group_guid: str,
-        language: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        title: Annotated[str, Field(
+            min_length=1,
+            max_length=500,
+            description="Article headline/title",
+        )],
+        content: Annotated[str, Field(
+            min_length=10,
+            description="Full article text content",
+        )],
+        source_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the source (use list_sources to find valid sources)",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        language: Annotated[str | None, Field(
+            default=None,
+            min_length=2,
+            max_length=5,
+            description="ISO 639-1 language code (en/zh/ja) - auto-detected if omitted",
+            examples=["en", "zh", "ja"],
+        )] = None,
+        metadata: Annotated[dict[str, Any] | None, Field(
+            default=None,
+            description="Optional extra attributes as key-value pairs",
+        )] = None,
     ) -> ToolResponse:
         """Ingest a news document.
+
+        The document is automatically stored in the group associated with
+        your authentication token. The group is a string identifier like
+        'reuters-feed' or 'sales-team-nyc', not a UUID.
+        Anonymous users cannot ingest documents.
 
         Args:
             title: Article headline
             content: Full article text
-            source_guid: Source identifier (use list_sources to find valid sources)
-            group_guid: Group this document belongs to
+            source_guid: Source UUID (use list_sources to find valid sources)
             language: Language code (en/zh/ja) - auto-detected if omitted
             metadata: Optional extra attributes
 
@@ -62,8 +94,20 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             language: Detected/provided language
             word_count: Document length
             duplicate_of: Original document ID if duplicate
+            group_guid: Group name/identifier (string like 'reuters-feed')
         """
         try:
+            # Get write group from authentication context
+            # Anonymous users cannot write - they get None
+            group_guid = get_write_group_from_context()
+            
+            if group_guid is None:
+                return error_response(
+                    error_code="AUTH_REQUIRED",
+                    message="Authentication required for document ingestion",
+                    recovery_strategy="Provide a valid Bearer token in the Authorization header.",
+                )
+
             result = ingest_service.ingest(
                 title=title,
                 content=content,

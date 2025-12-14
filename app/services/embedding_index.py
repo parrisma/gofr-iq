@@ -551,6 +551,40 @@ class EmbeddingIndex:
 
         return similarity_results
 
+    def search_with_access_check(
+        self,
+        query: str,
+        permitted_groups: list[str],
+        n_results: int = 10,
+        source_guids: Optional[list[str]] = None,
+        languages: Optional[list[str]] = None,
+        include_content: bool = True,
+    ) -> list[SimilarityResult]:
+        """Search for similar documents with group access enforcement.
+
+        This is the primary search method for user-facing queries.
+        Only returns results from groups the user has access to.
+
+        Args:
+            query: Search query text
+            permitted_groups: Groups the user can access (from token)
+            n_results: Maximum number of results to return
+            source_guids: Filter to specific sources
+            languages: Filter to specific languages
+            include_content: Whether to include chunk content in results
+
+        Returns:
+            List of SimilarityResult objects, sorted by similarity
+        """
+        return self.search(
+            query=query,
+            n_results=n_results,
+            group_guids=permitted_groups,  # Enforce group filtering
+            source_guids=source_guids,
+            languages=languages,
+            include_content=include_content,
+        )
+
     def delete_document(self, document_guid: str) -> int:
         """Delete all chunks for a document
 

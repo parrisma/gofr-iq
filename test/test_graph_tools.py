@@ -10,13 +10,21 @@ from __future__ import annotations
 
 import json
 from typing import Any
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 from mcp.server.fastmcp import FastMCP
 
 from app.services.graph_index import GraphIndex, GraphNode, NodeLabel
 from app.tools.graph_tools import register_graph_tools
+
+
+# ============================================================================
+# Test Constants
+# ============================================================================
+
+TEST_PUBLIC_GROUP = "public"
+TEST_GROUP = "test-group-123"
 
 
 # ============================================================================
@@ -365,12 +373,15 @@ class TestGetMarketContext:
 class TestGetInstrumentNews:
     """Tests for get_instrument_news tool"""
 
+    @patch('app.tools.graph_tools.get_permitted_groups_from_context')
     def test_get_news_success(
         self,
+        mock_permitted_groups: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test getting news for an instrument"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
         register_graph_tools(mcp_server, mock_graph_index)
 
         # Mock instrument
@@ -404,9 +415,9 @@ class TestGetInstrumentNews:
 
         tool_fn = get_tool_fn(mcp_server, "get_instrument_news")
 
+        # Call without group_guids - extracted from context
         response = tool_fn(
             ticker="AAPL",
-            group_guids=["group-1"],
             days_back=7,
         )
 
@@ -417,12 +428,15 @@ class TestGetInstrumentNews:
         assert len(result["data"]["articles"]) == 1
         assert result["data"]["articles"][0]["title"] == "Apple Beats Earnings"
 
+    @patch('app.tools.graph_tools.get_permitted_groups_from_context')
     def test_get_news_with_impact_filter(
         self,
+        mock_permitted_groups: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test getting news with minimum impact filter"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
         register_graph_tools(mcp_server, mock_graph_index)
 
         mock_graph_index.get_instrument.return_value = GraphNode(
@@ -441,9 +455,9 @@ class TestGetInstrumentNews:
 
         tool_fn = get_tool_fn(mcp_server, "get_instrument_news")
 
+        # Call without group_guids
         response = tool_fn(
             ticker="AAPL",
-            group_guids=["group-1"],
             min_impact_score=70.0,
         )
 
@@ -453,21 +467,24 @@ class TestGetInstrumentNews:
         # Verify the query was called with the impact filter
         mock_session.run.assert_called_once()
 
+    @patch('app.tools.graph_tools.get_permitted_groups_from_context')
     def test_get_news_instrument_not_found(
         self,
+        mock_permitted_groups: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test getting news for non-existent instrument"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP]
         register_graph_tools(mcp_server, mock_graph_index)
 
         mock_graph_index.get_instrument.return_value = None
 
         tool_fn = get_tool_fn(mcp_server, "get_instrument_news")
 
+        # Call without group_guids
         response = tool_fn(
             ticker="INVALID",
-            group_guids=["group-1"],
         )
 
         result = parse_response(response)

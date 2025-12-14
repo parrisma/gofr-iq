@@ -98,6 +98,17 @@ from app.services.source_registry import (
     SourceRegistry,
     SourceRegistryError,
 )
+from app.services.group_service import (
+    GroupAccessDeniedError,
+    GroupService,
+    extract_group,
+    get_group_service,
+    get_permitted_groups,
+    get_permitted_groups_from_context,
+    get_write_group_from_context,
+    init_group_service,
+)
+from app.models.group import PUBLIC_GROUP
 
 __all__ = [
     "AuditEntry",
@@ -118,6 +129,8 @@ __all__ = [
     "GraphIndex",
     "GraphNode",
     "GraphRelationship",
+    "GroupAccessDeniedError",
+    "GroupService",
     "IngestError",
     "IngestResult",
     "IngestService",
@@ -132,6 +145,7 @@ __all__ = [
     "LLMService",
     "LLMServiceError",
     "NodeLabel",
+    "PUBLIC_GROUP",
     "QueryFilters",
     "QueryResponse",
     "QueryResult",
@@ -159,6 +173,12 @@ __all__ = [
     "detect_language",
     "detect_language_with_confidence",
     "DeterministicEmbeddingFunction",
+    "extract_group",
+    "get_group_service",
+    "get_permitted_groups",
+    "get_permitted_groups_from_context",
+    "get_write_group_from_context",
+    "init_group_service",
     "llm_available",
     "log_document_ingest",
     "log_document_query",
