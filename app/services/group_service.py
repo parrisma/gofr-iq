@@ -1,27 +1,22 @@
 """Group Service for GoFr-IQ.
 
-Provides group-based access control following the gofr-plot model:
-- Extract group from JWT token
+Provides group-based access control using gofr_common.auth v2:
+- Extract groups from JWT token (multi-group support)
 - Default to "public" for unauthenticated requests
 - Validate group access for all operations
-- One token = one group (strict 1:1 mapping)
+- Tokens can have multiple groups
 
-Users needing access to multiple groups receive multiple tokens.
+The 'public' group is always accessible to all users.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from gofr_common.auth import AuthService, TokenInfo
 
-if TYPE_CHECKING:
-    pass
 
-
-# Public group constants
+# Public group constant - matches gofr_common.auth reserved group
 PUBLIC_GROUP = "public"
-"""Default group for unauthenticated requests. Readable by all, writable by admins."""
+"""Default group for unauthenticated requests. Readable by all."""
 
 
 class GroupAccessDeniedError(Exception):
@@ -44,10 +39,10 @@ class GroupAccessDeniedError(Exception):
 class GroupService:
     """Service for group-based access control.
     
-    Follows the gofr-plot model where:
-    - Group is extracted from JWT token at request level
-    - Unauthenticated requests get "public" group
-    - Storage/graph operations filter by permitted groups
+    Uses gofr_common.auth v2 multi-group tokens:
+    - Tokens can have multiple groups
+    - Primary group = first group in token
+    - Public group always included in permitted groups
     
     Attributes:
         auth_service: Optional AuthService for token validation
@@ -63,26 +58,24 @@ class GroupService:
         self.auth_service = auth_service
 
     def extract_group(self, token_info: TokenInfo | None) -> str:
-        """Extract group from token info or return public.
+        """Extract primary group from token info or return public.
         
-        This follows the gofr-plot pattern:
-            group = token_info.group if token_info else "public"
+        For multi-group tokens, returns the first (primary) group.
         
         Args:
             token_info: TokenInfo from JWT validation, or None if unauthenticated
             
         Returns:
-            Group string - either the token's group or "public"
+            Primary group string - either the token's first group or "public"
         """
-        if token_info is not None:
-            return token_info.group
+        if token_info is not None and token_info.groups:
+            return token_info.groups[0]
         return PUBLIC_GROUP
 
     def get_permitted_groups(self, token_info: TokenInfo | None) -> list[str]:
         """Get all groups a user can access.
         
-        All users can access public content. Authenticated users can also
-        access their token's group.
+        Returns all groups from the token plus public.
         
         Args:
             token_info: TokenInfo from JWT validation, or None if unauthenticated
@@ -91,28 +84,41 @@ class GroupService:
             List of group strings the user can read from.
             Always includes PUBLIC_GROUP.
         """
-        groups = [PUBLIC_GROUP]
+        groups = {PUBLIC_GROUP}
         if token_info is not None:
-            user_group = token_info.group
-            if user_group != PUBLIC_GROUP and user_group not in groups:
-                groups.append(user_group)
-        return groups
+            groups.update(token_info.groups)
+        return list(groups)
 
     def get_write_group(self, token_info: TokenInfo | None) -> str | None:
-        """Get the group a user can write to.
+        """Get the primary group a user can write to.
         
-        Only authenticated users can write, and only to their token's group.
-        Public group is read-only for regular users.
+        Only authenticated users can write, and writes go to their
+        primary (first) group.
         
         Args:
             token_info: TokenInfo from JWT validation, or None if unauthenticated
             
         Returns:
-            Group string the user can write to, or None if no write access.
+            Primary group string the user can write to, or None if no write access.
+        """
+        if token_info is None or not token_info.groups:
+            return None
+        return token_info.groups[0]
+
+    def get_write_groups(self, token_info: TokenInfo | None) -> list[str]:
+        """Get all groups a user can write to.
+        
+        Returns all groups from the token (user can write to any of their groups).
+        
+        Args:
+            token_info: TokenInfo from JWT validation, or None if unauthenticated
+            
+        Returns:
+            List of groups the user can write to, empty if unauthenticated.
         """
         if token_info is None:
-            return None
-        return token_info.group
+            return []
+        return list(token_info.groups)
 
     def validate_read_access(
         self,
@@ -138,6 +144,8 @@ class GroupService:
     ) -> bool:
         """Validate that a user can write to a group.
         
+        User can write to any of their groups.
+        
         Args:
             token_info: TokenInfo from JWT validation
             group: Group to check access for
@@ -145,10 +153,9 @@ class GroupService:
         Returns:
             True if write access is allowed, False otherwise
         """
-        write_group = self.get_write_group(token_info)
-        if write_group is None:
+        if token_info is None:
             return False
-        return group == write_group
+        return token_info.has_group(group)
 
     def is_public_group(self, group: str) -> bool:
         """Check if a group is the public group.
@@ -198,7 +205,7 @@ def init_group_service(auth_service: AuthService | None = None) -> GroupService:
 
 
 def extract_group(token_info: TokenInfo | None) -> str:
-    """Convenience function to extract group from token.
+    """Convenience function to extract primary group from token.
     
     Can be used without initializing the global service.
     
@@ -206,10 +213,10 @@ def extract_group(token_info: TokenInfo | None) -> str:
         token_info: TokenInfo from JWT validation
         
     Returns:
-        Group string - either the token's group or "public"
+        Primary group string - either the token's first group or "public"
     """
-    if token_info is not None:
-        return token_info.group
+    if token_info is not None and token_info.groups:
+        return token_info.groups[0]
     return PUBLIC_GROUP
 
 
@@ -222,14 +229,12 @@ def get_permitted_groups(token_info: TokenInfo | None) -> list[str]:
         token_info: TokenInfo from JWT validation
         
     Returns:
-        List of groups the user can read from
+        List of groups the user can read from (all token groups + public)
     """
-    groups = [PUBLIC_GROUP]
+    groups = {PUBLIC_GROUP}
     if token_info is not None:
-        user_group = token_info.group
-        if user_group != PUBLIC_GROUP and user_group not in groups:
-            groups.append(user_group)
-    return groups
+        groups.update(token_info.groups)
+    return list(groups)
 
 
 def get_permitted_groups_from_context(auth_service: AuthService | None = None) -> list[str]:
@@ -276,8 +281,12 @@ def get_permitted_groups_from_context(auth_service: AuthService | None = None) -
         return [PUBLIC_GROUP]
     
     try:
-        token_info = auth_service.verify_token(token)
-        return get_permitted_groups(token_info)
+        # Use stateless verification (require_store=False) since JWT is self-contained
+        # This allows tokens created by external services or tests to be valid
+        # as long as they have the correct signature and claims
+        token_info = auth_service.verify_token(token, require_store=False)
+        groups = get_permitted_groups(token_info)
+        return groups
     except Exception:
         # Invalid token = public access only
         return [PUBLIC_GROUP]
@@ -287,14 +296,14 @@ def get_write_group_from_context(auth_service: AuthService | None = None) -> str
     """Get the write group from the current request context.
     
     Extracts the Authorization header from the request context,
-    validates the JWT token, and returns the group that can be
-    written to (the token's primary group).
+    validates the JWT token, and returns the primary group that can be
+    written to (the token's first group).
     
     Args:
         auth_service: Optional AuthService for token validation.
         
     Returns:
-        The group the user can write to, or None if no valid token
+        The primary group the user can write to, or None if no valid token
         is present (anonymous users cannot write).
     """
     from gofr_common.web import get_auth_header_from_context
@@ -317,7 +326,189 @@ def get_write_group_from_context(auth_service: AuthService | None = None) -> str
         return None
     
     try:
-        token_info = auth_service.verify_token(token)
-        return token_info.group
+        # Use stateless verification (require_store=False)
+        token_info = auth_service.verify_token(token, require_store=False)
+        return token_info.groups[0] if token_info.groups else None
     except Exception:
         return None
+
+
+def resolve_permitted_groups(
+    auth_tokens: list[str] | None = None,
+    auth_service: AuthService | None = None,
+) -> list[str]:
+    """Get permitted groups from explicit tokens OR context header.
+    
+    This function provides a unified way to extract permitted groups,
+    supporting both:
+    1. Explicit auth_tokens parameter (for MCPO proxy path where headers
+       are not forwarded)
+    2. Authorization header from request context (for direct MCP calls)
+    
+    Priority:
+    1. If auth_tokens provided -> extract groups from all tokens
+    2. Otherwise -> fall back to get_permitted_groups_from_context()
+    3. Default: ["public"]
+    
+    Args:
+        auth_tokens: Optional list of JWT tokens to extract groups from.
+                    If provided, extracts and unions groups from all tokens.
+        auth_service: Optional AuthService for token validation.
+                     Falls back to global GroupService's auth_service.
+    
+    Returns:
+        List of group IDs the caller can access. Always includes "public".
+    """
+    # If explicit tokens provided, extract groups from them
+    if auth_tokens:
+        return _extract_groups_from_tokens(auth_tokens, auth_service)
+    
+    # Otherwise, fall back to context-based extraction
+    return get_permitted_groups_from_context(auth_service)
+
+
+def _extract_groups_from_tokens(
+    auth_tokens: list[str],
+    auth_service: AuthService | None = None,
+) -> list[str]:
+    """Extract and union groups from a list of JWT tokens.
+    
+    Args:
+        auth_tokens: List of JWT tokens (without "Bearer " prefix)
+        auth_service: Optional AuthService for token validation.
+        
+    Returns:
+        List of unique groups from all valid tokens, plus "public".
+    """
+    # Get auth service if not provided
+    if auth_service is None:
+        try:
+            service = get_group_service()
+            auth_service = service.auth_service
+        except RuntimeError:
+            return [PUBLIC_GROUP]
+    
+    if auth_service is None:
+        return [PUBLIC_GROUP]
+    
+    # Extract groups from all tokens
+    all_groups = {PUBLIC_GROUP}
+    
+    for token in auth_tokens:
+        # Strip "Bearer " prefix if present (be lenient)
+        if token.startswith("Bearer "):
+            token = token[7:]
+        
+        try:
+            # Use stateless verification
+            token_info = auth_service.verify_token(token, require_store=False)
+            if token_info and token_info.groups:
+                all_groups.update(token_info.groups)
+        except Exception:  # nosec B110 - Intentionally continue on invalid tokens
+            # Continue processing other tokens
+            pass
+    
+    return list(all_groups)
+
+
+def resolve_write_group(
+    auth_tokens: list[str] | None = None,
+    auth_service: AuthService | None = None,
+) -> str | None:
+    """Get the write group from explicit tokens OR context header.
+    
+    This function provides a unified way to extract the primary write group,
+    supporting both:
+    1. Explicit auth_tokens parameter (for MCPO proxy path where headers
+       are not forwarded)
+    2. Authorization header from request context (for direct MCP calls)
+    
+    Priority:
+    1. If auth_tokens provided -> extract primary group from first valid token
+    2. Otherwise -> fall back to get_write_group_from_context()
+    3. If auth is disabled (auth_service is None globally) -> return PUBLIC_GROUP
+    4. Default: None (anonymous users cannot write when auth is enabled)
+    
+    Args:
+        auth_tokens: Optional list of JWT tokens to extract write group from.
+                    Uses the primary (first) group from the first valid token.
+        auth_service: Optional AuthService for token validation.
+                     Falls back to global GroupService's auth_service.
+    
+    Returns:
+        Primary group ID the caller can write to, or None if anonymous
+        (when auth is enabled).
+    """
+    # If explicit tokens provided, extract write group from first valid token
+    if auth_tokens:
+        result = _extract_write_group_from_tokens(auth_tokens, auth_service)
+        # If extraction failed but auth is disabled, allow public writes
+        if result is None:
+            if auth_service is None:
+                try:
+                    service = get_group_service()
+                    if service.auth_service is None:
+                        return PUBLIC_GROUP
+                except RuntimeError:
+                    return PUBLIC_GROUP
+        return result
+    
+    # Otherwise, fall back to context-based extraction
+    result = get_write_group_from_context(auth_service)
+    
+    # If result is None and auth is globally disabled, allow writes to public group
+    if result is None:
+        # Check if auth is globally disabled
+        if auth_service is None:
+            try:
+                service = get_group_service()
+                if service.auth_service is None:
+                    # Auth is disabled, allow writes to public group
+                    return PUBLIC_GROUP
+            except RuntimeError:
+                # No global service yet, assume auth disabled
+                return PUBLIC_GROUP
+    
+    return result
+
+
+def _extract_write_group_from_tokens(
+    auth_tokens: list[str],
+    auth_service: AuthService | None = None,
+) -> str | None:
+    """Extract primary write group from the first valid JWT token.
+    
+    Args:
+        auth_tokens: List of JWT tokens (without "Bearer " prefix)
+        auth_service: Optional AuthService for token validation.
+        
+    Returns:
+        Primary group from the first valid token, or None.
+    """
+    # Get auth service if not provided
+    if auth_service is None:
+        try:
+            service = get_group_service()
+            auth_service = service.auth_service
+        except RuntimeError:
+            return None
+    
+    if auth_service is None:
+        return None
+    
+    # Try each token until we find a valid one
+    for token in auth_tokens:
+        # Strip "Bearer " prefix if present (be lenient)
+        if token.startswith("Bearer "):
+            token = token[7:]
+        
+        try:
+            # Use stateless verification
+            token_info = auth_service.verify_token(token, require_store=False)
+            if token_info and token_info.groups:
+                return token_info.groups[0]  # Primary group
+        except Exception:  # nosec B110 - Intentionally continue on invalid tokens
+            # Continue to next token
+            pass
+    
+    return None

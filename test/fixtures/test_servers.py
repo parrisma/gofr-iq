@@ -43,10 +43,28 @@ class ServerConfig:
     
     @property
     def is_running(self) -> bool:
-        """Check if the server process is running."""
-        if self.process is None:
+        """Check if the server is running (either our process or externally).
+        
+        First checks if we started the process ourselves, then checks
+        if an external server (started by run_tests.sh) is responding.
+        """
+        # Check if we started it
+        if self.process is not None and self.process.poll() is None:
+            return True
+        # Check if external server is running (e.g., started by run_tests.sh)
+        return self._check_external_server()
+    
+    def _check_external_server(self) -> bool:
+        """Check if server is running externally by making HTTP request."""
+        import socket
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(0.5)
+            result = sock.connect_ex((self.host, self.port))
+            sock.close()
+            return result == 0
+        except Exception:
             return False
-        return self.process.poll() is None
 
 
 class ServerManager:
@@ -74,10 +92,11 @@ class ServerManager:
         ...     response = requests.get(manager.web_url + "/health")
     """
     
-    # Default ports (can be overridden)
-    DEFAULT_MCP_PORT = 8160   # Test ports offset from prod (8060)
-    DEFAULT_MCPO_PORT = 8161
-    DEFAULT_WEB_PORT = 8162
+    # Default ports - aligned with run_tests.sh test configuration
+    # These differ from production (8080-8082) to avoid conflicts
+    DEFAULT_MCP_PORT = int(os.environ.get("GOFR_IQ_MCP_PORT", 8180))
+    DEFAULT_MCPO_PORT = int(os.environ.get("GOFR_IQ_MCPO_PORT", 8181))
+    DEFAULT_WEB_PORT = int(os.environ.get("GOFR_IQ_WEB_PORT", 8182))
     
     def __init__(
         self,
@@ -88,7 +107,7 @@ class ServerManager:
         mcpo_port: Optional[int] = None,
         web_port: Optional[int] = None,
         host: str = "127.0.0.1",
-        jwt_secret: str = "test-secret-key-for-testing",
+        jwt_secret: Optional[str] = None,
     ):
         """Initialize server manager.
         
@@ -100,7 +119,7 @@ class ServerManager:
             mcpo_port: MCPO server port. Defaults to 8161.
             web_port: Web API server port. Defaults to 8162.
             host: Host address to bind servers to. Defaults to 127.0.0.1.
-            jwt_secret: JWT secret for authentication.
+            jwt_secret: JWT secret for authentication. Defaults to env or test value.
         """
         # Determine project root
         if project_root is None:
@@ -114,7 +133,11 @@ class ServerManager:
         
         # Server configuration
         self.host = host
-        self.jwt_secret = jwt_secret
+        # Get JWT secret from env (matches run_tests.sh) or use fallback
+        self.jwt_secret = jwt_secret or os.environ.get(
+            "GOFR_IQ_JWT_SECRET", 
+            "test-secret-key-for-secure-testing-do-not-use-in-production"
+        )
         
         # Initialize server configs
         self._servers: dict[str, ServerConfig] = {
@@ -168,6 +191,7 @@ class ServerManager:
         return self._servers["web"].port
     
     @property
+
     def is_running(self) -> bool:
         """Check if any servers are running."""
         return any(s.is_running for s in self._servers.values())
@@ -185,12 +209,17 @@ class ServerManager:
             "GOFR_IQ_DATA": str(self.data_dir),
             "GOFR_IQ_LOGS": str(self.logs_dir),
             "GOFR_IQ_STORAGE": str(self.data_dir / "storage"),
-            "GOFR_IQ_TOKEN_STORE": str(self.logs_dir / "gofriq_tokens_test.json"),
             "GOFR_IQ_HOST": self.host,
             "GOFR_IQ_MCP_PORT": str(self.mcp_port),
             "GOFR_IQ_MCPO_PORT": str(self.mcpo_port),
             "GOFR_IQ_WEB_PORT": str(self.web_port),
             "GOFR_IQ_JWT_SECRET": self.jwt_secret,
+            # Auth backend - Vault for shared state with tests
+            "GOFR_AUTH_BACKEND": os.environ.get("GOFR_AUTH_BACKEND", "vault"),
+            "GOFR_VAULT_URL": os.environ.get("GOFR_VAULT_URL", "http://gofr-vault:8200"),
+            "GOFR_VAULT_TOKEN": os.environ.get("GOFR_VAULT_TOKEN", "gofr-dev-root-token"),
+            "GOFR_VAULT_PATH_PREFIX": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-iq-test"),
+            "GOFR_VAULT_MOUNT_POINT": os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),
         })
         return env
     

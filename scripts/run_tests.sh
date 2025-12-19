@@ -62,8 +62,25 @@ else
     echo -e "${YELLOW}Warning: Virtual environment not found at ${VENV_DIR}${NC}"
 fi
 
-# Source centralized environment configuration
+# =============================================================================
+# TEST CONFIGURATION (set BEFORE sourcing env to ensure test ports are used)
+# =============================================================================
 export GOFR_IQ_ENV="TEST"
+export GOFR_IQ_JWT_SECRET="test-secret-key-for-secure-testing-do-not-use-in-production"
+# Test ports - intentionally different from production (8080/8081/8082) to avoid conflicts
+# Set these BEFORE sourcing env file so they won't be overwritten
+export GOFR_IQ_MCP_PORT=8180
+export GOFR_IQ_WEB_PORT=8182
+export GOFR_IQ_MCPO_PORT=8181
+
+# Auth Backend Configuration - Vault for shared state between tests and servers
+export GOFR_AUTH_BACKEND="vault"
+export GOFR_VAULT_URL="http://gofr-vault:8200"
+export GOFR_VAULT_TOKEN="gofr-dev-root-token"
+export GOFR_VAULT_PATH_PREFIX="gofr-iq-test"
+export GOFR_VAULT_MOUNT_POINT="secret"
+
+# Source centralized environment configuration (won't override already-set vars)
 if [ -f "${SCRIPT_DIR}/gofr-iq.env" ]; then
     source "${SCRIPT_DIR}/gofr-iq.env"
 elif [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
@@ -80,14 +97,6 @@ else
     export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
 fi
 
-# Test configuration - use standardized GOFR_IQ_ prefix
-export GOFR_IQ_JWT_SECRET="test-secret-key-for-secure-testing-do-not-use-in-production"
-export GOFR_IQ_TOKEN_STORE="${GOFR_IQ_TOKEN_STORE:-${LOG_DIR}/${PROJECT_NAME}_tokens_test.json}"
-# Test ports are intentionally different from production (8080/8081/8082) to avoid conflicts
-export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT:-8180}"
-export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT:-8182}"
-export GOFR_IQ_MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8181}"
-
 # Infrastructure (ChromaDB, Neo4j) - for tests connecting to external services
 # Use container names on gofr-net network (not localhost, since we're in a container)
 export GOFR_IQ_CHROMA_HOST="${GOFR_IQ_CHROMA_HOST:-gofr-iq-chromadb}"
@@ -98,7 +107,6 @@ export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
 
 # Legacy variable mapping for backward compatibility
 export GOFR_IQ_JWT_SECRET="${GOFR_IQ_JWT_SECRET}"
-export GOFR_IQ_TOKEN_STORE="${GOFR_IQ_TOKEN_STORE}"
 export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT}"
 export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT}"
 
@@ -115,8 +123,10 @@ print_header() {
     echo "Project root: ${PROJECT_ROOT}"
     echo "Environment: ${GOFR_IQ_ENV}"
     echo "JWT Secret: ${GOFR_IQ_JWT_SECRET:0:20}..."
-    echo "Token store: ${GOFR_IQ_TOKEN_STORE}"
+    echo "Auth Backend: ${GOFR_AUTH_BACKEND}"
+    echo "Vault URL: ${GOFR_VAULT_URL}"
     echo "MCP Port: ${GOFR_IQ_MCP_PORT}"
+    echo "MCPO Port: ${GOFR_IQ_MCPO_PORT}"
     echo "Web Port: ${GOFR_IQ_WEB_PORT}"
     echo "ChromaDB: ${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}"
     echo "Neo4j: ${GOFR_IQ_NEO4J_HOST}:${GOFR_IQ_NEO4J_BOLT_PORT}"
@@ -151,13 +161,43 @@ free_port() {
 
 stop_servers() {
     echo "Stopping server processes..."
-    pkill -9 -f "python.*main_mcp" 2>/dev/null || true
-    pkill -9 -f "python.*main_web" 2>/dev/null || true
-    pkill -9 -f "mcpo" 2>/dev/null || true
-    sleep 2
     
-    if ps aux | grep -E "python.*(main_mcp|main_web)|mcpo" | grep -v grep >/dev/null 2>&1; then
-        echo -e "${RED}WARNING: Some server processes still running${NC}"
+    # Use specific patterns with full path to avoid killing unrelated processes
+    # This prevents accidentally killing the terminal or VS Code processes
+    local pids=""
+    
+    # Find PIDs for our specific server processes
+    pids=$(pgrep -f "app/main_mcp\.py" 2>/dev/null || true)
+    if [ -n "$pids" ]; then
+        echo "Stopping MCP server (PIDs: $pids)"
+        echo "$pids" | xargs -r kill -9 2>/dev/null || true
+    fi
+    
+    pids=$(pgrep -f "app/main_web\.py" 2>/dev/null || true)
+    if [ -n "$pids" ]; then
+        echo "Stopping Web server (PIDs: $pids)"
+        echo "$pids" | xargs -r kill -9 2>/dev/null || true
+    fi
+    
+    pids=$(pgrep -f "app/main_mcpo\.py" 2>/dev/null || true)
+    if [ -n "$pids" ]; then
+        echo "Stopping MCPO server (PIDs: $pids)"
+        echo "$pids" | xargs -r kill -9 2>/dev/null || true
+    fi
+    
+    # Also stop mcpo wrapper if running
+    pids=$(pgrep -f "mcpo.*--port.*${GOFR_IQ_MCPO_PORT}" 2>/dev/null || true)
+    if [ -n "$pids" ]; then
+        echo "Stopping MCPO wrapper (PIDs: $pids)"
+        echo "$pids" | xargs -r kill -9 2>/dev/null || true
+    fi
+    
+    sleep 1
+    
+    # Verify cleanup
+    if pgrep -f "app/main_(mcp|web|mcpo)\.py" >/dev/null 2>&1; then
+        echo -e "${YELLOW}WARNING: Some server processes may still be running${NC}"
+        pgrep -af "app/main_(mcp|web|mcpo)\.py" 2>/dev/null || true
         return 1
     fi
     echo "All server processes stopped"
@@ -197,6 +237,50 @@ start_chromadb() {
     echo -e " ${RED}✗${NC}"
     echo -e "${RED}ChromaDB failed to start${NC}"
     docker logs gofr-iq-chromadb 2>&1 | tail -20 || true
+    return 1
+}
+
+start_vault() {
+    echo -e "${YELLOW}Starting Vault container...${NC}"
+    
+    # Check if container already running
+    if docker ps --format '{{.Names}}' | grep -q "^gofr-vault$"; then
+        echo -e "${GREEN}Vault container already running${NC}"
+        return 0
+    fi
+    
+    # Use gofr-common vault run script
+    local vault_script="${PROJECT_ROOT}/lib/gofr-common/docker/infra/vault/run.sh"
+    if [ -f "$vault_script" ]; then
+        bash "$vault_script" --test
+    else
+        # Fallback: start directly
+        docker run -d \
+            --name gofr-vault \
+            --hostname gofr-vault \
+            --network gofr-net \
+            -p 8201:8200 \
+            -e VAULT_DEV_ROOT_TOKEN_ID="${GOFR_VAULT_TOKEN}" \
+            -e VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200 \
+            hashicorp/vault:latest server -dev >/dev/null 2>&1 || {
+            echo -e "${RED}Failed to start Vault container${NC}"
+            return 1
+        }
+    fi
+    
+    # Wait for Vault to be ready
+    echo -n "Waiting for Vault"
+    for i in {1..30}; do
+        if docker exec gofr-vault vault status >/dev/null 2>&1; then
+            echo -e " ${GREEN}✓${NC}"
+            return 0
+        fi
+        echo -n "."
+        sleep 1
+    done
+    echo -e " ${RED}✗${NC}"
+    echo -e "${RED}Vault failed to start${NC}"
+    docker logs gofr-vault 2>&1 | tail -20 || true
     return 1
 }
 
@@ -241,6 +325,12 @@ start_neo4j() {
 stop_infrastructure() {
     echo -e "${YELLOW}Stopping infrastructure containers...${NC}"
     
+    # Stop Vault if running
+    if docker ps --format '{{.Names}}' | grep -q "^gofr-vault$"; then
+        docker stop gofr-vault >/dev/null 2>&1 || true
+        docker rm gofr-vault >/dev/null 2>&1 || true
+    fi
+    
     # Stop ChromaDB if running
     if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-chromadb$"; then
         docker stop gofr-iq-chromadb >/dev/null 2>&1 || true
@@ -261,10 +351,6 @@ cleanup_environment() {
     stop_servers || true
     stop_infrastructure || true
     
-    # Empty token store
-    echo "{}" > "${GOFR_IQ_TOKEN_STORE}" 2>/dev/null || true
-    echo "Token store emptied: ${GOFR_IQ_TOKEN_STORE}"
-    
     echo -e "${GREEN}Cleanup complete${NC}"
 }
 
@@ -275,10 +361,11 @@ start_mcp_server() {
     free_port "${GOFR_IQ_MCP_PORT}"
     rm -f "${log_file}"
 
+    # Auth backend configured via GOFR_AUTH_BACKEND env var (Vault)
     nohup uv run python app/main_mcp.py \
         --port "${GOFR_IQ_MCP_PORT}" \
         --jwt-secret "${GOFR_IQ_JWT_SECRET}" \
-        --token-store "${GOFR_IQ_TOKEN_STORE}" \
+        --log-level INFO \
         > "${log_file}" 2>&1 &
     MCP_PID=$!
     echo "MCP PID: ${MCP_PID}"
@@ -309,10 +396,10 @@ start_web_server() {
     free_port "${GOFR_IQ_WEB_PORT}"
     rm -f "${log_file}"
 
+    # Auth backend configured via GOFR_AUTH_BACKEND env var (Vault)
     nohup uv run python app/main_web.py \
         --port "${GOFR_IQ_WEB_PORT}" \
         --jwt-secret "${GOFR_IQ_JWT_SECRET}" \
-        --token-store "${GOFR_IQ_TOKEN_STORE}" \
         > "${log_file}" 2>&1 &
     WEB_PID=$!
     echo "Web PID: ${WEB_PID}"
@@ -333,6 +420,49 @@ start_web_server() {
     done
     echo -e " ${RED}✗${NC}"
     tail -20 "${log_file}"
+    return 1
+}
+
+start_mcpo_server() {
+    local log_file="${LOG_DIR}/${PROJECT_NAME}_mcpo_test.log"
+    echo -e "${YELLOW}Starting MCPO server on port ${GOFR_IQ_MCPO_PORT}...${NC}"
+    
+    free_port "${GOFR_IQ_MCPO_PORT}"
+    rm -f "${log_file}"
+
+    # MCPO wraps the MCP server and exposes it as REST/OpenAPI
+    # Connect to the already-running MCP server via HTTP Streamable transport
+    # NEVER use stdio or SSE - only HTTP Streamable!
+    # Matches docker-compose.yml: mcpo --server-type streamable-http -- http://host:port/mcp
+    # NOTE: No --api-key - MCPO is a transparent pass-through, MCP validates JWTs
+    local mcp_url="http://localhost:${GOFR_IQ_MCP_PORT}/mcp"
+    
+    nohup mcpo --host 0.0.0.0 --port "${GOFR_IQ_MCPO_PORT}" \
+        --server-type streamable-http \
+        -- "${mcp_url}" \
+        > "${log_file}" 2>&1 &
+    MCPO_PID=$!
+    echo "MCPO PID: ${MCPO_PID}"
+
+    echo -n "Waiting for MCPO server"
+    for _ in {1..30}; do
+        if ! kill -0 ${MCPO_PID} 2>/dev/null; then
+            echo -e " ${RED}✗${NC}"
+            echo "MCPO process died, checking logs:"
+            tail -30 "${log_file}"
+            return 1
+        fi
+        # Use /docs endpoint like docker healthcheck
+        if curl -s "http://localhost:${GOFR_IQ_MCPO_PORT}/docs" >/dev/null 2>&1; then
+            echo -e " ${GREEN}✓${NC}"
+            return 0
+        fi
+        echo -n "."
+        sleep 0.5
+    done
+    echo -e " ${RED}✗${NC}"
+    echo "MCPO server logs:"
+    tail -30 "${log_file}"
     return 1
 }
 
@@ -440,21 +570,23 @@ if [ "$CLEANUP_ONLY" = true ]; then
     exit 0
 fi
 
-# Clean up before starting
-cleanup_environment
-
-# Initialize token store
-if [ ! -f "${GOFR_IQ_TOKEN_STORE}" ]; then
-    echo "{}" > "${GOFR_IQ_TOKEN_STORE}"
+# Only run full cleanup for integration tests (skip for unit tests)
+if [ "$RUN_UNIT" = true ]; then
+    echo -e "${YELLOW}Unit test mode - skipping server cleanup${NC}"
+else
+    # Clean up before starting
+    cleanup_environment
 fi
 
 # Start servers if needed
 MCP_PID=""
 WEB_PID=""
+MCPO_PID=""
 if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
     echo -e "${GREEN}=== Starting Test Infrastructure ===${NC}"
     
-    # Start infrastructure containers
+    # Start infrastructure containers (Vault first - auth backend)
+    start_vault || { stop_servers; stop_infrastructure; exit 1; }
     start_chromadb || { stop_servers; stop_infrastructure; exit 1; }
     start_neo4j || { stop_servers; stop_infrastructure; exit 1; }
     echo ""
@@ -462,6 +594,7 @@ if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
     echo -e "${GREEN}=== Starting Test Servers ===${NC}"
     start_mcp_server || { stop_servers; stop_infrastructure; exit 1; }
     start_web_server || { stop_servers; stop_infrastructure; exit 1; }
+    start_mcpo_server || { stop_servers; stop_infrastructure; exit 1; }
     echo ""
 fi
 

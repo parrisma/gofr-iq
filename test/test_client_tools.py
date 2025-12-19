@@ -40,8 +40,8 @@ TEST_PUBLIC_GROUP = "public"
 def with_auth_context(group: str = TEST_GROUP):
     """Decorator to mock auth context for a test function."""
     def decorator(fn):
-        @patch('app.services.group_service.get_write_group_from_context')
-        @patch('app.services.group_service.get_permitted_groups_from_context')
+        @patch('app.tools.client_tools.resolve_write_group')
+        @patch('app.tools.client_tools.resolve_permitted_groups')
         def wrapper(mock_permitted, mock_write, *args, **kwargs):
             mock_write.return_value = group
             mock_permitted.return_value = [TEST_PUBLIC_GROUP, group]
@@ -130,7 +130,7 @@ class TestToolRegistration:
 class TestCreateClient:
     """Tests for create_client tool"""
 
-    @patch('app.tools.client_tools.get_write_group_from_context')
+    @patch('app.tools.client_tools.resolve_write_group')
     def test_create_client_success(
         self,
         mock_write_group: MagicMock,
@@ -180,7 +180,7 @@ class TestCreateClient:
         assert result["data"]["client_type"] == "HEDGE_FUND"
         assert result["data"]["group_guid"] == TEST_GROUP
 
-    @patch('app.tools.client_tools.get_write_group_from_context')
+    @patch('app.tools.client_tools.resolve_write_group')
     def test_create_client_with_profile(
         self,
         mock_write_group: MagicMock,
@@ -240,7 +240,7 @@ class TestCreateClient:
 class TestGetClientFeed:
     """Tests for get_client_feed tool"""
 
-    @patch('app.tools.client_tools.get_permitted_groups_from_context')
+    @patch('app.tools.client_tools.resolve_permitted_groups')
     def test_get_feed_success(
         self,
         mock_permitted_groups: MagicMock,
@@ -295,7 +295,7 @@ class TestGetClientFeed:
         assert len(result["data"]["articles"]) == 2
         assert result["data"]["articles"][0]["title"] == "Apple Beats Earnings"
 
-    @patch('app.tools.client_tools.get_permitted_groups_from_context')
+    @patch('app.tools.client_tools.resolve_permitted_groups')
     def test_get_feed_with_filters(
         self,
         mock_permitted_groups: MagicMock,
@@ -328,7 +328,7 @@ class TestGetClientFeed:
         assert result["data"]["filters_applied"]["min_impact_score"] == 70
         assert result["data"]["filters_applied"]["impact_tiers"] == ["PLATINUM", "GOLD"]
 
-    @patch('app.tools.client_tools.get_permitted_groups_from_context')
+    @patch('app.tools.client_tools.resolve_permitted_groups')
     def test_get_feed_client_not_found(
         self,
         mock_permitted_groups: MagicMock,

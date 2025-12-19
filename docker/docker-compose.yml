@@ -1,18 +1,23 @@
-# GOFR-IQ Docker Compose - Production Stack
+# GOFR-IQ Docker Compose - Complete Production Stack
 # 
+# OpenWebUI Integration:
+#   OpenWebUI connects to MCPO (port 8081) which exposes MCP tools as REST endpoints.
+#   Configure OpenWebUI to use: http://localhost:8081 (or http://gofr-iq-mcpo:8081 on same network)
+#
 # Usage:
-#   docker compose up -d                    # Start all services (MCP, MCPO, Web)
+#   docker compose up -d                    # Start all services
+#   docker compose ps                       # Check service status  
+#   docker compose logs -f mcpo             # Watch MCPO logs
 #   docker compose down                     # Stop all services
 #   docker compose down -v                  # Stop and remove volumes
 #
 # Services:
-#   - mcp: MCP Server (Core Logic)
-#   - mcpo: MCPO Server (OpenAPI Wrapper)
-#   - web: Web Server (FastAPI docs/admin)
-#
-# Infrastructure (ChromaDB, Neo4j) should be started separately via:
-#   ./docker/start-chromadb.sh
-#   ./docker/start-neo4j.sh
+#   - vault:    HashiCorp Vault (Auth backend) - port 8201
+#   - neo4j:    Graph Database - ports 7474, 7687
+#   - chromadb: Vector Database - port 8000
+#   - mcp:      MCP Server (Core Logic) - port 8080
+#   - mcpo:     MCPO Server (OpenAPI for OpenWebUI) - port 8081
+#   - web:      Web Server (Health Check Only) - port 8082
 
 name: gofr-iq
 
@@ -20,9 +25,34 @@ services:
   # ==========================================================================
   # INFRASTRUCTURE (Shared)
   # ==========================================================================
+  
+  # HashiCorp Vault - Auth Backend
+  vault:
+    image: hashicorp/vault:latest
+    container_name: gofr-vault
+    hostname: gofr-vault
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - "${GOFR_VAULT_PORT:-8201}:8200"
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+      - VAULT_ADDR=http://127.0.0.1:8200
+    command: server -dev
+    networks:
+      - gofr-net
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   neo4j:
     image: gofr-neo4j:latest
-    container_name: gofr-iq-neo4j
+    container_name: gofr-neo4j
     hostname: gofr-neo4j
     restart: unless-stopped
     ports:
@@ -48,8 +78,8 @@ services:
 
   chromadb:
     image: gofr-chroma:latest
-    container_name: gofr-iq-chromadb
-    hostname: gofr-chroma
+    container_name: gofr-chromadb
+    hostname: gofr-chromadb
     restart: unless-stopped
     ports:
       - "8000:8000"
@@ -74,23 +104,37 @@ services:
   mcp:
     image: gofr-iq-prod:latest
     container_name: gofr-iq-mcp
+    hostname: gofr-iq-mcp
     restart: unless-stopped
     user: gofr-iq
     working_dir: /home/gofr-iq
-    entrypoint: ["/home/gofr-iq/.venv/bin/python"]
-    # Use new MCP entry point with HTTP streamable transport
-    command: ["-m", "app.main_mcp", "--host", "0.0.0.0", "--port", "8080", "--no-auth"]
+    entrypoint: []
+    depends_on:
+      vault:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+      chromadb:
+        condition: service_healthy
+    command: >
+      /home/gofr-iq/.venv/bin/python -m app.main_mcp
+      --host 0.0.0.0 --port 8080 --no-auth
     environment:
       - GOFR_IQ_ENV=PROD
-      - GOFR_IQ_LOG_LEVEL=INFO
-      - GOFR_IQ_AUTH_ENABLED=false
-      - GOFR_IQ_AUTH_DISABLED=true
+      - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
+      - GOFR_IQ_AUTH_DISABLED=${GOFR_IQ_AUTH_DISABLED:-true}
+      # Auth Backend (Vault) - used for token storage even in no-auth mode
+      - GOFR_AUTH_BACKEND=vault
+      - GOFR_VAULT_URL=http://gofr-vault:8200
+      - GOFR_VAULT_TOKEN=${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}
+      - GOFR_VAULT_PATH_PREFIX=gofr-iq
+      - GOFR_VAULT_MOUNT_POINT=secret
       # Infrastructure connections
-      - GOFR_IQ_CHROMADB_HOST=gofr-iq-chromadb
+      - GOFR_IQ_CHROMADB_HOST=gofr-chromadb
       - GOFR_IQ_CHROMADB_PORT=8000
-      - GOFR_IQ_NEO4J_HOST=gofr-iq-neo4j
-      - GOFR_IQ_NEO4J_BOLT_PORT=7687
-      - GOFR_IQ_NEO4J_PASSWORD=${GOFR_IQ_NEO4J_PASSWORD:-testpassword}
+      - GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:7687
+      - GOFR_IQ_NEO4J_USER=neo4j
+      - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD:-gofr-neo4j-password}
       - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
     ports:
       - "${GOFR_IQ_MCP_PORT:-8080}:${GOFR_IQ_MCP_PORT:-8080}"
@@ -99,7 +143,7 @@ services:
     networks:
       - gofr-net
     healthcheck:
-      test: ["CMD-SHELL", "curl -s -o /dev/null http://localhost:8080/mcp || exit 1"]
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -111,66 +155,58 @@ services:
   mcpo:
     image: gofr-iq-prod:latest
     container_name: gofr-iq-mcpo
+    hostname: gofr-iq-mcpo
     restart: unless-stopped
     user: gofr-iq
     working_dir: /home/gofr-iq
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: []
     depends_on:
-      - mcp
-    command:
-      - "/home/gofr-iq/.venv/bin/mcpo --host 0.0.0.0 --port 8081 --server-type streamable-http -- http://gofr-iq-mcp:8080/mcp"
+      mcp:
+        condition: service_healthy
+    command: >
+      /home/gofr-iq/.venv/bin/mcpo
+      --host 0.0.0.0 --port 8081 --server-type streamable-http
+      -- http://gofr-iq-mcp:8080/mcp
     environment:
       - GOFR_IQ_ENV=PROD
-      - GOFR_IQ_AUTH_DISABLED=true
     ports:
-      - "${GOFR_IQ_MCPO_PORT:-8081}:${GOFR_IQ_MCPO_PORT:-8081}"
-    volumes:
-      - gofr-iq-data:/home/gofr-iq/data
+      - "${GOFR_IQ_MCPO_PORT:-8081}:8081"
     networks:
       - gofr-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/docs"]
-      interval: 10s
+      test: ["CMD-SHELL", "curl -sf http://localhost:8081/openapi.json || exit 1"]
+      interval: 15s
       timeout: 5s
       retries: 3
       start_period: 15s
 
   # ==========================================================================
-  # 3. Web Server (FastAPI docs/admin) - Phase 3 Placeholder
+  # 3. Web Server (Health Check Only)
   # ==========================================================================
   web:
     image: gofr-iq-prod:latest
     container_name: gofr-iq-web
+    hostname: gofr-iq-web
     restart: unless-stopped
     user: gofr-iq
     working_dir: /home/gofr-iq
-    entrypoint: ["/home/gofr-iq/.venv/bin/python"]
-    # TODO: Phase 3 - Implement web server entry point (app.main_web)
-    # For now, uses MCP server as a placeholder
-    command: ["-m", "app.main_mcp", "--host", "0.0.0.0", "--port", "8082", "--no-auth"]
+    entrypoint: []
+    command: >
+      /home/gofr-iq/.venv/bin/python -m app.main_web
+      --host 0.0.0.0 --port 8082
     environment:
       - GOFR_IQ_ENV=PROD
-      - GOFR_IQ_LOG_LEVEL=INFO
-      - GOFR_IQ_AUTH_ENABLED=false
-      - GOFR_IQ_AUTH_DISABLED=true
-      # Infrastructure connections
-      - GOFR_IQ_CHROMADB_HOST=gofr-iq-chromadb
-      - GOFR_IQ_CHROMADB_PORT=8000
-      - GOFR_IQ_NEO4J_HOST=gofr-iq-neo4j
-      - GOFR_IQ_NEO4J_BOLT_PORT=7687
-      - GOFR_IQ_NEO4J_PASSWORD=${GOFR_IQ_NEO4J_PASSWORD:-testpassword}
+      - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
     ports:
-      - "${GOFR_IQ_WEB_PORT:-8082}:${GOFR_IQ_WEB_PORT:-8082}"
-    volumes:
-      - gofr-iq-data:/home/gofr-iq/data
+      - "${GOFR_IQ_WEB_PORT:-8082}:8082"
     networks:
       - gofr-net
     healthcheck:
-      test: ["CMD-SHELL", "curl -s -o /dev/null http://localhost:8082/mcp || exit 1"]
-      interval: 10s
+      test: ["CMD-SHELL", "curl -sf http://localhost:8082/health || exit 1"]
+      interval: 15s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 10s
 
 # ==========================================================================
 # Networks
@@ -179,6 +215,8 @@ networks:
   gofr-net:
     name: gofr-net
     external: true
+    # Network is shared across dev container, infra scripts, and compose
+    # Create manually if needed: docker network create gofr-net
 
 # ==========================================================================
 # Volumes - Persistent

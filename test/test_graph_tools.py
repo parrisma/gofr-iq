@@ -373,7 +373,7 @@ class TestGetMarketContext:
 class TestGetInstrumentNews:
     """Tests for get_instrument_news tool"""
 
-    @patch('app.tools.graph_tools.get_permitted_groups_from_context')
+    @patch('app.tools.graph_tools.resolve_permitted_groups')
     def test_get_news_success(
         self,
         mock_permitted_groups: MagicMock,
@@ -428,7 +428,7 @@ class TestGetInstrumentNews:
         assert len(result["data"]["articles"]) == 1
         assert result["data"]["articles"][0]["title"] == "Apple Beats Earnings"
 
-    @patch('app.tools.graph_tools.get_permitted_groups_from_context')
+    @patch('app.tools.graph_tools.resolve_permitted_groups')
     def test_get_news_with_impact_filter(
         self,
         mock_permitted_groups: MagicMock,
@@ -467,7 +467,7 @@ class TestGetInstrumentNews:
         # Verify the query was called with the impact filter
         mock_session.run.assert_called_once()
 
-    @patch('app.tools.graph_tools.get_permitted_groups_from_context')
+    @patch('app.tools.graph_tools.resolve_permitted_groups')
     def test_get_news_instrument_not_found(
         self,
         mock_permitted_groups: MagicMock,

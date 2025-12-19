@@ -21,7 +21,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.document_store import DocumentNotFoundError, DocumentStore
-from app.services.group_service import get_permitted_groups_from_context
+from app.services.group_service import resolve_permitted_groups
 from app.services.query_service import QueryFilters, QueryService
 
 if TYPE_CHECKING:
@@ -41,9 +41,11 @@ def register_query_tools(
     @mcp.tool(
         name="get_document",
         description=(
-            "Retrieve a specific document by ID. "
-            "Use when you have a document_guid and need the full content. "
-            "Only returns documents from groups you have access to."
+            "Retrieve full document content by its GUID. "
+            "USE FOR: Getting full text after finding document_guid from another tool. "
+            "RETURNS: Full title, content, metadata, language, timestamps. "
+            "PREREQUISITE: You need a document_guid (from query_documents, get_client_feed, etc). "
+            "TIP: Provide date_hint (YYYY-MM-DD) if known for faster lookup."
         ),
     )
     def get_document(
@@ -59,6 +61,10 @@ def register_query_tools(
             pattern=r"^\d{4}-\d{2}-\d{2}$",
             description="Document creation date in YYYY-MM-DD format to speed up lookup (optional)",
             examples=["2025-12-08", "2025-01-15"],
+        )] = None,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
         )] = None,
     ) -> ToolResponse:
         """Get a document by GUID.
@@ -78,8 +84,8 @@ def register_query_tools(
             - metadata, timestamps, and other fields
         """
         try:
-            # Get permitted groups from authentication context
-            permitted_groups = get_permitted_groups_from_context()
+            # Get permitted groups from explicit tokens or context header
+            permitted_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
 
             # Parse date hint if provided
             date_obj: datetime | None = None
@@ -150,10 +156,11 @@ def register_query_tools(
         @mcp.tool(
             name="query_documents",
             description=(
-                "Search news articles by topic, company, or event. "
-                "Use for questions like 'What news about Apple?' or 'Recent M&A activity in APAC'. "
-                "Returns ranked results with relevance scores. "
-                "Only searches groups you have access to."
+                "Search news articles using natural language queries. "
+                "USE FOR: 'Apple earnings', 'China tech regulation', 'M&A in APAC'. "
+                "FILTERS: regions, sectors, companies (tickers), date range, impact level. "
+                "RETURNS: Ranked articles with relevance scores, snippets, source info. "
+                "DIFFERENT FROM get_instrument_news: This is topic search; that is ticker-specific."
             ),
         )
         def query_documents(
@@ -220,6 +227,10 @@ def register_query_tools(
                 default=True,
                 description="Include related entities from knowledge graph (default: True)",
             )] = True,
+            auth_tokens: Annotated[list[str] | None, Field(
+                default=None,
+                description="JWT tokens for authentication (pass via API when headers not available)",
+            )] = None,
         ) -> ToolResponse:
             """Search documents using natural language.
 
@@ -247,8 +258,8 @@ def register_query_tools(
                 execution_time_ms: Query time
             """
             try:
-                # Get permitted groups from authentication context
-                group_guids = get_permitted_groups_from_context()
+                # Get permitted groups from explicit tokens or context header
+                group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
 
                 # Parse dates if provided
                 date_from_obj: datetime | None = None

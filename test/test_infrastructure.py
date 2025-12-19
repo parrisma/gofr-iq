@@ -10,6 +10,7 @@ Phase 0 Steps:
     0.4 - conftest fixtures (future)
 """
 
+import os
 import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -384,10 +385,15 @@ class TestServerManager:
             logs_dir=tmp_path / "logs",
         )
         
-        # Test ports use offset from production (8160 vs 8060)
-        assert manager.mcp_port == 8160
-        assert manager.mcpo_port == 8161
-        assert manager.web_port == 8162
+        # Default ports come from environment or fallback to 8180-8182
+        # (run_tests.sh sets these, or defaults apply)
+        expected_mcp = int(os.environ.get("GOFR_IQ_MCP_PORT", 8180))
+        expected_mcpo = int(os.environ.get("GOFR_IQ_MCPO_PORT", 8181))
+        expected_web = int(os.environ.get("GOFR_IQ_WEB_PORT", 8182))
+        
+        assert manager.mcp_port == expected_mcp
+        assert manager.mcpo_port == expected_mcpo
+        assert manager.web_port == expected_web
     
     def test_server_manager_custom_ports(self, tmp_path: Path):
         """Test custom port configuration."""
@@ -439,12 +445,18 @@ class TestServerManager:
         assert "GOFR_IQ_MCP_PORT" in env
     
     def test_server_manager_status_when_stopped(self, tmp_path: Path):
-        """Test server status reporting when not running."""
+        """Test server status reporting when not running.
+        
+        Note: Uses non-default ports to avoid detecting external servers.
+        """
         from fixtures import ServerManager
         
         manager = ServerManager(
             project_root=tmp_path,
             data_dir=tmp_path / "data",
+            mcp_port=19160,
+            mcpo_port=19161,
+            web_port=19162,
         )
         
         status = manager.get_server_status()
@@ -458,12 +470,20 @@ class TestServerManager:
             assert info["pid"] is None
     
     def test_server_manager_is_running_when_stopped(self, tmp_path: Path):
-        """Test is_running property when stopped."""
+        """Test is_running property when stopped.
+        
+        Note: ServerManager now detects external servers (started by run_tests.sh),
+        so this test uses custom ports that shouldn't conflict.
+        """
         from fixtures import ServerManager
         
+        # Use unusual ports that won't be in use
         manager = ServerManager(
             project_root=tmp_path,
             data_dir=tmp_path / "data",
+            mcp_port=19160,
+            mcpo_port=19161,
+            web_port=19162,
         )
         
         assert manager.is_running is False
@@ -475,13 +495,16 @@ class TestServerManager:
         manager = ServerManager(
             project_root=tmp_path,
             data_dir=tmp_path / "data",
+            mcp_port=19160,
+            mcpo_port=19161,
+            web_port=19162,
         )
         
         repr_str = repr(manager)
         
         assert "ServerManager" in repr_str
         assert "stopped" in repr_str
-        assert "8160" in repr_str  # mcp port
+        assert "19160" in repr_str  # mcp port (custom)
     
     def test_server_config_dataclass(self):
         """Test ServerConfig dataclass."""
@@ -519,11 +542,15 @@ class TestConftestFixtures:
         assert len(sample_data["documents"]) == 10
     
     def test_server_manager_fixture(self, server_manager: "ServerManager") -> None:
-        """Test that server_manager fixture is available."""
+        """Test that server_manager fixture is available.
+        
+        Note: The is_running check depends on whether external servers are running.
+        When run via run_tests.sh, external servers may be active on the default ports.
+        """
         assert server_manager is not None
         assert hasattr(server_manager, "start_all")
         assert hasattr(server_manager, "stop_all")
-        assert server_manager.is_running is False
+        # Don't assert is_running=False since external servers may be running
     
     def test_data_store_isolation(
         self, data_store: "DataStore", tmp_path: Path

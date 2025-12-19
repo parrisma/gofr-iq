@@ -39,8 +39,10 @@ def register_health_tools(
     @mcp.tool(
         name="health_check",
         description=(
-            "Check the health of all infrastructure dependencies. "
-            "Returns status of Neo4j, ChromaDB, and LLM API connections."
+            "Check system health - use to diagnose connection issues. "
+            "CHECKS: Neo4j (graph DB), ChromaDB (vectors), LLM API. "
+            "RETURNS: Overall status (healthy/degraded/unhealthy) + per-service details. "
+            "USE WHEN: Errors occur, to verify infrastructure is operational."
         ),
     )
     def health_check() -> ToolResponse:

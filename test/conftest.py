@@ -8,6 +8,10 @@ Phase 0 Fixtures:
     - sample_data: Pre-generated sample data (groups, sources, documents)
     - server_manager: ServerManager for integration tests
     - test_env: Environment variables for test mode
+
+Auth Fixtures:
+    - vault_auth_service: AuthService with Vault backend (shared with servers)
+    - auth_service_isolated: AuthService with memory backend (isolated unit tests)
 """
 
 import os
@@ -40,7 +44,14 @@ def test_env() -> dict[str, str]:
     """
     return {
         "GOFR_IQ_ENV": "TEST",
-        "GOFR_IQ_JWT_SECRET": "test-secret-key-for-testing-do-not-use-in-prod",
+        # Match run_tests.sh JWT secret for MCPO API key auth
+        "GOFR_IQ_JWT_SECRET": "test-secret-key-for-secure-testing-do-not-use-in-production",
+        # Vault auth backend configuration
+        "GOFR_AUTH_BACKEND": "vault",
+        "GOFR_VAULT_URL": "http://gofr-vault:8200",
+        "GOFR_VAULT_TOKEN": "gofr-dev-root-token",
+        "GOFR_VAULT_PATH_PREFIX": "gofr-iq-test",
+        "GOFR_VAULT_MOUNT_POINT": "secret",
     }
 
 
@@ -65,6 +76,150 @@ def setup_test_environment(test_env: dict[str, str]) -> Generator[None, None, No
             os.environ.pop(key, None)
         else:
             os.environ[key] = value
+
+
+# =============================================================================
+# Auth Service Fixtures
+# =============================================================================
+
+
+# Common test group GUIDs - used across multiple test files
+TEST_GROUP_A_GUID = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+TEST_GROUP_B_GUID = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+TEST_GROUP_ALPHA = "11111111-1111-1111-1111-111111111111"
+TEST_GROUP_BETA = "22222222-2222-2222-2222-222222222222"
+TEST_GROUP_PUBLIC = "00000000-0000-0000-0000-000000000000"
+TEST_GROUP_LIFECYCLE = "11111111-1111-4111-8111-111111111111"
+
+
+def _ensure_group(auth_service, group_id: str, name: str) -> None:
+    """Create group if it doesn't exist."""
+    try:
+        auth_service.groups.create_group(group_id, name)
+    except Exception:
+        # Group may already exist - that's fine
+        pass
+
+
+@pytest.fixture(scope="session")
+def vault_auth_service():
+    """Create AuthService with Vault backend - shared across ALL tests.
+    
+    Uses the same Vault instance as running servers, so tokens
+    created here are valid when calling MCPO/MCP/Web endpoints.
+    
+    This fixture requires Vault to be running (started by run_tests.sh).
+    Pre-creates all common test groups to avoid InvalidGroupError.
+    
+    Returns:
+        AuthService configured with Vault backend.
+        
+    Raises:
+        pytest.skip: If GOFR_AUTH_BACKEND is not set to 'vault'.
+    """
+    from app.auth.factory import create_auth_service
+    
+    # Verify Vault backend is configured
+    backend = os.environ.get("GOFR_AUTH_BACKEND", "")
+    if backend != "vault":
+        pytest.skip(f"Vault backend required, got: {backend or 'not set'}")
+    
+    jwt_secret = os.environ.get(
+        "GOFR_IQ_JWT_SECRET",
+        "test-secret-key-for-secure-testing-do-not-use-in-production"
+    )
+    auth = create_auth_service(secret_key=jwt_secret)
+    
+    # Pre-create ALL common test groups used across test files
+    # Groups must exist before tokens can be created (auth v2 requirement)
+    _ensure_group(auth, TEST_GROUP_A_GUID, "Group A")
+    _ensure_group(auth, TEST_GROUP_B_GUID, "Group B")
+    _ensure_group(auth, TEST_GROUP_ALPHA, "Auth Test Alpha")
+    _ensure_group(auth, TEST_GROUP_BETA, "Auth Test Beta")
+    _ensure_group(auth, TEST_GROUP_LIFECYCLE, "Test Lifecycle Group")
+    # Note: "public" is auto-bootstrapped as reserved group
+    
+    # Groups used by test_group_access.py
+    _ensure_group(auth, "admin-group", "Admin access group")
+    _ensure_group(auth, "reader-group", "Read-only access group")
+    _ensure_group(auth, "writer-group", "Write access group")
+    _ensure_group(auth, "test-group", "Test group")
+    _ensure_group(auth, "emea-reader", "EMEA reader group")
+    _ensure_group(auth, "unknown-group", "Unknown group")
+    _ensure_group(auth, "any-group", "Any group")
+    
+    # Groups used by test_group_service.py
+    _ensure_group(auth, "primary-group", "Primary group")
+    _ensure_group(auth, "secondary-group", "Secondary group")
+    _ensure_group(auth, "only-group", "Only group")
+    _ensure_group(auth, "read-group", "Read group")
+    _ensure_group(auth, "write-group", "Write group")
+    _ensure_group(auth, "other-group", "Other group")
+    _ensure_group(auth, "my-group", "My group")
+    _ensure_group(auth, "group-a", "Group A")
+    _ensure_group(auth, "group-b", "Group B")
+    _ensure_group(auth, "group-c", "Group C")
+    _ensure_group(auth, "single-group", "Single group")
+    _ensure_group(auth, "private-group", "Private group")
+    _ensure_group(auth, "some-group", "Some group")
+    _ensure_group(auth, "group-x", "Group X")
+    _ensure_group(auth, "group-y", "Group Y")
+    _ensure_group(auth, "group-1", "Group 1")
+    _ensure_group(auth, "group-2", "Group 2")
+    _ensure_group(auth, "not-my-group", "Not my group")
+    
+    # Groups used by test_group_service_auth.py
+    _ensure_group(auth, "premium-group", "Premium group")
+    
+    return auth
+
+
+# Alias for backward compatibility - tests should use vault_auth_service
+@pytest.fixture(scope="session")
+def auth_service(vault_auth_service):
+    """Alias for vault_auth_service - ALL auth tests use Vault backend.
+    
+    This ensures consistent behavior: every test that uses auth_service
+    gets the Vault-backed AuthService, not an in-memory one.
+    """
+    return vault_auth_service
+
+
+# NOTE: auth_service_isolated removed - ALL auth tests must use Vault backend
+# This ensures tokens created in tests are valid when calling servers
+
+
+@pytest.fixture(scope="session")
+def vault_config() -> dict[str, str]:
+    """Provide Vault configuration from environment.
+    
+    Returns:
+        Dictionary with Vault connection details.
+    """
+    return {
+        "url": os.environ.get("GOFR_VAULT_URL", "http://gofr-vault:8200"),
+        "token": os.environ.get("GOFR_VAULT_TOKEN", "gofr-dev-root-token"),
+        "path_prefix": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-iq-test"),
+        "mount_point": os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),
+    }
+
+
+@pytest.fixture(scope="session")
+def vault_available(vault_config: dict[str, str]) -> bool:
+    """Check if Vault server is available.
+    
+    Returns:
+        True if Vault server is reachable, False otherwise.
+    """
+    try:
+        import hvac
+        client = hvac.Client(
+            url=vault_config["url"],
+            token=vault_config["token"],
+        )
+        return client.is_authenticated()
+    except Exception:
+        return False
 
 
 # =============================================================================
@@ -343,7 +498,7 @@ def graph_index(neo4j_config: dict[str, str | int]) -> Generator:
 
 
 @pytest.fixture(scope="session")
-def infra_available(chromadb_available: bool, neo4j_available: bool) -> dict[str, bool]:
+def infra_available(chromadb_available: bool, neo4j_available: bool, vault_available: bool) -> dict[str, bool]:
     """Check availability of all infrastructure components.
     
     Returns:
@@ -352,7 +507,8 @@ def infra_available(chromadb_available: bool, neo4j_available: bool) -> dict[str
     return {
         "chromadb": chromadb_available,
         "neo4j": neo4j_available,
-        "all": chromadb_available and neo4j_available,
+        "vault": vault_available,
+        "all": chromadb_available and neo4j_available and vault_available,
     }
 
 
@@ -382,5 +538,13 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
         "markers",
         "requires_infra: mark test as requiring all infrastructure (ChromaDB + Neo4j)",
+    )
+    config.addinivalue_line(
+        "markers",
+        "requires_vault: mark test as requiring Vault server",
+    )
+    config.addinivalue_line(
+        "markers",
+        "vault: mark test as Vault backend integration test",
     )
 

@@ -51,7 +51,7 @@ def main():
     mcp_port = int(os.environ.get("GOFR_IQ_MCP_PORT", str(DEFAULT_MCP_PORT)))
     mcpo_port = int(os.environ.get("GOFR_IQ_MCPO_PORT", str(DEFAULT_MCPO_PORT)))
 
-    auth_disabled = os.environ.get("GOFR_IQ_AUTH_DISABLED", "true").lower() in ("1", "true", "yes")
+    auth_disabled = os.environ.get("GOFR_IQ_AUTH_DISABLED", "false").lower() in ("1", "true", "yes")
     print(f"[MCPO] Starting on host=0.0.0.0 port={mcpo_port}")
     print(f"[MCPO] Connecting to MCP at http://{mcp_host}:{mcp_port}/mcp")
     print(f"[MCPO] Proxy available at http://localhost:{mcpo_port}")

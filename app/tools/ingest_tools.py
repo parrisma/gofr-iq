@@ -18,7 +18,7 @@ from pydantic import Field, ValidationError
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
-from app.services.group_service import get_write_group_from_context
+from app.services.group_service import resolve_write_group
 from app.services.ingest_service import (
     IngestError,
     IngestService,
@@ -39,10 +39,11 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
     @mcp.tool(
         name="ingest_document",
         description=(
-            "Add a news article to the repository. "
-            "Use when you have news content to store. "
-            "Automatically detects language and checks for duplicates. "
-            "Requires authentication - documents are stored in your token's group."
+            "Store a news article in the repository. "
+            "PREREQUISITES: Call list_sources first to get a valid source_guid. "
+            "REQUIRES AUTH: Must have a valid token. "
+            "AUTO-DETECTS: Language (en/zh/ja) and duplicates. "
+            "RETURNS: document_guid, status (success/duplicate), language, word_count."
         ),
     )
     def ingest_document(
@@ -73,6 +74,10 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             default=None,
             description="Optional extra attributes as key-value pairs",
         )] = None,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
     ) -> ToolResponse:
         """Ingest a news document.
 
@@ -97,9 +102,9 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             group_guid: Group name/identifier (string like 'reuters-feed')
         """
         try:
-            # Get write group from authentication context
+            # Get write group from explicit tokens or context header
             # Anonymous users cannot write - they get None
-            group_guid = get_write_group_from_context()
+            group_guid = resolve_write_group(auth_tokens=auth_tokens)
             
             if group_guid is None:
                 return error_response(

@@ -140,12 +140,12 @@ DO NOT extract:
 - Companies mentioned only in passing or for comparison
 
 Example - Article: "Tesla cuts prices in China amid competition from BYD and NIO"
-- ✅ Extract: TSLA (primary subject, took action)
-- ❌ Do NOT extract: BYD, NIO (mentioned as competitors, no specific news about them)
+- Extract: TSLA (primary subject, took action)
+- Do NOT extract: BYD, NIO (mentioned as competitors, no specific news about them)
 
 Example - Article: "Apple beats earnings, iPhone outsells Samsung Galaxy"
-- ✅ Extract: AAPL (primary subject with earnings)
-- ❌ Do NOT extract: SSNLF (mentioned for comparison only)
+- Extract: AAPL (primary subject with earnings)
+- Do NOT extract: SSNLF (mentioned for comparison only)
 
 ## Instrument Direction
 

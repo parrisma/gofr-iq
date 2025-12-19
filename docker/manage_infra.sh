@@ -1,6 +1,6 @@
 #!/bin/bash
 # GOFR-IQ Infrastructure Management
-# Start/stop/restart all infrastructure containers (ChromaDB, Neo4j)
+# Start/stop/restart all infrastructure containers (Vault, ChromaDB, Neo4j)
 # Includes automatic rolling backup management
 #
 # Usage: 
@@ -8,11 +8,12 @@
 #   ./manage_infra.sh stop [--test]      # Stop infrastructure
 #   ./manage_infra.sh restart [--test]   # Restart infrastructure
 #   ./manage_infra.sh status             # Show status of all containers
-#   ./manage_infra.sh logs [service]     # Show logs (chromadb, neo4j, or all)
+#   ./manage_infra.sh logs [service]     # Show logs (vault, chromadb, neo4j, or all)
 #   ./manage_infra.sh clean              # Stop and remove all volumes
 #   ./manage_infra.sh backup             # Run backup for all services
 #   ./manage_infra.sh backup-list        # List available backups
 #   ./manage_infra.sh restore <service> <file>  # Restore from backup
+#   ./manage_infra.sh vault [--test]     # Start only Vault container
 
 set -e
 
@@ -119,6 +120,9 @@ do_start() {
         ensure_network "gofr-net"
     fi
     
+    # Start Vault first (auth backend)
+    do_vault_start
+    
     # Build images if needed
     log_info "Building images..."
     docker compose -f "$COMPOSE_FILE" build
@@ -152,7 +156,35 @@ do_stop() {
     log_info "Stopping services..."
     docker compose -f "$COMPOSE_FILE" down
     
+    # Stop Vault
+    do_vault_stop
+    
     log_success "Infrastructure stopped"
+}
+
+do_vault_start() {
+    local vault_mode="--test"
+    if [ "$TEST_MODE" = false ]; then
+        vault_mode=""
+    fi
+    
+    log_info "Starting Vault..."
+    # Use gofr-common vault scripts
+    local vault_script="$SCRIPT_DIR/../lib/gofr-common/docker/infra/vault/run.sh"
+    if [ -f "$vault_script" ]; then
+        bash "$vault_script" $vault_mode
+    else
+        log_warn "Vault run script not found at $vault_script, skipping..."
+    fi
+}
+
+do_vault_stop() {
+    log_info "Stopping Vault..."
+    # Use gofr-common vault scripts
+    local vault_script="$SCRIPT_DIR/../lib/gofr-common/docker/infra/vault/stop.sh"
+    if [ -f "$vault_script" ]; then
+        bash "$vault_script" --rm 2>/dev/null || true
+    fi
 }
 
 do_restart() {
@@ -168,9 +200,9 @@ do_status() {
     
     # Show containers
     if [ "$TEST_MODE" = true ]; then
-        docker ps -a --filter "name=gofr-iq-.*-test" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+        docker ps -a --filter "name=gofr-iq-.*-test" --filter "name=gofr-vault" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
     else
-        docker ps -a --filter "name=gofr-iq-chromadb" --filter "name=gofr-iq-neo4j" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -v "\-test"
+        docker ps -a --filter "name=gofr-iq-chromadb" --filter "name=gofr-iq-neo4j" --filter "name=gofr-vault" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -v "\-test"
     fi
     
     echo ""
@@ -286,11 +318,17 @@ case "$ACTION" in
     restore)
         do_restore "$SERVICE" "$2"
         ;;
+    vault)
+        do_vault_start
+        ;;
+    vault-stop)
+        do_vault_stop
+        ;;
     *)
-        echo "Usage: $0 {start|stop|restart|status|logs|clean|backup|backup-list|restore} [--test]"
+        echo "Usage: $0 {start|stop|restart|status|logs|clean|backup|backup-list|restore|vault|vault-stop} [--test]"
         echo ""
         echo "Commands:"
-        echo "  start        Start infrastructure containers"
+        echo "  start        Start infrastructure containers (Vault, ChromaDB, Neo4j)"
         echo "  stop         Stop infrastructure containers"
         echo "  restart      Restart infrastructure containers"
         echo "  status       Show status of containers"
@@ -299,6 +337,8 @@ case "$ACTION" in
         echo "  backup       Run backup for all services (or specify: neo4j, chromadb)"
         echo "  backup-list  List available backups"
         echo "  restore      Restore from backup: restore <neo4j|chromadb> <file>"
+        echo "  vault        Start only Vault container"
+        echo "  vault-stop   Stop only Vault container"
         echo ""
         echo "Options:"
         echo "  --test    Use ephemeral test containers (no backups)"

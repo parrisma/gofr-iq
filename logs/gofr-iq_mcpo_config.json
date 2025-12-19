@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+        "gofr-iq": {
+            "type": "streamable-http",
+            "url": "http://localhost:8180/mcp"
+        }
+    }
+}

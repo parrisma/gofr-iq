@@ -1,7 +1,7 @@
 """Tests for Group Access Control - Phase 4.
 
 Tests for JWT token group extraction, membership validation,
-and permission checking.
+and permission checking. Updated for auth v2 multi-group tokens.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from app.auth import (
     GroupNotFoundError,
     TokenValidationError,
 )
+from gofr_common.auth.exceptions import TokenError, TokenExpiredError
 from app.models import Permission
 
 
@@ -27,15 +28,8 @@ from app.models import Permission
 # Test Fixtures
 # =============================================================================
 
-
-@pytest.fixture
-def auth_service() -> AuthService:
-    """Create an in-memory auth service for testing."""
-    return AuthService(
-        secret_key="test-secret-key-for-unit-tests",
-        token_store_path=":memory:",
-        env_prefix="GOFR_IQ_TEST",
-    )
+# NOTE: auth_service fixture is provided by conftest.py using Vault backend
+# All groups are pre-created in vault_auth_service fixture
 
 
 @pytest.fixture
@@ -78,7 +72,7 @@ class TestExtractGroupsFromToken:
     ) -> None:
         """Test extracting groups from a valid token."""
         # Create a token for a group
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
 
         claims = access_service.extract_groups_from_token(token)
 
@@ -92,21 +86,21 @@ class TestExtractGroupsFromToken:
     def test_extract_groups_from_invalid_token(
         self, access_service: GroupAccessService
     ) -> None:
-        """Test that invalid tokens raise TokenValidationError."""
-        with pytest.raises(TokenValidationError):
+        """Test that invalid tokens raise TokenError."""
+        with pytest.raises(TokenError):
             access_service.extract_groups_from_token("invalid-token")
 
     def test_extract_groups_from_expired_token(
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
-        """Test that expired tokens raise TokenValidationError."""
+        """Test that expired tokens raise TokenExpiredError."""
         # Create a token that's already expired
         token = auth_service.create_token(
-            group="admin-group",
+            groups=["admin-group"],
             expires_in_seconds=-1,  # Already expired
         )
 
-        with pytest.raises(TokenValidationError) as exc_info:
+        with pytest.raises(TokenExpiredError) as exc_info:
             access_service.extract_groups_from_token(token)
 
         assert "expired" in str(exc_info.value).lower()
@@ -115,7 +109,7 @@ class TestExtractGroupsFromToken:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test GroupClaims.has_group method."""
-        token = auth_service.create_token(group="test-group")
+        token = auth_service.create_token(groups=["test-group"])
         claims = access_service.extract_groups_from_token(token)
 
         assert claims.has_group("test-group") is True
@@ -134,7 +128,7 @@ class TestValidateGroupMembership:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test validating membership in a group the token has access to."""
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         claims = access_service.validate_group_membership(token, group_guid=group_guid)
@@ -146,7 +140,7 @@ class TestValidateGroupMembership:
     ) -> None:
         """Test that membership validation fails for inaccessible groups."""
         # Create token for a group that has no access to EMEA
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
         emea_group = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
 
         # admin-group is not in EMEA's tokens, so should fail
@@ -159,7 +153,7 @@ class TestValidateGroupMembership:
         self, access_service: GroupAccessService
     ) -> None:
         """Test membership validation with invalid token."""
-        with pytest.raises(TokenValidationError):
+        with pytest.raises(TokenError):
             access_service.validate_group_membership(
                 "invalid", group_guid="any-group"
             )
@@ -177,7 +171,7 @@ class TestPermissionCheck:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test checking read permission."""
-        token = auth_service.create_token(group="reader-group")
+        token = auth_service.create_token(groups=["reader-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         claims = access_service.check_permission(
@@ -190,7 +184,7 @@ class TestPermissionCheck:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test that write permission is denied for read-only token."""
-        token = auth_service.create_token(group="reader-group")
+        token = auth_service.create_token(groups=["reader-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         with pytest.raises(AccessDeniedError) as exc_info:
@@ -204,7 +198,7 @@ class TestPermissionCheck:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test checking all permissions for admin token."""
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         # Admin should have all permissions
@@ -218,7 +212,7 @@ class TestPermissionCheck:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test permission check for non-existent group."""
-        token = auth_service.create_token(group="unknown-group")
+        token = auth_service.create_token(groups=["unknown-group"])
 
         with pytest.raises(AccessDeniedError):
             # Token doesn't have access to this group
@@ -232,7 +226,7 @@ class TestPermissionCheck:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test checking READ access level."""
-        token = auth_service.create_token(group="reader-group")
+        token = auth_service.create_token(groups=["reader-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         claims = access_service.check_access_level(
@@ -246,7 +240,7 @@ class TestPermissionCheck:
     ) -> None:
         """Test that WRITE access level requires multiple permissions."""
         # Reader only has READ permission
-        token = auth_service.create_token(group="reader-group")
+        token = auth_service.create_token(groups=["reader-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         with pytest.raises(AccessDeniedError) as exc_info:
@@ -260,7 +254,7 @@ class TestPermissionCheck:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test WRITE access level with proper permissions."""
-        token = auth_service.create_token(group="writer-group")
+        token = auth_service.create_token(groups=["writer-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         claims = access_service.check_access_level(
@@ -273,7 +267,7 @@ class TestPermissionCheck:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test ADMIN access level."""
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         claims = access_service.check_access_level(
@@ -296,7 +290,7 @@ class TestDocumentAccessByGroup:
     ) -> None:
         """Test accessing a document requires group membership."""
         # User with access to group A
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
         group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         # Should succeed for group A
@@ -308,7 +302,7 @@ class TestDocumentAccessByGroup:
     ) -> None:
         """Test that document access is denied for wrong group."""
         # User with access to admin-group
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
         group_b = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
 
         # Should fail for group B (token is for admin-group, not emea-reader)
@@ -319,7 +313,7 @@ class TestDocumentAccessByGroup:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test getting list of accessible groups for a token."""
-        token = auth_service.create_token(group="admin-group")
+        token = auth_service.create_token(groups=["admin-group"])
 
         groups = access_service.get_accessible_groups(token)
 
@@ -330,7 +324,7 @@ class TestDocumentAccessByGroup:
         self, auth_service: AuthService, access_service: GroupAccessService
     ) -> None:
         """Test read permission check for document access."""
-        token = auth_service.create_token(group="reader-group")
+        token = auth_service.create_token(groups=["reader-group"])
         group_guid = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 
         # Reader should be able to read
@@ -351,7 +345,7 @@ class TestDocumentAccessByGroup:
         """Test that without group_store, all permissions are granted."""
         # Service without group store (admin/testing mode)
         service = GroupAccessService(auth_service=auth_service)
-        token = auth_service.create_token(group="any-group")
+        token = auth_service.create_token(groups=["any-group"])
 
         # Should succeed without group store restrictions
         claims = service.check_permission(
@@ -393,7 +387,7 @@ class TestEdgeCases:
         """Test GroupNotFoundError attributes."""
         error = GroupNotFoundError("test-guid")
 
-        assert error.group_guid == "test-guid"
+        # gofr_common's GroupNotFoundError is a simple exception
         assert "test-guid" in str(error)
 
     def test_access_level_required_permissions(self) -> None:

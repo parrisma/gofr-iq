@@ -28,13 +28,14 @@ import logging
 import os
 import secrets
 import sys
-from pathlib import Path
 
 import uvicorn
 
+from app.auth.factory import create_auth_service
 from app.config import get_settings
 from app.logger import ConsoleLogger
 from app.mcp_server.mcp_server import create_mcp_server
+from app.services.group_service import init_group_service
 
 logger = ConsoleLogger(name="main_mcp", level=logging.INFO)
 
@@ -58,8 +59,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--auth-disabled",
         action="store_true",
-        default=os.environ.get("GOFR_IQ_AUTH_DISABLED", "true").lower() in ("1", "true", "yes"),
-        help="Disable authentication (default: true, can be overridden by GOFR_IQ_AUTH_DISABLED)",
+        default=os.environ.get("GOFR_IQ_AUTH_DISABLED", "false").lower() in ("1", "true", "yes"),
+        help="Disable authentication (default: false, auth enabled by default)",
     )
     parser.add_argument(
         "--storage-dir",
@@ -73,12 +74,7 @@ if __name__ == "__main__":
         default=None,
         help="JWT secret key (default: from GOFR_IQ_JWT_SECRET env var)",
     )
-    parser.add_argument(
-        "--token-store",
-        type=str,
-        default=None,
-        help="Path to token store file (default: {data_dir}/auth/tokens.json)",
-    )
+    # NOTE: --token-store removed - backend configured via GOFR_AUTH_BACKEND env var
     parser.add_argument(
         "--no-auth",
         action="store_true",
@@ -105,13 +101,15 @@ if __name__ == "__main__":
     try:
         # Resolve authentication configuration
         jwt_secret = args.jwt_secret or os.getenv("GOFR_IQ_JWT_SECRET")
-        token_store_path = args.token_store or os.getenv("GOFR_IQ_TOKEN_STORE")
         
         # Determine auth requirement
-        # Check command line first, then environment variable
-        if args.no_auth:
+        # Check command line flags first (--no-auth or --auth-disabled), then environment variable
+        if args.no_auth or args.auth_disabled:
             require_auth = False
-            startup_logger.warning("Authentication disabled via --no-auth flag")
+            if args.no_auth:
+                startup_logger.warning("Authentication disabled via --no-auth flag")
+            else:
+                startup_logger.warning("Authentication disabled via --auth-disabled flag or GOFR_IQ_AUTH_DISABLED env")
         else:
             # Check environment variable
             auth_enabled = os.environ.get("GOFR_IQ_AUTH_ENABLED", "true").lower()
@@ -141,10 +139,29 @@ if __name__ == "__main__":
         storage_dir = args.storage_dir or settings.storage.storage_dir
 
         # Use resolved auth configuration
+        auth_service = None
         if require_auth:
+            # jwt_secret is guaranteed non-None here (validated above)
+            assert jwt_secret is not None, "JWT secret required when auth is enabled"
             settings.auth.jwt_secret = jwt_secret
-            settings.auth.token_store_path = Path(token_store_path) if token_store_path else None
             settings.auth.require_auth = True
+            
+            # Create AuthService using factory (backend from GOFR_AUTH_BACKEND env)
+            auth_service = create_auth_service(secret_key=jwt_secret)
+            backend = os.getenv("GOFR_AUTH_BACKEND", "memory")
+            startup_logger.info(
+                "AuthService initialized",
+                backend=backend,
+                secret_fingerprint=auth_service.get_secret_fingerprint(),
+            )
+        
+        # Initialize GroupService with AuthService for JWT-based group extraction
+        # This enables get_permitted_groups_from_context() in MCP tools
+        init_group_service(auth_service=auth_service)
+        startup_logger.info(
+            "GroupService initialized",
+            auth_enabled=auth_service is not None,
+        )
 
         startup_logger.info(
             "Starting GOFR-IQ MCP Server",
@@ -171,14 +188,31 @@ if __name__ == "__main__":
         print("Press Ctrl+C to stop")
         print()
 
-        # Get the streamable HTTP handler from FastMCP
-        mcp_handler = mcp.streamable_http_app()
+        # Get the Starlette app from FastMCP
+        # This app includes the proper lifespan context for MCP sessions
+        from gofr_common.web import AuthHeaderMiddleware
+        from starlette.responses import JSONResponse
+        from starlette.routing import Route
         
-        # For now, use the handler directly without Starlette wrapping
-        # TODO: Re-enable auth middleware for group extraction
-        app = mcp_handler
+        app = mcp.streamable_http_app()
+        
+        # Add a simple /health endpoint for healthchecks
+        # (MCP streamable HTTP is session-based, can't healthcheck /mcp directly)
+        async def health_endpoint(request):
+            return JSONResponse({"status": "ok", "service": "gofr-iq-mcp"})
+        
+        app.routes.append(Route("/health", health_endpoint, methods=["GET"]))
+        
+        # Add AuthHeaderMiddleware to extract JWT from headers
+        # This stores the Authorization header in a ContextVar for use by
+        # get_permitted_groups_from_context() in MCP tools
+        app.add_middleware(AuthHeaderMiddleware)
+        
+        startup_logger.info(
+            "AuthHeaderMiddleware enabled for group-based access control"
+        )
 
-        # Run with uvicorn directly instead of FastMCP.run()
+        # Run with uvicorn directly (FastMCP.run() doesn't allow adding middleware)
         uvicorn.run(
             app,
             host=host,

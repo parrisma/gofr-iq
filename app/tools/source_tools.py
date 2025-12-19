@@ -20,8 +20,8 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.group_service import (
-    get_permitted_groups_from_context,
-    get_write_group_from_context,
+    resolve_permitted_groups,
+    resolve_write_group,
 )
 from app.services.source_registry import SourceNotFoundError, SourceRegistry
 
@@ -38,10 +38,11 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
     @mcp.tool(
         name="list_sources",
         description=(
-            "List available news sources. "
-            "Use to find source_guids before ingesting documents, "
-            "or to discover sources by region/type. "
-            "Only returns sources from groups you have access to."
+            "List available news sources (Reuters, Bloomberg, etc). "
+            "USE BEFORE: ingest_document - you need a source_guid. "
+            "FILTER BY: region (APAC, US, EU), type (news_agency, broker, analyst). "
+            "RETURNS: source_guid, name, type, region, trust_level. "
+            "TIP: Call this first if you need to ingest documents."
         ),
     )
     def list_sources(
@@ -57,6 +58,10 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             default=True,
             description="Only return active sources (default: True)",
         )] = True,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
     ) -> ToolResponse:
         """List registered news sources.
 
@@ -73,8 +78,8 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             count: Total matching sources
         """
         try:
-            # Get permitted groups from authentication context
-            access_groups = get_permitted_groups_from_context()
+            # Get permitted groups from explicit tokens or context header
+            access_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
 
             # Query sources with individual filter params
             from app.models.source import SourceType
@@ -116,8 +121,10 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
     @mcp.tool(
         name="get_source",
         description=(
-            "Get detailed information about a specific news source by its GUID. "
-            "Only returns sources from groups you have access to."
+            "Get detailed information about a specific news source. "
+            "USE FOR: Checking source credibility, supported languages, metadata. "
+            "RETURNS: Full source details including trust_level, boost_factor, active status. "
+            "PREREQUISITE: You need a source_guid (from list_sources or document metadata)."
         ),
     )
     def get_source(
@@ -128,6 +135,10 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             description="UUID of the source to retrieve (36-char UUID format)",
             examples=["550e8400-e29b-41d4-a716-446655440000"],
         )],
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
     ) -> ToolResponse:
         """Get detailed source information.
 
@@ -156,8 +167,8 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             - SOURCE_NOT_FOUND: The source_guid doesn't exist or isn't accessible
         """
         try:
-            # Get permitted groups from authentication context
-            access_groups = get_permitted_groups_from_context()
+            # Get permitted groups from explicit tokens or context header
+            access_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
 
             source = source_registry.get(source_guid, access_groups=access_groups)
 
@@ -211,9 +222,11 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
     @mcp.tool(
         name="create_source",
         description=(
-            "Create a new news source in the repository. "
-            "Use to register a new data provider before ingesting documents from it. "
-            "Requires authentication - source is created in your token's group."
+            "Register a new news source (e.g., Reuters, internal feed). "
+            "USE BEFORE: ingest_document from a new provider. "
+            "REQUIRES AUTH: Must have a valid token. "
+            "TYPES: news_agency, broker, analyst, regulator, other. "
+            "RETURNS: source_guid to use when ingesting documents from this source."
         ),
     )
     def create_source(
@@ -238,6 +251,10 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             default="unverified",
             description="Credibility level: verified, trusted, standard, unverified",
         )] = "unverified",
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
     ) -> ToolResponse:
         """Create a new news source.
 
@@ -263,9 +280,9 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             group_guid: Group name/identifier (string like 'reuters-feed')
         """
         try:
-            # Get write group from authentication context
+            # Get write group from explicit tokens or context header
             # Anonymous users cannot write - they get None
-            group_guid = get_write_group_from_context()
+            group_guid = resolve_write_group(auth_tokens=auth_tokens)
             
             if group_guid is None:
                 return error_response(

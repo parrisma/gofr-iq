@@ -1,7 +1,7 @@
 """Group Access Control for APAC Brokerage News Repository.
 
 This module provides group-based access control with:
-- Token group extraction from JWT
+- Token group extraction from JWT (multi-group support via auth v2)
 - Group membership validation
 - Permission checking (read/write/admin equivalents)
 - Integration with document store for access enforcement
@@ -94,13 +94,13 @@ class GroupClaims:
         groups: List of group GUIDs the token has access to
         primary_group: The primary/default group for the token
         issued_at: When the token was issued
-        expires_at: When the token expires
+        expires_at: When the token expires (None if no expiry)
     """
     token_id: str
     groups: list[str]
     primary_group: str
     issued_at: datetime
-    expires_at: datetime
+    expires_at: datetime | None
 
     def has_group(self, group_guid: str) -> bool:
         """Check if the token has access to a specific group."""
@@ -138,6 +138,9 @@ class GroupAccessService:
     def extract_groups_from_token(self, token: str) -> GroupClaims:
         """Extract group claims from a JWT token.
         
+        Uses auth v2 multi-group tokens. Returns all groups from the token
+        plus the public group.
+        
         Args:
             token: JWT token string
             
@@ -150,12 +153,14 @@ class GroupAccessService:
         try:
             token_info: TokenInfo = self.auth_service.verify_token(token)
             
-            # The token contains a primary group
-            primary_group = token_info.group
+            # v2: Token contains multiple groups
+            # Primary group is the first group in the list
+            groups = list(token_info.groups)
+            primary_group = groups[0] if groups else "public"
             
-            # For now, tokens have access to their primary group
-            # In future, we could expand this to include inherited groups
-            groups = [primary_group]
+            # Always include public group
+            if "public" not in groups:
+                groups.append("public")
             
             return GroupClaims(
                 token_id=token_info.token,

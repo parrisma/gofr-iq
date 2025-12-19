@@ -21,8 +21,8 @@ from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
 from app.services.group_service import (
-    get_permitted_groups_from_context,
-    get_write_group_from_context,
+    resolve_permitted_groups,
+    resolve_write_group,
 )
 
 if TYPE_CHECKING:
@@ -38,10 +38,11 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     @mcp.tool(
         name="create_client",
         description=(
-            "Create a client profile for personalized news. "
-            "Use when setting up a new user who needs tailored news feeds "
-            "based on their portfolio and interests. "
-            "Requires authentication - client is created in your token's group."
+            "Create an investment client profile for personalized news feeds. "
+            "USE FOR: Setting up hedge funds, asset managers, family offices, etc. "
+            "REQUIRES AUTH: Must have a valid token. "
+            "CREATES: Client + empty portfolio + empty watchlist. "
+            "NEXT STEPS: Use add_to_portfolio/add_to_watchlist to populate holdings."
         ),
     )
     def create_client(
@@ -80,6 +81,10 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             default=False,
             description="Apply ESG filters to news feed",
         )] = False,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
     ) -> ToolResponse:
         """Create a new client profile.
 
@@ -105,8 +110,8 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         import uuid
 
         try:
-            # Get write group from authentication context
-            group_guid = get_write_group_from_context()
+            # Get write group from explicit tokens or context header
+            group_guid = resolve_write_group(auth_tokens=auth_tokens)
             
             if group_guid is None:
                 return error_response(
@@ -204,10 +209,11 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     @mcp.tool(
         name="get_client_feed",
         description=(
-            "Get a personalized news feed for a client. "
-            "Shows relevant news based on their portfolio holdings and watchlist. "
-            "Results ranked by impact and relevance to client's positions. "
-            "Only includes news from groups you have access to."
+            "Get personalized news feed for a client based on their holdings. "
+            "USE FOR: 'What news matters to Citadel?' or 'Show me my client's feed'. "
+            "RANKED BY: Impact score + relevance to portfolio/watchlist positions. "
+            "PREREQUISITE: Client must exist (use create_client first). "
+            "RETURNS: Articles with impact_score, affected tickers, relevance."
         ),
     )
     def get_client_feed(
@@ -242,6 +248,10 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             default=True,
             description="Include news for watched stocks (default: True)",
         )] = True,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
     ) -> ToolResponse:
         """Get personalized news feed for a client.
 
@@ -262,8 +272,8 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             total_count: Number of articles
         """
         try:
-            # Get permitted groups from authentication context
-            group_guids = get_permitted_groups_from_context()
+            # Get permitted groups from explicit tokens or context header
+            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
 
             # Validate client exists
             client_node = graph_index.get_node(NodeLabel.CLIENT, client_guid)
@@ -324,8 +334,11 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     @mcp.tool(
         name="add_to_portfolio",
         description=(
-            "Add a stock holding to a client's portfolio. "
-            "News about portfolio holdings gets higher priority in the client's feed."
+            "Add a stock position to a client's portfolio. "
+            "USE FOR: Recording actual holdings (not just interest). "
+            "EFFECT: News about holdings gets HIGHER priority in get_client_feed. "
+            "PREREQUISITE: Client must exist. Creates instrument if needed. "
+            "TIP: weight is decimal (0.10 = 10%), not percentage."
         ),
     )
     def add_to_portfolio(
@@ -430,8 +443,11 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     @mcp.tool(
         name="add_to_watchlist",
         description=(
-            "Add a stock to a client's watchlist. "
-            "Use to track stocks the client is interested in but doesn't hold."
+            "Add a stock to a client's watchlist for monitoring (not holdings). "
+            "USE FOR: Tracking stocks of interest without actual positions. "
+            "EFFECT: News about watched stocks appears in get_client_feed. "
+            "DIFFERENCE FROM PORTFOLIO: Watchlist = interested; Portfolio = owns. "
+            "PREREQUISITE: Client must exist."
         ),
     )
     def add_to_watchlist(

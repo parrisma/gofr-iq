@@ -19,7 +19,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
-from app.services.group_service import get_permitted_groups_from_context
+from app.services.group_service import resolve_permitted_groups
 
 if TYPE_CHECKING:
     pass
@@ -34,9 +34,11 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     @mcp.tool(
         name="explore_graph",
         description=(
-            "Traverse the knowledge graph to explore relationships. "
-            "Use for questions like 'What else affects AAPL?' or 'What are TSLA's peers?' "
-            "Discovers connected entities like companies, documents, events, and sectors."
+            "Explore knowledge graph relationships from any starting point. "
+            "USE FOR: 'What affects AAPL?', 'TSLA peers?', 'Related companies?' "
+            "RETURNS: Connected nodes (companies, documents, events, sectors). "
+            "NODE_TYPES: INSTRUMENT, COMPANY, DOCUMENT, EVENT_TYPE, SECTOR, CLIENT. "
+            "TIP: For stocks, start with node_type=INSTRUMENT, node_id=ticker."
         ),
     )
     def explore_graph(
@@ -191,9 +193,11 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     @mcp.tool(
         name="get_market_context",
         description=(
-            "Get market context for a stock. "
-            "Use when you need background on a ticker: peers, recent events, index memberships. "
-            "Good for 'Tell me about AAPL' or 'What's the context around TSLA?'"
+            "Get comprehensive background on a stock ticker. "
+            "USE FOR: 'Tell me about AAPL', 'TSLA context', 'What indices is NVDA in?' "
+            "RETURNS: Company info, peer companies, recent events, index memberships, sector. "
+            "SIMPLER THAN explore_graph: Just pass a ticker, get full context. "
+            "TIP: Use this first; use explore_graph for deeper relationship queries."
         ),
     )
     def get_market_context(
@@ -373,10 +377,11 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     @mcp.tool(
         name="get_instrument_news",
         description=(
-            "Get news affecting a specific stock. "
-            "Use for 'What news is moving AAPL?' or 'Why is TSLA down?' "
-            "Returns articles sorted by impact and recency. "
-            "Only includes news from groups you have access to."
+            "Get news articles affecting a specific stock. "
+            "USE FOR: 'Why is AAPL moving?', 'TSLA news', 'What's happening with NVDA?' "
+            "SORTED BY: Impact score (highest first), then recency. "
+            "RETURNS: Articles with impact_score, event_type, direction (positive/negative). "
+            "DIFFERENT FROM query_documents: This is ticker-specific; query_documents is topic search."
         ),
     )
     def get_instrument_news(
@@ -404,6 +409,10 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             le=100,
             description="Max articles to return (default: 20)",
         )] = 20,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
     ) -> ToolResponse:
         """Get news affecting a stock.
 
@@ -422,8 +431,8 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             total_found: Number of matching articles
         """
         try:
-            # Get permitted groups from authentication context
-            group_guids = get_permitted_groups_from_context()
+            # Get permitted groups from explicit tokens or context header
+            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
 
             # Verify instrument exists
             instrument = graph_index.get_instrument(ticker.upper())
