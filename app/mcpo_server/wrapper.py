@@ -16,15 +16,16 @@ from app.logger import ConsoleLogger
 logger = ConsoleLogger(name="mcpo_wrapper", level=logging.INFO)
 
 
-# Import canonical port configuration from gofr-common
-try:
-    from gofr_common.config import GOFR_IQ_PORTS
-    _DEFAULT_MCP_PORT = GOFR_IQ_PORTS.mcp
-    _DEFAULT_MCPO_PORT = GOFR_IQ_PORTS.mcpo
-except ImportError:
-    import os
-    _DEFAULT_MCP_PORT = int(os.environ.get("GOFR_IQ_MCP_PORT", 8080))
-    _DEFAULT_MCPO_PORT = int(os.environ.get("GOFR_IQ_MCPO_PORT", 8081))
+# Ports must be set via environment variables - no defaults
+# No default port values - callers must provide them
+
+
+def _get_required_port(env_var: str) -> int:
+    """Get required port from environment or raise error."""
+    value = os.environ.get(env_var)
+    if value is None:
+        raise ValueError(f"Required environment variable {env_var} is not set")
+    return int(value)
 
 
 class MCPOWrapper:
@@ -33,8 +34,8 @@ class MCPOWrapper:
     def __init__(
         self,
         mcp_host: str = "localhost",
-        mcp_port: int = _DEFAULT_MCP_PORT,
-        mcpo_port: int = _DEFAULT_MCPO_PORT,
+        mcp_port: Optional[int] = None,
+        mcpo_port: Optional[int] = None,
         mcpo_api_key: Optional[str] = None,
         auth_token: Optional[str] = None,
         use_auth: bool = False,
@@ -43,15 +44,15 @@ class MCPOWrapper:
 
         Args:
             mcp_host: Host where MCP server is running
-            mcp_port: Port where MCP server is listening
-            mcpo_port: Port for MCPO proxy to listen on
+            mcp_port: Port where MCP server is listening (required via arg or env)
+            mcpo_port: Port for MCPO proxy to listen on (required via arg or env)
             mcpo_api_key: API key for client -> MCPO authentication (None = no API key)
             auth_token: JWT token for MCPO -> MCP authentication (if use_auth=True)
             use_auth: Whether to use authenticated mode
         """
         self.mcp_host = mcp_host
-        self.mcp_port = mcp_port
-        self.mcpo_port = mcpo_port
+        self.mcp_port = mcp_port if mcp_port is not None else _get_required_port("GOFR_IQ_MCP_PORT")
+        self.mcpo_port = mcpo_port if mcpo_port is not None else _get_required_port("GOFR_IQ_MCPO_PORT")
         self.mcpo_api_key = mcpo_api_key
         self.auth_token = auth_token
         self.use_auth = use_auth
@@ -177,8 +178,8 @@ class MCPOWrapper:
 
 def start_mcpo_wrapper(
     mcp_host: str = "localhost",
-    mcp_port: int = _DEFAULT_MCP_PORT,
-    mcpo_port: int = _DEFAULT_MCPO_PORT,
+    mcp_port: int = 0,
+    mcpo_port: int = 0,
     mcpo_api_key: Optional[str] = None,
     auth_token: Optional[str] = None,
     use_auth: bool = False,

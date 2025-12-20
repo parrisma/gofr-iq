@@ -1,0 +1,29 @@
+# HashiCorp Vault server for GOFR-IQ
+# Provides authentication backend and secret storage
+#
+# Build: ./build-vault.sh
+# Run:   ./run-vault.sh [-e] [-p PORT]
+
+FROM hashicorp/vault:1.15
+
+# Default configuration for dev mode
+ENV VAULT_DEV_ROOT_TOKEN_ID=gofr-dev-root-token
+ENV VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+ENV VAULT_ADDR=http://127.0.0.1:8200
+
+# Copy entrypoint script for bootstrap support
+COPY entrypoint-vault.sh /entrypoint-vault.sh
+RUN chmod +x /entrypoint-vault.sh
+
+# Health check for container orchestration
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=3 \
+    CMD vault status -address=http://127.0.0.1:8200 || exit 1
+
+# Expose ports
+# 8200 - API
+# 8201 - Cluster (HA)
+EXPOSE 8200 8201
+
+# Use custom entrypoint
+ENTRYPOINT ["/entrypoint-vault.sh"]
+CMD ["server", "-dev"]

@@ -23,6 +23,7 @@
 #   ./scripts/run_tests.sh --unit                   # Run unit tests only (no servers)
 #   ./scripts/run_tests.sh --integration            # Run integration tests (with servers)
 #   ./scripts/run_tests.sh --no-servers             # Run without starting servers
+#   ./scripts/run_tests.sh --rebuild                # Rebuild Docker images before starting
 #   ./scripts/run_tests.sh --stop                   # Stop servers only
 #   ./scripts/run_tests.sh --cleanup-only           # Clean environment only
 # =============================================================================
@@ -67,16 +68,25 @@ fi
 # =============================================================================
 export GOFR_IQ_ENV="TEST"
 export GOFR_IQ_JWT_SECRET="test-secret-key-for-secure-testing-do-not-use-in-production"
-# Test ports - intentionally different from production (8080/8081/8082) to avoid conflicts
-# Set these BEFORE sourcing env file so they won't be overwritten
-export GOFR_IQ_MCP_PORT=8180
-export GOFR_IQ_WEB_PORT=8182
-export GOFR_IQ_MCPO_PORT=8181
+
+# Source centralized port configuration from gofr-common
+GOFR_PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.sh"
+if [ -f "${GOFR_PORTS_FILE}" ]; then
+    source "${GOFR_PORTS_FILE}"
+    # Switch to test ports (prod + 100)
+    gofr_set_test_ports gofr-iq
+    gofr_set_test_ports infra
+    echo "Loaded port configuration from gofr_ports.sh (test mode)"
+else
+    echo -e "${RED}ERROR: Port configuration file not found: ${GOFR_PORTS_FILE}${NC}" >&2
+    exit 1
+fi
 
 # Auth Backend Configuration - Vault for shared state between tests and servers
+# Tests run INSIDE dev container connected to gofr-test-net, use container hostnames
 export GOFR_AUTH_BACKEND="vault"
-export GOFR_VAULT_URL="http://gofr-vault:8200"
-export GOFR_VAULT_TOKEN="gofr-dev-root-token"
+export GOFR_VAULT_URL="http://gofr-vault-test:8200"
+export GOFR_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
 export GOFR_VAULT_PATH_PREFIX="gofr-iq-test"
 export GOFR_VAULT_MOUNT_POINT="secret"
 
@@ -98,11 +108,13 @@ else
 fi
 
 # Infrastructure (ChromaDB, Neo4j) - for tests connecting to external services
-# Use container names on gofr-net network (not localhost, since we're in a container)
-export GOFR_IQ_CHROMA_HOST="${GOFR_IQ_CHROMA_HOST:-gofr-iq-chromadb}"
-export GOFR_IQ_CHROMA_PORT="${GOFR_IQ_CHROMA_PORT:-8000}"
-export GOFR_IQ_NEO4J_HOST="${GOFR_IQ_NEO4J_HOST:-gofr-iq-neo4j}"
-export GOFR_IQ_NEO4J_BOLT_PORT="${GOFR_IQ_NEO4J_BOLT_PORT:-7687}"
+# Tests run INSIDE dev container connected to gofr-test-net, use container hostnames
+# Ports are internal container ports (8000 for chroma, 7687 for neo4j bolt)
+export GOFR_IQ_CHROMA_HOST="gofr-iq-chromadb-test"
+export GOFR_IQ_CHROMA_PORT="8000"
+export GOFR_IQ_NEO4J_HOST="gofr-iq-neo4j-test"
+export GOFR_IQ_NEO4J_BOLT_PORT="7687"
+export GOFR_IQ_NEO4J_URI="bolt://gofr-iq-neo4j-test:7687"
 export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
 
 # Legacy variable mapping for backward compatibility
@@ -125,11 +137,11 @@ print_header() {
     echo "JWT Secret: ${GOFR_IQ_JWT_SECRET:0:20}..."
     echo "Auth Backend: ${GOFR_AUTH_BACKEND}"
     echo "Vault URL: ${GOFR_VAULT_URL}"
-    echo "MCP Port: ${GOFR_IQ_MCP_PORT}"
-    echo "MCPO Port: ${GOFR_IQ_MCPO_PORT}"
-    echo "Web Port: ${GOFR_IQ_WEB_PORT}"
-    echo "ChromaDB: ${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}"
-    echo "Neo4j: ${GOFR_IQ_NEO4J_HOST}:${GOFR_IQ_NEO4J_BOLT_PORT}"
+    echo "MCP Port: ${GOFR_IQ_MCP_PORT} (test port, internal)"
+    echo "MCPO Port: ${GOFR_IQ_MCPO_PORT} (test port, internal)"
+    echo "Web Port: ${GOFR_IQ_WEB_PORT} (test port, internal)"
+    echo "ChromaDB: ${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT} (container)"
+    echo "Neo4j: ${GOFR_IQ_NEO4J_HOST}:${GOFR_IQ_NEO4J_BOLT_PORT} (container)"
     echo ""
 }
 
@@ -227,7 +239,7 @@ start_chromadb() {
     # Wait for ChromaDB to be ready (check via Docker network using v2 API)
     echo -n "Waiting for ChromaDB"
     for i in {1..30}; do
-        if curl -s "http://${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}/api/v2/heartbeat" >/dev/null 2>&1; then
+        if curl -s "http://${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}/api/v1/heartbeat" >/dev/null 2>&1; then
             echo -e " ${GREEN}✓${NC}"
             return 0
         fi
@@ -284,6 +296,53 @@ start_vault() {
     return 1
 }
 
+run_bootstrap_auth() {
+    echo -e "${YELLOW}Running auth bootstrap to create public/admin tokens...${NC}"
+    
+    local bootstrap_script="${PROJECT_ROOT}/scripts/bootstrap_auth.py"
+    if [ ! -f "$bootstrap_script" ]; then
+        echo -e "${RED}Bootstrap script not found: ${bootstrap_script}${NC}"
+        return 1
+    fi
+    
+    # Run bootstrap and capture token output
+    local bootstrap_output
+    bootstrap_output=$(uv run python "$bootstrap_script" 2>&1)
+    local exit_code=$?
+    
+    if [ $exit_code -ne 0 ]; then
+        echo -e "${RED}Bootstrap script failed:${NC}"
+        echo "$bootstrap_output"
+        return 1
+    fi
+    
+    # Parse and export tokens from output
+    # Output format: GOFR_IQ_PUBLIC_TOKEN=xxx and GOFR_IQ_ADMIN_TOKEN=xxx
+    while IFS='=' read -r key value; do
+        case "$key" in
+            GOFR_IQ_PUBLIC_TOKEN)
+                export GOFR_IQ_PUBLIC_TOKEN="$value"
+                echo -e "  Public token: ${GREEN}✓${NC} (${#value} chars)"
+                ;;
+            GOFR_IQ_ADMIN_TOKEN)
+                export GOFR_IQ_ADMIN_TOKEN="$value"
+                echo -e "  Admin token: ${GREEN}✓${NC} (${#value} chars)"
+                ;;
+        esac
+    done <<< "$bootstrap_output"
+    
+    # Verify tokens were captured
+    if [ -z "${GOFR_IQ_PUBLIC_TOKEN:-}" ] || [ -z "${GOFR_IQ_ADMIN_TOKEN:-}" ]; then
+        echo -e "${RED}Failed to capture bootstrap tokens${NC}"
+        echo "Bootstrap output:"
+        echo "$bootstrap_output"
+        return 1
+    fi
+    
+    echo -e "${GREEN}Bootstrap tokens created and exported${NC}"
+    return 0
+}
+
 start_neo4j() {
     echo -e "${YELLOW}Starting Neo4j container...${NC}"
     
@@ -325,25 +384,117 @@ start_neo4j() {
 stop_infrastructure() {
     echo -e "${YELLOW}Stopping infrastructure containers...${NC}"
     
-    # Stop Vault if running
-    if docker ps --format '{{.Names}}' | grep -q "^gofr-vault$"; then
-        docker stop gofr-vault >/dev/null 2>&1 || true
-        docker rm gofr-vault >/dev/null 2>&1 || true
-    fi
-    
-    # Stop ChromaDB if running
-    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-chromadb$"; then
-        docker stop gofr-iq-chromadb >/dev/null 2>&1 || true
-        docker rm gofr-iq-chromadb >/dev/null 2>&1 || true
-    fi
-    
-    # Stop Neo4j if running
-    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-neo4j$"; then
-        docker stop gofr-iq-neo4j >/dev/null 2>&1 || true
-        docker rm gofr-iq-neo4j >/dev/null 2>&1 || true
+    # Use manage-infra.sh to stop test infrastructure
+    local manage_script="${PROJECT_ROOT}/docker/manage-infra.sh"
+    if [ -f "$manage_script" ]; then
+        bash "$manage_script" stop --test 2>/dev/null || true
+    else
+        # Fallback: stop containers directly
+        docker stop gofr-vault-test gofr-iq-chromadb-test gofr-iq-neo4j-test 2>/dev/null || true
+        docker rm gofr-vault-test gofr-iq-chromadb-test gofr-iq-neo4j-test 2>/dev/null || true
     fi
     
     echo "Infrastructure containers stopped"
+}
+
+start_test_infrastructure() {
+    local rebuild="$1"
+    echo -e "${GREEN}=== Starting Test Infrastructure via manage-infra.sh ===${NC}"
+    
+    local manage_script="${PROJECT_ROOT}/docker/manage-infra.sh"
+    if [ ! -f "$manage_script" ]; then
+        echo -e "${RED}manage-infra.sh not found: ${manage_script}${NC}"
+        return 1
+    fi
+    
+    # Rebuild Docker images if requested
+    if [ "$rebuild" = true ]; then
+        echo -e "${YELLOW}Rebuilding Docker images...${NC}"
+        bash "${PROJECT_ROOT}/docker/build-vault.sh" || return 1
+        bash "${PROJECT_ROOT}/docker/build-chromadb.sh" || return 1
+        bash "${PROJECT_ROOT}/docker/build-neo4j.sh" || return 1
+        bash "${PROJECT_ROOT}/docker/build-prod.sh" || return 1
+        echo -e "${GREEN}Docker images rebuilt${NC}"
+    fi
+    
+    # Start test infrastructure using manage-infra.sh
+    bash "$manage_script" start --test || {
+        echo -e "${RED}Failed to start test infrastructure${NC}"
+        return 1
+    }
+    
+    # Connect dev container to gofr-test-net so tests can reach test services
+    local dev_container="gofr-iq-dev"
+    if docker ps --format '{{.Names}}' | grep -q "^${dev_container}$"; then
+        if ! docker network inspect gofr-test-net --format '{{range .Containers}}{{.Name}} {{end}}' | grep -q "${dev_container}"; then
+            echo -e "${YELLOW}Connecting dev container to gofr-test-net...${NC}"
+            docker network connect gofr-test-net "${dev_container}" 2>/dev/null || true
+        fi
+        echo -e "${GREEN}Dev container connected to gofr-test-net${NC}"
+    fi
+    
+    # Verify all test services are reachable
+    verify_test_services || {
+        echo -e "${RED}Service verification failed${NC}"
+        return 1
+    }
+    
+    echo -e "${GREEN}Test infrastructure started and verified${NC}"
+    return 0
+}
+
+# Verify all test services are reachable before running tests
+verify_test_services() {
+    echo -e "${BLUE}=== Verifying Test Services ===${NC}"
+    local all_ok=true
+    
+    # Verify Vault
+    echo -n "  Vault (${GOFR_VAULT_URL})... "
+    if curl -s --max-time 5 "${GOFR_VAULT_URL}/v1/sys/health" >/dev/null 2>&1; then
+        echo -e "${GREEN}✓${NC}"
+    else
+        echo -e "${RED}✗ NOT REACHABLE${NC}"
+        all_ok=false
+    fi
+    
+    # Verify ChromaDB
+    local chromadb_url="http://${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}"
+    echo -n "  ChromaDB (${chromadb_url})... "
+    if curl -s --max-time 5 "${chromadb_url}/api/v1/heartbeat" >/dev/null 2>&1; then
+        echo -e "${GREEN}✓${NC}"
+    else
+        echo -e "${RED}✗ NOT REACHABLE${NC}"
+        all_ok=false
+    fi
+    
+    # Verify Neo4j
+    local neo4j_url="http://${GOFR_IQ_NEO4J_HOST}:7474"
+    echo -n "  Neo4j (${neo4j_url})... "
+    if curl -s --max-time 5 "${neo4j_url}" >/dev/null 2>&1; then
+        echo -e "${GREEN}✓${NC}"
+    else
+        echo -e "${RED}✗ NOT REACHABLE${NC}"
+        all_ok=false
+    fi
+    
+    echo ""
+    echo -e "${BLUE}Test Service Environment Variables:${NC}"
+    echo "  GOFR_VAULT_URL=${GOFR_VAULT_URL}"
+    echo "  GOFR_VAULT_TOKEN=${GOFR_VAULT_TOKEN:0:10}..."
+    echo "  GOFR_IQ_CHROMA_HOST=${GOFR_IQ_CHROMA_HOST}"
+    echo "  GOFR_IQ_CHROMA_PORT=${GOFR_IQ_CHROMA_PORT}"
+    echo "  GOFR_IQ_NEO4J_HOST=${GOFR_IQ_NEO4J_HOST}"
+    echo "  GOFR_IQ_NEO4J_BOLT_PORT=${GOFR_IQ_NEO4J_BOLT_PORT}"
+    echo ""
+    
+    if [ "$all_ok" = true ]; then
+        echo -e "${GREEN}All test services verified${NC}"
+        return 0
+    else
+        echo -e "${RED}Some test services are not reachable${NC}"
+        echo -e "${YELLOW}Hint: Is the dev container connected to gofr-test-net?${NC}"
+        return 1
+    fi
 }
 
 cleanup_environment() {
@@ -479,6 +630,7 @@ RUN_INTEGRATION=false
 RUN_ALL=false
 STOP_ONLY=false
 CLEANUP_ONLY=false
+REBUILD_IMAGES=false
 PYTEST_ARGS=()
 
 while [[ $# -gt 0 ]]; do
@@ -519,6 +671,10 @@ while [[ $# -gt 0 ]]; do
             START_SERVERS=true
             shift
             ;;
+        --rebuild)
+            REBUILD_IMAGES=true
+            shift
+            ;;
         --stop|--stop-servers)
             STOP_ONLY=true
             shift
@@ -539,6 +695,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --all            Run all test categories"
             echo "  --no-servers     Don't start test servers"
             echo "  --with-servers   Start test servers (default)"
+            echo "  --rebuild        Rebuild Docker images before starting"
             echo "  --stop           Stop servers and exit"
             echo "  --cleanup-only   Clean environment and exit"
             echo "  --help, -h       Show this help message"
@@ -583,12 +740,11 @@ MCP_PID=""
 WEB_PID=""
 MCPO_PID=""
 if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
-    echo -e "${GREEN}=== Starting Test Infrastructure ===${NC}"
+    # Start test infrastructure via manage-infra.sh (Vault, ChromaDB, Neo4j)
+    start_test_infrastructure "$REBUILD_IMAGES" || { stop_servers; stop_infrastructure; exit 1; }
     
-    # Start infrastructure containers (Vault first - auth backend)
-    start_vault || { stop_servers; stop_infrastructure; exit 1; }
-    start_chromadb || { stop_servers; stop_infrastructure; exit 1; }
-    start_neo4j || { stop_servers; stop_infrastructure; exit 1; }
+    # Run bootstrap to create public/admin tokens (after Vault is up)
+    run_bootstrap_auth || { stop_servers; stop_infrastructure; exit 1; }
     echo ""
     
     echo -e "${GREEN}=== Starting Test Servers ===${NC}"

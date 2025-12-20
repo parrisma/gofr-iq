@@ -92,11 +92,14 @@ class ServerManager:
         ...     response = requests.get(manager.web_url + "/health")
     """
     
-    # Default ports - aligned with run_tests.sh test configuration
-    # These differ from production (8080-8082) to avoid conflicts
-    DEFAULT_MCP_PORT = int(os.environ.get("GOFR_IQ_MCP_PORT", 8180))
-    DEFAULT_MCPO_PORT = int(os.environ.get("GOFR_IQ_MCPO_PORT", 8181))
-    DEFAULT_WEB_PORT = int(os.environ.get("GOFR_IQ_WEB_PORT", 8182))
+    # Ports must be set via environment variables - no defaults
+    @staticmethod
+    def _get_required_port(env_var: str) -> int:
+        """Get required port from environment or raise error."""
+        value = os.environ.get(env_var)
+        if value is None:
+            raise ValueError(f"Required environment variable {env_var} is not set")
+        return int(value)
     
     def __init__(
         self,
@@ -115,9 +118,9 @@ class ServerManager:
             project_root: Project root directory. Defaults to auto-detect.
             data_dir: Test data directory. Defaults to test/data.
             logs_dir: Logs directory. Defaults to logs/.
-            mcp_port: MCP server port. Defaults to 8160.
-            mcpo_port: MCPO server port. Defaults to 8161.
-            web_port: Web API server port. Defaults to 8162.
+            mcp_port: MCP server port (required via arg or GOFR_IQ_MCP_PORT env).
+            mcpo_port: MCPO server port (required via arg or GOFR_IQ_MCPO_PORT env).
+            web_port: Web API server port (required via arg or GOFR_IQ_WEB_PORT env).
             host: Host address to bind servers to. Defaults to 127.0.0.1.
             jwt_secret: JWT secret for authentication. Defaults to env or test value.
         """
@@ -139,21 +142,21 @@ class ServerManager:
             "test-secret-key-for-secure-testing-do-not-use-in-production"
         )
         
-        # Initialize server configs
+        # Initialize server configs (ports required from env if not passed)
         self._servers: dict[str, ServerConfig] = {
             "mcp": ServerConfig(
                 name="mcp",
-                port=mcp_port or self.DEFAULT_MCP_PORT,
+                port=mcp_port if mcp_port is not None else self._get_required_port("GOFR_IQ_MCP_PORT"),
                 host=host,
             ),
             "mcpo": ServerConfig(
                 name="mcpo",
-                port=mcpo_port or self.DEFAULT_MCPO_PORT,
+                port=mcpo_port if mcpo_port is not None else self._get_required_port("GOFR_IQ_MCPO_PORT"),
                 host=host,
             ),
             "web": ServerConfig(
                 name="web",
-                port=web_port or self.DEFAULT_WEB_PORT,
+                port=web_port if web_port is not None else self._get_required_port("GOFR_IQ_WEB_PORT"),
                 host=host,
             ),
         }
@@ -214,9 +217,9 @@ class ServerManager:
             "GOFR_IQ_MCPO_PORT": str(self.mcpo_port),
             "GOFR_IQ_WEB_PORT": str(self.web_port),
             "GOFR_IQ_JWT_SECRET": self.jwt_secret,
-            # Auth backend - Vault for shared state with tests
+            # Auth backend - use env vars set by run_tests.sh (no fallback defaults)
             "GOFR_AUTH_BACKEND": os.environ.get("GOFR_AUTH_BACKEND", "vault"),
-            "GOFR_VAULT_URL": os.environ.get("GOFR_VAULT_URL", "http://gofr-vault:8200"),
+            "GOFR_VAULT_URL": os.environ.get("GOFR_VAULT_URL", "http://gofr-vault-test:8200"),
             "GOFR_VAULT_TOKEN": os.environ.get("GOFR_VAULT_TOKEN", "gofr-dev-root-token"),
             "GOFR_VAULT_PATH_PREFIX": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-iq-test"),
             "GOFR_VAULT_MOUNT_POINT": os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),

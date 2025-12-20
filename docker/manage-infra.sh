@@ -18,7 +18,17 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$SCRIPT_DIR"
+
+# Source centralized port configuration
+GOFR_PORTS_FILE="$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.sh"
+if [ -f "$GOFR_PORTS_FILE" ]; then
+    source "$GOFR_PORTS_FILE"
+else
+    echo "ERROR: Port configuration file not found: $GOFR_PORTS_FILE" >&2
+    exit 1
+fi
 
 # Colors
 RED='\033[0;31m'
@@ -30,6 +40,7 @@ NC='\033[0m'
 # Default compose file
 COMPOSE_FILE="docker-compose.yml"
 TEST_MODE=false
+NETWORK_NAME="gofr-net"
 
 # Parse arguments
 ACTION="${1:-status}"
@@ -39,7 +50,10 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         --test|-t)
             TEST_MODE=true
-            COMPOSE_FILE="docker-compose.test.yml"
+            COMPOSE_FILE="docker-compose-test.yml"
+            NETWORK_NAME="gofr-test-net"
+            # Switch to test ports (prod + 100)
+            gofr_set_test_ports all
             shift
             ;;
         *)
@@ -66,7 +80,7 @@ log_error() {
 }
 
 ensure_network() {
-    local network_name="$1"
+    local network_name="${1:-$NETWORK_NAME}"
     if ! docker network inspect "$network_name" >/dev/null 2>&1; then
         log_info "Creating network: $network_name"
         docker network create "$network_name"
@@ -111,17 +125,23 @@ do_start() {
     echo "======================================================================="
     echo "Mode: $([ "$TEST_MODE" = true ] && echo "TEST (ephemeral)" || echo "DEVELOPMENT (persistent)")"
     echo "Compose file: $COMPOSE_FILE"
+    echo "Network: $NETWORK_NAME"
+    echo "Ports:"
+    echo "  Vault:    ${GOFR_VAULT_PORT}"
+    echo "  Neo4j:    HTTP=${GOFR_NEO4J_HTTP_PORT} Bolt=${GOFR_NEO4J_BOLT_PORT}"
+    echo "  ChromaDB: ${GOFR_CHROMA_PORT}"
+    echo "  MCP:      ${GOFR_IQ_MCP_PORT}"
+    echo "  MCPO:     ${GOFR_IQ_MCPO_PORT}"
+    echo "  Web:      ${GOFR_IQ_WEB_PORT}"
     echo ""
     
     # Ensure network exists
-    if [ "$TEST_MODE" = true ]; then
-        ensure_network "gofr-test-net"
-    else
-        ensure_network "gofr-net"
-    fi
+    ensure_network "$NETWORK_NAME"
     
-    # Start Vault first (auth backend)
-    do_vault_start
+    # For non-test mode, start Vault separately (test mode includes vault in compose)
+    if [ "$TEST_MODE" = false ]; then
+        do_vault_start
+    fi
     
     # Build images if needed
     log_info "Building images..."
@@ -156,23 +176,29 @@ do_stop() {
     log_info "Stopping services..."
     docker compose -f "$COMPOSE_FILE" down
     
-    # Stop Vault
-    do_vault_stop
+    # Stop Vault separately only in non-test mode (test mode vault is in compose)
+    if [ "$TEST_MODE" = false ]; then
+        do_vault_stop
+    fi
     
     log_success "Infrastructure stopped"
 }
 
 do_vault_start() {
-    local vault_mode="--test"
-    if [ "$TEST_MODE" = false ]; then
-        vault_mode=""
-    fi
+    log_info "Starting Vault on port ${GOFR_VAULT_PORT}..."
     
-    log_info "Starting Vault..."
-    # Use gofr-common vault scripts
-    local vault_script="$SCRIPT_DIR/../lib/gofr-common/docker/infra/vault/run.sh"
+    # Use local run-vault.sh script
+    local vault_script="$SCRIPT_DIR/run-vault.sh"
     if [ -f "$vault_script" ]; then
-        bash "$vault_script" $vault_mode
+        # Export port vars for the script
+        export GOFR_VAULT_PORT
+        export GOFR_VAULT_DEV_TOKEN
+        
+        local vault_args=""
+        if [ "$TEST_MODE" = true ]; then
+            vault_args="--network gofr-test-net"
+        fi
+        bash "$vault_script" $vault_args
     else
         log_warn "Vault run script not found at $vault_script, skipping..."
     fi
@@ -180,10 +206,13 @@ do_vault_start() {
 
 do_vault_stop() {
     log_info "Stopping Vault..."
-    # Use gofr-common vault scripts
-    local vault_script="$SCRIPT_DIR/../lib/gofr-common/docker/infra/vault/stop.sh"
-    if [ -f "$vault_script" ]; then
-        bash "$vault_script" --rm 2>/dev/null || true
+    # Stop vault container
+    if [ "$TEST_MODE" = true ]; then
+        docker stop gofr-vault-test 2>/dev/null || true
+        docker rm gofr-vault-test 2>/dev/null || true
+    else
+        docker stop gofr-vault 2>/dev/null || true
+        docker rm gofr-vault 2>/dev/null || true
     fi
 }
 
@@ -197,12 +226,14 @@ do_status() {
     echo ""
     echo "GOFR-IQ Infrastructure Status"
     echo "======================================================================="
+    echo "Mode: $([ "$TEST_MODE" = true ] && echo "TEST" || echo "PRODUCTION")"
+    echo ""
     
     # Show containers
     if [ "$TEST_MODE" = true ]; then
-        docker ps -a --filter "name=gofr-iq-.*-test" --filter "name=gofr-vault" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+        docker ps -a --filter "name=gofr.*-test" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
     else
-        docker ps -a --filter "name=gofr-iq-chromadb" --filter "name=gofr-iq-neo4j" --filter "name=gofr-vault" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -v "\-test"
+        docker ps -a --filter "name=gofr-iq-chromadb" --filter "name=gofr-iq-neo4j" --filter "name=gofr-vault" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -v "\-test" || true
     fi
     
     echo ""
@@ -235,7 +266,11 @@ do_clean() {
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         log_info "Stopping and removing containers..."
         docker compose -f docker-compose.yml down -v 2>/dev/null || true
-        docker compose -f docker-compose.test.yml down -v 2>/dev/null || true
+        docker compose -f docker-compose-test.yml down -v 2>/dev/null || true
+        
+        # Stop vault containers
+        docker stop gofr-vault gofr-vault-test 2>/dev/null || true
+        docker rm gofr-vault gofr-vault-test 2>/dev/null || true
         
         log_info "Removing orphan volumes..."
         docker volume ls -q --filter "name=gofr-iq" | xargs -r docker volume rm 2>/dev/null || true

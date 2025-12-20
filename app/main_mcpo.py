@@ -31,25 +31,23 @@ import sys
 
 from app.mcpo_server.wrapper import start_mcpo_wrapper
 
-# Import canonical port configuration from gofr-common
-try:
-    from gofr_common.config import GOFR_IQ_PORTS
-    DEFAULT_MCP_PORT = GOFR_IQ_PORTS.mcp
-    DEFAULT_MCPO_PORT = GOFR_IQ_PORTS.mcpo
-except ImportError:
-    # Fallback if gofr-common not available
-    import os
-    DEFAULT_MCP_PORT = int(os.environ.get("GOFR_IQ_MCP_PORT", 8080))
-    DEFAULT_MCPO_PORT = int(os.environ.get("GOFR_IQ_MCPO_PORT", 8081))
+# Ports must be set via environment variables - no defaults
+
+def _get_required_port(env_var: str) -> int:
+    """Get required port from environment or raise error."""
+    value = os.environ.get(env_var)
+    if value is None:
+        raise ValueError(f"Required environment variable {env_var} is not set")
+    return int(value)
 
 
 def main():
     """Main function to start MCPO wrapper."""
 
-    # Get configuration from environment (defaults from gofr-common)
+    # Get configuration from environment (required - no defaults)
     mcp_host = os.environ.get("GOFR_IQ_MCP_HOST", "localhost")
-    mcp_port = int(os.environ.get("GOFR_IQ_MCP_PORT", str(DEFAULT_MCP_PORT)))
-    mcpo_port = int(os.environ.get("GOFR_IQ_MCPO_PORT", str(DEFAULT_MCPO_PORT)))
+    mcp_port = _get_required_port("GOFR_IQ_MCP_PORT")
+    mcpo_port = _get_required_port("GOFR_IQ_MCPO_PORT")
 
     auth_disabled = os.environ.get("GOFR_IQ_AUTH_DISABLED", "false").lower() in ("1", "true", "yes")
     print(f"[MCPO] Starting on host=0.0.0.0 port={mcpo_port}")

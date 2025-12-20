@@ -5,7 +5,8 @@ set -e
 cd "$(dirname "$0")"
 
 export GOFR_IQ_AUTH_DISABLED=true
-export GOFR_IQ_OPENROUTER_API_KEY=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
+# Set GOFR_IQ_OPENROUTER_API_KEY in your environment or .env file
+export GOFR_IQ_OPENROUTER_API_KEY="${GOFR_IQ_OPENROUTER_API_KEY:-}"
 
 echo "=== Starting GOFR-IQ Swarm ==="
 echo "Auth: Disabled"

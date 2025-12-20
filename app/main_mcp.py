@@ -7,15 +7,15 @@ Usage:
     # Run with standard options
     python -m app.main_mcp
 
-    # Run with custom host and port
-    python -m app.main_mcp --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT:-8080}
+    # Run with custom host and port (port from gofr_ports.sh or explicit)
+    python -m app.main_mcp --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT}
 
     # Run without authentication (development only)
     python -m app.main_mcp --no-auth
 
 Environment Variables:
     GOFR_IQ_STORAGE_DIR: Base directory for document storage
-    GOFR_IQ_MCP_PORT: Port for MCP server (from gofr-common config)
+    GOFR_IQ_MCP_PORT: Port for MCP server (required - from gofr_ports.sh)
     GOFR_IQ_LOG_LEVEL: Logging level (default: INFO)
     GOFR_IQ_AUTH_ENABLED: Enable/disable authentication (default: true)
     GOFR_IQ_JWT_SECRET: JWT secret for authentication
@@ -53,8 +53,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--port",
         type=int,
-        default=int(os.environ.get("GOFR_IQ_MCP_PORT", 8080)),
-        help="Port number to listen on (default: from env or gofr-common config)",
+        default=int(os.environ["GOFR_IQ_MCP_PORT"]) if "GOFR_IQ_MCP_PORT" in os.environ else None,
+        help="Port number to listen on (required: set GOFR_IQ_MCP_PORT or use --port)",
     )
     parser.add_argument(
         "--auth-disabled",
@@ -88,6 +88,10 @@ if __name__ == "__main__":
         help="Logging level for all components (default: INFO)",
     )
     args = parser.parse_args()
+    
+    # Validate required port
+    if args.port is None:
+        parser.error("Port is required: set GOFR_IQ_MCP_PORT environment variable or use --port")
 
     # Explicitly log host/port for debugging
     print(f"[MCP] Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}")  # nosec B104 - just logging, not binding
@@ -206,7 +210,7 @@ if __name__ == "__main__":
         # Add AuthHeaderMiddleware to extract JWT from headers
         # This stores the Authorization header in a ContextVar for use by
         # get_permitted_groups_from_context() in MCP tools
-        app.add_middleware(AuthHeaderMiddleware)
+        app.add_middleware(AuthHeaderMiddleware)  # type: ignore[arg-type]
         
         startup_logger.info(
             "AuthHeaderMiddleware enabled for group-based access control"

@@ -3,6 +3,14 @@
 # Starts MCP, MCPO, and Web servers via supervisor
 set -e
 
+# Source centralized port configuration
+GOFR_PORTS_FILE="/app/lib/gofr-common/config/gofr_ports.sh"
+if [ -f "${GOFR_PORTS_FILE}" ]; then
+    source "${GOFR_PORTS_FILE}"
+else
+    echo "ERROR: Port configuration file not found: ${GOFR_PORTS_FILE}" >&2
+    exit 1
+fi
 
 # Environment variables
 # JWT_SECRET is optional if auth is disabled
@@ -13,10 +21,10 @@ if [ "$AUTH_DISABLED" = "false" ] && [ -z "$JWT_SECRET" ]; then
 fi
 export GOFR_IQ_AUTH_DISABLED="$AUTH_DISABLED"
 
-# Port configuration - use GOFR_IQ_*_PORT naming with defaults
-MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
-MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8081}"
-WEB_PORT="${GOFR_IQ_WEB_PORT:-8082}"
+# Port configuration (from gofr_ports.sh)
+MCP_PORT="${GOFR_IQ_MCP_PORT}"
+MCPO_PORT="${GOFR_IQ_MCPO_PORT}"
+WEB_PORT="${GOFR_IQ_WEB_PORT}"
 
 export MCP_PORT
 export MCPO_PORT
@@ -37,9 +45,9 @@ export NEO4J_URI="${NEO4J_URI:-bolt://gofr-neo4j:7687}"
 export NEO4J_USER="${NEO4J_USER:-neo4j}"
 export NEO4J_PASSWORD="${NEO4J_PASSWORD:-}"
 
-# ChromaDB connection (optional)
+# ChromaDB connection (from gofr_ports.sh)
 export CHROMA_HOST="${CHROMA_HOST:-gofr-chroma}"
-export CHROMA_PORT="${CHROMA_PORT:-8000}"
+export CHROMA_PORT="${GOFR_CHROMA_PORT}"
 
 # Path to venv
 VENV_PATH="/home/gofr-iq/.venv"

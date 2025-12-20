@@ -39,25 +39,41 @@ from fixtures import DataStore, ServerManager  # noqa: E402
 def test_env() -> dict[str, str]:
     """Provide test environment variables.
     
+    These are FALLBACK defaults only used if run_tests.sh hasn't set them.
+    When running via run_tests.sh, these should NOT override the env vars
+    it sets (which point to the correct test containers).
+    
     Returns:
-        Dictionary of environment variables for test mode.
+        Dictionary of environment variables for test mode (fallbacks only).
     """
-    return {
+    # Only return values that AREN'T already set in the environment
+    # This ensures run_tests.sh settings take precedence
+    defaults = {
         "GOFR_IQ_ENV": "TEST",
-        # Match run_tests.sh JWT secret for MCPO API key auth
         "GOFR_IQ_JWT_SECRET": "test-secret-key-for-secure-testing-do-not-use-in-production",
-        # Vault auth backend configuration
         "GOFR_AUTH_BACKEND": "vault",
-        "GOFR_VAULT_URL": "http://gofr-vault:8200",
+        # NOTE: These are fallbacks for IDE/direct pytest runs only
+        # run_tests.sh sets the correct test container URLs
+        "GOFR_VAULT_URL": "http://gofr-vault-test:8200",
         "GOFR_VAULT_TOKEN": "gofr-dev-root-token",
         "GOFR_VAULT_PATH_PREFIX": "gofr-iq-test",
         "GOFR_VAULT_MOUNT_POINT": "secret",
+        "GOFR_IQ_CHROMA_HOST": "gofr-iq-chromadb-test",
+        "GOFR_IQ_CHROMA_PORT": "8000",
+        "GOFR_IQ_NEO4J_HOST": "gofr-iq-neo4j-test",
+        "GOFR_IQ_NEO4J_BOLT_PORT": "7687",
     }
+    
+    # Only return vars that aren't already set
+    return {k: v for k, v in defaults.items() if k not in os.environ}
 
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_environment(test_env: dict[str, str]) -> Generator[None, None, None]:
     """Set up test environment variables for the entire test session.
+    
+    Only sets variables that aren't already set by run_tests.sh.
+    This ensures test infrastructure settings from run_tests.sh take precedence.
     
     This fixture runs automatically and sets environment variables
     needed for all tests.
@@ -115,8 +131,9 @@ def vault_auth_service():
         AuthService configured with Vault backend.
         
     Raises:
-        pytest.skip: If GOFR_AUTH_BACKEND is not set to 'vault'.
+        pytest.skip: If GOFR_AUTH_BACKEND is not set to 'vault' or Vault unavailable.
     """
+    from gofr_common.auth.backends import StorageUnavailableError
     from app.auth.factory import create_auth_service
     
     # Verify Vault backend is configured
@@ -128,7 +145,11 @@ def vault_auth_service():
         "GOFR_IQ_JWT_SECRET",
         "test-secret-key-for-secure-testing-do-not-use-in-production"
     )
-    auth = create_auth_service(secret_key=jwt_secret)
+    
+    try:
+        auth = create_auth_service(secret_key=jwt_secret)
+    except StorageUnavailableError as e:
+        pytest.skip(f"Vault unavailable: {e}")
     
     # Pre-create ALL common test groups used across test files
     # Groups must exist before tokens can be created (auth v2 requirement)
@@ -171,6 +192,9 @@ def vault_auth_service():
     # Groups used by test_group_service_auth.py
     _ensure_group(auth, "premium-group", "Premium group")
     
+    # Groups used by test_source_tools_auth.py
+    _ensure_group(auth, "regular-user-group", "Regular user group for auth testing")
+    
     return auth
 
 
@@ -193,12 +217,32 @@ def auth_service(vault_auth_service):
 def vault_config() -> dict[str, str]:
     """Provide Vault configuration from environment.
     
+    These values MUST be set by run_tests.sh - no fallback defaults.
+    This ensures tests use the correct test containers.
+    
     Returns:
         Dictionary with Vault connection details.
+    
+    Raises:
+        ValueError: If required environment variables are not set.
     """
+    url = os.environ.get("GOFR_VAULT_URL")
+    token = os.environ.get("GOFR_VAULT_TOKEN")
+    
+    if not url:
+        raise ValueError(
+            "GOFR_VAULT_URL not set. Run tests via ./scripts/run_tests.sh "
+            "which sets up the test environment correctly."
+        )
+    if not token:
+        raise ValueError(
+            "GOFR_VAULT_TOKEN not set. Run tests via ./scripts/run_tests.sh "
+            "which sets up the test environment correctly."
+        )
+    
     return {
-        "url": os.environ.get("GOFR_VAULT_URL", "http://gofr-vault:8200"),
-        "token": os.environ.get("GOFR_VAULT_TOKEN", "gofr-dev-root-token"),
+        "url": url,
+        "token": token,
         "path_prefix": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-iq-test"),
         "mount_point": os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),
     }
@@ -217,9 +261,45 @@ def vault_available(vault_config: dict[str, str]) -> bool:
             url=vault_config["url"],
             token=vault_config["token"],
         )
-        return client.is_authenticated()
-    except Exception:
+        result = client.is_authenticated()
+        if not result:
+            print(f"\nVault auth failed - URL: {vault_config['url']}, Token: {vault_config['token'][:10]}...")
+        return result
+    except Exception as e:
+        print(f"\nVault connection error: {e}")
+        print(f"  URL: {vault_config['url']}")
         return False
+
+
+# =============================================================================
+# Bootstrap Token Fixtures
+# =============================================================================
+
+
+@pytest.fixture(scope="session")
+def public_token() -> str | None:
+    """Get the bootstrap public token from environment.
+    
+    This token is created by bootstrap_auth.py and exported by run_tests.sh.
+    It grants access to the 'public' group.
+    
+    Returns:
+        JWT token string for public group, or None if not set.
+    """
+    return os.environ.get("GOFR_IQ_PUBLIC_TOKEN")
+
+
+@pytest.fixture(scope="session")
+def admin_token() -> str | None:
+    """Get the bootstrap admin token from environment.
+    
+    This token is created by bootstrap_auth.py and exported by run_tests.sh.
+    It grants access to the 'admin' group for administrative operations.
+    
+    Returns:
+        JWT token string for admin group, or None if not set.
+    """
+    return os.environ.get("GOFR_IQ_ADMIN_TOKEN")
 
 
 # =============================================================================
@@ -353,12 +433,32 @@ def shared_server_manager(
 def chromadb_config() -> dict[str, str | int]:
     """Provide ChromaDB server configuration from environment.
     
+    These values MUST be set by run_tests.sh - no fallback defaults.
+    This ensures tests use the correct test containers.
+    
     Returns:
         Dictionary with host and port for ChromaDB server.
+    
+    Raises:
+        ValueError: If required environment variables are not set.
     """
+    host = os.environ.get("GOFR_IQ_CHROMA_HOST")
+    port = os.environ.get("GOFR_IQ_CHROMA_PORT")
+    
+    if not host:
+        raise ValueError(
+            "GOFR_IQ_CHROMA_HOST not set. Run tests via ./scripts/run_tests.sh "
+            "which sets up the test environment correctly."
+        )
+    if not port:
+        raise ValueError(
+            "GOFR_IQ_CHROMA_PORT not set. Run tests via ./scripts/run_tests.sh "
+            "which sets up the test environment correctly."
+        )
+    
     return {
-        "host": os.environ.get("GOFR_IQ_CHROMADB_HOST", "gofr-iq-chromadb"),
-        "port": int(os.environ.get("GOFR_IQ_CHROMADB_PORT", "8000")),
+        "host": host,
+        "port": int(port),
     }
 
 

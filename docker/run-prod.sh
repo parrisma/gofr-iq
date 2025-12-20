@@ -27,9 +27,9 @@ NEO4J_URI="${NEO4J_URI:-bolt://gofr-neo4j:7687}"
 NEO4J_USER="${NEO4J_USER:-neo4j}"
 NEO4J_PASSWORD="${NEO4J_PASSWORD:-}"
 
-# ChromaDB connection (optional)
+# ChromaDB connection (from gofr_ports.sh)
 CHROMA_HOST="${CHROMA_HOST:-gofr-chroma}"
-CHROMA_PORT="${CHROMA_PORT:-8000}"
+CHROMA_PORT="${GOFR_CHROMA_PORT}"
 
 echo "=== gofr-iq Production Container ==="
 

@@ -104,6 +104,33 @@ def get_default_proxy_dir() -> str:
     return str(Config.get_proxy_dir())
 
 
+@dataclass
+class ChromaDBSettings:
+    """ChromaDB configuration
+    
+    Attributes:
+        host: ChromaDB server host (None for local/ephemeral mode)
+        port: ChromaDB server port (default: 8000)
+    """
+    host: str | None = None
+    port: int = 8000
+    
+    @property
+    def is_http_mode(self) -> bool:
+        """Check if configured for HTTP client mode"""
+        return self.host is not None
+
+
+def get_chromadb_settings() -> ChromaDBSettings:
+    """Get ChromaDB settings from environment variables"""
+    host = os.environ.get("GOFR_IQ_CHROMA_HOST")
+    port_str = os.environ.get("GOFR_IQ_CHROMA_PORT", "8000")
+    return ChromaDBSettings(
+        host=host,
+        port=int(port_str),
+    )
+
+
 __all__ = [
     "Config",
     "Settings",
@@ -112,8 +139,10 @@ __all__ = [
     "StorageSettings",
     "LogSettings",
     "LLMSettings",
+    "ChromaDBSettings",
     "get_settings",
     "get_llm_settings",
+    "get_chromadb_settings",
     "reset_settings",
     "get_public_storage_dir",
     "get_default_storage_dir",

@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Literal
 
 from mcp.server.fastmcp import FastMCP
 
-from app.config import get_settings
+from app.config import get_settings, get_chromadb_settings
 from app.services import (
     DocumentStore,
     DuplicateDetector,
@@ -62,11 +62,19 @@ def create_mcp_server(
     duplicate_detector = DuplicateDetector()
 
     # Initialize indexes
-    # Note: In production, these would connect to real services
-    # For now, we use defaults (ephemeral/local) or env vars
-    embedding_index = EmbeddingIndex(
-        persist_directory=storage_path / "chroma",
-    )
+    # Use ChromaDB settings from environment (HTTP mode if host is set)
+    chromadb_settings = get_chromadb_settings()
+    if chromadb_settings.is_http_mode:
+        # HTTP client mode - connect to ChromaDB server
+        embedding_index = EmbeddingIndex(
+            host=chromadb_settings.host,
+            port=chromadb_settings.port,
+        )
+    else:
+        # Local persistent mode
+        embedding_index = EmbeddingIndex(
+            persist_directory=storage_path / "chroma",
+        )
     
     # Graph index requires Neo4j connection
     # We initialize it but handle connection errors gracefully in service

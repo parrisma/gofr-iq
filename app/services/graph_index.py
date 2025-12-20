@@ -10,6 +10,7 @@ Supports a rich domain model for news ranking and client matching:
 See docs/graph_architecture.md for full schema documentation.
 """
 
+import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -204,12 +205,9 @@ class GraphIndex:
     - Schema initialization with constraints
     """
 
-    # Default URI uses container name for gofr-net network
-    DEFAULT_URI = "bolt://gofr-iq-neo4j:7687"
-
     def __init__(
         self,
-        uri: str = DEFAULT_URI,
+        uri: Optional[str] = None,
         username: str = "neo4j",
         password: str = "testpassword",  # nosec B107
         database: str = "neo4j",
@@ -217,11 +215,15 @@ class GraphIndex:
         """Initialize graph index
 
         Args:
-            uri: Neo4j Bolt URI
+            uri: Neo4j Bolt URI (required: set GOFR_IQ_NEO4J_URI or pass explicitly)
             username: Neo4j username
             password: Neo4j password
             database: Database name
         """
+        if uri is None:
+            uri = os.environ.get("GOFR_IQ_NEO4J_URI")
+            if uri is None:
+                raise ValueError("Neo4j URI is required: set GOFR_IQ_NEO4J_URI or pass uri parameter")
         self.uri = uri
         self.username = username
         self.password = password

@@ -28,8 +28,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--port",
         type=int,
-        default=int(os.environ.get("GOFR_IQ_WEB_PORT", 8082)),
-        help="Port number to listen on",
+        default=int(os.environ["GOFR_IQ_WEB_PORT"]) if "GOFR_IQ_WEB_PORT" in os.environ else None,
+        help="Port number to listen on (required: set GOFR_IQ_WEB_PORT or use --port)",
     )
     parser.add_argument(
         "--log-level",
@@ -44,6 +44,11 @@ if __name__ == "__main__":
     parser.add_argument("--auth-disabled", action="store_true", help=argparse.SUPPRESS)
     
     args = parser.parse_args()
+    
+    # Validate required port
+    if args.port is None:
+        parser.error("Port is required: set GOFR_IQ_WEB_PORT environment variable or use --port")
+        
     log_level = getattr(logging, args.log_level.upper(), logging.INFO)
 
     server = GofrIqWebServer(log_level=log_level)

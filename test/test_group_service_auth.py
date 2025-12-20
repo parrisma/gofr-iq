@@ -3,15 +3,12 @@
 Tests resolve_write_group() behavior in both auth-enabled and auth-disabled modes.
 """
 
-import pytest
-
 from app.services.group_service import (
     init_group_service,
     resolve_write_group,
     get_group_service,
     PUBLIC_GROUP,
 )
-from app.auth.factory import create_auth_service
 
 
 class TestResolveWriteGroupNoAuth:

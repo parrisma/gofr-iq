@@ -270,13 +270,15 @@ class EmbeddingIndex:
                               For production, inject a real embedding model.
             host: ChromaDB server host (HTTP client mode). If provided,
                   persist_directory is ignored.
-            port: ChromaDB server port (default: 8000)
+            port: ChromaDB server port (required if host is provided)
         """
         self.persist_directory = persist_directory
         self.collection_name = collection_name
         self.chunk_config = chunk_config or ChunkConfig()
         self.host = host
-        self.port = port or 8000
+        if host and port is None:
+            raise ValueError("port is required when host is provided for ChromaDB HTTP client mode")
+        self.port = port
         
         # Use provided embedding function or default to deterministic (for testing)
         # Note: For HTTP client mode, custom embedding functions must be registered
@@ -286,6 +288,8 @@ class EmbeddingIndex:
         # Initialize ChromaDB client
         if host:
             # HTTP client mode - connect to ChromaDB server
+            # Note: port is validated above when host is provided
+            assert self.port is not None  # type narrowing for pyright
             self._client = chromadb.HttpClient(
                 host=host,
                 port=self.port,
