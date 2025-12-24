@@ -4,7 +4,18 @@
 # Build: ./build-vault.sh
 # Run:   ./run-vault.sh [-e] [-p PORT]
 
-FROM hashicorp/vault:1.15
+FROM hashicorp/vault:1.15.6
+
+# OCI Labels - Version metadata per SERVICE_COMPATIBILITY.md
+ARG BUILD_DATE
+ARG GIT_COMMIT
+LABEL org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${GIT_COMMIT}" \
+      org.opencontainers.image.version="1.15.6" \
+      org.opencontainers.image.title="gofr-vault" \
+      org.opencontainers.image.description="HashiCorp Vault for GOFR-IQ" \
+      com.gofr.vault.version="1.15.6" \
+      com.gofr.hvac.version="2.4.0"
 
 # Default configuration for dev mode
 ENV VAULT_DEV_ROOT_TOKEN_ID=gofr-dev-root-token

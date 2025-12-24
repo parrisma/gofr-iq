@@ -274,7 +274,7 @@ start_vault() {
             -p 8201:8200 \
             -e VAULT_DEV_ROOT_TOKEN_ID="${GOFR_VAULT_TOKEN}" \
             -e VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200 \
-            hashicorp/vault:latest server -dev >/dev/null 2>&1 || {
+            hashicorp/vault:1.15.6 server -dev >/dev/null 2>&1 || {
             echo -e "${RED}Failed to start Vault container${NC}"
             return 1
         }
@@ -767,6 +767,16 @@ fi
 # =============================================================================
 # RUN TESTS
 # =============================================================================
+
+# Run version compatibility check first
+echo -e "${GREEN}=== Checking Version Compatibility ===${NC}"
+if ! python "${SCRIPT_DIR}/check_version_compatibility.py"; then
+    echo -e "${RED}Version compatibility check failed!${NC}"
+    echo "Fix version mismatches before running tests."
+    [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ] && stop_infrastructure || true
+    exit 1
+fi
+echo ""
 
 echo -e "${GREEN}=== Running Tests ===${NC}"
 set +e

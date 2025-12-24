@@ -15,11 +15,20 @@ if [ -z "$VERSION" ]; then
     exit 1
 fi
 
+# Get build metadata
+BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+GIT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+
 echo "Building gofr-iq production image version: $VERSION"
+echo "Build date: $BUILD_DATE"
+echo "Git commit: $GIT_COMMIT"
 
 # Build the image with version tag and latest
 docker build \
     -f docker/Dockerfile.prod \
+    --build-arg BUILD_DATE="$BUILD_DATE" \
+    --build-arg GIT_COMMIT="$GIT_COMMIT" \
+    --build-arg VERSION="$VERSION" \
     -t gofr-iq-prod:${VERSION} \
     -t gofr-iq-prod:latest \
     .

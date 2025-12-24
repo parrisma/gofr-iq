@@ -1,6 +1,24 @@
 # gofr-iq Production Dockerfile
 # Single-stage build with supervisor for MCP + MCPO + Web servers
-FROM python:3.11-slim
+FROM python:3.11.11-slim
+
+# OCI Labels - Version metadata per SERVICE_COMPATIBILITY.md
+# These are baked into the image for traceability
+ARG BUILD_DATE
+ARG GIT_COMMIT
+ARG VERSION=0.1.0
+LABEL org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${GIT_COMMIT}" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.title="gofr-iq" \
+      org.opencontainers.image.description="GOFR IQ MCP Server" \
+      org.opencontainers.image.vendor="GOFR" \
+      com.gofr.python.version="3.11.11" \
+      com.gofr.chromadb.version="0.5.23" \
+      com.gofr.neo4j.driver.version="6.0.3" \
+      com.gofr.hvac.version="2.4.0" \
+      com.gofr.mcp.version="1.23.1" \
+      com.gofr.fastapi.version="0.115.9"
 
 # Install system dependencies and supervisor
 RUN apt-get update && apt-get install -y --no-install-recommends \

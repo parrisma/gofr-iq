@@ -8,6 +8,17 @@
 # Client version is pinned in pyproject.toml
 FROM chromadb/chroma:0.5.23
 
+# OCI Labels - Version metadata per SERVICE_COMPATIBILITY.md
+ARG BUILD_DATE
+ARG GIT_COMMIT
+LABEL org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${GIT_COMMIT}" \
+      org.opencontainers.image.version="0.5.23" \
+      org.opencontainers.image.title="gofr-chromadb" \
+      org.opencontainers.image.description="ChromaDB for GOFR-IQ" \
+      com.gofr.chromadb.version="0.5.23" \
+      com.gofr.chromadb.api.version="v1"
+
 # Test-friendly defaults
 ENV IS_PERSISTENT=TRUE
 ENV ANONYMIZED_TELEMETRY=FALSE

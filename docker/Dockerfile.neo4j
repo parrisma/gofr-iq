@@ -6,6 +6,17 @@
 
 FROM neo4j:5.26.18-community
 
+# OCI Labels - Version metadata per SERVICE_COMPATIBILITY.md
+ARG BUILD_DATE
+ARG GIT_COMMIT
+LABEL org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${GIT_COMMIT}" \
+      org.opencontainers.image.version="5.26.18" \
+      org.opencontainers.image.title="gofr-neo4j" \
+      org.opencontainers.image.description="Neo4j for GOFR-IQ" \
+      com.gofr.neo4j.version="5.26.18-community" \
+      com.gofr.neo4j.driver.version="6.0.3"
+
 # Install APOC plugin for advanced procedures
 ENV NEO4J_PLUGINS='["apoc"]'
 

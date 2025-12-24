@@ -175,10 +175,7 @@ Thumbs.db
 *.bak
 
 # Data storage - sessions and documents
-data/sessions/
-data/storage/**/*.json
-data/storage/**/*.jsonl
-data/storage/**/chroma.sqlite3
+/data/
 
 # Test tuning artifacts
 test/tuning/live_run_*.json
