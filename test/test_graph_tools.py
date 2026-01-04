@@ -220,7 +220,7 @@ class TestExploreGraph:
         result = parse_response(response)
 
         assert result["status"] == "error"
-        assert result["error_code"] == "NODE_NOT_FOUND"
+        assert result["error_code"] == "INSTRUMENT_NOT_FOUND"
 
     def test_explore_invalid_node_type(
         self,
@@ -241,6 +241,7 @@ class TestExploreGraph:
 
         assert result["status"] == "error"
         assert result["error_code"] == "INVALID_NODE_TYPE"
+        assert "valid" in result.get("details", {})
 
 
 # ============================================================================

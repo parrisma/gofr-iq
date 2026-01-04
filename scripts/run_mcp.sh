@@ -22,12 +22,7 @@ fi
 
 # Configuration with environment variable fallbacks
 HOST="${GOFR_IQ_MCP_HOST:-${GOFR_IQ_HOST:-0.0.0.0}}"
-# Source gofriq.env for canonical port definitions
-if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
-    source "${SCRIPT_DIR}/gofriq.env"
-fi
-
-PORT="${GOFR_IQ_MCP_PORT:-${GOFR_IQ_MCP_PORT}}"
+PORT="${GOFR_IQ_MCP_PORT}"
 NO_AUTH="${GOFR_IQ_NO_AUTH:-false}"
 LOG_LEVEL="${GOFR_IQ_LOG_LEVEL:-INFO}"
 STORAGE_DIR="${GOFR_IQ_STORAGE_DIR:-${GOFR_IQ_STORAGE}}"

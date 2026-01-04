@@ -291,6 +291,9 @@ class LLMService:
             
         Returns:
             EmbeddingResult with embedding vectors
+            
+        Raises:
+            LLMAPIError: If the embedding API returns an error
         """
         payload = {
             "model": model or self.settings.embedding_model,
@@ -299,7 +302,16 @@ class LLMService:
 
         response = self._make_request("/embeddings", payload)
 
+        # Check for error in response body (OpenRouter returns 200 with error object)
+        if "error" in response:
+            error_msg = response["error"].get("message", "Unknown embedding error")
+            error_code = response["error"].get("code", 500)
+            raise LLMAPIError(error_code, f"Embedding failed: {error_msg}")
+
         # Extract embeddings from response
+        if "data" not in response:
+            raise LLMAPIError(500, f"Invalid embedding response: missing 'data' field. Response: {response}")
+        
         embeddings = [item["embedding"] for item in response["data"]]
 
         return EmbeddingResult(

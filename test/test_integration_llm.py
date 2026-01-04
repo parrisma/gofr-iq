@@ -24,6 +24,8 @@ from app.services.embedding_index import (
     create_llm_embedding_function,
 )
 
+# Qwen3 embedding model produces 4096-dimensional vectors
+EMBEDDING_DIMENSIONS = 4096
 
 # Skip all tests if LLM is not available
 pytestmark = pytest.mark.skipif(
@@ -141,8 +143,8 @@ class TestEmbeddingIntegration:
         assert isinstance(embedding, list)
         assert len(embedding) > 0
         assert all(isinstance(x, float) for x in embedding)
-        # text-embedding-3-small produces 1536-dimensional vectors
-        assert len(embedding) == 1536
+        # Qwen3 embedding model produces 4096-dimensional vectors
+        assert len(embedding) == EMBEDDING_DIMENSIONS
 
     def test_batch_embeddings(self, llm_service: LLMService) -> None:
         """Test generating batch embeddings"""
@@ -155,7 +157,7 @@ class TestEmbeddingIntegration:
 
         assert isinstance(result, EmbeddingResult)
         assert len(result.embeddings) == 3
-        assert result.dimensions == 1536
+        assert result.dimensions == EMBEDDING_DIMENSIONS
         assert result.usage  # Usage stats returned
 
     def test_embedding_similarity(self, llm_service: LLMService) -> None:
@@ -197,7 +199,7 @@ class TestLLMEmbeddingFunctionIntegration:
         embeddings = embed_fn(["Hello", "World"])
 
         assert len(embeddings) == 2
-        assert len(embeddings[0]) == 1536  # text-embedding-3-small dimensions
+        assert len(embeddings[0]) == EMBEDDING_DIMENSIONS  # Qwen3 embedding dimensions
 
     def test_embedding_function_dimensions(self, llm_service: LLMService) -> None:
         """Test dimensions property"""
@@ -205,7 +207,7 @@ class TestLLMEmbeddingFunctionIntegration:
 
         # Dimensions should be determined on first call
         dims = embed_fn.dimensions
-        assert dims == 1536
+        assert dims == EMBEDDING_DIMENSIONS
 
     def test_factory_function(self) -> None:
         """Test factory function creates working embedding function"""
@@ -214,7 +216,7 @@ class TestLLMEmbeddingFunctionIntegration:
         embeddings = embed_fn(["Test embedding"])
 
         assert len(embeddings) == 1
-        assert len(embeddings[0]) == 1536
+        assert len(embeddings[0]) == EMBEDDING_DIMENSIONS
 
     def test_embed_documents(self, llm_service: LLMService) -> None:
         """Test embed_documents interface"""
@@ -231,4 +233,4 @@ class TestLLMEmbeddingFunctionIntegration:
         embeddings = embed_fn.embed_query("Search query")
 
         assert len(embeddings) == 1  # Single query returns list with one embedding
-        assert len(embeddings[0]) == 1536
+        assert len(embeddings[0]) == EMBEDDING_DIMENSIONS

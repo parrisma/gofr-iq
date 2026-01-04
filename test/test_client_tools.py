@@ -108,6 +108,14 @@ class TestToolRegistration:
         assert "get_client_feed" in registered_tools
         assert "add_to_portfolio" in registered_tools
         assert "add_to_watchlist" in registered_tools
+        # New tools
+        assert "list_clients" in registered_tools
+        assert "get_client_profile" in registered_tools
+        assert "get_portfolio_holdings" in registered_tools
+        assert "get_watchlist_items" in registered_tools
+        assert "update_client_profile" in registered_tools
+        assert "remove_from_portfolio" in registered_tools
+        assert "remove_from_watchlist" in registered_tools
 
     def test_create_client_description(self, registered_tools: dict[str, Any]) -> None:
         """Test create_client has proper description"""
@@ -496,3 +504,724 @@ class TestAddToWatchlist:
         
         assert result["status"] == "error"
         assert result["error_code"] == "WATCHLIST_NOT_FOUND"
+
+
+# ============================================================================
+# List Clients Tests
+# ============================================================================
+
+
+class TestListClients:
+    """Tests for list_clients tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_list_clients_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test listing clients successfully"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        # Mock session for client query
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.__iter__ = lambda self: iter([
+            {
+                "client_guid": "client-1",
+                "name": "Citadel",
+                "client_type": "HEDGE_FUND",
+                "group_guid": TEST_GROUP,
+                "created_at": "2025-01-01T00:00:00Z",
+            },
+            {
+                "client_guid": "client-2",
+                "name": "BlackRock",
+                "client_type": "LONG_ONLY",
+                "group_guid": TEST_GROUP,
+                "created_at": "2025-01-02T00:00:00Z",
+            },
+        ])
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "list_clients")
+        
+        response = tool_fn()
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["total_count"] == 2
+        assert len(result["data"]["clients"]) == 2
+        assert result["data"]["clients"][0]["name"] == "Citadel"
+        assert result["data"]["clients"][1]["name"] == "BlackRock"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_list_clients_with_type_filter(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test listing clients filtered by type"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.__iter__ = lambda self: iter([
+            {
+                "client_guid": "client-1",
+                "name": "Citadel",
+                "client_type": "HEDGE_FUND",
+                "group_guid": TEST_GROUP,
+                "created_at": "2025-01-01T00:00:00Z",
+            },
+        ])
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "list_clients")
+        
+        response = tool_fn(client_type="HEDGE_FUND")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["filters_applied"]["client_type"] == "HEDGE_FUND"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_list_clients_empty(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test listing when no clients exist"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.__iter__ = lambda self: iter([])
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "list_clients")
+        
+        response = tool_fn()
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["total_count"] == 0
+        assert result["data"]["clients"] == []
+
+
+# ============================================================================
+# Get Client Profile Tests
+# ============================================================================
+
+
+class TestGetClientProfile:
+    """Tests for get_client_profile tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_profile_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test getting client profile successfully"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.single.return_value = {
+            "client_guid": "client-123",
+            "name": "Citadel",
+            "alert_frequency": "realtime",
+            "impact_threshold": 50.0,
+            "created_at": "2025-01-01T00:00:00Z",
+            "client_type": "HEDGE_FUND",
+            "group_guid": TEST_GROUP,
+            "profile_guid": "profile-123",
+            "mandate_type": "equity_long_short",
+            "horizon": "short",
+            "esg_constrained": False,
+            "benchmark": "SPY",
+            "portfolio_guid": "portfolio-123",
+            "watchlist_guid": "watchlist-123",
+        }
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "get_client_profile")
+        
+        response = tool_fn(client_guid="client-123")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["name"] == "Citadel"
+        assert result["data"]["client_type"] == "HEDGE_FUND"
+        assert result["data"]["profile"]["mandate_type"] == "equity_long_short"
+        assert result["data"]["settings"]["alert_frequency"] == "realtime"
+        assert result["data"]["portfolio_guid"] == "portfolio-123"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_profile_not_found(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test getting profile for non-existent client"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.single.return_value = None
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "get_client_profile")
+        
+        response = tool_fn(client_guid="nonexistent-guid-1234-5678-901234567890")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "error"
+        assert result["error_code"] == "CLIENT_NOT_FOUND"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_profile_access_denied(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test access denied for client in different group"""
+        mock_permitted_groups.return_value = ["other-group"]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.single.return_value = {
+            "client_guid": "client-123",
+            "name": "Citadel",
+            "group_guid": TEST_GROUP,  # Different from permitted
+            "alert_frequency": "realtime",
+            "impact_threshold": 50.0,
+            "created_at": None,
+            "client_type": "HEDGE_FUND",
+            "profile_guid": None,
+            "mandate_type": None,
+            "horizon": None,
+            "esg_constrained": None,
+            "benchmark": None,
+            "portfolio_guid": None,
+            "watchlist_guid": None,
+        }
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "get_client_profile")
+        
+        response = tool_fn(client_guid="client-123")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "error"
+        assert result["error_code"] == "ACCESS_DENIED"
+
+
+# ============================================================================
+# Get Portfolio Holdings Tests
+# ============================================================================
+
+
+class TestGetPortfolioHoldings:
+    """Tests for get_portfolio_holdings tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_holdings_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test getting portfolio holdings successfully"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        # First call: access check
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+        }
+        
+        # Second call: holdings query
+        holdings_result = MagicMock()
+        holdings_result.__iter__ = lambda self: iter([
+            {
+                "portfolio_guid": "portfolio-123",
+                "ticker": "AAPL",
+                "instrument_name": "Apple Inc",
+                "weight": 0.25,
+                "shares": 10000,
+                "avg_cost": 150.0,
+                "added_at": "2025-01-01T00:00:00Z",
+            },
+            {
+                "portfolio_guid": "portfolio-123",
+                "ticker": "MSFT",
+                "instrument_name": "Microsoft Corp",
+                "weight": 0.15,
+                "shares": 5000,
+                "avg_cost": 380.0,
+                "added_at": "2025-01-02T00:00:00Z",
+            },
+        ])
+        
+        mock_session.run.side_effect = [access_result, holdings_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "get_portfolio_holdings")
+        
+        response = tool_fn(client_guid="client-123")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["holding_count"] == 2
+        assert result["data"]["total_weight"] == 0.4
+        assert result["data"]["holdings"][0]["ticker"] == "AAPL"
+        assert result["data"]["holdings"][0]["weight_pct"] == "25.0%"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_holdings_empty_portfolio(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test getting empty portfolio"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+        }
+        
+        holdings_result = MagicMock()
+        holdings_result.__iter__ = lambda self: iter([
+            {
+                "portfolio_guid": "portfolio-123",
+                "ticker": None,  # No holdings
+                "instrument_name": None,
+                "weight": None,
+                "shares": None,
+                "avg_cost": None,
+                "added_at": None,
+            },
+        ])
+        
+        mock_session.run.side_effect = [access_result, holdings_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "get_portfolio_holdings")
+        
+        response = tool_fn(client_guid="client-123")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["holding_count"] == 0
+        assert result["data"]["holdings"] == []
+
+
+# ============================================================================
+# Get Watchlist Items Tests
+# ============================================================================
+
+
+class TestGetWatchlistItems:
+    """Tests for get_watchlist_items tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_watchlist_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test getting watchlist items successfully"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+        }
+        
+        watchlist_result = MagicMock()
+        watchlist_result.__iter__ = lambda self: iter([
+            {
+                "watchlist_guid": "watchlist-123",
+                "watchlist_name": "Citadel Watchlist",
+                "ticker": "TSLA",
+                "instrument_name": "Tesla Inc",
+                "alert_threshold": 60.0,
+                "added_at": "2025-01-01T00:00:00Z",
+            },
+            {
+                "watchlist_guid": "watchlist-123",
+                "watchlist_name": "Citadel Watchlist",
+                "ticker": "NVDA",
+                "instrument_name": "NVIDIA Corp",
+                "alert_threshold": 70.0,
+                "added_at": "2025-01-02T00:00:00Z",
+            },
+        ])
+        
+        mock_session.run.side_effect = [access_result, watchlist_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "get_watchlist_items")
+        
+        response = tool_fn(client_guid="client-123")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["item_count"] == 2
+        assert result["data"]["items"][0]["ticker"] == "TSLA"
+        assert result["data"]["items"][0]["alert_threshold"] == 60.0
+
+
+# ============================================================================
+# Update Client Profile Tests
+# ============================================================================
+
+
+class TestUpdateClientProfile:
+    """Tests for update_client_profile tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_update_profile_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test updating client profile successfully"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        # Access check result
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+            "profile_guid": "profile-123",
+        }
+        
+        # Update results (no return needed)
+        update_result = MagicMock()
+        
+        # Final fetch result
+        fetch_result = MagicMock()
+        fetch_result.single.return_value = {
+            "client_guid": "client-123",
+            "name": "Citadel",
+            "alert_frequency": "daily",
+            "impact_threshold": 70.0,
+            "client_type": "HEDGE_FUND",
+            "group_guid": TEST_GROUP,
+            "mandate_type": "equity_long_short",
+            "horizon": "short",
+            "esg_constrained": False,
+            "benchmark": "SPY",
+        }
+        
+        mock_session.run.side_effect = [access_result, update_result, fetch_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "update_client_profile")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            alert_frequency="daily",
+            impact_threshold=70.0,
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert "alert_frequency" in result["data"]["changes"]
+        assert "impact_threshold" in result["data"]["changes"]
+        assert result["data"]["settings"]["alert_frequency"] == "daily"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_update_profile_no_changes(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test update with no fields provided"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        tool_fn = get_tool_fn(mcp_server, "update_client_profile")
+        
+        response = tool_fn(client_guid="client-123")
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "error"
+        assert result["error_code"] == "NO_UPDATES_PROVIDED"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_update_profile_invalid_frequency(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test update with invalid alert frequency"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        tool_fn = get_tool_fn(mcp_server, "update_client_profile")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            alert_frequency="invalid",
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "error"
+        assert result["error_code"] == "INVALID_ALERT_FREQUENCY"
+
+
+# ============================================================================
+# Remove from Portfolio Tests
+# ============================================================================
+
+
+class TestRemoveFromPortfolio:
+    """Tests for remove_from_portfolio tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_remove_holding_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test removing holding successfully"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+        }
+        
+        delete_result = MagicMock()
+        delete_result.single.return_value = {"deleted": 1}
+        
+        count_result = MagicMock()
+        count_result.single.return_value = {"remaining": 5}
+        
+        mock_session.run.side_effect = [access_result, delete_result, count_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "remove_from_portfolio")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            ticker="AAPL",
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["ticker_removed"] == "AAPL"
+        assert result["data"]["remaining_holdings"] == 5
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_remove_holding_not_found(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test removing holding that doesn't exist"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+        }
+        
+        delete_result = MagicMock()
+        delete_result.single.return_value = {"deleted": 0}  # Nothing deleted
+        
+        mock_session.run.side_effect = [access_result, delete_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "remove_from_portfolio")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            ticker="XYZ",
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "error"
+        assert result["error_code"] == "HOLDING_NOT_FOUND"
+
+
+# ============================================================================
+# Remove from Watchlist Tests
+# ============================================================================
+
+
+class TestRemoveFromWatchlist:
+    """Tests for remove_from_watchlist tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_remove_watch_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test removing from watchlist successfully"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+        }
+        
+        delete_result = MagicMock()
+        delete_result.single.return_value = {"deleted": 1}
+        
+        count_result = MagicMock()
+        count_result.single.return_value = {"remaining": 3}
+        
+        mock_session.run.side_effect = [access_result, delete_result, count_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "remove_from_watchlist")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            ticker="TSLA",
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert result["data"]["ticker_removed"] == "TSLA"
+        assert result["data"]["remaining_watched"] == 3
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_remove_watch_not_found(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test removing watch that doesn't exist"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Citadel",
+        }
+        
+        delete_result = MagicMock()
+        delete_result.single.return_value = {"deleted": 0}
+        
+        mock_session.run.side_effect = [access_result, delete_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "remove_from_watchlist")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            ticker="XYZ",
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "error"
+        assert result["error_code"] == "WATCH_NOT_FOUND"

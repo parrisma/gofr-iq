@@ -16,6 +16,7 @@ Test Classes:
 from __future__ import annotations
 
 import json
+import os
 import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -679,7 +680,7 @@ class TestMCPServerCreation:
 
     def test_create_mcp_server(self, temp_storage: Path) -> None:
         """Test creating MCP server from factory."""
-        from app.main import create_mcp_server
+        from app.main_mcp import create_mcp_server
 
         server = create_mcp_server(
             storage_dir=temp_storage,
@@ -690,9 +691,16 @@ class TestMCPServerCreation:
         # Server should be a FastMCP instance
         assert isinstance(server, FastMCP)
 
+    @pytest.mark.skipif(
+        not os.environ.get("GOFR_IQ_CHROMA_HOST"),
+        reason="Requires ChromaDB infrastructure"
+    )
     def test_mcp_server_configuration(self, temp_storage: Path) -> None:
         """Test that MCP server is properly configured."""
-        from app.main import create_mcp_server
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            from app.main import create_mcp_server
 
         server = create_mcp_server(
             storage_dir=temp_storage,

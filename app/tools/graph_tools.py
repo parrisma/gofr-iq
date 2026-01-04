@@ -35,10 +35,13 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="explore_graph",
         description=(
             "Explore knowledge graph relationships from any starting point. "
-            "USE FOR: 'What affects AAPL?', 'TSLA peers?', 'Related companies?' "
-            "RETURNS: Connected nodes (companies, documents, events, sectors). "
-            "NODE_TYPES: INSTRUMENT, COMPANY, DOCUMENT, EVENT_TYPE, SECTOR, CLIENT. "
-            "TIP: For stocks, start with node_type=INSTRUMENT, node_id=ticker."
+            "WORKFLOW: query_documents (find entities) → explore_graph (relationships) → get_instrument_news (details). "
+            "USE FOR: 'What affects AAPL?', 'TSLA peers?', 'Companies in Energy sector?', 'Who holds this stock?' "
+            "USES OUTPUT FROM: query_documents (entities found) | get_instrument_news (ticker context). "
+            "PROVIDES INPUT TO: get_instrument_news (for detail drill-down) | get_market_context (for context). "
+            "NODE_TYPES: INSTRUMENT (ticker), COMPANY, DOCUMENT (guid), EVENT_TYPE, SECTOR, CLIENT. "
+            "RELATIONSHIPS: AFFECTS|PEER_OF|MENTIONS|HOLDS|WATCHES|ISSUED_BY|BELONGS_TO. "
+            "TIP: Start with node_type=INSTRUMENT, node_id=ticker (e.g., 'AAPL'). Increase max_depth to see deeper connections (slower)."
         ),
     )
     def explore_graph(
@@ -53,13 +56,14 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         )],
         relationship_types: Annotated[list[str] | None, Field(
             default=None,
-            description="Filter traversal by relationship types: AFFECTS, PEER_OF, MENTIONS, HOLDS, WATCHES, ISSUED_BY, BELONGS_TO, etc.",
+            description="Filter: AFFECTS|PEER_OF|MENTIONS|HOLDS|WATCHES|ISSUED_BY|BELONGS_TO",
+            examples=[["AFFECTS", "PEER_OF"]],
         )] = None,
         max_depth: Annotated[int, Field(
             default=1,
             ge=1,
             le=3,
-            description="How far to traverse (1-3 hops, default: 1)",
+            description="Hops: 1=direct neighbors, 2=neighbors-of-neighbors, 3=max (slower)",
         )] = 1,
         limit: Annotated[int, Field(
             default=20,
@@ -90,7 +94,8 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 return error_response(
                     error_code="INVALID_NODE_TYPE",
                     message=f"Invalid node type: {node_type}",
-                    recovery_strategy=f"Valid types: {', '.join([label.name for label in NodeLabel])}",
+                    recovery_strategy="Valid types: INSTRUMENT|COMPANY|DOCUMENT|EVENT_TYPE|SECTOR|CLIENT",
+                    details={"provided": node_type, "valid": [label.name for label in NodeLabel]},
                 )
 
             # Validate relationship types if provided
@@ -99,9 +104,10 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     rel_types = [RelationType[rt.upper()] for rt in relationship_types]
                 except KeyError as e:
                     return error_response(
-                        error_code="INVALID_RELATIONSHIP",
+                        error_code="INVALID_RELATIONSHIP_TYPE",
                         message=f"Invalid relationship type: {e}",
-                        recovery_strategy=f"Valid types: {', '.join([rel.name for rel in RelationType])}",
+                        recovery_strategy="Valid types: AFFECTS|PEER_OF|MENTIONS|HOLDS|WATCHES|ISSUED_BY|BELONGS_TO",
+                        details={"valid": [rel.name for rel in RelationType]},
                     )
             else:
                 rel_types = None
@@ -112,9 +118,10 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 start_node = graph_index.get_instrument(node_id.upper())
                 if not start_node:
                     return error_response(
-                        error_code="NODE_NOT_FOUND",
+                        error_code="INSTRUMENT_NOT_FOUND",
                         message=f"Instrument not found: {node_id}",
-                        recovery_strategy="Check the ticker symbol and try again.",
+                        recovery_strategy="Verify ticker symbol. Try get_market_context with correct ticker.",
+                        details={"ticker": node_id.upper()},
                     )
                 node_guid = f"{node_id.upper()}:NYSE"  # Default exchange
             else:
@@ -123,7 +130,8 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     return error_response(
                         error_code="NODE_NOT_FOUND",
                         message=f"{node_type} not found: {node_id}",
-                        recovery_strategy="Check the node ID and try again.",
+                        recovery_strategy="Verify the node ID. For instruments, use get_market_context first.",
+                        details={"node_type": node_type, "node_id": node_id},
                     )
                 node_guid = node_id
 
@@ -185,19 +193,23 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
         except Exception as e:
             return error_response(
-                error_code="GRAPH_ERROR",
+                error_code="GRAPH_EXPLORATION_FAILED",
                 message=f"Graph exploration failed: {e!s}",
-                recovery_strategy="Check the node type and ID, then try again.",
+                recovery_strategy="Run health_check to verify Neo4j (bolt://localhost:7687). Check node_type and node_id.",
+                details={"node_type": node_type, "node_id": node_id},
             )
 
     @mcp.tool(
         name="get_market_context",
         description=(
-            "Get comprehensive background on a stock ticker. "
-            "USE FOR: 'Tell me about AAPL', 'TSLA context', 'What indices is NVDA in?' "
+            "Get comprehensive market background on a stock ticker. "
+            "WORKFLOW: Often used after query_documents finds a ticker | provides context before explore_graph. "
+            "USE FOR: 'Tell me about AAPL', 'TSLA context', 'What indices is NVDA in?', 'Who are TSLA peers?' "
+            "USES OUTPUT FROM: query_documents (ticker identified) | explore_graph (to fill context). "
+            "PROVIDES INPUT TO: explore_graph (for deeper relationship queries) | get_instrument_news (complementary details). "
             "RETURNS: Company info, peer companies, recent events, index memberships, sector. "
-            "SIMPLER THAN explore_graph: Just pass a ticker, get full context. "
-            "TIP: Use this first; use explore_graph for deeper relationship queries."
+            "INCLUDES: Company fundamentals, peer correlation, recent news (30 days default), S&P 500/other indices, sector. "
+            "RECOMMENDED FLOW: Start here after query_documents finds a ticker, then use explore_graph for deeper relationships."
         ),
     )
     def get_market_context(
@@ -250,7 +262,8 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 return error_response(
                     error_code="INSTRUMENT_NOT_FOUND",
                     message=f"Instrument not found: {ticker}",
-                    recovery_strategy="Check the ticker symbol and try again.",
+                    recovery_strategy="Verify ticker symbol format (e.g., AAPL, 9988.HK). Ticker may not exist in graph.",
+                    details={"ticker": ticker.upper()},
                 )
 
             context: dict[str, Any] = {
@@ -369,19 +382,24 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
         except Exception as e:
             return error_response(
-                error_code="MARKET_CONTEXT_ERROR",
+                error_code="MARKET_CONTEXT_FAILED",
                 message=f"Failed to get market context: {e!s}",
-                recovery_strategy="Check the ticker and try again.",
+                recovery_strategy="Run health_check to verify Neo4j. Check ticker format (e.g., AAPL, 700.HK).",
+                details={"ticker": ticker},
             )
 
     @mcp.tool(
         name="get_instrument_news",
         description=(
-            "Get news articles affecting a specific stock. "
-            "USE FOR: 'Why is AAPL moving?', 'TSLA news', 'What's happening with NVDA?' "
+            "Get news articles and events affecting a specific stock. "
+            "WORKFLOW: query_documents (find companies) → get_instrument_news (ticker drill-down) | explore_graph (relationships). "
+            "USE FOR: 'Why is AAPL moving?', 'TSLA news', 'What's happening with NVDA?', 'Recent events for ticker X' "
+            "USES OUTPUT FROM: query_documents (ticker identified) | explore_graph (ticker context). "
+            "PROVIDES INPUT TO: explore_graph (for relationship drilling) | get_market_context (complementary view). "
             "SORTED BY: Impact score (highest first), then recency. "
-            "RETURNS: Articles with impact_score, event_type, direction (positive/negative). "
-            "DIFFERENT FROM query_documents: This is ticker-specific; query_documents is topic search."
+            "RETURNS: Articles with impact_score, event_type, direction (positive/negative), publication date. "
+            "DIFFERENT FROM query_documents: This is ticker-specific news (stock drill-down); query_documents is broad topic search. "
+            "FILTER: Impact tier, time window, event type (earnings, M&A, regulatory, etc.)"
         ),
     )
     def get_instrument_news(
@@ -440,7 +458,8 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 return error_response(
                     error_code="INSTRUMENT_NOT_FOUND",
                     message=f"Instrument not found: {ticker}",
-                    recovery_strategy="Check the ticker symbol.",
+                    recovery_strategy="Verify ticker symbol. Use get_market_context to check if ticker exists.",
+                    details={"ticker": ticker.upper()},
                 )
 
             with graph_index._get_session() as session:
@@ -500,7 +519,8 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
         except Exception as e:
             return error_response(
-                error_code="NEWS_QUERY_ERROR",
-                message=f"Failed to get news: {e!s}",
-                recovery_strategy="Check parameters and try again.",
+                error_code="INSTRUMENT_NEWS_FAILED",
+                message=f"Failed to get instrument news: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j. Check ticker and filters.",
+                details={"ticker": ticker, "days_back": days_back},
             )

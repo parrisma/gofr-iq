@@ -46,12 +46,7 @@ done
 
 # Defaults
 GOFR_IQ_HOST="${GOFR_IQ_HOST:-0.0.0.0}"
-# Source gofriq.env for canonical port definitions
-if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
-    source "${SCRIPT_DIR}/gofriq.env"
-fi
-
-GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT:-${GOFR_IQ_WEB_PORT}}"
+GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT}"
 
 # Export for Python process
 export GOFR_IQ_HOST

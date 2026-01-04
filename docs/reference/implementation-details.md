@@ -383,15 +383,52 @@ Extends `gofr_common.auth` with group claims:
 
 ### 6.1 MCP Server (Port 8060)
 
-**Tools:**
+**Ingest Tools:**
 | Tool | Description |
 |------|-------------|
 | `ingest_document` | Ingest news document |
+| `validate_document` | Dry-run validation before ingestion |
+
+**Query Tools:**
+| Tool | Description |
+|------|-------------|
 | `query_documents` | Hybrid search query |
 | `get_document` | Retrieve document by GUID |
+| `get_client_feed` | Personalized news for client |
+| `get_instrument_news` | News for specific ticker |
+
+**Source Tools:**
+| Tool | Description |
+|------|-------------|
 | `list_sources` | List available sources |
 | `get_source` | Get source details |
-| `register_source` | Register new source (admin) |
+| `create_source` | Register new source |
+| `update_source` | Update source properties |
+| `delete_source` | Soft-delete (deactivate) source |
+
+**Client Tools:**
+| Tool | Description |
+|------|-------------|
+| `create_client` | Create client profile |
+| `list_clients` | List all accessible clients |
+| `get_client_profile` | Get full client profile |
+| `update_client_profile` | Update client settings |
+| `add_to_portfolio` | Add stock to portfolio |
+| `remove_from_portfolio` | Remove stock from portfolio |
+| `get_portfolio_holdings` | Get portfolio with weights |
+| `add_to_watchlist` | Add stock to watchlist |
+| `remove_from_watchlist` | Remove from watchlist |
+| `get_watchlist_items` | Get watchlist with alerts |
+
+**Graph Tools:**
+| Tool | Description |
+|------|-------------|
+| `explore_graph` | Traverse entity relationships |
+
+**Health Tools:**
+| Tool | Description |
+|------|-------------|
+| `health_check` | System health status |
 
 ### 6.2 MCPO Server (Port 8061)
 
@@ -442,7 +479,10 @@ gofr-iq/
 │   │   ├── __init__.py
 │   │   ├── ingest_tools.py          # MCP ingest tools
 │   │   ├── query_tools.py           # MCP query tools
-│   │   └── source_tools.py          # MCP source tools
+│   │   ├── source_tools.py          # MCP source tools
+│   │   ├── client_tools.py          # MCP client tools
+│   │   ├── graph_tools.py           # MCP graph tools
+│   │   └── health_tools.py          # MCP health tools
 │   └── web/
 │       ├── __init__.py
 │       ├── routes.py                # FastAPI routes

@@ -89,3 +89,14 @@ skips = ["B101"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 pythonpath = ["."]
+filterwarnings = [
+    "error",
+    # Ignore ChromaDB's internal Pydantic deprecation warnings
+    # ChromaDB 0.5.23 uses deprecated Pydantic v2 patterns - not our code
+    # This will be fixed when ChromaDB updates to Pydantic v2.11+ compatible code
+    "ignore:Accessing the 'model_fields' attribute on the instance is deprecated:pydantic.warnings.PydanticDeprecatedSince211",
+    # Ignore SSL socket cleanup warnings from httpx/OpenRouter API client
+    # These are cosmetic resource warnings from async HTTP connections, not real failures
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+    "ignore::ResourceWarning",
+]

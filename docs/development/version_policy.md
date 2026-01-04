@@ -29,6 +29,3 @@ Policy: External Service and Python Library Version Synchronization
 
 8. The build pipeline must expose the resolved service versions and Python library versions as build metadata (for example: OCI labels on Docker images). This ensures that deployed artifacts always carry a verifiable compatibility signature.
 
----
-
-If you want, I can also produce a minimal SERVICE_COMPATIBILITY.md template that fits this policy.

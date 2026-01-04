@@ -96,9 +96,10 @@ def register_query_tools(
                     date_obj = datetime.combine(parsed_date, datetime.min.time())
                 except ValueError:
                     return error_response(
-                        error_code="INVALID_DATE",
+                        error_code="INVALID_DATE_FORMAT",
                         message=f"Invalid date format: {date_hint}",
-                        recovery_strategy="Use YYYY-MM-DD format for date_hint (e.g., '2025-12-08').",
+                        recovery_strategy="Use YYYY-MM-DD format (e.g., '2025-12-08').",
+                        details={"provided": date_hint, "expected_format": "YYYY-MM-DD"},
                     )
 
             # Load document with access check
@@ -131,8 +132,8 @@ def register_query_tools(
             return error_response(
                 error_code="DOCUMENT_NOT_FOUND",
                 message=f"Document not found: {guid}",
-                recovery_strategy="Verify the GUID is correct and you have access to the group. "
-                "Provide a date_hint if you know the document's creation date.",
+                recovery_strategy="Use query_documents to search for documents. Add date_hint (YYYY-MM-DD) if you know the date.",
+                details={"guid": guid},
             )
 
         except Exception as e:
@@ -142,12 +143,14 @@ def register_query_tools(
                 return error_response(
                     error_code="ACCESS_DENIED",
                     message=f"Access denied to document: {guid}",
-                    recovery_strategy="You do not have permission to access this document's group.",
+                    recovery_strategy="Document belongs to a group you can't access. Use query_documents to find accessible documents.",
+                    details={"guid": guid},
                 )
             return error_response(
-                error_code="GET_DOCUMENT_ERROR",
+                error_code="DOCUMENT_RETRIEVAL_FAILED",
                 message=f"Failed to retrieve document: {e!s}",
-                recovery_strategy="Check the GUID format and try again.",
+                recovery_strategy="Run health_check to verify services. Check GUID format (36-char UUID).",
+                details={"guid": guid},
             )
 
     # Only register query_documents if query_service is provided
@@ -157,7 +160,10 @@ def register_query_tools(
             name="query_documents",
             description=(
                 "Search news articles using natural language queries. "
+                "WORKFLOW: ingest_document (populate documents) → query_documents (search) → explore_graph (relationships). "
                 "USE FOR: 'Apple earnings', 'China tech regulation', 'M&A in APAC'. "
+                "INPUT FROM: Documents via ingest_document tool. "
+                "OUTPUT TO: get_client_feed (filtered by client) | explore_graph (relationships) | get_instrument_news (ticker drill-down). "
                 "FILTERS: regions, sectors, companies (tickers), date range, impact level. "
                 "RETURNS: Ranked articles with relevance scores, snippets, source info. "
                 "DIFFERENT FROM get_instrument_news: This is topic search; that is ticker-specific."
@@ -178,18 +184,22 @@ def register_query_tools(
             regions: Annotated[list[str] | None, Field(
                 default=None,
                 description="Filter by region codes: APAC, JP, CN, HK, SG, AU, KR, TW, US, EU",
+                examples=[["APAC", "US"]],
             )] = None,
             sectors: Annotated[list[str] | None, Field(
                 default=None,
                 description="Filter by sector: Technology, Finance, Healthcare, Energy, Consumer, etc.",
+                examples=[["Technology", "Finance"]],
             )] = None,
             companies: Annotated[list[str] | None, Field(
                 default=None,
                 description="Filter by ticker symbols: AAPL, 9988.HK, BABA, etc.",
+                examples=[["AAPL", "TSLA", "9988.HK"]],
             )] = None,
             languages: Annotated[list[str] | None, Field(
                 default=None,
                 description="Filter by language codes: en, zh, ja",
+                examples=[["en", "zh"]],
             )] = None,
             date_from: Annotated[str | None, Field(
                 default=None,
@@ -211,11 +221,13 @@ def register_query_tools(
             )] = None,
             impact_tiers: Annotated[list[str] | None, Field(
                 default=None,
-                description="Filter by impact tier: PLATINUM, GOLD, SILVER, BRONZE, STANDARD",
+                description="Tiers: PLATINUM (>$1B)|GOLD (>$100M)|SILVER (>$10M)|BRONZE|STANDARD",
+                examples=[["PLATINUM", "GOLD"]],
             )] = None,
             event_types: Annotated[list[str] | None, Field(
                 default=None,
-                description="Filter by event type: EARNINGS_BEAT, EARNINGS_MISS, M&A_ANNOUNCE, FDA_APPROVAL, GUIDANCE_RAISE, GUIDANCE_CUT, etc.",
+                description="Filter: EARNINGS_BEAT|EARNINGS_MISS|M&A_ANNOUNCE|FDA_APPROVAL|GUIDANCE_RAISE|GUIDANCE_CUT",
+                examples=[["EARNINGS_BEAT", "M&A_ANNOUNCE"]],
             )] = None,
             client_guid: Annotated[str | None, Field(
                 default=None,
@@ -225,7 +237,7 @@ def register_query_tools(
             )] = None,
             include_graph_context: Annotated[bool, Field(
                 default=True,
-                description="Include related entities from knowledge graph (default: True)",
+                description="Add sector, peers, related events from Neo4j graph (default: True)",
             )] = True,
             auth_tokens: Annotated[list[str] | None, Field(
                 default=None,
@@ -271,9 +283,10 @@ def register_query_tools(
                         date_from_obj = datetime.combine(parsed, datetime.min.time())
                     except ValueError:
                         return error_response(
-                            error_code="INVALID_DATE",
+                            error_code="INVALID_DATE_FORMAT",
                             message=f"Invalid date_from format: {date_from}",
                             recovery_strategy="Use YYYY-MM-DD format (e.g., '2025-01-01').",
+                            details={"provided": date_from, "expected_format": "YYYY-MM-DD"},
                         )
 
                 if date_to:
@@ -282,9 +295,10 @@ def register_query_tools(
                         date_to_obj = datetime.combine(parsed, datetime.max.time())
                     except ValueError:
                         return error_response(
-                            error_code="INVALID_DATE",
+                            error_code="INVALID_DATE_FORMAT",
                             message=f"Invalid date_to format: {date_to}",
                             recovery_strategy="Use YYYY-MM-DD format (e.g., '2025-12-31').",
+                            details={"provided": date_to, "expected_format": "YYYY-MM-DD"},
                         )
 
                 # Build filters
@@ -346,8 +360,30 @@ def register_query_tools(
                 )
 
             except Exception as e:
+                # Build filter summary for debugging
+                active_filters = []
+                if date_from:
+                    active_filters.append(f"date_from={date_from}")
+                if date_to:
+                    active_filters.append(f"date_to={date_to}")
+                if regions:
+                    active_filters.append(f"regions={regions}")
+                if sectors:
+                    active_filters.append(f"sectors={sectors}")
+                if companies:
+                    active_filters.append(f"companies={companies}")
+                if impact_tiers:
+                    active_filters.append(f"impact_tiers={impact_tiers}")
+                if event_types:
+                    active_filters.append(f"event_types={event_types}")
+                
                 return error_response(
-                    error_code="QUERY_ERROR",
+                    error_code="QUERY_SEARCH_FAILED",
                     message=f"Search failed: {e!s}",
-                    recovery_strategy="Check your query and filters, then try again.",
+                    recovery_strategy="Run health_check to verify ChromaDB. Try removing filters one by one to isolate the issue.",
+                    details={
+                        "query": query,
+                        "filters_applied": active_filters if active_filters else ["none"],
+                        "hint": "If using companies filter, verify ticker format (e.g., AAPL, 9988.HK).",
+                    },
                 )

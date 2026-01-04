@@ -20,7 +20,10 @@ import re
 import sys
 import tomllib
 from pathlib import Path
-from typing import NamedTuple
+from typing import Any, NamedTuple
+
+# Use Any for complex nested dict to avoid type checking issues
+VersionDict = dict[str, Any]
 
 
 class VersionSpec(NamedTuple):
@@ -40,10 +43,10 @@ class VersionMismatch(NamedTuple):
     actual_version: str
 
 
-def parse_compatibility_md(path: Path) -> dict[str, dict[str, str]]:
+def parse_compatibility_md(path: Path) -> VersionDict:
     """Parse SERVICE_COMPATIBILITY.md and extract version mappings."""
     content = path.read_text()
-    versions: dict[str, dict[str, str]] = {
+    versions: VersionDict = {
         "services": {},
         "python": {},
         "images": {},
@@ -56,12 +59,13 @@ def parse_compatibility_md(path: Path) -> dict[str, dict[str, str]]:
     )
     for match in service_pattern.finditer(content):
         service_name = match.group(1).lower()
-        versions["services"][service_name] = {
+        service_info: dict[str, str] = {
             "image": match.group(2),
             "image_version": match.group(3),
             "library": match.group(4),
             "library_version": match.group(5),
         }
+        versions["services"][service_name] = service_info  # type: ignore[index]
     
     # Parse Python dependencies table: | Library | Version | Purpose |
     python_pattern = re.compile(
@@ -71,7 +75,7 @@ def parse_compatibility_md(path: Path) -> dict[str, dict[str, str]]:
     for match in python_pattern.finditer(content):
         lib_name = match.group(1).lower()
         if lib_name not in ["library"]:  # Skip header
-            versions["python"][lib_name] = match.group(2)
+            versions["python"][lib_name] = match.group(2)  # type: ignore[index]
     
     # Parse Base Images table: | Image | Version | Used In |
     image_pattern = re.compile(
@@ -81,7 +85,7 @@ def parse_compatibility_md(path: Path) -> dict[str, dict[str, str]]:
     for match in image_pattern.finditer(content):
         image_name = match.group(1).lower()
         if image_name not in ["image"]:  # Skip header
-            versions["images"][image_name] = match.group(2)
+            versions["images"][image_name] = match.group(2)  # type: ignore[index]
     
     return versions
 
@@ -179,7 +183,7 @@ def check_for_floating_versions(specs: list[VersionSpec]) -> list[str]:
 
 
 def validate_versions(
-    compat_versions: dict[str, dict[str, str]],
+    compat_versions: VersionDict,
     pyproject_specs: list[VersionSpec],
     dockerfile_specs: list[VersionSpec],
 ) -> list[VersionMismatch]:
@@ -188,8 +192,9 @@ def validate_versions(
     
     # Check service library versions
     for service, info in compat_versions.get("services", {}).items():
-        lib_name = info["library"].lower()
-        expected_version = info["library_version"]
+        # info is dict[str, str], so we can access keys directly
+        lib_name = info.get("library", "").lower()
+        expected_version = info.get("library_version", "")
         
         for spec in pyproject_specs:
             # Normalize names for comparison

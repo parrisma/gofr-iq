@@ -29,11 +29,7 @@ if [ -d "$SCRIPT_DIR/../lib/gofr-common/scripts" ]; then
     COMMON_SCRIPTS="$SCRIPT_DIR/../lib/gofr-common/scripts"
 fi
 
-
-
-# Source centralized port configuration
-source "$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.sh"
-gofr_ports_list
+# Source centralized environment configuration
 export GOFR_IQ_ENV="${GOFR_IQ_ENV:-PROD}"
 if [ -f "$SCRIPT_DIR/gofriq.env" ]; then
     source "$SCRIPT_DIR/gofriq.env"
@@ -183,7 +179,7 @@ if [ "$STOP_INFRA" = true ]; then
     exit 0
 fi
 
-# Re-source after env vars may have changed
+# Re-source gofriq.env after command-line args may have changed GOFR_IQ_ENV
 if [ -f "$SCRIPT_DIR/gofriq.env" ]; then
     source "$SCRIPT_DIR/gofriq.env"
 fi

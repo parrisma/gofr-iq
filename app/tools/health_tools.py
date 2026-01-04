@@ -39,10 +39,15 @@ def register_health_tools(
     @mcp.tool(
         name="health_check",
         description=(
-            "Check system health - use to diagnose connection issues. "
-            "CHECKS: Neo4j (graph DB), ChromaDB (vectors), LLM API. "
-            "RETURNS: Overall status (healthy/degraded/unhealthy) + per-service details. "
-            "USE WHEN: Errors occur, to verify infrastructure is operational."
+            "Diagnostic tool to check system health and troubleshoot connection issues. "
+            "WORKFLOW: Run when any tool fails unexpectedly to identify infrastructure problems. "
+            "USE FOR: 'System is slow', 'Tool errors keep happening', 'Debugging tool failures'. "
+            "CHECKS: Neo4j (bolt://localhost:7687), ChromaDB (http://localhost:8000), LLM API (configured key/endpoint). "
+            "RETURNS: healthy|degraded|unhealthy status + per-service details (response time, version, errors). "
+            "RECOVERY: Neo4j down→restart docker container, ChromaDB down→check container/port:8000, LLM→verify API key/endpoint. "
+            "DEPENDS ON: Being called when other tools fail (indicates infrastructure issue). "
+            "PREREQUISITE CHAIN: If tool errors → health_check (diagnose) → fix service → retry tool. "
+            "RELATED: All tools depend on healthy Neo4j and ChromaDB. LLM is optional for some operations."
         ),
     )
     def health_check() -> ToolResponse:
