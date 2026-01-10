@@ -9,7 +9,7 @@ Environment Variables:
     GOFR_VAULT_TOKEN: Vault token (dev mode)
     GOFR_VAULT_ROLE_ID: AppRole role ID (production)
     GOFR_VAULT_SECRET_ID: AppRole secret ID (production)
-    GOFR_VAULT_PATH_PREFIX: Path prefix in Vault (default: "gofr-iq")
+    GOFR_VAULT_PATH_PREFIX: Path prefix in Vault (default: "gofr/auth")
     GOFR_VAULT_MOUNT_POINT: KV mount point (default: "secret")
 """
 
@@ -45,7 +45,7 @@ def create_auth_service(
     secret_key: str,
     *,
     prefix: str = "GOFR",
-    env_prefix: str = "GOFR_IQ",
+    env_prefix: str = "GOFR",
     token_store: Optional[TokenStore] = None,
     group_store: Optional[GroupStore] = None,
 ) -> AuthService:
@@ -59,7 +59,7 @@ def create_auth_service(
     Args:
         secret_key: JWT signing secret
         prefix: Environment variable prefix for backend config (default: "GOFR")
-        env_prefix: Environment variable prefix for JWT audience (default: "GOFR_IQ")
+        env_prefix: Environment variable prefix for JWT audience (default: "GOFR" for shared auth)
         token_store: Optional pre-created token store
         group_store: Optional pre-created group store
         

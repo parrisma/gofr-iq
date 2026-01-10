@@ -21,6 +21,8 @@ from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
 from app.services.group_service import (
+    get_group_uuid_by_name,
+    get_group_uuids_by_names,
     resolve_permitted_groups,
     resolve_write_group,
 )
@@ -39,7 +41,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="create_client",
         description=(
             "Create an investment client profile for personalized news feeds. "
-            "WORKFLOW: create_client → get_client_profile → add_to_portfolio/add_to_watchlist → get_client_feed. "
+            "WORKFLOW: create_client -> get_client_profile -> add_to_portfolio/add_to_watchlist -> get_client_feed. "
             "USE FOR: Setting up hedge funds, asset managers, family offices, etc. "
             "REQUIRES AUTH: Must have a valid token. "
             "CREATES: Client + empty portfolio + empty watchlist. "
@@ -119,13 +121,23 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
         try:
             # Get write group from explicit tokens or context header
-            group_guid = resolve_write_group(auth_tokens=auth_tokens)
+            write_group_name = resolve_write_group(auth_tokens=auth_tokens)
             
-            if group_guid is None:
+            if write_group_name is None:
                 return error_response(
                     error_code="AUTH_REQUIRED",
                     message="Authentication required to create clients",
                     recovery_strategy="Pass auth_tokens parameter or include Authorization header with Bearer token.",
+                )
+            
+            # Convert group name to UUID for storage layer
+            group_guid = get_group_uuid_by_name(write_group_name)
+            if group_guid is None:
+                return error_response(
+                    error_code="GROUP_NOT_FOUND",
+                    message=f"Group not found: {write_group_name}",
+                    recovery_strategy="Ensure the group exists in the auth system.",
+                    details={"group_name": write_group_name},
                 )
 
             client_guid = str(uuid.uuid4())
@@ -283,7 +295,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             # Validate client exists
             client_node = graph_index.get_node(NodeLabel.CLIENT, client_guid)
@@ -347,7 +361,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="add_to_portfolio",
         description=(
             "Add a stock position to a client's portfolio (actual holdings). "
-            "WORKFLOW: create_client → add_to_portfolio (+ add_to_watchlist) → get_client_feed. "
+            "WORKFLOW: create_client -> add_to_portfolio (+ add_to_watchlist) -> get_client_feed. "
             "USE FOR: Recording actual holdings (not just interest). 'Add AAPL to Citadel portfolio'. "
             "USES OUTPUT FROM: create_client (client_guid), list_clients (client_guid). "
             "PROVIDES INPUT TO: get_portfolio_holdings (discover holdings), get_client_feed (boosts news relevance). "
@@ -463,7 +477,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="add_to_watchlist",
         description=(
             "Add a stock to a client's watchlist for monitoring (not holdings). "
-            "WORKFLOW: create_client → add_to_watchlist → get_watchlist_items → get_client_feed (includes watched stocks). "
+            "WORKFLOW: create_client -> add_to_watchlist -> get_watchlist_items -> get_client_feed (includes watched stocks). "
             "USE FOR: Tracking stocks of interest without actual positions. "
             "INPUT FROM: create_client (client_guid) | get_client_profile (watchlist_guid). "
             "OUTPUT TO: get_watchlist_items (retrieve all) | remove_from_watchlist (delete) | get_client_feed (filtered results). "
@@ -607,7 +621,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             # Build query with optional type filter
             type_filter = ""
@@ -674,7 +690,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="get_client_profile",
         description=(
             "Get complete profile and settings for a specific client. "
-            "WORKFLOW: create_client → get_client_profile → update_client_profile | add_to_portfolio/watchlist. "
+            "WORKFLOW: create_client -> get_client_profile -> update_client_profile | add_to_portfolio/watchlist. "
             "USE FOR: 'Show me details for client X' or 'What are Citadel's settings?'. "
             "INPUT FROM: create_client (client_guid) | list_clients (client_guid). "
             "OUTPUT TO: update_client_profile | add_to_portfolio | add_to_watchlist | get_client_feed. "
@@ -712,7 +728,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             with graph_index._get_session() as session:
                 # Get client with all related data in one query
@@ -796,7 +814,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="get_portfolio_holdings",
         description=(
             "List all holdings in a client's portfolio with weights and positions. "
-            "WORKFLOW: create_client → add_to_portfolio → get_portfolio_holdings → remove_from_portfolio. "
+            "WORKFLOW: create_client -> add_to_portfolio -> get_portfolio_holdings -> remove_from_portfolio. "
             "USE FOR: 'What stocks does Citadel hold?' or 'Show portfolio for client X'. "
             "USES OUTPUT FROM: add_to_portfolio (holdings added) | create_client (portfolio created). "
             "PROVIDES INPUT TO: remove_from_portfolio (ticker list) | get_client_feed (portfolio context). "
@@ -835,7 +853,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             with graph_index._get_session() as session:
                 # First verify client exists and user has access
@@ -933,7 +953,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="get_watchlist_items",
         description=(
             "List all stocks on a client's watchlist (monitoring without positions). "
-            "WORKFLOW: create_client → add_to_watchlist → get_watchlist_items → remove_from_watchlist. "
+            "WORKFLOW: create_client -> add_to_watchlist -> get_watchlist_items -> remove_from_watchlist. "
             "USE FOR: 'What stocks is Citadel watching?' or 'Show watchlist for client X'. "
             "USES OUTPUT FROM: add_to_watchlist (items added) | create_client (watchlist created). "
             "PROVIDES INPUT TO: remove_from_watchlist (ticker list) | get_client_feed (watchlist context). "
@@ -972,7 +992,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             with graph_index._get_session() as session:
                 # First verify client exists and user has access
@@ -1064,12 +1086,12 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="update_client_profile",
         description=(
             "Update a client's profile settings (alert frequency, thresholds, investment style). "
-            "WORKFLOW: create_client → get_client_profile → update_client_profile → get_client_feed. "
+            "WORKFLOW: create_client -> get_client_profile -> update_client_profile -> get_client_feed. "
             "USE FOR: 'Change Citadel to daily alerts' or 'Set impact threshold to 70', 'Change mandate to equity_long_short'. "
             "USES OUTPUT FROM: create_client (client_guid) | get_client_profile (current settings). "
             "PROVIDES INPUT TO: get_client_feed (alert settings) | get_client_profile (returns updated). "
             "PARTIAL UPDATE: Only provide fields you want to change. Omitted fields keep current values. "
-            "PREREQUISITE CHAIN: create_client → get_client_profile (see current) → update_client_profile (make changes). "
+            "PREREQUISITE CHAIN: create_client -> get_client_profile (see current) -> update_client_profile (make changes). "
             "RETURNS: Updated profile with all current settings. "
             "ALERT FREQUENCY: realtime|hourly|daily|weekly. Affects notification frequency. "
             "IMPACT_THRESHOLD: 0-100. Higher = fewer alerts (only major news). 70+ for executives, 50 for analysts, 30 for researchers. "
@@ -1150,7 +1172,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             # Check if any update fields provided
             updates_client: dict[str, Any] = {}
@@ -1347,7 +1371,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="remove_from_portfolio",
         description=(
             "Remove a stock position from a client's portfolio. "
-            "WORKFLOW: add_to_portfolio → get_portfolio_holdings → remove_from_portfolio (confirm with next get_portfolio_holdings). "
+            "WORKFLOW: add_to_portfolio -> get_portfolio_holdings -> remove_from_portfolio (confirm with next get_portfolio_holdings). "
             "USE FOR: 'Remove AAPL from Citadel portfolio' or 'Client sold their TSLA position'. "
             "USES OUTPUT FROM: get_portfolio_holdings (holdings list to remove) | create_client (portfolio exists). "
             "PROVIDES INPUT TO: get_portfolio_holdings (verify removal) | get_client_feed (news ranking changes). "
@@ -1390,7 +1414,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             with graph_index._get_session() as session:
                 # Verify client exists and user has access
@@ -1477,7 +1503,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="remove_from_watchlist",
         description=(
             "Stop watching a stock (remove from client's watchlist). "
-            "WORKFLOW: add_to_watchlist → get_watchlist_items → remove_from_watchlist (confirm with next get_watchlist_items). "
+            "WORKFLOW: add_to_watchlist -> get_watchlist_items -> remove_from_watchlist (confirm with next get_watchlist_items). "
             "USE FOR: 'Stop watching TSLA for Citadel' or 'Remove BABA from watchlist'. "
             "USES OUTPUT FROM: get_watchlist_items (watchlist items to remove) | create_client (watchlist exists). "
             "PROVIDES INPUT TO: get_watchlist_items (verify removal) | get_client_feed (watchlist context changes). "
@@ -1521,7 +1547,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             with graph_index._get_session() as session:
                 # Verify client exists and user has access

@@ -18,7 +18,12 @@ from pydantic import Field, ValidationError
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
-from app.services.group_service import resolve_permitted_groups, resolve_write_group
+from app.services.group_service import (
+    get_group_uuid_by_name,
+    get_group_uuids_by_names,
+    resolve_permitted_groups,
+    resolve_write_group,
+)
 from app.services.ingest_service import (
     IngestError,
     IngestService,
@@ -40,7 +45,7 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
         name="ingest_document",
         description=(
             "Store a news article in the repository. "
-            "WORKFLOW: list_sources → ingest_document → query_documents to retrieve. "
+            "WORKFLOW: list_sources -> ingest_document -> query_documents to retrieve. "
             "PREREQUISITES: Must call list_sources first to get valid source_guid. "
             "INPUT FROM: list_sources (source_guid parameter) | create_source (if new source). "
             "OUTPUT TO: query_documents (searches documents) | get_client_feed (filtered by client). "
@@ -108,13 +113,23 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
         try:
             # Get write group from explicit tokens or context header
             # Anonymous users cannot write - they get None
-            group_guid = resolve_write_group(auth_tokens=auth_tokens)
+            # Returns group NAME (e.g., "apac-sales")
+            group_name = resolve_write_group(auth_tokens=auth_tokens)
             
-            if group_guid is None:
+            if group_name is None:
                 return error_response(
                     error_code="AUTH_REQUIRED",
                     message="Authentication required for document ingestion",
                     recovery_strategy="Pass auth_tokens parameter or include Authorization header with Bearer token.",
+                )
+            
+            # Convert group name to UUID for storage
+            group_guid = get_group_uuid_by_name(group_name)
+            if group_guid is None:
+                return error_response(
+                    error_code="INVALID_GROUP",
+                    message=f"Group '{group_name}' not found",
+                    recovery_strategy="Verify the group exists and your token has access to it.",
                 )
 
             result = ingest_service.ingest(
@@ -173,7 +188,7 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
         name="validate_document",
         description=(
             "Validate a document before ingestion (dry-run). "
-            "WORKFLOW: validate_document → review issues → ingest_document (if valid). "
+            "WORKFLOW: validate_document -> review issues -> ingest_document (if valid). "
             "USE BEFORE: ingest_document to check for issues. "
             "CHECKS: Source validity, word count, language detection, duplicates. "
             "INPUT FROM: list_sources | create_source (source_guid parameter). "
@@ -250,11 +265,13 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             from app.services.source_registry import SourceNotFoundError
 
             # Get permitted groups for source access check
-            access_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            access_groups = get_group_uuids_by_names(group_names)
 
             # Validate write access (anonymous cannot validate for ingest)
-            write_group = resolve_write_group(auth_tokens=auth_tokens)
-            if write_group is None:
+            write_group_name = resolve_write_group(auth_tokens=auth_tokens)
+            if write_group_name is None:
                 return error_response(
                     error_code="AUTH_REQUIRED",
                     message="Authentication required to validate documents",

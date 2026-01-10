@@ -21,7 +21,10 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.document_store import DocumentNotFoundError, DocumentStore
-from app.services.group_service import resolve_permitted_groups
+from app.services.group_service import (
+    get_group_uuids_by_names,
+    resolve_permitted_groups,
+)
 from app.services.query_service import QueryFilters, QueryService
 
 if TYPE_CHECKING:
@@ -85,7 +88,9 @@ def register_query_tools(
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            permitted_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            permitted_groups = get_group_uuids_by_names(group_names)
 
             # Parse date hint if provided
             date_obj: datetime | None = None
@@ -160,7 +165,7 @@ def register_query_tools(
             name="query_documents",
             description=(
                 "Search news articles using natural language queries. "
-                "WORKFLOW: ingest_document (populate documents) → query_documents (search) → explore_graph (relationships). "
+                "WORKFLOW: ingest_document (populate documents) -> query_documents (search) -> explore_graph (relationships). "
                 "USE FOR: 'Apple earnings', 'China tech regulation', 'M&A in APAC'. "
                 "INPUT FROM: Documents via ingest_document tool. "
                 "OUTPUT TO: get_client_feed (filtered by client) | explore_graph (relationships) | get_instrument_news (ticker drill-down). "
@@ -271,7 +276,11 @@ def register_query_tools(
             """
             try:
                 # Get permitted groups from explicit tokens or context header
-                group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+                # Returns group NAMES (e.g., ["apac-sales", "public"])
+                group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+                
+                # Convert group names to UUIDs for storage lookup
+                group_guids = get_group_uuids_by_names(group_names)
 
                 # Parse dates if provided
                 date_from_obj: datetime | None = None

@@ -67,7 +67,7 @@ while [[ $# -gt 0 ]]; do
             echo "  GOFR_IQ_STORAGE_DIR      Storage directory"
             echo "  GOFR_IQ_NO_AUTH          Set to 'true' to disable auth"
             echo "  GOFR_IQ_LOG_LEVEL        Logging level (default: INFO)"
-            echo "  GOFR_IQ_JWT_SECRET       JWT secret for authentication"
+            echo "  GOFR_JWT_SECRET          JWT secret for authentication (shared)"
             exit 0
             ;;
         *)
@@ -79,9 +79,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate authentication configuration
-if [ "$NO_AUTH" = "false" ] && [ -z "${GOFR_IQ_JWT_SECRET:-}" ]; then
+if [ "$NO_AUTH" = "false" ] && [ -z "${GOFR_JWT_SECRET:-}" ]; then
     echo -e "${YELLOW}WARNING: No JWT secret configured and authentication is enabled${NC}"
-    echo -e "${YELLOW}Set GOFR_IQ_JWT_SECRET environment variable or use --no-auth${NC}"
+    echo -e "${YELLOW}Set GOFR_JWT_SECRET environment variable or use --no-auth${NC}"
 fi
 
 # Build command line arguments

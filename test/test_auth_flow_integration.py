@@ -76,8 +76,16 @@ def multi_token(auth_flow_auth_service: AuthService) -> str:
 
 
 @pytest.fixture(scope="module")
-def auth_test_data():
-    """Create test documents in different groups for auth flow testing."""
+def auth_test_data(auth_flow_auth_service: AuthService):
+    """Create test documents in different groups for auth flow testing.
+    
+    Important: Documents are stored using group UUIDs (from Vault), not group names.
+    This matches the real auth flow where:
+    - JWT tokens contain group names
+    - resolve_permitted_groups() extracts names from tokens
+    - get_group_uuids_by_names() converts names to UUIDs
+    - DocumentStore uses UUIDs as directory paths
+    """
     storage_dir = Config.get_storage_dir()
     source_registry = SourceRegistry(base_path=storage_dir / "sources")
     document_store = DocumentStore(base_path=storage_dir / "documents")
@@ -85,31 +93,41 @@ def auth_test_data():
     created_docs = {}
     
     # Create sources and documents for each test group
-    for group_id, group_name in [
+    # We use the group NAME as the key (what's in the JWT token)
+    # but store documents using the group UUID (from Vault)
+    for group_name, display_name in [
         (AUTH_TEST_GROUP_ALPHA, "Alpha"),
         (AUTH_TEST_GROUP_BETA, "Beta"),
-        (AUTH_TEST_GROUP_PUBLIC, "Public"),
+        ("public", "Public"),  # Use "public" name for public group
     ]:
-        # Create source
+        # Get the real UUID for this group from Vault
+        group = auth_flow_auth_service.groups.get_group_by_name(group_name)
+        if group is None:
+            # Group doesn't exist, skip
+            continue
+        group_uuid = str(group.id)
+        
+        # Create source using UUID
         source = source_registry.create(
-            name=f"Auth Test Source {group_name}",
-            group_guid=group_id,
+            name=f"Auth Test Source {display_name}",
+            group_guid=group_uuid,
             source_type=SourceType.NEWS_AGENCY,
             trust_level=TrustLevel.UNVERIFIED,
         )
         
-        # Create document
+        # Create document using UUID
         doc = Document(
             guid=str(uuid4()),
             source_guid=source.source_guid,
-            group_guid=group_id,
-            title=f"Auth Test Document {group_name}",
-            content=f"This document belongs to {group_name} group for auth flow testing.",
+            group_guid=group_uuid,
+            title=f"Auth Test Document {display_name}",
+            content=f"This document belongs to {display_name} group for auth flow testing.",
             language="en",
             created_at=datetime.now(UTC),
         )
         document_store.save(doc)
-        created_docs[group_id] = doc
+        # Key by group NAME (what's in tokens) for test lookups
+        created_docs[group_name] = doc
     
     return created_docs
 
@@ -293,7 +311,7 @@ class TestAuthFlowGroupFiltering:
         
         mcpo_url = shared_server_manager.mcpo_url
         alpha_doc = auth_test_data.get(AUTH_TEST_GROUP_ALPHA)
-        public_doc = auth_test_data.get(AUTH_TEST_GROUP_PUBLIC)
+        public_doc = auth_test_data.get("public")  # Use "public" name, not UUID
         
         if not alpha_doc or not public_doc:
             pytest.skip("Test data not created")

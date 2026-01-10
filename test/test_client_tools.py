@@ -138,15 +138,18 @@ class TestToolRegistration:
 class TestCreateClient:
     """Tests for create_client tool"""
 
+    @patch('app.tools.client_tools.get_group_uuid_by_name')
     @patch('app.tools.client_tools.resolve_write_group')
     def test_create_client_success(
         self,
         mock_write_group: MagicMock,
+        mock_get_group_uuid: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test successful client creation"""
         mock_write_group.return_value = TEST_GROUP
+        mock_get_group_uuid.return_value = TEST_GROUP  # Return UUID for the group
         register_client_tools(mcp_server, mock_graph_index)
         
         # Mock return values
@@ -188,15 +191,18 @@ class TestCreateClient:
         assert result["data"]["client_type"] == "HEDGE_FUND"
         assert result["data"]["group_guid"] == TEST_GROUP
 
+    @patch('app.tools.client_tools.get_group_uuid_by_name')
     @patch('app.tools.client_tools.resolve_write_group')
     def test_create_client_with_profile(
         self,
         mock_write_group: MagicMock,
+        mock_get_group_uuid: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test client creation with profile options"""
         mock_write_group.return_value = TEST_GROUP
+        mock_get_group_uuid.return_value = TEST_GROUP  # Return UUID for the group
         register_client_tools(mcp_server, mock_graph_index)
         
         mock_graph_index.create_client.return_value = GraphNode(
@@ -710,15 +716,19 @@ class TestGetClientProfile:
         assert result["status"] == "error"
         assert result["error_code"] == "CLIENT_NOT_FOUND"
 
+    @patch('app.tools.client_tools.get_group_uuids_by_names')
     @patch('app.tools.client_tools.resolve_permitted_groups')
     def test_get_profile_access_denied(
         self,
         mock_permitted_groups: MagicMock,
+        mock_get_group_uuids: MagicMock,
         mcp_server: FastMCP,
         mock_graph_index: MagicMock,
     ) -> None:
         """Test access denied for client in different group"""
         mock_permitted_groups.return_value = ["other-group"]
+        # Return a UUID for "other-group" that differs from TEST_GROUP
+        mock_get_group_uuids.return_value = ["other-group-uuid"]
         register_client_tools(mcp_server, mock_graph_index)
         
         mock_session = MagicMock()

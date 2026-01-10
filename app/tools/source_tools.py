@@ -20,6 +20,8 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.group_service import (
+    get_group_uuid_by_name,
+    get_group_uuids_by_names,
     resolve_permitted_groups,
     resolve_write_group,
 )
@@ -42,7 +44,7 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             "USE BEFORE: ingest_document - you need a source_guid. "
             "FILTER BY: region (APAC, US, EU), type (news_agency, broker, analyst). "
             "RETURNS: source_guid, name, type, region, trust_level. "
-            "WORKFLOW: list_sources → get_source → ingest_document OR create_source (if new provider). "
+            "WORKFLOW: list_sources -> get_source -> ingest_document OR create_source (if new provider). "
             "OUTPUT TO: ingest_document(source_guid=...) | get_source(source_guid=...). "
             "TIP: Call this first if you need to ingest documents."
         ),
@@ -83,7 +85,11 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            access_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Returns group NAMES (e.g., ["admin", "public"])
+            access_group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            
+            # Convert group names to UUIDs for storage lookup
+            access_groups = get_group_uuids_by_names(access_group_names)
 
             # Query sources with individual filter params
             from app.models.source import SourceType
@@ -128,7 +134,7 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             "Get detailed information about a specific news source. "
             "USE FOR: Checking source credibility, supported languages, metadata. "
             "RETURNS: Full source details including trust_level, boost_factor, active status. "
-            "WORKFLOW: list_sources → get_source → verify before ingesting. "
+            "WORKFLOW: list_sources -> get_source -> verify before ingesting. "
             "INPUT FROM: list_sources (source_guid output). "
             "OUTPUT TO: Verify metadata before ingest_document | update_source | delete_source. "
             "PREREQUISITE: You need a source_guid (from list_sources or document metadata)."
@@ -175,7 +181,9 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            access_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            access_groups = get_group_uuids_by_names(group_names)
 
             source = source_registry.get(source_guid, access_groups=access_groups)
 
@@ -236,7 +244,7 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             "USE BEFORE: ingest_document from a new provider. "
             "REQUIRES AUTH: Must have a valid token. "
             "TYPES: news_agency, broker, analyst, regulator, other. "
-            "WORKFLOW: list_sources (not found?) → create_source → ingest_document. "
+            "WORKFLOW: list_sources (not found?) -> create_source -> ingest_document. "
             "OUTPUT TO: ingest_document(source_guid=...) | get_source(source_guid=...). "
             "RETURNS: source_guid to use when ingesting documents from this source."
         ),
@@ -294,15 +302,25 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             group_guid: Group name/identifier (string like 'reuters-feed')
         """
         try:
-            # Get write group from explicit tokens or context header
+            # Get write group NAME from explicit tokens or context header
             # Anonymous users cannot write - they get None
-            group_guid = resolve_write_group(auth_tokens=auth_tokens)
+            write_group_name = resolve_write_group(auth_tokens=auth_tokens)
             
-            if group_guid is None:
+            if write_group_name is None:
                 return error_response(
                     error_code="AUTH_REQUIRED",
                     message="Authentication required to create sources",
                     recovery_strategy="Pass auth_tokens parameter or include Authorization header with Bearer token.",
+                )
+
+            # Convert group name to UUID for storage
+            group_uuid = get_group_uuid_by_name(write_group_name)
+            if group_uuid is None:
+                return error_response(
+                    error_code="GROUP_NOT_FOUND",
+                    message=f"Group '{write_group_name}' not found in auth system",
+                    recovery_strategy="Ensure the group exists before creating sources.",
+                    details={"group_name": write_group_name},
                 )
 
             from app.models.source import SourceType, TrustLevel
@@ -328,10 +346,10 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
                     details={"provided": trust_level},
                 )
 
-            # Create the source
+            # Create the source with UUID
             source = source_registry.create(
                 name=name,
-                group_guid=group_guid,
+                group_guid=group_uuid,
                 source_type=source_type_enum,
                 region=region,
                 languages=languages or ["en"],
@@ -434,11 +452,13 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         """
         try:
             # Get permitted groups for access check
-            access_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            access_groups = get_group_uuids_by_names(group_names)
 
             # Validate write access (anonymous cannot update)
-            write_group = resolve_write_group(auth_tokens=auth_tokens)
-            if write_group is None:
+            write_group_name = resolve_write_group(auth_tokens=auth_tokens)
+            if write_group_name is None:
                 return error_response(
                     error_code="AUTH_REQUIRED",
                     message="Authentication required to update sources",
@@ -567,11 +587,13 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         """
         try:
             # Get permitted groups for access check
-            access_groups = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            access_groups = get_group_uuids_by_names(group_names)
 
             # Validate write access (anonymous cannot delete)
-            write_group = resolve_write_group(auth_tokens=auth_tokens)
-            if write_group is None:
+            write_group_name = resolve_write_group(auth_tokens=auth_tokens)
+            if write_group_name is None:
                 return error_response(
                     error_code="AUTH_REQUIRED",
                     message="Authentication required to delete sources",

@@ -81,7 +81,7 @@ python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 | `GOFR_VAULT_PORT` | `8201` | Vault server port |
 | `GOFR_VAULT_TOKEN` | `gofr-dev-root-token` | Vault root token (dev only) |
 | `GOFR_VAULT_DEV_TOKEN` | `gofr-dev-root-token` | Development root token |
-| `GOFR_VAULT_PATH_PREFIX` | `gofr-iq/auth` | Vault path prefix for auth data |
+| `GOFR_VAULT_PATH_PREFIX` | `gofr/auth` | Vault path prefix for auth data (shared across GOFR services) |
 | `GOFR_VAULT_MOUNT_POINT` | `secret` | Vault KV mount point |
 
 **Production AppRole** (set these in production, leave empty for dev):

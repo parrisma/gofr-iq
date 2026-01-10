@@ -1,8 +1,12 @@
 """Authentication tests for GroupService.
 
-Tests resolve_write_group() behavior in both auth-enabled and auth-disabled modes.
+Tests resolve_write_group() behavior with auth enabled.
+
+NOTE: Per TEST_AUTH_CONSOLIDATION_PLAN.md, all tests must run WITH AUTH ON.
+No-auth mode tests have been removed/skipped.
 """
 
+import pytest
 from app.services.group_service import (
     init_group_service,
     resolve_write_group,
@@ -11,8 +15,22 @@ from app.services.group_service import (
 )
 
 
+# =============================================================================
+# SKIPPED: No-Auth Tests (violate "all tests WITH AUTH ON" requirement)
+# =============================================================================
+# These tests verify behavior when auth_service=None, which is no longer
+# a supported configuration per TEST_AUTH_CONSOLIDATION_PLAN.md Step 7.
+# If no-auth mode needs to be tested, create a separate test file that
+# runs independently with explicit documentation.
+# =============================================================================
+
+
+@pytest.mark.skip(reason="No-auth mode tests skipped: all tests must run WITH AUTH ON (see TEST_AUTH_CONSOLIDATION_PLAN.md)")
 class TestResolveWriteGroupNoAuth:
-    """Tests for resolve_write_group when auth is disabled."""
+    """Tests for resolve_write_group when auth is disabled.
+    
+    SKIPPED: These tests violate the requirement that all tests run WITH AUTH ON.
+    """
 
     def test_resolve_write_group_no_auth_no_token(self):
         """When auth is disabled globally, anonymous users should write to 'public'."""

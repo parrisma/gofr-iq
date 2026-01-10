@@ -44,9 +44,9 @@ def register_health_tools(
             "USE FOR: 'System is slow', 'Tool errors keep happening', 'Debugging tool failures'. "
             "CHECKS: Neo4j (bolt://localhost:7687), ChromaDB (http://localhost:8000), LLM API (configured key/endpoint). "
             "RETURNS: healthy|degraded|unhealthy status + per-service details (response time, version, errors). "
-            "RECOVERY: Neo4j down→restart docker container, ChromaDB down→check container/port:8000, LLM→verify API key/endpoint. "
+            "RECOVERY: Neo4j down->restart docker container, ChromaDB down->check container/port:8000, LLM->verify API key/endpoint. "
             "DEPENDS ON: Being called when other tools fail (indicates infrastructure issue). "
-            "PREREQUISITE CHAIN: If tool errors → health_check (diagnose) → fix service → retry tool. "
+            "PREREQUISITE CHAIN: If tool errors -> health_check (diagnose) -> fix service -> retry tool. "
             "RELATED: All tools depend on healthy Neo4j and ChromaDB. LLM is optional for some operations."
         ),
     )

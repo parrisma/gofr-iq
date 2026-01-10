@@ -39,29 +39,35 @@ from fixtures import DataStore, ServerManager  # noqa: E402
 def test_env() -> dict[str, str]:
     """Provide test environment variables.
     
-    These are FALLBACK defaults only used if run_tests.sh hasn't set them.
-    When running via run_tests.sh, these should NOT override the env vars
-    it sets (which point to the correct test containers).
+    CRITICAL: Most test configuration MUST come from run_tests.sh which sources
+    gofr_ports.sh. This fixture only provides non-critical defaults.
+    
+    Required env vars (must be set by run_tests.sh):
+    - GOFR_JWT_SECRET: Single JWT signing secret (from gofr_ports.sh)
+    - GOFR_VAULT_URL: Test Vault URL
+    - GOFR_VAULT_TOKEN: Test Vault token
+    - GOFR_IQ_CHROMA_HOST/PORT: Test ChromaDB
+    - GOFR_IQ_NEO4J_HOST/PORT: Test Neo4j
     
     Returns:
-        Dictionary of environment variables for test mode (fallbacks only).
+        Dictionary of non-critical environment defaults.
+    
+    Raises:
+        ValueError: If required GOFR_JWT_SECRET is not set.
     """
-    # Only return values that AREN'T already set in the environment
-    # This ensures run_tests.sh settings take precedence
+    # Fail fast if JWT secret not set - this is critical for auth
+    if not os.environ.get("GOFR_JWT_SECRET"):
+        raise ValueError(
+            "GOFR_JWT_SECRET not set. Run tests via ./scripts/run_tests.sh "
+            "which sources gofr_ports.sh for the single JWT secret."
+        )
+    
+    # Only non-critical defaults - everything else must come from run_tests.sh
     defaults = {
         "GOFR_IQ_ENV": "TEST",
-        "GOFR_IQ_JWT_SECRET": "test-secret-key-for-secure-testing-do-not-use-in-production",
         "GOFR_AUTH_BACKEND": "vault",
-        # NOTE: These are fallbacks for IDE/direct pytest runs only
-        # run_tests.sh sets the correct test container URLs
-        "GOFR_VAULT_URL": "http://gofr-vault-test:8200",
-        "GOFR_VAULT_TOKEN": "gofr-dev-root-token",
-        "GOFR_VAULT_PATH_PREFIX": "gofr-iq-test",
+        "GOFR_VAULT_PATH_PREFIX": "gofr-test/auth",
         "GOFR_VAULT_MOUNT_POINT": "secret",
-        "GOFR_IQ_CHROMA_HOST": "gofr-iq-chromadb-test",
-        "GOFR_IQ_CHROMA_PORT": "8000",
-        "GOFR_IQ_NEO4J_HOST": "gofr-iq-neo4j-test",
-        "GOFR_IQ_NEO4J_BOLT_PORT": "7687",
     }
     
     # Only return vars that aren't already set
@@ -141,10 +147,14 @@ def vault_auth_service():
     if backend != "vault":
         pytest.skip(f"Vault backend required, got: {backend or 'not set'}")
     
-    jwt_secret = os.environ.get(
-        "GOFR_IQ_JWT_SECRET",
-        "test-secret-key-for-secure-testing-do-not-use-in-production"
-    )
+    # Single JWT secret - NO FALLBACKS
+    # This must be set by run_tests.sh from gofr_ports.sh
+    jwt_secret = os.environ.get("GOFR_JWT_SECRET")
+    if not jwt_secret:
+        pytest.fail(
+            "GOFR_JWT_SECRET not set. Run tests via ./scripts/run_tests.sh "
+            "which sources gofr_ports.sh for the single JWT secret."
+        )
     
     try:
         auth = create_auth_service(secret_key=jwt_secret)
@@ -243,7 +253,7 @@ def vault_config() -> dict[str, str]:
     return {
         "url": url,
         "token": token,
-        "path_prefix": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-iq-test"),
+        "path_prefix": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-test/auth"),
         "mount_point": os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),
     }
 
@@ -277,29 +287,66 @@ def vault_available(vault_config: dict[str, str]) -> bool:
 
 
 @pytest.fixture(scope="session")
-def public_token() -> str | None:
-    """Get the bootstrap public token from environment.
+def bootstrap_auth(vault_auth_service) -> dict[str, str]:
+    """Create bootstrap groups and tokens ONCE at session start.
     
-    This token is created by bootstrap_auth.py and exported by run_tests.sh.
-    It grants access to the 'public' group.
+    This is the SINGLE source of truth for admin/public tokens in tests.
+    It ensures:
+    - admin/public groups exist in Vault (created if needed)
+    - admin/public tokens are created with the correct JWT secret (GOFR_JWT_SECRET)
+    - All tests share the same tokens
+    - Tokens are exported to environment for tests that read from env
+    
+    This fixture replaces the old run_bootstrap_auth() in run_tests.sh.
     
     Returns:
-        JWT token string for public group, or None if not set.
+        Dictionary with 'admin_token' and 'public_token' keys.
     """
-    return os.environ.get("GOFR_IQ_PUBLIC_TOKEN")
+    # Reserved groups (admin, public) are auto-created by AuthService
+    # But let's ensure they exist explicitly
+    _ensure_group(vault_auth_service, "admin", "Administrator group")
+    _ensure_group(vault_auth_service, "public", "Public access group")
+    
+    # Create bootstrap tokens with the shared JWT secret
+    admin_token = vault_auth_service.create_token(groups=["admin"])
+    public_token = vault_auth_service.create_token(groups=["public"])
+    
+    # Export to environment for tests/code that reads from env vars
+    os.environ["GOFR_IQ_ADMIN_TOKEN"] = admin_token
+    os.environ["GOFR_IQ_PUBLIC_TOKEN"] = public_token
+    
+    print(f"\n  Bootstrap auth: admin token ({len(admin_token)} chars), public token ({len(public_token)} chars)")
+    
+    return {
+        "admin_token": admin_token,
+        "public_token": public_token,
+    }
 
 
 @pytest.fixture(scope="session")
-def admin_token() -> str | None:
-    """Get the bootstrap admin token from environment.
+def public_token(bootstrap_auth: dict[str, str]) -> str:
+    """Get the bootstrap public token.
     
-    This token is created by bootstrap_auth.py and exported by run_tests.sh.
+    This token is created by the bootstrap_auth fixture at session start.
+    It grants access to the 'public' group.
+    
+    Returns:
+        JWT token string for public group.
+    """
+    return bootstrap_auth["public_token"]
+
+
+@pytest.fixture(scope="session")
+def admin_token(bootstrap_auth: dict[str, str]) -> str:
+    """Get the bootstrap admin token.
+    
+    This token is created by the bootstrap_auth fixture at session start.
     It grants access to the 'admin' group for administrative operations.
     
     Returns:
-        JWT token string for admin group, or None if not set.
+        JWT token string for admin group.
     """
-    return os.environ.get("GOFR_IQ_ADMIN_TOKEN")
+    return bootstrap_auth["admin_token"]
 
 
 # =============================================================================

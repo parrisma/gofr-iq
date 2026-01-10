@@ -19,7 +19,10 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
-from app.services.group_service import resolve_permitted_groups
+from app.services.group_service import (
+    get_group_uuids_by_names,
+    resolve_permitted_groups,
+)
 
 if TYPE_CHECKING:
     pass
@@ -35,7 +38,7 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="explore_graph",
         description=(
             "Explore knowledge graph relationships from any starting point. "
-            "WORKFLOW: query_documents (find entities) → explore_graph (relationships) → get_instrument_news (details). "
+            "WORKFLOW: query_documents (find entities) -> explore_graph (relationships) -> get_instrument_news (details). "
             "USE FOR: 'What affects AAPL?', 'TSLA peers?', 'Companies in Energy sector?', 'Who holds this stock?' "
             "USES OUTPUT FROM: query_documents (entities found) | get_instrument_news (ticker context). "
             "PROVIDES INPUT TO: get_instrument_news (for detail drill-down) | get_market_context (for context). "
@@ -392,7 +395,7 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         name="get_instrument_news",
         description=(
             "Get news articles and events affecting a specific stock. "
-            "WORKFLOW: query_documents (find companies) → get_instrument_news (ticker drill-down) | explore_graph (relationships). "
+            "WORKFLOW: query_documents (find companies) -> get_instrument_news (ticker drill-down) | explore_graph (relationships). "
             "USE FOR: 'Why is AAPL moving?', 'TSLA news', 'What's happening with NVDA?', 'Recent events for ticker X' "
             "USES OUTPUT FROM: query_documents (ticker identified) | explore_graph (ticker context). "
             "PROVIDES INPUT TO: explore_graph (for relationship drilling) | get_market_context (complementary view). "
@@ -450,7 +453,9 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         """
         try:
             # Get permitted groups from explicit tokens or context header
-            group_guids = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Convert group names to UUIDs for storage layer
+            group_guids = get_group_uuids_by_names(group_names)
 
             # Verify instrument exists
             instrument = graph_index.get_instrument(ticker.upper())

@@ -293,17 +293,17 @@ def get_permitted_groups_from_context(auth_service: AuthService | None = None) -
 
 
 def get_write_group_from_context(auth_service: AuthService | None = None) -> str | None:
-    """Get the write group from the current request context.
+    """Get the write group name from the current request context.
     
     Extracts the Authorization header from the request context,
-    validates the JWT token, and returns the primary group that can be
+    validates the JWT token, and returns the primary group name that can be
     written to (the token's first group).
     
     Args:
         auth_service: Optional AuthService for token validation.
         
     Returns:
-        The primary group the user can write to, or None if no valid token
+        The primary group name the user can write to, or None if no valid token
         is present (anonymous users cannot write).
     """
     from gofr_common.web import get_auth_header_from_context
@@ -328,7 +328,9 @@ def get_write_group_from_context(auth_service: AuthService | None = None) -> str
     try:
         # Use stateless verification (require_store=False)
         token_info = auth_service.verify_token(token, require_store=False)
-        return token_info.groups[0] if token_info.groups else None
+        if token_info.groups:
+            return token_info.groups[0]  # Return primary group name
+        return None
     except Exception:
         return None
 
@@ -415,7 +417,7 @@ def resolve_write_group(
     auth_tokens: list[str] | None = None,
     auth_service: AuthService | None = None,
 ) -> str | None:
-    """Get the write group from explicit tokens OR context header.
+    """Get the write group name from explicit tokens OR context header.
     
     This function provides a unified way to extract the primary write group,
     supporting both:
@@ -436,7 +438,7 @@ def resolve_write_group(
                      Falls back to global GroupService's auth_service.
     
     Returns:
-        Primary group ID the caller can write to, or None if anonymous
+        Primary group name the caller can write to, or None if anonymous
         (when auth is enabled).
     """
     # If explicit tokens provided, extract write group from first valid token
@@ -476,14 +478,14 @@ def _extract_write_group_from_tokens(
     auth_tokens: list[str],
     auth_service: AuthService | None = None,
 ) -> str | None:
-    """Extract primary write group from the first valid JWT token.
+    """Extract primary write group name from the first valid JWT token.
     
     Args:
         auth_tokens: List of JWT tokens (without "Bearer " prefix)
         auth_service: Optional AuthService for token validation.
         
     Returns:
-        Primary group from the first valid token, or None.
+        Primary group name from the first valid token, or None.
     """
     # Get auth service if not provided
     if auth_service is None:
@@ -506,9 +508,83 @@ def _extract_write_group_from_tokens(
             # Use stateless verification
             token_info = auth_service.verify_token(token, require_store=False)
             if token_info and token_info.groups:
-                return token_info.groups[0]  # Primary group
+                return token_info.groups[0]  # Return primary group name
         except Exception:  # nosec B110 - Intentionally continue on invalid tokens
             # Continue to next token
             pass
     
     return None
+
+
+def get_group_uuid_by_name(
+    group_name: str,
+    auth_service: AuthService | None = None,
+) -> str | None:
+    """Convert a group name to its UUID.
+    
+    Use this function when you need a group UUID for data storage (e.g., Source.group_guid).
+    This follows the design principle: "Group names flow through auth; UUIDs are resolved
+    at point of use."
+    
+    Args:
+        group_name: The group name (e.g., 'public', 'admin', 'premium')
+        auth_service: Optional AuthService for group lookup.
+                     Falls back to global GroupService's auth_service.
+        
+    Returns:
+        The group UUID string, or None if the group doesn't exist.
+        
+    Example:
+        >>> write_group_name = resolve_write_group(auth_tokens)  # "premium"
+        >>> group_uuid = get_group_uuid_by_name(write_group_name)
+        >>> source = Source(group_guid=group_uuid, ...)
+    """
+    # Get auth service if not provided
+    if auth_service is None:
+        try:
+            service = get_group_service()
+            auth_service = service.auth_service
+        except RuntimeError:
+            return None
+    
+    if auth_service is None:
+        return None
+    
+    try:
+        group = auth_service.groups.get_group_by_name(group_name)
+        if group:
+            return str(group.id)
+    except Exception:  # nosec B110 - Group lookup may fail for various reasons
+        pass
+    
+    return None
+
+
+def get_group_uuids_by_names(
+    group_names: list[str],
+    auth_service: AuthService | None = None,
+) -> list[str]:
+    """Convert a list of group names to their UUIDs.
+    
+    Use this function when you need group UUIDs for data access filtering.
+    Skips any groups that don't exist (no error raised).
+    
+    Args:
+        group_names: List of group names (e.g., ['public', 'admin', 'premium'])
+        auth_service: Optional AuthService for group lookup.
+                     Falls back to global GroupService's auth_service.
+        
+    Returns:
+        List of group UUID strings for groups that exist.
+        
+    Example:
+        >>> group_names = resolve_permitted_groups(auth_tokens)  # ["admin", "public"]
+        >>> group_uuids = get_group_uuids_by_names(group_names)
+        >>> sources = source_registry.list_sources(access_groups=group_uuids)
+    """
+    uuids = []
+    for name in group_names:
+        uuid = get_group_uuid_by_name(name, auth_service)
+        if uuid:
+            uuids.append(uuid)
+    return uuids

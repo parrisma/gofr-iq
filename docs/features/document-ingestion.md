@@ -23,83 +23,83 @@ The ingestion pipeline processes news articles from external sources into the re
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 1: INPUT VALIDATION                                              │
-│  ├─ Validate source_guid exists                                        │
-│  ├─ Check user has write access to group                              │
-│  └─ Verify word count ≤ 20,000 words                                  │
+│  STEP 1: INPUT VALIDATION                                               │
+│  ├─ Validate source_guid exists                                         │
+│  ├─ Check user has write access to group                                │
+│  └─ Verify word count ≤ 20,000 words                                    │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 2: LANGUAGE DETECTION                                            │
-│  ├─ Auto-detect language (if not provided)                            │
-│  ├─ Supports 100+ languages                                           │
-│  ├─ Special handling for APAC languages                              │
-│  └─ Store detected flag for audit trail                              │
+│  STEP 2: LANGUAGE DETECTION                                             │
+│  ├─ Auto-detect language (if not provided)                              │
+│  ├─ Supports 100+ languages                                             │
+│  ├─ Special handling for APAC languages                                 │
+│  └─ Store detected flag for audit trail                                 │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 3: DUPLICATE DETECTION                                           │
-│  ├─ Hash-based exact match detection (SHA-256)                       │
-│  ├─ Cosine similarity near-duplicate detection                       │
-│  ├─ Configurable threshold (default 0.95)                            │
-│  └─ Flag but store duplicates (append-only)                          │
+│  STEP 3: DUPLICATE DETECTION                                            │
+│  ├─ Hash-based exact match detection (SHA-256)                          │
+│  ├─ Cosine similarity near-duplicate detection                          │
+│  ├─ Configurable threshold (default 0.95)                               │
+│  └─ Flag but store duplicates (append-only)                             │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 4: GENERATE METADATA                                             │
-│  ├─ Generate UUID v4 for document GUID                               │
-│  ├─ Record creation timestamp (UTC)                                  │
-│  ├─ Set version = 1                                                  │
-│  └─ Store user-provided metadata                                     │
+│  STEP 4: GENERATE METADATA                                              │
+│  ├─ Generate UUID v4 for document GUID                                  │
+│  ├─ Record creation timestamp (UTC)                                     │
+│  ├─ Set version = 1                                                     │
+│  └─ Store user-provided metadata                                        │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 5: CANONICAL STORAGE (FILE STORE)                               │
-│  ├─ Serialize to JSON with all metadata                              │
-│  ├─ Store at: data/storage/documents/{group}/{YYYY-MM-DD}/{guid}.json│
-│  ├─ Create date-based partitions for efficiency                      │
-│  └─ Verify successful write before proceeding                        │
+│  STEP 5: CANONICAL STORAGE (FILE STORE)                                 │
+│  ├─ Serialize to JSON with all metadata                                 │
+│  ├─ Store at: data/storage/documents/{group}/{YYYY-MM-DD}/{guid}.json   │
+│  ├─ Create date-based partitions for efficiency                         │
+│  └─ Verify successful write before proceeding                           │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 6: VECTOR INDEXING (CHROMADB) - PARALLEL                        │
-│  ├─ Embed document using OpenRouter embeddings                       │
-│  ├─ Chunk content for optimal embeddings                             │
-│  ├─ Create group-specific collection                                 │
-│  ├─ Store metadata (title, date, language, source)                   │
-│  └─ On fail: ROLLBACK ALL ⚠️                                          │
+│  STEP 6: VECTOR INDEXING (CHROMADB) - PARALLEL                          │
+│  ├─ Embed document using OpenRouter embeddings                          │
+│  ├─ Chunk content for optimal embeddings                                │
+│  ├─ Create group-specific collection                                    │
+│  ├─ Store metadata (title, date, language, source)                      │
+│  └─ On fail: ROLLBACK ALL                                               │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 7: GRAPH INDEXING (NEO4J) - PARALLEL                            │
-│  ├─ Create Document node                                             │
-│  ├─ Link to Source node (PRODUCED_BY)                               │
-│  ├─ Link to Group node (IN_GROUP)                                    │
-│  └─ On fail: ROLLBACK ALL ⚠️                                          │
+│  STEP 7: GRAPH INDEXING (NEO4J) - PARALLEL                              │
+│  ├─ Create Document node                                                │
+│  ├─ Link to Source node (PRODUCED_BY)                                   │
+│  ├─ Link to Group node (IN_GROUP)                                       │
+│  └─ On fail: ROLLBACK ALL                                               │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 8: LLM EXTRACTION (OPENROUTER API) - OPTIONAL                   │
-│  ├─ Extract entities (companies, instruments)                        │
-│  ├─ Identify event type (earnings, M&A, guidance, etc.)             │
-│  ├─ Calculate impact score (0-100) and tier                         │
-│  ├─ Estimate price impact magnitude                                 │
-│  └─ Continue on failure (not transactional)                         │
+│  STEP 8: LLM EXTRACTION (OPENROUTER API) - OPTIONAL                     │
+│  ├─ Extract entities (companies, instruments)                           │
+│  ├─ Identify event type (earnings, M&A, guidance, etc.)                 │
+│  ├─ Calculate impact score (0-100) and tier                             │
+│  ├─ Estimate price impact magnitude                                     │
+│  └─ Continue on failure (not transactional)                             │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 9: GRAPH ENRICHMENT (NEO4J) - OPTIONAL                          │
-│  ├─ Create entity nodes (Company, Instrument, EventType)             │
-│  ├─ Create relationships (MENTIONS, AFFECTS)                        │
-│  ├─ Set document impact properties                                   │
-│  └─ Continue on failure (non-critical)                              │
+│  STEP 9: GRAPH ENRICHMENT (NEO4J) - OPTIONAL                            │
+│  ├─ Create entity nodes (Company, Instrument, EventType)                │
+│  ├─ Create relationships (MENTIONS, AFFECTS)                            │
+│  ├─ Set document impact properties                                      │
+│  └─ Continue on failure (non-critical)                                  │
 └─────────────────────────────────────────────────────────────────────────┘
                               ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  STEP 10: RETURN RESULT                                               │
-│  ├─ Status: SUCCESS | DUPLICATE | FAILED                            │
-│  ├─ Include: guid, language, duplicate_of, extraction               │
-│  └─ Audit log all operations                                         │
+│  STEP 10: RETURN RESULT                                                 │
+│  ├─ Status: SUCCESS | DUPLICATE | FAILED                                │
+│  ├─ Include: guid, language, duplicate_of, extraction                   │
+│  └─ Audit log all operations                                            │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 

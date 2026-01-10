@@ -41,13 +41,43 @@ if TYPE_CHECKING:
 
 # Test group GUIDs - should match test data setup in Phase 3
 # Using UUID format (36 chars) as required by Source model validation
-GROUP_A_GUID = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-GROUP_B_GUID = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
-PUBLIC_GROUP_GUID = "00000000-0000-0000-0000-000000000000"  # Public group uses deterministic UUID
+# IMPORTANT: These are group NAMES used for token creation.
+# The actual group UUIDs (for document storage) are auto-generated and must be
+# resolved via get_group_uuid_by_name() at runtime.
+GROUP_A_NAME = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+GROUP_B_NAME = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+PUBLIC_GROUP_NAME = "public"  # Reserved group name
+
+# Aliases for backward compatibility - in tests, we use the group NAME as the GUID
+# since the group name IS a UUID-format string that we store in documents
+GROUP_A_GUID = GROUP_A_NAME
+GROUP_B_GUID = GROUP_B_NAME
+PUBLIC_GROUP_GUID = PUBLIC_GROUP_NAME
 
 
 # NOTE: auth_service fixture is provided by conftest.py using Vault backend
-# All groups (GROUP_A_GUID, GROUP_B_GUID, public) are pre-created in vault_auth_service
+# All groups (GROUP_A_NAME, GROUP_B_NAME, public) are pre-created in vault_auth_service
+
+
+def _get_group_uuid(auth_service: AuthService, group_name: str) -> str:
+    """Get the actual UUID for a group name.
+    
+    Group names are used in tokens, but documents need the actual group UUID.
+    
+    Args:
+        auth_service: AuthService for group lookup
+        group_name: Group name (e.g., "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+        
+    Returns:
+        The actual group UUID string
+        
+    Raises:
+        ValueError: If group not found
+    """
+    group = auth_service.groups.get_group_by_name(group_name)
+    if group is None:
+        raise ValueError(f"Group not found: {group_name}")
+    return str(group.id)
 
 
 @pytest.fixture
@@ -55,11 +85,11 @@ def token_group_a(auth_service: AuthService) -> str:
     """Generate a JWT token with access to group-a only.
     
     This token should:
-    - Allow access to documents in GROUP_A_GUID
-    - Be denied access to documents in GROUP_B_GUID
-    - Be allowed access to PUBLIC_GROUP_GUID (public is always readable)
+    - Allow access to documents in group-a
+    - Be denied access to documents in group-b
+    - Be allowed access to public (public is always readable)
     """
-    return auth_service.create_token(groups=[GROUP_A_GUID])
+    return auth_service.create_token(groups=[GROUP_A_NAME])
 
 
 @pytest.fixture
@@ -210,28 +240,46 @@ def test_data_setup() -> GroupAccessTestDataSetup:
 
 
 @pytest.fixture(scope="module")
-def source_group_a(test_data_setup: GroupAccessTestDataSetup) -> Source:
+def group_a_uuid(auth_service: AuthService) -> str:
+    """Get the actual UUID for group-a (resolved from auth service)."""
+    return _get_group_uuid(auth_service, GROUP_A_NAME)
+
+
+@pytest.fixture(scope="module")
+def group_b_uuid(auth_service: AuthService) -> str:
+    """Get the actual UUID for group-b (resolved from auth service)."""
+    return _get_group_uuid(auth_service, GROUP_B_NAME)
+
+
+@pytest.fixture(scope="module")
+def public_group_uuid(auth_service: AuthService) -> str:
+    """Get the actual UUID for public group (resolved from auth service)."""
+    return _get_group_uuid(auth_service, PUBLIC_GROUP_NAME)
+
+
+@pytest.fixture(scope="module")
+def source_group_a(test_data_setup: GroupAccessTestDataSetup, group_a_uuid: str) -> Source:
     """Ensure source exists in group-a."""
-    return test_data_setup.ensure_source(GROUP_A_GUID, "Test Source Group A")
+    return test_data_setup.ensure_source(group_a_uuid, "Test Source Group A")
 
 
 @pytest.fixture(scope="module")
-def source_group_b(test_data_setup: GroupAccessTestDataSetup) -> Source:
+def source_group_b(test_data_setup: GroupAccessTestDataSetup, group_b_uuid: str) -> Source:
     """Ensure source exists in group-b."""
-    return test_data_setup.ensure_source(GROUP_B_GUID, "Test Source Group B")
+    return test_data_setup.ensure_source(group_b_uuid, "Test Source Group B")
 
 
 @pytest.fixture(scope="module")
-def source_public(test_data_setup: GroupAccessTestDataSetup) -> Source:
+def source_public(test_data_setup: GroupAccessTestDataSetup, public_group_uuid: str) -> Source:
     """Ensure source exists in public group."""
-    return test_data_setup.ensure_source(PUBLIC_GROUP_GUID, "Test Source Public")
+    return test_data_setup.ensure_source(public_group_uuid, "Test Source Public")
 
 
 @pytest.fixture(scope="module")
-def doc_group_a(test_data_setup: GroupAccessTestDataSetup, source_group_a: Source) -> Document:
+def doc_group_a(test_data_setup: GroupAccessTestDataSetup, source_group_a: Source, group_a_uuid: str) -> Document:
     """Create a test document in group-a."""
     return test_data_setup.create_document(
-        group_guid=GROUP_A_GUID,
+        group_guid=group_a_uuid,
         source_guid=source_group_a.source_guid,
         title="Group A Test Document",
         content=DOC_CONTENT_GROUP_A,
@@ -239,10 +287,10 @@ def doc_group_a(test_data_setup: GroupAccessTestDataSetup, source_group_a: Sourc
 
 
 @pytest.fixture(scope="module")
-def doc_group_b(test_data_setup: GroupAccessTestDataSetup, source_group_b: Source) -> Document:
+def doc_group_b(test_data_setup: GroupAccessTestDataSetup, source_group_b: Source, group_b_uuid: str) -> Document:
     """Create a test document in group-b."""
     return test_data_setup.create_document(
-        group_guid=GROUP_B_GUID,
+        group_guid=group_b_uuid,
         source_guid=source_group_b.source_guid,
         title="Group B Test Document",
         content=DOC_CONTENT_GROUP_B,
@@ -250,10 +298,10 @@ def doc_group_b(test_data_setup: GroupAccessTestDataSetup, source_group_b: Sourc
 
 
 @pytest.fixture(scope="module")
-def doc_public(test_data_setup: GroupAccessTestDataSetup, source_public: Source) -> Document:
+def doc_public(test_data_setup: GroupAccessTestDataSetup, source_public: Source, public_group_uuid: str) -> Document:
     """Create a test document in public group."""
     return test_data_setup.create_document(
-        group_guid=PUBLIC_GROUP_GUID,
+        group_guid=public_group_uuid,
         source_guid=source_public.source_guid,
         title="Public Test Document",
         content=DOC_CONTENT_PUBLIC,
@@ -434,46 +482,46 @@ class TestDataSetupVerification:
     They don't require servers - they just check the fixture outputs.
     """
 
-    def test_source_group_a_created(self, source_group_a: Source) -> None:
+    def test_source_group_a_created(self, source_group_a: Source, group_a_uuid: str) -> None:
         """Verify source_group_a fixture creates a source in group-a."""
         assert source_group_a is not None
         assert source_group_a.source_guid is not None
-        assert source_group_a.group_guid == GROUP_A_GUID
+        assert source_group_a.group_guid == group_a_uuid
         assert source_group_a.name == "Test Source Group A"
 
-    def test_source_group_b_created(self, source_group_b: Source) -> None:
+    def test_source_group_b_created(self, source_group_b: Source, group_b_uuid: str) -> None:
         """Verify source_group_b fixture creates a source in group-b."""
         assert source_group_b is not None
         assert source_group_b.source_guid is not None
-        assert source_group_b.group_guid == GROUP_B_GUID
+        assert source_group_b.group_guid == group_b_uuid
         assert source_group_b.name == "Test Source Group B"
 
-    def test_source_public_created(self, source_public: Source) -> None:
+    def test_source_public_created(self, source_public: Source, public_group_uuid: str) -> None:
         """Verify source_public fixture creates a source in public group."""
         assert source_public is not None
         assert source_public.source_guid is not None
-        assert source_public.group_guid == PUBLIC_GROUP_GUID
+        assert source_public.group_guid == public_group_uuid
         assert source_public.name == "Test Source Public"
 
-    def test_doc_group_a_created(self, doc_group_a: Document) -> None:
+    def test_doc_group_a_created(self, doc_group_a: Document, group_a_uuid: str) -> None:
         """Verify doc_group_a fixture creates a document in group-a."""
         assert doc_group_a is not None
         assert doc_group_a.guid is not None
-        assert doc_group_a.group_guid == GROUP_A_GUID
+        assert doc_group_a.group_guid == group_a_uuid
         assert DOC_CONTENT_GROUP_A in doc_group_a.content
 
-    def test_doc_group_b_created(self, doc_group_b: Document) -> None:
+    def test_doc_group_b_created(self, doc_group_b: Document, group_b_uuid: str) -> None:
         """Verify doc_group_b fixture creates a document in group-b."""
         assert doc_group_b is not None
         assert doc_group_b.guid is not None
-        assert doc_group_b.group_guid == GROUP_B_GUID
+        assert doc_group_b.group_guid == group_b_uuid
         assert DOC_CONTENT_GROUP_B in doc_group_b.content
 
-    def test_doc_public_created(self, doc_public: Document) -> None:
+    def test_doc_public_created(self, doc_public: Document, public_group_uuid: str) -> None:
         """Verify doc_public fixture creates a document in public group."""
         assert doc_public is not None
         assert doc_public.guid is not None
-        assert doc_public.group_guid == PUBLIC_GROUP_GUID
+        assert doc_public.group_guid == public_group_uuid
         assert DOC_CONTENT_PUBLIC in doc_public.content
 
     def test_documents_have_different_guids(
@@ -484,12 +532,13 @@ class TestDataSetupVerification:
         assert len(set(guids)) == 3, "All documents should have unique GUIDs"
 
     def test_documents_are_in_correct_groups(
-        self, doc_group_a: Document, doc_group_b: Document, doc_public: Document
+        self, doc_group_a: Document, doc_group_b: Document, doc_public: Document,
+        group_a_uuid: str, group_b_uuid: str, public_group_uuid: str
     ) -> None:
         """Verify documents are assigned to correct groups."""
-        assert doc_group_a.group_guid == GROUP_A_GUID
-        assert doc_group_b.group_guid == GROUP_B_GUID
-        assert doc_public.group_guid == PUBLIC_GROUP_GUID
+        assert doc_group_a.group_guid == group_a_uuid
+        assert doc_group_b.group_guid == group_b_uuid
+        assert doc_public.group_guid == public_group_uuid
 
 
 # =============================================================================
@@ -547,6 +596,7 @@ class TestMCPOGetDocumentGroupAccess:
         shared_server_manager, 
         token_group_a: str,
         doc_group_a: Document,
+        group_a_uuid: str,
     ) -> None:
         """Test: Token with group-a CAN fetch group-a document."""
         if not shared_server_manager.is_running:
@@ -570,7 +620,7 @@ class TestMCPOGetDocumentGroupAccess:
             assert result.get("status") == "success", f"Expected success status: {result}"
             data = result.get("data", {})
             assert data.get("guid") == doc_group_a.guid
-            assert GROUP_A_GUID in str(data.get("group_guid", ""))
+            assert data.get("group_guid") == group_a_uuid
             
         except requests.exceptions.ConnectionError:
             pytest.skip(f"MCPO not available at {mcpo_url}")

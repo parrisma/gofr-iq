@@ -64,12 +64,21 @@ else
 fi
 
 # =============================================================================
-# TEST CONFIGURATION (set BEFORE sourcing env to ensure test ports are used)
+# TEST CONFIGURATION
+# =============================================================================
+# IMPORTANT: All configuration comes from gofr_ports.sh (single source of truth)
+# - JWT secret: GOFR_JWT_SECRET
+# - Ports: GOFR_IQ_*_PORT (switched to test ports below)
+# - Vault token: GOFR_VAULT_DEV_TOKEN
 # =============================================================================
 export GOFR_IQ_ENV="TEST"
-export GOFR_IQ_JWT_SECRET="test-secret-key-for-secure-testing-do-not-use-in-production"
+
+# Clear stale tokens from previous sessions (they may have wrong JWT signature)
+# This ensures tests create fresh tokens with the correct secret
+unset GOFR_IQ_ADMIN_TOKEN GOFR_IQ_PUBLIC_TOKEN 2>/dev/null || true
 
 # Source centralized port configuration from gofr-common
+# This sets GOFR_JWT_SECRET, GOFR_VAULT_DEV_TOKEN, and all port variables
 GOFR_PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.sh"
 if [ -f "${GOFR_PORTS_FILE}" ]; then
     source "${GOFR_PORTS_FILE}"
@@ -77,6 +86,7 @@ if [ -f "${GOFR_PORTS_FILE}" ]; then
     gofr_set_test_ports gofr-iq
     gofr_set_test_ports infra
     echo "Loaded port configuration from gofr_ports.sh (test mode)"
+    echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}... (from gofr_ports.sh)"
 else
     echo -e "${RED}ERROR: Port configuration file not found: ${GOFR_PORTS_FILE}${NC}" >&2
     exit 1
@@ -87,7 +97,7 @@ fi
 export GOFR_AUTH_BACKEND="vault"
 export GOFR_VAULT_URL="http://gofr-vault-test:8200"
 export GOFR_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
-export GOFR_VAULT_PATH_PREFIX="gofr-iq-test"
+export GOFR_VAULT_PATH_PREFIX="gofr-test/auth"
 export GOFR_VAULT_MOUNT_POINT="secret"
 
 # Source centralized environment configuration (won't override already-set vars)
@@ -117,8 +127,9 @@ export GOFR_IQ_NEO4J_BOLT_PORT="7687"
 export GOFR_IQ_NEO4J_URI="bolt://gofr-iq-neo4j-test:7687"
 export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
 
-# Legacy variable mapping for backward compatibility
-export GOFR_IQ_JWT_SECRET="${GOFR_IQ_JWT_SECRET}"
+# JWT Secret: Use GOFR_JWT_SECRET from gofr_ports.sh as THE single source of truth
+# Legacy alias for backward compatibility with code that uses GOFR_IQ_JWT_SECRET
+export GOFR_IQ_JWT_SECRET="${GOFR_JWT_SECRET}"
 export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT}"
 export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT}"
 
@@ -296,52 +307,12 @@ start_vault() {
     return 1
 }
 
-run_bootstrap_auth() {
-    echo -e "${YELLOW}Running auth bootstrap to create public/admin tokens...${NC}"
-    
-    local bootstrap_script="${PROJECT_ROOT}/scripts/bootstrap_auth.py"
-    if [ ! -f "$bootstrap_script" ]; then
-        echo -e "${RED}Bootstrap script not found: ${bootstrap_script}${NC}"
-        return 1
-    fi
-    
-    # Run bootstrap and capture token output
-    local bootstrap_output
-    bootstrap_output=$(uv run python "$bootstrap_script" 2>&1)
-    local exit_code=$?
-    
-    if [ $exit_code -ne 0 ]; then
-        echo -e "${RED}Bootstrap script failed:${NC}"
-        echo "$bootstrap_output"
-        return 1
-    fi
-    
-    # Parse and export tokens from output
-    # Output format: GOFR_IQ_PUBLIC_TOKEN=xxx and GOFR_IQ_ADMIN_TOKEN=xxx
-    while IFS='=' read -r key value; do
-        case "$key" in
-            GOFR_IQ_PUBLIC_TOKEN)
-                export GOFR_IQ_PUBLIC_TOKEN="$value"
-                echo -e "  Public token: ${GREEN}✓${NC} (${#value} chars)"
-                ;;
-            GOFR_IQ_ADMIN_TOKEN)
-                export GOFR_IQ_ADMIN_TOKEN="$value"
-                echo -e "  Admin token: ${GREEN}✓${NC} (${#value} chars)"
-                ;;
-        esac
-    done <<< "$bootstrap_output"
-    
-    # Verify tokens were captured
-    if [ -z "${GOFR_IQ_PUBLIC_TOKEN:-}" ] || [ -z "${GOFR_IQ_ADMIN_TOKEN:-}" ]; then
-        echo -e "${RED}Failed to capture bootstrap tokens${NC}"
-        echo "Bootstrap output:"
-        echo "$bootstrap_output"
-        return 1
-    fi
-    
-    echo -e "${GREEN}Bootstrap tokens created and exported${NC}"
-    return 0
-}
+# NOTE: Auth bootstrap (creating admin/public groups and tokens) is now handled
+# by the pytest session fixture in conftest.py. This ensures:
+# 1. Groups/tokens are created with the correct JWT secret (GOFR_JWT_SECRET)
+# 2. Groups/tokens are created in the correct Vault (gofr-vault-test)
+# 3. All tests share the same auth state
+# See: test/conftest.py - bootstrap_auth fixture
 
 start_neo4j() {
     echo -e "${YELLOW}Starting Neo4j container...${NC}"
@@ -743,8 +714,9 @@ if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
     # Start test infrastructure via manage-infra.sh (Vault, ChromaDB, Neo4j)
     start_test_infrastructure "$REBUILD_IMAGES" || { stop_servers; stop_infrastructure; exit 1; }
     
-    # Run bootstrap to create public/admin tokens (after Vault is up)
-    run_bootstrap_auth || { stop_servers; stop_infrastructure; exit 1; }
+    # NOTE: Auth bootstrap (admin/public groups & tokens) happens in conftest.py
+    # This ensures tokens are created with correct JWT secret after Vault is ready
+    echo -e "${BLUE}Auth bootstrap will run in pytest session fixture (conftest.py)${NC}"
     echo ""
     
     echo -e "${GREEN}=== Starting Test Servers ===${NC}"

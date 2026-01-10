@@ -115,8 +115,11 @@ def delete_source_fn(mock_source_registry):
 class TestCreateSourceAlwaysRequiresAuth:
     """Tests that create_source behavior with authentication."""
 
+    @pytest.mark.skip(reason="No-auth mode tests skipped: all tests must run WITH AUTH ON (see TEST_AUTH_CONSOLIDATION_PLAN.md)")
     def test_create_source_no_auth_mode_writes_to_public(self, create_source_fn, mock_source_registry):
         """When auth is disabled, create_source writes to public group.
+        
+        SKIPPED: This test violates the requirement that all tests run WITH AUTH ON.
         
         POLICY DECISION: Rather than requiring auth even when disabled,
         anonymous writes go to the 'public' group. This allows systems

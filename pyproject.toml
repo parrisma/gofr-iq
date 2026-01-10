@@ -89,6 +89,9 @@ skips = ["B101"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 pythonpath = ["."]
+testpaths = ["test"]
+# Exclude gofr-common tests - they have their own test configuration
+norecursedirs = ["lib", "node_modules", ".git", ".venv", "__pycache__"]
 filterwarnings = [
     "error",
     # Ignore ChromaDB's internal Pydantic deprecation warnings

@@ -40,11 +40,11 @@ services:
     cap_add:
       - IPC_LOCK
     ports:
-      - "${GOFR_VAULT_PORT}:8200"
+      - "${GOFR_VAULT_PORT}:${GOFR_VAULT_PORT}"
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=${GOFR_VAULT_DEV_TOKEN}
-      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
-      - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:${GOFR_VAULT_PORT}
+      - VAULT_ADDR=http://127.0.0.1:${GOFR_VAULT_PORT}
     networks:
       - gofr-net
     healthcheck:
@@ -55,7 +55,7 @@ services:
       start_period: 10s
 
   neo4j:
-    image: gofr-neo4j:latest
+    image: gofr-iq-neo4j:latest
     container_name: gofr-neo4j
     hostname: gofr-neo4j
     restart: unless-stopped
@@ -74,14 +74,14 @@ services:
     networks:
       - gofr-net
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7474"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${GOFR_NEO4J_HTTP_PORT}"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 60s
 
   chromadb:
-    image: gofr-chroma:latest
+    image: gofr-iq-chromadb:latest
     container_name: gofr-chromadb
     hostname: gofr-chromadb
     restart: unless-stopped
@@ -96,7 +96,7 @@ services:
     networks:
       - gofr-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      test: ["CMD", "curl", "-f", "http://localhost:${GOFR_CHROMA_PORT}/api/v1/heartbeat"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -122,17 +122,20 @@ services:
         condition: service_healthy
     command: >
       /home/gofr-iq/.venv/bin/python -m app.main_mcp
-      --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT} --no-auth
+      --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT}
     environment:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
-      - GOFR_IQ_AUTH_DISABLED=${GOFR_IQ_AUTH_DISABLED:-true}
-      # Auth Backend (Vault) - used for token storage even in no-auth mode
+      - GOFR_IQ_AUTH_DISABLED=false
+      # JWT Secret for token signing/verification (shared across services)
+      - GOFR_IQ_JWT_SECRET=${GOFR_JWT_SECRET}
+      - GOFR_JWT_SECRET=${GOFR_JWT_SECRET}
+      # Auth Backend (Vault) - shared across all GOFR services
       - GOFR_AUTH_BACKEND=vault
-      - GOFR_VAULT_URL=http://gofr-vault:8200
+      - GOFR_VAULT_URL=http://gofr-vault:${GOFR_VAULT_PORT}
       - GOFR_VAULT_TOKEN=${GOFR_VAULT_DEV_TOKEN}
-      - GOFR_VAULT_PATH_PREFIX=gofr-iq
+      - GOFR_VAULT_PATH_PREFIX=gofr/auth
       - GOFR_VAULT_MOUNT_POINT=secret
       # Infrastructure connections
       - GOFR_IQ_CHROMADB_HOST=gofr-chromadb

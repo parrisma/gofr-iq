@@ -1,26 +1,22 @@
 #!/bin/bash
-# Start GOFR-IQ Docker Swarm with no-auth mode
+# Start GOFR-IQ Docker Swarm with auth mode on
 set -e
 
 cd "$(dirname "$0")"
 
-export GOFR_IQ_AUTH_DISABLED=true
-# Set GOFR_IQ_OPENROUTER_API_KEY in your environment or .env file
+# Source port configuration
+source ../lib/gofr-common/config/gofr_ports.sh
+
+export GOFR_IQ_AUTH_DISABLED=false
 export GOFR_IQ_OPENROUTER_API_KEY="${GOFR_IQ_OPENROUTER_API_KEY:-}"
+export GOFR_VAULT_DEV_TOKEN="${GOFR_VAULT_DEV_TOKEN:-dev-root-token-a1b2c3d4e5f6}"
+export NEO4J_PASSWORD="${NEO4J_PASSWORD:-gofr-dev-password}"
 
 echo "=== Starting GOFR-IQ Swarm ==="
-echo "Auth: Disabled"
+echo "Auth: Enabled"
 echo "LLM:  OpenRouter"
 echo ""
 
 docker compose up -d
 
-echo ""
-echo "=== Services ==="
-echo "MCPO (OpenWebUI): http://localhost:8081"
-echo "MCP Server:       http://localhost:8080"
-echo "Web Health:       http://localhost:8082"
-echo ""
-echo "From dev container, use hostnames:"
-echo "  curl http://gofr-iq-mcpo:8081/openapi.json"
-echo "  curl http://gofr-iq-mcp:8080/health"
+

@@ -122,7 +122,7 @@ class ServerManager:
             mcpo_port: MCPO server port (required via arg or GOFR_IQ_MCPO_PORT env).
             web_port: Web API server port (required via arg or GOFR_IQ_WEB_PORT env).
             host: Host address to bind servers to. Defaults to 127.0.0.1.
-            jwt_secret: JWT secret for authentication. Defaults to env or test value.
+            jwt_secret: JWT secret for authentication. Required via arg or GOFR_JWT_SECRET env.
         """
         # Determine project root
         if project_root is None:
@@ -136,11 +136,18 @@ class ServerManager:
         
         # Server configuration
         self.host = host
-        # Get JWT secret from env (matches run_tests.sh) or use fallback
-        self.jwt_secret = jwt_secret or os.environ.get(
-            "GOFR_IQ_JWT_SECRET", 
-            "test-secret-key-for-secure-testing-do-not-use-in-production"
-        )
+        # Single JWT secret - NO FALLBACKS
+        # Must be set by run_tests.sh from gofr_ports.sh
+        if jwt_secret:
+            self.jwt_secret: str = jwt_secret
+        else:
+            secret = os.environ.get("GOFR_JWT_SECRET")
+            if not secret:
+                raise ValueError(
+                    "GOFR_JWT_SECRET not set. Run tests via ./scripts/run_tests.sh "
+                    "which sources gofr_ports.sh for the single JWT secret."
+                )
+            self.jwt_secret = secret
         
         # Initialize server configs (ports required from env if not passed)
         self._servers: dict[str, ServerConfig] = {
@@ -206,7 +213,8 @@ class ServerManager:
             Dictionary of environment variables.
         """
         env = os.environ.copy()
-        env.update({
+        # Build update dict with guaranteed str values
+        update_vars: dict[str, str] = {
             "GOFR_IQ_ENV": "TEST",
             "GOFR_IQ_ROOT": str(self.project_root),
             "GOFR_IQ_DATA": str(self.data_dir),
@@ -217,13 +225,14 @@ class ServerManager:
             "GOFR_IQ_MCPO_PORT": str(self.mcpo_port),
             "GOFR_IQ_WEB_PORT": str(self.web_port),
             "GOFR_IQ_JWT_SECRET": self.jwt_secret,
-            # Auth backend - use env vars set by run_tests.sh (no fallback defaults)
+            # Auth backend - use env vars set by run_tests.sh
             "GOFR_AUTH_BACKEND": os.environ.get("GOFR_AUTH_BACKEND", "vault"),
             "GOFR_VAULT_URL": os.environ.get("GOFR_VAULT_URL", "http://gofr-vault-test:8200"),
             "GOFR_VAULT_TOKEN": os.environ.get("GOFR_VAULT_TOKEN", "gofr-dev-root-token"),
-            "GOFR_VAULT_PATH_PREFIX": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-iq-test"),
+            "GOFR_VAULT_PATH_PREFIX": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-test/auth"),
             "GOFR_VAULT_MOUNT_POINT": os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),
-        })
+        }
+        env.update(update_vars)
         return env
     
     def start_server(self, name: str, wait: bool = True, timeout: float = 10.0) -> bool:

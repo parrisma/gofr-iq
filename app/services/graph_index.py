@@ -208,16 +208,16 @@ class GraphIndex:
     def __init__(
         self,
         uri: Optional[str] = None,
-        username: str = "neo4j",
-        password: str = "testpassword",  # nosec B107
+        username: Optional[str] = None,
+        password: Optional[str] = None,
         database: str = "neo4j",
     ) -> None:
         """Initialize graph index
 
         Args:
             uri: Neo4j Bolt URI (required: set GOFR_IQ_NEO4J_URI or pass explicitly)
-            username: Neo4j username
-            password: Neo4j password
+            username: Neo4j username (default: from GOFR_IQ_NEO4J_USER or "neo4j")
+            password: Neo4j password (default: from GOFR_IQ_NEO4J_PASSWORD or "testpassword")
             database: Database name
         """
         if uri is None:
@@ -225,8 +225,10 @@ class GraphIndex:
             if uri is None:
                 raise ValueError("Neo4j URI is required: set GOFR_IQ_NEO4J_URI or pass uri parameter")
         self.uri = uri
-        self.username = username
-        self.password = password
+        
+        # Read credentials from environment if not provided
+        self.username = username or os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+        self.password = password or os.environ.get("GOFR_IQ_NEO4J_PASSWORD", "testpassword")  # nosec B107
         self.database = database
 
         self._driver: Optional[Driver] = None

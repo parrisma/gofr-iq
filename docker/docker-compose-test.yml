@@ -51,7 +51,7 @@ services:
     # No volumes - ephemeral
 
   neo4j:
-    image: gofr-neo4j:latest
+    image: gofr-iq-neo4j:latest
     container_name: gofr-iq-neo4j-test
     hostname: gofr-iq-neo4j-test
     restart: "no"
@@ -78,7 +78,7 @@ services:
       - /logs
 
   chromadb:
-    image: gofr-chroma:latest
+    image: gofr-iq-chromadb:latest
     container_name: gofr-iq-chromadb-test
     hostname: gofr-iq-chromadb-test
     restart: "no"
@@ -121,17 +121,17 @@ services:
       - |
         mkdir -p /home/gofr-iq/data/storage /home/gofr-iq/data/auth
         chown -R gofr-iq:gofr-iq /home/gofr-iq/data
-        exec su -s /bin/bash gofr-iq -c '/home/gofr-iq/.venv/bin/python -m app.main_mcp --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT} --no-auth'
+        exec su -s /bin/bash gofr-iq -c '/home/gofr-iq/.venv/bin/python -m app.main_mcp --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT} --jwt-secret ${GOFR_JWT_SECRET}'
     environment:
       - GOFR_IQ_ENV=TEST
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-DEBUG}
-      - GOFR_IQ_AUTH_DISABLED=true
+      - GOFR_JWT_SECRET=${GOFR_JWT_SECRET}
       # Auth Backend (Vault - test container)
       - GOFR_AUTH_BACKEND=vault
       - GOFR_VAULT_URL=http://gofr-vault-test:8200
       - GOFR_VAULT_TOKEN=${GOFR_VAULT_DEV_TOKEN}
-      - GOFR_VAULT_PATH_PREFIX=gofr-iq-test
+      - GOFR_VAULT_PATH_PREFIX=gofr-test/auth
       - GOFR_VAULT_MOUNT_POINT=secret
       # Infrastructure connections (test containers)
       - GOFR_IQ_CHROMADB_HOST=gofr-iq-chromadb-test
