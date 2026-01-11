@@ -22,14 +22,21 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$SCRIPT_DIR"
 
 # Source centralized port configuration from .env file
+# BUT: If ports are already set (e.g., from run_tests.sh with +100 offset), don't override
 GOFR_PORTS_FILE="$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.env"
-if [ -f "$GOFR_PORTS_FILE" ]; then
-    set -a
-    source "$GOFR_PORTS_FILE"
-    set +a
+if [ -z "$GOFR_IQ_MCP_PORT" ]; then
+    # Ports not set - load from config file
+    if [ -f "$GOFR_PORTS_FILE" ]; then
+        set -a
+        source "$GOFR_PORTS_FILE"
+        set +a
+    else
+        echo "ERROR: Port configuration file not found: $GOFR_PORTS_FILE" >&2
+        exit 1
+    fi
 else
-    echo "ERROR: Port configuration file not found: $GOFR_PORTS_FILE" >&2
-    exit 1
+    # Ports already set (likely from test runner) - use them
+    : # no-op
 fi
 
 # Colors

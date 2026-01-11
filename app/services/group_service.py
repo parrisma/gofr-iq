@@ -281,10 +281,9 @@ def get_permitted_groups_from_context(auth_service: AuthService | None = None) -
         return [PUBLIC_GROUP]
     
     try:
-        # Use stateless verification (require_store=False) since JWT is self-contained
-        # This allows tokens created by external services or tests to be valid
-        # as long as they have the correct signature and claims
-        token_info = auth_service.verify_token(token, require_store=False)
+        # Vault backend requires store lookup (require_store=True)
+        # Tokens are stored in Vault and must be verified against the store
+        token_info = auth_service.verify_token(token, require_store=True)
         groups = get_permitted_groups(token_info)
         return groups
     except Exception:
@@ -326,8 +325,8 @@ def get_write_group_from_context(auth_service: AuthService | None = None) -> str
         return None
     
     try:
-        # Use stateless verification (require_store=False)
-        token_info = auth_service.verify_token(token, require_store=False)
+        # Vault backend requires store lookup (require_store=True)
+        token_info = auth_service.verify_token(token, require_store=True)
         if token_info.groups:
             return token_info.groups[0]  # Return primary group name
         return None
@@ -402,8 +401,8 @@ def _extract_groups_from_tokens(
             token = token[7:]
         
         try:
-            # Use stateless verification
-            token_info = auth_service.verify_token(token, require_store=False)
+            # Vault backend requires store lookup (require_store=True)
+            token_info = auth_service.verify_token(token, require_store=True)
             if token_info and token_info.groups:
                 all_groups.update(token_info.groups)
         except Exception:  # nosec B110 - Intentionally continue on invalid tokens
@@ -505,12 +504,14 @@ def _extract_write_group_from_tokens(
             token = token[7:]
         
         try:
-            # Use stateless verification
-            token_info = auth_service.verify_token(token, require_store=False)
+            # Vault backend requires store lookup (require_store=True)
+            token_info = auth_service.verify_token(token, require_store=True)
             if token_info and token_info.groups:
                 return token_info.groups[0]  # Return primary group name
-        except Exception:  # nosec B110 - Intentionally continue on invalid tokens
-            # Continue to next token
+        except Exception as e:  # nosec B110 - Intentionally continue on invalid tokens
+            # Log and continue to next token
+            import logging
+            logging.error(f"Token verification failed: {e}")
             pass
     
     return None

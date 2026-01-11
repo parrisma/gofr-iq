@@ -449,9 +449,9 @@ fi
 
 if [[ -z "$MCP_PORT" ]]; then
     if [[ "$ENV_MODE" == "prod" ]]; then
-        MCP_PORT="${GOFR_IQ_MCP_PORT_TEST:-8180}"
-    else
         MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
+    else
+        MCP_PORT="${GOFR_IQ_MCP_PORT_TEST:-8280}"
     fi
 fi
 

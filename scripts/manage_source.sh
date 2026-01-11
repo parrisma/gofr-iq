@@ -11,6 +11,7 @@
 # Commands:
 #   list                  List all sources
 #   create                Create a new source
+#   delete                Delete a source (soft-delete)
 #
 # Options:
 #   --host HOST          MCP server host (default: localhost)
@@ -90,10 +91,12 @@ GOFR-IQ Source Management Script
 Usage:
   ./manage_source.sh list [OPTIONS]
   ./manage_source.sh create --name NAME --url URL [OPTIONS]
+  ./manage_source.sh delete --source-guid GUID --token TOKEN [OPTIONS]
 
 Commands:
   list                  List all sources
   create                Create a new source
+  delete                Delete a source (soft-delete)
 
 Options:
   --docker, --prod     Use production docker ports (default, port 8180)
@@ -330,6 +333,58 @@ if 'data' in data:
     return 0
 }
 
+# Format and display delete source response
+format_delete_source() {
+    local json_data=$1
+    
+    # Extract the inner JSON from the text field
+    local result_json
+    result_json=$(echo "$json_data" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+if 'result' in data and 'content' in data['result']:
+    content = data['result']['content']
+    if content and len(content) > 0 and 'text' in content[0]:
+        inner = json.loads(content[0]['text'])
+        print(json.dumps(inner))
+" 2>/dev/null)
+    
+    if [[ -z "$result_json" ]]; then
+        log_error "Failed to parse response"
+        return 1
+    fi
+    
+    # Check for errors
+    if echo "$result_json" | grep -q '"status".*:.*"error"'; then
+        log_error "API Error:"
+        echo "$result_json" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+print(f\"Error: {data.get('message', 'Unknown error')}\")
+if 'recovery_strategy' in data:
+    print(f\"Hint: {data['recovery_strategy']}\")
+" 2>/dev/null
+        return 1
+    fi
+    
+    # Display success
+    echo ""
+    log_success "Source deleted successfully!"
+    echo ""
+    echo "$result_json" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+if 'data' in data:
+    info = data['data']
+    print(f\"Source GUID:   {info.get('source_guid', 'N/A')}\")
+    print(f\"Name:          {info.get('name', 'N/A')}\")
+    print(f\"Active:        {'yes' if info.get('active', False) else 'no'}\")
+    print(f\"Deleted:       {info.get('deleted_at', 'N/A')}\")
+" 2>/dev/null
+    
+    return 0
+}
+
 # Parse and display tool response
 parse_response() {
     local response=$1
@@ -358,6 +413,9 @@ parse_response() {
             ;;
         create)
             format_create_source "$json_data"
+            ;;
+        delete)
+            format_delete_source "$json_data"
             ;;
         *)
             # Fallback to JSON output
@@ -465,6 +523,48 @@ EOF
     return 0
 }
 
+delete_source() {
+    local host=$1
+    local port=$2
+    local source_guid=$3
+    local auth_token=$4
+    
+    # Validate required parameters
+    if [[ -z "$source_guid" ]]; then
+        log_error "Source GUID is required (--source-guid)"
+        return 1
+    fi
+    
+    if [[ -z "$auth_token" ]]; then
+        log_error "Auth token is required (--token)"
+        log_error "Must have write access to the source's group."
+        return 1
+    fi
+    
+    log_info "=== Deleting Source ==="
+    log_info "Target: ${host}:${port}"
+    log_info "Source GUID: ${source_guid}"
+    log_info "Auth: Token provided (${#auth_token} chars)"
+    echo ""
+    
+    # Initialize session
+    local session_id
+    session_id=$(mcp_initialize "$host" "$port") || return 1
+    
+    # Build arguments JSON
+    local args
+    args="{\"source_guid\": \"${source_guid}\", \"auth_tokens\": [\"${auth_token}\"]}"
+    
+    # Call delete_source tool
+    local response
+    response=$(mcp_call_tool "$host" "$port" "$session_id" "delete_source" "$args") || return 1
+    
+    # Parse and display response
+    parse_response "$response" "delete"
+    
+    return 0
+}
+
 # =============================================================================
 # Main Script
 # =============================================================================
@@ -514,6 +614,10 @@ while [[ $# -gt 0 ]]; do
             SOURCE_TYPE="$2"
             shift 2
             ;;
+        --source-guid)
+            SOURCE_GUID="$2"
+            shift 2
+            ;;
         --token)
             AUTH_TOKEN="$2"
             shift 2
@@ -542,9 +646,9 @@ fi
 
 if [[ -z "$MCP_PORT" ]]; then
     if [[ "$ENV_MODE" == "prod" ]]; then
-        MCP_PORT="${GOFR_IQ_MCP_PORT_TEST:-8180}"
-    else
         MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
+    else
+        MCP_PORT="${GOFR_IQ_MCP_PORT_TEST:-8280}"
     fi
 fi
 
@@ -555,6 +659,9 @@ case $COMMAND in
         ;;
     create)
         create_source "$MCP_HOST" "$MCP_PORT" "$SOURCE_NAME" "$SOURCE_URL" "$SOURCE_DESCRIPTION" "$SOURCE_TYPE" "$AUTH_TOKEN"
+        ;;
+    delete)
+        delete_source "$MCP_HOST" "$MCP_PORT" "$SOURCE_GUID" "$AUTH_TOKEN"
         ;;
     help|-h|--help)
         show_help

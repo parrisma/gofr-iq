@@ -21,6 +21,11 @@ from typing import Generator
 
 import pytest
 
+# Set OpenRouter API key early (before test modules import and check llm_available())
+# This ensures LLM integration tests can run
+if "GOFR_IQ_OPENROUTER_API_KEY" not in os.environ:
+    os.environ["GOFR_IQ_OPENROUTER_API_KEY"] = "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"
+
 # Add project root and test directory to path - must be before fixtures import
 project_root = Path(__file__).parent.parent
 test_dir = Path(__file__).parent
@@ -68,6 +73,8 @@ def test_env() -> dict[str, str]:
         "GOFR_AUTH_BACKEND": "vault",
         "GOFR_VAULT_PATH_PREFIX": "gofr-test/auth",
         "GOFR_VAULT_MOUNT_POINT": "secret",
+        # OpenRouter API key for LLM integration tests
+        "GOFR_IQ_OPENROUTER_API_KEY": "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",
     }
     
     # Only return vars that aren't already set

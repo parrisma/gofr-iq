@@ -33,6 +33,8 @@ cd "$(dirname "$0")"
 # Load port configuration from .env file
 set -a  # automatically export all variables
 source ../lib/gofr-common/config/gofr_ports.env
+# Load secrets (JWT_SECRET, etc.) from .env - single source of truth
+source ../lib/gofr-common/.env
 set +a
 
 # Production configuration: auth enabled

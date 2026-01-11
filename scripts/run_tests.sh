@@ -63,6 +63,10 @@ else
     echo -e "${YELLOW}Warning: Virtual environment not found at ${VENV_DIR}${NC}"
 fi
 
+# Purge test data from previous runs
+echo "Purging test data..."
+"${SCRIPT_DIR}/purge_local_data.sh" --test-only --force
+
 # =============================================================================
 # TEST CONFIGURATION
 # =============================================================================
