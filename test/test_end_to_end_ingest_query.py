@@ -164,7 +164,7 @@ def real_llm_service(openrouter_api_key: str):
     Returns:
         LLMService configured for OpenRouter.
     """
-    from app.config import LLMSettings
+    from app.services.llm_service import LLMSettings
     settings = LLMSettings(api_key=openrouter_api_key)
     return create_llm_service(settings=settings)
 

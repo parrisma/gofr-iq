@@ -29,9 +29,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Source port configuration
-if [ -f "$PROJECT_DIR/lib/gofr-common/config/gofr_ports.sh" ]; then
-    source "$PROJECT_DIR/lib/gofr-common/config/gofr_ports.sh"
+# Load port configuration from .env file
+if [ -f "$PROJECT_DIR/lib/gofr-common/config/gofr_ports.env" ]; then
+    set -a  # automatically export all variables
+    source "$PROJECT_DIR/lib/gofr-common/config/gofr_ports.env"
+    set +a
 fi
 
 # Environment mode: prod (docker) or dev (default: prod)

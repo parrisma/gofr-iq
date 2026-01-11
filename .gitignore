@@ -115,6 +115,12 @@ ENV/
 env.bak/
 venv.bak/
 
+# GOFR-specific environment files with secrets
+*.env
+!lib/gofr-common/config/gofr_ports.env
+!lib/gofr-common/docker/gofr-swarm.env
+!lib/gofr-common/src/gofr_common/config/gofr_ports.env
+
 # Spyder project settings
 .spyderproject
 .spyproject

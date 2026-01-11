@@ -1,22 +1,13 @@
 """Application configuration
 
-Re-exports configuration from gofr_common.config with GOFR_IQ prefix.
+Provides GofrIqConfig extending InfrastructureConfig from gofr_common for GOFR-IQ specific settings.
 """
 
-import os
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
-from gofr_common.config import (
-    Config as BaseConfig,
-    Settings,
-    ServerSettings,
-    AuthSettings,
-    StorageSettings,
-    LogSettings,
-    get_settings as _get_settings,
-    reset_settings,
-)
+from gofr_common.config import BaseConfig, InfrastructureConfig
 
 # Project-specific prefix
 _ENV_PREFIX = "GOFR_IQ"
@@ -26,127 +17,140 @@ _PROJECT_ROOT = Path(__file__).parent.parent
 
 
 @dataclass
-class LLMSettings:
-    """LLM service configuration
+class GofrIqConfig(InfrastructureConfig):
+    """GOFR-IQ specific configuration extending InfrastructureConfig.
+    
+    Inherits infrastructure settings (Vault, Neo4j, etc.) and adds
+    GOFR-IQ specific settings for LLM and ChromaDB.
     
     Attributes:
-        api_key: OpenRouter API key (required for LLM features)
-        base_url: OpenRouter API base URL
-        chat_model: Model for chat completions
-        embedding_model: Model for embeddings
-        max_retries: Maximum retry attempts
-        timeout: Request timeout in seconds
+        Inherited from InfrastructureConfig:
+            env, project_root, log_level, log_format, prefix
+            vault_url, vault_token, vault_role_id, vault_secret_id,
+            vault_path_prefix, vault_mount_point
+            chroma_host, chroma_port
+            neo4j_host, neo4j_bolt_port, neo4j_http_port
+            shared_jwt_secret
+        
+        GOFR-IQ Specific:
+            openrouter_api_key: OpenRouter API key for LLM
+            openrouter_base_url: OpenRouter API base URL
+            llm_model: Chat completion model
+            embedding_model: Embedding model
+            llm_max_retries: Maximum LLM retry attempts
+            llm_timeout: LLM request timeout in seconds
     """
-    api_key: str | None = None
-    base_url: str = "https://openrouter.ai/api/v1"
-    chat_model: str = "anthropic/claude-opus-4"
+    
+    # LLM Configuration
+    openrouter_api_key: Optional[str] = None
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    llm_model: str = "anthropic/claude-opus-4"
     embedding_model: str = "qwen/qwen3-embedding-8b"
-    max_retries: int = 3
-    timeout: int = 60
+    llm_max_retries: int = 3
+    llm_timeout: int = 60
+    
+    @classmethod
+    def from_env(
+        cls,
+        prefix: str = "GOFR_IQ",
+        project_root: Optional[Path] = None,
+        env_file: Optional[Path] = None,
+    ) -> "GofrIqConfig":
+        """Load configuration from environment variables.
+        
+        Args:
+            prefix: Environment variable prefix (default: GOFR_IQ)
+            project_root: Project root directory (default: auto-detected)
+            env_file: Optional .env file path
+            
+        Returns:
+            GofrIqConfig instance with all settings loaded
+        """
+        # Get base infrastructure config
+        base = InfrastructureConfig.from_env(prefix=prefix, project_root=project_root, env_file=env_file)
+        
+        # Load GOFR-IQ specific settings from environment
+        from gofr_common.config.env_loader import EnvLoader
+        env_data = EnvLoader(env_file).load()
+        
+        return cls(
+            # Base config
+            env=base.env,
+            project_root=base.project_root,
+            log_level=base.log_level,
+            log_format=base.log_format,
+            prefix=prefix,
+            # Infrastructure config
+            vault_url=base.vault_url,
+            vault_token=base.vault_token,
+            vault_role_id=base.vault_role_id,
+            vault_secret_id=base.vault_secret_id,
+            vault_path_prefix=base.vault_path_prefix,
+            vault_mount_point=base.vault_mount_point,
+            chroma_host=base.chroma_host,
+            chroma_port=base.chroma_port,
+            neo4j_host=base.neo4j_host,
+            neo4j_bolt_port=base.neo4j_bolt_port,
+            neo4j_http_port=base.neo4j_http_port,
+            shared_jwt_secret=base.shared_jwt_secret,
+            # GOFR-IQ specific
+            openrouter_api_key=env_data.get(f"{prefix}_OPENROUTER_API_KEY"),
+            openrouter_base_url=env_data.get(
+                f"{prefix}_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"
+            ),
+            llm_model=env_data.get(f"{prefix}_LLM_MODEL", "anthropic/claude-opus-4"),
+            embedding_model=env_data.get(f"{prefix}_EMBEDDING_MODEL", "qwen/qwen3-embedding-8b"),
+            llm_max_retries=int(env_data.get(f"{prefix}_LLM_MAX_RETRIES", "3")),
+            llm_timeout=int(env_data.get(f"{prefix}_LLM_TIMEOUT", "60")),
+        )
     
     @property
-    def is_available(self) -> bool:
-        """Check if LLM service is configured"""
-        return self.api_key is not None and len(self.api_key) > 0
-
-
-def get_llm_settings() -> LLMSettings:
-    """Get LLM settings from environment variables"""
-    return LLMSettings(
-        api_key=os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"),
-        base_url=os.environ.get("GOFR_IQ_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
-        chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "anthropic/claude-opus-4"),
-        embedding_model=os.environ.get("GOFR_IQ_EMBEDDING_MODEL", "qwen/qwen3-embedding-8b"),
-        max_retries=int(os.environ.get("GOFR_IQ_LLM_MAX_RETRIES", "3")),
-        timeout=int(os.environ.get("GOFR_IQ_LLM_TIMEOUT", "60")),
-    )
-
-
-class Config(BaseConfig):
-    """Project-specific Config with GOFR_IQ prefix"""
-
-    _env_prefix = _ENV_PREFIX
-
-
-def get_settings(reload: bool = False, require_auth: bool = True) -> Settings:
-    """Get settings with GOFR_IQ prefix"""
-    return _get_settings(
-        prefix=_ENV_PREFIX,
-        reload=reload,
-        require_auth=require_auth,
-        project_root=_PROJECT_ROOT,
-    )
-
-
-# Convenience functions
-def get_public_storage_dir() -> str:
-    """Get public storage directory as string"""
-    return str(Config.get_storage_dir() / "public")
-
-
-def get_default_storage_dir() -> str:
-    """Get default storage directory as string"""
-    return str(Config.get_storage_dir())
-
-
-def get_default_token_store_path() -> str:
-    """Get default token store path as string"""
-    return str(Config.get_token_store_path())
-
-
-def get_default_sessions_dir() -> str:
-    """Get default sessions directory as string"""
-    return str(Config.get_sessions_dir())
-
-
-def get_default_proxy_dir() -> str:
-    """Get default proxy directory as string"""
-    return str(Config.get_proxy_dir())
-
-
-@dataclass
-class ChromaDBSettings:
-    """ChromaDB configuration
+    def llm_is_available(self) -> bool:
+        """Check if LLM service is configured."""
+        return self.openrouter_api_key is not None and len(self.openrouter_api_key) > 0
     
-    Attributes:
-        host: ChromaDB server host (None for local/ephemeral mode)
-        port: ChromaDB server port (default: 8000)
+    @property
+    def chromadb_is_http_mode(self) -> bool:
+        """Check if configured for ChromaDB HTTP client mode."""
+        return self.chroma_host is not None
+
+
+# Singleton instance cache
+_config_instance: Optional[GofrIqConfig] = None
+
+
+def get_config(reload: bool = False, env_file: Optional[Path] = None) -> GofrIqConfig:
+    """Get or create the singleton GofrIqConfig instance.
+    
+    Args:
+        reload: Force reload configuration from environment
+        env_file: Optional .env file path to load
+        
+    Returns:
+        GofrIqConfig singleton instance
     """
-    host: str | None = None
-    port: int = 8000
+    global _config_instance
     
-    @property
-    def is_http_mode(self) -> bool:
-        """Check if configured for HTTP client mode"""
-        return self.host is not None
+    if reload or _config_instance is None:
+        _config_instance = GofrIqConfig.from_env(
+            prefix=_ENV_PREFIX,
+            project_root=_PROJECT_ROOT,
+            env_file=env_file,
+        )
+    
+    return _config_instance
 
 
-def get_chromadb_settings() -> ChromaDBSettings:
-    """Get ChromaDB settings from environment variables"""
-    host = os.environ.get("GOFR_IQ_CHROMADB_HOST")
-    port_str = os.environ.get("GOFR_IQ_CHROMADB_PORT", "8000")
-    return ChromaDBSettings(
-        host=host,
-        port=int(port_str),
-    )
+def reset_config() -> None:
+    """Reset the singleton config instance (useful for testing)."""
+    global _config_instance
+    _config_instance = None
 
 
 __all__ = [
-    "Config",
-    "Settings",
-    "ServerSettings",
-    "AuthSettings",
-    "StorageSettings",
-    "LogSettings",
-    "LLMSettings",
-    "ChromaDBSettings",
-    "get_settings",
-    "get_llm_settings",
-    "get_chromadb_settings",
-    "reset_settings",
-    "get_public_storage_dir",
-    "get_default_storage_dir",
-    "get_default_token_store_path",
-    "get_default_sessions_dir",
-    "get_default_proxy_dir",
+    "GofrIqConfig",
+    "BaseConfig",
+    "InfrastructureConfig",
+    "get_config",
+    "reset_config",
 ]

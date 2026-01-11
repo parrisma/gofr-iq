@@ -32,7 +32,7 @@ import sys
 import uvicorn
 
 from app.auth.factory import create_auth_service
-from app.config import get_settings
+from app.config import get_config
 from app.logger import ConsoleLogger
 from app.mcp_server.mcp_server import create_mcp_server
 from app.services.group_service import init_group_service
@@ -134,21 +134,29 @@ if __name__ == "__main__":
                     )
                     sys.exit(1)
 
-        # Build settings from environment and CLI args
-        settings = get_settings(require_auth=False)
+        # Load configuration from environment
+        config = get_config()
 
         # Override with CLI arguments if provided
         host = args.host or os.environ.get("GOFR_IQ_MCP_HOST", "0.0.0.0")  # nosec B104
-        port = args.port or settings.server.mcp_port
-        storage_dir = args.storage_dir or settings.storage.storage_dir
+        
+        # Get port from environment (GOFR_IQ_MCP_PORT set by run script)
+        port = args.port
+        if port is None:
+            port_str = os.environ.get("GOFR_IQ_MCP_PORT")
+            if port_str:
+                port = int(port_str)
+            else:
+                startup_logger.error("Port required: set GOFR_IQ_MCP_PORT or use --port")
+                sys.exit(1)
+        
+        storage_dir = args.storage_dir or config.project_root / "data" / "storage"
 
         # Use resolved auth configuration
         auth_service = None
         if require_auth:
             # jwt_secret is guaranteed non-None here (validated above)
             assert jwt_secret is not None, "JWT secret required when auth is enabled"
-            settings.auth.jwt_secret = jwt_secret
-            settings.auth.require_auth = True
             
             # Create AuthService using factory (backend from GOFR_AUTH_BACKEND env)
             auth_service = create_auth_service(secret_key=jwt_secret)

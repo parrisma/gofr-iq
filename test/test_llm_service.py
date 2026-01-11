@@ -10,8 +10,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from app.config import LLMSettings
 from app.services.llm_service import (
+    LLMSettings,
     ChatCompletionResult,
     ChatMessage,
     EmbeddingResult,

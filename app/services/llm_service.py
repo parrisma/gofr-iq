@@ -15,11 +15,31 @@ from __future__ import annotations
 import json
 import time
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 import httpx
 
-from app.config import LLMSettings, get_llm_settings
+from app.config import GofrIqConfig
+
+if TYPE_CHECKING:
+    pass
+
+
+# Legacy LLMSettings for backward compatibility
+@dataclass
+class LLMSettings:
+    """Legacy LLM settings (deprecated, use GofrIqConfig instead)."""
+    api_key: str | None = None
+    base_url: str = "https://openrouter.ai/api/v1"
+    chat_model: str = "anthropic/claude-opus-4"
+    embedding_model: str = "qwen/qwen3-embedding-8b"
+    max_retries: int = 3
+    timeout: int = 60
+    
+    @property
+    def is_available(self) -> bool:
+        """Check if LLM service is configured"""
+        return self.api_key is not None and len(self.api_key) > 0
 
 
 class LLMServiceError(Exception):
@@ -132,13 +152,45 @@ class LLMService:
         >>> print(embeddings.dimensions)
     """
 
-    def __init__(self, settings: LLMSettings | None = None) -> None:
+    def __init__(
+        self,
+        settings: LLMSettings | None = None,
+        config: GofrIqConfig | None = None,
+    ) -> None:
         """Initialize LLM service
         
         Args:
-            settings: LLM settings (uses environment if not provided)
+            settings: Legacy LLM settings (deprecated, use config instead)
+            config: GofrIqConfig instance (preferred)
+            
+        Note:
+            If config is provided, LLM settings are extracted from it.
+            Otherwise falls back to settings parameter or loads from environment.
         """
-        self.settings = settings or get_llm_settings()
+        if config is not None:
+            # Extract LLM settings from GofrIqConfig
+            self.settings = LLMSettings(
+                api_key=config.openrouter_api_key,
+                base_url=config.openrouter_base_url,
+                chat_model=config.llm_model,
+                embedding_model=config.embedding_model,
+                max_retries=config.llm_max_retries,
+                timeout=config.llm_timeout,
+            )
+        elif settings is not None:
+            # Use provided settings
+            self.settings = settings
+        else:
+            # Load from environment
+            import os
+            self.settings = LLMSettings(
+                api_key=os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"),
+                base_url=os.environ.get("GOFR_IQ_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+                chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "anthropic/claude-opus-4"),
+                embedding_model=os.environ.get("GOFR_IQ_EMBEDDING_MODEL", "qwen/qwen3-embedding-8b"),
+                max_retries=int(os.environ.get("GOFR_IQ_LLM_MAX_RETRIES", "3")),
+                timeout=int(os.environ.get("GOFR_IQ_LLM_TIMEOUT", "60")),
+            )
         self._client: httpx.Client | None = None
 
     @property
@@ -333,19 +385,24 @@ class LLMService:
             Embedding vector as list of floats
         """
         result = self.generate_embeddings([text], model)
-        return result.embeddings[0]
+        # Ensure all values are floats (API may return ints or other numeric types)
+        return [float(x) for x in result.embeddings[0]]
 
 
-def create_llm_service(settings: LLMSettings | None = None) -> LLMService:
+def create_llm_service(
+    settings: LLMSettings | None = None,
+    config: GofrIqConfig | None = None,
+) -> LLMService:
     """Factory function to create LLM service
     
     Args:
-        settings: Optional LLM settings
+        settings: Optional legacy LLM settings (deprecated)
+        config: Optional GofrIqConfig instance (preferred)
         
     Returns:
         Configured LLMService instance
     """
-    return LLMService(settings)
+    return LLMService(settings=settings, config=config)
 
 
 def llm_available() -> bool:
@@ -354,5 +411,6 @@ def llm_available() -> bool:
     Returns:
         True if GOFR_IQ_OPENROUTER_API_KEY is set
     """
-    settings = get_llm_settings()
-    return settings.is_available
+    import os
+    api_key = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
+    return api_key is not None and len(api_key) > 0

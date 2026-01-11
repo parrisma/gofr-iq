@@ -66,10 +66,9 @@ fi
 # =============================================================================
 # TEST CONFIGURATION
 # =============================================================================
-# IMPORTANT: All configuration comes from gofr_ports.sh (single source of truth)
-# - JWT secret: GOFR_JWT_SECRET
-# - Ports: GOFR_IQ_*_PORT (switched to test ports below)
-# - Vault token: GOFR_VAULT_DEV_TOKEN
+# IMPORTANT: Configuration loaded from .env files (single source of truth)
+# - Ports: GOFR_IQ_*_PORT loaded from gofr_ports.env
+# - Secrets: GOFR_JWT_SECRET, GOFR_VAULT_DEV_TOKEN from .env
 # =============================================================================
 export GOFR_IQ_ENV="TEST"
 
@@ -77,19 +76,52 @@ export GOFR_IQ_ENV="TEST"
 # This ensures tests create fresh tokens with the correct secret
 unset GOFR_IQ_ADMIN_TOKEN GOFR_IQ_PUBLIC_TOKEN 2>/dev/null || true
 
-# Source centralized port configuration from gofr-common
-# This sets GOFR_JWT_SECRET, GOFR_VAULT_DEV_TOKEN, and all port variables
-GOFR_PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.sh"
+# Load centralized port configuration from gofr-common .env file
+GOFR_PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
 if [ -f "${GOFR_PORTS_FILE}" ]; then
+    echo "Loading port configuration from gofr_ports.env"
+    set -a
     source "${GOFR_PORTS_FILE}"
-    # Switch to test ports (prod + 100)
-    gofr_set_test_ports gofr-iq
-    gofr_set_test_ports infra
-    echo "Loaded port configuration from gofr_ports.sh (test mode)"
-    echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}... (from gofr_ports.sh)"
+    set +a
+    
+    # Apply test port offsets (prod ports + 100)
+    # GOFR-IQ Service Ports
+    export GOFR_IQ_MCP_PORT="${GOFR_IQ_MCP_PORT_TEST:-$((GOFR_IQ_MCP_PORT + 100))}"
+    export GOFR_IQ_MCPO_PORT="${GOFR_IQ_MCPO_PORT_TEST:-$((GOFR_IQ_MCPO_PORT + 100))}"
+    export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT_TEST:-$((GOFR_IQ_WEB_PORT + 100))}"
+    
+    # Infrastructure Ports
+    export GOFR_VAULT_PORT="${GOFR_VAULT_PORT_TEST:-$((GOFR_VAULT_PORT + 100))}"
+    export GOFR_CHROMA_PORT="${GOFR_CHROMA_PORT_TEST:-$((GOFR_CHROMA_PORT + 100))}"
+    export GOFR_NEO4J_HTTP_PORT="${GOFR_NEO4J_HTTP_PORT_TEST:-$((GOFR_NEO4J_HTTP_PORT + 100))}"
+    export GOFR_NEO4J_BOLT_PORT="${GOFR_NEO4J_BOLT_PORT_TEST:-$((GOFR_NEO4J_BOLT_PORT + 100))}"
+    
+    echo "  Port configuration loaded (test mode with +100 offset)"
 else
     echo -e "${RED}ERROR: Port configuration file not found: ${GOFR_PORTS_FILE}${NC}" >&2
     exit 1
+fi
+
+# Load secrets from gofr-common .env if available
+GOFR_COMMON_ENV="${PROJECT_ROOT}/lib/gofr-common/.env"
+if [ -f "${GOFR_COMMON_ENV}" ]; then
+    set -a
+    source "${GOFR_COMMON_ENV}"
+    set +a
+    echo "Loaded secrets from gofr-common/.env"
+fi
+
+# JWT Secret: Required for auth - should come from .env
+if [ -z "${GOFR_JWT_SECRET:-}" ]; then
+    echo -e "${YELLOW}Warning: GOFR_JWT_SECRET not set, generating test secret${NC}"
+    export GOFR_JWT_SECRET="test-jwt-secret-$(date +%s)"
+fi
+echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}..."
+
+# Vault Token: Required for vault auth backend
+if [ -z "${GOFR_VAULT_DEV_TOKEN:-}" ]; then
+    echo -e "${YELLOW}Warning: GOFR_VAULT_DEV_TOKEN not set, using default${NC}"
+    export GOFR_VAULT_DEV_TOKEN="gofr-dev-root-token"
 fi
 
 # Auth Backend Configuration - Vault for shared state between tests and servers

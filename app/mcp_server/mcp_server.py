@@ -6,12 +6,13 @@ The server exposes tools for document ingestion, source management, and document
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
 from mcp.server.fastmcp import FastMCP
 
-from app.config import get_settings, get_chromadb_settings
+from app.config import get_config, GofrIqConfig
 from app.services import (
     DocumentStore,
     DuplicateDetector,
@@ -35,6 +36,7 @@ def create_mcp_server(
     host: str = "0.0.0.0",  # nosec B104
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO",
     require_auth: bool = True,
+    config: GofrIqConfig | None = None,
 ) -> FastMCP:
     """Create and configure the MCP server.
 
@@ -44,16 +46,18 @@ def create_mcp_server(
         host: Host to bind to (default: 0.0.0.0)
         log_level: Logging level (default: INFO)
         require_auth: Whether authentication is required (default: True)
+        config: GofrIqConfig instance (loads from env if not provided)
 
     Returns:
         Configured FastMCP server instance
     """
     # Get configuration
-    settings = get_settings(require_auth=require_auth)
+    if config is None:
+        config = get_config()
 
-    # Use overrides or settings
-    storage_path = Path(storage_dir) if storage_dir else settings.storage.storage_dir
-    port = mcp_port or settings.server.mcp_port
+    # Use overrides or config
+    storage_path = Path(storage_dir) if storage_dir else config.project_root / "data" / "storage"
+    port = mcp_port or int(os.getenv("GOFR_IQ_MCP_PORT", "8080"))
 
     # Initialize services
     document_store = DocumentStore(base_path=storage_path / "documents")
@@ -61,19 +65,16 @@ def create_mcp_server(
     language_detector = LanguageDetector()
     duplicate_detector = DuplicateDetector()
 
-    # Initialize indexes
-    # Use ChromaDB settings from environment (HTTP mode if host is set)
-    chromadb_settings = get_chromadb_settings()
-    if chromadb_settings.is_http_mode:
+    # Initialize indexes using config
+    if config.chromadb_is_http_mode:
         # HTTP client mode - connect to ChromaDB server
         embedding_index = EmbeddingIndex(
-            host=chromadb_settings.host,
-            port=chromadb_settings.port,
+            host=config.chroma_host,
+            port=config.chroma_port,
         )
     else:
         # ChromaDB HTTP server MUST be configured - no local fallback
         # This prevents silent state divergence between containers
-        import os
         raise RuntimeError(
             "ChromaDB HTTP server not configured. "
             "GOFR_IQ_CHROMADB_HOST must be set to use shared ChromaDB server. "
@@ -102,8 +103,8 @@ def create_mcp_server(
         graph_index=graph_index,
     )
 
-    # Create LLM service for health checks
-    llm_service = LLMService()
+    # Create LLM service with config
+    llm_service = LLMService(config=config)
 
     # Create MCP server
     server = FastMCP(

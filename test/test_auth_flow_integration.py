@@ -23,7 +23,7 @@ import requests
 
 from gofr_common.auth import AuthService
 
-from app.config import Config
+from app.config import get_config
 from app.models import Document, SourceType, TrustLevel
 from app.services import DocumentStore, SourceRegistry
 
@@ -86,7 +86,8 @@ def auth_test_data(auth_flow_auth_service: AuthService):
     - get_group_uuids_by_names() converts names to UUIDs
     - DocumentStore uses UUIDs as directory paths
     """
-    storage_dir = Config.get_storage_dir()
+    config = get_config()
+    storage_dir = config.project_root / "data" / "storage"
     source_registry = SourceRegistry(base_path=storage_dir / "sources")
     document_store = DocumentStore(base_path=storage_dir / "documents")
     

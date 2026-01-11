@@ -1,15 +1,16 @@
 # GOFR-IQ Docker Compose - Test Stack (Ephemeral)
 #
 # Port Configuration:
-#   All ports defined in lib/gofr-common/config/gofr_ports.sh
-#   Uses TEST ports (production + 100)
-#   Source it before running: source lib/gofr-common/config/gofr_ports.sh && gofr_set_test_ports all
+#   All ports defined in lib/gofr-common/config/gofr_ports.env
+#   Test ports are production ports + 100 (calculated by scripts/run_tests.sh)
+#   Managed via docker/manage-infra.sh which handles test port offsets
 #
 # Usage:
-#   source lib/gofr-common/config/gofr_ports.sh  # Load port config
-#   gofr_set_test_ports all                      # Switch to test ports
-#   docker compose -f docker/docker-compose-test.yml up -d
-#   docker compose -f docker/docker-compose-test.yml down
+#   # Ports are automatically configured by manage-infra.sh when run in test mode
+#   docker/manage-infra.sh start --test           # Start test infrastructure
+#   docker/manage-infra.sh stop                   # Stop test infrastructure
+#   # Or use the test runner:
+#   ./scripts/run_tests.sh                        # Handles all infrastructure setup
 #
 # Services (Ephemeral - no persistent volumes):
 #   - vault:    HashiCorp Vault (Auth backend) - port ${GOFR_VAULT_PORT} (8301)

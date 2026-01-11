@@ -14,10 +14,12 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Source centralized port configuration
-GOFR_PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.sh"
+# Load centralized port configuration from .env file
+GOFR_PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
 if [ -f "${GOFR_PORTS_FILE}" ]; then
+    set -a  # automatically export all variables
     source "${GOFR_PORTS_FILE}"
+    set +a
 else
     echo "ERROR: Port configuration file not found: ${GOFR_PORTS_FILE}" >&2
     exit 1

@@ -6,19 +6,23 @@ Complete guide to bootstrap GOFR-IQ from scratch, creating groups, sources, and 
 
 ```bash
 cd /home/gofr/devroot/gofr-iq
-source lib/gofr-common/config/gofr_ports.sh
 ```
 
 ---
 
-## Step 1: Start Infrastructure & Services
+## Step 1: Start Production Stack
 
-### 1.1 Start Docker Compose Stack
+### 1.1 Start Docker Compose with Authentication
 
 ```bash
 cd /home/gofr/devroot/gofr-iq/docker
 ./start-swarm.sh
 ```
+
+**This is the canonical way to start GOFR-IQ in production mode:**
+- Authentication: ENABLED
+- All services: Vault, Neo4j, ChromaDB, MCP, MCPO, Web
+- Ports: Standard production ports from gofr_ports.env
 
 **Verify all services are healthy:**
 

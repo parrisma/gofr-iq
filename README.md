@@ -99,14 +99,31 @@ GOFR-IQ is a financial news intelligence platform that helps brokerages deliver 
 - Python 3.11+ (for local development)
 - 4GB+ RAM
 
-### 1. Run with Docker (Recommended)
+### 1. Run Production Stack (Recommended)
 
 ```bash
 # Clone and enter repository
 git clone https://github.com/parrisma/gofr-iq.git
 cd gofr-iq
 
-# Build and start all services
+# Start production stack with authentication enabled
+cd docker && ./start-swarm.sh
+```
+
+**Production services will start on**:
+- MCP Server: `http://localhost:8080`
+- MCPO (REST API): `http://localhost:8081`
+- Web UI: `http://localhost:8082`
+- Vault: `http://localhost:8201`
+- ChromaDB: `http://localhost:8000`
+- Neo4j: `http://localhost:7474` (Bolt: 7687)
+
+**Note**: Production mode has authentication enabled. See [Bootstrap Guide](docs/getting-started/bootstrap.md) for creating groups and tokens.
+
+### 2. Run Development Environment
+
+```bash
+# Build and start dev container
 cd docker && ./build-dev.sh && ./run-dev.sh
 
 # Enter dev container
@@ -116,14 +133,14 @@ docker exec -it gofr-iq-dev bash
 bash scripts/run_tests.sh
 ```
 
-**Services will start on**:
-- MCP Server: `http://localhost:8180`
-- MCPO (REST API): `http://localhost:8181`
-- Web UI: `http://localhost:8182`
+**Dev services will start on** (offset +200 from prod):
+- MCP Server: `http://localhost:8280`
+- MCPO (REST API): `http://localhost:8281`
+- Web UI: `http://localhost:8282`
 - ChromaDB: `http://localhost:8100`
 - Neo4j: `http://localhost:7574` (Bolt: 7787)
 
-### 2. Local Development
+### 3. Local Development
 
 ```bash
 # Install dependencies with uv

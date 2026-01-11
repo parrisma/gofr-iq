@@ -18,7 +18,10 @@ GOFR_GID=1000
 CONTAINER_NAME="gofr-iq-dev"
 IMAGE_NAME="gofr-iq-dev:latest"
 
-source "$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.sh"
+# Load port configuration from .env file
+set -a  # automatically export all variables
+source "$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.env"
+set +a
 # Add 200 to dev ports to separate from prod (8080 -> 8280, 8081 -> 8281, 8082 -> 8282)
 MCP_PORT=$((GOFR_IQ_MCP_PORT + 200))
 MCPO_PORT=$((GOFR_IQ_MCPO_PORT + 200))

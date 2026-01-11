@@ -27,7 +27,7 @@ import pytest
 import requests
 
 from app.auth import AuthService
-from app.config import Config
+from app.config import get_config
 from app.models import Document, Source, SourceType, TrustLevel
 from app.services import DocumentStore, SourceRegistry
 
@@ -160,7 +160,8 @@ class GroupAccessTestDataSetup:
     
     def __init__(self):
         """Initialize with shared storage paths."""
-        storage_dir = Config.get_storage_dir()
+        config = get_config()
+        storage_dir = config.project_root / "data" / "storage"
         self.source_registry = SourceRegistry(base_path=storage_dir / "sources")
         self.document_store = DocumentStore(base_path=storage_dir / "documents")
         

@@ -1,20 +1,19 @@
 # GOFR-IQ Docker Compose - Complete Production Stack
 #
 # Port Configuration:
-#   All ports defined in lib/gofr-common/config/gofr_ports.sh
-#   Source it before running: source lib/gofr-common/config/gofr_ports.sh
+#   All ports defined in lib/gofr-common/config/gofr_ports.env
+#   Must be exported to environment before running docker compose
 # 
 # OpenWebUI Integration:
 #   OpenWebUI connects to MCPO which exposes MCP tools as REST endpoints.
 #   Configure OpenWebUI to use: http://localhost:${GOFR_IQ_MCPO_PORT}
 #
 # Usage:
-#   source lib/gofr-common/config/gofr_ports.sh  # Load port config
-#   docker compose up -d                         # Start all services
-#   docker compose ps                            # Check service status  
-#   docker compose logs -f mcpo                  # Watch MCPO logs
-#   docker compose down                          # Stop all services
-#   docker compose down -v                       # Stop and remove volumes
+#   Use start-swarm.sh to start production stack (recommended)
+#   OR manually:
+#     cd docker
+#     set -a && source ../lib/gofr-common/config/gofr_ports.env && set +a
+#     docker compose up -d
 #
 # Services:
 #   - vault:    HashiCorp Vault (Auth backend) - port ${GOFR_VAULT_PORT}
@@ -151,7 +150,13 @@ services:
       - GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:${GOFR_NEO4J_BOLT_INTERNAL_PORT}
       - GOFR_IQ_NEO4J_USER=neo4j
       - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD:-gofr-dev-password}
+      # LLM Configuration
       - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
+      - GOFR_IQ_OPENROUTER_BASE_URL=${GOFR_IQ_OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      - GOFR_IQ_LLM_MODEL=${GOFR_IQ_LLM_MODEL:-anthropic/claude-opus-4}
+      - GOFR_IQ_EMBEDDING_MODEL=${GOFR_IQ_EMBEDDING_MODEL:-qwen/qwen3-embedding-8b}
+      - GOFR_IQ_LLM_TIMEOUT=${GOFR_IQ_LLM_TIMEOUT:-60}
+      - GOFR_IQ_LLM_MAX_RETRIES=${GOFR_IQ_LLM_MAX_RETRIES:-3}
     ports:
       - "${GOFR_IQ_MCP_PORT}:${GOFR_IQ_MCP_PORT}"
     volumes:

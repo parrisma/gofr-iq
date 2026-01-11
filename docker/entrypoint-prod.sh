@@ -3,10 +3,12 @@
 # Starts MCP, MCPO, and Web servers via supervisor
 set -e
 
-# Source centralized port configuration
-GOFR_PORTS_FILE="/app/lib/gofr-common/config/gofr_ports.sh"
+# Load centralized port configuration from .env file
+GOFR_PORTS_FILE="/app/lib/gofr-common/config/gofr_ports.env"
 if [ -f "${GOFR_PORTS_FILE}" ]; then
+    set -a  # automatically export all variables
     source "${GOFR_PORTS_FILE}"
+    set +a
 else
     echo "ERROR: Port configuration file not found: ${GOFR_PORTS_FILE}" >&2
     exit 1

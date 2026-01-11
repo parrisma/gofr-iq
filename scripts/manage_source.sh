@@ -49,12 +49,14 @@
 
 set -e
 
-# Get script directory and source port configuration
+# Get script directory and load port configuration from .env file
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GOFR_PORTS_SH="${SCRIPT_DIR}/../lib/gofr-common/config/gofr_ports.sh"
+GOFR_PORTS_ENV="${SCRIPT_DIR}/../lib/gofr-common/config/gofr_ports.env"
 
-if [[ -f "$GOFR_PORTS_SH" ]]; then
-    source "$GOFR_PORTS_SH"
+if [[ -f "$GOFR_PORTS_ENV" ]]; then
+    set -a  # automatically export all variables
+    source "$GOFR_PORTS_ENV"
+    set +a
 fi
 
 # Environment mode: prod (docker) or dev (default: prod)

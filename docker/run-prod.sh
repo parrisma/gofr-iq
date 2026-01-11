@@ -6,7 +6,10 @@ CONTAINER_NAME="gofr-iq-prod"
 IMAGE_NAME="gofr-iq-prod:latest"
 NETWORK_NAME="gofr-net"
 
-source "$(dirname "$0")/../lib/gofr-common/config/gofr_ports.sh"
+# Load port configuration from .env file
+set -a  # automatically export all variables
+source "$(dirname "$0")/../lib/gofr-common/config/gofr_ports.env"
+set +a
 MCP_PORT="${GOFR_IQ_MCP_PORT}"
 MCPO_PORT="${GOFR_IQ_MCPO_PORT}"
 WEB_PORT="${GOFR_IQ_WEB_PORT}"

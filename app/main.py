@@ -38,15 +38,18 @@ mcp = create_mcp_server(require_auth=_require_auth)
 
 def main() -> None:
     """Run the MCP server (legacy entry point)."""
-    from app.config import get_settings
+    from app.config import get_config
 
     print("WARNING: Using deprecated entry point. Use 'python -m app.main_mcp' instead.")
     print()
 
-    settings = get_settings(require_auth=_require_auth)
+    config = get_config()
 
-    print(f"Starting GOFR-IQ MCP Server on port {settings.server.mcp_port}...")
-    print(f"Storage directory: {settings.storage.storage_dir}")
+    port = int(os.environ.get("GOFR_IQ_MCP_PORT", "8080"))
+    storage_dir = config.project_root / "data" / "storage"
+
+    print(f"Starting GOFR-IQ MCP Server on port {port}...")
+    print(f"Storage directory: {storage_dir}")
     print("Transport: HTTP Streamable")
     print("Press Ctrl+C to stop")
 

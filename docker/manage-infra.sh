@@ -21,10 +21,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$SCRIPT_DIR"
 
-# Source centralized port configuration
-GOFR_PORTS_FILE="$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.sh"
+# Source centralized port configuration from .env file
+GOFR_PORTS_FILE="$PROJECT_ROOT/lib/gofr-common/config/gofr_ports.env"
 if [ -f "$GOFR_PORTS_FILE" ]; then
+    set -a
     source "$GOFR_PORTS_FILE"
+    set +a
 else
     echo "ERROR: Port configuration file not found: $GOFR_PORTS_FILE" >&2
     exit 1
@@ -53,7 +55,10 @@ while [[ $# -gt 0 ]]; do
             COMPOSE_FILE="docker-compose-test.yml"
             NETWORK_NAME="gofr-test-net"
             # Switch to test ports (prod + 100)
-            gofr_set_test_ports all
+            export GOFR_VAULT_PORT="${GOFR_VAULT_PORT_TEST:-$((GOFR_VAULT_PORT + 100))}"
+            export GOFR_CHROMA_PORT="${GOFR_CHROMA_PORT_TEST:-$((GOFR_CHROMA_PORT + 100))}"
+            export GOFR_NEO4J_HTTP_PORT="${GOFR_NEO4J_HTTP_PORT_TEST:-$((GOFR_NEO4J_HTTP_PORT + 100))}"
+            export GOFR_NEO4J_BOLT_PORT="${GOFR_NEO4J_BOLT_PORT_TEST:-$((GOFR_NEO4J_BOLT_PORT + 100))}"
             shift
             ;;
         *)
