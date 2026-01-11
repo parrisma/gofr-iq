@@ -123,8 +123,8 @@ class ChromaDBSettings:
 
 def get_chromadb_settings() -> ChromaDBSettings:
     """Get ChromaDB settings from environment variables"""
-    host = os.environ.get("GOFR_IQ_CHROMA_HOST")
-    port_str = os.environ.get("GOFR_IQ_CHROMA_PORT", "8000")
+    host = os.environ.get("GOFR_IQ_CHROMADB_HOST")
+    port_str = os.environ.get("GOFR_IQ_CHROMADB_PORT", "8000")
     return ChromaDBSettings(
         host=host,
         port=int(port_str),

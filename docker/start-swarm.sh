@@ -19,4 +19,10 @@ echo ""
 
 docker compose up -d
 
+echo ""
+echo "=== Container Status ==="
+echo ""
+docker ps --filter "name=gofr" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+
 

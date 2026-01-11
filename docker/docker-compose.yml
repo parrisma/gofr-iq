@@ -31,7 +31,7 @@ services:
   # INFRASTRUCTURE (Shared)
   # ==========================================================================
   
-  # HashiCorp Vault - Auth Backend
+  # HashiCorp Vault - Auth Backend (Production Mode)
   vault:
     image: gofr-iq-vault:latest
     container_name: gofr-vault
@@ -41,10 +41,18 @@ services:
       - IPC_LOCK
     ports:
       - "${GOFR_VAULT_PORT}:${GOFR_VAULT_PORT}"
+    volumes:
+      - gofr-vault-data:/vault/data
+      - gofr-vault-logs:/vault/logs
+      - gofr-vault-config:/vault/config
     environment:
+      - VAULT_ADDR=http://0.0.0.0:${GOFR_VAULT_PORT}
+      - VAULT_API_ADDR=http://0.0.0.0:${GOFR_VAULT_PORT}
+      - VAULT_LOG_LEVEL=info
+      # For simplified setup, we use VAULT_DEV_ROOT_TOKEN_ID
+      # In true production, remove this and use proper init/unseal
       - VAULT_DEV_ROOT_TOKEN_ID=${GOFR_VAULT_DEV_TOKEN}
       - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:${GOFR_VAULT_PORT}
-      - VAULT_ADDR=http://127.0.0.1:${GOFR_VAULT_PORT}
     networks:
       - gofr-net
     healthcheck:
@@ -66,7 +74,7 @@ services:
       - gofr-iq-neo4j-data:/data
       - gofr-iq-neo4j-logs:/logs
     environment:
-      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-gofr-neo4j-password}
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-gofr-dev-password}
       - NEO4J_PLUGINS=["apoc"]
       - NEO4J_dbms_security_procedures_unrestricted=apoc.*
       - NEO4J_dbms_memory_heap_initial__size=512m
@@ -74,7 +82,7 @@ services:
     networks:
       - gofr-net
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${GOFR_NEO4J_HTTP_PORT}"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${GOFR_NEO4J_HTTP_INTERNAL_PORT}"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -96,7 +104,7 @@ services:
     networks:
       - gofr-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${GOFR_CHROMA_PORT}/api/v1/heartbeat"]
+      test: ["CMD", "curl", "-f", "http://localhost:${GOFR_CHROMA_INTERNAL_PORT}/api/v1/heartbeat"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -139,10 +147,10 @@ services:
       - GOFR_VAULT_MOUNT_POINT=secret
       # Infrastructure connections
       - GOFR_IQ_CHROMADB_HOST=gofr-chromadb
-      - GOFR_IQ_CHROMADB_PORT=${GOFR_CHROMA_PORT}
-      - GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:${GOFR_NEO4J_BOLT_PORT}
+      - GOFR_IQ_CHROMADB_PORT=${GOFR_CHROMA_INTERNAL_PORT}
+      - GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:${GOFR_NEO4J_BOLT_INTERNAL_PORT}
       - GOFR_IQ_NEO4J_USER=neo4j
-      - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD:-gofr-neo4j-password}
+      - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD:-gofr-dev-password}
       - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
     ports:
       - "${GOFR_IQ_MCP_PORT}:${GOFR_IQ_MCP_PORT}"
@@ -233,6 +241,15 @@ networks:
 # Volumes - Persistent
 # ==========================================================================
 volumes:
+  gofr-vault-data:
+    name: gofr-vault-data
+    external: false
+  gofr-vault-logs:
+    name: gofr-vault-logs
+    external: false
+  gofr-vault-config:
+    name: gofr-vault-config
+    external: false
   gofr-iq-neo4j-data:
     name: gofr-iq-neo4j-data
     external: false

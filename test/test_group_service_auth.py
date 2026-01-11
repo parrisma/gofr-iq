@@ -25,40 +25,6 @@ from app.services.group_service import (
 # =============================================================================
 
 
-@pytest.mark.skip(reason="No-auth mode tests skipped: all tests must run WITH AUTH ON (see TEST_AUTH_CONSOLIDATION_PLAN.md)")
-class TestResolveWriteGroupNoAuth:
-    """Tests for resolve_write_group when auth is disabled.
-    
-    SKIPPED: These tests violate the requirement that all tests run WITH AUTH ON.
-    """
-
-    def test_resolve_write_group_no_auth_no_token(self):
-        """When auth is disabled globally, anonymous users should write to 'public'."""
-        # Setup: GroupService with auth_service=None (auth disabled)
-        init_group_service(auth_service=None)
-        
-        # Verify setup
-        service = get_group_service()
-        assert service.auth_service is None, "Auth service should be None"
-        
-        # Action: Call resolve_write_group without tokens
-        result = resolve_write_group(auth_tokens=None)
-        
-        # Expected: Should return "public" not None
-        assert result == PUBLIC_GROUP, f"Expected '{PUBLIC_GROUP}', got {result}"
-
-    def test_resolve_write_group_no_auth_empty_list(self):
-        """Empty auth_tokens list with no auth should return 'public'."""
-        # Setup: GroupService with auth_service=None
-        init_group_service(auth_service=None)
-        
-        # Action: Call with empty list
-        result = resolve_write_group(auth_tokens=[])
-        
-        # Expected: Should return "public"
-        assert result == PUBLIC_GROUP, f"Expected '{PUBLIC_GROUP}', got {result}"
-
-
 class TestResolveWriteGroupAuthEnabled:
     """Tests for resolve_write_group when auth is enabled."""
 

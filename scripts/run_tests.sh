@@ -120,8 +120,8 @@ fi
 # Infrastructure (ChromaDB, Neo4j) - for tests connecting to external services
 # Tests run INSIDE dev container connected to gofr-test-net, use container hostnames
 # Ports are internal container ports (8000 for chroma, 7687 for neo4j bolt)
-export GOFR_IQ_CHROMA_HOST="gofr-iq-chromadb-test"
-export GOFR_IQ_CHROMA_PORT="8000"
+export GOFR_IQ_CHROMADB_HOST="gofr-iq-chromadb-test"
+export GOFR_IQ_CHROMADB_PORT="8000"
 export GOFR_IQ_NEO4J_HOST="gofr-iq-neo4j-test"
 export GOFR_IQ_NEO4J_BOLT_PORT="7687"
 export GOFR_IQ_NEO4J_URI="bolt://gofr-iq-neo4j-test:7687"
@@ -151,7 +151,7 @@ print_header() {
     echo "MCP Port: ${GOFR_IQ_MCP_PORT} (test port, internal)"
     echo "MCPO Port: ${GOFR_IQ_MCPO_PORT} (test port, internal)"
     echo "Web Port: ${GOFR_IQ_WEB_PORT} (test port, internal)"
-    echo "ChromaDB: ${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT} (container)"
+    echo "ChromaDB: ${GOFR_IQ_CHROMADB_HOST}:${GOFR_IQ_CHROMADB_PORT} (container)"
     echo "Neo4j: ${GOFR_IQ_NEO4J_HOST}:${GOFR_IQ_NEO4J_BOLT_PORT} (container)"
     echo ""
 }
@@ -241,7 +241,7 @@ start_chromadb() {
     docker run -d \
         --name gofr-iq-chromadb \
         --network gofr-net \
-        -p "${GOFR_IQ_CHROMA_PORT}:8000" \
+        -p "${GOFR_IQ_CHROMADB_PORT}:8000" \
         gofr-iq-chromadb:latest >/dev/null 2>&1 || {
         echo -e "${RED}Failed to start ChromaDB container${NC}"
         return 1
@@ -250,7 +250,7 @@ start_chromadb() {
     # Wait for ChromaDB to be ready (check via Docker network using v2 API)
     echo -n "Waiting for ChromaDB"
     for i in {1..30}; do
-        if curl -s "http://${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}/api/v1/heartbeat" >/dev/null 2>&1; then
+        if curl -s "http://${GOFR_IQ_CHROMADB_HOST}:${GOFR_IQ_CHROMADB_PORT}/api/v1/heartbeat" >/dev/null 2>&1; then
             echo -e " ${GREEN}✓${NC}"
             return 0
         fi
@@ -429,7 +429,7 @@ verify_test_services() {
     fi
     
     # Verify ChromaDB
-    local chromadb_url="http://${GOFR_IQ_CHROMA_HOST}:${GOFR_IQ_CHROMA_PORT}"
+    local chromadb_url="http://${GOFR_IQ_CHROMADB_HOST}:${GOFR_IQ_CHROMADB_PORT}"
     echo -n "  ChromaDB (${chromadb_url})... "
     if curl -s --max-time 5 "${chromadb_url}/api/v1/heartbeat" >/dev/null 2>&1; then
         echo -e "${GREEN}✓${NC}"
@@ -452,8 +452,8 @@ verify_test_services() {
     echo -e "${BLUE}Test Service Environment Variables:${NC}"
     echo "  GOFR_VAULT_URL=${GOFR_VAULT_URL}"
     echo "  GOFR_VAULT_TOKEN=${GOFR_VAULT_TOKEN:0:10}..."
-    echo "  GOFR_IQ_CHROMA_HOST=${GOFR_IQ_CHROMA_HOST}"
-    echo "  GOFR_IQ_CHROMA_PORT=${GOFR_IQ_CHROMA_PORT}"
+    echo "  GOFR_IQ_CHROMADB_HOST=${GOFR_IQ_CHROMADB_HOST}"
+    echo "  GOFR_IQ_CHROMADB_PORT=${GOFR_IQ_CHROMADB_PORT}"
     echo "  GOFR_IQ_NEO4J_HOST=${GOFR_IQ_NEO4J_HOST}"
     echo "  GOFR_IQ_NEO4J_BOLT_PORT=${GOFR_IQ_NEO4J_BOLT_PORT}"
     echo ""
@@ -472,6 +472,12 @@ cleanup_environment() {
     echo -e "${YELLOW}Cleaning up test environment...${NC}"
     stop_servers || true
     stop_infrastructure || true
+    
+    # Remove local ChromaDB state (prevents schema conflicts between test runs)
+    if [ -d "${PROJECT_ROOT}/data/storage/chroma" ]; then
+        echo -e "${YELLOW}Removing local ChromaDB state...${NC}"
+        rm -rf "${PROJECT_ROOT}/data/storage/chroma"
+    fi
     
     echo -e "${GREEN}Cleanup complete${NC}"
 }

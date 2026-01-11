@@ -57,9 +57,12 @@ if [[ -f "$GOFR_PORTS_SH" ]]; then
     source "$GOFR_PORTS_SH"
 fi
 
-# Default values
-MCP_HOST="${MCP_HOST:-localhost}"
-MCP_PORT="${MCP_PORT:-${GOFR_IQ_MCP_PORT:-8080}}"
+# Environment mode: prod (docker) or dev (default: prod)
+ENV_MODE="prod"
+
+# Default values (will be set based on ENV_MODE)
+MCP_HOST=""  # Will be set after parsing --docker/--dev flags
+MCP_PORT=""  # Will be set after parsing --docker/--dev flags
 COMMAND=""
 SOURCE_NAME=""
 SOURCE_URL=""
@@ -91,8 +94,10 @@ Commands:
   create                Create a new source
 
 Options:
+  --docker, --prod     Use production docker ports (default, port 8180)
+  --dev                Use development ports (port 8080)
   --host HOST          MCP server host (default: localhost)
-  --port PORT          MCP server port (default: from gofr_ports.sh)
+  --port PORT          MCP server port (override auto-detection)
   --name NAME          Source name (required for create)
   --url URL            Source URL (required for create)
   --description DESC   Source description (optional for create)
@@ -101,28 +106,30 @@ Options:
   --help, -h           Show this help message
 
 Examples:
-  # List all sources
-  ./manage_source.sh list
+  # List all sources (production docker)
+  ./manage_source.sh list --docker
+
+  # List sources in dev mode
+  ./manage_source.sh list --dev
 
   # List sources on custom port
-  ./manage_source.sh list --port 8180
+  ./manage_source.sh list --docker --port 8180
 
   # Create a new source (requires auth token)
-  ./manage_source.sh create \
+  ./manage_source.sh create --docker \
     --name "Reuters" \
     --url "https://www.reuters.com" \
     --description "International news agency" \
-    --token "$GOFR_IQ_ADMIN_TOKEN"
+    --token "$GOFR_ADMIN_TOKEN"
 
   # Create source with all options
-  ./manage_source.sh create \
+  ./manage_source.sh create --docker \
     --name "Bloomberg" \
     --url "https://www.bloomberg.com" \
     --description "Financial news" \
     --source-type "financial_news" \
-    --token "$GOFR_IQ_ADMIN_TOKEN" \
-    --host localhost \
-    --port 8080
+    --token "$APAC_SALES_TOKEN" \
+    --host localhost
 EOF
 }
 
@@ -211,9 +218,120 @@ mcp_call_tool() {
     echo "$response"
 }
 
+# Format and display list sources response
+format_list_sources() {
+    local json_data=$1
+    
+    # Extract the inner JSON from the text field
+    local sources_json
+    sources_json=$(echo "$json_data" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+if 'result' in data and 'content' in data['result']:
+    content = data['result']['content']
+    if content and len(content) > 0 and 'text' in content[0]:
+        inner = json.loads(content[0]['text'])
+        print(json.dumps(inner))
+" 2>/dev/null)
+    
+    if [[ -z "$sources_json" ]]; then
+        log_error "Failed to parse response"
+        return 1
+    fi
+    
+    # Check for errors in inner JSON
+    if echo "$sources_json" | grep -q '"status".*:.*"error"'; then
+        log_error "API Error:"
+        echo "$sources_json" | python3 -m json.tool
+        return 1
+    fi
+    
+    # Format sources table
+    echo ""
+    echo "Source GUID                          Name              Type          Languages  Trust        Active"
+    echo "-------------------------------------------------------------------------------------------------------"
+    
+    echo "$sources_json" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+if 'data' in data and 'sources' in data['data']:
+    sources = data['data']['sources']
+    for source in sources:
+        guid = source.get('source_guid', 'N/A')[:36]
+        name = source.get('name', 'N/A')[:16]
+        stype = source.get('type', 'N/A')[:12]
+        langs = ','.join(source.get('languages', ['N/A']))[:10]
+        trust = source.get('trust_level', 'N/A')[:12]
+        active = 'yes' if source.get('active', False) else 'no'
+        print(f'{guid:<36} {name:<16} {stype:<12} {langs:<10} {trust:<12} {active}')
+    count = data['data'].get('count', 0)
+    print(f'\nTotal: {count} source(s)')
+" 2>/dev/null
+    
+    return 0
+}
+
+# Format and display create source response
+format_create_source() {
+    local json_data=$1
+    
+    # Extract the inner JSON from the text field
+    local result_json
+    result_json=$(echo "$json_data" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+if 'result' in data and 'content' in data['result']:
+    content = data['result']['content']
+    if content and len(content) > 0 and 'text' in content[0]:
+        inner = json.loads(content[0]['text'])
+        print(json.dumps(inner))
+" 2>/dev/null)
+    
+    if [[ -z "$result_json" ]]; then
+        log_error "Failed to parse response"
+        return 1
+    fi
+    
+    # Check for errors
+    if echo "$result_json" | grep -q '"status".*:.*"error"'; then
+        log_error "API Error:"
+        echo "$result_json" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+print(f\"Error: {data.get('message', 'Unknown error')}\")
+if 'recovery_strategy' in data:
+    print(f\"Hint: {data['recovery_strategy']}\")
+if 'details' in data:
+    print(f\"Details: {json.dumps(data['details'])}\")
+" 2>/dev/null
+        return 1
+    fi
+    
+    # Display success
+    echo ""
+    log_success "Source created successfully!"
+    echo ""
+    echo "$result_json" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+if 'data' in data:
+    info = data['data']
+    print(f\"Source GUID:   {info.get('source_guid', 'N/A')}\")
+    print(f\"Name:          {info.get('name', 'N/A')}\")
+    print(f\"Type:          {info.get('type', 'N/A')}\")
+    print(f\"Languages:     {', '.join(info.get('languages', []))}\")
+    print(f\"Trust Level:   {info.get('trust_level', 'N/A')}\")
+    print(f\"Active:        {'yes' if info.get('active', False) else 'no'}\")
+    print(f\"Created:       {info.get('created_at', 'N/A')}\")
+" 2>/dev/null
+    
+    return 0
+}
+
 # Parse and display tool response
 parse_response() {
     local response=$1
+    local operation=$2  # "list" or "create"
     
     # Extract data from SSE format
     local json_data
@@ -224,15 +342,26 @@ parse_response() {
         return 1
     fi
     
-    # Check for errors
+    # Check for errors at MCP level
     if echo "$json_data" | grep -q '"error"'; then
         log_error "MCP error occurred:"
         echo "$json_data" | python3 -m json.tool 2>/dev/null || echo "$json_data"
         return 1
     fi
     
-    # Pretty print the response
-    echo "$json_data" | python3 -m json.tool 2>/dev/null || echo "$json_data"
+    # Format based on operation type
+    case "$operation" in
+        list)
+            format_list_sources "$json_data"
+            ;;
+        create)
+            format_create_source "$json_data"
+            ;;
+        *)
+            # Fallback to JSON output
+            echo "$json_data" | python3 -m json.tool 2>/dev/null || echo "$json_data"
+            ;;
+    esac
 }
 
 # =============================================================================
@@ -266,9 +395,7 @@ list_sources() {
     response=$(mcp_call_tool "$host" "$port" "$session_id" "list_sources" "$args") || return 1
     
     # Parse and display response
-    echo ""
-    log_info "=== Response ==="
-    parse_response "$response"
+    parse_response "$response" "list"
     
     return 0
 }
@@ -331,9 +458,7 @@ EOF
     response=$(mcp_call_tool "$host" "$port" "$session_id" "create_source" "$args") || return 1
     
     # Parse and display response
-    echo ""
-    log_info "=== Response ==="
-    parse_response "$response"
+    parse_response "$response" "create"
     
     return 0
 }
@@ -355,6 +480,14 @@ shift
 # Parse remaining arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --docker|--prod)
+            ENV_MODE="prod"
+            shift
+            ;;
+        --dev)
+            ENV_MODE="dev"
+            shift
+            ;;
         --host)
             MCP_HOST="$2"
             shift 2
@@ -395,6 +528,23 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Set host and port based on environment mode if not explicitly provided
+if [[ -z "$MCP_HOST" ]]; then
+    if [[ "$ENV_MODE" == "prod" ]]; then
+        MCP_HOST="gofr-iq-mcp"
+    else
+        MCP_HOST="localhost"
+    fi
+fi
+
+if [[ -z "$MCP_PORT" ]]; then
+    if [[ "$ENV_MODE" == "prod" ]]; then
+        MCP_PORT="${GOFR_IQ_MCP_PORT_TEST:-8180}"
+    else
+        MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
+    fi
+fi
 
 # Execute command
 case $COMMAND in

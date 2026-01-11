@@ -692,7 +692,7 @@ class TestMCPServerCreation:
         assert isinstance(server, FastMCP)
 
     @pytest.mark.skipif(
-        not os.environ.get("GOFR_IQ_CHROMA_HOST"),
+        not os.environ.get("GOFR_IQ_CHROMADB_HOST"),
         reason="Requires ChromaDB infrastructure"
     )
     def test_mcp_server_configuration(self, temp_storage: Path) -> None:

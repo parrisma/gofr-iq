@@ -34,9 +34,12 @@ if [ -f "$PROJECT_DIR/lib/gofr-common/config/gofr_ports.sh" ]; then
     source "$PROJECT_DIR/lib/gofr-common/config/gofr_ports.sh"
 fi
 
-# Default values
-MCP_HOST="${GOFR_IQ_MCP_HOST:-localhost}"
-MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
+# Environment mode: prod (docker) or dev (default: prod)
+ENV_MODE="prod"
+
+# Default values (will be set based on ENV_MODE)
+MCP_HOST=""  # Will be set after parsing --docker/--dev flags
+MCP_PORT=""  # Will be set after parsing --docker/--dev flags
 SOURCE_GUID=""
 TITLE=""
 CONTENT=""
@@ -70,8 +73,10 @@ Commands:
   query                 Search for documents
 
 Ingest Options:
-  --host HOST          MCP server host (default: localhost)
-  --port PORT          MCP server port (default: from gofr_ports.sh)
+  --docker, --prod     Use production docker ports (default, port 8180)
+  --dev                Use development ports (port 8080)
+  --host HOST          MCP server host (override auto-detection)
+  --port PORT          MCP server port (override auto-detection)
   --source-guid GUID   Source UUID (required - use manage_source.sh to list sources)
   --title TITLE        Document title (required)
   --content TEXT       Document content (required if --content-file not used)
@@ -80,8 +85,10 @@ Ingest Options:
   --token TOKEN        JWT auth token (required - determines group)
 
 Query Options:
-  --host HOST          MCP server host (default: localhost)
-  --port PORT          MCP server port (default: from gofr_ports.sh)
+  --docker, --prod     Use production docker ports (default, port 8180)
+  --dev                Use development ports (port 8080)
+  --host HOST          MCP server host (override auto-detection)
+  --port PORT          MCP server port (override auto-detection)
   --query TEXT         Search query (required)
   --n-results NUM      Max results to return (default: 10)
   --token TOKEN        JWT auth token (optional - for group-based access)
@@ -368,6 +375,14 @@ shift
 # Parse remaining arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --docker|--prod)
+            ENV_MODE="prod"
+            shift
+            ;;
+        --dev)
+            ENV_MODE="dev"
+            shift
+            ;;
         --host)
             MCP_HOST="$2"
             shift 2
@@ -420,6 +435,23 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Set host and port based on environment mode if not explicitly provided
+if [[ -z "$MCP_HOST" ]]; then
+    if [[ "$ENV_MODE" == "prod" ]]; then
+        MCP_HOST="gofr-iq-mcp"
+    else
+        MCP_HOST="localhost"
+    fi
+fi
+
+if [[ -z "$MCP_PORT" ]]; then
+    if [[ "$ENV_MODE" == "prod" ]]; then
+        MCP_PORT="${GOFR_IQ_MCP_PORT_TEST:-8180}"
+    else
+        MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
+    fi
+fi
 
 # Read content from file if specified
 if [[ -n "$CONTENT_FILE" ]] && [[ -z "$CONTENT" ]]; then

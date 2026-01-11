@@ -489,17 +489,17 @@ def chromadb_config() -> dict[str, str | int]:
     Raises:
         ValueError: If required environment variables are not set.
     """
-    host = os.environ.get("GOFR_IQ_CHROMA_HOST")
-    port = os.environ.get("GOFR_IQ_CHROMA_PORT")
+    host = os.environ.get("GOFR_IQ_CHROMADB_HOST")
+    port = os.environ.get("GOFR_IQ_CHROMADB_PORT")
     
     if not host:
         raise ValueError(
-            "GOFR_IQ_CHROMA_HOST not set. Run tests via ./scripts/run_tests.sh "
+            "GOFR_IQ_CHROMADB_HOST not set. Run tests via ./scripts/run_tests.sh "
             "which sets up the test environment correctly."
         )
     if not port:
         raise ValueError(
-            "GOFR_IQ_CHROMA_PORT not set. Run tests via ./scripts/run_tests.sh "
+            "GOFR_IQ_CHROMADB_PORT not set. Run tests via ./scripts/run_tests.sh "
             "which sets up the test environment correctly."
         )
     

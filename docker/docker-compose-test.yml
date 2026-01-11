@@ -67,7 +67,7 @@ services:
     networks:
       - gofr-test-net
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7474"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${GOFR_NEO4J_HTTP_INTERNAL_PORT_TEST}"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -86,11 +86,12 @@ services:
       - "${GOFR_CHROMA_PORT}:8000"
     environment:
       - IS_PERSISTENT=FALSE
+      - PERSIST_DIRECTORY=/chroma/chroma
       - ANONYMIZED_TELEMETRY=FALSE
     networks:
       - gofr-test-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      test: ["CMD", "curl", "-f", "http://localhost:${GOFR_CHROMA_INTERNAL_PORT_TEST}/api/v1/heartbeat"]
       interval: 30s
       timeout: 10s
       retries: 3

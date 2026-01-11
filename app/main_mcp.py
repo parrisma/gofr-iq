@@ -228,5 +228,7 @@ if __name__ == "__main__":
         print("\nServer stopped")
         sys.exit(0)
     except Exception as e:
+        import traceback
         startup_logger.error("FATAL: Failed to start MCP server", error=str(e))
+        traceback.print_exc()
         sys.exit(1)

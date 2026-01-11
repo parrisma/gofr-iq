@@ -115,37 +115,6 @@ def delete_source_fn(mock_source_registry):
 class TestCreateSourceAlwaysRequiresAuth:
     """Tests that create_source behavior with authentication."""
 
-    @pytest.mark.skip(reason="No-auth mode tests skipped: all tests must run WITH AUTH ON (see TEST_AUTH_CONSOLIDATION_PLAN.md)")
-    def test_create_source_no_auth_mode_writes_to_public(self, create_source_fn, mock_source_registry):
-        """When auth is disabled, create_source writes to public group.
-        
-        SKIPPED: This test violates the requirement that all tests run WITH AUTH ON.
-        
-        POLICY DECISION: Rather than requiring auth even when disabled,
-        anonymous writes go to the 'public' group. This allows systems
-        to operate without auth while maintaining group-based access control.
-        """
-        # Setup: Initialize GroupService with auth disabled
-        init_group_service(auth_service=None)
-        
-        # Action: Call create_source without auth_tokens
-        response = create_source_fn(
-            name="Test Source",
-            source_type="news_agency",
-            region="APAC",
-            auth_tokens=None,  # No token provided
-        )
-        
-        # Parse response
-        result = parse_tool_response(response)
-        
-        # Assertion: Should succeed - anonymous writes go to public group
-        success = result.get("success", result.get("status") == "success")
-        assert success is True, f"create_source should succeed with public group when auth disabled, got: {result}"
-        
-        # Verify create was called (with public group)
-        mock_source_registry.create.assert_called_once()
-
     def test_create_source_auth_enabled_no_token(self, vault_auth_service, create_source_fn, mock_source_registry):
         """create_source fails without token when auth enabled."""
         # Setup: Initialize GroupService with auth enabled

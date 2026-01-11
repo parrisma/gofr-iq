@@ -71,9 +71,14 @@ def create_mcp_server(
             port=chromadb_settings.port,
         )
     else:
-        # Local persistent mode
-        embedding_index = EmbeddingIndex(
-            persist_directory=storage_path / "chroma",
+        # ChromaDB HTTP server MUST be configured - no local fallback
+        # This prevents silent state divergence between containers
+        import os
+        raise RuntimeError(
+            "ChromaDB HTTP server not configured. "
+            "GOFR_IQ_CHROMADB_HOST must be set to use shared ChromaDB server. "
+            f"Current: GOFR_IQ_CHROMADB_HOST={os.getenv('GOFR_IQ_CHROMADB_HOST')} "
+            f"Environment: {os.getenv('GOFR_IQ_ENV', 'PROD')}"
         )
     
     # Graph index requires Neo4j connection
