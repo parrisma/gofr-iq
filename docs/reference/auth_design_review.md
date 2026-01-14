@@ -66,3 +66,4 @@ Admin capabilities are implemented via specific group memberships.
 ## Conclusion
 
 The GOFR-IQ authentication implementation aligns with the specified design requirements. The architecture correctly segregates data by groups, enforces access controls at the service entry points (MCP tools), and leverages a centralized authentication service backed by Vault (or other providers) via `gofr-common`. The bootstrap and management scripts provide the necessary operational tooling to maintain this security model.
+Note: docs/reference/auth_design_review.md is outdated (pre-admin-access-control implementation). Consider archiving or updating it.

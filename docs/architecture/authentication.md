@@ -68,7 +68,8 @@ mcpo --host 0.0.0.0 --port 8181 \
 Services (QueryService, IngestService, etc.) receive permitted groups and:
 - Filter query results to only return documents in accessible groups
 - Enforce write permissions for ingest operations
-- Validate source access based on group membership
+- Enforce admin-only access for source management (create/update/delete)
+- Sources are global (no group affiliation) - any authenticated user can reference any source
 
 ---
 
@@ -94,7 +95,7 @@ Services (QueryService, IngestService, etc.) receive permitted groups and:
 ### Group Semantics
 
 - `public`: Reserved group, always accessible even without token
-- `admin`: Administrative access (can create/delete sources, manage groups)
+- `admin`: **Required** for source management (create/update/delete), group management, and token management
 - Custom groups: Content-specific (e.g., `reuters-feed`, `alt-data-provider`)
 
 ---
@@ -108,8 +109,9 @@ Services (QueryService, IngestService, etc.) receive permitted groups and:
 - Example: Document in `["reuters-feed"]` accessible to tokens with `reuters-feed` OR `admin`
 
 **Sources**:
-- User can list/view source if token includes source's group
-- Public sources visible to all
+- Sources are global - any authenticated user can list/view all sources
+- No group-based filtering for sources
+- Admin group required for create/update/delete operations
 
 ### Write Access
 
@@ -119,7 +121,8 @@ Services (QueryService, IngestService, etc.) receive permitted groups and:
 
 **Source Management**:
 - Create/Update/Delete requires `admin` group membership
-- Sources inherit group from creating token
+- Sources are global (no group affiliation)
+- Any document can reference any source regardless of document's group
 
 ---
 

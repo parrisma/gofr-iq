@@ -1,6 +1,6 @@
 """Tests for Source Registry - Phase 3.
 
-Tests for CRUD operations on sources with group-based access control.
+Tests for CRUD operations on sources with flat storage (no group-based access).
 """
 
 from __future__ import annotations
@@ -13,7 +13,6 @@ import pytest
 
 from app.models import SourceMetadata, SourceType, TrustLevel
 from app.services import (
-    SourceAccessDeniedError,
     SourceNotFoundError,
     SourceRegistry,
 )
@@ -40,11 +39,9 @@ class TestCreateSource:
 
         source = registry.create(
             name="Test News Agency",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         assert source.name == "Test News Agency"
-        assert source.group_guid == "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
         assert len(source.source_guid) == 36  # UUID format
         assert source.type == SourceType.OTHER  # Default
         assert source.trust_level == TrustLevel.UNVERIFIED  # Default
@@ -63,7 +60,6 @@ class TestCreateSource:
 
         source = registry.create(
             name="Reuters APAC",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             source_type=SourceType.NEWS_AGENCY,
             region="APAC",
             languages=["en", "zh", "ja"],
@@ -85,7 +81,6 @@ class TestCreateSource:
 
         source = registry.create(
             name="Internal Research",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             source_type=SourceType.INTERNAL,
             metadata={"department": "Equity Research"},
         )
@@ -94,19 +89,17 @@ class TestCreateSource:
         assert source.metadata.department == "Equity Research"
 
     def test_create_source_persists_to_file(self, data_store: DataStore) -> None:
-        """Test that created source is persisted to disk."""
+        """Test that created source is persisted to disk with flat storage."""
         registry = SourceRegistry(data_store.base_path)
 
         source = registry.create(
             name="Persisted Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
-        # Verify file exists
+        # Verify file exists in flat storage
         expected_path = (
             data_store.base_path
             / "sources"
-            / source.group_guid
             / f"{source.source_guid}.json"
         )
         assert expected_path.exists()
@@ -123,7 +116,6 @@ class TestCreateSource:
 
         source = registry.create(
             name="Audited Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         audit_log = registry.get_audit_log(source.source_guid)
@@ -142,7 +134,6 @@ class TestGetSource:
 
         created = registry.create(
             name="Test Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         retrieved = registry.get(created.source_guid)
@@ -159,29 +150,12 @@ class TestGetSource:
 
         assert "nonexistent-guid-0000-0000-000000000000" in str(exc_info.value)
 
-    def test_get_source_with_access_groups(self, data_store: DataStore) -> None:
-        """Test getting a source with access group restriction."""
-        registry = SourceRegistry(data_store.base_path)
-
-        source = registry.create(
-            name="Group A Source",
-            group_guid="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-        )
-
-        # Can access with correct group
-        retrieved = registry.get(
-            source.source_guid,
-            access_groups=["aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"],
-        )
-        assert retrieved.source_guid == source.source_guid
-
     def test_source_exists(self, data_store: DataStore) -> None:
         """Test exists method."""
         registry = SourceRegistry(data_store.base_path)
 
         source = registry.create(
             name="Exists Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         assert registry.exists(source.source_guid) is True
@@ -209,29 +183,13 @@ class TestListSources:
         registry = SourceRegistry(data_store.base_path)
 
         # Create multiple sources
-        registry.create(name="Source 1", group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890")
-        registry.create(name="Source 2", group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890")
-        registry.create(name="Source 3", group_guid="b2c3d4e5-f6a7-8901-bcde-f12345678901")
+        registry.create(name="Source 1")
+        registry.create(name="Source 2")
+        registry.create(name="Source 3")
 
         sources = registry.list_sources()
 
         assert len(sources) == 3
-
-    def test_list_sources_by_group(self, data_store: DataStore) -> None:
-        """Test filtering sources by group."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-        group_b = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
-
-        registry.create(name="Group A Source 1", group_guid=group_a)
-        registry.create(name="Group A Source 2", group_guid=group_a)
-        registry.create(name="Group B Source 1", group_guid=group_b)
-
-        sources = registry.list_sources(group_guid=group_a)
-
-        assert len(sources) == 2
-        assert all(s.group_guid == group_a for s in sources)
 
     def test_filter_sources_by_region(self, data_store: DataStore) -> None:
         """Test filtering sources by region."""
@@ -239,17 +197,14 @@ class TestListSources:
 
         registry.create(
             name="APAC Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             region="APAC",
         )
         registry.create(
             name="EMEA Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             region="EMEA",
         )
         registry.create(
             name="Americas Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             region="Americas",
         )
 
@@ -265,17 +220,14 @@ class TestListSources:
 
         registry.create(
             name="News Agency",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             source_type=SourceType.NEWS_AGENCY,
         )
         registry.create(
             name="Internal Research",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             source_type=SourceType.INTERNAL,
         )
         registry.create(
             name="Government Report",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             source_type=SourceType.GOVERNMENT,
         )
 
@@ -284,31 +236,12 @@ class TestListSources:
         assert len(news_sources) == 1
         assert news_sources[0].type == SourceType.NEWS_AGENCY
 
-    def test_list_sources_with_access_groups(self, data_store: DataStore) -> None:
-        """Test listing sources limited to access groups."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-        group_b = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
-        group_c = "cccccccc-cccc-cccc-cccc-cccccccccccc"
-
-        registry.create(name="A1", group_guid=group_a)
-        registry.create(name="B1", group_guid=group_b)
-        registry.create(name="C1", group_guid=group_c)
-
-        # User has access to groups A and B only
-        sources = registry.list_sources(access_groups=[group_a, group_b])
-
-        assert len(sources) == 2
-        names = {s.name for s in sources}
-        assert names == {"A1", "B1"}
-
     def test_count_sources(self, data_store: DataStore) -> None:
         """Test counting sources."""
         registry = SourceRegistry(data_store.base_path)
 
-        registry.create(name="Source 1", group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890")
-        registry.create(name="Source 2", group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890")
+        registry.create(name="Source 1")
+        registry.create(name="Source 2")
 
         assert registry.count_sources() == 2
 
@@ -327,7 +260,6 @@ class TestUpdateSource:
 
         source = registry.create(
             name="Original Name",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         updated = registry.update(source.source_guid, name="Updated Name")
@@ -341,7 +273,6 @@ class TestUpdateSource:
 
         source = registry.create(
             name="Original",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             source_type=SourceType.OTHER,
             trust_level=TrustLevel.UNVERIFIED,
         )
@@ -367,7 +298,6 @@ class TestUpdateSource:
 
         source = registry.create(
             name="Original",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
         original_updated_at = source.updated_at
 
@@ -381,7 +311,6 @@ class TestUpdateSource:
 
         source = registry.create(
             name="Original Name",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         registry.update(source.source_guid, name="Updated Name")
@@ -404,23 +333,6 @@ class TestUpdateSource:
                 name="New Name",
             )
 
-    def test_update_with_access_groups(self, data_store: DataStore) -> None:
-        """Test updating with access group authorization."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-
-        source = registry.create(name="Test", group_guid=group_a)
-
-        # Update with correct access group
-        updated = registry.update(
-            source.source_guid,
-            access_groups=[group_a],
-            name="Updated",
-        )
-
-        assert updated.name == "Updated"
-
 
 # =============================================================================
 # Phase 3.4: Soft-Delete Source
@@ -436,7 +348,6 @@ class TestSoftDeleteSource:
 
         source = registry.create(
             name="To Delete",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
         assert source.active is True
 
@@ -451,7 +362,6 @@ class TestSoftDeleteSource:
 
         source = registry.create(
             name="To Delete",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         registry.soft_delete(source.source_guid)
@@ -466,11 +376,9 @@ class TestSoftDeleteSource:
 
         source1 = registry.create(
             name="Active Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
         source2 = registry.create(
             name="Deleted Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         registry.soft_delete(source2.source_guid)
@@ -486,11 +394,9 @@ class TestSoftDeleteSource:
 
         registry.create(
             name="Active Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
         source2 = registry.create(
             name="Deleted Source",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         registry.soft_delete(source2.source_guid)
@@ -505,7 +411,6 @@ class TestSoftDeleteSource:
 
         source = registry.create(
             name="To Delete",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         )
 
         registry.soft_delete(source.source_guid)
@@ -519,79 +424,5 @@ class TestSoftDeleteSource:
 
 
 # =============================================================================
-# Phase 3.5: Access Groups Enforcement
+# All tests complete - sources are now standalone entities
 # =============================================================================
-
-
-class TestSourceAccessControl:
-    """Tests for group-based access control."""
-
-    def test_source_access_denied(self, data_store: DataStore) -> None:
-        """Test that access is denied when source's group not in access_groups."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-        group_b = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
-
-        source = registry.create(name="Group A Source", group_guid=group_a)
-
-        # Try to access with only group B
-        with pytest.raises(SourceAccessDeniedError) as exc_info:
-            registry.get(source.source_guid, access_groups=[group_b])
-
-        assert source.source_guid in str(exc_info.value)
-
-    def test_source_access_allowed(self, data_store: DataStore) -> None:
-        """Test that access is allowed when source's group is in access_groups."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-        group_b = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
-
-        source = registry.create(name="Group A Source", group_guid=group_a)
-
-        # Access with both groups
-        retrieved = registry.get(source.source_guid, access_groups=[group_a, group_b])
-
-        assert retrieved.source_guid == source.source_guid
-
-    def test_update_access_denied(self, data_store: DataStore) -> None:
-        """Test that update is denied without proper access."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-        group_b = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
-
-        source = registry.create(name="Group A Source", group_guid=group_a)
-
-        with pytest.raises(SourceAccessDeniedError):
-            registry.update(
-                source.source_guid,
-                access_groups=[group_b],
-                name="Unauthorized Update",
-            )
-
-    def test_soft_delete_access_denied(self, data_store: DataStore) -> None:
-        """Test that soft-delete is denied without proper access."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-        group_b = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
-
-        source = registry.create(name="Group A Source", group_guid=group_a)
-
-        with pytest.raises(SourceAccessDeniedError):
-            registry.soft_delete(source.source_guid, access_groups=[group_b])
-
-    def test_no_access_groups_allows_all(self, data_store: DataStore) -> None:
-        """Test that omitting access_groups allows access to all sources."""
-        registry = SourceRegistry(data_store.base_path)
-
-        group_a = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-
-        source = registry.create(name="Any Source", group_guid=group_a)
-
-        # No access_groups means unrestricted access
-        retrieved = registry.get(source.source_guid)
-
-        assert retrieved.source_guid == source.source_guid

@@ -1,0 +1,22 @@
+{
+  "source": "TechCrunch",
+  "published_at": "2025-12-12T19:00:44.481528",
+  "upload_as_group": "us-sales",
+  "token": "gofr-sim-us-token",
+  "title": "News regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc. Appoints New VP of Supply Chain Operations\n\nGigaTech Inc. (NASDAQ: GTX) announced today the appointment of Sarah Chen as Vice President of Supply Chain Operations, effective November 1. Chen joins the company from Meridian Technologies, where she served as Senior Director of Global Logistics for the past four years.\n\nIn her new role, Chen will oversee GigaTech's supply chain strategy across its North American and Asian operations, reporting directly to Chief Operating Officer Michael Torres. The position became vacant following the retirement of longtime executive Robert Walsh in September.\n\n\"Sarah brings valuable experience in optimizing complex supply networks, which will be instrumental as we continue to scale our manufacturing capabilities,\" Torres said in a statement. \"Her background in both technology and logistics sectors aligns well with our operational goals.\"\n\nChen holds an MBA from Northwestern University's Kellogg School of Management and a bachelor's degree in industrial engineering from Purdue University. During her tenure at Meridian Technologies, she led initiatives that reduced shipping costs by 12 percent while maintaining delivery timelines.\n\nThe appointment comes as GigaTech continues its steady expansion of production facilities. The company recently completed construction of its third manufacturing plant in Ohio and plans to break ground on a facility in Mexico next quarter.\n\nIn related news, GigaTech will participate in the upcoming Pacific Tech Conference in San Francisco from November 15-17. Chief Technology Officer Lisa Patel is scheduled to speak on a panel discussing semiconductor innovation trends. The company will also host a booth showcasing its latest enterprise solutions.\n\nAdditionally, GigaTech launched its annual \"Tech for Tomorrow\" initiative this week, pledging to donate refurbished computers to 50 schools in underserved communities across five states. The program, now in its third year, aims to provide technology access to approximately 2,000 students.\n\n\"Education remains a key pillar of our community engagement efforts,\" said Amanda Ross, GigaTech's Director of Corporate Social Responsibility. \"These donations help bridge the digital divide while giving our older but still functional equipment a second life.\"\n\nGigaTech shares closed at $47.82 yesterday, up 0.3 percent. The company is scheduled to report third-quarter earnings on November 28.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

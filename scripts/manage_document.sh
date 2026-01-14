@@ -51,6 +51,12 @@ QUERY=""
 N_RESULTS=10
 AUTH_TOKEN=""
 
+# Delete-specific variables
+DOCUMENT_GUID=""
+GROUP_GUID=""
+DATE_HINT=""
+CONFIRM="false"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -69,10 +75,12 @@ GOFR-IQ Document Management Script
 Usage:
   ./manage_document.sh ingest [OPTIONS]
   ./manage_document.sh query [OPTIONS]
+  ./manage_document.sh delete [OPTIONS]
 
 Commands:
   ingest                Ingest a document into the system
   query                 Search for documents
+  delete                Permanently delete a document (admin only)
 
 Ingest Options:
   --docker, --prod     Use production docker ports (default, port 8180)
@@ -94,6 +102,17 @@ Query Options:
   --query TEXT         Search query (required)
   --n-results NUM      Max results to return (default: 10)
   --token TOKEN        JWT auth token (optional - for group-based access)
+
+Delete Options:
+  --docker, --prod     Use production docker ports (default, port 8180)
+  --dev                Use development ports (port 8080)
+  --host HOST          MCP server host (override auto-detection)
+  --port PORT          MCP server port (override auto-detection)
+  --document-guid GUID Document UUID to delete (required)
+  --group-guid GUID    Group UUID containing the document (required)
+  --date YYYY-MM-DD    Document creation date (optional, speeds lookup)
+  --confirm            Must be present to execute deletion (safety check)
+  --token TOKEN        JWT auth token (admin required)
   
 Common Options:
   --help, -h           Show this help message
@@ -125,6 +144,13 @@ Examples:
     --host gofr-iq-mcp \\
     --query "earnings surprises" \\
     --n-results 10
+
+  # Delete a document (requires --confirm flag)
+  ./manage_document.sh delete \\
+    --document-guid "550e8400-e29b-41d4-a716-446655440000" \\
+    --group-guid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" \\
+    --confirm \\
+    --token "\$GOFR_IQ_ADMIN_TOKEN"
 
 EOF
 }
@@ -360,6 +386,74 @@ query_documents() {
     return 0
 }
 
+delete_document() {
+    local host=$1
+    local port=$2
+    local document_guid=$3
+    local group_guid=$4
+    local date_hint=$5
+    local confirm=$6
+    local auth_token=$7
+    
+    # Validate required parameters
+    if [[ -z "$document_guid" ]]; then
+        log_error "Document GUID is required (--document-guid)"
+        return 1
+    fi
+    
+    if [[ -z "$group_guid" ]]; then
+        log_error "Group GUID is required (--group-guid)"
+        return 1
+    fi
+    
+    if [[ -z "$auth_token" ]]; then
+        log_error "Admin token is required (--token)"
+        return 1
+    fi
+    
+    if [[ "$confirm" != "true" ]]; then
+        echo -e "${YELLOW}=== DELETION NOT CONFIRMED ===${NC}" >&2
+        log_warning "This operation will PERMANENTLY delete:"
+        log_warning "  - Document file from storage"
+        log_warning "  - All vector embeddings from ChromaDB"
+        log_warning "  - All graph entries from Neo4j"
+        echo "" >&2
+        log_warning "Document GUID: ${document_guid}"
+        log_warning "Group GUID: ${group_guid}"
+        echo "" >&2
+        log_warning "To execute, add --confirm flag to command"
+        return 1
+    fi
+    
+    echo -e "${RED}=== DELETING DOCUMENT ===${NC}" >&2
+    log_info "Target: ${host}:${port}"
+    log_info "Document GUID: ${document_guid}"
+    log_info "Group GUID: ${group_guid}"
+    [[ -n "$date_hint" ]] && log_info "Date hint: ${date_hint}"
+    log_info "Auth: Admin token provided (${#auth_token} chars)"
+    echo ""
+    
+    # Initialize session
+    local session_id
+    session_id=$(mcp_initialize "$host" "$port") || return 1
+    
+    # Build arguments JSON
+    local args="{\"document_guid\": \"${document_guid}\", \"group_guid\": \"${group_guid}\", \"confirm\": true"
+    [[ -n "$date_hint" ]] && args="${args}, \"date_hint\": \"${date_hint}\""
+    args="${args}, \"auth_tokens\": [\"${auth_token}\"]}"
+    
+    # Call delete_document tool
+    local response
+    response=$(mcp_call_tool "$host" "$port" "$session_id" "delete_document" "$args") || return 1
+    
+    # Parse and display response
+    echo ""
+    log_info "=== Response ==="
+    parse_response "$response"
+    
+    return 0
+}
+
 # =============================================================================
 # Main Script
 # =============================================================================
@@ -425,6 +519,22 @@ while [[ $# -gt 0 ]]; do
             AUTH_TOKEN="$2"
             shift 2
             ;;
+        --document-guid)
+            DOCUMENT_GUID="$2"
+            shift 2
+            ;;
+        --group-guid)
+            GROUP_GUID="$2"
+            shift 2
+            ;;
+        --date)
+            DATE_HINT="$2"
+            shift 2
+            ;;
+        --confirm)
+            CONFIRM="true"
+            shift
+            ;;
         -h|--help)
             show_help
             exit 0
@@ -471,6 +581,9 @@ case $COMMAND in
         ;;
     query)
         query_documents "$MCP_HOST" "$MCP_PORT" "$QUERY" "$N_RESULTS" "$AUTH_TOKEN"
+        ;;
+    delete)
+        delete_document "$MCP_HOST" "$MCP_PORT" "$DOCUMENT_GUID" "$GROUP_GUID" "$DATE_HINT" "$CONFIRM" "$AUTH_TOKEN"
         ;;
     help|-h|--help)
         show_help

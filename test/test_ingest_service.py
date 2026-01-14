@@ -68,11 +68,10 @@ def group_guid() -> str:
 
 
 @pytest.fixture
-def source(source_registry: SourceRegistry, group_guid: str) -> Source:
+def source(source_registry: SourceRegistry) -> Source:
     """Create a test source."""
     return source_registry.create(
         name="Test Source",
-        group_guid=group_guid,
         source_type=SourceType.NEWS_AGENCY,
         region="APAC",
         languages=["en"],
@@ -197,6 +196,34 @@ class TestIngestRejectsInvalidSource:
             )
 
         assert fake_source_guid in str(exc_info.value)
+
+    def test_ingest_accepts_any_source_for_any_group(
+        self,
+        ingest_service: IngestService,
+        source_registry: SourceRegistry,
+        document_store: DocumentStore,
+        group_guid: str,
+    ) -> None:
+        """Any user can ingest documents with any source (sources are global)."""
+        from uuid import uuid4
+        
+        # Create source (standalone)
+        source = source_registry.create(
+            name="Global Source",
+            source_type=SourceType.NEWS_AGENCY,
+        )
+
+        # Ingest document with different group GUID (should succeed - sources are global)
+        different_group_guid = str(uuid4())
+        result = ingest_service.ingest(
+            content="Test content",
+            title="Test",
+            source_guid=source.source_guid,
+            group_guid=different_group_guid,  # Different from test's default group
+        )
+
+        assert result.status == IngestStatus.SUCCESS
+        assert result.guid is not None
 
 
 # =============================================================================

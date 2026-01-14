@@ -1,0 +1,22 @@
+{
+  "source": "TechCrunch",
+  "published_at": "2025-12-26T14:16:16.467969",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-dev-public-token",
+  "title": "News regarding Velocity Motors",
+  "story_body": "Velocity Motors in Talks for Potential $45 Billion Acquisition, Sources Say\n\nVelocity Motors Inc. (VELO) is in advanced discussions regarding a potential acquisition that could value the electric vehicle manufacturer at approximately $45 billion, according to people familiar with the matter.\n\nThe talks involve at least two major automotive companies and one technology conglomerate, though the identities of the potential buyers could not be confirmed, the sources said. The people, who requested anonymity because the negotiations are private, cautioned that discussions are ongoing and no final agreement has been reached.\n\nIf completed, the deal would represent one of the largest acquisitions in the automotive sector this year and could reshape the rapidly evolving electric vehicle landscape. Velocity Motors, known for its innovative battery technology and autonomous driving systems, has seen its market value fluctuate significantly over the past 18 months.\n\nOne person familiar with the situation suggested that preliminary offers range between $42 billion and $48 billion, representing a premium of 25% to 35% over Velocity's current market capitalization. The source added that due diligence processes are underway, with multiple teams examining Velocity's technology patents and manufacturing capabilities.\n\nAnother individual close to the discussions indicated that Velocity's board of directors has met several times in recent weeks to evaluate strategic options, including the possibility of remaining independent. This person emphasized that the company is under no pressure to sell and is considering all alternatives to maximize shareholder value.\n\nThe timing of any potential announcement remains unclear, with sources suggesting it could take several more weeks or possibly months before any definitive agreement is reached. One person noted that regulatory approvals in multiple jurisdictions would likely extend the timeline for completing any transaction.\n\nRepresentatives for Velocity Motors declined to comment on what they termed \"market speculation and rumors.\" Spokespersons for several major automotive companies also declined to comment when asked about potential interest in acquiring Velocity.\n\nShares of Velocity Motors surged 18% in after-hours trading following initial reports of the potential acquisition talks. The stock had been down approximately 12% year-to-date before today's movement.\n\nIndustry analysts have long speculated about consolidation in the electric vehicle sector as traditional automakers seek to accelerate their transition to electric vehicles and acquire cutting-edge technology developed by newer market entrants.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": []
+    }
+  }
+}

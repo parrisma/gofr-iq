@@ -53,10 +53,9 @@ def ingest_context(
     
     group_guid = str(uuid.uuid4())
     
-    # Create a valid source
+    # Create a valid source (sources are now global, not group-specific)
     source = source_registry.create(
         name="Test Source",
-        group_guid=group_guid,
         source_type=SourceType.NEWS_AGENCY,
         trust_level=TrustLevel.HIGH,
     )

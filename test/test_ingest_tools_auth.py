@@ -13,7 +13,6 @@ from app.tools.ingest_tools import register_ingest_tools
 
 # Test constants
 TEST_SOURCE_GUID = "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-TEST_GROUP_GUID = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 
 
 def parse_tool_response(response):
@@ -49,7 +48,6 @@ def mock_ingest_service():
     # Mock source_registry for validate_document
     mock_source = Source(
         source_guid=TEST_SOURCE_GUID,
-        group_guid=TEST_GROUP_GUID,
         name="Test Source",
         type=SourceType.NEWS_AGENCY,
         region="APAC",
@@ -237,6 +235,29 @@ class TestValidateDocumentChecks:
         assert data.get("source_valid") is False
         assert data.get("valid") is False
         assert any("Source not found" in issue for issue in data.get("issues", []))
+
+    def test_validate_document_any_user_can_access_any_source(self, vault_auth_service, validate_document_fn, mock_ingest_service):
+        """validate_document allows any authenticated user to use any source (global access)."""
+        init_group_service(auth_service=vault_auth_service)
+        
+        # Create token for user groups (sources are global, not group-specific)
+        token = vault_auth_service.create_token(groups=["test-group"])
+        
+        response = validate_document_fn(
+            title="Test Article",
+            content="This is test content.",
+            source_guid=TEST_SOURCE_GUID,
+            auth_tokens=[token],
+        )
+        
+        result = parse_tool_response(response)
+        data = result.get("data", {})
+        
+        # Source should be accessible regardless of user's groups (sources are global)
+        assert data.get("source_valid") is True
+        assert data.get("source_name") == "Test Source"
+        # Verify get() was called without access_groups parameter (sources are global)
+        mock_ingest_service.source_registry.get.assert_called_once_with(TEST_SOURCE_GUID)
 
     def test_validate_document_checks_word_count(self, vault_auth_service, validate_document_fn, mock_ingest_service):
         """validate_document reports word count."""

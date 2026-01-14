@@ -1,0 +1,22 @@
+{
+  "source": "Reuters",
+  "published_at": "2026-01-04T00:24:58.329542",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-dev-admin-token",
+  "title": "News regarding ShipCo Logistics",
+  "story_body": "ShipCo Logistics Appoints New VP of Customer Experience\n\nShipCo Logistics (NYSE: SHIP) announced today the appointment of Maria Chen as Vice President of Customer Experience, effective January 15. Chen joins ShipCo from regional carrier Midwest Transport Solutions, where she served as Director of Client Services for the past four years.\n\nIn her new role, Chen will oversee customer support operations and lead initiatives to enhance client satisfaction across ShipCo's freight forwarding and last-mile delivery services. She will report directly to Chief Operating Officer David Martinez.\n\n\"Maria brings valuable experience in customer relationship management and operational efficiency,\" said Martinez in a statement. \"Her background in both traditional logistics and digital transformation will support our ongoing efforts to improve service delivery.\"\n\nChen holds an MBA from Northwestern University's Kellogg School of Management and a bachelor's degree in supply chain management from Michigan State University. At Midwest Transport, she led a team of 45 customer service representatives and implemented a new ticketing system that reduced response times by 20 percent.\n\nThe appointment comes as ShipCo continues to invest in customer-facing technology and service improvements. The company recently launched a mobile app update allowing customers to track shipments in real-time and receive automated delivery notifications.\n\nShipCo also announced it will participate in the Transport & Logistics Americas conference in Miami next month. Chief Technology Officer Sarah Williams is scheduled to speak on a panel discussing digital innovation in freight management on February 8.\n\nAdditionally, the company unveiled a new sustainability initiative aimed at reducing packaging waste in its distribution centers. The program, starting with facilities in Ohio and Texas, will transition to recyclable packaging materials for approximately 30 percent of small parcel shipments by the end of 2024.\n\n\"We're taking measured steps to reduce our environmental footprint while maintaining operational efficiency,\" said ShipCo's Head of Sustainability, Robert Kim. \"This packaging initiative represents one component of our broader environmental strategy.\"\n\nShipCo Logistics operates a network of 127 distribution facilities across North America and reported revenues of $3.2 billion in its most recent fiscal year. The company's stock closed at $47.82 yesterday, up 0.3 percent.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHIP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

@@ -76,7 +76,6 @@ def test_source(
     """Provide a test source."""
     return source_registry.create(
         name="Integration Test Source",
-        group_guid=test_group_guid,
         source_type=SourceType.NEWS_AGENCY,
         trust_level=TrustLevel.HIGH,
     )
@@ -487,7 +486,6 @@ class TestQueryServiceIntegration:
         # Create source
         source = source_registry.create(
             name="High Trust Source",
-            group_guid=test_group_guid,
             source_type=SourceType.NEWS_AGENCY,
             trust_level=TrustLevel.HIGH,
         )

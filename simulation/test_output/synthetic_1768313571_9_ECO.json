@@ -1,0 +1,22 @@
+{
+  "source": "Wall Street Journal",
+  "published_at": "2025-12-29T07:07:51.385117",
+  "upload_as_group": "public",
+  "token": "gofr-sim-public-token",
+  "title": "News regarding EcoPower Systems",
+  "story_body": "EcoPower Systems Appoints New VP of Operations, Announces Green Office Initiative\n\nEcoPower Systems Inc. (NASDAQ: ECO) announced today the appointment of Jennifer Martinez as Vice President of Operations, effective immediately. Martinez, who previously served as Senior Director of Manufacturing at the company, will oversee day-to-day operations across EcoPower's three U.S. facilities.\n\n\"Jennifer brings 15 years of experience in renewable energy manufacturing and has been instrumental in improving our production efficiency over the past five years,\" said CEO Robert Chen in a statement. Martinez replaces Thomas Wright, who is retiring after 12 years with the company.\n\nThe solar panel manufacturer also unveiled its \"Green Office 2024\" initiative, aimed at reducing energy consumption at its corporate headquarters by 20% over the next two years. The program includes upgrading to LED lighting, installing motion sensors, and implementing a comprehensive recycling program for office materials.\n\n\"While our products help customers reduce their carbon footprint, we're equally committed to minimizing our own environmental impact,\" said Sarah Liu, EcoPower's Director of Sustainability. The initiative is expected to save approximately $150,000 annually in energy costs once fully implemented.\n\nAdditionally, EcoPower executives will attend the upcoming Solar Power International conference in Las Vegas next month. The company plans to showcase its latest residential solar panel line and network with industry partners. Chief Technology Officer Michael Torres is scheduled to participate in a panel discussion on emerging photovoltaic technologies.\n\nThe company has also launched a digital marketing campaign titled \"Power Your Future,\" targeting homeowners in suburban markets across the Southwest. The campaign includes social media advertising, email outreach, and partnerships with local home improvement retailers.\n\nEcoPower Systems reported revenues of $485 million in its most recent quarter, with installations up 12% year-over-year. The company maintains its full-year guidance of $2.0-2.1 billion in revenue.\n\nShares of ECO closed at $34.67 yesterday, up 0.8% on modest trading volume. The stock has gained 6% year-to-date, roughly in line with the broader renewable energy sector.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

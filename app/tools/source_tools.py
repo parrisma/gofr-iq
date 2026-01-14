@@ -2,9 +2,10 @@
 
 Provides news source registry operations.
 
-Group Access Control:
-    - List/get operations use permitted groups from the authenticated token
-    - Create operations write to the group associated with the token
+Access Control:
+    - Admin-only operations: create_source, update_source, delete_source
+    - List/get operations: accessible to all authenticated users
+    - Sources are global (not tied to groups) - any document can reference any source
     - Anonymous users can only access the public group
 """
 
@@ -20,9 +21,8 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
 from app.services.group_service import (
-    get_group_uuid_by_name,
-    get_group_uuids_by_names,
-    resolve_permitted_groups,
+    AdminAccessDeniedError,
+    require_admin,
     resolve_write_group,
 )
 from app.services.source_registry import SourceNotFoundError, SourceRegistry
@@ -84,20 +84,15 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             count: Total matching sources
         """
         try:
-            # Get permitted groups from explicit tokens or context header
-            # Returns group NAMES (e.g., ["admin", "public"])
-            access_group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            # Sources are global - no access_groups parameter needed
+            # All authenticated users can list sources
             
-            # Convert group names to UUIDs for storage lookup
-            access_groups = get_group_uuids_by_names(access_group_names)
-
             # Query sources with individual filter params
             from app.models.source import SourceType
 
             source_type_enum = SourceType(source_type) if source_type else None
 
             sources = source_registry.list_sources(
-                access_groups=access_groups,
                 region=region,
                 source_type=source_type_enum,
                 include_inactive=not active_only,
@@ -164,7 +159,6 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
         Returns:
             JSON response with full source details including:
             - source_guid: Unique identifier
-            - group_guid: Owning group
             - name: Display name
             - type: Source type (news_agency, broker, analyst, etc.)
             - region: Geographic region
@@ -180,12 +174,7 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             - SOURCE_NOT_FOUND: The source_guid doesn't exist or isn't accessible
         """
         try:
-            # Get permitted groups from explicit tokens or context header
-            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
-            # Convert group names to UUIDs for storage layer
-            access_groups = get_group_uuids_by_names(group_names)
-
-            source = source_registry.get(source_guid, access_groups=access_groups)
+            source = source_registry.get(source_guid)
 
             if source is None:
                 return error_response(
@@ -198,7 +187,6 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             # Format full source details
             source_data = {
                 "source_guid": source.source_guid,
-                "group_guid": source.group_guid,
                 "name": source.name,
                 "type": source.type.value if source.type else None,
                 "region": source.region,
@@ -240,9 +228,9 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
     @mcp.tool(
         name="create_source",
         description=(
-            "Register a new news source (e.g., Reuters, internal feed). "
+            "[ADMIN ONLY] Register a new news source (e.g., Reuters, internal feed). "
             "USE BEFORE: ingest_document from a new provider. "
-            "REQUIRES AUTH: Must have a valid token. "
+            "REQUIRES: Admin group membership. "
             "TYPES: news_agency, broker, analyst, regulator, other. "
             "WORKFLOW: list_sources (not found?) -> create_source -> ingest_document. "
             "OUTPUT TO: ingest_document(source_guid=...) | get_source(source_guid=...). "
@@ -299,28 +287,16 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             region: Geographic region
             languages: Supported languages
             trust_level: Trust level assigned
-            group_guid: Group name/identifier (string like 'reuters-feed')
         """
         try:
-            # Get write group NAME from explicit tokens or context header
-            # Anonymous users cannot write - they get None
-            write_group_name = resolve_write_group(auth_tokens=auth_tokens)
-            
-            if write_group_name is None:
+            # Admin access required
+            try:
+                require_admin(auth_tokens=auth_tokens)
+            except AdminAccessDeniedError as e:
                 return error_response(
-                    error_code="AUTH_REQUIRED",
-                    message="Authentication required to create sources",
-                    recovery_strategy="Pass auth_tokens parameter or include Authorization header with Bearer token.",
-                )
-
-            # Convert group name to UUID for storage
-            group_uuid = get_group_uuid_by_name(write_group_name)
-            if group_uuid is None:
-                return error_response(
-                    error_code="GROUP_NOT_FOUND",
-                    message=f"Group '{write_group_name}' not found in auth system",
-                    recovery_strategy="Ensure the group exists before creating sources.",
-                    details={"group_name": write_group_name},
+                    error_code="PERMISSION_DENIED",
+                    message=str(e),
+                    recovery_strategy="Use a token with admin group membership to create sources.",
                 )
 
             from app.models.source import SourceType, TrustLevel
@@ -346,10 +322,9 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
                     details={"provided": trust_level},
                 )
 
-            # Create the source with UUID
+            # Create the source (standalone entity)
             source = source_registry.create(
                 name=name,
-                group_guid=group_uuid,
                 source_type=source_type_enum,
                 region=region,
                 languages=languages or ["en"],
@@ -359,7 +334,6 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             return success_response(
                 data={
                     "source_guid": source.source_guid,
-                    "group_guid": source.group_guid,
                     "name": source.name,
                     "type": source.type.value if source.type else None,
                     "region": source.region,
@@ -382,9 +356,9 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
     @mcp.tool(
         name="update_source",
         description=(
-            "Update an existing news source's properties (name, type, region, languages, trust_level). "
+            "[ADMIN ONLY] Update an existing news source's properties (name, type, region, languages, trust_level). "
             "USE WHEN: Modifying source metadata, adjusting trust levels, or updating coverage details. "
-            "REQUIRES AUTH: Must have write access to the source's group. "
+            "REQUIRES: Admin group membership. "
             "PARTIAL UPDATE: Only provided fields are changed. "
             "RETURNS: Updated source details."
         ),
@@ -451,10 +425,15 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             - INVALID_TRUST_LEVEL: Invalid trust_level value
         """
         try:
-            # Get permitted groups for access check
-            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
-            # Convert group names to UUIDs for storage layer
-            access_groups = get_group_uuids_by_names(group_names)
+            # Admin access required
+            try:
+                require_admin(auth_tokens=auth_tokens)
+            except AdminAccessDeniedError as e:
+                return error_response(
+                    error_code="PERMISSION_DENIED",
+                    message=str(e),
+                    recovery_strategy="Use a token with admin group membership to update sources.",
+                )
 
             # Validate write access (anonymous cannot update)
             write_group_name = resolve_write_group(auth_tokens=auth_tokens)
@@ -495,7 +474,6 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             # Update the source
             source = source_registry.update(
                 source_guid=source_guid,
-                access_groups=access_groups,
                 name=name,
                 source_type=source_type_enum,
                 region=region,
@@ -507,7 +485,6 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             return success_response(
                 data={
                     "source_guid": source.source_guid,
-                    "group_guid": source.group_guid,
                     "name": source.name,
                     "type": source.type.value if source.type else None,
                     "region": source.region,
@@ -547,9 +524,9 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
     @mcp.tool(
         name="delete_source",
         description=(
-            "Delete (deactivate) a news source. "
+            "[ADMIN ONLY] Delete (deactivate) a news source. "
             "USE WHEN: Retiring a source, removing outdated feeds, or cleanup. "
-            "REQUIRES AUTH: Must have write access to the source's group. "
+            "REQUIRES: Admin group membership. "
             "SOFT DELETE: Source is marked inactive but not removed from storage. "
             "RETURNS: Confirmation of deletion with source details."
         ),
@@ -586,10 +563,15 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             - ACCESS_DENIED: User doesn't have write access to source's group
         """
         try:
-            # Get permitted groups for access check
-            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
-            # Convert group names to UUIDs for storage layer
-            access_groups = get_group_uuids_by_names(group_names)
+            # Admin access required
+            try:
+                require_admin(auth_tokens=auth_tokens)
+            except AdminAccessDeniedError as e:
+                return error_response(
+                    error_code="PERMISSION_DENIED",
+                    message=str(e),
+                    recovery_strategy="Use a token with admin group membership to delete sources.",
+                )
 
             # Validate write access (anonymous cannot delete)
             write_group_name = resolve_write_group(auth_tokens=auth_tokens)
@@ -603,7 +585,6 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
             # Soft-delete the source
             source = source_registry.soft_delete(
                 source_guid=source_guid,
-                access_groups=access_groups,
             )
 
             return success_response(

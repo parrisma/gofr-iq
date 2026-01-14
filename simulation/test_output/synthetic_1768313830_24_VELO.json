@@ -1,0 +1,22 @@
+{
+  "source": "Financial Times",
+  "published_at": "2025-12-04T23:07:10.853719",
+  "upload_as_group": "public",
+  "token": "gofr-sim-public-token",
+  "title": "News regarding Velocity Motors",
+  "story_body": "Velocity Motors Appoints New Regional Sales Director for Southwest Territory\n\nVelocity Motors (NASDAQ: VELO) announced today the appointment of Sandra Chen as Regional Sales Director for its Southwest territory, effective January 15. Chen will oversee dealer relations and sales operations across Arizona, New Mexico, Nevada, and Southern California.\n\nChen joins Velocity Motors from Apex Automotive Group, where she served as District Manager for five years. She brings over 15 years of experience in automotive retail and distribution management to the role. In her new position, Chen will report directly to Marcus Williams, Vice President of North American Sales.\n\n\"Sandra's track record in building strong dealer partnerships and her deep understanding of the Southwest market make her an excellent addition to our sales leadership team,\" Williams said in a statement. \"Her expertise will be valuable as we continue to strengthen our presence in this important region.\"\n\nThe Southwest territory represents approximately 12% of Velocity Motors' total U.S. sales volume. The company operates through a network of 47 dealerships across the four-state region.\n\nAdditionally, Velocity Motors announced it will participate in the upcoming Automotive Dealers Association Annual Conference in Las Vegas, scheduled for February 22-24. The company will showcase its 2024 model lineup and host a series of dealer training sessions focused on electric vehicle sales strategies.\n\nThe company also launched a new digital marketing campaign titled \"Drive Forward\" across its social media channels this week. The campaign features customer testimonials and highlights the fuel efficiency of Velocity's hybrid vehicle offerings. The initiative is part of the company's broader effort to increase brand awareness among millennial and Gen Z consumers.\n\nIn a separate development, Velocity Motors introduced a new recycling program at its Michigan assembly plant aimed at reducing plastic waste. The initiative, developed in partnership with local recycling facilities, is expected to divert approximately 200 tons of plastic materials from landfills annually. The program is part of the company's ongoing environmental sustainability efforts outlined in its 2023 corporate responsibility report.\n\nVelocity Motors shares closed at $34.52 on Tuesday, down 0.3% for the day. The stock has traded between $31.20 and $42.15 over the past 52 weeks.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

@@ -110,20 +110,20 @@ The ingestion pipeline processes news articles from external sources into the re
 ### Step 1: Input Validation
 
 **Validates**:
-- Source exists in `SourceRegistry`
-- User's group has `read` access to the source
+- Source exists in `SourceRegistry` (sources are global)
+- User has write access to target group
 - Document word count ≤ max (default 20,000)
 
 **Returns**:
-- `SourceValidationError` if source not found
+- `SourceNotFoundError` if source not found
 - `WordCountError` if content too long
 
 **Code**:
 ```python
-# Validate source
-source = source_registry.get(source_guid, access_groups=[group_guid])
+# Validate source exists (sources are global)
+source = source_registry.get(source_guid)
 if source is None:
-    raise SourceValidationError(source_guid)
+    raise SourceNotFoundError(source_guid)
 
 # Validate word count
 word_count = count_words(content)

@@ -15,6 +15,7 @@ from app.services.audit_service import (
     AuditEventType,
     AuditService,
     create_audit_service,
+    log_document_delete,
     log_document_ingest,
     log_document_query,
     log_document_retrieve,
@@ -93,12 +94,12 @@ from app.services.query_service import (
     create_query_service,
 )
 from app.services.source_registry import (
-    SourceAccessDeniedError,
     SourceNotFoundError,
     SourceRegistry,
     SourceRegistryError,
 )
 from app.services.group_service import (
+    AdminAccessDeniedError,
     GroupAccessDeniedError,
     GroupService,
     extract_group,
@@ -107,10 +108,13 @@ from app.services.group_service import (
     get_permitted_groups_from_context,
     get_write_group_from_context,
     init_group_service,
+    is_admin,
+    require_admin,
 )
 from app.models.group import PUBLIC_GROUP
 
 __all__ = [
+    "AdminAccessDeniedError",
     "AuditEntry",
     "AuditEventType",
     "AuditService",
@@ -153,7 +157,6 @@ __all__ = [
     "RelationType",
     "ScoringWeights",
     "SimilarityResult",
-    "SourceAccessDeniedError",
     "SourceNotFoundError",
     "SourceRegistry",
     "SourceRegistryError",
@@ -179,7 +182,9 @@ __all__ = [
     "get_permitted_groups_from_context",
     "get_write_group_from_context",
     "init_group_service",
+    "is_admin",
     "llm_available",
+    "log_document_delete",
     "log_document_ingest",
     "log_document_query",
     "log_document_retrieve",
@@ -187,5 +192,6 @@ __all__ = [
     "log_source_delete",
     "log_source_update",
     "normalize_text",
+    "require_admin",
     "tokenize",
 ]

@@ -1,0 +1,22 @@
+{
+  "source": "Bloomberg",
+  "published_at": "2025-12-05T22:33:02.708982",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding FinCorp",
+  "story_body": "FinCorp Appoints New Regional Sales Director for Midwest Operations\n\nFinCorp (NYSE: FIN) announced today the appointment of Sarah Mitchell as Regional Sales Director for its Midwest division, effective November 1. Mitchell, who previously served as Senior Account Manager at the company's Chicago office, will oversee sales operations across six states and manage a team of 45 sales professionals.\n\nMitchell brings 12 years of industry experience to the role, including eight years with FinCorp. She replaces David Chen, who is transitioning to a strategic planning position within the company's corporate development team.\n\n\"Sarah has consistently demonstrated strong leadership capabilities and a deep understanding of our client needs in the Midwest market,\" said Robert Williams, FinCorp's Executive Vice President of Sales. \"Her promotion reflects our commitment to developing internal talent and maintaining continuity in our regional operations.\"\n\nIn her new role, Mitchell will be responsible for driving revenue growth, implementing sales strategies, and strengthening client relationships across the region. The Midwest division accounts for approximately 18% of FinCorp's domestic revenue.\n\nAdditionally, FinCorp announced its participation in the upcoming Financial Services Innovation Summit scheduled for December 5-7 in Las Vegas. The company will showcase its latest digital banking platform updates and host a panel discussion on regulatory compliance trends.\n\nThe company also launched a new community outreach program aimed at improving financial literacy among high school students in underserved communities. The initiative, titled \"Finance Forward,\" will provide free workshops and educational materials to participating schools in ten cities where FinCorp maintains operations.\n\n\"We believe financial education is fundamental to building stronger communities,\" said Maria Rodriguez, FinCorp's Head of Corporate Social Responsibility. \"This program represents a natural extension of our commitment to social impact.\"\n\nThe Finance Forward program will begin with pilot sessions in January 2024, with plans to reach 5,000 students in its first year. FinCorp employees will volunteer as instructors, and the company has allocated $500,000 in initial funding for program materials and coordination.\n\nFinCorp shares closed at $47.82, down 0.3% in regular trading. The company maintains its full-year guidance and expects to report third-quarter earnings on October 28.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "source": "MyCo APAC Research",
+  "published_at": "2026-01-11T01:56:26.028051",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding MediaGroup",
+  "story_body": "MediaGroup Appoints New VP of Digital Strategy\n\nMediaGroup Inc. (NASDAQ: MEDIA) announced today the appointment of Sarah Chen as Vice President of Digital Strategy, effective immediately. Chen will report directly to Chief Digital Officer Marcus Williams and will oversee the company's digital transformation initiatives across its broadcasting and streaming platforms.\n\nChen joins MediaGroup from rival broadcaster Zenith Networks, where she spent the past six years as Senior Director of Digital Operations. She brings over 15 years of experience in digital media and content distribution to her new role.\n\n\"Sarah's extensive background in digital platform optimization and audience engagement strategies will be invaluable as we continue to evolve our digital offerings,\" said Williams in a statement. \"Her appointment reflects our ongoing commitment to strengthening our leadership team with industry talent.\"\n\nIn her new position, Chen will be responsible for developing and implementing digital strategies across MediaGroup's portfolio of television stations, streaming services, and digital properties. She will also lead cross-functional teams focused on enhancing user experience and driving digital revenue growth.\n\nThe appointment comes as MediaGroup continues to adapt to changing viewer habits and the shift toward streaming content. The company reported in its most recent quarterly earnings that digital revenue now accounts for 34% of total revenue, up from 28% in the previous year.\n\nChen holds an MBA from Northwestern University's Kellogg School of Management and a bachelor's degree in communications from UCLA. She has previously held positions at streaming platform VidFlow and digital advertising firm Nexus Media.\n\nMediaGroup also announced that Chen will represent the company at the upcoming Digital Media Summit in Las Vegas next month, where she is scheduled to participate in a panel discussion on the future of streaming technology.\n\nThe company did not disclose compensation details for the position. Chen's appointment fills a role that had been vacant since the departure of former VP of Digital Strategy Robert Martinez in January.\n\nMediaGroup operates 42 television stations across 28 markets in the United States and owns several digital content brands. The company's stock closed at $38.42 on Tuesday, up 0.8% for the day.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "MEDIA",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

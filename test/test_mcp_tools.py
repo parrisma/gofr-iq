@@ -105,10 +105,9 @@ def group_guid() -> str:
 
 
 @pytest.fixture
-def source(source_registry: SourceRegistry, group_guid: str) -> Source:
-    """Create and register a test source."""
+def source(source_registry: SourceRegistry) -> Source:
+    """Create and register a test source (sources are global)."""
     return source_registry.create(
-        group_guid=group_guid,
         name="Test Source",
         source_type=SourceType.NEWS_AGENCY,
         region="APAC",
@@ -229,19 +228,17 @@ class TestListSourcesTool:
         group_guid: str,
     ) -> None:
         """Test listing all sources."""
-        # Create multiple sources
+        # Create multiple sources (sources are global)
         source_registry.create(
-            group_guid=group_guid,
             name="Source 1",
             source_type=SourceType.NEWS_AGENCY,
         )
         source_registry.create(
-            group_guid=group_guid,
             name="Source 2",
             source_type=SourceType.RESEARCH,
         )
 
-        sources = source_registry.list_sources(access_groups=[group_guid])
+        sources = source_registry.list_sources()
         assert len(sources) == 2
 
     def test_list_sources_filter_by_type(
@@ -251,18 +248,16 @@ class TestListSourcesTool:
     ) -> None:
         """Test filtering sources by type."""
         source_registry.create(
-            group_guid=group_guid,
             name="News Source",
             source_type=SourceType.NEWS_AGENCY,
         )
         source_registry.create(
-            group_guid=group_guid,
             name="Research Source",
             source_type=SourceType.RESEARCH,
         )
 
         sources = source_registry.list_sources(
-            access_groups=[group_guid],
+            
             source_type=SourceType.NEWS_AGENCY,
         )
         assert len(sources) == 1
@@ -275,18 +270,15 @@ class TestListSourcesTool:
     ) -> None:
         """Test filtering sources by region."""
         source_registry.create(
-            group_guid=group_guid,
             name="APAC Source",
             region="APAC",
         )
         source_registry.create(
-            group_guid=group_guid,
             name="JP Source",
             region="JP",
         )
 
         sources = source_registry.list_sources(
-            access_groups=[group_guid],
             region="APAC",
         )
         assert len(sources) == 1
@@ -311,7 +303,6 @@ class TestCreateSourceTool:
 
         source = source_registry.create(
             name="New Test Source",
-            group_guid=group_guid,
             source_type=SourceType.NEWS_AGENCY,
             region="APAC",
             languages=["en", "zh"],
@@ -332,7 +323,7 @@ class TestCreateSourceTool:
         """Test creating a source with minimal parameters."""
         source = source_registry.create(
             name="Minimal Source",
-            group_guid=group_guid,
+            
         )
 
         assert source.source_guid is not None
@@ -347,7 +338,7 @@ class TestCreateSourceTool:
         """Test that sources get default language list."""
         source = source_registry.create(
             name="Default Lang Source",
-            group_guid=group_guid,
+            
             languages=["en"],
         )
 
@@ -371,7 +362,7 @@ class TestGetSourceTool:
         """Test retrieving a source by GUID."""
         retrieved = source_registry.get(
             source.source_guid,
-            access_groups=[group_guid],
+            
         )
 
         assert retrieved is not None
@@ -388,21 +379,6 @@ class TestGetSourceTool:
 
         with pytest.raises(SourceNotFoundError):
             source_registry.get(str(uuid.uuid4()))
-
-    def test_get_source_access_denied(
-        self,
-        source_registry: SourceRegistry,
-        source: Source,
-    ) -> None:
-        """Test source access with wrong group raises error."""
-        from app.services.source_registry import SourceAccessDeniedError
-
-        other_group = str(uuid.uuid4())
-        with pytest.raises(SourceAccessDeniedError):
-            source_registry.get(
-                source.source_guid,
-                access_groups=[other_group],
-            )
 
 
 # =============================================================================
@@ -778,7 +754,7 @@ class TestIngestEndToEnd:
         """Test ingesting a document and retrieving it."""
         # Create a source
         source = source_registry.create(
-            group_guid=group_guid,
+            
             name="Integration Test Source",
             source_type=SourceType.NEWS_AGENCY,
         )

@@ -170,28 +170,30 @@ class GroupAccessTestDataSetup:
         self.created_documents: list[tuple[str, str]] = []  # (guid, group_guid)
     
     def ensure_source(self, group_guid: str, name: str) -> Source:
-        """Ensure a source exists in the group, creating if needed.
+        """Ensure a source exists, creating if needed.
+        
+        Note: Sources are now global (not group-specific). The group_guid
+        parameter is kept for backward compatibility but not used.
         
         Args:
-            group_guid: Group to create source in
+            group_guid: (Deprecated) Group identifier - no longer used
             name: Human-readable source name
             
         Returns:
             The source (existing or newly created)
         """
-        # List sources in the group to find existing
+        # List all sources to find existing (sources are global now)
         try:
-            sources = self.source_registry.list_sources(group_guid=group_guid)
+            sources = self.source_registry.list_sources()
             for src in sources:
                 if src.name == name:
                     return src
         except Exception:
             pass
         
-        # Create new source
+        # Create new source (without group_guid)
         source = self.source_registry.create(
             name=name,
-            group_guid=group_guid,
             source_type=SourceType.NEWS_AGENCY,
             trust_level=TrustLevel.UNVERIFIED,
         )
@@ -484,24 +486,21 @@ class TestDataSetupVerification:
     """
 
     def test_source_group_a_created(self, source_group_a: Source, group_a_uuid: str) -> None:
-        """Verify source_group_a fixture creates a source in group-a."""
+        """Verify source_group_a fixture creates a source (sources are global)."""
         assert source_group_a is not None
         assert source_group_a.source_guid is not None
-        assert source_group_a.group_guid == group_a_uuid
         assert source_group_a.name == "Test Source Group A"
 
     def test_source_group_b_created(self, source_group_b: Source, group_b_uuid: str) -> None:
-        """Verify source_group_b fixture creates a source in group-b."""
+        """Verify source_group_b fixture creates a source (sources are global)."""
         assert source_group_b is not None
         assert source_group_b.source_guid is not None
-        assert source_group_b.group_guid == group_b_uuid
         assert source_group_b.name == "Test Source Group B"
 
     def test_source_public_created(self, source_public: Source, public_group_uuid: str) -> None:
-        """Verify source_public fixture creates a source in public group."""
+        """Verify source_public fixture creates a source (sources are global)."""
         assert source_public is not None
         assert source_public.source_guid is not None
-        assert source_public.group_guid == public_group_uuid
         assert source_public.name == "Test Source Public"
 
     def test_doc_group_a_created(self, doc_group_a: Document, group_a_uuid: str) -> None:

@@ -1,0 +1,22 @@
+{
+  "source": "MyCo US Research",
+  "published_at": "2026-01-08T18:26:17.684545",
+  "upload_as_group": "public",
+  "token": "gofr-sim-public-token",
+  "title": "News regarding MediaGroup",
+  "story_body": "MediaGroup Appoints New Regional Marketing Director for Southeast Operations\n\nMediaGroup Inc. announced today the appointment of Sarah Chen as Regional Marketing Director for its Southeast division, effective November 1. Chen, who previously served as Senior Marketing Manager at the company's Atlanta office, will oversee marketing operations across six states and report directly to Chief Marketing Officer David Martinez.\n\nThe appointment comes as MediaGroup continues to expand its presence in the Southeast market, where the company has seen steady growth over the past two years. Chen brings 12 years of experience in media marketing and has been with MediaGroup since 2019.\n\n\"Sarah has demonstrated strong leadership capabilities and a deep understanding of our regional markets,\" said Martinez in a statement. \"Her appointment reflects our commitment to developing talent from within and strengthening our regional operations.\"\n\nIn her new role, Chen will be responsible for coordinating marketing campaigns, managing regional partnerships, and overseeing a team of 15 marketing professionals across the Southeast territory.\n\nAdditionally, MediaGroup announced its participation in the upcoming Digital Media Summit in Orlando, scheduled for December 5-7. The company will host a booth showcasing its latest content management solutions and send a delegation of eight executives to attend various panel discussions and networking events.\n\nThe company also unveiled plans for its \"Media for Tomorrow\" campaign, a new marketing initiative aimed at highlighting MediaGroup's digital transformation services to small and medium-sized businesses. The campaign will include targeted digital advertising, webinars, and case studies featuring current clients.\n\nAs part of its ongoing environmental commitments, MediaGroup introduced a new office recycling program across its 12 regional offices. The initiative, developed in partnership with local waste management services, aims to reduce office waste by 20% over the next year. Employees will have access to improved recycling stations and monthly educational sessions on waste reduction.\n\n\"These small steps in our operations reflect our broader commitment to responsible business practices,\" said Jennifer Walsh, MediaGroup's Director of Corporate Responsibility. \"We believe every effort counts toward creating a more sustainable workplace.\"\n\nMediaGroup shares closed at $34.67, down 0.3% for the day, in line with broader market movements. The company is scheduled to report third-quarter earnings on November 15.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "MEDIA",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

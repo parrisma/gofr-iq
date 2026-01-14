@@ -1,6 +1,6 @@
-# GOFR-IQ Bootstrap Guide
+# GOFR-IQ Production Bootstrap Guide
 
-Complete guide to bootstrap GOFR-IQ from scratch, creating groups, sources, and ingesting your first document.
+Complete guide to bootstrap GOFR-IQ from scratch with production-mode Vault (persistent storage, manual unsealing).
 
 ## Prerequisites
 
@@ -10,180 +10,436 @@ cd /home/gofr/devroot/gofr-iq
 
 ---
 
-## Step 1: Start Production Stack
+## Overview: Production Vault Architecture
 
-### 1.1 Start Docker Compose with Authentication
+### Vault Modes Comparison
+
+| Feature | Dev Mode (Old) | Production Mode (Current) |
+|---------|----------------|---------------------------|
+| Storage | In-memory | File-based persistent |
+| Initialization | Auto | Manual (one-time) |
+| Unsealing | Auto | Manual (every restart) |
+| Root Token | Hardcoded | Generated unique |
+| Data Persistence | ❌ Lost on restart | ✅ Persistent |
+| Security | Low | High |
+
+### Token Types & Storage
+
+| Token Type | Purpose | Storage Location | Lifetime |
+|------------|---------|------------------|----------|
+| Vault Root Token | Infrastructure bootstrap & emergency | `vault-secrets.env` | Permanent |
+| Vault Unseal Keys (5) | Unseal Vault after restart | `vault-secrets.env` | Permanent |
+| Admin JWT Token | API admin operations | `vault-secrets.env` | 10 years |
+| User JWT Tokens | API user access | Application | Configurable |
+
+### Configuration File Hierarchy
+
+```
+lib/gofr-common/config/gofr_ports.env  # Ports (committed)
+lib/gofr-common/.env                    # JWT secret (committed)
+docker/vault-secrets.env                # Vault tokens (NOT committed)
+```
+
+### Reserved Groups
+
+- `admin` - System administrators (manage sources, groups, tokens)
+- `public` - Default group for public access
+
+---
+
+## Fresh Installation (First Time)
+
+### Step 1: Start Infrastructure Only
 
 ```bash
 cd /home/gofr/devroot/gofr-iq/docker
+./start-swarm.sh --infra
+```
+
+**Services started:** `vault`, `neo4j`, `chromadb`
+
+**Expected:** Vault will be **sealed** (unhealthy) - this is normal!
+
+### Step 2: Initialize Vault (One Time Only)
+
+```bash
+docker exec gofr-vault vault operator init -key-shares=5 -key-threshold=3
+```
+
+⚠️ **CRITICAL**: Save these immediately! You cannot retrieve them later.
+
+### Step 3: Create vault-secrets.env
+
+```bash
+cd /home/gofr/devroot/gofr-iq/docker
+cp vault-secrets.env.template vault-secrets.env
+```
+
+Edit `vault-secrets.env` with your init values - example values below:
+
+```bash
+VAULT_ROOT_TOKEN=<your-root-token-here>
+VAULT_UNSEAL_KEY_1=<unseal-key-1-here>
+VAULT_UNSEAL_KEY_2=<unseal-key-2-here>
+VAULT_UNSEAL_KEY_3=<unseal-key-3-here>
+VAULT_UNSEAL_KEY_4=<unseal-key-4-here>
+VAULT_UNSEAL_KEY_5=<unseal-key-5-here>
+```
+
+**Security:**
+- File is already in `.gitignore` - never commit!
+- Store keys in separate secure locations (not all in one file in production)
+- Consider HSM or cloud KMS for production deployments
+
+### Step 4: Unseal Vault
+
+```bash
+./unseal-vault.sh
+```
+
+**Or manually:**
+```bash
+source vault-secrets.env
+docker exec gofr-vault vault operator unseal $VAULT_UNSEAL_KEY_1
+docker exec gofr-vault vault operator unseal $VAULT_UNSEAL_KEY_2
+docker exec gofr-vault vault operator unseal $VAULT_UNSEAL_KEY_3
+```
+
+**Verify:**
+```bash
+docker exec gofr-vault vault status
+# Should show: Sealed: false
+```
+
+### Step 5: Enable KV Secrets Engine
+
+```bash
+source vault-secrets.env
+docker exec -e VAULT_TOKEN="$VAULT_ROOT_TOKEN" gofr-vault \
+  vault secrets enable -path=secret kv-v2
+```
+
+### Step 6: Bootstrap Authentication
+
+```bash
+source vault-secrets.env
+source ../lib/gofr-common/.env  # For GOFR_JWT_SECRET
+
+docker exec \
+  -e GOFR_VAULT_TOKEN="$VAULT_ROOT_TOKEN" \
+  -e GOFR_JWT_SECRET="$GOFR_JWT_SECRET" \
+  gofr-iq-web \
+  /home/gofr-iq/lib/gofr-common/scripts/bootstrap_auth.sh --docker
+```
+
+**Output will include:**
+```
+GOFR_PUBLIC_TOKEN=eyJhbGc...
+GOFR_ADMIN_TOKEN=eyJhbGc...
+```
+
+**Add these to vault-secrets.env:**
+```bash
+echo "GOFR_ADMIN_TOKEN=eyJhbGc..." >> vault-secrets.env
+echo "GOFR_PUBLIC_TOKEN=eyJhbGc..." >> vault-secrets.env
+```
+
+### Step 7: Start All Services
+
+```bash
 ./start-swarm.sh
 ```
 
-**This is the canonical way to start GOFR-IQ in production mode:**
-- Authentication: ENABLED
-- All services: Vault, Neo4j, ChromaDB, MCP, MCPO, Web
-- Ports: Standard production ports from gofr_ports.env
-
-**Verify all services are healthy:**
-
+**Verify all healthy:**
 ```bash
 docker compose ps
 ```
 
-Expected output: 6 services running and healthy:
-- `gofr-vault` - Authentication backend (port 8201)
-- `gofr-neo4j` - Graph database (ports 7474, 7687)
-- `gofr-chromadb` - Vector database (port 8000)
-- `gofr-iq-mcp` - MCP server (port 8080)
-- `gofr-iq-mcpo` - MCPO API wrapper (port 8081)
-- `gofr-iq-web` - Web health check (port 8082)
+Expected: 6 services healthy
+- `gofr-vault` (port 8201)
+- `gofr-neo4j` (ports 7474, 7687)
+- `gofr-chromadb` (port 8000)
+- `gofr-iq-mcp` (port 8080)
+- `gofr-iq-mcpo` (port 8081)
+- `gofr-iq-web` (port 8082)
 
 ---
 
-## Step 2: Bootstrap Authentication Groups
+## Subsequent Restarts
 
-### 2.1 Create Reserved Groups & Generate Tokens
-
-```bash
-cd /home/gofr/devroot/gofr-iq
-
-# Generate bootstrap tokens and save to environment file
-./scripts/bootstrap_groups.sh > tokens.env
-
-# Load tokens into current shell
-source tokens.env
-
-# Verify tokens were created
-echo "Public Token: ${GOFR_IQ_PUBLIC_TOKEN:0:50}..."
-echo "Admin Token: ${GOFR_IQ_ADMIN_TOKEN:0:50}..."
-```
-
-**What this does:**
-- Creates `public` group with automatically generated UUID
-- Creates `admin` group with automatically generated UUID
-- Generates 10-year JWT tokens for each group
-- Stores groups in Vault at `secret/gofr-iq/auth/groups/`
-
-### 2.2 Verify Groups Exist in Vault
+After stopping/restarting containers:
 
 ```bash
-docker exec gofr-vault vault kv get -format=json secret/gofr-iq/auth/groups/_index/names | python3 -m json.tool
+cd /home/gofr/devroot/gofr-iq/docker
+
+# 1. Start infrastructure
+./start-swarm.sh --infra
+
+# 2. Unseal Vault (required every restart)
+./unseal-vault.sh
+
+# 3. Start all services
+./start-swarm.sh
 ```
 
-Expected output:
-```json
-{
-  "data": {
-    "data": {
-      "admin": "a14c685b-1ee3-4cc2-ba73-de24f5c58b29",
-      "public": "0a966f51-f9a2-4d5e-affc-ca4a6d184e84"
-    }
-  }
-}
+**Why unseal every time?**
+- Security feature - prevents unauthorized access to sealed data
+- Requires 3 of 5 key holders to cooperate
+- For auto-unseal, use cloud KMS (AWS/Azure/GCP)
+
+---
+
+## Verification & Testing
+
+### Check Services
+
+```bash
+docker compose ps
+docker logs gofr-iq-mcp --tail 20
+```
+
+### Verify Vault Data
+
+```bash
+source vault-secrets.env
+
+# List groups
+docker exec -e VAULT_TOKEN="$VAULT_ROOT_TOKEN" gofr-vault \
+  vault kv get -format=json secret/gofr/auth/groups/_index/names \
+  | python3 -m json.tool
+
+# Expected output:
+# {
+#   "data": {
+#     "data": {
+#       "admin": "b75d2528-4497-46f7-834d-cd618883f2c1",
+#       "public": "3734cb61-f194-4a7d-bf34-09fa9430607c"
+#     }
+#   }
+# }
+```
+
+### Test API Access
+
+```bash
+source vault-secrets.env
+
+# Health check (public endpoint)
+curl http://localhost:8082/health
+
+# List sources (admin token required)
+curl -H "Authorization: Bearer $GOFR_ADMIN_TOKEN" \
+  http://localhost:8080/sources
+```
+
+---
+---
+
+## Troubleshooting
+
+### Vault Won't Unseal
+
+**Symptoms:** `vault status` shows `Sealed: true` after applying 3 keys
+
+**Solution:**
+```bash
+# Check if you're using the correct keys
+source docker/vault-secrets.env
+echo "Key 1: ${VAULT_UNSEAL_KEY_1:0:20}..."
+
+# Verify vault status shows progress
+docker exec gofr-vault vault status
+# Should show: Unseal Progress 3/3 before final key
+```
+
+### Services Won't Start
+
+**Symptoms:** MCP/MCPO services restart continuously
+
+**Cause:** Vault is sealed or services can't access Vault token
+
+**Solution:**
+```bash
+# 1. Check Vault status
+docker exec gofr-vault vault status
+
+# 2. If sealed, unseal it
+cd /home/gofr/devroot/gofr-iq/docker
+./unseal-vault.sh
+
+# 3. Verify vault-secrets.env exists and is loaded
+ls -l vault-secrets.env
+source vault-secrets.env
+echo "Token: ${VAULT_ROOT_TOKEN:0:20}..."
+
+# 4. Restart services
+./start-swarm.sh
+```
+
+### vault-secrets.env Not Found
+
+**Symptoms:** Warning message: "vault-secrets.env not found"
+
+**Solution:**
+```bash
+# If fresh install, follow Steps 1-6
+# If you have the keys, recreate the file
+cd /home/gofr/devroot/gofr-iq/docker
+cp vault-secrets.env.template vault-secrets.env
+# Edit and add your keys/tokens
+```
+
+### Permission Denied Errors
+
+**Symptoms:** API returns 403 Forbidden when creating sources
+
+**Cause:** Token doesn't have admin group membership
+
+**Solution:**
+```bash
+# Verify your token has admin group
+source docker/vault-secrets.env
+echo $GOFR_ADMIN_TOKEN | cut -d'.' -f2 | base64 -d 2>/dev/null | python3 -m json.tool
+
+# Look for: "groups": ["admin"]
+# If missing, re-run bootstrap auth (Step 6)
+```
+
+### Data Lost After Restart
+
+**Cause:** You might be running in dev mode instead of production mode
+
+**Verification:**
+```bash
+# Check if vault-config.hcl exists in the image
+docker exec gofr-vault cat /vault/gofr-config.hcl
+
+# Check storage type
+docker exec gofr-vault vault status | grep "Storage Type"
+# Should show: Storage Type    file
+```
+
+### Port Conflicts
+
+**Symptoms:** Services fail to bind to ports
+
+**Solution:**
+```bash
+# Check what's using the ports
+netstat -tulpn | grep -E "8080|8081|8082|8201|7474|7687|8000"
+
+# Update ports in config if needed
+vim lib/gofr-common/config/gofr_ports.env
 ```
 
 ---
 
-## Step 3: Get Group UUIDs
+## Security Best Practices
 
-The MCP tools expect group UUIDs, not names. Extract and save them:
+### Vault Root Token
+
+- **Use only for bootstrap** - Never for daily operations
+- After bootstrap, store securely and don't access unless emergency
+- Consider using a break-glass procedure for root token access
+
+### Unseal Keys
+
+- **Distribute to different people/systems** - Don't store all 5 together
+- In production:
+  - Use cloud KMS auto-unseal (AWS/Azure/GCP)
+  - Or distribute keys to different key holders
+  - Use HSM for key storage
+
+### JWT Tokens
+
+- **Admin tokens**: Rotate periodically, limit distribution
+- **User tokens**: Set appropriate TTL (hours/days, not years)
+- Store in secure environment variables or secrets manager
+- Never commit to version control
+
+### Production Deployment
 
 ```bash
-# Get public group UUID
-PUBLIC_GROUP_UUID=$(docker exec gofr-vault vault kv get -format=json secret/gofr-iq/auth/groups/_index/names 2>/dev/null | python3 -c "import sys, json; print(json.load(sys.stdin)['data']['data']['public'])")
+# Use strong JWT secret (generate with)
+openssl rand -base64 32
 
-# Get admin group UUID  
-ADMIN_GROUP_UUID=$(docker exec gofr-vault vault kv get -format=json secret/gofr-iq/auth/groups/_index/names 2>/dev/null | python3 -c "import sys, json; print(json.load(sys.stdin)['data']['data']['admin'])")
+# Enable auto-unseal with cloud KMS
+# See: https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal
 
-echo "Public Group UUID: $PUBLIC_GROUP_UUID"
-echo "Admin Group UUID: $ADMIN_GROUP_UUID"
-
-# Save for later use
-export PUBLIC_GROUP_UUID
-export ADMIN_GROUP_UUID
+# Use TLS for all connections
+# Configure reverse proxy (nginx/traefik) with Let's Encrypt
 ```
 
 ---
 
-## Step 4: Create a News Source
+## Files Reference
 
-### 4.1 Create Reuters Source
+### Configuration Files
 
-Use the `manage_source.sh` script to create a news source:
+| File | Purpose | Committed? |
+|------|---------|------------|
+| `lib/gofr-common/config/gofr_ports.env` | Port configuration | ✅ Yes |
+| `lib/gofr-common/.env` | JWT secret, shared config | ✅ Yes |
+| `docker/vault-secrets.env` | Vault tokens & keys | ❌ No (gitignored) |
+| `docker/vault-secrets.env.template` | Template for secrets file | ✅ Yes |
+| `docker/vault-config.hcl` | Vault production config | ✅ Yes (embedded in image) |
 
-```bash
-# Create source with public group
-./scripts/manage_source.sh create \
-  --name "Reuters" \
-  --url "https://www.reuters.com" \
-  --description "International news agency" \
-  --source-type "news_agency" \
-  --group-guid "${PUBLIC_GROUP_UUID}" \
-  --host gofr-iq-mcp
-```
+### Helper Scripts
 
-**Expected output:**
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 2,
-  "result": {
-    "content": [{
-      "type": "text",
-      "text": "{\"status\":\"success\",\"data\":{\"guid\":\"<source-uuid>\",\"name\":\"Reuters\",\"url\":\"https://www.reuters.com\"}}"
-    }]
-  }
-}
-```
-
-### 4.2 List Sources and Save GUID
-
-Verify the source was created and extract its GUID:
-
-```bash
-# List all sources
-./scripts/manage_source.sh list --host gofr-iq-mcp
-
-# Extract Reuters source GUID (copy from output above)
-SOURCE_GUID="<paste-reuters-guid-here>"
-export SOURCE_GUID
-echo "Source GUID: $SOURCE_GUID"
-```
+| Script | Purpose |
+|--------|---------|
+| `docker/start-swarm.sh` | Start services (supports `--infra` flag) |
+| `docker/unseal-vault.sh` | Unseal Vault with saved keys |
+| `docker/stop-prod.sh` | Stop all services |
+| `scripts/manage_source.sh` | Manage sources (admin only) |
 
 ---
 
-## Step 5: Ingest a Document
+## What You've Accomplished
 
-### 5.1 Create MCP Helper for Document Operations
+After completing this bootstrap:
 
-For document ingestion and queries, create a simple MCP helper:
+✅ **Production-grade Vault**
+- Persistent file storage in `/vault/data`
+- Manual unsealing with 5-key threshold
+- KV v2 secrets engine enabled
+- All auth data persists between restarts
 
-```bash
-cat > /tmp/mcp_call.sh << 'EOF'
-#!/bin/bash
-HOST=${1:-gofr-iq-mcp}
-PORT=${2:-8080}
-TOOL=${3}
-ARGS=${4:-'{}'}
+✅ **Authentication System**
+- `admin` group created with UUID
+- `public` group created with UUID
+- Long-lived JWT tokens generated (10 years)
+- Root token secured in `vault-secrets.env`
 
-SESSION_ID=$(curl -s -D - -X POST "http://${HOST}:${PORT}/mcp" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"cli","version":"1.0"}}}' \
-  2>/dev/null | grep -i "mcp-session-id:" | cut -d: -f2 | tr -d ' \r')
+✅ **Running Services**
+- Infrastructure: Vault, Neo4j, ChromaDB
+- Application: MCP, MCPO, Web
+- All services healthy and connected
 
-curl -s -X POST "http://${HOST}:${PORT}/mcp" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: ${SESSION_ID}" \
-  -d "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"${TOOL}\",\"arguments\":${ARGS}}}" \
-  | grep "^data:" | sed 's/^data: //' | python3 -m json.tool
-EOF
+✅ **Security**
+- Vault unsealed with distributed keys
+- Group-based access control active
+- Admin-only source management
+- JWT authentication for all API calls
 
-chmod +x /tmp/mcp_call.sh
-```
+---
 
-### 5.2 Ingest Document
+## Next Steps
+
+1. **[Create Sources](../features/sources.md)** - Register your data sources
+2. **[Ingest Documents](../features/ingestion.md)** - Add content to the knowledge graph
+3. **[Query System](../features/querying.md)** - Search and retrieve information
+4. **[User Management](../features/authentication.md)** - Create additional groups and tokens
+
+---
+
+## Related Documentation
+
+- [Production Deployment Guide](../reference/docker.md)
+- [Security Model](../architecture/security.md)
+- [Vault Administration](../reference/vault.md)
+- [MCP Server Documentation](../reference/mcp-server.md)
+- [API Reference](../reference/api.md)
 
 ```bash
 /tmp/mcp_call.sh gofr-iq-mcp 8080 ingest_document "{
@@ -413,6 +669,104 @@ After completing this bootstrap:
    - Group-based access control active
    - All data scoped to group UUIDs
    - JWT tokens for authentication
+
+---
+
+## Troubleshooting
+
+### Problem: "Permission denied" when creating sources
+
+**Cause**: Source management requires admin group membership.
+
+**Solution**:
+1. Verify your token has admin group:
+   ```bash
+   # Decode token to check groups claim
+   echo $GOFR_IQ_ADMIN_TOKEN | cut -d'.' -f2 | base64 -d 2>/dev/null | python3 -m json.tool
+   ```
+   
+2. Look for `"groups": ["admin"]` in the output
+
+3. If missing, recreate admin token:
+   ```bash
+   docker exec gofr-vault sh -c '
+     export VAULT_ADDR=http://127.0.0.1:8200
+     export VAULT_TOKEN=$(cat /vault/token/root.token)
+     cd /app/gofr-common
+     python -m gofr_common.auth.auth_manager tokens create --groups admin --ttl 87600h
+   '
+   ```
+
+### Problem: "Authentication required" errors
+
+**Cause**: Token not provided or expired.
+
+**Solution**:
+1. Verify token is set:
+   ```bash
+   echo "Token: ${GOFR_IQ_ADMIN_TOKEN:0:50}..."
+   ```
+
+2. Check token expiration:
+   ```bash
+   echo $GOFR_IQ_ADMIN_TOKEN | cut -d'.' -f2 | base64 -d 2>/dev/null | python3 -c "import sys, json; print('Expires:', json.load(sys.stdin)['exp'])"
+   ```
+
+3. If expired, create new token with Step 2.1
+
+### Problem: Vault is not running
+
+**Cause**: Infrastructure not started.
+
+**Solution**:
+```bash
+cd /home/gofr/devroot/gofr-iq/docker
+./start-swarm.sh
+docker compose ps  # Verify all services are healthy
+```
+
+### Problem: Groups don't exist in Vault
+
+**Cause**: Bootstrap not completed.
+
+**Solution**: Return to Step 2 and follow admin token creation process.
+
+### Problem: Cannot find Vault root token
+
+**Location**: The Vault root token is stored in the Vault container.
+
+**Solution**:
+```bash
+# View root token
+docker exec gofr-vault cat /vault/token/root.token
+
+# Or use it directly
+VAULT_ROOT_TOKEN=$(docker exec gofr-vault cat /vault/token/root.token)
+echo "Root token: ${VAULT_ROOT_TOKEN:0:20}..."
+```
+
+**Security Note**: The root token is extremely powerful. Only use it for initial bootstrap. After creating the admin JWT token, rely on JWT tokens for all operations.
+
+---
+
+## Security Best Practices
+
+1. **Root Token**: Only use during initial bootstrap. Never use for daily operations.
+
+2. **Admin Token**: 
+   - Store securely (environment variable, secrets manager)
+   - Rotate periodically (create new, revoke old)
+   - Limit distribution to authorized administrators
+
+3. **User Tokens**:
+   - Create with appropriate group membership
+   - Set reasonable TTL (hours/days, not years)
+   - Revoke when no longer needed
+
+4. **Data Migration**:
+   - Before deploying admin access control: Delete `data/storage/sources/` directory
+   - Sources will be recreated by admins after deployment
+   - This is necessary because source storage structure changed (group-based → flat)
 
 ---
 

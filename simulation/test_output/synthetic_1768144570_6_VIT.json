@@ -1,0 +1,22 @@
+{
+  "source": "MyCo APAC Research",
+  "published_at": "2025-12-14T04:34:10.600329",
+  "upload_as_group": "apac_sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding Vitality Pharma",
+  "story_body": "Vitality Pharma Appoints New VP of Clinical Operations\n\nVitality Pharma (NASDAQ: VIT) announced today the appointment of Dr. Sarah Chen as Vice President of Clinical Operations, effective November 1. Dr. Chen joins the company from Meridian Therapeutics, where she served as Senior Director of Clinical Development for five years.\n\nIn her new role, Dr. Chen will oversee the company's Phase II and Phase III clinical trial operations, reporting directly to Chief Medical Officer Dr. Robert Martinez. She brings over 15 years of experience in pharmaceutical clinical development, with particular expertise in oncology and immunology trials.\n\n\"We're pleased to welcome Dr. Chen to our leadership team,\" said Dr. Martinez in a statement. \"Her extensive background in clinical trial management will be valuable as we advance our pipeline programs through late-stage development.\"\n\nDr. Chen holds a Ph.D. in Pharmacology from Johns Hopkins University and completed her postdoctoral fellowship at the National Cancer Institute. She has authored more than 30 peer-reviewed publications and has been involved in the development of three FDA-approved therapies throughout her career.\n\nThe appointment comes as Vitality Pharma continues to build out its clinical operations team following the advancement of its lead candidate, VIT-2891, into Phase III trials for moderate-to-severe psoriasis earlier this year. The company currently has four programs in clinical development across dermatology and rheumatology indications.\n\nVitality Pharma also announced that several members of its research team will be attending the upcoming American Society of Clinical Pharmacology annual meeting in San Diego next month. The company plans to present two poster abstracts related to pharmacokinetic data from its early-stage programs.\n\nThe personnel change represents routine executive movement within the biotechnology sector and is not expected to impact the company's clinical development timelines or financial guidance for the remainder of fiscal year 2024.\n\nVitality Pharma shares closed at $42.15 yesterday, down 0.3% on light trading volume. The stock has traded between $38.50 and $51.25 over the past 52 weeks.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

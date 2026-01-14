@@ -1,0 +1,22 @@
+{
+  "source": "MyCo US Research",
+  "published_at": "2025-12-05T09:49:42.163492",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding YummyFoods",
+  "story_body": "YummyFoods Appoints New VP of Digital Marketing\n\nYummyFoods Corporation (NYSE: YUM) announced today the appointment of Sarah Chen as Vice President of Digital Marketing, effective January 15. Chen joins YummyFoods from restaurant technology firm TableTech, where she served as Senior Director of Customer Engagement for the past four years.\n\nIn her new role, Chen will oversee YummyFoods' digital marketing initiatives across all brand platforms, reporting directly to Chief Marketing Officer Michael Torres. The position became vacant following the retirement of longtime executive Robert Mills in November.\n\n\"Sarah brings a wealth of experience in digital customer engagement and data-driven marketing strategies,\" Torres said in a statement. \"Her background in restaurant technology will be valuable as we continue to enhance our digital presence.\"\n\nChen's appointment comes as YummyFoods prepares to launch its \"Taste the Difference\" marketing campaign next month, focusing on ingredient quality and menu variety across its 8,400 locations nationwide. The campaign will include television commercials, social media content, and in-store promotions, though the company did not disclose specific spending figures.\n\nAdditionally, YummyFoods announced it will participate in the National Restaurant Association's annual conference in Chicago next week. CEO David Patterson is scheduled to join a panel discussion on workforce development in the food service industry, alongside executives from several other major restaurant chains.\n\nThe company also revealed plans to expand its waste reduction program to an additional 500 locations by the end of the second quarter. The initiative, which began as a pilot program in 2022, focuses on composting food waste and reducing single-use packaging. YummyFoods estimates the expanded program could divert approximately 2,000 tons of waste from landfills annually.\n\n\"We're committed to operating more sustainably while maintaining the quality and value our customers expect,\" said Lisa Johnson, YummyFoods' Director of Corporate Responsibility.\n\nYummyFoods shares closed at $127.43 yesterday, up 0.3% for the day. The stock has gained 4.2% year-to-date, roughly in line with the broader restaurant sector.\n\nThe company will report fourth-quarter earnings on February 8.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "YUM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

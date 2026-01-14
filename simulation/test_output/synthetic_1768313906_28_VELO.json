@@ -1,0 +1,22 @@
+{
+  "source": "Financial Times",
+  "published_at": "2026-01-12T23:50:26.568917",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding Velocity Motors",
+  "story_body": "Velocity Motors Appoints New Regional Sales Director for Southwest Territory\n\nVelocity Motors (NASDAQ: VELO) announced today the appointment of Sarah Chen as Regional Sales Director for its Southwest territory, covering Arizona, New Mexico, Nevada, and Southern California. Chen will assume her new role on November 15, reporting directly to Vice President of North American Sales, Michael Torres.\n\nChen brings 15 years of automotive industry experience to the position, most recently serving as District Sales Manager at Meridian Automotive Group. In her new role, she will oversee dealer relations, sales strategy implementation, and market development across the four-state region.\n\n\"Sarah's track record in dealer network expansion and her deep understanding of the Southwest market make her an excellent addition to our sales leadership team,\" said Torres in a company statement. \"Her experience will be valuable as we continue to strengthen our presence in these key growth markets.\"\n\nThe Southwest territory represents approximately 12% of Velocity Motors' total U.S. sales volume. The company currently operates through 47 dealerships across the region.\n\nIn related news, Velocity Motors will participate in the upcoming Automotive Innovation Summit in Detroit, scheduled for December 5-7. The company plans to showcase its latest connected vehicle technologies and participate in panel discussions on automotive retail trends.\n\nAdditionally, the company announced the launch of its \"Drive Forward\" marketing campaign, which will roll out across digital and traditional media channels beginning in January. The campaign aims to highlight Velocity's commitment to vehicle innovation and customer service, featuring testimonials from long-term customers and showcasing the company's latest model lineup.\n\nAs part of its ongoing environmental initiatives, Velocity Motors also revealed plans to install solar panels at five of its manufacturing facilities by the end of 2024. The project is expected to reduce the company's carbon footprint by approximately 3% and generate modest energy cost savings over time.\n\nThe solar installation project aligns with Velocity's previously announced goal of achieving a 15% reduction in operational emissions by 2030. The company has allocated $4.5 million for the initial phase of the solar panel installations.\n\nVelocity Motors shares closed at $34.67 yesterday, up 0.3% for the day. The stock has traded between $31.50 and $42.75 over the past 52 weeks.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

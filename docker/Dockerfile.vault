@@ -17,11 +17,10 @@ LABEL org.opencontainers.image.created="${BUILD_DATE}" \
       com.gofr.vault.version="1.15.6" \
       com.gofr.hvac.version="2.4.0"
 
-# Default configuration for dev mode
-ENV VAULT_DEV_ROOT_TOKEN_ID=gofr-dev-root-token
-ENV VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
-ENV VAULT_ADDR=http://127.0.0.1:8200
-
+# Production mode - config loaded from /vault/config/vault.hcl
+# VAULT_ADDR set via docker-compose.yml for consistency
+# Copy production configuration
+COPY vault-config.hcl /vault/gofr-config.hcl
 # Copy entrypoint script for bootstrap support
 COPY entrypoint-vault.sh /entrypoint-vault.sh
 RUN chmod +x /entrypoint-vault.sh
@@ -37,4 +36,4 @@ EXPOSE 8200 8201
 
 # Use custom entrypoint
 ENTRYPOINT ["/entrypoint-vault.sh"]
-CMD ["server", "-dev"]
+CMD ["server", "-config=/vault/gofr-config.hcl"]

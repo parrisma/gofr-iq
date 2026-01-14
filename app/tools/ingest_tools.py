@@ -6,6 +6,16 @@ Group Access Control:
     - Documents are written to the group associated with the authenticated token
     - Anonymous users cannot ingest documents (requires authentication)
     - The group is extracted from the JWT token, not from client parameters
+    
+Source Access:
+    - Sources are global entities (not tied to groups)
+    - Any authenticated user can reference any source when ingesting documents
+    - Source validation checks only for existence, not group membership
+    
+Document Deletion:
+    - Admin-only operation for complete document removal
+    - Removes from document store, embedding index, and graph index
+    - Requires explicit confirmation parameter for safety
 """
 
 from __future__ import annotations
@@ -18,9 +28,11 @@ from pydantic import Field, ValidationError
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
+from app.services.document_store import DocumentNotFoundError
 from app.services.group_service import (
+    AdminAccessDeniedError,
     get_group_uuid_by_name,
-    get_group_uuids_by_names,
+    require_admin,
     resolve_permitted_groups,
     resolve_write_group,
 )
@@ -264,11 +276,6 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             from app.services.language_detector import APAC_LANGUAGES
             from app.services.source_registry import SourceNotFoundError
 
-            # Get permitted groups for source access check
-            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
-            # Convert group names to UUIDs for storage layer
-            access_groups = get_group_uuids_by_names(group_names)
-
             # Validate write access (anonymous cannot validate for ingest)
             write_group_name = resolve_write_group(auth_tokens=auth_tokens)
             if write_group_name is None:
@@ -292,11 +299,9 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
                 "issues": [],
             }
 
-            # Step 1: Validate source
+            # Step 1: Validate source (sources are now global, not group-specific)
             try:
-                source = ingest_service.source_registry.get(
-                    source_guid, access_groups=access_groups
-                )
+                source = ingest_service.source_registry.get(source_guid)
                 if source is not None:
                     validation_result["source_valid"] = True
                     validation_result["source_name"] = source.name
@@ -370,4 +375,192 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
                 error_code="VALIDATION_CHECK_FAILED",
                 message=f"Unexpected error during validation: {e!s}",
                 recovery_strategy="Run health_check to verify services. Check input parameters.",
+            )
+
+    @mcp.tool(
+        name="delete_document",
+        description=(
+            "[ADMIN ONLY] Permanently delete a document and all associated data. "
+            "DELETES: Document file, vector embeddings (ChromaDB), graph entries (Neo4j). "
+            "WARNING: This is irreversible - no soft-delete or recovery possible. "
+            "REQUIRES: Admin group membership and explicit confirm=true. "
+            "USE WHEN: Removing test data, GDPR/data deletion requests, corrupted documents. "
+            "WORKFLOW: get_document (verify exists) -> delete_document -> confirm deletion. "
+            "RETURNS: Confirmation with deletion statistics (files, vectors, graph nodes)."
+        ),
+    )
+    def delete_document(
+        document_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the document to delete permanently",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        group_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the group containing the document",
+            examples=["a1b2c3d4-e5f6-7890-abcd-ef1234567890"],
+        )],
+        confirm: Annotated[bool, Field(
+            description="Must be true to execute deletion (safety check)",
+        )],
+        date_hint: Annotated[str | None, Field(
+            default=None,
+            pattern=r"^\d{4}-\d{2}-\d{2}$",
+            description="Document creation date in YYYY-MM-DD format to speed up lookup (optional)",
+            examples=["2025-12-08", "2026-01-15"],
+        )] = None,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (admin required)",
+        )] = None,
+    ) -> ToolResponse:
+        """Permanently delete a document and all associated data.
+
+        This performs a complete hard delete across all three storage layers:
+        1. Document file from canonical store
+        2. Vector embeddings from ChromaDB
+        3. Graph nodes and relationships from Neo4j
+
+        This operation is irreversible. The document and all associated data
+        will be permanently removed from the system.
+
+        Args:
+            document_guid: UUID of the document to delete
+            group_guid: UUID of the group containing the document
+            confirm: Must be True to execute (prevents accidental deletion)
+            date_hint: Optional date to speed up file lookup
+            auth_tokens: JWT tokens (admin group required)
+
+        Returns:
+            Confirmation message with deletion statistics:
+            - document_guid: The deleted document ID
+            - title: Title of the deleted document
+            - group_guid: Group that contained the document
+            - deleted_from: List of storage layers deleted from
+            - vector_chunks_deleted: Number of vector chunks removed
+
+        Errors:
+            - AUTH_REQUIRED: No valid authentication token provided
+            - ACCESS_DENIED: User not in admin group
+            - DOCUMENT_NOT_FOUND: Document doesn't exist in specified group
+            - CONFIRMATION_REQUIRED: confirm parameter not set to true
+            - DELETION_FAILED: One or more storage layers failed to delete
+        """
+        try:
+            # Require admin access
+            try:
+                require_admin(auth_tokens=auth_tokens)
+            except AdminAccessDeniedError as e:
+                return error_response(
+                    error_code="ACCESS_DENIED",
+                    message=str(e),
+                    recovery_strategy="Use a token with 'admin' group membership.",
+                )
+
+            # Safety check - require explicit confirmation
+            if not confirm:
+                return error_response(
+                    error_code="CONFIRMATION_REQUIRED",
+                    message="Delete operation requires confirm=true parameter to execute",
+                    recovery_strategy="Set confirm=true in the request to proceed with deletion. This is a safety check to prevent accidental deletions.",
+                )
+
+            # Verify document exists before attempting deletion
+            try:
+                doc = ingest_service.document_store.load(
+                    document_guid, group_guid, date_hint
+                )
+            except DocumentNotFoundError:
+                return error_response(
+                    error_code="DOCUMENT_NOT_FOUND",
+                    message=f"Document {document_guid} not found in group {group_guid}",
+                    recovery_strategy="Verify the document_guid and group_guid are correct. Use get_document to verify the document exists.",
+                )
+
+            # Track deletion results
+            results: dict[str, Any] = {
+                "document_guid": document_guid,
+                "title": doc.title,
+                "group_guid": group_guid,
+                "deleted_from": [],
+            }
+
+            # 1. Delete from document store (canonical file)
+            file_deleted = ingest_service.document_store.delete(
+                document_guid, group_guid, date_hint
+            )
+            if file_deleted:
+                results["deleted_from"].append("document_store")
+
+            # 2. Delete from embedding index (ChromaDB vectors)
+            vector_chunks_deleted = 0
+            if ingest_service.embedding_index:
+                vector_chunks_deleted = ingest_service.embedding_index.delete_document(
+                    document_guid
+                )
+                results["vector_chunks_deleted"] = vector_chunks_deleted
+                if vector_chunks_deleted > 0:
+                    results["deleted_from"].append(
+                        f"embedding_index ({vector_chunks_deleted} chunks)"
+                    )
+
+            # 3. Delete from graph index (Neo4j)
+            if ingest_service.graph_index:
+                from app.services.graph_index import NodeLabel
+
+                graph_deleted = ingest_service.graph_index.delete_node(
+                    NodeLabel.DOCUMENT, document_guid
+                )
+                if graph_deleted:
+                    results["deleted_from"].append("graph_index")
+
+            # Log the deletion for audit trail
+            if hasattr(ingest_service, 'audit_service'):
+                audit_svc = getattr(ingest_service, 'audit_service', None)
+                if audit_svc:
+                    from app.services.audit_service import log_document_delete
+
+                    # Get actor from token groups
+                    groups = resolve_permitted_groups(auth_tokens=auth_tokens)
+                    actor = groups[0] if groups else "admin"
+                    log_document_delete(
+                        audit_svc,
+                        document_guid=document_guid,
+                        group_guid=group_guid,
+                        title=doc.title,
+                        actor=actor,
+                        deleted_from=results["deleted_from"],
+                        vector_chunks_deleted=vector_chunks_deleted,
+                    )
+
+            # Verify at least one layer deleted
+            if not results["deleted_from"]:
+                return error_response(
+                    error_code="DELETION_FAILED",
+                    message="Document was found but could not be deleted from any storage layer",
+                    recovery_strategy="Run health_check to verify storage services are healthy. The document may have been partially deleted.",
+                )
+
+            return success_response(
+                data=results,
+                message=f"Document '{doc.title}' permanently deleted from all storage layers",
+            )
+
+        except ValidationError as e:
+            return error_response(
+                error_code="VALIDATION_ERROR",
+                message="Invalid input parameters",
+                recovery_strategy="Ensure document_guid and group_guid are valid UUIDs, and confirm is a boolean.",
+                details={"errors": e.errors()},
+            )
+
+        except Exception as e:
+            return error_response(
+                error_code="DELETION_FAILED",
+                message=f"Unexpected error during deletion: {e!s}",
+                recovery_strategy="Run health_check to verify services. Check input parameters and try again.",
             )

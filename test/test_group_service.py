@@ -4,6 +4,7 @@ import pytest
 
 
 from app.services.group_service import (
+    AdminAccessDeniedError,
     GroupService,
     GroupAccessDeniedError,
     PUBLIC_GROUP,
@@ -11,6 +12,8 @@ from app.services.group_service import (
     get_permitted_groups,
     init_group_service,
     get_group_service,
+    is_admin,
+    require_admin,
     resolve_permitted_groups,
 )
 
@@ -382,3 +385,136 @@ class TestResolvePermittedGroups:
         
         result = resolve_permitted_groups(auth_tokens=[token])
         assert PUBLIC_GROUP in result
+
+
+# =============================================================================
+# Admin Access Control Tests
+# =============================================================================
+
+
+class TestIsAdmin:
+    """Test is_admin() function."""
+
+    def test_is_admin_with_admin_group(self, auth_service):
+        """Token with admin group returns True."""
+        init_group_service(auth_service)
+        
+        # Admin is a reserved group, should already exist
+        admin_token = auth_service.create_token(groups=["admin"])
+        
+        result = is_admin(auth_tokens=[admin_token], auth_service=auth_service)
+        assert result is True
+
+    def test_is_admin_without_admin_group(self, auth_service):
+        """Token without admin group returns False."""
+        _ensure_group(auth_service, "regular-user")
+        init_group_service(auth_service)
+        
+        user_token = auth_service.create_token(groups=["regular-user"])
+        
+        result = is_admin(auth_tokens=[user_token], auth_service=auth_service)
+        assert result is False
+
+    def test_is_admin_with_multiple_groups_including_admin(self, auth_service):
+        """Token with admin among multiple groups returns True."""
+        _ensure_group(auth_service, "sales")
+        init_group_service(auth_service)
+        
+        token = auth_service.create_token(groups=["admin", "sales", "public"])
+        
+        result = is_admin(auth_tokens=[token], auth_service=auth_service)
+        assert result is True
+
+    def test_is_admin_no_token_returns_false(self, auth_service):
+        """No token (anonymous) returns False."""
+        init_group_service(auth_service)
+        
+        result = is_admin(auth_tokens=None, auth_service=auth_service)
+        assert result is False
+
+    def test_is_admin_invalid_token_returns_false(self, auth_service):
+        """Invalid token returns False."""
+        init_group_service(auth_service)
+        
+        result = is_admin(auth_tokens=["invalid-token"], auth_service=auth_service)
+        assert result is False
+
+    def test_is_admin_public_only_returns_false(self, auth_service):
+        """Token with only public group returns False."""
+        init_group_service(auth_service)
+        
+        # Public is reserved, should already exist
+        public_token = auth_service.create_token(groups=["public"])
+        
+        result = is_admin(auth_tokens=[public_token], auth_service=auth_service)
+        assert result is False
+
+
+class TestRequireAdmin:
+    """Test require_admin() function."""
+
+    def test_require_admin_success_with_admin_group(self, auth_service):
+        """require_admin() does not raise when admin group present."""
+        init_group_service(auth_service)
+        
+        admin_token = auth_service.create_token(groups=["admin"])
+        
+        # Should not raise
+        require_admin(auth_tokens=[admin_token], auth_service=auth_service)
+
+    def test_require_admin_raises_without_admin_group(self, auth_service):
+        """require_admin() raises AdminAccessDeniedError when admin group absent."""
+        _ensure_group(auth_service, "regular-user")
+        init_group_service(auth_service)
+        
+        user_token = auth_service.create_token(groups=["regular-user"])
+        
+        with pytest.raises(AdminAccessDeniedError) as exc_info:
+            require_admin(auth_tokens=[user_token], auth_service=auth_service)
+        
+        # Check error message
+        assert "Admin access required" in str(exc_info.value)
+        assert "admin" in str(exc_info.value).lower()
+
+    def test_require_admin_raises_for_anonymous(self, auth_service):
+        """require_admin() raises for anonymous (no token)."""
+        init_group_service(auth_service)
+        
+        with pytest.raises(AdminAccessDeniedError) as exc_info:
+            require_admin(auth_tokens=None, auth_service=auth_service)
+        
+        assert "Admin access required" in str(exc_info.value)
+
+    def test_require_admin_raises_for_invalid_token(self, auth_service):
+        """require_admin() raises for invalid token."""
+        init_group_service(auth_service)
+        
+        with pytest.raises(AdminAccessDeniedError) as exc_info:
+            require_admin(auth_tokens=["invalid-garbage"], auth_service=auth_service)
+        
+        assert "Admin access required" in str(exc_info.value)
+
+    def test_require_admin_success_with_multiple_groups(self, auth_service):
+        """require_admin() succeeds when admin is one of multiple groups."""
+        _ensure_group(auth_service, "sales")
+        _ensure_group(auth_service, "marketing")
+        init_group_service(auth_service)
+        
+        token = auth_service.create_token(groups=["sales", "admin", "marketing"])
+        
+        # Should not raise
+        require_admin(auth_tokens=[token], auth_service=auth_service)
+
+    def test_require_admin_error_message_provides_recovery(self, auth_service):
+        """Error message provides recovery guidance."""
+        init_group_service(auth_service)
+        
+        public_token = auth_service.create_token(groups=["public"])
+        
+        with pytest.raises(AdminAccessDeniedError) as exc_info:
+            require_admin(auth_tokens=[public_token], auth_service=auth_service)
+        
+        error_msg = str(exc_info.value)
+        # Should mention using a token with admin group
+        assert "token" in error_msg.lower() or "admin" in error_msg.lower()
+

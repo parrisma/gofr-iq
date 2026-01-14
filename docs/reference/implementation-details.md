@@ -167,17 +167,17 @@ data/
 
 **Module:** `app/services/source_registry.py`
 
-Sources have full CRUD with group-based access control:
+Sources have full CRUD with admin-only access control:
 
 | Method | Permission | Description |
 |--------|------------|-------------|
-| `create_source(metadata)` | admin | Register new source, return source_guid |
+| `create_source(metadata)` | **admin** | Register new global source, return source_guid |
 | `get_source(source_guid)` | read | Retrieve source metadata |
-| `list_sources(filters)` | read | List sources with optional filters |
-| `update_source(source_guid, metadata)` | write | Update source metadata (audit logged) |
-| `delete_source(source_guid)` | admin | Soft-delete source (marks inactive) |
+| `list_sources(filters)` | read | List all sources (global, no filtering) |
+| `update_source(source_guid, metadata)` | **admin** | Update source metadata |
+| `delete_source(source_guid)` | **admin** | Soft-delete source (marks inactive) |
 
-Access is controlled by `access_groups` field on each source.
+**Note**: Sources are global entities. Admin group required for create/update/delete operations.
 
 **Trust Level Scoring:**
 

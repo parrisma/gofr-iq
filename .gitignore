@@ -190,3 +190,6 @@ test/tuning/live_run_*.json
 logs/*.log
 logs/*.json
 !logs/.gitkeep
+
+# Vault production secrets (generated, contains tokens)
+docker/vault-secrets.env

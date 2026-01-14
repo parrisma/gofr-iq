@@ -1,8 +1,9 @@
 """Source models for news sources.
 
 Sources represent the origin of news documents - news agencies, internal
-research, etc. Each source belongs to exactly one group and has a trust
-level that affects scoring in search results.
+research, etc. Sources are standalone entities (not tied to groups) and have a
+trust level that affects scoring in search results. Sources are managed by
+admin users only.
 
 Schema from IMPLEMENTATION.md Section 3.2.
 """
@@ -71,12 +72,11 @@ class Source(BaseModel):
     """Source model representing a news or document source.
     
     Sources track where documents come from and provide trust scoring.
-    Each source belongs to exactly one group. Tokens with appropriate
-    permissions on that group can perform CRUD operations.
+    Sources are standalone entities managed by admin users. Any authenticated
+    user can reference a source when ingesting documents.
     
     Attributes:
         source_guid: Unique identifier for the source (UUID format)
-        group_guid: The group this source belongs to
         name: Human-readable source name
         type: Type of source (news_agency, internal, etc.)
         region: Geographic region coverage
@@ -90,7 +90,6 @@ class Source(BaseModel):
     Example:
         >>> source = Source(
         ...     source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-        ...     group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         ...     name="Reuters APAC",
         ...     type=SourceType.NEWS_AGENCY,
         ...     region="APAC",
@@ -103,12 +102,6 @@ class Source(BaseModel):
         max_length=36,
         pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
         description="UUID format source identifier",
-    )]
-    group_guid: Annotated[str, Field(
-        min_length=36,
-        max_length=36,
-        pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
-        description="UUID of the owning group",
     )]
     name: Annotated[str, Field(
         min_length=1,
@@ -192,7 +185,6 @@ class Source(BaseModel):
         "json_schema_extra": {
             "example": {
                 "source_guid": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-                "group_guid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
                 "name": "Reuters APAC",
                 "type": "news_agency",
                 "region": "APAC",

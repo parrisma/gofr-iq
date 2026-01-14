@@ -429,12 +429,11 @@ class TestHybridQueryIntegration:
 
     @pytest.fixture
     def test_sources(self, source_registry: SourceRegistry) -> Dict[str, Source]:
-        """Create test sources for each group."""
+        """Create test sources (global, not group-specific)."""
         sources = {}
         for group_code, group_guid in GROUPS.items():
             source = source_registry.create(
                 name=f"Source {group_code}",
-                group_guid=group_guid,
                 source_type=SourceType.NEWS_AGENCY,
                 trust_level=TrustLevel.HIGH,
             )

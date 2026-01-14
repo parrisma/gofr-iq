@@ -39,6 +39,17 @@ else
     : # no-op
 fi
 
+# Load secrets from gofr-common/.env if not already set
+GOFR_COMMON_ENV="$PROJECT_ROOT/lib/gofr-common/.env"
+if [ -f "$GOFR_COMMON_ENV" ]; then
+    # Only load if vars not already set (don't override test runner settings)
+    if [ -z "$GOFR_JWT_SECRET" ] || [ -z "$GOFR_VAULT_DEV_TOKEN" ]; then
+        set -a
+        source "$GOFR_COMMON_ENV"
+        set +a
+    fi
+fi
+
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'

@@ -46,6 +46,7 @@ __all__ = [
     "IngestResult",
     "IngestService",
     "IngestStatus",
+    "LLMExtractionError",
     "SourceValidationError",
     "WordCountError",
 ]
@@ -79,6 +80,13 @@ class WordCountError(IngestError):
         super().__init__(
             f"Document exceeds word count limit: {word_count} > {max_count}"
         )
+
+
+class LLMExtractionError(IngestError):
+    """Error when LLM extraction fails and is required."""
+
+    def __init__(self, message: str = "LLM extraction failed") -> None:
+        super().__init__(message)
 
 
 # =============================================================================
@@ -200,14 +208,19 @@ class IngestService:
     def _extract_graph_entities(
         self,
         doc: Document,
+        require_extraction: bool = True,
     ) -> "GraphExtractionResult | None":
         """Extract graph entities from document using LLM
         
         Args:
             doc: Document to analyze
+            require_extraction: If True, raise error when LLM unavailable or fails
             
         Returns:
-            Extraction result or None if LLM not available
+            Extraction result or None if LLM not available and not required
+            
+        Raises:
+            LLMExtractionError: If require_extraction=True and extraction fails
         """
         # Import here to avoid circular imports
         from app.prompts.graph_extraction import (
@@ -219,6 +232,8 @@ class IngestService:
         from app.services.llm_service import ChatMessage, LLMServiceError
 
         if not self.llm_service or not self.llm_service.is_available:
+            if require_extraction:
+                raise LLMExtractionError("LLM service not available for graph extraction")
             return None
             
         try:
@@ -245,7 +260,9 @@ class IngestService:
             return parse_extraction_response(result.content)
             
         except LLMServiceError as e:
-            # Log but don't fail ingestion
+            if require_extraction:
+                raise LLMExtractionError(f"LLM extraction failed: {e}") from e
+            # Log but don't fail ingestion when not required
             print(f"LLM extraction failed for {doc.guid}: {e}")
             return create_default_result()
 
@@ -356,9 +373,9 @@ class IngestService:
         # Step 1: Generate document GUID first (so we can return it on error)
         doc_guid = str(uuid.uuid4())
 
-        # Step 2: Validate source exists and belongs to the specified group
+        # Step 2: Validate source exists (sources are now global, not group-specific)
         try:
-            source = self.source_registry.get(source_guid, access_groups=[group_guid])
+            source = self.source_registry.get(source_guid)
             if source is None:
                 raise SourceValidationError(source_guid)
         except SourceNotFoundError:
@@ -438,8 +455,12 @@ class IngestService:
                     metadata=doc.metadata,
                 )
 
-            # Step 10: LLM extraction (if configured)
-            extraction = self._extract_graph_entities(doc)
+            # Step 10: LLM extraction (required when both LLM and graph are configured)
+            # Extraction is required when we have both services - this ensures ingestion
+            # fails if LLM extraction fails, rather than silently proceeding without
+            # graph entity relationships.
+            require_extraction = bool(self.llm_service and self.graph_index)
+            extraction = self._extract_graph_entities(doc, require_extraction=require_extraction)
 
             # Step 11: Update graph with extracted entities (if extraction succeeded)
             if extraction and self.graph_index:

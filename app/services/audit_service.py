@@ -32,6 +32,7 @@ class AuditEventType(str, Enum):
     DOCUMENT_INGEST = "document.ingest"
     DOCUMENT_QUERY = "document.query"
     DOCUMENT_RETRIEVE = "document.retrieve"
+    DOCUMENT_DELETE = "document.delete"
 
     # Source events
     SOURCE_CREATE = "source.create"
@@ -530,5 +531,52 @@ def log_document_query(
         event_type=AuditEventType.DOCUMENT_QUERY,
         resource_type="query",
         actor=actor,
+        details=details,
+    )
+
+
+def log_document_delete(
+    service: AuditService,
+    document_guid: str,
+    group_guid: str,
+    title: str | None = None,
+    actor: str | None = None,
+    deleted_from: list[str] | None = None,
+    vector_chunks_deleted: int = 0,
+) -> AuditEntry:
+    """Log a document hard deletion event.
+
+    Records complete deletion of a document from all storage layers
+    (document store, embedding index, graph index) for audit compliance.
+
+    Args:
+        service: AuditService instance
+        document_guid: GUID of the deleted document
+        group_guid: GUID of the group containing the document
+        title: Title of the deleted document
+        actor: User/system performing deletion
+        deleted_from: List of storage layers deleted from
+        vector_chunks_deleted: Number of vector chunks removed
+
+    Returns:
+        The created AuditEntry
+    """
+    details: dict[str, Any] = {
+        "document_guid": document_guid,
+        "operation": "hard_delete",
+    }
+    if title:
+        details["title"] = title
+    if deleted_from:
+        details["deleted_from"] = deleted_from
+    if vector_chunks_deleted > 0:
+        details["vector_chunks_deleted"] = vector_chunks_deleted
+
+    return service.log_event(
+        event_type=AuditEventType.DOCUMENT_DELETE,
+        resource_guid=document_guid,
+        resource_type="document",
+        actor=actor,
+        group_guid=group_guid,
         details=details,
     )

@@ -127,21 +127,23 @@ def source_registry() -> SourceRegistry:
 
 @pytest.fixture
 def test_source(source_registry: SourceRegistry, test_group: tuple[Group, str]) -> Generator[Source, None, None]:
-    """Create a unique test source for the test group.
+    """Create a unique test source (global, not group-specific).
     
     Args:
         source_registry: SourceRegistry instance.
-        test_group: Tuple of (Group, group_name) from test_group fixture.
+        test_group: Tuple of (Group, group_name) from test_group fixture (unused for source creation).
         
     Yields:
         Source object for the test.
+    
+    Note: Sources are global entities as of admin-access-control implementation.
+          Documents reference sources and are scoped to groups.
     """
     group, group_name = test_group
     source_name = f"E2E Test Source {uuid.uuid4().hex[:8]}"
     
     source = source_registry.create(
         name=source_name,
-        group_guid=str(group.id),  # type: ignore[attr-defined]
         source_type=SourceType.NEWS_AGENCY,
     )
     
@@ -311,9 +313,9 @@ def test_fixtures_created(
     assert token_info is not None
     assert group_name in token_info.groups
     
-    # Verify source
-    assert test_source.group_guid == str(group.id)  # type: ignore[attr-defined]
+    # Verify source (sources are global, no group association)
     assert test_source.name.startswith("E2E Test Source")
+    assert test_source.active
 
 
 def test_ingest_document_with_real_llm(

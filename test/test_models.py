@@ -178,7 +178,6 @@ class TestSourceModel:
         """Test creating a valid source."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Reuters APAC",
             type=SourceType.NEWS_AGENCY,
             trust_level=TrustLevel.HIGH,
@@ -195,26 +194,14 @@ class TestSourceModel:
         with pytest.raises(ValidationError) as exc_info:
             Source(
                 source_guid="invalid",
-                group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
                 name="Test Source",
             )
         assert "source_guid" in str(exc_info.value)
-    
-    def test_source_model_invalid_group_guid(self) -> None:
-        """Test that invalid group GUIDs are rejected."""
-        with pytest.raises(ValidationError) as exc_info:
-            Source(
-                source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-                group_guid="invalid",
-                name="Test Source",
-            )
-        assert "group_guid" in str(exc_info.value)
     
     def test_source_type_from_string(self) -> None:
         """Test that string types are converted to SourceType enum."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             type="news_agency",  # type: ignore[arg-type]
         )
@@ -225,7 +212,6 @@ class TestSourceModel:
         """Test that string trust levels are converted to TrustLevel enum."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             trust_level="high",  # type: ignore[arg-type]
         )
@@ -241,7 +227,6 @@ class TestSourceModel:
         
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             trust_level=TrustLevel.HIGH,
         )
@@ -251,7 +236,6 @@ class TestSourceModel:
         """Test that languages are normalized to lowercase."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             languages=["EN", "ZH", "JA"],
         )
@@ -262,7 +246,6 @@ class TestSourceModel:
         """Test that single language string is converted to list."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             languages="en",  # type: ignore[arg-type]
         )
@@ -273,7 +256,6 @@ class TestSourceModel:
         """Test soft-delete via deactivate."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
         )
         
@@ -289,7 +271,6 @@ class TestSourceModel:
         """Test reactivating a soft-deleted source."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             active=False,
         )
@@ -302,7 +283,6 @@ class TestSourceModel:
         """Test source metadata handling."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             metadata=SourceMetadata(
                 feed_url="https://example.com/feed",
@@ -317,7 +297,6 @@ class TestSourceModel:
         """Test source JSON serialization."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
             type=SourceType.NEWS_AGENCY,
             trust_level=TrustLevel.HIGH,
@@ -333,7 +312,6 @@ class TestSourceModel:
         """Test source default values."""
         source = Source(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-            group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             name="Test Source",
         )
         

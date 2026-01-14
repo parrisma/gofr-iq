@@ -14,14 +14,19 @@ A **group** is the fundamental unit of **permission boundary**:
 ┌─────────────────────────────────────┐
 │         GROUP (apac-research)       │
 ├─────────────────────────────────────┤
-│ All Documents, Sources, Clients     │
-│ must belong to exactly one group    │
+│ Documents and Clients must belong  │
+│ to exactly one group.               │
+│ Sources are global (no affiliation)│
 │                                     │
 │ ├─ Documents (1000+)               │
-│ ├─ Sources (5+)                    │
-│ └─ Clients (10+)                   │
+│ ├─ Clients (10+)                   │
+│                                     │
+│ Sources (global, shared):          │
+│ └─ Any user can reference sources  │
 └─────────────────────────────────────┘
 ```
+
+**Note**: Sources are global entities managed by admins. They track attribution (where content came from) and trust level, but are not tied to specific groups. Any authenticated user can ingest documents referencing any source.
 
 ### User-to-Group Mapping
 
@@ -65,8 +70,10 @@ Each user has **scopes** controlling what they can do:
 | Query documents | ✅ | ✅ | ✅ |
 | View client feeds | ✅ | ✅ | ✅ |
 | Ingest documents | ❌ | ✅ | ✅ |
-| Create sources | ❌ | ✅ | ✅ |
-| Update sources | ❌ | ✅ | ✅ |
+| List/view sources | ✅ | ✅ | ✅ |
+| Create sources | ❌ | ❌ | ✅ |
+| Update sources | ❌ | ❌ | ✅ |
+| Delete sources | ❌ | ❌ | ✅ |
 | Create tokens | ❌ | ❌ | ✅ |
 | View audit logs | ❌ | ❌ | ✅ |
 | Manage groups | ❌ | ❌ | ✅ |
@@ -75,19 +82,20 @@ Each user has **scopes** controlling what they can do:
 
 ## Database Schema: IN_GROUP Relationship
 
-Every permissioned node must have `IN_GROUP` relationship:
+Documents and Clients must have `IN_GROUP` relationship:
 
 ```cypher
 // Documents MUST belong to exactly one group
 (Document)-[:IN_GROUP]->(Group)
 
-// Sources MUST belong to exactly one group
-(Source)-[:IN_GROUP]->(Group)
-
 // Clients MUST belong to exactly one group
 (Client)-[:IN_GROUP]->(Group)
 
-// But NOT these - they're global reference data:
+// Sources are global (no IN_GROUP relationship)
+// Any user can reference any source
+(Source)  # No group affiliation
+
+// Global reference data (shared across all groups):
 Instrument  # Shared across all groups
 Index       # Shared taxonomy
 Sector      # Shared taxonomy
@@ -127,26 +135,38 @@ WHERE g.group_guid IN ["apac-research", "japan-desk", "trading"]
 RETURN d
 ```
 
-### Rule 3: Source Validation
+### Rule 3: Source Access
 
-When ingesting documents, validate source belongs to user's group:
+Sources are global - any authenticated user can reference any source when ingesting:
 
 ```python
-def ingest(title: str, content: str, source_guid: str, user_groups: list[str]):
-    # Verify source is in one of user's permitted groups
+def ingest(title: str, content: str, source_guid: str, group_guid: str):
+    # Verify source exists (no group check needed - sources are global)
     source = source_registry.get(source_guid)
+    if not source:
+        raise NotFoundError(f"Source {source_guid} not found")
     
-    if source.group_guid not in user_groups:
-        raise PermissionError(
-            f"Source {source_guid} not in your groups: {user_groups}"
-        )
-    
-    # Ingest with source's group
+    # Ingest document with caller's group
+    # Document gets group from caller's token, not from source
     return ingest_service.ingest(
         title=title,
         content=content,
         source_guid=source_guid,
-        group_guid=source.group_guid  # Use source's group
+        group_guid=group_guid,  # From caller's token
+    )
+```
+
+**Source Management** (admin-only):
+```python
+def create_source(name: str, auth_tokens: list[str]):
+    # Requires admin group membership
+    require_admin(auth_tokens)
+    
+    # Create global source (no group affiliation)
+    return source_registry.create(
+        name=name,
+        source_type=SourceType.NEWS_AGENCY,
+        trust_level=TrustLevel.HIGH,
     )
 ```
 
@@ -201,17 +221,17 @@ async def ingest(
 ):
     """Ingest document into user's permitted group."""
     
-    # Verify source is in user's groups
+    # Verify source exists (sources are global)
     source = source_registry.get(doc.source_guid)
-    if source.group_guid not in user["groups"]:
-        raise HTTPException(403, "Source not in your groups")
+    if not source:
+        raise HTTPException(404, "Source not found")
     
     # Ingest with source's group
     result = ingest_service.ingest(
         title=doc.title,
         content=doc.content,
         source_guid=doc.source_guid,
-        group_guid=source.group_guid,  # Use source's group
+        group_guid=user["groups"][0],  # Use user's first group
         language=doc.language,
         metadata=doc.metadata
     )

@@ -1,7 +1,7 @@
 """Authentication tests for Source Tools.
 
-Tests create_source behavior - requires authentication to create sources.
-Any authenticated user can create sources in their own group.
+Tests create_source, update_source, delete_source behavior - requires admin access.
+Only users with admin group membership can manage sources.
 """
 
 import json
@@ -13,7 +13,7 @@ from app.services.group_service import init_group_service
 from app.tools.source_tools import register_source_tools
 
 # Admin group constant
-ADMIN_GROUP = "admin-group"
+ADMIN_GROUP = "admin"
 
 
 def parse_tool_response(response):
@@ -112,39 +112,33 @@ def delete_source_fn(mock_source_registry):
     raise RuntimeError("delete_source tool not found")
 
 
-class TestCreateSourceAlwaysRequiresAuth:
+class TestCreateSourceRequiresAdmin:
     """Tests that create_source behavior with authentication."""
 
-    def test_create_source_auth_enabled_no_token(self, vault_auth_service, create_source_fn, mock_source_registry):
-        """create_source fails without token when auth enabled."""
-        # Setup: Initialize GroupService with auth enabled
+    def test_create_source_no_token_fails_permission_denied(
+        self, vault_auth_service, create_source_fn, mock_source_registry
+    ):
+        """No token should fail with PERMISSION_DENIED (anonymous user lacks admin access)."""
         init_group_service(auth_service=vault_auth_service)
         
-        # Action: Call create_source without token
         response = create_source_fn(
             name="Test Source",
             source_type="news_agency",
-            region="APAC",
-            auth_tokens=None,  # No token
+            auth_tokens=None,
         )
         
-        # Parse response
         result = parse_tool_response(response)
         
-        # Assertion: Should fail with AUTH_REQUIRED error
         success = result.get("success", result.get("status") == "success")
         assert success is False
         error_code = result.get("error_code") or result.get("error", {}).get("code")
-        assert error_code == "AUTH_REQUIRED"
-        
-        # Verify create was NOT called
+        assert error_code == "PERMISSION_DENIED"
         mock_source_registry.create.assert_not_called()
 
-    def test_create_source_non_admin_token_succeeds(self, vault_auth_service, create_source_fn, mock_source_registry):
-        """create_source succeeds with any authenticated user token.
+    def test_create_source_non_admin_token_fails(self, vault_auth_service, create_source_fn, mock_source_registry):
+        """create_source fails with non-admin token.
         
-        Any authenticated user can create sources - the source is created
-        in the group associated with their token.
+        Only users with admin group membership can create sources.
         """
         # Setup: Initialize GroupService with auth enabled
         init_group_service(auth_service=vault_auth_service)
@@ -163,12 +157,14 @@ class TestCreateSourceAlwaysRequiresAuth:
         # Parse response
         result = parse_tool_response(response)
         
-        # Assertion: Should succeed - any authenticated user can create sources
+        # Assertion: Should fail with PERMISSION_DENIED for non-admin user
         success = result.get("success", result.get("status") == "success")
-        assert success is True, f"Authenticated user should be able to create sources, got: {result}"
+        assert success is False, f"Non-admin user should not be able to create sources, got: {result}"
+        error_code = result.get("error_code") or result.get("error", {}).get("code")
+        assert error_code == "PERMISSION_DENIED"
         
-        # Verify create was called
-        mock_source_registry.create.assert_called_once()
+        # Verify create was NOT called
+        mock_source_registry.create.assert_not_called()
 
     def test_create_source_admin_token_succeeds(self, vault_auth_service, create_source_fn, mock_source_registry):
         """create_source succeeds with admin token."""
@@ -201,25 +197,25 @@ class TestUpdateSourceAuth:
     """Tests for update_source authentication and authorization."""
 
     def test_update_source_no_token_fails(self, vault_auth_service, update_source_fn, mock_source_registry):
-        """update_source fails without authentication token."""
+        """update_source fails without authentication token (PERMISSION_DENIED for anonymous users)."""
         init_group_service(auth_service=vault_auth_service)
-        
+
         response = update_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
             name="Updated Name",
             auth_tokens=None,
         )
-        
+
         result = parse_tool_response(response)
-        
+
         success = result.get("success", result.get("status") == "success")
         assert success is False
         error_code = result.get("error_code") or result.get("error", {}).get("code")
-        assert error_code == "AUTH_REQUIRED"
+        assert error_code == "PERMISSION_DENIED"
         mock_source_registry.update.assert_not_called()
 
-    def test_update_source_with_valid_token_succeeds(self, vault_auth_service, update_source_fn, mock_source_registry):
-        """update_source succeeds with valid authentication token."""
+    def test_update_source_with_non_admin_token_fails(self, vault_auth_service, update_source_fn, mock_source_registry):
+        """update_source fails with non-admin token - requires admin access."""
         init_group_service(auth_service=vault_auth_service)
         token = vault_auth_service.create_token(groups=["test-group"])
         
@@ -233,13 +229,33 @@ class TestUpdateSourceAuth:
         result = parse_tool_response(response)
         
         success = result.get("success", result.get("status") == "success")
-        assert success is True, f"Authenticated user should be able to update sources, got: {result}"
+        assert success is False, f"Non-admin user should not be able to update sources, got: {result}"
+        error_code = result.get("error_code") or result.get("error", {}).get("code")
+        assert error_code == "PERMISSION_DENIED"
+        mock_source_registry.update.assert_not_called()
+
+    def test_update_source_admin_token_succeeds(self, vault_auth_service, update_source_fn, mock_source_registry):
+        """update_source succeeds with admin token."""
+        init_group_service(auth_service=vault_auth_service)
+        token = vault_auth_service.create_token(groups=[ADMIN_GROUP])
+        
+        response = update_source_fn(
+            source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
+            name="Updated Name",
+            trust_level="high",
+            auth_tokens=[token],
+        )
+        
+        result = parse_tool_response(response)
+        
+        success = result.get("success", result.get("status") == "success")
+        assert success is True, f"Admin user should be able to update sources, got: {result}"
         mock_source_registry.update.assert_called_once()
 
     def test_update_source_partial_update(self, vault_auth_service, update_source_fn, mock_source_registry):
         """update_source only passes provided fields to registry."""
         init_group_service(auth_service=vault_auth_service)
-        token = vault_auth_service.create_token(groups=["test-group"])
+        token = vault_auth_service.create_token(groups=[ADMIN_GROUP])  # Use admin token
         
         response = update_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
@@ -262,7 +278,7 @@ class TestUpdateSourceAuth:
     def test_update_source_invalid_trust_level(self, vault_auth_service, update_source_fn, mock_source_registry):
         """update_source rejects invalid trust_level values."""
         init_group_service(auth_service=vault_auth_service)
-        token = vault_auth_service.create_token(groups=["test-group"])
+        token = vault_auth_service.create_token(groups=[ADMIN_GROUP])  # Use admin token
         
         response = update_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
@@ -281,12 +297,12 @@ class TestUpdateSourceAuth:
     def test_update_source_invalid_source_type(self, vault_auth_service, update_source_fn, mock_source_registry):
         """update_source rejects invalid source_type values."""
         init_group_service(auth_service=vault_auth_service)
-        token = vault_auth_service.create_token(groups=["test-group"])
-        
+        admin_token = vault_auth_service.create_token(groups=["admin"])
+
         response = update_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
             source_type="invalid_type",
-            auth_tokens=[token],
+            auth_tokens=[admin_token],
         )
         
         result = parse_tool_response(response)
@@ -300,7 +316,7 @@ class TestUpdateSourceAuth:
     def test_update_source_returns_boost_factor(self, vault_auth_service, update_source_fn, mock_source_registry):
         """update_source response includes calculated boost_factor."""
         init_group_service(auth_service=vault_auth_service)
-        token = vault_auth_service.create_token(groups=["test-group"])
+        token = vault_auth_service.create_token(groups=[ADMIN_GROUP])  # Use admin token
         
         response = update_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
@@ -321,24 +337,24 @@ class TestDeleteSourceAuth:
     """Tests for delete_source authentication and soft-delete behavior."""
 
     def test_delete_source_no_token_fails(self, vault_auth_service, delete_source_fn, mock_source_registry):
-        """delete_source fails without authentication token."""
+        """delete_source fails without authentication token (PERMISSION_DENIED for anonymous users)."""
         init_group_service(auth_service=vault_auth_service)
-        
+
         response = delete_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
             auth_tokens=None,
         )
-        
+
         result = parse_tool_response(response)
-        
+
         success = result.get("success", result.get("status") == "success")
         assert success is False
         error_code = result.get("error_code") or result.get("error", {}).get("code")
-        assert error_code == "AUTH_REQUIRED"
+        assert error_code == "PERMISSION_DENIED"
         mock_source_registry.soft_delete.assert_not_called()
 
-    def test_delete_source_with_valid_token_succeeds(self, vault_auth_service, delete_source_fn, mock_source_registry):
-        """delete_source succeeds with valid authentication token."""
+    def test_delete_source_with_non_admin_token_fails(self, vault_auth_service, delete_source_fn, mock_source_registry):
+        """delete_source fails with non-admin token - requires admin access."""
         init_group_service(auth_service=vault_auth_service)
         token = vault_auth_service.create_token(groups=["test-group"])
         
@@ -350,13 +366,31 @@ class TestDeleteSourceAuth:
         result = parse_tool_response(response)
         
         success = result.get("success", result.get("status") == "success")
-        assert success is True, f"Authenticated user should be able to delete sources, got: {result}"
+        assert success is False, f"Non-admin user should not be able to delete sources, got: {result}"
+        error_code = result.get("error_code") or result.get("error", {}).get("code")
+        assert error_code == "PERMISSION_DENIED"
+        mock_source_registry.soft_delete.assert_not_called()
+
+    def test_delete_source_with_admin_token_succeeds(self, vault_auth_service, delete_source_fn, mock_source_registry):
+        """delete_source succeeds with admin authentication token."""
+        init_group_service(auth_service=vault_auth_service)
+        token = vault_auth_service.create_token(groups=[ADMIN_GROUP])
+        
+        response = delete_source_fn(
+            source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
+            auth_tokens=[token],
+        )
+        
+        result = parse_tool_response(response)
+        
+        success = result.get("success", result.get("status") == "success")
+        assert success is True, f"Admin user should be able to delete sources, got: {result}"
         mock_source_registry.soft_delete.assert_called_once()
 
     def test_delete_source_returns_inactive_status(self, vault_auth_service, delete_source_fn, mock_source_registry):
         """delete_source returns source with active=False."""
         init_group_service(auth_service=vault_auth_service)
-        token = vault_auth_service.create_token(groups=["test-group"])
+        token = vault_auth_service.create_token(groups=[ADMIN_GROUP])  # Use admin token
         
         response = delete_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
@@ -374,7 +408,7 @@ class TestDeleteSourceAuth:
     def test_delete_source_calls_soft_delete(self, vault_auth_service, delete_source_fn, mock_source_registry):
         """delete_source calls soft_delete method, not hard delete."""
         init_group_service(auth_service=vault_auth_service)
-        token = vault_auth_service.create_token(groups=["test-group"])
+        token = vault_auth_service.create_token(groups=[ADMIN_GROUP])  # Use admin token
         
         delete_source_fn(
             source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",

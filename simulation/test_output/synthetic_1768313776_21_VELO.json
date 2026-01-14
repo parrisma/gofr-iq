@@ -1,0 +1,22 @@
+{
+  "source": "Reuters",
+  "published_at": "2025-11-30T13:14:16.129996",
+  "upload_as_group": "public",
+  "token": "gofr-sim-public-token",
+  "title": "News regarding Velocity Motors",
+  "story_body": "Velocity Motors Appoints New Regional Sales Director for Southwest Territory\n\nVelocity Motors (NYSE: VELO) announced today the appointment of Jennifer Martinez as Regional Sales Director for its Southwest territory, effective November 1. Martinez will oversee dealer relations and sales operations across Arizona, New Mexico, Nevada, and Southern California.\n\nMartinez joins Velocity Motors from Apex Automotive Group, where she served as District Manager for five years. She brings over 15 years of experience in automotive sales and distribution management to the role. In her new position, she will report directly to National Sales Vice President Robert Chen.\n\n\"Jennifer's track record of building strong dealer partnerships and her deep understanding of the Southwest market make her an excellent addition to our sales leadership team,\" said Chen in a statement. \"We look forward to her contributions as we continue to strengthen our presence in this important region.\"\n\nThe Southwest territory represents approximately 12% of Velocity Motors' total U.S. sales volume. The company operates through a network of 85 dealerships across the four-state region.\n\nAdditionally, Velocity Motors announced it will participate in the upcoming Automotive Innovation Summit in Detroit, scheduled for December 5-7. The company's Chief Technology Officer, Dr. Sarah Walsh, is slated to speak on a panel discussing connected vehicle technologies and data analytics in modern automotive design.\n\nThe company also unveiled its \"Drive Forward\" marketing campaign, which will launch across digital and traditional media channels in early 2024. The campaign will highlight Velocity's latest vehicle lineup and focus on the brand's commitment to performance and reliability. Marketing executives declined to disclose the specific budget allocation for the initiative.\n\nIn a separate development, Velocity Motors announced a new recycling partnership with GreenCycle Industries to improve the recycling rate of packaging materials at its manufacturing facilities. The initiative aims to divert an additional 500 tons of cardboard and plastic packaging from landfills annually.\n\nVelocity Motors shares closed at $42.15 yesterday, down 0.3% for the day. The stock has traded between $38.50 and $47.25 over the past 52 weeks.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

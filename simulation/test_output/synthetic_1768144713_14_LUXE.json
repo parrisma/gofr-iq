@@ -1,0 +1,22 @@
+{
+  "source": "MyCo APAC Research",
+  "published_at": "2025-12-05T13:02:33.417097",
+  "upload_as_group": "us_sales",
+  "token": "gofr-sim-us-token",
+  "title": "News regarding LuxeBrands",
+  "story_body": "LuxeBrands Appoints New Vice President of Digital Commerce\n\nLuxeBrands Inc. (NYSE: LUXE) announced today the appointment of Sarah Chen as Vice President of Digital Commerce, effective January 15. Chen will report directly to Chief Marketing Officer Michael Torres and will oversee the company's e-commerce strategy and digital customer experience initiatives.\n\nChen joins LuxeBrands from rival beauty retailer Glamour Group, where she spent the past five years as Senior Director of Online Sales. During her tenure at Glamour, she led the implementation of personalized shopping features that contributed to a 15% increase in online conversion rates.\n\n\"Sarah brings valuable experience in digital retail and customer engagement that will help us continue evolving our omnichannel presence,\" said Torres in a statement. \"Her track record of driving digital innovation aligns well with our strategic priorities for 2024.\"\n\nThe appointment comes as LuxeBrands continues to invest in its digital infrastructure following a year of steady online growth. The company reported that e-commerce sales represented 42% of total revenue in the most recent quarter, up from 38% in the prior year period.\n\nIn her new role, Chen will be responsible for enhancing the company's mobile shopping experience, expanding virtual try-on capabilities, and optimizing the integration between online and in-store inventory systems. She will also oversee a team of approximately 45 digital commerce professionals across the company's New York and San Francisco offices.\n\nChen holds an MBA from Northwestern University's Kellogg School of Management and a bachelor's degree in computer science from Stanford University. She replaces former VP of Digital Commerce Robert Liu, who left the company in November to pursue other opportunities.\n\nLuxeBrands operates 890 retail locations across North America and maintains exclusive distribution agreements with over 50 premium beauty and skincare brands. The company's digital platforms serve customers in 15 countries.\n\nThe company reaffirmed its full-year guidance and expects to provide updates on its digital strategy during its fourth-quarter earnings call scheduled for February 28.\n\nShares of LUXE closed at $67.23, down 0.4% in Tuesday trading. The stock has gained 12% year-to-date, in line with the broader retail sector.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

@@ -523,7 +523,7 @@ def get_group_uuid_by_name(
 ) -> str | None:
     """Convert a group name to its UUID.
     
-    Use this function when you need a group UUID for data storage (e.g., Source.group_guid).
+    Use this function when you need a group UUID for data storage (e.g., Document.group_guid).
     This follows the design principle: "Group names flow through auth; UUIDs are resolved
     at point of use."
     
@@ -589,3 +589,68 @@ def get_group_uuids_by_names(
         if uuid:
             uuids.append(uuid)
     return uuids
+
+
+# =============================================================================
+# Admin Access Control
+# =============================================================================
+
+
+class AdminAccessDeniedError(Exception):
+    """Raised when admin access is required but not present."""
+
+    def __init__(self, message: str | None = None) -> None:
+        msg = message or "Admin access required for this operation"
+        super().__init__(msg)
+
+
+def is_admin(
+    auth_tokens: list[str] | None = None,
+    auth_service: AuthService | None = None,
+) -> bool:
+    """Check if the caller has admin access.
+    
+    Checks if "admin" is in the caller's permitted groups.
+    
+    Args:
+        auth_tokens: Optional list of JWT tokens to check.
+                    If not provided, checks the request context.
+        auth_service: Optional AuthService for token validation.
+                     Falls back to global GroupService's auth_service.
+    
+    Returns:
+        True if caller has admin access, False otherwise.
+    """
+    groups = resolve_permitted_groups(auth_tokens, auth_service)
+    return "admin" in groups
+
+
+def require_admin(
+    auth_tokens: list[str] | None = None,
+    auth_service: AuthService | None = None,
+) -> None:
+    """Require admin access or raise an error.
+    
+    Use this function at the start of any operation that requires
+    admin privileges (e.g., creating groups, tokens, or sources).
+    
+    Args:
+        auth_tokens: Optional list of JWT tokens to check.
+                    If not provided, checks the request context.
+        auth_service: Optional AuthService for token validation.
+                     Falls back to global GroupService's auth_service.
+    
+    Raises:
+        AdminAccessDeniedError: If admin access is not present.
+    
+    Example:
+        >>> @mcp.tool(name="create_source")
+        >>> def create_source(name: str, auth_tokens: list[str] | None = None):
+        >>>     require_admin(auth_tokens)
+        >>>     # ... create source logic
+    """
+    if not is_admin(auth_tokens, auth_service):
+        raise AdminAccessDeniedError(
+            "Admin access required for this operation. "
+            "Use a token with 'admin' group membership."
+        )

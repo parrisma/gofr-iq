@@ -2,9 +2,12 @@
 
 This module provides storage and management for news sources with:
 - CRUD operations (create, read, update, soft-delete)
-- Group-based access control
+- Admin-only write access (enforced by callers)
 - Audit logging for changes
 - Region and type filtering
+
+Sources are stored in a flat structure:
+    {base_path}/sources/{source_guid}.json
 """
 
 from __future__ import annotations
@@ -24,24 +27,6 @@ class SourceNotFoundError(Exception):
     def __init__(self, guid: str) -> None:
         self.guid = guid
         super().__init__(f"Source not found: {guid}")
-
-
-class SourceAccessDeniedError(Exception):
-    """Raised when access to a source is denied."""
-
-    def __init__(
-        self,
-        guid: str,
-        group_guid: str,
-        permitted_groups: list[str] | None = None,
-    ) -> None:
-        self.guid = guid
-        self.group_guid = group_guid
-        self.permitted_groups = permitted_groups or []
-        msg = f"Access denied: source {guid} belongs to group '{group_guid}'"
-        if permitted_groups:
-            msg += f", not in permitted groups {permitted_groups}"
-        super().__init__(msg)
 
 
 class SourceRegistryError(Exception):
@@ -79,10 +64,10 @@ class AuditEntry:
 
 
 class SourceRegistry:
-    """File-based source registry with group-based access control.
+    """File-based source registry with flat storage.
 
-    Sources are stored in a directory structure:
-        {base_path}/sources/{group_guid}/{source_guid}.json
+    Sources are stored in a flat directory structure:
+        {base_path}/sources/{source_guid}.json
 
     Audit logs are stored in:
         {base_path}/audit/sources/{source_guid}.jsonl
@@ -107,28 +92,16 @@ class SourceRegistry:
         self._sources_path.mkdir(parents=True, exist_ok=True)
         self._audit_path.mkdir(parents=True, exist_ok=True)
 
-    def _get_source_path(self, source_guid: str, group_guid: str) -> Path:
+    def _get_source_path(self, source_guid: str) -> Path:
         """Get the file path for a source.
 
         Args:
             source_guid: Source GUID
-            group_guid: Group GUID
 
         Returns:
             Full path to the source file
         """
-        return self._sources_path / group_guid / f"{source_guid}.json"
-
-    def _get_group_path(self, group_guid: str) -> Path:
-        """Get the path for a group's sources.
-
-        Args:
-            group_guid: Group GUID
-
-        Returns:
-            Path to the group's source directory
-        """
-        return self._sources_path / group_guid
+        return self._sources_path / f"{source_guid}.json"
 
     def _get_audit_path(self, source_guid: str) -> Path:
         """Get the path for a source's audit log.
@@ -170,7 +143,6 @@ class SourceRegistry:
     def create(
         self,
         name: str,
-        group_guid: str,
         source_type: SourceType = SourceType.OTHER,
         region: str | None = None,
         languages: list[str] | None = None,
@@ -181,7 +153,6 @@ class SourceRegistry:
 
         Args:
             name: Human-readable source name
-            group_guid: Group this source belongs to
             source_type: Type of source
             region: Geographic region coverage
             languages: Languages this source provides
@@ -203,7 +174,6 @@ class SourceRegistry:
 
             source = Source(
                 source_guid=source_guid,
-                group_guid=group_guid,
                 name=name,
                 type=source_type,
                 region=region,
@@ -213,7 +183,7 @@ class SourceRegistry:
             )
 
             # Save the source
-            file_path = self._get_source_path(source_guid, group_guid)
+            file_path = self._get_source_path(source_guid)
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
             data = source.model_dump(mode="json")
@@ -225,7 +195,7 @@ class SourceRegistry:
                 source_guid=source_guid,
                 action="create",
                 changes={"initial": data},
-                actor_group=group_guid,
+                actor_group=None,
             )
 
             return source
@@ -235,40 +205,25 @@ class SourceRegistry:
     def get(
         self,
         source_guid: str,
-        access_groups: list[str] | None = None,
     ) -> Source:
         """Get a source by GUID.
 
         Args:
             source_guid: Source GUID to retrieve
-            access_groups: Optional list of group GUIDs the caller has access to.
-                          If provided, the source must belong to one of these groups.
 
         Returns:
             The Source
 
         Raises:
             SourceNotFoundError: If source doesn't exist
-            SourceAccessDeniedError: If access_groups provided and source's group not in list
             SourceRegistryError: If load fails
         """
         try:
-            # Always search all groups first to find the source
-            all_groups = self._list_all_groups()
-
-            for group_guid in all_groups:
-                file_path = self._get_source_path(source_guid, group_guid)
-                if file_path.exists():
-                    source = self._load_from_path(file_path)
-                    # If access_groups specified, verify access
-                    if access_groups and source.group_guid not in access_groups:
-                        raise SourceAccessDeniedError(
-                            source_guid, source.group_guid, access_groups
-                        )
-                    return source
-
-            raise SourceNotFoundError(source_guid)
-        except (SourceNotFoundError, SourceAccessDeniedError):
+            file_path = self._get_source_path(source_guid)
+            if not file_path.exists():
+                raise SourceNotFoundError(source_guid)
+            return self._load_from_path(file_path)
+        except SourceNotFoundError:
             raise
         except Exception as e:
             raise SourceRegistryError(f"Failed to get source {source_guid}: {e}") from e
@@ -286,22 +241,8 @@ class SourceRegistry:
             data = json.load(f)
         return Source(**data)
 
-    def _list_all_groups(self) -> list[str]:
-        """List all group GUIDs that have sources.
-
-        Returns:
-            List of group GUIDs
-        """
-        if not self._sources_path.exists():
-            return []
-        return [
-            d.name for d in self._sources_path.iterdir() if d.is_dir()
-        ]
-
     def list_sources(
         self,
-        group_guid: str | None = None,
-        access_groups: list[str] | None = None,
         region: str | None = None,
         source_type: SourceType | None = None,
         include_inactive: bool = False,
@@ -309,8 +250,6 @@ class SourceRegistry:
         """List sources with optional filters.
 
         Args:
-            group_guid: Filter by specific group
-            access_groups: Limit to sources in these groups
             region: Filter by region
             source_type: Filter by source type
             include_inactive: Include soft-deleted sources
@@ -320,42 +259,31 @@ class SourceRegistry:
         """
         sources: list[Source] = []
 
-        # Determine which groups to search
-        if group_guid:
-            groups_to_search = [group_guid]
-        elif access_groups:
-            groups_to_search = access_groups
-        else:
-            groups_to_search = self._list_all_groups()
+        if not self._sources_path.exists():
+            return sources
 
-        for grp in groups_to_search:
-            group_path = self._get_group_path(grp)
-            if not group_path.exists():
-                continue
+        for source_file in self._sources_path.glob("*.json"):
+            try:
+                source = self._load_from_path(source_file)
 
-            for source_file in group_path.glob("*.json"):
-                try:
-                    source = self._load_from_path(source_file)
+                # Apply filters
+                if not include_inactive and not source.active:
+                    continue
+                if region and source.region != region:
+                    continue
+                if source_type and source.type != source_type:
+                    continue
 
-                    # Apply filters
-                    if not include_inactive and not source.active:
-                        continue
-                    if region and source.region != region:
-                        continue
-                    if source_type and source.type != source_type:
-                        continue
-
-                    sources.append(source)
-                except Exception:
-                    # Skip invalid source files
-                    continue  # nosec B112
+                sources.append(source)
+            except Exception:
+                # Skip invalid source files
+                continue  # nosec B112
 
         return sources
 
     def update(
         self,
         source_guid: str,
-        access_groups: list[str] | None = None,
         name: str | None = None,
         source_type: SourceType | None = None,
         region: str | None = None,
@@ -367,7 +295,6 @@ class SourceRegistry:
 
         Args:
             source_guid: Source to update
-            access_groups: Groups the caller has access to (for authorization)
             name: New name (optional)
             source_type: New type (optional)
             region: New region (optional)
@@ -380,12 +307,11 @@ class SourceRegistry:
 
         Raises:
             SourceNotFoundError: If source doesn't exist
-            SourceAccessDeniedError: If caller doesn't have access
             SourceRegistryError: If update fails
         """
         try:
             # Get the existing source
-            source = self.get(source_guid, access_groups)
+            source = self.get(source_guid)
 
             # Track changes for audit
             changes: dict[str, Any] = {}
@@ -425,7 +351,7 @@ class SourceRegistry:
             source.updated_at = datetime.utcnow()
 
             # Save the updated source
-            file_path = self._get_source_path(source_guid, source.group_guid)
+            file_path = self._get_source_path(source_guid)
             data = source.model_dump(mode="json")
             with file_path.open("w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
@@ -436,11 +362,11 @@ class SourceRegistry:
                     source_guid=source_guid,
                     action="update",
                     changes=changes,
-                    actor_group=access_groups[0] if access_groups else None,
+                    actor_group=None,
                 )
 
             return source
-        except (SourceNotFoundError, SourceAccessDeniedError):
+        except SourceNotFoundError:
             raise
         except Exception as e:
             raise SourceRegistryError(f"Failed to update source {source_guid}: {e}") from e
@@ -448,32 +374,29 @@ class SourceRegistry:
     def soft_delete(
         self,
         source_guid: str,
-        access_groups: list[str] | None = None,
     ) -> Source:
         """Soft-delete a source by marking it inactive.
 
         Args:
             source_guid: Source to delete
-            access_groups: Groups the caller has access to
 
         Returns:
             The deactivated Source
 
         Raises:
             SourceNotFoundError: If source doesn't exist
-            SourceAccessDeniedError: If caller doesn't have access
             SourceRegistryError: If delete fails
         """
         try:
             # Get the existing source
-            source = self.get(source_guid, access_groups)
+            source = self.get(source_guid)
 
             # Deactivate
             was_active = source.active
             source.deactivate()
 
             # Save the updated source
-            file_path = self._get_source_path(source_guid, source.group_guid)
+            file_path = self._get_source_path(source_guid)
             data = source.model_dump(mode="json")
             with file_path.open("w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
@@ -483,32 +406,27 @@ class SourceRegistry:
                 source_guid=source_guid,
                 action="soft_delete",
                 changes={"active": {"old": was_active, "new": False}},
-                actor_group=access_groups[0] if access_groups else None,
+                actor_group=None,
             )
 
             return source
-        except (SourceNotFoundError, SourceAccessDeniedError):
+        except SourceNotFoundError:
             raise
         except Exception as e:
             raise SourceRegistryError(f"Failed to soft-delete source {source_guid}: {e}") from e
 
-    def exists(self, source_guid: str, group_guid: str | None = None) -> bool:
+    def exists(self, source_guid: str) -> bool:
         """Check if a source exists.
 
         Args:
             source_guid: Source GUID
-            group_guid: Optional group to check in
 
         Returns:
             True if source exists
         """
         try:
-            if group_guid:
-                file_path = self._get_source_path(source_guid, group_guid)
-                return file_path.exists()
-            else:
-                self.get(source_guid)
-                return True
+            self.get(source_guid)
+            return True
         except SourceNotFoundError:
             return False
 
@@ -537,19 +455,16 @@ class SourceRegistry:
 
     def count_sources(
         self,
-        group_guid: str | None = None,
         include_inactive: bool = False,
     ) -> int:
         """Count sources matching criteria.
 
         Args:
-            group_guid: Optional group to filter by
             include_inactive: Include soft-deleted sources
 
         Returns:
             Count of matching sources
         """
         return len(self.list_sources(
-            group_guid=group_guid,
             include_inactive=include_inactive,
         ))

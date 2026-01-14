@@ -109,12 +109,11 @@ def source_registry(tmp_path) -> SourceRegistry:
 
 @pytest.fixture
 def test_sources(source_registry: SourceRegistry) -> dict[str, Source]:
-    """Create test sources for each group."""
+    """Create test sources (global, not group-specific)."""
     sources = {}
     for key, group in TEST_GROUPS.items():
         source = source_registry.create(
             name=f"Source for {group.name}",
-            group_guid=group.guid,
             source_type=SourceType.NEWS_AGENCY,
             trust_level=TrustLevel.HIGH,
         )

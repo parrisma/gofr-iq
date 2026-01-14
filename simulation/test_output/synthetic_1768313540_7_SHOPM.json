@@ -1,0 +1,22 @@
+{
+  "source": "Bloomberg",
+  "published_at": "2025-12-11T22:20:20.262285",
+  "upload_as_group": "us-sales",
+  "token": "gofr-sim-us-token",
+  "title": "News regarding ShopMart",
+  "story_body": "ShopMart Names New VP of Supply Chain Operations\n\nShopMart Inc. (NASDAQ: SHOPM) announced today the appointment of Jennifer Chen as Vice President of Supply Chain Operations, effective November 1. Chen, who previously served as Senior Director of Logistics at the company, will oversee the retailer's distribution network and inventory management systems.\n\n\"Jennifer has demonstrated strong leadership throughout her eight years with ShopMart,\" said Chief Operating Officer Michael Torres in a statement. \"Her deep understanding of our operations will be valuable as we continue to optimize our supply chain efficiency.\"\n\nChen replaces Robert Martinez, who is retiring after 15 years with the company. She will report directly to Torres and join the company's senior leadership team.\n\nIn her new role, Chen will be responsible for ShopMart's network of 12 distribution centers across the United States, managing relationships with third-party logistics providers, and implementing technology solutions to improve delivery times.\n\nPrior to joining ShopMart in 2016, Chen held positions at several major retailers, including a role as Director of Distribution at Retail Solutions Corp. She holds an MBA from Northwestern University's Kellogg School of Management and a bachelor's degree in industrial engineering from Purdue University.\n\nThe appointment comes as ShopMart continues to invest in its e-commerce capabilities and same-day delivery options. The company recently reported that online sales accounted for 28% of total revenue in the most recent quarter, up from 24% in the same period last year.\n\nShopMart also announced that Chen will represent the company at the upcoming National Retail Federation's Supply Chain 360 conference in Phoenix next month, where she will participate in a panel discussion on last-mile delivery innovations.\n\nThe retailer, which operates 847 stores across 42 states, has been focusing on streamlining its operations amid increased competition from both traditional retailers and e-commerce giants. The company's stock closed at $67.42 yesterday, up 0.3% for the day.\n\nShopMart did not announce any changes to its financial guidance in connection with the appointment. The company is scheduled to report third-quarter earnings on November 15.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

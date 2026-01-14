@@ -420,13 +420,13 @@ def ingest(
 ```python
 # Good: Explains WHY, not WHAT
 # User must have write access to source's group before ingestion
-# to prevent cross-tenant data leakage
-if source.group_guid not in user_groups:
+# Documents are isolated by group for tenant separation
+if user["groups"][0] not in user_groups:
     raise PermissionError(...)
 
 # Bad: Explains WHAT (code already does this)
-# Check if source group is in user groups
-if source.group_guid not in user_groups:
+# Sources are global - any authenticated user can reference any source
+if user["groups"][0] not in user_groups:
 
 # Bad: Misleading comment
 # This is fast  # Actually O(n^2)!
