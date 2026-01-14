@@ -419,7 +419,6 @@ class TestDeleteSourceAuth:
         mock_source_registry.soft_delete.assert_called_once()
         call_kwargs = mock_source_registry.soft_delete.call_args.kwargs
         assert call_kwargs.get("source_guid") == "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-        assert "access_groups" in call_kwargs
 
 
 class TestSourceToolsRegistration:

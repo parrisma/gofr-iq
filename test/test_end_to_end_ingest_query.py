@@ -584,7 +584,6 @@ def test_group_isolation(
         # Create a source for group A
         source_a = source_registry.create(
             name=f"test-source-a-{uuid.uuid4().hex[:8]}",
-            group_guid=str(group_a.id),
             source_type=SourceType.NEWS_AGENCY,
         )
         

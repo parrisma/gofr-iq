@@ -119,11 +119,10 @@ def test_group2() -> Group:
 
 
 @pytest.fixture
-def test_source_high_trust(source_registry: SourceRegistry, test_group: Group) -> Source:
+def test_source_high_trust(source_registry: SourceRegistry) -> Source:
     """Provide a high-trust source."""
     source = source_registry.create(
         name="Bloomberg",
-        group_guid=test_group.group_guid,
         source_type=SourceType.NEWS_AGENCY,
         trust_level=TrustLevel.HIGH,
     )
@@ -131,11 +130,10 @@ def test_source_high_trust(source_registry: SourceRegistry, test_group: Group) -
 
 
 @pytest.fixture
-def test_source_low_trust(source_registry: SourceRegistry, test_group: Group) -> Source:
+def test_source_low_trust(source_registry: SourceRegistry) -> Source:
     """Provide a low-trust source."""
     source = source_registry.create(
         name="Unverified News",
-        group_guid=test_group.group_guid,
         source_type=SourceType.OTHER,
         trust_level=TrustLevel.LOW,
     )
