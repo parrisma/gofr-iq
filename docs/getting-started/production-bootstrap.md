@@ -2,14 +2,49 @@
 
 Complete walkthrough for resetting and bootstrapping GOFR-IQ from scratch.
 
-## Prerequisites
+## Quick Start (Recommended)
+
+**Single command** to start production with automatic Vault initialization:
+
+```bash
+# Fresh install (new Vault):
+./docker/start-prod.sh --fresh
+
+# With OpenRouter API key:
+./docker/start-prod.sh --fresh --openrouter-key sk-or-v1-xxxxx
+
+# Normal restart (existing Vault):
+./docker/start-prod.sh
+
+# Complete reset (wipe all data):
+./docker/start-prod.sh --reset
+```
+
+That's it! The script handles:
+1. ✅ Port configuration loading
+2. ✅ Vault startup and health check
+3. ✅ Automatic Vault initialization (if `--fresh`)
+4. ✅ Automatic Vault unsealing
+5. ✅ Bootstrap tokens creation
+6. ✅ Environment file generation
+7. ✅ All services startup
+
+**Credentials are saved to:**
+- `docker/.vault-init.env` - Vault root token and unseal key
+- `docker/.env` - JWT secret and service credentials
+
+---
+
+## Manual Bootstrap (Advanced)
+
+If you prefer manual control or the script fails:
+
+### Prerequisites
 
 - Docker and Docker Compose installed
 - `uv` package manager installed
 - Vault CLI installed (`vault` command)
 - Access to project repository with gofr-common submodule
-
-## Complete Reset & Bootstrap
 
 ### Step 1: Reset Environment (Optional - Clean Slate)
 
@@ -32,7 +67,8 @@ cd /home/gofr/devroot/gofr-iq
 
 ```bash
 cd docker
-docker compose up -d gofr-vault
+set -a && source ../lib/gofr-common/config/gofr_ports.env && set +a
+docker compose up -d vault
 
 # Wait for Vault to be ready
 sleep 5
@@ -54,9 +90,7 @@ ROOT_TOKEN=$(jq -r '.root_token' /tmp/vault-init.json)
 # Create credentials file
 cat > docker/.vault-init.env <<EOF
 export VAULT_UNSEAL_KEY="$UNSEAL_KEY"
-export VAULT_ROOT_TOKEN="$ROOT_TOKEN"
-export VAULT_TOKEN=\$VAULT_ROOT_TOKEN
-export VAULT_ADDR="http://localhost:8200"
+export VAULT_TOKEN="$ROOT_TOKEN"
 EOF
 
 # Secure the file
@@ -68,36 +102,109 @@ rm /tmp/vault-init.json
 echo "✅ Vault initialized. Credentials saved to docker/.vault-init.env"
 ```
 
-### Step 4: Unseal Vault
+### Step 4: Unseal Vault and Run Bootstrap
 
 ```bash
 # Source credentials
 source docker/.vault-init.env
 
 # Unseal Vault
-docker exec -e VAULT_ADDR=http://localhost:8200 \
-  gofr-vault vault operator unseal "$VAULT_UNSEAL_KEY"
+docker exec gofr-vault vault operator unseal "$VAULT_UNSEAL_KEY"
 
-# Verify status
-docker exec -e VAULT_ADDR=http://localhost:8200 \
-  -e VAULT_TOKEN="$VAULT_TOKEN" \
-  gofr-vault vault status
+# Run bootstrap (from project root)
+cd ..
+uv run scripts/bootstrap.py
 ```
 
-### Step 5: Create Vault Service Policy & Token
+### Step 5: Start All Services
 
 ```bash
-# Create read-only policy for services
-docker exec -e VAULT_ADDR=http://localhost:8200 \
-  -e VAULT_TOKEN="$VAULT_TOKEN" \
-  gofr-vault vault policy write gofr-service-read - <<'EOF'
-# Read access to config secrets
-path "secret/data/gofr/config/*" {
-  capabilities = ["read", "list"]
-}
+cd docker
+source .env  # Load generated secrets
+docker compose up -d
+```
 
-# Read access to auth namespace
-path "secret/data/gofr/auth/*" {
+### Step 6: Verify
+
+```bash
+docker compose ps
+# All services should show "healthy"
+```
+
+---
+
+## Troubleshooting
+
+### Vault Permission Denied
+
+If services fail with "Permission denied" errors:
+
+```bash
+# Verify docker/.env has VAULT_ROOT_TOKEN
+cat docker/.env | grep VAULT_ROOT_TOKEN
+
+# Regenerate env from Vault:
+source docker/.vault-init.env
+./scripts/generate_envs.sh --mode prod
+```
+
+### Vault Sealed After Restart
+
+Vault requires unsealing after every container restart:
+
+```bash
+source docker/.vault-init.env
+docker exec gofr-vault vault operator unseal "$VAULT_UNSEAL_KEY"
+```
+
+Or use `start-prod.sh` which handles this automatically.
+
+### MCP Container Restart Loop
+
+Usually caused by missing credentials:
+
+```bash
+# Check logs
+docker logs gofr-iq-mcp --tail 50
+
+# Ensure docker/.env exists and has:
+# - GOFR_JWT_SECRET
+# - VAULT_ROOT_TOKEN
+
+# Recreate services with updated env
+cd docker
+source ../lib/gofr-common/config/gofr_ports.env
+source .env
+docker compose up -d --force-recreate
+```
+
+---
+
+## Architecture Notes
+
+### Vault Data Persistence
+
+Vault uses file-based storage in production mode:
+- Data persists in `gofr-vault-data` Docker volume
+- **Unsealing required** after every Vault container restart
+- Use `start-prod.sh` for automatic unsealing
+
+### Bootstrap Tokens
+
+Bootstrap creates two long-lived tokens (365 days):
+- **Admin Token**: Full access to all groups
+- **Public Token**: Read-only public access
+
+Token UUIDs are stored in Vault at:
+- `secret/gofr/config/bootstrap-tokens/admin-token-id`
+- `secret/gofr/config/bootstrap-tokens/public-token-id`
+
+### Service Token Flow
+
+1. Services read `VAULT_ROOT_TOKEN` from environment
+2. Services connect to Vault using this token
+3. JWT secret loaded from `GOFR_JWT_SECRET` environment variable
+4. Auth service initialized with Vault backend stores
   capabilities = ["read", "list"]
 }
 EOF

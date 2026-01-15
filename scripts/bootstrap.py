@@ -4,22 +4,35 @@ Bootstrap Script for GOFR-IQ
 ============================
 Atomically initializes Vault secrets and creates bootstrap tokens.
 
+Can auto-initialize and unseal Vault if running fresh.
+
 Prerequisites:
-- Vault must be running and unsealed
-- VAULT_TOKEN must be set (root token)
-- VAULT_ADDR must be set (e.g., http://localhost:8200)
+- Vault must be running
+- For existing Vault: VAULT_TOKEN must be set (root token)
+- For fresh Vault: Script will initialize and save credentials
 
 Usage:
+    # Fresh install (auto-init):
+    uv run scripts/bootstrap.py --auto-init
+
+    # Existing Vault:
     source docker/.vault-init.env
-    uv run scripts/bootstrap.py [--rotate-tokens] [--openrouter-key KEY]
+    uv run scripts/bootstrap.py
+
+    # Rotate tokens:
+    source docker/.vault-init.env
+    uv run scripts/bootstrap.py --rotate-tokens
 
 This script:
-1. Configures Vault KV v2 engine
-2. Generates and stores JWT signing secret
-3. Stores API keys (if provided)
-4. Initializes Auth service and reserved groups
-5. Creates long-lived admin/public tokens (365 days)
-6. Stores token UUIDs in Vault for reference
+1. (Optional) Initializes Vault and saves credentials
+2. (Optional) Unseals Vault
+3. Configures Vault KV v2 engine
+4. Generates and stores JWT signing secret
+5. Stores API keys (if provided)
+6. Initializes Auth service and reserved groups
+7. Creates long-lived admin/public tokens (365 days)
+8. Stores token UUIDs in Vault for reference
+9. Generates docker/.env with secrets
 """
 
 import argparse
@@ -28,19 +41,124 @@ import sys
 import os
 from pathlib import Path
 
-# Add project root to path for imports
+# Add project root and gofr-common to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "lib" / "gofr-common" / "src"))
 
 try:
     import hvac  # type: ignore[import-untyped]
-    from app.auth.service import AuthService  # type: ignore[import-not-found]
-    from app.auth.token_store import VaultTokenStore  # type: ignore[import-not-found]
-    from app.auth.group_registry import GroupRegistry  # type: ignore[import-not-found]
-    from app.auth.group_store import VaultGroupStore  # type: ignore[import-not-found]
+    from gofr_common.auth.service import AuthService  # type: ignore[import-not-found]
+    from gofr_common.auth.backends.vault import VaultTokenStore, VaultGroupStore  # type: ignore[import-not-found]
+    from gofr_common.auth.backends.vault_client import VaultClient  # type: ignore[import-not-found]
+    from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[import-not-found]
+    from gofr_common.auth.groups import GroupRegistry  # type: ignore[import-not-found]
 except ImportError as e:
     print(f"Error importing dependencies: {e}")
     print("Ensure you're running with: uv run scripts/bootstrap.py")
     sys.exit(1)
+
+
+# Project paths
+PROJECT_ROOT = Path(__file__).parent.parent
+VAULT_INIT_FILE = PROJECT_ROOT / "docker" / ".vault-init.env"
+DOCKER_ENV_FILE = PROJECT_ROOT / "docker" / ".env"
+
+
+def check_vault_status(vault_addr: str) -> dict:
+    """Check Vault status without authentication."""
+    import urllib.request
+    import json
+    try:
+        req = urllib.request.Request(f"{vault_addr}/v1/sys/health", method='GET')
+        # Vault returns different status codes for different states, all are valid responses
+        try:
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                return json.loads(resp.read())
+        except urllib.error.HTTPError as e:
+            # Vault uses HTTP errors for status (e.g., 503 = sealed, 501 = not initialized)
+            return json.loads(e.read())
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def initialize_vault(vault_addr: str) -> tuple[str, str]:
+    """Initialize Vault and return (root_token, unseal_key)."""
+    import urllib.request
+    import json
+    
+    print("🔧 Initializing Vault (1 unseal key, threshold 1)...")
+    
+    data = json.dumps({"secret_shares": 1, "secret_threshold": 1}).encode()
+    req = urllib.request.Request(
+        f"{vault_addr}/v1/sys/init",
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method='PUT'
+    )
+    
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        result = json.loads(resp.read())
+    
+    root_token = result["root_token"]
+    unseal_key = result["keys"][0]  # Single key for simplicity
+    
+    print("✅ Vault initialized successfully")
+    return root_token, unseal_key
+
+
+def unseal_vault(vault_addr: str, unseal_key: str) -> bool:
+    """Unseal Vault with the given key."""
+    import urllib.request
+    import json
+    
+    print("🔓 Unsealing Vault...")
+    
+    data = json.dumps({"key": unseal_key}).encode()
+    req = urllib.request.Request(
+        f"{vault_addr}/v1/sys/unseal",
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method='PUT'
+    )
+    
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        result = json.loads(resp.read())
+    
+    if not result.get("sealed", True):
+        print("✅ Vault unsealed")
+        return True
+    else:
+        print("❌ Vault still sealed")
+        return False
+
+
+def save_vault_credentials(root_token: str, unseal_key: str):
+    """Save Vault credentials to .vault-init.env."""
+    content = f"""# Vault Initialization Credentials
+# Generated by bootstrap.py on {__import__('datetime').datetime.now().isoformat()}
+# KEEP THIS FILE SECURE!
+
+export VAULT_UNSEAL_KEY="{unseal_key}"
+export VAULT_TOKEN="{root_token}"
+"""
+    VAULT_INIT_FILE.write_text(content)
+    VAULT_INIT_FILE.chmod(0o600)
+    print(f"✅ Saved Vault credentials to {VAULT_INIT_FILE}")
+
+
+def generate_docker_env(jwt_secret: str, vault_token: str, openrouter_key: str = None):
+    """Generate docker/.env with secrets from Vault."""
+    content = f"""# Generated by bootstrap.py
+# {__import__('datetime').datetime.now().isoformat()}
+
+GOFR_JWT_SECRET={jwt_secret}
+VAULT_ROOT_TOKEN={vault_token}
+"""
+    if openrouter_key:
+        content += f"GOFR_IQ_OPENROUTER_API_KEY={openrouter_key}\n"
+    
+    DOCKER_ENV_FILE.write_text(content)
+    print(f"✅ Generated {DOCKER_ENV_FILE}")
 
 
 def verify_vault_connection(client: hvac.Client) -> bool:
@@ -131,25 +249,33 @@ def store_api_key(client: hvac.Client, key_name: str, key_value: str):
         print(f"❌ Failed to store API key {key_name}: {e}")
 
 
-def initialize_auth_service(vault_client: hvac.Client, jwt_secret: str) -> AuthService:
+def initialize_auth_service(vault_url: str, vault_token: str, jwt_secret: str) -> tuple[AuthService, VaultClient]:
     """Initialize Auth service with Vault backend."""
     try:
+        # Create VaultConfig and VaultClient
+        vault_config = VaultConfig(
+            url=vault_url,
+            token=vault_token,
+            mount_point="secret",
+        )
+        gofr_vault_client = VaultClient(vault_config)
+        
         # Create Auth service with Vault stores
         auth = AuthService(
-            token_store=VaultTokenStore(vault_client),
-            group_registry=GroupRegistry(VaultGroupStore(vault_client)),
+            token_store=VaultTokenStore(gofr_vault_client),
+            group_registry=GroupRegistry(VaultGroupStore(gofr_vault_client)),
             secret_key=jwt_secret
         )
         
         # GroupRegistry auto-creates reserved groups (admin, public) on init
         print("✅ Initialized Auth service with reserved groups (admin, public)")
-        return auth
+        return auth, gofr_vault_client
     except Exception as e:
         print(f"❌ Failed to initialize Auth service: {e}")
         sys.exit(1)
 
 
-def create_bootstrap_tokens(auth: AuthService, vault_client: hvac.Client, rotate: bool = False):
+def create_bootstrap_tokens(auth: AuthService, hvac_client: hvac.Client, rotate: bool = False):
     """Create long-lived bootstrap tokens and store UUIDs in Vault."""
     try:
         # Token lifetime: 365 days
@@ -157,31 +283,31 @@ def create_bootstrap_tokens(auth: AuthService, vault_client: hvac.Client, rotate
         
         # Create admin token
         print("\n📝 Creating admin bootstrap token...")
-        admin_result = auth.create_token(
+        admin_token = auth.create_token(
             groups=["admin"],
             expires_in_seconds=token_lifetime,
-            description="Bootstrap admin token (365-day lifetime)"
         )
-        admin_token = admin_result['token']
-        admin_uuid = admin_result['jti']
+        # Extract jti from token by decoding (without verification since we just made it)
+        import jwt as pyjwt
+        admin_payload = pyjwt.decode(admin_token, options={"verify_signature": False})
+        admin_uuid = admin_payload['jti']
         
         # Create public token
         print("📝 Creating public bootstrap token...")
-        public_result = auth.create_token(
+        public_token = auth.create_token(
             groups=["public"],
             expires_in_seconds=token_lifetime,
-            description="Bootstrap public token (365-day lifetime)"
         )
-        public_token = public_result['token']
-        public_uuid = public_result['jti']
+        public_payload = pyjwt.decode(public_token, options={"verify_signature": False})
+        public_uuid = public_payload['jti']
         
-        # Store token UUIDs (NOT the JWT strings!) in Vault
-        vault_client.secrets.kv.v2.create_or_update_secret(
+        # Store token UUIDs (NOT the JWT strings!) in Vault using hvac client
+        hvac_client.secrets.kv.v2.create_or_update_secret(
             path='gofr/config/bootstrap-tokens/admin-token-id',
             secret={'value': admin_uuid},
             mount_point='secret'
         )
-        vault_client.secrets.kv.v2.create_or_update_secret(
+        hvac_client.secrets.kv.v2.create_or_update_secret(
             path='gofr/config/bootstrap-tokens/public-token-id',
             secret={'value': public_uuid},
             mount_point='secret'
@@ -216,53 +342,118 @@ def create_bootstrap_tokens(auth: AuthService, vault_client: hvac.Client, rotate
 
 def main():
     parser = argparse.ArgumentParser(description='Bootstrap GOFR-IQ Vault and Auth')
+    parser.add_argument('--auto-init', action='store_true',
+                       help='Auto-initialize and unseal Vault if needed')
     parser.add_argument('--rotate-tokens', action='store_true',
                        help='Rotate existing bootstrap tokens')
     parser.add_argument('--openrouter-key', type=str,
                        help='OpenRouter API key to store in Vault')
     args = parser.parse_args()
     
-    # Check required environment variables
-    vault_addr = os.getenv('VAULT_ADDR')
+    # Default Vault address
+    vault_addr = os.getenv('VAULT_ADDR', 'http://gofr-vault:8201')
     vault_token = os.getenv('VAULT_TOKEN')
-    
-    if not vault_addr:
-        print("❌ VAULT_ADDR not set. Example: http://localhost:8200")
-        sys.exit(1)
-    if not vault_token:
-        print("❌ VAULT_TOKEN not set. Source .vault-init.env first.")
-        sys.exit(1)
+    unseal_key = os.getenv('VAULT_UNSEAL_KEY')
     
     print("\n" + "="*70)
     print("🚀 GOFR-IQ Bootstrap")
     print("="*70)
     print(f"Vault: {vault_addr}")
-    print(f"Mode: {'Token Rotation' if args.rotate_tokens else 'Initial Setup'}")
+    print(f"Mode: {'Auto-Init' if args.auto_init else 'Token Rotation' if args.rotate_tokens else 'Standard'}")
     print("="*70 + "\n")
     
-    # Initialize Vault client
-    client = hvac.Client(url=vault_addr, token=vault_token)
+    # Check Vault status
+    status = check_vault_status(vault_addr)
+    if "error" in status:
+        print(f"❌ Cannot reach Vault at {vault_addr}: {status['error']}")
+        print("   Ensure Vault container is running: docker compose up -d vault")
+        sys.exit(1)
+    
+    # Handle auto-initialization
+    if args.auto_init:
+        if not status.get('initialized', True):
+            # Fresh Vault - initialize it
+            vault_token, unseal_key = initialize_vault(vault_addr)
+            save_vault_credentials(vault_token, unseal_key)
+        elif status.get('sealed', False):
+            # Already initialized but sealed - need unseal key
+            if not unseal_key:
+                print("❌ Vault is sealed. Provide VAULT_UNSEAL_KEY or source .vault-init.env")
+                sys.exit(1)
+            unseal_vault(vault_addr, unseal_key)
+            if not vault_token:
+                print("❌ VAULT_TOKEN not set after unseal. Source .vault-init.env")
+                sys.exit(1)
+        else:
+            print("✅ Vault already initialized and unsealed")
+    
+    # At this point we need a valid token
+    if not vault_token:
+        # Try loading from saved file
+        if VAULT_INIT_FILE.exists():
+            print(f"📂 Loading credentials from {VAULT_INIT_FILE}")
+            import re
+            content = VAULT_INIT_FILE.read_text()
+            token_match = re.search(r'VAULT_TOKEN="([^"]+)"', content)
+            key_match = re.search(r'VAULT_UNSEAL_KEY="([^"]+)"', content)
+            if token_match:
+                vault_token = token_match.group(1)
+            if key_match:
+                unseal_key = key_match.group(1)
+        
+        if not vault_token:
+            print("❌ VAULT_TOKEN not set. Run with --auto-init or source .vault-init.env")
+            sys.exit(1)
+    
+    # Check if we need to unseal (may have restarted)
+    status = check_vault_status(vault_addr)
+    if status.get('sealed', False):
+        if unseal_key:
+            unseal_vault(vault_addr, unseal_key)
+        else:
+            print("❌ Vault is sealed. Source .vault-init.env and run again")
+            sys.exit(1)
+    
+    # Initialize hvac client for low-level operations
+    hvac_client = hvac.Client(url=vault_addr, token=vault_token)
     
     # Step 1: Verify connection
-    if not verify_vault_connection(client):
+    if not verify_vault_connection(hvac_client):
         sys.exit(1)
     
     # Step 2: Enable KV engine
-    if not enable_kv_engine(client):
+    if not enable_kv_engine(hvac_client):
         sys.exit(1)
     
     # Step 3: Generate/retrieve JWT secret
-    jwt_secret = generate_and_store_jwt_secret(client)
+    jwt_secret = generate_and_store_jwt_secret(hvac_client)
     
     # Step 4: Store API keys if provided
-    if args.openrouter_key:
-        store_api_key(client, 'openrouter', args.openrouter_key)
+    openrouter_key = args.openrouter_key
+    if openrouter_key:
+        store_api_key(hvac_client, 'openrouter', openrouter_key)
+    else:
+        # Try to retrieve existing key
+        try:
+            existing = hvac_client.secrets.kv.v2.read_secret_version(
+                path='gofr/config/api-keys/openrouter',
+                mount_point='secret'
+            )
+            openrouter_key = existing['data']['data'].get('value')
+        except:
+            pass
     
-    # Step 5: Initialize Auth service
-    auth = initialize_auth_service(client, jwt_secret)
+    # Step 5: Initialize Auth service (uses gofr-common VaultClient internally)
+    auth, gofr_vault_client = initialize_auth_service(vault_addr, vault_token, jwt_secret)
     
     # Step 6: Create bootstrap tokens
-    create_bootstrap_tokens(auth, client, rotate=args.rotate_tokens)
+    create_bootstrap_tokens(auth, hvac_client, rotate=args.rotate_tokens)
+    
+    # Step 7: Generate docker/.env
+    generate_docker_env(jwt_secret, vault_token, openrouter_key)
+    
+    print("\n✅ Bootstrap complete! Start services with:")
+    print("   cd docker && source ../lib/gofr-common/config/gofr_ports.env && docker compose up -d")
 
 
 if __name__ == '__main__':

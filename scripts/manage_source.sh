@@ -72,6 +72,7 @@ SOURCE_URL=""
 SOURCE_DESCRIPTION=""
 SOURCE_TYPE="news_agency"
 AUTH_TOKEN=""
+RAW_OUTPUT=""
 
 # Color codes for output
 RED='\033[0;31m'
@@ -101,6 +102,7 @@ Commands:
 Options:
   --docker, --prod     Use production docker ports (default, port 8180)
   --dev                Use development ports (port 8080)
+    --json               Emit raw JSON (for list)
   --host HOST          MCP server host (default: localhost)
   --port PORT          MCP server port (override auto-detection)
   --name NAME          Source name (required for create)
@@ -389,6 +391,7 @@ if 'data' in data:
 parse_response() {
     local response=$1
     local operation=$2  # "list" or "create"
+    local raw=$3        # if "raw", output inner JSON only
     
     # Extract data from SSE format
     local json_data
@@ -409,7 +412,16 @@ parse_response() {
     # Format based on operation type
     case "$operation" in
         list)
-            format_list_sources "$json_data"
+            if [[ "$raw" == "raw" ]]; then
+                # Emit inner JSON for machine parsing
+                echo "$json_data" | python3 -c "import sys,json;d=json.load(sys.stdin); print(json.dumps(d['result']['content'][0]['text']))" 2>/dev/null
+            else
+                if [[ "$raw" == "raw" ]]; then
+                    echo "$json_data" | python3 -c "import sys,json;d=json.load(sys.stdin); txt=d['result']['content'][0]['text']; print(txt)" 2>/dev/null
+                else
+                    format_list_sources "$json_data"
+                fi
+            fi
             ;;
         create)
             format_create_source "$json_data"
@@ -418,7 +430,6 @@ parse_response() {
             format_delete_source "$json_data"
             ;;
         *)
-            # Fallback to JSON output
             echo "$json_data" | python3 -m json.tool 2>/dev/null || echo "$json_data"
             ;;
     esac
@@ -432,6 +443,7 @@ list_sources() {
     local host=$1
     local port=$2
     local auth_token=$3
+    local raw_output=$4  # "raw" to emit JSON
     
     log_info "=== Listing Sources ==="
     log_info "Target: ${host}:${port}"
@@ -455,7 +467,7 @@ list_sources() {
     response=$(mcp_call_tool "$host" "$port" "$session_id" "list_sources" "$args") || return 1
     
     # Parse and display response
-    parse_response "$response" "list"
+    parse_response "$response" "list" "$raw_output"
     
     return 0
 }
@@ -598,6 +610,10 @@ while [[ $# -gt 0 ]]; do
             MCP_PORT="$2"
             shift 2
             ;;
+        --json)
+            RAW_OUTPUT="raw"
+            shift 1
+            ;;
         --name)
             SOURCE_NAME="$2"
             shift 2
@@ -654,8 +670,8 @@ fi
 
 # Execute command
 case $COMMAND in
-    list)
-        list_sources "$MCP_HOST" "$MCP_PORT" "$AUTH_TOKEN"
+        list)
+            list_sources "$MCP_HOST" "$MCP_PORT" "$AUTH_TOKEN" "$RAW_OUTPUT"
         ;;
     create)
         create_source "$MCP_HOST" "$MCP_PORT" "$SOURCE_NAME" "$SOURCE_URL" "$SOURCE_DESCRIPTION" "$SOURCE_TYPE" "$AUTH_TOKEN"

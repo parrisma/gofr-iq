@@ -54,46 +54,26 @@ def load_tokens() -> Dict[str, str]:
 
 
 def load_sources() -> Dict[str, str]:
-    """Build source name → GUID mapping from manage_source.sh."""
+    """Build source name → GUID mapping from manage_source.sh (raw JSON to avoid truncation)."""
     try:
         result = subprocess.run(
-            ["./scripts/manage_source.sh", "list"],
+            ["./scripts/manage_source.sh", "list", "--docker", "--json"],
             capture_output=True,
             text=True,
             cwd=WORKSPACE_ROOT,
             timeout=30
         )
-        
         if result.returncode != 0:
-            raise RuntimeError(f"manage_source.sh failed: {result.stderr}")
-        
-        # Parse output to build mapping
-        sources = {}
-        lines = result.stdout.split('\n')
-        
-        for line in lines:
-            # Skip headers and empty lines
-            if not line.strip() or 'Source GUID' in line or '---' in line:
-                continue
-            
-            # Parse: "GUID    Name    Type    Languages    Trust    Active"
-            parts = line.split()
-            if len(parts) >= 2:
-                guid = parts[0]
-                # Name might have spaces, so reconstruct it
-                # Find where type starts (news_agency, research, etc)
-                name_parts = []
-                for i, part in enumerate(parts[1:], 1):
-                    if part in ('news_agency', 'research', 'blog', 'social_media'):
-                        break
-                    name_parts.append(part)
-                
-                name = ' '.join(name_parts)
-                sources[name] = guid
-        
+            raise RuntimeError(f"manage_source.sh failed: {result.stderr or result.stdout}")
+
+        # result.stdout is JSON string from inner MCP response
+        payload = json.loads(result.stdout)
+        if isinstance(payload, str):
+            payload = json.loads(payload)
+        sources_json = payload.get("data", {}).get("sources", [])
+        sources = {src.get("name"): src.get("source_guid") for src in sources_json if src.get("name")}
         if not sources:
-            raise ValueError("No sources found")
-        
+            raise ValueError("No sources found in JSON response")
         return sources
     except Exception as e:
         print(f"{Colors.RED}ERROR: Failed to load sources{Colors.RESET}")

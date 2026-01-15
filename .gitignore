@@ -120,6 +120,7 @@ venv.bak/
 !lib/gofr-common/config/gofr_ports.env
 !lib/gofr-common/docker/gofr-swarm.env
 !lib/gofr-common/src/gofr_common/config/gofr_ports.env
+simulation/.env.*
 
 # Spyder project settings
 .spyderproject
@@ -191,5 +192,16 @@ logs/*.log
 logs/*.json
 !logs/.gitkeep
 
-# Vault production secrets (generated, contains tokens)
-docker/vault-secrets.env
+# Vault and secrets (NEVER commit these!)
+docker/.vault-init.env
+docker/.env
+config/.vault-init.env
+config/generated/
+**/vault-secrets.env
+**/.vault-init.env
+**/*-secrets.env
+
+# Temporary tokens and credentials
+**/tokens.env
+tmp/tokens.env
+logs/*_tokens.json
