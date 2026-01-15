@@ -1,0 +1,22 @@
+{
+  "source": "MyCo US Research",
+  "published_at": "2025-11-24T07:39:00.321880",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding MediaGroup",
+  "story_body": "MediaGroup Names New VP of Digital Strategy, Announces Sustainability Pilot Program\n\nMediaGroup Inc. (NASDAQ: MEDIA) today announced the appointment of Sarah Chen as Vice President of Digital Strategy, effective January 15. Chen joins MediaGroup from her previous role as Senior Director of Digital Innovation at Vertex Communications, where she spent six years developing streaming platform strategies.\n\n\"Sarah brings valuable experience in digital content distribution and audience engagement,\" said MediaGroup CEO Thomas Rivera in a statement. \"Her expertise will help us continue evolving our digital offerings as viewing habits shift.\"\n\nChen will report directly to Chief Operating Officer Michael Brennan and oversee the company's digital transformation initiatives across its broadcast and streaming properties. She replaces former VP James Mitchell, who left the company in October to pursue other opportunities.\n\nIn a separate announcement, MediaGroup unveiled a new sustainability pilot program aimed at reducing energy consumption at its production facilities. The initiative, launching at three studios in California and Georgia, includes LED lighting upgrades and improved HVAC systems. The company estimates the changes could reduce energy usage by 15% at participating locations by the end of 2024.\n\n\"This pilot represents a practical step in our ongoing environmental efforts,\" said Lisa Park, MediaGroup's Director of Corporate Responsibility. \"If successful, we plan to expand these measures to additional facilities next year.\"\n\nMediaGroup executives will also attend the upcoming National Association of Broadcasters conference in Las Vegas next month. Chief Technology Officer Robert Kim is scheduled to participate in a panel discussion on emerging broadcast technologies on February 18.\n\nThe company additionally announced the launch of its \"Stories That Matter\" marketing campaign, highlighting MediaGroup's local news coverage across its 42 television stations. The campaign will include digital ads and social media content emphasizing the company's community journalism efforts.\n\nMediaGroup reported third-quarter revenue of $1.2 billion in its most recent earnings report, with broadcasting revenues flat year-over-year and digital revenues growing 8%. The company operates television stations, radio properties, and digital platforms across 35 U.S. markets.\n\nShares of MediaGroup closed at $34.67 on Tuesday, up 0.3% for the day. The stock has traded between $31.50 and $38.25 over the past 52 weeks.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "MEDIA",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

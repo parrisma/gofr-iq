@@ -68,6 +68,28 @@ echo "Purging test data..."
 "${SCRIPT_DIR}/purge_local_data.sh" --test-only --force
 
 # =============================================================================
+# ENVIRONMENT SETUP (New Standard)
+# =============================================================================
+
+# Generate ephemeral test environment configuration
+# This creates config/generated/secrets.env and docker/.env
+echo "Generating test environment configuration..."
+export GOFR_VAULT_DEV_TOKEN="${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}"
+export GOFR_JWT_SECRET="${GOFR_JWT_SECRET:-test-jwt-secret-$(date +%s)}"
+
+# Use generate_envs.sh if available (preferred)
+if [ -f "${SCRIPT_DIR}/generate_envs.sh" ]; then
+    "${SCRIPT_DIR}/generate_envs.sh" --mode test
+elif [ -f "${PROJECT_ROOT}/lib/gofr-common/scripts/generate_envs.sh" ]; then
+    "${PROJECT_ROOT}/lib/gofr-common/scripts/generate_envs.sh" --mode test
+fi
+
+# Source the generated secrets (overriding any previous)
+if [ -f "${PROJECT_ROOT}/config/generated/secrets.env" ]; then
+    source "${PROJECT_ROOT}/config/generated/secrets.env"
+fi
+
+# =============================================================================
 # TEST CONFIGURATION
 # =============================================================================
 # IMPORTANT: Configuration loaded from .env files (single source of truth)

@@ -1,0 +1,22 @@
+{
+  "source": "Bloomberg",
+  "published_at": "2025-11-15T16:48:46.058875",
+  "upload_as_group": "us-sales",
+  "token": "gofr-sim-us-token",
+  "title": "News regarding Quantum Compute",
+  "story_body": "Tech Giant Amazon in Talks to Acquire Quantum Computing Startup QNTM for $12 Billion, Sources Say\n\nAmazon.com Inc. is in advanced negotiations to acquire quantum computing startup QNTM Technologies for approximately $12 billion, according to people familiar with the matter, in what would mark one of the largest tech acquisitions of the year.\n\nThe discussions, which have been ongoing for several weeks, could value QNTM at nearly three times its last private funding round of $4.2 billion in March, said the sources, who requested anonymity because the talks are confidential. The deal could be announced as early as next month, though negotiations could still fall apart, the people cautioned.\n\nThe potential acquisition would represent Amazon's most significant push into quantum computing, a nascent technology that promises to revolutionize everything from drug discovery to cryptography. QNTM, founded in 2019, has developed proprietary quantum processors that the company claims can perform certain calculations exponentially faster than traditional computers.\n\nAccording to two people briefed on the negotiations, Amazon is particularly interested in QNTM's patent portfolio and its team of approximately 300 quantum physicists and engineers. The e-commerce giant sees quantum computing as critical to maintaining its competitive edge in cloud computing services through Amazon Web Services, these people said.\n\nThe talks come as major technology companies race to achieve quantum supremacy. Google, IBM, and Microsoft have all invested billions in developing their own quantum systems. One source familiar with Amazon's strategy said the company had considered building its quantum capabilities internally but decided that acquiring QNTM would accelerate its timeline by several years.\n\nQNTM has raised $1.8 billion in total funding from investors including Andreessen Horowitz, Sequoia Capital, and Singapore's GIC, according to data from PitchBook. The startup's investors stand to see substantial returns if the deal proceeds at the reported valuation, said a person close to one of QNTM's major shareholders.\n\nRepresentatives for Amazon and QNTM declined to comment on what they termed \"market speculation.\" \n\nThe quantum computing market is expected to grow from $928 million in 2023 to $6.5 billion by 2030, according to research firm Markets and Markets. However, the technology remains largely experimental, with most quantum computers requiring extreme cooling and isolation from environmental interference to function properly.\n\nIf completed, the acquisition would be Amazon's largest since its $13.7 billion purchase of Whole Foods Market in 2017.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": []
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "source": "Wall Street Journal",
+  "published_at": "2026-01-07T03:52:24.333584",
+  "upload_as_group": "us-sales",
+  "token": "gofr-sim-us-token",
+  "title": "News regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc. Names New Regional Sales Director for Midwest Territory\n\nDETROIT - HeavyTrucks Inc. (NYSE: TRUCK) announced today the appointment of Jennifer Martinez as Regional Sales Director for its Midwest territory, effective November 1. Martinez will oversee commercial vehicle sales operations across seven states, including Illinois, Wisconsin, and Michigan.\n\nMartinez joins HeavyTrucks from Midwest Fleet Solutions, where she served as senior account manager for five years. She brings over 15 years of experience in commercial vehicle sales and fleet management to the role. In her new position, she will report directly to Thomas Chen, Vice President of North American Sales.\n\n\"Jennifer's deep understanding of the Midwest trucking market and strong relationships with regional fleet operators make her an excellent addition to our sales leadership team,\" said Chen in a prepared statement. \"Her experience will be valuable as we continue to serve our customers in this important region.\"\n\nThe Midwest territory represents approximately 18% of HeavyTrucks' North American sales volume. The company has maintained a stable market share in the region over the past three years, according to industry data.\n\nMartinez replaces Robert Thompson, who retired in September after 12 years with the company. The company conducted a two-month search to fill the position, considering both internal and external candidates.\n\n\"I'm excited to join HeavyTrucks and work with the talented Midwest team,\" Martinez said. \"The company's commitment to customer service and product quality aligns perfectly with what fleet operators in our region need to keep their businesses running efficiently.\"\n\nHeavyTrucks Inc. manufactures Class 6, 7, and 8 commercial vehicles for the North American market. The company operates manufacturing facilities in Detroit, Michigan; Louisville, Kentucky; and Monterrey, Mexico. It employs approximately 8,500 people across its operations.\n\nThe appointment comes as the commercial trucking industry continues to navigate supply chain normalization following pandemic-related disruptions. Industry analysts project steady but modest growth in commercial vehicle sales through 2024.\n\nMartinez holds a bachelor's degree in business administration from the University of Illinois and completed executive education programs at Northwestern University's Kellogg School of Management. She is based in Chicago and will work from the company's regional office in Schaumburg, Illinois.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

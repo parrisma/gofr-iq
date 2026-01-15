@@ -1,0 +1,22 @@
+{
+  "source": "TechCrunch",
+  "published_at": "2025-12-13T11:33:16.360331",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc. Appoints New Regional Sales Director for Southeast Territory\n\nATLANTA - HeavyTrucks Inc. (NASDAQ: TRUCK) announced today the appointment of Jennifer Martinez as Regional Sales Director for its Southeast territory, effective November 1. Martinez will oversee dealer relationships and fleet sales across eight states from the company's Atlanta regional office.\n\nMartinez joins HeavyTrucks from Midwest Fleet Solutions, where she served as Senior Account Manager for five years. She brings over 15 years of experience in commercial vehicle sales and fleet management to the role.\n\n\"Jennifer's track record in developing strategic partnerships with fleet operators aligns well with our growth objectives in the Southeast market,\" said Tom Bradley, Vice President of Sales at HeavyTrucks Inc. \"Her expertise will be valuable as we continue to strengthen our dealer network in this key region.\"\n\nThe Southeast territory has seen steady growth for HeavyTrucks, with fleet sales increasing 3.2% year-over-year in the most recent quarter. The region accounts for approximately 18% of the company's total North American sales volume.\n\nIn her new role, Martinez will manage a team of 12 sales representatives and work closely with the company's 47 authorized dealers across the Southeast. She replaces Robert Chen, who relocated to the company's Sacramento office to lead West Coast operations.\n\n\"I'm excited to join HeavyTrucks at a time when the commercial transportation industry is evolving rapidly,\" Martinez said. \"The company's commitment to innovation and customer service provides a strong foundation for continued growth in the Southeast market.\"\n\nMartinez holds a Bachelor of Business Administration from Georgia State University and is certified by the National Truck Equipment Association. She will report directly to Bradley and participate in the company's executive sales committee.\n\nHeavyTrucks Inc., headquartered in Columbus, Ohio, manufactures and distributes Class 8 commercial vehicles through a network of over 400 dealers across North America. The company reported revenues of $4.7 billion in its most recent fiscal year.\n\nThe appointment comes as HeavyTrucks continues to invest in its sales infrastructure amid moderate demand for commercial vehicles. The company maintains its full-year guidance of 4-6% revenue growth for fiscal 2024.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

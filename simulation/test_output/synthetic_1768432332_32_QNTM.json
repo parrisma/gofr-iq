@@ -1,0 +1,22 @@
+{
+  "source": "Wall Street Journal",
+  "published_at": "2025-12-18T18:08:12.570250",
+  "upload_as_group": "us-sales",
+  "token": "gofr-sim-us-token",
+  "title": "News regarding Quantum Compute",
+  "story_body": "Quantum Compute Appoints New VP of Engineering Operations\n\nSANTA CLARA, Calif. - Quantum Compute Inc. (NASDAQ: QNTM) announced today the appointment of Dr. Rachel Chen as Vice President of Engineering Operations, effective November 1. Chen joins the quantum computing company from semiconductor manufacturer Nexus Technologies, where she served as Senior Director of Product Engineering for the past four years.\n\nIn her new role, Chen will oversee QNTM's engineering operations across its three research facilities and report directly to Chief Technology Officer Marcus Williams. The position was previously held by James Morrison, who transitioned to an advisory role with the company in September to pursue other opportunities.\n\n\"Rachel brings valuable experience in scaling complex technical operations, which will support our continued growth,\" said Williams in a statement. \"Her background in semiconductor manufacturing processes aligns well with our quantum processor development initiatives.\"\n\nChen holds a Ph.D. in Electrical Engineering from Stanford University and has published several papers on manufacturing optimization in peer-reviewed journals. Prior to Nexus Technologies, she spent eight years at Intel Corporation in various engineering management positions.\n\nAdditionally, QNTM confirmed its participation in the upcoming International Quantum Computing Symposium scheduled for December 5-7 in Boston. The company will host a booth in the exhibition hall and present a technical paper on error correction methodologies. Dr. Sarah Patel, QNTM's Principal Research Scientist, is slated to deliver the presentation on December 6.\n\nThe company also announced the launch of its \"Quantum Future\" educational initiative, partnering with three local high schools to provide quantum computing workshops for students. The program, beginning in January 2024, will offer monthly sessions introducing basic quantum concepts and potential career paths in the field. QNTM plans to allocate $150,000 annually to support the program, including materials and instructor stipends.\n\nQNTM shares closed at $47.82 on Tuesday, down 0.3% from the previous trading session. The stock has traded between $41.20 and $53.45 over the past 52 weeks, with current trading volumes in line with the three-month average.\n\nThe company is scheduled to report third-quarter earnings on November 15, with analysts expecting revenue of approximately $82 million, according to consensus estimates.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

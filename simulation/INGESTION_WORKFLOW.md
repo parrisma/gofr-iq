@@ -123,7 +123,7 @@ GOFR_SYNTHETIC_TOKENS={
 GOFR_ADMIN_TOKEN=$(cat /tmp/admin-token.txt)
 
 # OpenRouter API Key for LLM generation
-GOFR_IQ_OPENROUTER_API_KEY=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
+GOFR_IQ_OPENROUTER_API_KEY=sk-or-v1-9999999999999999999999999999
 EOF
 ```
 
@@ -369,7 +369,7 @@ cat > simulation/.env.synthetic << EOF
 GOFR_SYNTHETIC_SOURCES=["Bloomberg", "Reuters", "Wall Street Journal", "TechCrunch", "MyCo APAC Research", "Financial Times", "MyCo US Research"]
 GOFR_SYNTHETIC_TOKENS={"public": "$(cat /tmp/public-token.txt)", "apac-sales": "$(cat /tmp/apac-sales-token.txt)", "us-sales": "$(cat /tmp/us-sales-token.txt)"}
 GOFR_ADMIN_TOKEN=$(cat /tmp/admin-token.txt)
-GOFR_IQ_OPENROUTER_API_KEY=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
+GOFR_IQ_OPENROUTER_API_KEY=sk-or-v1-99999999999999999999999999999
 EOF
 
 echo -e "\n=== Step 6: Ingest Synthetic Documents ==="

@@ -1,0 +1,22 @@
+{
+  "source": "Bloomberg",
+  "published_at": "2025-11-18T18:52:36.989536",
+  "upload_as_group": "public",
+  "token": "gofr-sim-public-token",
+  "title": "News regarding FinCorp",
+  "story_body": "FinCorp Appoints New Regional Sales Director for Midwest Operations\n\nFinCorp (NYSE: FIN) announced today the appointment of Jennifer Martinez as Regional Sales Director for its Midwest division, effective November 1. Martinez will oversee sales operations across six states and report directly to Senior Vice President of Sales, Robert Chen.\n\nMartinez joins FinCorp from Meridian Financial Services, where she spent eight years in various sales leadership roles, most recently as Assistant Vice President of Commercial Banking. She holds an MBA from Northwestern University's Kellogg School of Management and brings over 15 years of experience in financial services.\n\n\"Jennifer's track record in building client relationships and developing sales teams aligns well with our growth objectives in the Midwest region,\" said Chen in a prepared statement. \"Her experience in commercial banking will be valuable as we continue to expand our presence in key metropolitan markets.\"\n\nThe appointment comes as FinCorp seeks to strengthen its regional leadership structure following steady growth in its commercial lending portfolio, which increased 3.2% year-over-year according to the company's most recent quarterly earnings report.\n\nIn her new role, Martinez will be responsible for managing a team of 45 sales professionals across offices in Chicago, Milwaukee, Detroit, Cleveland, Indianapolis, and St. Louis. She replaces Thomas Walsh, who retired in September after 12 years with the company.\n\n\"I'm excited to join FinCorp at this stage of its development,\" Martinez said. \"The company has built a strong foundation in the Midwest, and I look forward to working with the team to identify new opportunities and deepen existing client relationships.\"\n\nFinCorp also announced that Martinez will represent the company at the upcoming Midwest Banking Forum in Chicago next month, where she will participate in a panel discussion on regional lending trends.\n\nThe company maintains its full-year guidance and expects to release third-quarter earnings on October 28. FinCorp shares closed at $47.82 on Tuesday, up 0.3% for the day.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

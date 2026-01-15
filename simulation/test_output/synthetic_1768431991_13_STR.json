@@ -1,0 +1,22 @@
+{
+  "source": "Bloomberg",
+  "published_at": "2025-11-18T16:11:31.018892",
+  "upload_as_group": "apac-sales",
+  "token": "gofr-sim-apac-token",
+  "title": "News regarding Stratos Defense",
+  "story_body": "Stratos Defense Appoints New VP of Supply Chain Management\n\nStratos Defense Corporation announced today the appointment of Maria Chen as Vice President of Supply Chain Management, effective November 1. Chen will oversee the company's global supplier relationships and logistics operations from STR's headquarters in Arlington, Virginia.\n\nChen joins Stratos Defense from Northrop Grumman, where she spent 12 years in various supply chain leadership roles. She holds an MBA from the University of Maryland and a bachelor's degree in industrial engineering from Georgia Tech.\n\n\"Maria brings extensive experience in defense industry supply chain optimization,\" said Robert Martinez, Chief Operating Officer at Stratos Defense. \"Her expertise will be valuable as we continue to streamline our procurement processes and strengthen vendor partnerships.\"\n\nIn her new role, Chen will report directly to Martinez and lead a team of approximately 45 professionals across three facilities. She replaces Thomas Wright, who announced his retirement earlier this year after 18 years with the company.\n\nSeparately, Stratos Defense will participate in the upcoming Defense Manufacturing Conference in Phoenix, Arizona, scheduled for November 15-17. The company plans to showcase its latest manufacturing capabilities and host meetings with potential suppliers at booth 234.\n\nAs part of its ongoing environmental initiatives, Stratos Defense also announced the installation of LED lighting systems at its Tucson manufacturing facility. The upgrade, completed last month, is expected to reduce the facility's energy consumption by approximately 15 percent annually.\n\n\"We're committed to reducing our environmental footprint while maintaining operational excellence,\" said Jennifer Park, Stratos Defense's Environmental Health and Safety Director. \"This lighting upgrade is one of several energy efficiency projects planned for our facilities over the next two years.\"\n\nThe LED installation project, which cost approximately $1.2 million, qualified for local utility rebates totaling $180,000. Similar upgrades are planned for the company's facilities in South Carolina and Ohio during fiscal year 2024.\n\nStratos Defense, which specializes in advanced defense electronics and communications systems, employs approximately 3,200 people across five U.S. locations. The company reported revenues of $1.8 billion in its most recent fiscal year.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

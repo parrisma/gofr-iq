@@ -1,0 +1,22 @@
+{
+  "source": "Reuters",
+  "published_at": "2025-11-22T02:12:39.720652",
+  "upload_as_group": "public",
+  "token": "gofr-sim-public-token",
+  "title": "News regarding Velocity Motors",
+  "story_body": "Velocity Motors Announces Marketing Leadership Change, Plans Electric Vehicle Showcase at Detroit Summit\n\nVelocity Motors (NASDAQ: VELO) announced today that Sarah Chen will assume the role of Vice President of Digital Marketing, effective November 1. Chen, who previously served as Senior Director of Brand Strategy at the company, will oversee the automaker's digital marketing initiatives and e-commerce platforms.\n\nChen replaces Michael Torres, who departed last month to pursue opportunities outside the automotive industry. She will report directly to Chief Marketing Officer James Williams and will be based at Velocity's headquarters in Auburn Hills, Michigan.\n\n\"Sarah brings deep knowledge of our brand and customer base to this role,\" Williams said in a statement. \"Her experience in developing our online configurator and digital showroom initiatives positions her well to lead our digital marketing efforts.\"\n\nThe company also confirmed its participation in the upcoming North American Automotive Summit in Detroit, scheduled for November 15-17. Velocity plans to showcase its latest electric vehicle prototype, the E-Motion sedan, alongside interactive displays highlighting its connected car technologies.\n\nAdditionally, Velocity announced the launch of its \"Drive Forward\" marketing campaign, which will feature television and digital advertisements emphasizing the company's commitment to innovation and customer service. The campaign is set to debut during the holiday season across major markets.\n\nAs part of its environmental initiatives, Velocity revealed plans to install solar panels at three of its dealerships in California by the end of next year. The installations are expected to reduce energy costs by approximately 30 percent at these locations and align with the company's goal to achieve carbon neutrality in its retail operations by 2035.\n\nThe solar panel project represents a modest expansion of Velocity's existing sustainability efforts, which include LED lighting retrofits at manufacturing facilities and electric vehicle charging stations at select dealerships.\n\nVelocity Motors, which reported third-quarter vehicle deliveries of 47,000 units last month, maintains its full-year guidance of 185,000 to 190,000 vehicles. The company's stock closed at $42.15 yesterday, down 0.3 percent.\n\nThe automaker plans to release its third-quarter financial results on November 8, with a conference call scheduled for investors and analysts the same day.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": []
+    }
+  }
+}

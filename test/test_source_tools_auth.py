@@ -35,7 +35,6 @@ def mock_source_registry():
     # Note: source_tools.py calls registry.create(), not registry.create_source()
     registry.create.return_value = Source(
         source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-        group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         name="Test Source",
         type=SourceType.NEWS_AGENCY,
         region="APAC",
@@ -45,7 +44,6 @@ def mock_source_registry():
     # Add update return value
     registry.update.return_value = Source(
         source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-        group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         name="Updated Source",
         type=SourceType.NEWS_AGENCY,
         region="US",
@@ -55,7 +53,6 @@ def mock_source_registry():
     # Add soft_delete return value
     registry.soft_delete.return_value = Source(
         source_guid="7c9e6679-7425-40de-944b-e07fc1f90ae7",
-        group_guid="a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         name="Test Source",
         type=SourceType.NEWS_AGENCY,
         region="APAC",
