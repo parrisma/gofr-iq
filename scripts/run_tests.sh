@@ -13,26 +13,36 @@
 # - Supports optional ChromaDB/Neo4j infrastructure
 #
 # Usage:
-#   ./scripts/run_tests.sh                          # Run all tests
-#   ./scripts/run_tests.sh test/mcp/                # Run specific test directory
-#   ./scripts/run_tests.sh -k "iq"                  # Run tests matching keyword
-#   ./scripts/run_tests.sh -v                       # Run with verbose output
-#   ./scripts/run_tests.sh --coverage               # Run with coverage report
-#   ./scripts/run_tests.sh --coverage-html          # Run with HTML coverage report
-#   ./scripts/run_tests.sh --docker                 # Run tests in Docker container
-#   ./scripts/run_tests.sh --unit                   # Run unit tests only (no servers)
-#   ./scripts/run_tests.sh --integration            # Run integration tests (with servers)
-#   ./scripts/run_tests.sh --no-servers             # Run without starting servers
-#   ./scripts/run_tests.sh --rebuild                # Rebuild Docker images before starting
-#   ./scripts/run_tests.sh --stop                   # Stop servers only
-#   ./scripts/run_tests.sh --cleanup-only           # Clean environment only
+#   ./scripts/run_tests.sh --mode unit              # Fast, no deps (default for LLMs)
+#   ./scripts/run_tests.sh --mode all               # Full suite (requires key in .env)
+#   
+#   Common options:
+#   --mode mode_name      : Execution mode (unit|integration|all).
+#                           - unit: Fast, mocks only, no containers needed.
+#                           - integration: Spin up servers/DBs. Needs 4GB+ RAM.
+#                           - all: Everything.
+#
+#   --refresh-env         : Reset test secrets/tokens/ports. Use if 401/403 errors.
+#   --stop                : Stop orphaned test servers. Use before retrying.
+#   --cleanup-only        : aggressive cleanup of containers/networks.
+#
+#   LLM/Agent Instructions:
+#   - Prefer `--mode unit` for quick code verification.
+#   - Use `--mode all` ONLY if you have verified `GOFR_IQ_OPENROUTER_API_KEY` in .env.
+#   - If integration tests fail with 401s, run with `--refresh-env`.
+#   - If ports conflict, run with `--stop` then try again.
 # =============================================================================
 
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
 # =============================================================================
-# CONFIGURATION
+# CONFIGURATION & ENVIRONMENT STRATEGY
 # =============================================================================
+# LLM Note: This script enforces a "Single Source of Truth" pattern.
+# - Secrets are loaded ONLY from lib/gofr-common/.env
+# - Generated tokens are stored in tokens.env (gitignored)
+# - Do NOT create local .env files in app/ or test/ subdirs; they will be ignored/overwritten.
+#
 
 # Get script directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -48,53 +58,201 @@ NC='\033[0m' # No Color
 
 # Project-specific configuration
 PROJECT_NAME="gofr-iq"
-ENV_PREFIX="GOFR_IQ"
 CONTAINER_NAME="gofr-iq-dev"
 TEST_DIR="test"
 COVERAGE_SOURCE="app"
 LOG_DIR="${PROJECT_ROOT}/logs"
+TEST_ENV_SCRIPT="${SCRIPT_DIR}/test_env.sh"
+TEST_SERVERS_SCRIPT="${SCRIPT_DIR}/test_servers.sh"
+SECRETS_ENV_FILE="${PROJECT_ROOT}/config/generated/secrets.env"
+DOCKER_ENV_FILE="${PROJECT_ROOT}/docker/.env"
+REQUIRED_ENV_FILES=("${SECRETS_ENV_FILE}" "${DOCKER_ENV_FILE}")
+
+# Default execution settings (will be refined after parsing CLI args)
+MODE="unit"
+USE_DOCKER=false
+COVERAGE=false
+COVERAGE_HTML=false
+START_SERVERS=true
+STOP_ONLY=false
+CLEANUP_ONLY=false
+REBUILD_IMAGES=false
+PYTEST_ARGS=()
+NEEDS_ENV_SETUP=false
+UNIT_MODE=false
+TEST_ENV_STARTED=false
+TEST_SERVERS_STARTED=false
+REFRESH_ENV=false
+FORCE_CLEANUP=false
+CLEANUP_IN_PROGRESS=false
 
 # Activate virtual environment
 VENV_DIR="${PROJECT_ROOT}/.venv"
 if [ -f "${VENV_DIR}/bin/activate" ]; then
+    # shellcheck disable=SC1091
     source "${VENV_DIR}/bin/activate"
     echo "Activated venv: ${VENV_DIR}"
 else
     echo -e "${YELLOW}Warning: Virtual environment not found at ${VENV_DIR}${NC}"
 fi
 
-# Purge test data from previous runs
-echo "Purging test data..."
-"${SCRIPT_DIR}/purge_local_data.sh" --test-only --force
-
 # =============================================================================
-# ENVIRONMENT SETUP (New Standard)
+# ARGUMENT PARSING (early so mode can influence setup work)
 # =============================================================================
 
-# Generate ephemeral test environment configuration
-# This creates config/generated/secrets.env and docker/.env
-echo "Generating test environment configuration..."
-export GOFR_VAULT_DEV_TOKEN="${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}"
-export GOFR_JWT_SECRET="${GOFR_JWT_SECRET:-test-jwt-secret-$(date +%s)}"
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --mode)
+            if [[ -z "${2:-}" ]]; then
+                echo -e "${RED}ERROR:${NC} --mode requires a value (unit|integration|all)" >&2
+                exit 1
+            fi
+            MODE="$(echo "${2}" | tr '[:upper:]' '[:lower:]')"
+            shift 2
+            ;;
+        --mode=*)
+            MODE="$(echo "${1#--mode=}" | tr '[:upper:]' '[:lower:]')"
+            shift
+            ;;
+        --unit|--integration|--all)
+            echo -e "${RED}ERROR:${NC} '$1' has been removed. Use --mode unit|integration|all." >&2
+            exit 1
+            ;;
+        --docker)
+            USE_DOCKER=true
+            shift
+            ;;
+        --coverage|--cov)
+            COVERAGE=true
+            shift
+            ;;
+        --coverage-html)
+            COVERAGE=true
+            COVERAGE_HTML=true
+            shift
+            ;;
+        --refresh-env)
+            REFRESH_ENV=true
+            shift
+            ;;
+        --no-servers|--without-servers|--with-servers|--start-servers)
+            echo -e "${RED}ERROR:${NC} '$1' has been removed. Select a mode instead (unit skips servers, integration/all start them)." >&2
+            exit 1
+            ;;
+        --rebuild)
+            REBUILD_IMAGES=true
+            shift
+            ;;
+        --stop|--stop-servers)
+            STOP_ONLY=true
+            shift
+            ;;
+        --cleanup-only)
+            CLEANUP_ONLY=true
+            shift
+            ;;
+        --help|-h)
+            echo "Usage: $0 [OPTIONS] [PYTEST_ARGS...]"
+            echo ""
+            echo "Options:"
+            echo "  --mode unit|integration|all  Select execution profile (default: unit)"
+            echo "  --docker                     Run tests inside the dev container"
+            echo "  --coverage                   Enable coverage (terminal report)"
+            echo "  --coverage-html              Add HTML coverage report (implies --coverage)"
+            echo "  --refresh-env                Regenerate docker/.env + secrets before tests"
+            echo "  --rebuild                    Rebuild Docker images before integration tests"
+            echo "  --stop                       Stop servers and exit"
+            echo "  --cleanup-only               Clean environment artifacts and exit"
+            echo "  --help, -h                   Show this help message"
+            exit 0
+            ;;
+        *)
+            PYTEST_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
 
-# Use generate_envs.sh if available (preferred)
-if [ -f "${SCRIPT_DIR}/generate_envs.sh" ]; then
-    "${SCRIPT_DIR}/generate_envs.sh" --mode test
-elif [ -f "${PROJECT_ROOT}/lib/gofr-common/scripts/generate_envs.sh" ]; then
-    "${PROJECT_ROOT}/lib/gofr-common/scripts/generate_envs.sh" --mode test
+case "$MODE" in
+    unit)
+        UNIT_MODE=true
+        DEFAULT_START_SERVERS=false
+        ;;
+    integration|all)
+        UNIT_MODE=false
+        DEFAULT_START_SERVERS=true
+        ;;
+    *)
+        echo -e "${RED}ERROR:${NC} Unknown mode '${MODE}'. Use unit, integration, or all." >&2
+        exit 1
+        ;;
+esac
+
+ENV_SETUP_REASON=""
+if [ "$REFRESH_ENV" = true ]; then
+    NEEDS_ENV_SETUP=true
+    ENV_SETUP_REASON="manual refresh requested"
+elif [ "$UNIT_MODE" = false ]; then
+    for env_file in "${REQUIRED_ENV_FILES[@]}"; do
+        if [ ! -f "$env_file" ]; then
+            NEEDS_ENV_SETUP=true
+            ENV_SETUP_REASON="missing $(basename "$env_file")"
+            break
+        fi
+    done
 fi
 
-# Source the generated secrets (overriding any previous)
-if [ -f "${PROJECT_ROOT}/config/generated/secrets.env" ]; then
-    source "${PROJECT_ROOT}/config/generated/secrets.env"
+START_SERVERS="$DEFAULT_START_SERVERS"
+
+if [ "$UNIT_MODE" = true ]; then
+    START_SERVERS=false
+fi
+
+# Running tests inside Docker skips host server lifecycle entirely
+if [ "$USE_DOCKER" = true ]; then
+    START_SERVERS=false
+fi
+
+if [ "$NEEDS_ENV_SETUP" = true ]; then
+    setup_reason="${ENV_SETUP_REASON:-manual refresh}"
+    echo "Refreshing test environment artifacts (${setup_reason})..."
+
+    # Purge test data from previous runs
+    echo "Purging test data..."
+    "${SCRIPT_DIR}/purge_local_data.sh" --test-only --force
+
+    # =============================================================================
+    # ENVIRONMENT SETUP (New Standard)
+    # =============================================================================
+
+    # Generate ephemeral test environment configuration
+    # This creates config/generated/secrets.env and docker/.env
+    echo "Generating test environment configuration..."
+    export GOFR_VAULT_DEV_TOKEN="${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}"
+    export GOFR_JWT_SECRET="${GOFR_JWT_SECRET:-test-jwt-secret-$(date +%s)}"
+
+    # Use generate_envs.sh if available (preferred)
+    if [ -f "${SCRIPT_DIR}/generate_envs.sh" ]; then
+        "${SCRIPT_DIR}/generate_envs.sh" --mode test
+    elif [ -f "${PROJECT_ROOT}/lib/gofr-common/scripts/generate_envs.sh" ]; then
+        "${PROJECT_ROOT}/lib/gofr-common/scripts/generate_envs.sh" --mode test
+    fi
+elif [ "$UNIT_MODE" = false ]; then
+    echo "Reusing existing generated env artifacts (pass --refresh-env to regenerate)"
+fi
+
+if [ -f "${SECRETS_ENV_FILE}" ]; then
+    # Always source the generated secrets if present (even when reusing)
+    # shellcheck disable=SC1090
+    source "${SECRETS_ENV_FILE}"
 fi
 
 # =============================================================================
-# TEST CONFIGURATION
+# TEST CONFIGURATION (shared)
 # =============================================================================
 # IMPORTANT: Configuration loaded from .env files (single source of truth)
-# - Ports: GOFR_IQ_*_PORT loaded from gofr_ports.env
-# - Secrets: GOFR_JWT_SECRET, GOFR_VAULT_DEV_TOKEN from .env
+# - Ports: GOFR_IQ_*_PORT loaded from gofr_ports.env (integration/all modes)
+# - Secrets: GOFR_JWT_SECRET, GOFR_VAULT_DEV_TOKEN from .env or defaults
 # =============================================================================
 export GOFR_IQ_ENV="TEST"
 
@@ -107,6 +265,7 @@ GOFR_PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
 if [ -f "${GOFR_PORTS_FILE}" ]; then
     echo "Loading port configuration from gofr_ports.env"
     set -a
+    # shellcheck disable=SC1090
     source "${GOFR_PORTS_FILE}"
     set +a
     
@@ -132,17 +291,33 @@ fi
 GOFR_COMMON_ENV="${PROJECT_ROOT}/lib/gofr-common/.env"
 if [ -f "${GOFR_COMMON_ENV}" ]; then
     set -a
+    # shellcheck disable=SC1090
     source "${GOFR_COMMON_ENV}"
     set +a
     echo "Loaded secrets from gofr-common/.env"
 fi
 
+if [ -z "${GOFR_VAULT_DEV_TOKEN:-}" ]; then
+    export GOFR_VAULT_DEV_TOKEN="gofr-dev-root-token"
+fi
+
 # JWT Secret: Required for auth - should come from .env
 if [ -z "${GOFR_JWT_SECRET:-}" ]; then
     echo -e "${YELLOW}Warning: GOFR_JWT_SECRET not set, generating test secret${NC}"
-    export GOFR_JWT_SECRET="test-jwt-secret-$(date +%s)"
+    generated_jwt_secret="test-jwt-secret-$(date +%s)"
+    export GOFR_JWT_SECRET="${generated_jwt_secret}"
 fi
 echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}..."
+
+# OpenRouter API Key: Required for LLM integration tests
+if [ -z "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
+    echo -e "${YELLOW}Warning: GOFR_IQ_OPENROUTER_API_KEY not set in lib/gofr-common/.env${NC}"
+    echo "  LLM integration tests will be skipped. To enable them:"
+    echo "  1. Get an API key from https://openrouter.ai/"
+    echo "  2. Add it to lib/gofr-common/.env: GOFR_IQ_OPENROUTER_API_KEY=sk-or-v1-..."
+else
+    echo "  OpenRouter API Key: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
+fi
 
 # Vault Token: Required for vault auth backend
 if [ -z "${GOFR_VAULT_DEV_TOKEN:-}" ]; then
@@ -160,9 +335,11 @@ export GOFR_VAULT_MOUNT_POINT="secret"
 
 # Source centralized environment configuration (won't override already-set vars)
 if [ -f "${SCRIPT_DIR}/gofr-iq.env" ]; then
+    # shellcheck disable=SC1091
     source "${SCRIPT_DIR}/gofr-iq.env"
 elif [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
     # Legacy support
+    # shellcheck disable=SC1091
     source "${SCRIPT_DIR}/gofriq.env"
 fi
 
@@ -184,6 +361,7 @@ export GOFR_IQ_NEO4J_HOST="gofr-iq-neo4j-test"
 export GOFR_IQ_NEO4J_BOLT_PORT="7687"
 export GOFR_IQ_NEO4J_URI="bolt://gofr-iq-neo4j-test:7687"
 export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
+export GOFR_NEO4J_HTTP_PORT_CONTAINER="7474"
 
 # JWT Secret: Use GOFR_JWT_SECRET from gofr_ports.sh as THE single source of truth
 # Legacy alias for backward compatibility with code that uses GOFR_IQ_JWT_SECRET
@@ -194,6 +372,26 @@ export GOFR_IQ_WEB_PORT="${GOFR_IQ_WEB_PORT}"
 # Ensure directories exist
 mkdir -p "${LOG_DIR}"
 mkdir -p "${GOFR_IQ_STORAGE:-${PROJECT_ROOT}/data/storage}"
+
+run_test_env_cmd() {
+    local action="$1"
+    shift || true
+    if [ ! -x "${TEST_ENV_SCRIPT}" ]; then
+        echo -e "${RED}ERROR: Test environment helper not found: ${TEST_ENV_SCRIPT}${NC}" >&2
+        return 1
+    fi
+    bash "${TEST_ENV_SCRIPT}" "${action}" "$@"
+}
+
+run_test_servers_cmd() {
+    local action="$1"
+    shift || true
+    if [ ! -x "${TEST_SERVERS_SCRIPT}" ]; then
+        echo -e "${RED}ERROR: Test server helper not found: ${TEST_SERVERS_SCRIPT}${NC}" >&2
+        return 1
+    fi
+    bash "${TEST_SERVERS_SCRIPT}" "${action}" "$@"
+}
 
 # =============================================================================
 # HELPER FUNCTIONS
@@ -214,534 +412,66 @@ print_header() {
     echo ""
 }
 
-port_in_use() {
-    local port=$1
-    if command -v lsof >/dev/null 2>&1; then
-        lsof -i ":${port}" >/dev/null 2>&1
-    elif command -v ss >/dev/null 2>&1; then
-        ss -tuln | grep -q ":${port} "
-    elif command -v netstat >/dev/null 2>&1; then
-        netstat -tuln | grep -q ":${port} "
-    else
-        timeout 1 bash -c "cat < /dev/null > /dev/tcp/127.0.0.1/${port}" >/dev/null 2>&1
-    fi
-}
-
-free_port() {
-    local port=$1
-    if ! port_in_use "$port"; then
-        return 0
-    fi
-    if command -v lsof >/dev/null 2>&1; then
-        lsof -ti ":${port}" | xargs -r kill -9 2>/dev/null || true
-    elif command -v ss >/dev/null 2>&1; then
-        ss -lptn "sport = :${port}" 2>/dev/null | grep -o 'pid=[0-9]*' | cut -d'=' -f2 | xargs -r kill -9 2>/dev/null || true
-    fi
-    sleep 1
-}
-
 stop_servers() {
     echo "Stopping server processes..."
-    
-    # Use specific patterns with full path to avoid killing unrelated processes
-    # This prevents accidentally killing the terminal or VS Code processes
-    local pids=""
-    
-    # Find PIDs for our specific server processes
-    pids=$(pgrep -f "app/main_mcp\.py" 2>/dev/null || true)
-    if [ -n "$pids" ]; then
-        echo "Stopping MCP server (PIDs: $pids)"
-        echo "$pids" | xargs -r kill -9 2>/dev/null || true
-    fi
-    
-    pids=$(pgrep -f "app/main_web\.py" 2>/dev/null || true)
-    if [ -n "$pids" ]; then
-        echo "Stopping Web server (PIDs: $pids)"
-        echo "$pids" | xargs -r kill -9 2>/dev/null || true
-    fi
-    
-    pids=$(pgrep -f "app/main_mcpo\.py" 2>/dev/null || true)
-    if [ -n "$pids" ]; then
-        echo "Stopping MCPO server (PIDs: $pids)"
-        echo "$pids" | xargs -r kill -9 2>/dev/null || true
-    fi
-    
-    # Also stop mcpo wrapper if running
-    pids=$(pgrep -f "mcpo.*--port.*${GOFR_IQ_MCPO_PORT}" 2>/dev/null || true)
-    if [ -n "$pids" ]; then
-        echo "Stopping MCPO wrapper (PIDs: $pids)"
-        echo "$pids" | xargs -r kill -9 2>/dev/null || true
-    fi
-    
+    run_test_servers_cmd stop || true
+
+    local patterns=(
+        "app/main_mcp\.py"
+        "app/main_web\.py"
+        "app/main_mcpo\.py"
+        "mcpo.*--port.*${GOFR_IQ_MCPO_PORT}"
+    )
+
+    for pattern in "${patterns[@]}"; do
+        pkill -f "$pattern" 2>/dev/null || true
+    done
+
     sleep 1
-    
-    # Verify cleanup
+
     if pgrep -f "app/main_(mcp|web|mcpo)\.py" >/dev/null 2>&1; then
         echo -e "${YELLOW}WARNING: Some server processes may still be running${NC}"
         pgrep -af "app/main_(mcp|web|mcpo)\.py" 2>/dev/null || true
-        return 1
-    fi
-    echo "All server processes stopped"
-    return 0
-}
-
-start_chromadb() {
-    echo -e "${YELLOW}Starting ChromaDB container...${NC}"
-    
-    # Check if container already running
-    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-chromadb$"; then
-        echo -e "${GREEN}ChromaDB container already running${NC}"
-        return 0
-    fi
-    
-    # Start container directly without waiting in the script
-    # (the script will fail to connect to localhost from inside dev container)
-    docker run -d \
-        --name gofr-iq-chromadb \
-        --network gofr-net \
-        -p "${GOFR_IQ_CHROMADB_PORT}:8000" \
-        gofr-iq-chromadb:latest >/dev/null 2>&1 || {
-        echo -e "${RED}Failed to start ChromaDB container${NC}"
-        return 1
-    }
-    
-    # Wait for ChromaDB to be ready (check via Docker network using v2 API)
-    echo -n "Waiting for ChromaDB"
-    for i in {1..30}; do
-        if curl -s "http://${GOFR_IQ_CHROMADB_HOST}:${GOFR_IQ_CHROMADB_PORT}/api/v1/heartbeat" >/dev/null 2>&1; then
-            echo -e " ${GREEN}✓${NC}"
-            return 0
-        fi
-        echo -n "."
-        sleep 1
-    done
-    echo -e " ${RED}✗${NC}"
-    echo -e "${RED}ChromaDB failed to start${NC}"
-    docker logs gofr-iq-chromadb 2>&1 | tail -20 || true
-    return 1
-}
-
-start_vault() {
-    echo -e "${YELLOW}Starting Vault container...${NC}"
-    
-    # Check if container already running
-    if docker ps --format '{{.Names}}' | grep -q "^gofr-vault$"; then
-        echo -e "${GREEN}Vault container already running${NC}"
-        return 0
-    fi
-    
-    # Use gofr-common vault run script
-    local vault_script="${PROJECT_ROOT}/lib/gofr-common/docker/infra/vault/run.sh"
-    if [ -f "$vault_script" ]; then
-        bash "$vault_script" --test
     else
-        # Fallback: start directly
-        docker run -d \
-            --name gofr-vault \
-            --hostname gofr-vault \
-            --network gofr-net \
-            -p 8201:8200 \
-            -e VAULT_DEV_ROOT_TOKEN_ID="${GOFR_VAULT_TOKEN}" \
-            -e VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200 \
-            hashicorp/vault:1.15.6 server -dev >/dev/null 2>&1 || {
-            echo -e "${RED}Failed to start Vault container${NC}"
-            return 1
-        }
-    fi
-    
-    # Wait for Vault to be ready
-    echo -n "Waiting for Vault"
-    for i in {1..30}; do
-        if docker exec gofr-vault vault status >/dev/null 2>&1; then
-            echo -e " ${GREEN}✓${NC}"
-            return 0
-        fi
-        echo -n "."
-        sleep 1
-    done
-    echo -e " ${RED}✗${NC}"
-    echo -e "${RED}Vault failed to start${NC}"
-    docker logs gofr-vault 2>&1 | tail -20 || true
-    return 1
-}
-
-# NOTE: Auth bootstrap (creating admin/public groups and tokens) is now handled
-# by the pytest session fixture in conftest.py. This ensures:
-# 1. Groups/tokens are created with the correct JWT secret (GOFR_JWT_SECRET)
-# 2. Groups/tokens are created in the correct Vault (gofr-vault-test)
-# 3. All tests share the same auth state
-# See: test/conftest.py - bootstrap_auth fixture
-
-start_neo4j() {
-    echo -e "${YELLOW}Starting Neo4j container...${NC}"
-    
-    # Check if container already running
-    if docker ps --format '{{.Names}}' | grep -q "^gofr-iq-neo4j$"; then
-        echo -e "${GREEN}Neo4j container already running${NC}"
-        return 0
-    fi
-    
-    # Start container directly without waiting in the script
-    docker run -d \
-        --name gofr-iq-neo4j \
-        --network gofr-net \
-        -p "${GOFR_IQ_NEO4J_BOLT_PORT}:7687" \
-        -p 7474:7474 \
-        -e NEO4J_AUTH="neo4j/${GOFR_IQ_NEO4J_PASSWORD}" \
-        -e NEO4J_PLUGINS='["apoc"]' \
-        gofr-iq-neo4j:latest >/dev/null 2>&1 || {
-        echo -e "${RED}Failed to start Neo4j container${NC}"
-        return 1
-    }
-    
-    # Wait for Neo4j to be ready
-    echo -n "Waiting for Neo4j"
-    for i in {1..60}; do
-        if docker exec gofr-iq-neo4j cypher-shell -u neo4j -p "${GOFR_IQ_NEO4J_PASSWORD}" "RETURN 1" >/dev/null 2>&1; then
-            echo -e " ${GREEN}✓${NC}"
-            return 0
-        fi
-        echo -n "."
-        sleep 1
-    done
-    echo -e " ${RED}✗${NC}"
-    echo -e "${RED}Neo4j failed to start${NC}"
-    docker logs gofr-iq-neo4j 2>&1 | tail -20 || true
-    return 1
-}
-
-stop_infrastructure() {
-    echo -e "${YELLOW}Stopping infrastructure containers...${NC}"
-    
-    # Use manage-infra.sh to stop test infrastructure
-    local manage_script="${PROJECT_ROOT}/docker/manage-infra.sh"
-    if [ -f "$manage_script" ]; then
-        bash "$manage_script" stop --test 2>/dev/null || true
-    else
-        # Fallback: stop containers directly
-        docker stop gofr-vault-test gofr-iq-chromadb-test gofr-iq-neo4j-test 2>/dev/null || true
-        docker rm gofr-vault-test gofr-iq-chromadb-test gofr-iq-neo4j-test 2>/dev/null || true
-    fi
-    
-    echo "Infrastructure containers stopped"
-}
-
-start_test_infrastructure() {
-    local rebuild="$1"
-    echo -e "${GREEN}=== Starting Test Infrastructure via manage-infra.sh ===${NC}"
-    
-    local manage_script="${PROJECT_ROOT}/docker/manage-infra.sh"
-    if [ ! -f "$manage_script" ]; then
-        echo -e "${RED}manage-infra.sh not found: ${manage_script}${NC}"
-        return 1
-    fi
-    
-    # Rebuild Docker images if requested
-    if [ "$rebuild" = true ]; then
-        echo -e "${YELLOW}Rebuilding Docker images...${NC}"
-        bash "${PROJECT_ROOT}/docker/build-vault.sh" || return 1
-        bash "${PROJECT_ROOT}/docker/build-chromadb.sh" || return 1
-        bash "${PROJECT_ROOT}/docker/build-neo4j.sh" || return 1
-        bash "${PROJECT_ROOT}/docker/build-prod.sh" || return 1
-        echo -e "${GREEN}Docker images rebuilt${NC}"
-    fi
-    
-    # Start test infrastructure using manage-infra.sh
-    bash "$manage_script" start --test || {
-        echo -e "${RED}Failed to start test infrastructure${NC}"
-        return 1
-    }
-    
-    # Connect dev container to gofr-test-net so tests can reach test services
-    local dev_container="gofr-iq-dev"
-    if docker ps --format '{{.Names}}' | grep -q "^${dev_container}$"; then
-        if ! docker network inspect gofr-test-net --format '{{range .Containers}}{{.Name}} {{end}}' | grep -q "${dev_container}"; then
-            echo -e "${YELLOW}Connecting dev container to gofr-test-net...${NC}"
-            docker network connect gofr-test-net "${dev_container}" 2>/dev/null || true
-        fi
-        echo -e "${GREEN}Dev container connected to gofr-test-net${NC}"
-    fi
-    
-    # Verify all test services are reachable
-    verify_test_services || {
-        echo -e "${RED}Service verification failed${NC}"
-        return 1
-    }
-    
-    echo -e "${GREEN}Test infrastructure started and verified${NC}"
-    return 0
-}
-
-# Verify all test services are reachable before running tests
-verify_test_services() {
-    echo -e "${BLUE}=== Verifying Test Services ===${NC}"
-    local all_ok=true
-    
-    # Verify Vault
-    echo -n "  Vault (${GOFR_VAULT_URL})... "
-    if curl -s --max-time 5 "${GOFR_VAULT_URL}/v1/sys/health" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓${NC}"
-    else
-        echo -e "${RED}✗ NOT REACHABLE${NC}"
-        all_ok=false
-    fi
-    
-    # Verify ChromaDB
-    local chromadb_url="http://${GOFR_IQ_CHROMADB_HOST}:${GOFR_IQ_CHROMADB_PORT}"
-    echo -n "  ChromaDB (${chromadb_url})... "
-    if curl -s --max-time 5 "${chromadb_url}/api/v1/heartbeat" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓${NC}"
-    else
-        echo -e "${RED}✗ NOT REACHABLE${NC}"
-        all_ok=false
-    fi
-    
-    # Verify Neo4j
-    local neo4j_url="http://${GOFR_IQ_NEO4J_HOST}:7474"
-    echo -n "  Neo4j (${neo4j_url})... "
-    if curl -s --max-time 5 "${neo4j_url}" >/dev/null 2>&1; then
-        echo -e "${GREEN}✓${NC}"
-    else
-        echo -e "${RED}✗ NOT REACHABLE${NC}"
-        all_ok=false
-    fi
-    
-    echo ""
-    echo -e "${BLUE}Test Service Environment Variables:${NC}"
-    echo "  GOFR_VAULT_URL=${GOFR_VAULT_URL}"
-    echo "  GOFR_VAULT_TOKEN=${GOFR_VAULT_TOKEN:0:10}..."
-    echo "  GOFR_IQ_CHROMADB_HOST=${GOFR_IQ_CHROMADB_HOST}"
-    echo "  GOFR_IQ_CHROMADB_PORT=${GOFR_IQ_CHROMADB_PORT}"
-    echo "  GOFR_IQ_NEO4J_HOST=${GOFR_IQ_NEO4J_HOST}"
-    echo "  GOFR_IQ_NEO4J_BOLT_PORT=${GOFR_IQ_NEO4J_BOLT_PORT}"
-    echo ""
-    
-    if [ "$all_ok" = true ]; then
-        echo -e "${GREEN}All test services verified${NC}"
-        return 0
-    else
-        echo -e "${RED}Some test services are not reachable${NC}"
-        echo -e "${YELLOW}Hint: Is the dev container connected to gofr-test-net?${NC}"
-        return 1
+        echo "All server processes stopped"
     fi
 }
 
+# =============================================================================
+# CLEANUP STRATEGY
+# LLM Note:
+# - This function attempts to kill any process matching the server patterns.
+# - It is called on EXIT/INT/TERM via trap.
+# - If you see "Address already in use" errors during server spin-up, it means
+#   this cleanup failed or a previous run crashed hard.
+# - Use `--cleanup-only` to manually trigger this if you are stuck.
+# =============================================================================
 cleanup_environment() {
-    echo -e "${YELLOW}Cleaning up test environment...${NC}"
-    stop_servers || true
-    stop_infrastructure || true
-    
-    # Remove local ChromaDB state (prevents schema conflicts between test runs)
-    if [ -d "${PROJECT_ROOT}/data/storage/chroma" ]; then
-        echo -e "${YELLOW}Removing local ChromaDB state...${NC}"
-        rm -rf "${PROJECT_ROOT}/data/storage/chroma"
+    local exit_code=$?
+    if [ "$CLEANUP_IN_PROGRESS" = true ]; then
+        return $exit_code
     fi
-    
-    echo -e "${GREEN}Cleanup complete${NC}"
+    CLEANUP_IN_PROGRESS=true
+
+    if [ "$FORCE_CLEANUP" = true ] || [ "$TEST_SERVERS_STARTED" = true ]; then
+        stop_servers || true
+    fi
+
+    if [ "$FORCE_CLEANUP" = true ] || [ "$TEST_ENV_STARTED" = true ]; then
+        echo "Stopping test infrastructure..."
+        run_test_env_cmd stop || true
+    fi
+
+    if [ -n "${GOFR_IQ_TOKEN_STORE:-}" ] && [ -f "${GOFR_IQ_TOKEN_STORE}" ]; then
+        rm -f "${GOFR_IQ_TOKEN_STORE}" 2>/dev/null || true
+    fi
+
+    CLEANUP_IN_PROGRESS=false
+    FORCE_CLEANUP=false
+    return $exit_code
 }
 
-start_mcp_server() {
-    local log_file="${LOG_DIR}/${PROJECT_NAME}_mcp_test.log"
-    echo -e "${YELLOW}Starting MCP server on port ${GOFR_IQ_MCP_PORT}...${NC}"
-    
-    free_port "${GOFR_IQ_MCP_PORT}"
-    rm -f "${log_file}"
-
-    # Auth backend configured via GOFR_AUTH_BACKEND env var (Vault)
-    nohup uv run python app/main_mcp.py \
-        --port "${GOFR_IQ_MCP_PORT}" \
-        --jwt-secret "${GOFR_IQ_JWT_SECRET}" \
-        --log-level INFO \
-        > "${log_file}" 2>&1 &
-    MCP_PID=$!
-    echo "MCP PID: ${MCP_PID}"
-
-    echo -n "Waiting for MCP server"
-    for _ in {1..30}; do
-        if ! kill -0 ${MCP_PID} 2>/dev/null; then
-            echo -e " ${RED}✗${NC}"
-            tail -20 "${log_file}"
-            return 1
-        fi
-        if port_in_use "${GOFR_IQ_MCP_PORT}"; then
-            echo -e " ${GREEN}✓${NC}"
-            return 0
-        fi
-        echo -n "."
-        sleep 0.5
-    done
-    echo -e " ${RED}✗${NC}"
-    tail -20 "${log_file}"
-    return 1
-}
-
-start_web_server() {
-    local log_file="${LOG_DIR}/${PROJECT_NAME}_web_test.log"
-    echo -e "${YELLOW}Starting Web server on port ${GOFR_IQ_WEB_PORT}...${NC}"
-    
-    free_port "${GOFR_IQ_WEB_PORT}"
-    rm -f "${log_file}"
-
-    # Auth backend configured via GOFR_AUTH_BACKEND env var (Vault)
-    nohup uv run python app/main_web.py \
-        --port "${GOFR_IQ_WEB_PORT}" \
-        --jwt-secret "${GOFR_IQ_JWT_SECRET}" \
-        > "${log_file}" 2>&1 &
-    WEB_PID=$!
-    echo "Web PID: ${WEB_PID}"
-
-    echo -n "Waiting for Web server"
-    for _ in {1..30}; do
-        if ! kill -0 ${WEB_PID} 2>/dev/null; then
-            echo -e " ${RED}✗${NC}"
-            tail -20 "${log_file}"
-            return 1
-        fi
-        if port_in_use "${GOFR_IQ_WEB_PORT}"; then
-            echo -e " ${GREEN}✓${NC}"
-            return 0
-        fi
-        echo -n "."
-        sleep 0.5
-    done
-    echo -e " ${RED}✗${NC}"
-    tail -20 "${log_file}"
-    return 1
-}
-
-start_mcpo_server() {
-    local log_file="${LOG_DIR}/${PROJECT_NAME}_mcpo_test.log"
-    echo -e "${YELLOW}Starting MCPO server on port ${GOFR_IQ_MCPO_PORT}...${NC}"
-    
-    free_port "${GOFR_IQ_MCPO_PORT}"
-    rm -f "${log_file}"
-
-    # MCPO wraps the MCP server and exposes it as REST/OpenAPI
-    # Connect to the already-running MCP server via HTTP Streamable transport
-    # NEVER use stdio or SSE - only HTTP Streamable!
-    # Matches docker-compose.yml: mcpo --server-type streamable-http -- http://host:port/mcp
-    # NOTE: No --api-key - MCPO is a transparent pass-through, MCP validates JWTs
-    local mcp_url="http://localhost:${GOFR_IQ_MCP_PORT}/mcp"
-    
-    nohup mcpo --host 0.0.0.0 --port "${GOFR_IQ_MCPO_PORT}" \
-        --server-type streamable-http \
-        -- "${mcp_url}" \
-        > "${log_file}" 2>&1 &
-    MCPO_PID=$!
-    echo "MCPO PID: ${MCPO_PID}"
-
-    echo -n "Waiting for MCPO server"
-    for _ in {1..30}; do
-        if ! kill -0 ${MCPO_PID} 2>/dev/null; then
-            echo -e " ${RED}✗${NC}"
-            echo "MCPO process died, checking logs:"
-            tail -30 "${log_file}"
-            return 1
-        fi
-        # Use /docs endpoint like docker healthcheck
-        if curl -s "http://localhost:${GOFR_IQ_MCPO_PORT}/docs" >/dev/null 2>&1; then
-            echo -e " ${GREEN}✓${NC}"
-            return 0
-        fi
-        echo -n "."
-        sleep 0.5
-    done
-    echo -e " ${RED}✗${NC}"
-    echo "MCPO server logs:"
-    tail -30 "${log_file}"
-    return 1
-}
-
-# =============================================================================
-# ARGUMENT PARSING
-# =============================================================================
-
-USE_DOCKER=false
-START_SERVERS=true
-COVERAGE=false
-COVERAGE_HTML=false
-RUN_UNIT=false
-RUN_INTEGRATION=false
-RUN_ALL=false
-STOP_ONLY=false
-CLEANUP_ONLY=false
-REBUILD_IMAGES=false
-PYTEST_ARGS=()
-
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --docker)
-            USE_DOCKER=true
-            shift
-            ;;
-        --coverage|--cov)
-            COVERAGE=true
-            shift
-            ;;
-        --coverage-html)
-            COVERAGE=true
-            COVERAGE_HTML=true
-            shift
-            ;;
-        --unit)
-            RUN_UNIT=true
-            START_SERVERS=false
-            shift
-            ;;
-        --integration)
-            RUN_INTEGRATION=true
-            START_SERVERS=true
-            shift
-            ;;
-        --all)
-            RUN_ALL=true
-            START_SERVERS=true
-            shift
-            ;;
-        --no-servers|--without-servers)
-            START_SERVERS=false
-            shift
-            ;;
-        --with-servers|--start-servers)
-            START_SERVERS=true
-            shift
-            ;;
-        --rebuild)
-            REBUILD_IMAGES=true
-            shift
-            ;;
-        --stop|--stop-servers)
-            STOP_ONLY=true
-            shift
-            ;;
-        --cleanup-only)
-            CLEANUP_ONLY=true
-            shift
-            ;;
-        --help|-h)
-            echo "Usage: $0 [OPTIONS] [PYTEST_ARGS...]"
-            echo ""
-            echo "Options:"
-            echo "  --docker         Run tests inside Docker container"
-            echo "  --coverage       Run with coverage report"
-            echo "  --coverage-html  Run with HTML coverage report"
-            echo "  --unit           Run unit tests only (no servers)"
-            echo "  --integration    Run integration tests (with servers)"
-            echo "  --all            Run all test categories"
-            echo "  --no-servers     Don't start test servers"
-            echo "  --with-servers   Start test servers (default)"
-            echo "  --rebuild        Rebuild Docker images before starting"
-            echo "  --stop           Stop servers and exit"
-            echo "  --cleanup-only   Clean environment and exit"
-            echo "  --help, -h       Show this help message"
-            exit 0
-            ;;
-        *)
-            PYTEST_ARGS+=("$1")
-            shift
-            ;;
-    esac
-done
+trap cleanup_environment EXIT INT TERM
 
 # =============================================================================
 # MAIN EXECUTION
@@ -758,25 +488,32 @@ fi
 
 # Handle cleanup-only mode
 if [ "$CLEANUP_ONLY" = true ]; then
+    FORCE_CLEANUP=true
     cleanup_environment
     exit 0
 fi
 
-# Only run full cleanup for integration tests (skip for unit tests)
-if [ "$RUN_UNIT" = true ]; then
+# Only ensure local servers are down for integration tests (unit tests never start them)
+if [ "$UNIT_MODE" = true ]; then
     echo -e "${YELLOW}Unit test mode - skipping server cleanup${NC}"
-else
-    # Clean up before starting
-    cleanup_environment
+elif [ "$USE_DOCKER" = false ]; then
+    echo -e "${BLUE}Ensuring MCP/MCPO/Web servers are not already running...${NC}"
+    stop_servers
 fi
 
 # Start servers if needed
-MCP_PID=""
-WEB_PID=""
-MCPO_PID=""
 if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
     # Start test infrastructure via manage-infra.sh (Vault, ChromaDB, Neo4j)
-    start_test_infrastructure "$REBUILD_IMAGES" || { stop_servers; stop_infrastructure; exit 1; }
+    TEST_ENV_ARGS=()
+    if [ "$REBUILD_IMAGES" = true ]; then
+        TEST_ENV_ARGS+=(--rebuild)
+    fi
+    if run_test_env_cmd start "${TEST_ENV_ARGS[@]}"; then
+        TEST_ENV_STARTED=true
+    else
+        run_test_env_cmd stop || true
+        exit 1
+    fi
     
     # NOTE: Auth bootstrap (admin/public groups & tokens) happens in conftest.py
     # This ensures tokens are created with correct JWT secret after Vault is ready
@@ -784,18 +521,22 @@ if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
     echo ""
     
     echo -e "${GREEN}=== Starting Test Servers ===${NC}"
-    start_mcp_server || { stop_servers; stop_infrastructure; exit 1; }
-    start_web_server || { stop_servers; stop_infrastructure; exit 1; }
-    start_mcpo_server || { stop_servers; stop_infrastructure; exit 1; }
+    if run_test_servers_cmd start; then
+        TEST_SERVERS_STARTED=true
+    else
+        stop_servers
+        run_test_env_cmd stop || true
+        exit 1
+    fi
     echo ""
 fi
 
 # Build coverage arguments
-COVERAGE_ARGS=""
+COVERAGE_ARGS=()
 if [ "$COVERAGE" = true ]; then
-    COVERAGE_ARGS="--cov=${COVERAGE_SOURCE} --cov-report=term-missing"
+    COVERAGE_ARGS+=("--cov=${COVERAGE_SOURCE}" "--cov-report=term-missing")
     if [ "$COVERAGE_HTML" = true ]; then
-        COVERAGE_ARGS="${COVERAGE_ARGS} --cov-report=html:htmlcov"
+        COVERAGE_ARGS+=("--cov-report=html:htmlcov")
     fi
     echo -e "${BLUE}Coverage reporting enabled${NC}"
 fi
@@ -809,7 +550,9 @@ echo -e "${GREEN}=== Checking Version Compatibility ===${NC}"
 if ! python "${SCRIPT_DIR}/check_version_compatibility.py"; then
     echo -e "${RED}Version compatibility check failed!${NC}"
     echo "Fix version mismatches before running tests."
-    [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ] && stop_infrastructure || true
+    if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
+        run_test_env_cmd stop || true
+    fi
     exit 1
 fi
 echo ""
@@ -817,6 +560,47 @@ echo ""
 echo -e "${GREEN}=== Running Tests ===${NC}"
 set +e
 TEST_EXIT_CODE=0
+
+PYTEST_CMD_ARGS=()
+if [ ${#PYTEST_ARGS[@]} -eq 0 ]; then
+    PYTEST_CMD_ARGS+=("${TEST_DIR}/" "-v")
+else
+    PYTEST_CMD_ARGS+=("${PYTEST_ARGS[@]}")
+fi
+
+USER_DEFINED_MARKERS=false
+for arg in "${PYTEST_ARGS[@]}"; do
+    if [[ "$arg" == "-m" || "$arg" == "-m="* ]]; then
+        USER_DEFINED_MARKERS=true
+        break
+    fi
+done
+
+MARKER_EXPR=""
+case "$MODE" in
+    unit)
+        MARKER_EXPR="not integration and not e2e"
+        ;;
+    integration)
+        MARKER_EXPR="integration"
+        ;;
+    all)
+        MARKER_EXPR=""
+        ;;
+esac
+
+MARKER_ARGS=()
+if [ -n "$MARKER_EXPR" ] && [ "$USER_DEFINED_MARKERS" = false ]; then
+    MARKER_ARGS=(-m "$MARKER_EXPR")
+fi
+
+PYTEST_FULL_ARGS=("${PYTEST_CMD_ARGS[@]}")
+if [ ${#MARKER_ARGS[@]} -gt 0 ]; then
+    PYTEST_FULL_ARGS+=("${MARKER_ARGS[@]}")
+fi
+if [ ${#COVERAGE_ARGS[@]} -gt 0 ]; then
+    PYTEST_FULL_ARGS+=("${COVERAGE_ARGS[@]}")
+fi
 
 if [ "$USE_DOCKER" = true ]; then
     # Docker execution
@@ -826,51 +610,34 @@ if [ "$USE_DOCKER" = true ]; then
         exit 1
     fi
     
-    DOCKER_CMD="cd /home/gofr/devroot/${PROJECT_NAME} && source .venv/bin/activate && pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}"
+    DOCKER_PYTEST_ARGS=""
+    for arg in "${PYTEST_FULL_ARGS[@]}"; do
+        if [ -n "$DOCKER_PYTEST_ARGS" ]; then
+            DOCKER_PYTEST_ARGS+=" "
+        fi
+        DOCKER_PYTEST_ARGS+="$(printf '%q' "$arg")"
+    done
+
+    DOCKER_CMD="cd /home/gofr/devroot/${PROJECT_NAME} && source .venv/bin/activate && pytest ${DOCKER_PYTEST_ARGS}"
     docker exec "${CONTAINER_NAME}" bash -c "${DOCKER_CMD}"
     TEST_EXIT_CODE=$?
-
-elif [ "$RUN_UNIT" = true ]; then
-    echo -e "${BLUE}Running unit tests only (no servers)...${NC}"
-    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS} -k "not integration"
-    TEST_EXIT_CODE=$?
-
-elif [ "$RUN_INTEGRATION" = true ]; then
-    echo -e "${BLUE}Running integration tests (with servers)...${NC}"
-    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}
-    TEST_EXIT_CODE=$?
-
-elif [ "$RUN_ALL" = true ]; then
-    echo -e "${BLUE}Running ALL tests...${NC}"
-    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}
-    TEST_EXIT_CODE=$?
-
-elif [ ${#PYTEST_ARGS[@]} -eq 0 ]; then
-    # Default: run all tests
-    uv run python -m pytest ${TEST_DIR}/ -v ${COVERAGE_ARGS}
-    TEST_EXIT_CODE=$?
 else
-    # Custom arguments
-    uv run python -m pytest "${PYTEST_ARGS[@]}" ${COVERAGE_ARGS}
+    case "$MODE" in
+        unit)
+            echo -e "${BLUE}Running unit tests only (no servers)...${NC}"
+            ;;
+        integration)
+            echo -e "${BLUE}Running integration test suite...${NC}"
+            ;;
+        all)
+            echo -e "${BLUE}Running full test suite...${NC}"
+            ;;
+    esac
+
+    uv run python -m pytest "${PYTEST_FULL_ARGS[@]}"
     TEST_EXIT_CODE=$?
 fi
 set -e
-
-# =============================================================================
-# CLEANUP
-# =============================================================================
-
-if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
-    echo ""
-    echo -e "${YELLOW}Stopping test servers...${NC}"
-    stop_servers || true
-    echo -e "${YELLOW}Stopping infrastructure containers...${NC}"
-    stop_infrastructure || true
-fi
-
-# Clean up token store
-echo -e "${YELLOW}Cleaning up token store...${NC}"
-echo "{}" > "${GOFR_IQ_TOKEN_STORE}" 2>/dev/null || true
 
 # =============================================================================
 # RESULTS

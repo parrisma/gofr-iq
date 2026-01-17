@@ -121,6 +121,9 @@ venv.bak/
 !lib/gofr-common/docker/gofr-swarm.env
 !lib/gofr-common/src/gofr_common/config/gofr_ports.env
 simulation/.env.*
+!docker/.env.example
+!docker/.vault-init.env.example
+!simulation/.env.synthetic.example
 
 # Spyder project settings
 .spyderproject

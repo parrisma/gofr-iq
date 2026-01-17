@@ -10,6 +10,20 @@ Process news articles through:
 3. **Search** - Hybrid semantic + graph search with group access control
 4. **Ranking** - Client-specific relevance using portfolio holdings and impact scoring
 
+### Request flow (at a glance)
+1. Client hits MCP/MCPO/Web → request lands in server entrypoints (app/main_mcp.py, app/main_mcpo.py, app/main_web.py)
+2. Auth layer validates JWT + groups
+3. QueryService runs vector search (Chroma) + graph expansion (Neo4j)
+4. Hybrid scorer merges semantic + graph + trust + recency
+5. Results filtered by group permissions and returned
+
+### Ingestion flow (at a glance)
+1. Document arrives via IngestService
+2. Validate source + groups, deduplicate, detect language
+3. LLM extraction (entities, impact), store canonical JSON
+4. Write embeddings to Chroma; relationships to Neo4j
+5. Ready for search/ranking
+
 ---
 
 ## High-Level Architecture

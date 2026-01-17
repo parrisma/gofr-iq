@@ -327,7 +327,7 @@ def load_demo_data(
                     if doc_guid:
                         print(f"      ✓ Ingested: {doc_guid}")
                     else:
-                        print(f"      ✓ Ingested (no GUID returned)")
+                        print("      ✓ Ingested (no GUID returned)")
                     time.sleep(0.3)  # Rate limiting
                 except Exception as e:
                     print(f"      ✗ Error: {e}")

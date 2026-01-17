@@ -19,15 +19,15 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
 
-from dotenv import dotenv_values  # type: ignore[import-untyped]
-from gofr_common.auth.backends.vault import VaultGroupStore, VaultTokenStore  # type: ignore[import-not-found]
-from gofr_common.auth.backends.vault_client import VaultClient  # type: ignore[import-not-found]
-from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[import-not-found]
-from gofr_common.auth.groups import DuplicateGroupError, GroupRegistry  # type: ignore[import-not-found]
-from gofr_common.auth.service import AuthService  # type: ignore[import-not-found]
+from dotenv import dotenv_values  # type: ignore[import-untyped]  # noqa: E402
+from gofr_common.auth.backends.vault import VaultGroupStore, VaultTokenStore  # type: ignore[import-not-found]  # noqa: E402
+from gofr_common.auth.backends.vault_client import VaultClient  # type: ignore[import-not-found]  # noqa: E402
+from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[import-not-found]  # noqa: E402
+from gofr_common.auth.groups import DuplicateGroupError, GroupRegistry  # type: ignore[import-not-found]  # noqa: E402
+from gofr_common.auth.service import AuthService  # type: ignore[import-not-found]  # noqa: E402
 
-from simulation.generate_synthetic_stories import SyntheticGenerator
-from simulation import ingest_synthetic_stories as ingest
+from simulation.generate_synthetic_stories import SyntheticGenerator  # noqa: E402
+from simulation import ingest_synthetic_stories as ingest  # noqa: E402
 
 VAULT_INIT_FILE = PROJECT_ROOT / "docker" / ".vault-init.env"
 DOCKER_ENV_FILE = PROJECT_ROOT / "docker" / ".env"

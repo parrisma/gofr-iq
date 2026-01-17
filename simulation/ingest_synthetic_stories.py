@@ -167,10 +167,14 @@ def process_story(
         # Validate required fields
         if not all([source_name, group, title, content]):
             missing = []
-            if not source_name: missing.append("source")
-            if not group: missing.append("upload_as_group")
-            if not title: missing.append("title")
-            if not content: missing.append("story_body")
+            if not source_name:
+                missing.append("source")
+            if not group:
+                missing.append("upload_as_group")
+            if not title:
+                missing.append("title")
+            if not content:
+                missing.append("story_body")
             return "failed", f"missing fields: {', '.join(missing)}", 0.0, {}
         
         # Resolve source GUID
@@ -276,7 +280,7 @@ def main():
             print(f"  Source: {metadata['source']} ({metadata['source_guid']})")
             print(f"  Group: {metadata['group']}")
             print(f"  Title: {metadata['title_preview']}")
-            print(f"  Status: ", end="")
+            print("  Status: ", end="")
         else:
             print(f"{prefix} {filename:50s} ", end="")
         

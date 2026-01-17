@@ -8,7 +8,7 @@
 # Client version is pinned in pyproject.toml
 FROM chromadb/chroma:0.5.23
 
-# OCI Labels - Version metadata per SERVICE_COMPATIBILITY.md
+# OCI Labels - Version metadata per service_compatibility.md
 ARG BUILD_DATE
 ARG GIT_COMMIT
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \

@@ -2,7 +2,7 @@
 """
 Version Compatibility Checker
 
-Validates that all service versions match the SERVICE_COMPATIBILITY.md matrix.
+Validates that all service versions match the docs/development/service_compatibility.md matrix.
 Run this as part of CI/CD to prevent version drift.
 
 Usage:
@@ -44,7 +44,7 @@ class VersionMismatch(NamedTuple):
 
 
 def parse_compatibility_md(path: Path) -> VersionDict:
-    """Parse SERVICE_COMPATIBILITY.md and extract version mappings."""
+    """Parse docs/development/service_compatibility.md and extract version mappings."""
     content = path.read_text()
     versions: VersionDict = {
         "services": {},
@@ -187,7 +187,7 @@ def validate_versions(
     pyproject_specs: list[VersionSpec],
     dockerfile_specs: list[VersionSpec],
 ) -> list[VersionMismatch]:
-    """Validate all versions against SERVICE_COMPATIBILITY.md."""
+    """Validate all versions against docs/development/service_compatibility.md."""
     mismatches: list[VersionMismatch] = []
     
     # Check service library versions
@@ -204,7 +204,7 @@ def validate_versions(
             if spec_name == lib_name_normalized and spec.version != expected_version:
                 mismatches.append(VersionMismatch(
                     name=lib_name,
-                    expected_source="SERVICE_COMPATIBILITY.md",
+                    expected_source="docs/development/service_compatibility.md",
                     expected_version=expected_version,
                     actual_source=spec.source,
                     actual_version=spec.version,
@@ -219,7 +219,7 @@ def validate_versions(
                 if spec.version != expected_version:
                     mismatches.append(VersionMismatch(
                         name=spec.name,
-                        expected_source="SERVICE_COMPATIBILITY.md",
+                        expected_source="docs/development/service_compatibility.md",
                         expected_version=expected_version,
                         actual_source=f"{spec.source}:{spec.line}" if spec.line else spec.source,
                         actual_version=spec.version,
@@ -236,8 +236,8 @@ def main() -> int:
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
     
-    # Check for SERVICE_COMPATIBILITY.md
-    compat_file = project_root / "SERVICE_COMPATIBILITY.md"
+    # Check for docs/development/service_compatibility.md
+    compat_file = project_root / "docs/development/service_compatibility.md"
     if not compat_file.exists():
         print(f"ERROR: {compat_file} not found")
         print("Create this file using the version_policy.md template")
@@ -251,9 +251,9 @@ def main() -> int:
     try:
         compat_versions = parse_compatibility_md(compat_file)
         if verbose:
-            print(f"\nParsed {len(compat_versions['services'])} services from SERVICE_COMPATIBILITY.md")
-            print(f"Parsed {len(compat_versions['python'])} Python deps from SERVICE_COMPATIBILITY.md")
-            print(f"Parsed {len(compat_versions['images'])} images from SERVICE_COMPATIBILITY.md")
+            print(f"\nParsed {len(compat_versions['services'])} services from docs/development/service_compatibility.md")
+            print(f"Parsed {len(compat_versions['python'])} Python deps from docs/development/service_compatibility.md")
+            print(f"Parsed {len(compat_versions['images'])} images from docs/development/service_compatibility.md")
     except Exception as e:
         print(f"ERROR: Failed to parse {compat_file}: {e}")
         return 2
@@ -313,7 +313,7 @@ def main() -> int:
     else:
         print(f"❌ Found {total_issues} issue(s)")
         print("\nTo fix:")
-        print("  1. Update SERVICE_COMPATIBILITY.md with correct versions")
+        print("  1. Update docs/development/service_compatibility.md with correct versions")
         print("  2. Update pyproject.toml files to match")
         print("  3. Update Dockerfiles to match")
         print("  4. Run this check again")

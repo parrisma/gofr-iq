@@ -480,7 +480,7 @@ curl http://localhost:8000/api/v1/heartbeat
 ## Getting Help
 
 - **Issues**: Create GitHub issue with error logs
-- **Docs**: Check [docs/README.md](../README.md) for full documentation
+- **Docs**: Check [docs/readme.md](../readme.md) for full documentation
 - **Debugging**: Enable debug logs: `export GOFR_IQ_LOG_LEVEL=DEBUG`
 - **Performance**: Check `logs/gofr-iq.log` for slow operations
 

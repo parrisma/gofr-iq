@@ -197,7 +197,13 @@ do_stop() {
     echo "======================================================================="
     
     log_info "Stopping services..."
-    docker compose -f "$COMPOSE_FILE" down
+    
+    if [ "$TEST_MODE" = true ]; then
+        # In test mode, use -v to remove anonymous volumes and keep system clean
+        docker compose -f "$COMPOSE_FILE" down -v
+    else
+        docker compose -f "$COMPOSE_FILE" down
+    fi
     
     # Stop Vault separately only in non-test mode (test mode vault is in compose)
     if [ "$TEST_MODE" = false ]; then

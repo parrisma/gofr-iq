@@ -3,7 +3,7 @@
 Synthetic Story Generator for GOFR-IQ
 
 Generates synthetic news stories to stress-test graph extraction logic.
-Follows the specification in simulation/SYNTHETIC_DATA_PROPOSAL.md.
+Follows the specification in simulation/synthetic_data_proposal.md.
 
 Usage:
     python simulation/generate_synthetic_stories.py --count 10 --output data/synthetic

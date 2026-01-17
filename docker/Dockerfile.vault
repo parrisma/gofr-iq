@@ -6,7 +6,7 @@
 
 FROM hashicorp/vault:1.15.6
 
-# OCI Labels - Version metadata per SERVICE_COMPATIBILITY.md
+# OCI Labels - Version metadata per service_compatibility.md
 ARG BUILD_DATE
 ARG GIT_COMMIT
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \

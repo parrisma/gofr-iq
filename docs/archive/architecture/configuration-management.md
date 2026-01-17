@@ -285,10 +285,11 @@ Goal: run automated tests without a manual Vault unseal/`init` step.
 
 3) Run tests (defaults start servers + infra when needed):
     ```bash
-    ./scripts/run_tests.sh            # all tests
-    ./scripts/run_tests.sh --unit     # unit only, no servers
-    ./scripts/run_tests.sh --integration
+    ./scripts/run_tests.sh --mode unit          # unit only, no servers (default)
+    ./scripts/run_tests.sh --mode integration   # infra + servers
+    ./scripts/run_tests.sh --mode all
     ```
+    Add `--refresh-env` when you need to regenerate `docker/.env` and `config/generated/secrets.env` (first run, rotated secrets, CI).
 
 **How tests get auth state without unseal:**
 - `run_tests.sh` sets Vault endpoints to the test stack and seeds `VAULT_TOKEN` from `GOFR_VAULT_DEV_TOKEN` if present.

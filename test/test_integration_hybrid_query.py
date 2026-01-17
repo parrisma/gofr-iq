@@ -284,7 +284,7 @@ class TestHybridQueryIntegration:
     
     In live mode, captured data is saved to test/tuning/ for analysis.
     
-    Note: Requires ChromaDB to be running. Use --with-servers to auto-start infrastructure.
+    Note: Requires ChromaDB to be running. Run via ./scripts/run_tests.sh --mode integration to auto-start infrastructure.
     """
 
     @pytest.fixture(scope="class", autouse=True)

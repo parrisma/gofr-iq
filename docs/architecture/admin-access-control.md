@@ -633,7 +633,7 @@ During transition:
 - `docs/features/group-access.md`: Update source access section
 - `docs/features/document-ingestion.md`: Update source validation section
 - `docs/reference/api-reference.md`: Update source tool descriptions
-- `README.md`: Add bootstrap section with admin token creation
+- `readme.md`: Add bootstrap section with admin token creation
 
 ### Step 10: Validation and cleanup
 **Final checks**:

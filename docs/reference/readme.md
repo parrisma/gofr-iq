@@ -54,7 +54,7 @@ In-depth functional and technical design review from architecture analysis.
 
 ## Related Guides
 
-- 📖 Main docs: [Back to main documentation](../README.md)
+- 📖 Main docs: [Back to main documentation](../readme.md)
 - 🏗️ Architecture: [System architecture](../architecture/overview.md)
 - ✨ Features: [Feature documentation](../features/document-ingestion.md)
 - 🔧 Development: [Developer guides](../development/testing.md)

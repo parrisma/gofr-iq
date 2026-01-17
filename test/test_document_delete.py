@@ -6,7 +6,7 @@ Tests for complete document deletion from all storage layers:
 - Graph index (Neo4j nodes)
 
 Phase: Document Hard Delete Feature
-See: docs/features/DOCUMENT_HARD_DELETE_PROPOSAL.md
+See: docs/features/document_hard_delete_proposal.md
 """
 
 from __future__ import annotations

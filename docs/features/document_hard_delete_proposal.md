@@ -312,7 +312,7 @@ The following files were created or modified:
 | `app/services/__init__.py` | Modified | Exported `log_document_delete` |
 | `scripts/manage_document.sh` | Modified | Added `delete` command with argument parsing |
 | `test/test_document_delete.py` | Created | Comprehensive test suite (~500 lines) |
-| `docs/features/DOCUMENT_HARD_DELETE_PROPOSAL.md` | Created | This proposal document |
+| `docs/features/document_hard_delete_proposal.md` | Created | This proposal document |
 
 ### 8.2 Existing Deletion Methods
 

@@ -223,6 +223,35 @@ if [ -f "$DOCKER_ENV_FILE" ]; then
     set +a
 fi
 
+# Step 5.5: Merge port configuration into docker .env for docker compose
+log_info "Merging port configuration into docker .env..."
+if [ -f "$PORTS_FILE" ]; then
+    # Check if ports are already in .env (avoid duplicates)
+    if ! grep -q "GOFR_IQ_MCP_PORT" "$DOCKER_ENV_FILE" 2>/dev/null; then
+        echo "" >> "$DOCKER_ENV_FILE"
+        echo "# Port Configuration (merged from gofr-common)" >> "$DOCKER_ENV_FILE"
+        cat "$PORTS_FILE" >> "$DOCKER_ENV_FILE"
+        log_success "Port configuration merged"
+    else
+        log_info "Port configuration already present in .env"
+    fi
+fi
+
+# Also merge shared secrets if they exist
+SHARED_ENV="${PROJECT_ROOT}/lib/gofr-common/.env"
+if [ -f "$SHARED_ENV" ]; then
+    # Merge any missing secrets from gofr-common/.env
+    while IFS='=' read -r key value; do
+        # Skip comments and empty lines
+        [[ "$key" =~ ^#.*$ ]] && continue
+        [[ -z "$key" ]] && continue
+        # Only add if not already present
+        if ! grep -q "^${key}=" "$DOCKER_ENV_FILE" 2>/dev/null; then
+            echo "${key}=${value}" >> "$DOCKER_ENV_FILE"
+        fi
+    done < "$SHARED_ENV"
+fi
+
 # Step 6: Start all services
 log_info "Starting all services..."
 cd "$SCRIPT_DIR"

@@ -2,7 +2,7 @@
 # Single-stage build with supervisor for MCP + MCPO + Web servers
 FROM python:3.11.11-slim
 
-# OCI Labels - Version metadata per SERVICE_COMPATIBILITY.md
+# OCI Labels - Version metadata per service_compatibility.md
 # These are baked into the image for traceability
 ARG BUILD_DATE
 ARG GIT_COMMIT
@@ -46,7 +46,7 @@ WORKDIR /home/gofr-iq
 
 # Copy project files
 COPY --chown=gofr-iq:gofr-iq pyproject.toml /home/gofr-iq/
-COPY --chown=gofr-iq:gofr-iq README.md /home/gofr-iq/
+COPY --chown=gofr-iq:gofr-iq readme.md /home/gofr-iq/
 COPY --chown=gofr-iq:gofr-iq app/ /home/gofr-iq/app/
 COPY --chown=gofr-iq:gofr-iq lib/ /home/gofr-iq/lib/
 

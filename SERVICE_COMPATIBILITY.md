@@ -1,1 +1,0 @@
-docs/getting-started/service-compatibility.md
