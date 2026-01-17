@@ -1,0 +1,1 @@
+# Prevent accidental secret strings (pattern enforcement handled via pre-commit)

@@ -43,6 +43,7 @@ import argparse
 import secrets
 import sys
 import os
+import json
 from pathlib import Path
 from typing import Optional
 
@@ -67,6 +68,7 @@ except ImportError as e:
 PROJECT_ROOT = Path(__file__).parent.parent
 VAULT_INIT_FILE = PROJECT_ROOT / "docker" / ".vault-init.env"
 DOCKER_ENV_FILE = PROJECT_ROOT / "docker" / ".env"
+BOOTSTRAP_TOKEN_FILE = PROJECT_ROOT / "config" / "generated" / "bootstrap_tokens.json"
 
 
 def check_vault_status(vault_addr: str) -> dict:
@@ -286,7 +288,7 @@ def initialize_auth_service(vault_url: str, vault_token: str, jwt_secret: str) -
 
 
 def create_bootstrap_tokens(auth: AuthService, hvac_client: hvac.Client, rotate: bool = False):
-    """Create long-lived bootstrap tokens and store UUIDs in Vault."""
+    """Create long-lived bootstrap tokens and store them in Vault and on disk (0600)."""
     try:
         # Token lifetime: 365 days
         token_lifetime = 86400 * 365
@@ -311,7 +313,7 @@ def create_bootstrap_tokens(auth: AuthService, hvac_client: hvac.Client, rotate:
         public_payload = pyjwt.decode(public_token, options={"verify_signature": False})
         public_uuid = public_payload['jti']
         
-        # Store token UUIDs (NOT the JWT strings!) in Vault using hvac client
+        # Store token UUIDs (reference) in Vault using hvac client
         hvac_client.secrets.kv.v2.create_or_update_secret(
             path='gofr/config/bootstrap-tokens/admin-token-id',
             secret={'value': admin_uuid},
@@ -323,13 +325,30 @@ def create_bootstrap_tokens(auth: AuthService, hvac_client: hvac.Client, rotate:
             mount_point='secret'
         )
         
-        print("✅ Stored token UUIDs in Vault")
+        # Store full tokens in Vault (authoritative)
+        hvac_client.secrets.kv.v2.create_or_update_secret(
+            path='gofr/config/bootstrap-tokens/tokens',
+            secret={'admin_token': admin_token, 'public_token': public_token},
+            mount_point='secret'
+        )
+        print("✅ Stored bootstrap tokens in Vault (secret/gofr/config/bootstrap-tokens/tokens)")
+
+        # Persist tokens to disk (0600) for automation consumers
+        BOOTSTRAP_TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
+        token_payload = {
+            "admin_token": admin_token,
+            "public_token": public_token,
+            "ttl_seconds": token_lifetime,
+        }
+        BOOTSTRAP_TOKEN_FILE.write_text(json.dumps(token_payload, indent=2))
+        BOOTSTRAP_TOKEN_FILE.chmod(0o600)
+        print(f"✅ Saved bootstrap tokens to {BOOTSTRAP_TOKEN_FILE} (0600)")
         
         # Print tokens to console (only time they're shown!)
         print("\n" + "="*70)
         print("🎉 Bootstrap Complete!")
         print("="*70)
-        print("\n⚠️  SAVE THESE TOKENS SECURELY (they won't be shown again):\n")
+        print("\n⚠️  SAVE THESE TOKENS SECURELY (also stored in Vault and {BOOTSTRAP_TOKEN_FILE}):\n")
         print(f"Admin Token (365-day):  {admin_token}\n")
         print(f"Public Token (365-day): {public_token}\n")
         print("="*70)

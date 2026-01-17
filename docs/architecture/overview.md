@@ -104,10 +104,6 @@ All interfaces share the same tool implementations under `app/tools/`.
 
 **Token-based authentication** with group membership and scopes:
 
-- **JWT Tokens** - Signed with `GOFR_IQ_JWT_SECRET`
-- **Group Membership** - User belongs to 1+ groups (e.g., `apac-research`, `japan-desk`)
-- **Scopes** - Permissions: `read`, `write`, `admin`
-- **Backend** - Vault (prod), File (dev), Memory (test)
 
 See [Authentication Architecture](authentication.md) for details.
 
@@ -126,14 +122,14 @@ See [Authentication Architecture](authentication.md) for details.
 7. Update ChromaDB with embeddings
 8. Update Neo4j with graph relationships
 9. Return `{ guid, status, language, duplicate_of?, extraction }`
-
-**Dependencies**:
-- `DocumentStore` - File storage
-- `SourceRegistry` - Source validation
-- `LanguageDetector` - Language detection
-- `DuplicateDetector` - Similarity check
-- `LLMService` - Entity extraction
 - `EmbeddingIndex` - Vector storage
+### 4. Single Source of Truth
+
+- Secrets (JWT, tokens, API keys) live only in Vault; no fallbacks or local defaults.
+- Ports come only from lib/gofr-common/config/gofr_ports.env.
+- Runtime entrypoints (MCP, MCPO, Web, Simulation) fail fast if GOFR_JWT_SECRET differs from Vault.
+- docker/.env is generated only by bootstrap.py with Vault-derived values; generate_envs.sh never writes docker/.env.
+- Commits are blocked if GOFR_JWT_SECRET appears in tracked files.
 - `GraphIndex` - Graph updates
 
 #### QueryService

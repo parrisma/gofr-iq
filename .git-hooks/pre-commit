@@ -1,0 +1,18 @@
+#!/bin/sh
+# Fail if GOFR_JWT_SECRET appears in tracked files (excluding generated artifacts)
+
+set -euo pipefail
+
+# Paths to exclude (generated or vendor)
+exclude='^(config/generated/|logs/|tmp/|data/|lib/gofr-common/.env|docker/.vault-init.env)$'
+
+git diff --cached --name-only | while read -r file; do
+    # Skip directories or excluded paths
+    echo "$file" | grep -Eq "$exclude" && continue
+    if git show ":$file" | grep -q "GOFR_JWT_SECRET"; then
+        echo "[pre-commit] Blocking commit: GOFR_JWT_SECRET found in $file"
+        exit 1
+    fi
+done
+
+exit 0

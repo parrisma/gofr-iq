@@ -25,9 +25,11 @@ Environment Variables:
 """
 
 import asyncio
+import json
 import os
 import signal
 import sys
+import urllib.request
 
 from app.mcpo_server.wrapper import start_mcpo_wrapper
 
@@ -66,10 +68,38 @@ def main():
     mode = os.environ.get("GOFR_IQ_MCPO_MODE", "public").lower()
     if mode == "auth":
         jwt_token = os.environ.get("GOFR_IQ_JWT_TOKEN")
-        if jwt_token:
-            print("  Mode: Authenticated (JWT token will be passed to MCP)")
-        else:
+        jwt_secret = os.environ.get("GOFR_IQ_JWT_SECRET")
+        vault_addr = os.environ.get("GOFR_VAULT_URL") or os.environ.get("VAULT_ADDR")
+        vault_token = os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_TOKEN")
+
+        if not jwt_token:
             print("  Mode: Authenticated (but GOFR_IQ_JWT_TOKEN not set - will fail)")
+            sys.exit(1)
+
+        if not jwt_secret:
+            print("  Mode: Authenticated (GOFR_IQ_JWT_SECRET required and must match Vault)")
+            sys.exit(1)
+
+        if not vault_addr or not vault_token:
+            print("  Mode: Authenticated (VAULT_ADDR/VAULT_TOKEN required to validate JWT secret)")
+            sys.exit(1)
+
+        req = urllib.request.Request(
+            f"{vault_addr}/v1/secret/data/gofr/config/jwt-signing-secret",
+            headers={"X-Vault-Token": vault_token},
+            method="GET",
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            payload = json.loads(resp.read())
+        vault_jwt = payload.get("data", {}).get("data", {}).get("value")
+        if not vault_jwt:
+            print("  Mode: Authenticated (JWT secret missing in Vault)")
+            sys.exit(1)
+        if jwt_secret != vault_jwt:
+            print("  Mode: Authenticated (GOFR_IQ_JWT_SECRET does not match Vault jwt-signing-secret)")
+            sys.exit(1)
+
+        print("  Mode: Authenticated (JWT token will be passed to MCP; secret validated)")
     else:
         print("  Mode: Public (no JWT token passed to MCP)")
 

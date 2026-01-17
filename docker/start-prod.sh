@@ -190,6 +190,17 @@ case "$VAULT_STATUS" in
         ;;
 esac
 
+# Step 4.5: Validate JWT secret consistency (docker/.env vs Vault)
+if [ -n "${GOFR_JWT_SECRET:-}" ] && [ -n "${VAULT_TOKEN:-}" ]; then
+    VAULT_JWT=$(docker exec -e VAULT_TOKEN="${VAULT_TOKEN}" gofr-vault \
+        vault kv get -field=value secret/gofr/config/jwt-signing-secret 2>/dev/null || true)
+    if [ -n "$VAULT_JWT" ] && [ "$VAULT_JWT" != "$GOFR_JWT_SECRET" ]; then
+        log_error "GOFR_JWT_SECRET in docker/.env differs from Vault; refusing to start."
+        log_info "Regenerate docker/.env via scripts/bootstrap.py or remove stale docker/.env before retry."
+        exit 1
+    fi
+fi
+
 # Step 5: Run bootstrap
 log_info "Running bootstrap.py..."
 cd "$PROJECT_ROOT"

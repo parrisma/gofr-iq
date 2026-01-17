@@ -24,10 +24,11 @@ Environment Variables:
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import os
-import secrets
 import sys
+import urllib.request
 
 import uvicorn
 
@@ -121,18 +122,44 @@ if __name__ == "__main__":
             if not require_auth:
                 startup_logger.warning("Authentication disabled via GOFR_IQ_AUTH_ENABLED")
             
-            # Auto-generate secret for development if not provided
+            # Require explicit JWT secret in all modes
             if require_auth and not jwt_secret:
-                env = os.getenv("GOFR_IQ_ENV", os.getenv("GOFR_IQ_ENV", "PROD"))
-                if env.upper() not in ["PROD", "PRODUCTION"]:
-                    jwt_secret = f"dev-secret-{secrets.token_hex(16)}"
-                    startup_logger.info("Auto-generated development JWT secret")
-                else:
-                    startup_logger.error(
-                        "FATAL: JWT secret required in production",
-                        help="Set GOFR_IQ_JWT_SECRET environment variable or use --jwt-secret flag",
-                    )
-                    sys.exit(1)
+                startup_logger.error(
+                    "FATAL: JWT secret required",
+                    help="Set GOFR_IQ_JWT_SECRET environment variable or use --jwt-secret flag",
+                )
+                sys.exit(1)
+
+        # If auth enabled, validate JWT secret against Vault single source of truth
+        if require_auth:
+            vault_addr = os.environ.get("GOFR_VAULT_URL") or os.environ.get("VAULT_ADDR")
+            vault_token = os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_TOKEN")
+            if not vault_addr or not vault_token:
+                startup_logger.error(
+                    "FATAL: VAULT_ADDR/VAULT_TOKEN required to validate JWT secret",
+                    help="Ensure Vault env vars are set (GOFR_VAULT_URL/GOFR_VAULT_TOKEN)",
+                )
+                sys.exit(1)
+            req = urllib.request.Request(
+                f"{vault_addr}/v1/secret/data/gofr/config/jwt-signing-secret",
+                headers={"X-Vault-Token": vault_token},
+                method="GET",
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                payload = json.loads(resp.read())
+            vault_jwt = payload.get("data", {}).get("data", {}).get("value")
+            if not vault_jwt:
+                startup_logger.error(
+                    "FATAL: JWT secret not found in Vault",
+                    help="Check secret/gofr/config/jwt-signing-secret",
+                )
+                sys.exit(1)
+            if jwt_secret != vault_jwt:
+                startup_logger.error(
+                    "FATAL: GOFR_IQ_JWT_SECRET does not match Vault jwt-signing-secret",
+                    help="Regenerate docker/.env via bootstrap.py or set correct secret",
+                )
+                sys.exit(1)
 
         # Load configuration from environment
         config = get_config()

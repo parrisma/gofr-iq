@@ -53,6 +53,46 @@ def load_tokens() -> Dict[str, str]:
         sys.exit(1)
 
 
+def load_sources_from_registry():
+    """Build source guid map from local simulation registry instead of querying the API."""
+    from simulation.generate_synthetic_stories import MOCK_SOURCES
+    return {s.name: s.guid for s in MOCK_SOURCES}
+
+def ensure_sources_exist(token: str):
+    """Ensures that the synthetic sources exist in the Source Registry via the API."""
+    from simulation.generate_synthetic_stories import MOCK_SOURCES
+    
+    # We use the admin token to create sources
+    admin_token = token
+    
+    print(f"{Colors.BLUE}Checking Source Registry for synthetic sources...{Colors.RESET}")
+    
+    existing = load_sources() # Get actual existing sources from API
+    
+    for mock_src in MOCK_SOURCES:
+        if mock_src.name in existing:
+            print(f"  ✓ {mock_src.name} exists ({existing[mock_src.name]})")
+            # Ideally we check/update trust level here, but for now we assume it's okay or we update it
+        else:
+            print(f"  + Creating {mock_src.name}...")
+            # Create Source via curl/manage_source.sh
+            # We use manage_source.sh create command
+            cmd = [
+                "./scripts/manage_source.sh", "create",
+                mock_src.name,
+                "--description", mock_src.style_guide[:100], # Truncate desc
+                "--trust-level", str(mock_src.trust_level),
+                "--type", "news_wire",
+                "--region", "global",
+                "--docker"
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True, cwd=WORKSPACE_ROOT)
+            if result.returncode != 0:
+                print(f"{Colors.RED}Failed to create source {mock_src.name}: {result.stderr}{Colors.RESET}")
+            else:
+                 # Extract GUID from output if possible, or just re-load sources later
+                 print(f"    Created.")
+
 def load_sources() -> Dict[str, str]:
     """Build source name → GUID mapping from manage_source.sh (raw JSON to avoid truncation)."""
     try:
@@ -72,8 +112,6 @@ def load_sources() -> Dict[str, str]:
             payload = json.loads(payload)
         sources_json = payload.get("data", {}).get("sources", [])
         sources = {src.get("name"): src.get("source_guid") for src in sources_json if src.get("name")}
-        if not sources:
-            raise ValueError("No sources found in JSON response")
         return sources
     except Exception as e:
         print(f"{Colors.RED}ERROR: Failed to load sources{Colors.RESET}")
@@ -241,6 +279,13 @@ def main():
     print("Loading tokens from .env.synthetic...", end=" ")
     tokens = load_tokens()
     print(f"{Colors.GREEN}✓{Colors.RESET} ({len(tokens)} groups)")
+    
+    # Ensure Simulation Sources exist
+    admin_token = tokens.get("admin")
+    if admin_token:
+        ensure_sources_exist(admin_token)
+    else:
+        print(f"{Colors.RED}No admin token found, skipping source creation check.{Colors.RESET}")
     
     print("Loading sources from registry...", end=" ")
     sources = load_sources()
