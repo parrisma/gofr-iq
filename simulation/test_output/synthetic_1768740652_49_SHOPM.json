@@ -1,0 +1,37 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-14T03:31:52.384229",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding ShopMart",
+  "story_body": "LuxeBrands Manufacturing Facility Suffers Critical Infrastructure Failure; ShopMart Supply Chain Continuity at Risk\n\nLuxeBrands Corporation experienced a catastrophic thermal event at its primary production facility in Henderson, Nevada early Tuesday morning, resulting in complete operational shutdown of approximately 847,000 square feet of manufacturing capacity. The fire originated in the textile finishing sector's heat-setting equipment, specifically within the stentering frame's gas-fired heating chamber operating at 190 degrees Celsius.\n\nInitial damage assessments indicate total loss of the facility's automated cutting systems, including 14 Gerber Cutter Z7 units capable of processing 1,200 garment layers simultaneously. The facility's computerized pattern grading infrastructure, which handled SKU variations across 47 product categories, sustained irreparable damage to its server architecture and backup redundancy systems.\n\nLuxeBrands' Henderson operation represented 64 percent of total production throughput, with the facility maintaining an average cycle time of 11.2 days from raw material intake to finished goods packaging. The plant operated three shifts across 22 hours daily, producing approximately 285,000 units per week across apparel and soft home goods categories.\n\nCritical to downstream distribution networks, the facility housed the company's primary quality control laboratory, equipped with Martindale abrasion testers, colorfastness chambers maintaining ISO 105 standards, and tensile strength equipment calibrated to ASTM D5034 specifications. Loss of this testing infrastructure creates immediate compliance bottlenecks for alternative sourcing strategies.\n\nShopMart Corporation, which maintains LuxeBrands as a tier-one supplier representing approximately 18 percent of its soft goods inventory allocation, faces significant replenishment challenges within the 14-to-21-day window. ShopMart's distribution model operates on a just-in-time framework with average warehouse inventory turns of 8.7 annually, maintaining only 12-15 days of safety stock for LuxeBrands product categories.\n\nThe retailer's planogram compliance metrics will deteriorate rapidly as stock-keeping units reach reorder points without available replenishment. ShopMart's automated replenishment systems, configured with lead time parameters of 9-11 days for LuxeBrands merchandise, will trigger backorder protocols affecting approximately 340 SKUs across 1,847 store locations.\n\nAlternative sourcing from LuxeBrands' secondary facilities in Guatemala and Vietnam adds 6-8 days to transportation lead times and operates at 40 percent lower throughput capacity. Air freight alternatives increase per-unit logistics costs by $4.30-$6.80, compressing ShopMart's category gross margins from 38.2 percent to estimated 31.5 percent.\n\nLuxeBrands estimates 90-120 days minimum for partial capacity restoration, with full operational capability requiring 180-day reconstruction timeline pending insurance adjuster assessments and equipment procurement cycles.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

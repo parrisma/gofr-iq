@@ -17,12 +17,19 @@ import time
 import argparse
 from pathlib import Path
 from typing import Dict, Tuple
-from dotenv import dotenv_values
+
+# SSOT: Use the centralized environment module
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from lib.gofr_common.gofr_env import (
+    get_admin_token,
+    get_token_for_group,
+    get_workspace_root,
+    GofrEnvError,
+)
 
 # Configuration
-ENV_FILE = Path(__file__).parent / ".env.synthetic"
 TEST_OUTPUT = Path(__file__).parent / "test_output"
-WORKSPACE_ROOT = Path(__file__).parent.parent
+WORKSPACE_ROOT = get_workspace_root()
 
 
 class Colors:
@@ -34,28 +41,10 @@ class Colors:
     RESET = '\033[0m'
 
 
-def load_tokens() -> Dict[str, str]:
-    """Load JWT tokens from .env.synthetic."""
-    try:
-        config = dotenv_values(ENV_FILE)
-        tokens_str = config.get("GOFR_SYNTHETIC_TOKENS", "{}")
-        
-        # Parse JSON string
-        tokens = json.loads(tokens_str)
-        
-        if not tokens:
-            raise ValueError("GOFR_SYNTHETIC_TOKENS is empty")
-        
-        return tokens
-    except Exception as e:
-        print(f"{Colors.RED}ERROR: Failed to load tokens from {ENV_FILE}{Colors.RESET}")
-        print(f"  {e}")
-        sys.exit(1)
-
-
 def load_sources_from_registry():
     """Build source guid map from local simulation registry instead of querying the API."""
     from simulation.generate_synthetic_stories import MOCK_SOURCES
+
     return {s.name: s.guid for s in MOCK_SOURCES}
 
 def ensure_sources_exist(token: str):
@@ -67,7 +56,7 @@ def ensure_sources_exist(token: str):
     
     print(f"{Colors.BLUE}Checking Source Registry for synthetic sources...{Colors.RESET}")
     
-    existing = load_sources() # Get actual existing sources from API
+    existing = load_sources(admin_token) # Get actual existing sources from API
     
     for mock_src in MOCK_SOURCES:
         if mock_src.name in existing:
@@ -84,7 +73,8 @@ def ensure_sources_exist(token: str):
                 "--trust-level", str(mock_src.trust_level),
                 "--type", "news_wire",
                 "--region", "global",
-                "--docker"
+                "--docker",
+                "--token", admin_token
             ]
             result = subprocess.run(cmd, capture_output=True, text=True, cwd=WORKSPACE_ROOT)
             if result.returncode != 0:
@@ -93,11 +83,11 @@ def ensure_sources_exist(token: str):
                  # Extract GUID from output if possible, or just re-load sources later
                  print(f"    Created.")
 
-def load_sources() -> Dict[str, str]:
+def load_sources(token: str) -> Dict[str, str]:
     """Build source name → GUID mapping from manage_source.sh (raw JSON to avoid truncation)."""
     try:
         result = subprocess.run(
-            ["./scripts/manage_source.sh", "list", "--docker", "--json"],
+            ["./scripts/manage_source.sh", "list", "--docker", "--json", "--token", token],
             capture_output=True,
             text=True,
             cwd=WORKSPACE_ROOT,
@@ -124,6 +114,7 @@ def ingest_document(
     title: str,
     content: str,
     token: str,
+    metadata: Dict = {},
     verbose: bool = False
 ) -> Tuple[bool, str, float]:
     """
@@ -134,15 +125,33 @@ def ingest_document(
     """
     start_time = time.time()
     
+    # Write content to temp file to avoid shell escaping issues
+    import tempfile
+    content_file = None
+    
     try:
+        # Create temp file with content
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+            f.write(content)
+            content_file = f.name
+        
         cmd = [
             "./scripts/manage_document.sh",
             "ingest",
+            "--docker",
             "--source-guid", source_guid,
             "--title", title,
-            "--content", content,
+            "--content-file", content_file,
             "--token", token,
         ]
+
+        # TODO: Pass metadata once manage_document.sh supports --metadata
+        # if metadata:
+        #     cmd.extend(["--metadata", json.dumps(metadata)])
+        
+        if verbose:
+            print(f"    CMD: {cmd}")
+            print(f"    Content file: {content_file}")
         
         result = subprocess.run(
             cmd,
@@ -155,19 +164,26 @@ def ingest_document(
         duration = time.time() - start_time
         output = result.stdout + result.stderr
         
-        # Classify result
-        if "already exists" in output.lower() or "duplicate" in output.lower():
-            return False, "duplicate", duration
-        elif "document uploaded" in output.lower() or "success" in output.lower():
-            return True, "success", duration
-        elif "authentication" in output.lower() or "auth" in output.lower():
-            return False, f"auth_error: {output[:100]}", duration
-        elif "error" in output.lower():
-            return False, f"error: {output[:100]}", duration
-        elif result.returncode == 0:
+        if verbose:
+            print(f"    Exit code: {result.returncode}")
+            if result.returncode != 0:
+                print(f"    Output: {output[:300]}")
+        
+        # Classify result based on exit code first, then content
+        if result.returncode == 0:
+            if "already exists" in output.lower() or "duplicate" in output.lower():
+                return False, "duplicate", duration
             return True, "success", duration
         else:
-            return False, f"failed (exit {result.returncode}): {output[:100]}", duration
+            # Non-zero exit - check for specific errors
+            if "usage:" in output.lower():
+                return False, f"usage_error: {output[:200]}", duration
+            elif "unauthorized" in output.lower() or "401" in output:
+                return False, f"auth_error: {output[:100]}", duration
+            elif "error" in output.lower():
+                return False, f"error: {output[:100]}", duration
+            else:
+                return False, f"failed (exit {result.returncode}): {output[:100]}", duration
             
     except subprocess.TimeoutExpired:
         duration = time.time() - start_time
@@ -175,12 +191,19 @@ def ingest_document(
     except Exception as e:
         duration = time.time() - start_time
         return False, f"exception: {e}", duration
+    finally:
+        # Clean up temp file
+        if content_file:
+            import os
+            try:
+                os.unlink(content_file)
+            except:
+                pass
 
 
 def process_story(
     story_file: Path,
     sources: Dict[str, str],
-    tokens: Dict[str, str],
     dry_run: bool = False,
     verbose: bool = False
 ) -> Tuple[str, str, float, dict]:
@@ -220,9 +243,10 @@ def process_story(
         if not source_guid:
             return "failed", f"unknown source: {source_name}", 0.0, {}
         
-        # Resolve token
-        token = tokens.get(group)
-        if not token:
+        # Resolve token via SSOT module
+        try:
+            token = get_token_for_group(group)
+        except GofrEnvError as e:
             return "failed", f"no token for group: {group}", 0.0, {}
         
         metadata = {
@@ -236,9 +260,21 @@ def process_story(
         if dry_run:
             return "validated", "would upload", 0.0, metadata
         
+        # Prepare metadata for ingestion
+        # We pass validated metadata for the graph to use
+        ingest_metadata = {
+            "source_type": story.get("source_type", "NEWS_WIRE"),
+            "event_type": story.get("event_type"),
+            "published_at": story.get("published_at"),
+            "meta_source_name": story.get("meta_source_name"), 
+            "trust_level": story.get("trust_level", 5),
+            "group_guid": story.get("group_guid"),
+            "validation_metadata": metadata  # Nest the full validation metadata for later checking
+        }
+
         # Perform ingestion
         success, message, duration = ingest_document(
-            source_guid, title, content, token, verbose
+            source_guid, title, content, token, ingest_metadata, verbose
         )
         
         if success:
@@ -271,24 +307,31 @@ def main():
         action="store_true",
         help="Show detailed progress including source and group info"
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=0,
+        help="Limit number of documents to process (0 = all)"
+    )
     args = parser.parse_args()
     
     print("=== Synthetic Document Ingestion ===\n")
     
-    # Load configuration
-    print("Loading tokens from .env.synthetic...", end=" ")
-    tokens = load_tokens()
-    print(f"{Colors.GREEN}✓{Colors.RESET} ({len(tokens)} groups)")
+    # Load configuration via SSOT module
+    print("Loading tokens via SSOT module...", end=" ")
+    try:
+        admin_token = get_admin_token()
+        print(f"{Colors.GREEN}✓{Colors.RESET}")
+    except GofrEnvError as e:
+        print(f"{Colors.RED}✗{Colors.RESET}")
+        print(f"  {e}")
+        return 1
     
     # Ensure Simulation Sources exist
-    admin_token = tokens.get("admin")
-    if admin_token:
-        ensure_sources_exist(admin_token)
-    else:
-        print(f"{Colors.RED}No admin token found, skipping source creation check.{Colors.RESET}")
+    ensure_sources_exist(admin_token)
     
     print("Loading sources from registry...", end=" ")
-    sources = load_sources()
+    sources = load_sources(admin_token)
     print(f"{Colors.GREEN}✓{Colors.RESET} ({len(sources)} sources)")
     
     if args.dry_run:
@@ -296,11 +339,18 @@ def main():
     
     # Discover documents
     story_files = sorted(TEST_OUTPUT.glob("synthetic_*.json"))
-    print(f"\nFound {len(story_files)} synthetic documents to process\n")
+    
+    # Apply limit if specified
+    if args.limit > 0:
+        story_files = story_files[:args.limit]
+        print(f"\nProcessing {len(story_files)} documents (limited from total)\n")
+    else:
+        print(f"\nFound {len(story_files)} synthetic documents to process\n")
     
     if not story_files:
         print(f"{Colors.RED}No documents found in {TEST_OUTPUT}{Colors.RESET}")
         return 1
+
     
     # Process each document
     uploaded = 0
@@ -311,7 +361,7 @@ def main():
     
     for i, story_file in enumerate(story_files, 1):
         status, message, duration, metadata = process_story(
-            story_file, sources, tokens, args.dry_run, args.verbose
+            story_file, sources, args.dry_run, args.verbose
         )
         
         total_time += duration
@@ -338,6 +388,9 @@ def main():
             skipped += 1
         else:  # failed
             print(f"{Colors.RED}✗ Failed{Colors.RESET}: {message}")
+            if "auth_error" in message:
+                 print(f"{Colors.RED}CRITICAL: Authentication failed. Aborting run.{Colors.RESET}")
+                 return 1
             failed += 1
             failed_docs.append((filename, message))
     
@@ -345,6 +398,7 @@ def main():
     print(f"\n{'='*70}")
     print(f"Summary: {Colors.GREEN}{uploaded} uploaded{Colors.RESET}, "
           f"{Colors.YELLOW}{skipped} skipped{Colors.RESET}, "
+
           f"{Colors.RED}{failed} failed{Colors.RESET}")
     print(f"Total time: {total_time:.1f}s")
     print(f"{'='*70}")

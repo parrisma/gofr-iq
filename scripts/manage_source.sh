@@ -19,8 +19,7 @@
 #   --name NAME          Source name (required for create)
 #   --url URL            Source URL (required for create)
 #   --description DESC   Source description (optional for create)
-#   --source-type TYPE   Source type (optional, default: news_agency)
-#   --token TOKEN        JWT auth token (required for create - determines group)
+#   --source-type TYPE   Source type (optional, default: news_agency)  --trust-level LEVEL  Trust level: 1-10 integer OR high|medium|low|unverified (default: unverified)#   --token TOKEN        JWT auth token (required for create - determines group)
 #   --help, -h           Show this help message
 #
 # Examples:
@@ -71,6 +70,7 @@ SOURCE_NAME=""
 SOURCE_URL=""
 SOURCE_DESCRIPTION=""
 SOURCE_TYPE="news_agency"
+TRUST_LEVEL=""
 AUTH_TOKEN=""
 RAW_OUTPUT=""
 
@@ -109,18 +109,13 @@ Options:
   --url URL            Source URL (required for create)
   --description DESC   Source description (optional for create)
   --source-type TYPE   Source type (optional, default: news_agency)
-  --token TOKEN        JWT auth token (required for create - determines group)
+  --trust-level LEVEL  Trust level: 1-10 integer OR high|medium|low|unverified
+  --token TOKEN        JWT auth token (required - determines group)
   --help, -h           Show this help message
 
 Examples:
-  # List all sources (production docker)
-  ./manage_source.sh list --docker
-
-  # List sources in dev mode
-  ./manage_source.sh list --dev
-
-  # List sources on custom port
-  ./manage_source.sh list --docker --port 8180
+  # List all sources (requires auth token)
+  ./manage_source.sh list --docker --token "$GOFR_IQ_ADMIN_TOKEN"
 
   # Create a new source (requires auth token)
   ./manage_source.sh create --docker \
@@ -129,14 +124,21 @@ Examples:
     --description "International news agency" \
     --token "$GOFR_ADMIN_TOKEN"
 
-  # Create source with all options
+  # Create source with all options (string trust level)
   ./manage_source.sh create --docker \
     --name "Bloomberg" \
     --url "https://www.bloomberg.com" \
     --description "Financial news" \
     --source-type "financial_news" \
-    --token "$APAC_SALES_TOKEN" \
-    --host localhost
+    --trust-level high \
+    --token "$APAC_SALES_TOKEN"
+
+  # Create source with integer trust level (1-10 scale)
+  ./manage_source.sh create --docker \
+    --name "Insider Tips" \
+    --url "https://www.insidertips.com" \
+    --trust-level 2 \
+    --token "$GOFR_IQ_ADMIN_TOKEN"
 EOF
 }
 
@@ -154,6 +156,40 @@ log_error() {
 
 log_warning() {
     echo -e "${YELLOW}[WARN]${NC} $1" >&2
+}
+
+# Convert trust level (integer or string) to MCP API string format
+# Integer mapping: 1-3=unverified, 4-5=low, 6-7=medium, 8-10=high
+convert_trust_level() {
+    local input=$1
+    
+    # If already a valid string, return it
+    case "$input" in
+        high|medium|low|unverified)
+            echo "$input"
+            return 0
+            ;;
+    esac
+    
+    # Check if numeric
+    if [[ "$input" =~ ^[0-9]+$ ]]; then
+        local num=$input
+        if (( num >= 8 && num <= 10 )); then
+            echo "high"
+        elif (( num >= 6 && num <= 7 )); then
+            echo "medium"
+        elif (( num >= 4 && num <= 5 )); then
+            echo "low"
+        elif (( num >= 1 && num <= 3 )); then
+            echo "unverified"
+        else
+            log_error "Trust level must be 1-10 or high|medium|low|unverified"
+            return 1
+        fi
+    else
+        log_error "Invalid trust level: $input (use 1-10 or high|medium|low|unverified)"
+        return 1
+    fi
 }
 
 # Initialize MCP session and return session ID
@@ -316,7 +352,14 @@ if 'details' in data:
     
     # Display success
     echo ""
-    log_success "Source created successfully!"
+    # Check if the message says "already exists"
+    local message
+    message=$(echo "$result_json" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('message', ''))" 2>/dev/null)
+    if [[ "$message" == *"already exists"* ]]; then
+        log_success "Source already exists (returning existing)"
+    else
+        log_success "Source created successfully!"
+    fi
     echo ""
     echo "$result_json" | python3 -c "
 import sys, json
@@ -445,6 +488,11 @@ list_sources() {
     local auth_token=$3
     local raw_output=$4  # "raw" to emit JSON
     
+    if [[ -z "$auth_token" ]]; then
+        log_error "Auth token is required (--token)"
+        return 1
+    fi
+
     log_info "=== Listing Sources ==="
     log_info "Target: ${host}:${port}"
     [[ -n "$auth_token" ]] && log_info "Auth: Token provided (${#auth_token} chars)"
@@ -456,18 +504,14 @@ list_sources() {
     
     # Build arguments JSON
     local args
-    if [[ -n "$auth_token" ]]; then
-        args="{\"auth_tokens\": [\"${auth_token}\"]}"
-    else
-        args="{}"
-    fi
+    args="{\"auth_tokens\": [\"${auth_token}\"]}"
     
     # Call list_sources tool
     local response
     response=$(mcp_call_tool "$host" "$port" "$session_id" "list_sources" "$args") || return 1
     
     # Parse and display response
-    parse_response "$response" "list" "$raw_output"
+    parse_response "$response" "list" "$raw_output" || return 1
     
     return 0
 }
@@ -479,7 +523,8 @@ create_source() {
     local url=$4
     local description=$5
     local source_type=$6
-    local auth_token=$7
+    local trust_level=$7
+    local auth_token=$8
     
     # Validate required parameters
     if [[ -z "$name" ]]; then
@@ -499,12 +544,21 @@ create_source() {
         return 1
     fi
     
+
+    
+    # Convert trust level to MCP API format
+    local mcp_trust_level="unverified"
+    if [[ -n "$trust_level" ]]; then
+        mcp_trust_level=$(convert_trust_level "$trust_level") || return 1
+    fi
+    
     log_info "=== Creating Source ==="
     log_info "Target: ${host}:${port}"
     log_info "Name: ${name}"
     log_info "URL: ${url}"
     [[ -n "$description" ]] && log_info "Description: ${description}"
     log_info "Type: ${source_type}"
+    log_info "Trust Level: ${trust_level:-unverified} -> ${mcp_trust_level}"
     log_info "Auth: Token provided (${#auth_token} chars)"
     echo ""
     
@@ -519,6 +573,7 @@ create_source() {
     "name": "${name}",
     "url": "${url}",
     "source_type": "${source_type}",
+    "trust_level": "${mcp_trust_level}",
     "auth_tokens": ["${auth_token}"]
     $(if [[ -n "$description" ]]; then echo ", \"description\": \"${description}\""; fi)
 }
@@ -530,7 +585,7 @@ EOF
     response=$(mcp_call_tool "$host" "$port" "$session_id" "create_source" "$args") || return 1
     
     # Parse and display response
-    parse_response "$response" "create"
+    parse_response "$response" "create" || return 1
     
     return 0
 }
@@ -572,7 +627,7 @@ delete_source() {
     response=$(mcp_call_tool "$host" "$port" "$session_id" "delete_source" "$args") || return 1
     
     # Parse and display response
-    parse_response "$response" "delete"
+    parse_response "$response" "delete" || return 1
     
     return 0
 }
@@ -630,6 +685,10 @@ while [[ $# -gt 0 ]]; do
             SOURCE_TYPE="$2"
             shift 2
             ;;
+        --trust-level)
+            TRUST_LEVEL="$2"
+            shift 2
+            ;;
         --source-guid)
             SOURCE_GUID="$2"
             shift 2
@@ -674,7 +733,7 @@ case $COMMAND in
             list_sources "$MCP_HOST" "$MCP_PORT" "$AUTH_TOKEN" "$RAW_OUTPUT"
         ;;
     create)
-        create_source "$MCP_HOST" "$MCP_PORT" "$SOURCE_NAME" "$SOURCE_URL" "$SOURCE_DESCRIPTION" "$SOURCE_TYPE" "$AUTH_TOKEN"
+        create_source "$MCP_HOST" "$MCP_PORT" "$SOURCE_NAME" "$SOURCE_URL" "$SOURCE_DESCRIPTION" "$SOURCE_TYPE" "$TRUST_LEVEL" "$AUTH_TOKEN"
         ;;
     delete)
         delete_source "$MCP_HOST" "$MCP_PORT" "$SOURCE_GUID" "$AUTH_TOKEN"

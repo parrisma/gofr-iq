@@ -21,23 +21,26 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import List, Optional
 
+# SSOT: Add workspace to path and import env module
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from lib.gofr_common.gofr_env import get_admin_token, GofrEnvError
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Try to import dependencies
 try:
-    from dotenv import load_dotenv
     import httpx
 except ImportError:
-    logger.error("Missing dependencies. Please run: pip install python-dotenv httpx")
+    logger.error("Missing dependencies. Please run: pip install httpx")
     sys.exit(1)
 
 # ============================================================================
 # Configuration & Constants
 # ============================================================================
 
-MODEL_NAME = "anthropic/claude-opus-4"  # or another capable model
+MODEL_NAME = "anthropic/claude-sonnet-4.5"  # or another capable model
 MAX_RETRIES = 3
 TIMEOUT = 60.0
 
@@ -58,6 +61,9 @@ class ValidationRule:
     must_match_event: bool = False
     expected_event: Optional[str] = None
     expected_entities: List[str] = field(default_factory=list)
+    expected_relevant_clients: List[str] = field(default_factory=list)  # Client GUIDs
+    relationship_hops: int = 0  # 0=direct, 1=supplier/customer, 2=competitor
+    expected_feed_rank_range: str = "1-50"  # e.g., "1-5", "6-15", "16+"
 
 
 @dataclass
@@ -120,9 +126,23 @@ MOCK_SOURCES = [
 # Data Definitions
 # ============================================================================
 
-from simulation.universe.builder import UniverseBuilder
+from simulation.universe.builder import UniverseBuilder, DEFAULT_GROUP
+from simulation.universe.types import MockFactor, FactorExposure
 # Initialize the universe builder to access the shared topology
 UNIVERSE = UniverseBuilder()
+
+# Client portfolio mappings for validation metadata
+CLIENT_PORTFOLIOS = {
+    "client-hedge-fund": ["QNTM", "BANKO", "VIT", "GTX"],
+    "client-pension-fund": ["OMNI", "SHOPM", "TRUCK"],
+    "client-retail": ["VELO", "BLK"],
+}
+
+CLIENT_WATCHLISTS = {
+    "client-hedge-fund": ["NXS", "FIN"],
+    "client-pension-fund": ["ECO", "STR"],
+    "client-retail": ["QNTM", "LUXE"],
+}
 
 SCENARIOS = [
     Scenario(
@@ -175,29 +195,118 @@ SCENARIOS = [
         name="Indirect Supplier Delay",
         description="News about a supplier affecting the main company",
         target_tier="GOLD",
-        weight=0.10,
+        weight=0.08,
         template="News Event: Supplier Delay. Primary Subject: {related_ticker} ({related_name}). Impacted: {ticker} ({name}). Relationship: {relationship_desc}. Style Guide: {style_guide}. \nTask: Write a story about a failure at {related_name} that will specifically hurt {name} because of their relationship ({relationship_desc}). The headline should focus on the Supplier.",
         validation=ValidationRule(
-            expected_tier="GOLD", expected_event="SUPPLY_CHAIN"
+            expected_tier="GOLD", expected_event="SUPPLY_CHAIN", relationship_hops=1
         ),
     ),
      Scenario(
         name="Competitor Product Launch",
         description="Rival launches a better product",
         target_tier="SILVER",
-        weight=0.10,
+        weight=0.08,
         template="News Event: Competitor Product Launch. Subject: {related_ticker} ({related_name}). Threat to: {ticker} ({name}). Relationship: {relationship_desc}. Style Guide: {style_guide}. \nTask: Write a story about {related_name} launching a product that makes {name}'s flagship look obsolete. Focus on the competitive threat.",
         validation=ValidationRule(
-             expected_tier="SILVER", expected_event="PRODUCT_LAUNCH"
+             expected_tier="SILVER", expected_event="PRODUCT_LAUNCH", relationship_hops=2
         ),
     ),
     Scenario(
         name="Standard Filler",
         description="Routine corporate news",
         target_tier="STANDARD",
-        weight=0.55,
+        weight=0.20,
         template="News Event: Routine Update. Subject: {ticker} ({name}). Style Guide: {style_guide}. \nTask: Write a routine update (personnel, marketing, ESG). content should be low impact.",
-        validation=ValidationRule(max_score=49, expected_tier="STANDARD", expected_event="OTHER"),
+        validation=ValidationRule(max_score=49, expected_tier="STANDARD", expected_event="OTHER", relationship_hops=0),
+    ),
+    # === NEW: Macro Factor Scenarios ===
+    Scenario(
+        name="Interest Rate Impact",
+        description="Central bank rate decision affecting rate-sensitive stocks",
+        target_tier="GOLD",
+        weight=0.08,
+        template="News Event: Interest Rate Decision. Context: Federal Reserve raises/cuts rates by 25-50 bps. Focus: {ticker} ({name}). Exposure: {factor_exposure_desc}. Beta: {factor_beta}. Style Guide: {style_guide}. \nTask: Write about the rate decision and its SPECIFIC impact on {name} based on their exposure ({factor_exposure_desc}). If beta is positive, rates help them. If negative, rates hurt them.",
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="MACRO_DATA",
+            relationship_hops=0,
+            expected_feed_rank_range="1-10"
+        ),
+    ),
+    Scenario(
+        name="Commodity Price Shock",
+        description="Oil/commodity price spike affecting exposed companies",
+        target_tier="SILVER",
+        weight=0.05,
+        template="News Event: Commodity Price Surge. Context: Oil/lithium/steel prices spike 20%. Focus: {ticker} ({name}). Exposure: {factor_exposure_desc}. Beta: {factor_beta}. Style Guide: {style_guide}. \nTask: Write about commodity price movement and SPECIFIC impact on {name}. Negative beta means higher costs hurt margins. Positive beta means they benefit.",
+        validation=ValidationRule(
+            min_score=50,
+            max_score=74,
+            expected_tier="SILVER",
+            expected_event="MACRO_DATA",
+            relationship_hops=0,
+            expected_feed_rank_range="6-15"
+        ),
+    ),
+    Scenario(
+        name="Regulatory Event",
+        description="New regulation affecting specific sectors",
+        target_tier="GOLD",
+        weight=0.05,
+        template="News Event: Regulatory Announcement. Context: {regulation_context}. Focus: {ticker} ({name}). Exposure: {factor_exposure_desc}. Beta: {factor_beta}. Style Guide: {style_guide}. \nTask: Write about the new regulation and its SPECIFIC impact on {name}. Positive beta means regulations help them (subsidies/approvals). Negative beta means increased compliance costs or restrictions.",
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="LEGAL_RULING",
+            relationship_hops=0,
+            expected_feed_rank_range="1-10"
+        ),
+    ),
+    Scenario(
+        name="China Economic Data",
+        description="China GDP/policy affecting exposed multinationals",
+        target_tier="SILVER",
+        weight=0.04,
+        template="News Event: China Economic Report. Context: China GDP growth slows/accelerates. Focus: {ticker} ({name}). Exposure: {factor_exposure_desc}. Beta: {factor_beta}. Style Guide: {style_guide}. \nTask: Write about China economic data and SPECIFIC impact on {name}. Higher beta means more revenue exposure to China. Frame as opportunity or risk.",
+        validation=ValidationRule(
+            min_score=50,
+            max_score=74,
+            expected_tier="SILVER",
+            expected_event="MACRO_DATA",
+            relationship_hops=0,
+            expected_feed_rank_range="6-15"
+        ),
+    ),
+    # === NEW: Enhanced Supply Chain & Competitor Scenarios ===
+    Scenario(
+        name="Supply Chain Fire",
+        description="Factory fire at supplier creates 2-hop supply shock",
+        target_tier="GOLD",
+        weight=0.08,
+        template="News Event: Supplier Catastrophe. Primary: {related_ticker} ({related_name}) has major factory fire/shutdown. Downstream Impact: {ticker} ({name}). Relationship: {relationship_desc}. Style Guide: {style_guide}. \nTask: Write about the fire at {related_name}. Then explain how this will SPECIFICALLY hurt {name} in 2-4 weeks because {relationship_desc}. Focus headline on the supplier, but mention downstream impact.",
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="SUPPLY_CHAIN",
+            relationship_hops=1,
+            expected_feed_rank_range="6-15"
+        ),
+    ),
+    Scenario(
+        name="Competitor Product Recall",
+        description="Rival's product recall creates Schadenfreude opportunity",
+        target_tier="SILVER",
+        weight=0.08,
+        template="News Event: Product Recall. Subject: {related_ticker} ({related_name}) recalls flagship product. Beneficiary: {ticker} ({name}). Relationship: {relationship_desc}. Style Guide: {style_guide}. \nTask: Write about {related_name}'s embarrassing product recall/failure. Mention that {name}, their direct competitor, stands to gain market share. Frame as {related_name}'s problem but {name}'s opportunity.",
+        validation=ValidationRule(
+            min_score=50,
+            max_score=74,
+            expected_tier="SILVER",
+            expected_event="PRODUCT_RECALL",
+            relationship_hops=2,
+            expected_feed_rank_range="6-15"
+        ),
     ),
 ]
 
@@ -234,26 +343,24 @@ class SyntheticGenerator:
         )
 
     def _load_config(self, env_path: Optional[str]):
-        # Load .env file
+        # SSOT: do not load ad-hoc .env files; rely on Vault-derived env
         if env_path:
-            load_dotenv(env_path, override=True)
-        else:
-            # Try default locations
-            base_dir = Path(__file__).parent
-            if (base_dir / ".env.synthetic").exists():
-                load_dotenv(base_dir / ".env.synthetic", override=True)
-            load_dotenv(base_dir.parent / "lib/gofr-common/.env")  # Fallback for API key
+            logger.error("Custom env files are not supported; use Vault-derived environment")
+            sys.exit(1)
 
-        # Parse JSON configs
+        # Minimal config: sources/tokens
+        self.sources = MOCK_SOURCES
+        self.tokens = {}
+        
+        # Load bootstrap tokens via SSOT module
         try:
-            self.sources = json.loads(
-                os.environ.get("GOFR_SYNTHETIC_SOURCES", '["Bloomberg", "Reuters"]')
-            )
-            self.tokens = json.loads(
-                os.environ.get("GOFR_SYNTHETIC_TOKENS", '{"admin": "test-token"}')
-            )
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse JSON configuration: {e}")
+            admin_token = get_admin_token()
+            # Map the default simulation group GUID to the admin token for simplified access/ingestion
+            self.tokens["group-simulation"] = admin_token
+            logger.info("✓ Loaded admin token for group-simulation via SSOT module")
+        except GofrEnvError as e:
+            logger.error(f"Failed to load tokens via SSOT module: {e}")
+            logger.error("Run: uv run python scripts/bootstrap.py")
             sys.exit(1)
 
     def _select_scenario(self) -> Scenario:
@@ -308,10 +415,41 @@ class SyntheticGenerator:
 
         all_tickers = UNIVERSE.get_tickers()
         all_relationships = UNIVERSE.get_relationships()
+        all_factor_exposures = UNIVERSE.get_factor_exposures()
 
         for i in range(count):
             scenario = self._select_scenario()
-            ticker = random.choice(all_tickers)
+            
+            # For macro factor scenarios, select a ticker with relevant exposure
+            if scenario.name in ["Interest Rate Impact", "Commodity Price Shock", "Regulatory Event", "China Economic Data"]:
+                # Map scenario to factor
+                factor_map = {
+                    "Interest Rate Impact": "INTEREST_RATES",
+                    "Commodity Price Shock": "COMMODITY_PRICES",
+                    "Regulatory Event": "REGULATION",
+                    "China Economic Data": "CHINA_ECONOMY",
+                }
+                factor_id = factor_map[scenario.name]
+                
+                # Find tickers with exposure to this factor
+                exposed_tickers = [
+                    exp.ticker for exp in all_factor_exposures if exp.factor_id == factor_id
+                ]
+                
+                if not exposed_tickers:
+                    # No exposures, skip this scenario
+                    logger.warning(f"No exposures for {factor_id}, skipping scenario")
+                    continue
+                
+                ticker_sym = random.choice(exposed_tickers)
+                ticker = UNIVERSE.get_ticker(ticker_sym)
+                
+                # Get the exposure details
+                exposure = next(e for e in all_factor_exposures if e.ticker == ticker_sym and e.factor_id == factor_id)
+            else:
+                ticker = random.choice(all_tickers)
+                exposure = None
+            
             source = random.choice(MOCK_SOURCES)
 
             # Context Variables
@@ -322,8 +460,23 @@ class SyntheticGenerator:
                 "style_guide": source.style_guide,
                 "related_ticker": "N/A",
                 "related_name": "N/A",
-                "relationship_desc": "N/A"
+                "relationship_desc": "N/A",
+                "factor_exposure_desc": "N/A",
+                "factor_beta": "0.0",
+                "regulation_context": "SEC announces new disclosure requirements"
             }
+            
+            # Handle macro factor scenarios
+            if exposure:
+                prompt_vars["factor_exposure_desc"] = exposure.description
+                prompt_vars["factor_beta"] = f"{exposure.beta:.1f}"
+                
+                # Context-specific regulation descriptions
+                if scenario.name == "Regulatory Event":
+                    if exposure.beta > 0:
+                        prompt_vars["regulation_context"] = "Government announces favorable policy/subsidies"
+                    else:
+                        prompt_vars["regulation_context"] = "Regulators announce stricter compliance requirements"
             # Select competitors for "Peer Exclusion" context (Legacy support)
             competitors = [
                 t for t in all_tickers if t.ticker != ticker.ticker and t.sector == ticker.sector
@@ -379,17 +532,43 @@ class SyntheticGenerator:
                 logger.info(f"[{i+1}/{count}] Generating '{scenario.name}' for {ticker.ticker} via {source.name}")
                 story_body = self._generate_story_text(full_prompt)
 
-                # Pick random group context
-                group = random.choice(list(self.tokens.keys()))
-                token = self.tokens[group]
+                # Use Default Simulation Group
+                group_guid = DEFAULT_GROUP["guid"]
+                token = self.tokens.get(group_guid)
+                
+                # If no token loaded (bootstrap failed), validation might fail downstream
+                if not token:
+                    token = "placeholder_token"
+                    if i == 0: logger.warning("Using placeholder token (bootstrap tokens missing)")
+
+                # Calculate expected_relevant_clients based on portfolios and watchlists
+                expected_clients = []
+                for client_guid, portfolio in CLIENT_PORTFOLIOS.items():
+                    if ticker.ticker in portfolio:
+                        expected_clients.append(client_guid)
+                    elif ticker.ticker in CLIENT_WATCHLISTS.get(client_guid, []):
+                        expected_clients.append(client_guid)
+                
+                # For relationship scenarios, also include clients holding the related ticker
+                if prompt_vars.get("related_ticker") != "N/A":
+                    related_ticker_sym = prompt_vars["related_ticker"]
+                    for client_guid, portfolio in CLIENT_PORTFOLIOS.items():
+                        if related_ticker_sym in portfolio and client_guid not in expected_clients:
+                            expected_clients.append(client_guid)
 
                 # Construct Output JSON
                 output_data = {
                     "source": source.name,  # Legacy field
-                    "source_guid": source.guid, # New field for ingestion
-                    "trust_level": source.trust_level, # Helping ingest
+                    "source_name": source.name, # Standardized field
+                    "meta_source_name": source.name, # For graph node matching
+                    "source_guid": source.guid, 
+                    "trust_level": source.trust_level,
+                    "source_type": "NEWS_WIRE", # Default for synthetic generator
+                    "group_guid": group_guid,
+                    "event_type": scenario.validation.expected_event,
+                    
                     "published_at": self._get_random_date(),
-                    "upload_as_group": group,
+                    "upload_as_group": group_guid,
                     "token": token,
                     "title": f"Update regarding {prompt_vars['name']}", 
                     "story_body": story_body,
@@ -398,6 +577,9 @@ class SyntheticGenerator:
                         "base_ticker": ticker.ticker, # Ground truth
                         "expected_tier": scenario.validation.expected_tier,
                         "expected_event": scenario.validation.expected_event,
+                        "expected_relevant_clients": expected_clients,
+                        "relationship_hops": scenario.validation.relationship_hops,
+                        "expected_feed_rank_range": scenario.validation.expected_feed_rank_range,
                         "validation_rules": asdict(scenario.validation),
                     },
                 }

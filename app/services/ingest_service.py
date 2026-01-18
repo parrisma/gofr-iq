@@ -257,7 +257,15 @@ class IngestService:
             )
             
             # Parse the response
-            return parse_extraction_response(result.content)
+            extraction_result = parse_extraction_response(result.content)
+            
+            # DEBUG: Log extracted companies
+            if extraction_result and extraction_result.companies:
+                print(f"   DEBUG EXTRACT: Found {len(extraction_result.companies)} companies: {extraction_result.companies}")
+            else:
+                print(f"   DEBUG EXTRACT: No companies found in extraction")
+            
+            return extraction_result
             
         except LLMServiceError as e:
             if require_extraction:
@@ -276,6 +284,7 @@ class IngestService:
         Creates relationships between the document and:
         - EventTypes (TRIGGERED_BY)
         - Instruments (AFFECTS)
+        - Companies (MENTIONS)
         
         Args:
             document_guid: Document GUID
@@ -283,63 +292,174 @@ class IngestService:
         """
         if not self.graph_index:
             return
+        
+        # Map LLM event types to graph EventType codes
+        # LLM returns specific types like EARNINGS_BEAT, EARNINGS_MISS
+        # Graph uses simplified categories like EARNINGS, M&A
+        EVENT_TYPE_MAPPING = {
+            "EARNINGS_BEAT": "EARNINGS",
+            "EARNINGS_MISS": "EARNINGS",
+            "EARNINGS_WARNING": "EARNINGS",
+            "GUIDANCE_RAISE": "EARNINGS",
+            "GUIDANCE_CUT": "EARNINGS",
+            "M&A_ANNOUNCE": "M&A",
+            "M&A_RUMOR": "M&A",
+            "IPO": "M&A",
+            "SECONDARY": "M&A",
+            "BUYBACK": "M&A",
+            "DIVIDEND_CHANGE": "EARNINGS",
+            "ACTIVIST": "M&A",
+            "INSIDER_TXN": "EXEC_CHANGE",
+            "INDEX_ADD": "REGULATORY",
+            "INDEX_DELETE": "REGULATORY",
+            "INDEX_REBAL": "REGULATORY",
+            "RATING_UPGRADE": "EARNINGS",
+            "RATING_DOWNGRADE": "EARNINGS",
+            "FDA_APPROVAL": "FDA_APPROVAL",
+            "FDA_REJECTION": "FDA_APPROVAL",
+            "LEGAL_RULING": "LITIGATION",
+            "FRAUD_SCANDAL": "LITIGATION",
+            "MGMT_CHANGE": "EXEC_CHANGE",
+            "PRODUCT_LAUNCH": "PRODUCT_LAUNCH",
+            "CONTRACT_WIN": "PRODUCT_LAUNCH",
+            "CONTRACT_LOSS": "PRODUCT_LAUNCH",
+            "MACRO_DATA": "MACRO_ECON",
+            "CENTRAL_BANK": "MACRO_ECON",
+            "GEOPOLITICAL": "MACRO_ECON",
+            "POSITIVE_SENTIMENT": "EARNINGS",  # Default to earnings category
+            "NEGATIVE_SENTIMENT": "EARNINGS",  # Default to earnings category
+            "OTHER": None,  # Skip generic OTHER events
+        }
             
-        # Get primary event type code
+        # Get primary event type code and map it
         primary_event = extraction.primary_event
-        event_code = primary_event.event_type if primary_event else None
+        llm_event_code = primary_event.event_type if primary_event else None
+        graph_event_code = EVENT_TYPE_MAPPING.get(llm_event_code) if llm_event_code else None
+        
+        # DEBUG: Log event mapping
+        if llm_event_code:
+            if graph_event_code:
+                print(f"   DEBUG EVENT: {llm_event_code} -> {graph_event_code}")
+            else:
+                print(f"   DEBUG EVENT: {llm_event_code} -> SKIPPED (no mapping)")
         
         # Set document impact properties
         self.graph_index.set_document_impact(
             document_guid=document_guid,
             impact_score=extraction.impact_score,
             impact_tier=extraction.impact_tier,
-            event_type_code=event_code,
+            event_type_code=graph_event_code,  # Use mapped code
         )
         
         # Create AFFECTS relationships for instruments
-        for inst in extraction.instruments:
-            if not inst.ticker:
-                continue
-                
-            # Ensure instrument exists (create if not)
-            instrument_guid = f"{inst.ticker}:UNKNOWN"
-            try:
-                node = self.graph_index.create_instrument(
+        with self.graph_index.driver.session() as session:
+            for inst in extraction.instruments:
+                if not inst.ticker:
+                    continue
+
+                # Reuse shared instrument nodes (inst-<ticker>) if present; create canonical otherwise
+                instrument_guid = self._resolve_instrument_guid(
+                    session=session,
                     ticker=inst.ticker,
                     name=inst.name or inst.ticker,
-                    instrument_type="STOCK",  # Default type
-                    exchange="UNKNOWN",  # Will be updated when full instrument data available
                 )
-                instrument_guid = node.guid
-            except Exception:
-                pass  # nosec B110 - Instrument may already exist
+
+                # Map direction to expected values
+                direction_map = {
+                    "UP": "positive",
+                    "DOWN": "negative",
+                    "MIXED": "neutral",
+                    "NEUTRAL": "neutral",
+                }
+                direction = direction_map.get(inst.direction, "neutral")
                 
-            # Map direction to expected values
-            direction_map = {
-                "UP": "positive",
-                "DOWN": "negative",
-                "MIXED": "neutral",
-                "NEUTRAL": "neutral",
-            }
-            direction = direction_map.get(inst.direction, "neutral")
+                # Map magnitude to numeric value
+                magnitude_map = {
+                    "HIGH": 0.05,
+                    "MODERATE": 0.02,
+                    "LOW": 0.01,
+                }
+                magnitude = magnitude_map.get(inst.magnitude, 0.01)
+                
+                try:
+                    self.graph_index.add_document_affects(
+                        document_guid=document_guid,
+                        instrument_guid=instrument_guid,
+                        direction=direction,
+                        magnitude=magnitude,
+                    )
+                except Exception as e:
+                    print(f"Failed to create AFFECTS for {inst.ticker}: {e}")
             
-            # Map magnitude to numeric value
-            magnitude_map = {
-                "HIGH": 0.05,
-                "MODERATE": 0.02,
-                "LOW": 0.01,
-            }
-            magnitude = magnitude_map.get(inst.magnitude, 0.01)
+            # Create MENTIONS relationships for all companies
+            # This allows tracking of secondary/contextual company references
+            if extraction.companies:
+                print(f"   DEBUG: Found {len(extraction.companies)} companies to link: {extraction.companies[:3]}")
             
-            try:
-                self.graph_index.add_document_affects(
-                    document_guid=document_guid,
-                    instrument_guid=instrument_guid,
-                    direction=direction,
-                    magnitude=magnitude,
-                )
-            except Exception as e:
-                print(f"Failed to create AFFECTS for {inst.ticker}: {e}")
+            for company_name in extraction.companies:
+                if not company_name:
+                    continue
+                    
+                try:
+                    # Find company by name (case-insensitive fuzzy match)
+                    company_result = session.run(
+                        """
+                        MATCH (c:Company)
+                        WHERE toLower(c.name) CONTAINS toLower($name)
+                           OR toLower($name) CONTAINS toLower(c.name)
+                           OR any(alias IN c.aliases WHERE toLower(alias) CONTAINS toLower($name))
+                        RETURN c.guid AS guid, c.name AS name
+                        ORDER BY size(c.name) ASC
+                        LIMIT 1
+                        """,
+                        {"name": company_name}
+                    ).single()
+                    
+                    if company_result:
+                        company_guid = company_result["guid"]
+                        company_name_matched = company_result["name"]
+                        self.graph_index.add_company_mention(
+                            document_guid=document_guid,
+                            company_ticker=company_guid,  # Using guid as ticker identifier
+                            company_name=company_name_matched,
+                        )
+                        print(f"   DEBUG: Created MENTIONS: {company_name} -> {company_name_matched}")
+                    else:
+                        print(f"   DEBUG: No match found for company: {company_name}")
+                except Exception as e:
+                    # Silently skip unresolved companies (may be external/not in universe)
+                    print(f"   DEBUG: Error creating MENTIONS for {company_name}: {e}")
+
+    def _resolve_instrument_guid(self, session, ticker: str, name: str) -> str:
+        """Return shared Instrument guid for ticker, creating canonical inst-<ticker> if missing."""
+        # Prefer existing shared instruments (created by universe loader) before creating new
+        record = session.run(
+            """
+            MATCH (i:Instrument {ticker: $ticker})
+            RETURN i.guid AS guid
+            ORDER BY CASE WHEN i.guid STARTS WITH 'inst-' THEN 0 ELSE 1 END, i.guid
+            LIMIT 1
+            """,
+            {"ticker": ticker},
+        ).single()
+        if record and record["guid"]:
+            return record["guid"]
+
+        guid = f"inst-{ticker}"
+        session.run(
+            """
+            MERGE (i:Instrument {guid: $guid})
+            SET i.ticker = $ticker,
+                i.name = coalesce(i.name, $name),
+                i.instrument_type = coalesce(i.instrument_type, 'STOCK'),
+                i.exchange = coalesce(i.exchange, 'UNKNOWN'),
+                i.currency = coalesce(i.currency, 'USD'),
+                i.simulation_id = coalesce(i.simulation_id, 'phase1')
+            """,
+            {"guid": guid, "ticker": ticker, "name": name},
+        )
+
+        return guid
 
     def ingest(
         self,
@@ -379,7 +499,19 @@ class IngestService:
             if source is None:
                 raise SourceValidationError(source_guid)
         except SourceNotFoundError:
-            raise SourceValidationError(source_guid)
+            # Fallback: Try to find source by name from metadata (for simulation compatibility)
+            # Story files may reference mock source GUIDs that don't exist, but names match
+            source_name = metadata.get("meta_source_name") if metadata else None
+            if source_name:
+                source = self.source_registry.find_by_name(source_name)
+                if source:
+                    # Update source_guid to use the actual source's GUID
+                    source_guid = source.source_guid
+                    self.logger.debug(f"Source GUID {source_guid} not found, using name lookup: {source_name} -> {source.source_guid}")
+                else:
+                    raise SourceValidationError(source_guid)
+            else:
+                raise SourceValidationError(source_guid)
 
         # Step 3: Validate word count
         word_count = count_words(content)
@@ -445,6 +577,24 @@ class IngestService:
 
             # Step 9: Index in Neo4j (if configured)
             if self.graph_index:
+                # Ensure Source exists (P0 Fix) and set source_name in metadata
+                source_name = doc.metadata.get("source_name") or f"Source-{doc.source_guid}"
+                
+                # Ensure source_name is in metadata for graph storage (meta_source_name)
+                if "source_name" not in doc.metadata:
+                    doc.metadata["source_name"] = source_name
+                
+                try:
+                    self.graph_index.create_source_node(
+                        source_guid=doc.source_guid, 
+                        name=source_name,
+                        source_type=doc.metadata.get("source_type", "synthetic"),
+                        group_guid=doc.group_guid,
+                        properties={"reliability": doc.metadata.get("reliability", 0.8)}
+                    )
+                except Exception:
+                    pass # Ignore if already exists (MERGE handles duplicates)
+
                 self.graph_index.create_document_node(
                     document_guid=doc.guid,
                     source_guid=doc.source_guid,
@@ -455,11 +605,17 @@ class IngestService:
                     metadata=doc.metadata,
                 )
 
-            # Step 10: LLM extraction (required when both LLM and graph are configured)
-            # Extraction is required when we have both services - this ensures ingestion
-            # fails if LLM extraction fails, rather than silently proceeding without
-            # graph entity relationships.
-            require_extraction = bool(self.llm_service and self.graph_index)
+            # Step 10: LLM extraction (required when graph is configured)
+            # If we have a graph index, we MUST have entity extraction to populate relationships.
+            # Fail hard if graph is enabled but LLM service is missing.
+            if self.graph_index and not self.llm_service:
+                raise LLMExtractionError(
+                    "Graph index is enabled but LLM service is not available. "
+                    "Entity extraction is required for graph relationships. "
+                    "Ensure GOFR_IQ_OPENROUTER_API_KEY is set."
+                )
+            
+            require_extraction = bool(self.graph_index)
             extraction = self._extract_graph_entities(doc, require_extraction=require_extraction)
 
             # Step 11: Update graph with extracted entities (if extraction succeeded)

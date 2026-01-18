@@ -101,7 +101,7 @@ Query Options:
   --port PORT          MCP server port (override auto-detection)
   --query TEXT         Search query (required)
   --n-results NUM      Max results to return (default: 10)
-  --token TOKEN        JWT auth token (optional - for group-based access)
+  --token TOKEN        JWT auth token (required - for group-based access)
 
 Delete Options:
   --docker, --prod     Use production docker ports (default, port 8180)
@@ -143,7 +143,8 @@ Examples:
   ./manage_document.sh query \\
     --host gofr-iq-mcp \\
     --query "earnings surprises" \\
-    --n-results 10
+    --n-results 10 \\
+    --token "\$GOFR_IQ_ADMIN_TOKEN"
 
   # Delete a document (requires --confirm flag)
   ./manage_document.sh delete \\
@@ -333,7 +334,7 @@ ingest_document() {
     # Parse and display response
     echo ""
     log_info "=== Response ==="
-    parse_response "$response"
+    parse_response "$response" || return 1
     
     return 0
 }
@@ -348,6 +349,11 @@ query_documents() {
     # Validate required parameters
     if [[ -z "$query" ]]; then
         log_error "Search query is required (--query)"
+        return 1
+    fi
+    
+    if [[ -z "$auth_token" ]]; then
+        log_error "Auth token is required (--token)"
         return 1
     fi
     
@@ -368,11 +374,7 @@ query_documents() {
     
     # Build arguments JSON
     local args
-    if [[ -n "$auth_token" ]]; then
-        args="{\"query\": ${escaped_query}, \"n_results\": ${n_results}, \"auth_tokens\": [\"${auth_token}\"]}"
-    else
-        args="{\"query\": ${escaped_query}, \"n_results\": ${n_results}}"
-    fi
+    args="{\"query\": ${escaped_query}, \"n_results\": ${n_results}, \"auth_tokens\": [\"${auth_token}\"]}"
     
     # Call query_documents tool
     local response
@@ -381,7 +383,7 @@ query_documents() {
     # Parse and display response
     echo ""
     log_info "=== Response ==="
-    parse_response "$response"
+    parse_response "$response" || return 1
     
     return 0
 }
@@ -449,7 +451,7 @@ delete_document() {
     # Parse and display response
     echo ""
     log_info "=== Response ==="
-    parse_response "$response"
+    parse_response "$response" || return 1
     
     return 0
 }

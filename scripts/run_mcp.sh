@@ -113,4 +113,4 @@ echo ""
 
 # Start the server
 echo -e "${GREEN}Starting MCP server...${NC}"
-python -m app.main_mcp "${CMD_ARGS[@]}"
+uv run python -m app.main_mcp "${CMD_ARGS[@]}"

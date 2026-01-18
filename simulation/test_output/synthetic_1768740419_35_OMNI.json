@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-11T15:58:59.290490",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global Faces Headwinds as China Reports Economic Deceleration\n\nBEIJING/NEW YORK - The National Bureau of Statistics of China released quarterly economic data at 10:00 AM Beijing Time on Tuesday, revealing gross domestic product growth of 4.2 percent year-over-year for the fourth quarter, marking a deceleration from the prior quarter's 4.6 percent expansion and falling short of economist consensus estimates of 5.0 percent.\n\nOmniCorp Global (NYSE: OMNI), a multinational conglomerate with operations spanning industrial manufacturing, consumer goods, and technology services, maintains substantial revenue exposure to Chinese markets. The company derives approximately 28 percent of consolidated revenue from mainland China operations, according to its most recent 10-K filing with the Securities and Exchange Commission.\n\nThe weaker-than-anticipated Chinese economic performance presents material downside risks to OmniCorp Global's fiscal year 2025 revenue projections. Analysts at Morgan Stanley noted in a research memorandum distributed at 09:15 AM Eastern Time that the company's beta coefficient of 1.1 indicates amplified sensitivity to macroeconomic fluctuations in key markets.\n\nOmniCorp Global's China-based manufacturing facilities produced 34 percent of the company's industrial components in the previous fiscal year. Slowing domestic demand in China could compress margins across the company's Asia-Pacific segment, which generated USD 12.4 billion in revenue during fiscal year 2024.\n\nThe National Bureau of Statistics data also showed retail sales growth of 3.7 percent in December, below the 4.5 percent forecast, potentially affecting OmniCorp Global's consumer products division. The company operates 847 retail touchpoints across 156 Chinese cities.\n\nFixed asset investment in China increased 3.2 percent for the full year, the slowest pace since 2019, excluding pandemic-affected periods. This metric holds particular significance for OmniCorp Global given the company's infrastructure services contracts valued at approximately USD 2.1 billion across Chinese provincial governments.\n\nOmniCorp Global has not issued revised guidance following the data release. The company is scheduled to report third-quarter fiscal year 2025 earnings on February 12, 2025, at 04:00 PM Eastern Time.\n\nShares of OmniCorp Global traded at USD 87.34 at 11:30 AM Eastern Time, down 2.8 percent from the previous session close.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "OMNI",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

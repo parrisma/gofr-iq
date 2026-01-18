@@ -1,0 +1,64 @@
+{
+  "client_guid": "client-hedge-fund",
+  "client_name": "Apex Capital",
+  "archetype": "HEDGE_FUND",
+  "primary_objective": "Generate absolute returns through long/short equity strategies with alpha generation from information asymmetries and event-driven catalysts",
+  "return_target": "15-25% annual return (net of fees)",
+  "risk_tolerance": "High - willing to accept volatility for alpha opportunities",
+  "time_horizon": "Short to medium term (3-18 months per position)",
+  "permitted_asset_classes": [
+    "Global equities (long/short)",
+    "Derivatives (options, futures)",
+    "Convertible bonds",
+    "Warrants and rights"
+  ],
+  "prohibited_sectors": [
+    "Tobacco",
+    "Controversial weapons",
+    "Private prisons"
+  ],
+  "geographic_focus": [
+    "Global developed markets",
+    "Select emerging markets (China, India, Brazil)"
+  ],
+  "market_cap_preference": "Mid to large cap ($2B+), opportunistic small cap",
+  "esg_policy": "Integrated ESG analysis with focus on material risks, but not binding constraints",
+  "esg_exclusions": [
+    "Companies with severe ESG controversies (MSCI CCC rated)",
+    "Thermal coal producers (>25% revenue)",
+    "Tobacco manufacturers"
+  ],
+  "positive_themes": [
+    "Technology disruption",
+    "Healthcare innovation",
+    "Financial technology"
+  ],
+  "max_position_size": 0.15,
+  "max_sector_concentration": 0.4,
+  "max_single_issuer": 0.2,
+  "volatility_constraint": null,
+  "news_priority": [
+    "M&A / Corporate Actions",
+    "Earnings surprises",
+    "Regulatory events",
+    "Management changes",
+    "Short interest / activist activity"
+  ],
+  "trust_requirement": "Accept medium-trust sources (trust level 2+) for speed advantage; verify before trading",
+  "alert_threshold": 60.0,
+  "regulatory_framework": [
+    "SEC Registered Investment Adviser",
+    "Form PF reporting",
+    "Internal compliance program"
+  ],
+  "reporting_requirements": [
+    "Monthly NAV and performance",
+    "Quarterly investor letters",
+    "Annual audited financials"
+  ],
+  "investment_committee_approval": [
+    "New positions >10% of portfolio",
+    "Short positions >5% of portfolio",
+    "New sector exposure >30%"
+  ]
+}

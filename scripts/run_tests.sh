@@ -547,7 +547,7 @@ fi
 
 # Run version compatibility check first
 echo -e "${GREEN}=== Checking Version Compatibility ===${NC}"
-if ! python "${SCRIPT_DIR}/check_version_compatibility.py"; then
+if ! uv run python "${SCRIPT_DIR}/check_version_compatibility.py"; then
     echo -e "${RED}Version compatibility check failed!${NC}"
     echo "Fix version mismatches before running tests."
     if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then

@@ -88,19 +88,23 @@ if [ "$RESET_ALL" = true ]; then
         exit 0
     fi
     
-    log_info "Running reset-prod.sh..."
-    if [ -f "${SCRIPT_DIR}/reset-prod.sh" ]; then
-        # Pass 'y' to reset-prod.sh for its confirmation prompt
-        echo "y" | bash "${SCRIPT_DIR}/reset-prod.sh"
-    else
-        # Inline reset
-        cd "$SCRIPT_DIR"
-        docker compose down -v 2>/dev/null || true
-        sudo rm -rf "${PROJECT_ROOT}/data/storage/"* 2>/dev/null || true
-        sudo rm -rf "${PROJECT_ROOT}/data/auth/"* 2>/dev/null || true
-        rm -f "$VAULT_INIT_FILE" "$DOCKER_ENV_FILE" 2>/dev/null || true
-    fi
-    log_success "Reset complete"
+    log_info "Stopping all containers..."
+    cd "$SCRIPT_DIR"
+    docker compose down 2>/dev/null || true
+    
+    log_info "Removing docker volumes..."
+    docker volume rm gofr-vault-data gofr-vault-logs gofr-iq-neo4j-data gofr-iq-neo4j-logs gofr-iq-chroma-data 2>/dev/null || true
+    
+    log_info "Clearing data directories..."
+    rm -rf "${PROJECT_ROOT}/data/storage/"* 2>/dev/null || true
+    rm -rf "${PROJECT_ROOT}/data/auth/"* 2>/dev/null || true
+    rm -rf "${PROJECT_ROOT}/data/sessions/"* 2>/dev/null || true
+    
+    log_info "Removing credential files..."
+    rm -f "$VAULT_INIT_FILE" "$DOCKER_ENV_FILE" 2>/dev/null || true
+    rm -rf "${PROJECT_ROOT}/config/generated" 2>/dev/null || true
+    
+    log_success "Reset complete - environment is clean"
 fi
 
 # Step 1: Source port configuration
@@ -129,9 +133,15 @@ if [ -f "$VAULT_INIT_FILE" ]; then
     log_success "Vault credentials loaded"
 fi
 
-# Step 4: Start Vault first
-log_info "Starting Vault container..."
+# Step 4: Stop existing services (preserve volumes)
+log_info "Stopping existing services..."
 cd "$SCRIPT_DIR"
+docker compose down 2>/dev/null || true
+log_success "Existing services stopped"
+
+# Step 5: Start Vault first
+log_info "Starting Vault container..."
+
 docker compose up -d vault
 
 # Wait for Vault to be reachable
@@ -155,15 +165,20 @@ done
 
 # Check Vault status
 VAULT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${VAULT_ADDR}/v1/sys/health" 2>/dev/null || echo "000")
+log_info "Vault status code: $VAULT_STATUS"
 
 case "$VAULT_STATUS" in
     "200")
         log_success "Vault is initialized and unsealed"
         ;;
+    "429")
+        # Standby node - treat as healthy
+        log_success "Vault is initialized and unsealed (standby)"
+        ;;
     "501")
-        # Not initialized
+        # Not initialized - bootstrap will handle this
         if [ "$FRESH_INSTALL" = true ]; then
-            log_info "Fresh Vault detected - will auto-initialize"
+            log_info "Fresh Vault detected - bootstrap will auto-initialize"
         else
             log_warn "Vault not initialized. Run with --fresh for auto-init"
             log_warn "Or manually: docker exec gofr-vault vault operator init"
@@ -171,7 +186,7 @@ case "$VAULT_STATUS" in
         fi
         ;;
     "503")
-        # Sealed
+        # Sealed - need to unseal before bootstrap
         if [ -n "${VAULT_UNSEAL_KEY:-}" ]; then
             log_info "Unsealing Vault..."
             curl -s -X PUT "${VAULT_ADDR}/v1/sys/unseal" \
@@ -179,9 +194,14 @@ case "$VAULT_STATUS" in
                 -d "{\"key\": \"${VAULT_UNSEAL_KEY}\"}" >/dev/null
             log_success "Vault unsealed"
         else
-            log_error "Vault is sealed and no VAULT_UNSEAL_KEY found"
-            log_info "Source the credentials: source docker/.vault-init.env"
-            exit 1
+            # No unseal key - this is OK if FRESH_INSTALL, bootstrap will init fresh
+            if [ "$FRESH_INSTALL" = true ]; then
+                log_warn "Vault is sealed but no VAULT_UNSEAL_KEY - bootstrap will reinitialize"
+            else
+                log_error "Vault is sealed and no VAULT_UNSEAL_KEY found"
+                log_info "Source the credentials: source docker/.vault-init.env"
+                exit 1
+            fi
         fi
         ;;
     *)
@@ -190,7 +210,7 @@ case "$VAULT_STATUS" in
         ;;
 esac
 
-# Step 4.5: Validate JWT secret consistency (docker/.env vs Vault)
+# Step 5.5: Validate JWT secret consistency (docker/.env vs Vault)
 if [ -n "${GOFR_JWT_SECRET:-}" ] && [ -n "${VAULT_TOKEN:-}" ]; then
     VAULT_JWT=$(docker exec -e VAULT_TOKEN="${VAULT_TOKEN}" gofr-vault \
         vault kv get -field=value secret/gofr/config/jwt-signing-secret 2>/dev/null || true)
@@ -201,7 +221,7 @@ if [ -n "${GOFR_JWT_SECRET:-}" ] && [ -n "${VAULT_TOKEN:-}" ]; then
     fi
 fi
 
-# Step 5: Run bootstrap
+# Step 6: Run bootstrap
 log_info "Running bootstrap.py..."
 cd "$PROJECT_ROOT"
 
@@ -234,7 +254,7 @@ if [ -f "$DOCKER_ENV_FILE" ]; then
     set +a
 fi
 
-# Step 5.5: Merge port configuration into docker .env for docker compose
+# Step 6.5: Merge port configuration into docker .env for docker compose
 log_info "Merging port configuration into docker .env..."
 if [ -f "$PORTS_FILE" ]; then
     # Check if ports are already in .env (avoid duplicates)
@@ -263,7 +283,7 @@ if [ -f "$SHARED_ENV" ]; then
     done < "$SHARED_ENV"
 fi
 
-# Step 6: Start all services
+# Step 7: Start all services
 log_info "Starting all services..."
 cd "$SCRIPT_DIR"
 
@@ -273,7 +293,7 @@ docker compose up -d neo4j chromadb
 sleep 5
 docker compose up -d mcp mcpo web
 
-# Step 7: Wait for health checks
+# Step 8: Wait for health checks
 log_info "Waiting for services to be healthy..."
 sleep 5
 

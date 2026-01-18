@@ -1,0 +1,35 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-12T13:22:12.657999",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzYTZhMWNkMC1lN2FhLTQ0ZTgtYjNkNi02MDdiMjQ2YjMwMTEiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzIzNjk1LCJleHAiOjE4MDAyNTk2OTUsIm5iZiI6MTc2ODcyMzY5NSwiYXVkIjoiZ29mci1hcGkifQ.O6WUQ94N796EDX8ajCZ1_L4TGxGejkLv5xTbcJBp_Ec",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "**FinCorp Manufacturing Hub Suffers Catastrophic Fire, Regional Property Markets Brace for Liquidity Crunch**\n\nA devastating fire engulfed FinCorp's primary manufacturing facility in Riverside Industrial Park early Tuesday morning, destroying approximately 180,000 square feet of production floor space and rendering the company's ISO 9001:2015 certified assembly lines inoperable. The blaze, which reached temperatures exceeding 1,400 degrees Fahrenheit according to thermal imaging data, compromised the structural integrity of the facility's load-bearing steel framework and destroyed critical CNC machining centers valued at $45 million.\n\nFinCorp's facility, operating at 85% capacity utilization prior to the incident, was responsible for producing high-precision financial processing hardware, including their flagship FX-7700 series transaction processors and proprietary cryptographic security modules. The plant's automated storage and retrieval system, containing approximately 2.3 million units of finished goods inventory, suffered complete loss.\n\nInitial forensic analysis points to a malfunction in the facility's 480-volt three-phase power distribution system, specifically within the main electrical switchgear rated at 4,000 amperes. The facility's FM Global-compliant fire suppression system, designed to deliver 0.60 gallons per minute per square foot, failed to contain the rapidly spreading flames due to compromised water main pressure readings of 45 PSI, well below the required 175 PSI threshold.\n\nThe downstream implications for PropCo REIT are expected to materialize within 14 to 28 days as regional financial institutions dependent on FinCorp's hardware face operational constraints. PropCo's portfolio, concentrated in Class A office properties with 73% tenant exposure to financial services firms, faces immediate pressure. These tenants typically require 99.999% uptime for transaction processing systems, specifications that cannot be met without FinCorp's specialized hardware.\n\nPropCo's net operating income, currently yielding 6.8% on a trailing twelve-month basis, faces compression as financial services tenants confront operational bottlenecks. Industry analysts project a 15-20 basis point degradation in occupancy rates as smaller financial firms lacking redundant processing capabilities may be forced to consolidate operations or seek temporary space in markets with alternative hardware suppliers.\n\nThe REIT's debt service coverage ratio of 2.4x provides some buffer, but the concentrated tenant base and average remaining lease term of 4.2 years limit PropCo's ability to rapidly reposition its portfolio away from affected financial services operators.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

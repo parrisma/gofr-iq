@@ -19,6 +19,22 @@ class MockRelationship:
     description: str = ""
 
 @dataclass
+class MockFactor:
+    """Represents a macro economic factor in the simulation."""
+    factor_id: str  # e.g., "INTEREST_RATES", "COMMODITY_PRICES"
+    name: str  # Display name
+    category: str  # e.g., "Monetary Policy", "Commodities", "Regulation"
+    description: str = ""
+
+@dataclass
+class FactorExposure:
+    """Represents an instrument's exposure to a macro factor."""
+    ticker: str  # Instrument exposed
+    factor_id: str  # Factor they're exposed to
+    beta: float  # Sensitivity (-2.0 to +2.0, where 1.0 = market average)
+    description: str = ""
+
+@dataclass
 class ClientArchetype:
     """Defines a type of investor for simulation."""
     name: str # e.g. "Hedge Fund", "Pension"

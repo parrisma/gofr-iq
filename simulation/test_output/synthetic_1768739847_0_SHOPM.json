@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-08T23:57:27.770653",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding ShopMart",
+  "story_body": "LuxeBrands International Initiates Voluntary Recall of Signature Handbag Line\n\nLuxeBrands International Incorporated announced a voluntary recall of its flagship \"Eternelle\" handbag collection on Tuesday, November 14, 2023, at 09:00 EST, citing structural defects in the product's metal clasp mechanism. The recall affects approximately 847,000 units distributed across North American and European markets between January 2023 and October 2023.\n\nThe company identified the defect following 1,247 consumer complaints filed with LuxeBrands International customer service centers between September 15, 2023, and November 10, 2023. Reports indicate the clasp mechanism fails under normal usage conditions, resulting in unexpected bag openings and potential loss of contents. No injuries have been reported in connection with the defect.\n\nLuxeBrands International stated in a regulatory filing submitted to the Securities and Exchange Commission at 08:45 EST that the recall will result in estimated costs between $42 million and $58 million for the fourth quarter of fiscal year 2023. The Eternelle collection represented approximately 23 percent of LuxeBrands International total revenue in the first three quarters of 2023.\n\nThe company suspended production at its manufacturing facility in Florence, Italy, on November 13, 2023, at 14:00 CET. LuxeBrands International Chief Executive Officer Catherine Winters stated the company is conducting a comprehensive review of quality control procedures across all product lines.\n\nIndustry analysts noted that ShopMart Corporation, which operates in the accessible luxury segment and competes directly with LuxeBrands International for consumer discretionary spending, is positioned to capture market share during the recall period. ShopMart Corporation stock increased 3.7 percent to $47.82 per share in trading on November 14, 2023, while LuxeBrands International shares declined 8.2 percent to $31.45 per share at market close 16:00 EST.\n\nShopMart Corporation launched its competing \"Vivienne\" handbag line in August 2023, priced 15 percent below the Eternelle collection. The product line achieved distribution in 892 ShopMart Corporation retail locations as of October 31, 2023.\n\nLuxeBrands International established a dedicated recall hotline operational 24 hours daily at 1-800-555-0198 and will process full refunds or product replacements for affected consumers. The company projects the recall process will conclude by February 28, 2024.\n\nMarket research firm Consumer Trends Analytics reported on November 14, 2023, that 34 percent of surveyed consumers indicated willingness to switch brands following product recalls in the luxury accessories category.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

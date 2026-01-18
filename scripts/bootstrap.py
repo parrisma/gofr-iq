@@ -165,6 +165,10 @@ def generate_docker_env(
 
 GOFR_JWT_SECRET={jwt_secret}
 VAULT_ROOT_TOKEN={vault_token}
+NEO4J_PASSWORD=gofr-dev-password
+GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:7687
+GOFR_IQ_NEO4J_USER=neo4j
+GOFR_IQ_NEO4J_PASSWORD=gofr-dev-password
 """
     if openrouter_key:
         content += f"GOFR_IQ_OPENROUTER_API_KEY={openrouter_key}\n"
@@ -459,18 +463,45 @@ def main():
     
     # Step 4: Store API keys if provided
     openrouter_key = args.openrouter_key
-    if openrouter_key:
-        store_api_key(hvac_client, 'openrouter', openrouter_key)
-    else:
-        # Try to retrieve existing key
+    
+    # If not provided as arg, try to get from existing Vault
+    if not openrouter_key:
         try:
             existing = hvac_client.secrets.kv.v2.read_secret_version(
                 path='gofr/config/api-keys/openrouter',
                 mount_point='secret'
             )
             openrouter_key = existing['data']['data'].get('value')
+            if openrouter_key:
+                print("✅ Using existing OpenRouter key from Vault")
         except Exception:
             pass
+    
+    # If still not found, prompt user (only if interactive)
+    if not openrouter_key:
+        import sys
+        if sys.stdin.isatty():
+            print("\n" + "="*70)
+            print("🔑 OpenRouter API Key Required")
+            print("="*70)
+            print("The OpenRouter API key is needed for LLM-powered features.")
+            print("Get your key from: https://openrouter.ai/keys")
+            print()
+            print("Enter the key now, or press Enter to skip (you can add it later):")
+            user_input = input("> ").strip()
+            
+            if user_input:
+                openrouter_key = user_input
+                print("✅ OpenRouter key will be stored in Vault")
+            else:
+                print("⚠️  Skipped - simulation and LLM features will require manual key setup")
+        else:
+            print("⚠️  Non-interactive mode: OpenRouter key not set")
+            print("   Add later with: ./docker/start-prod.sh --openrouter-key YOUR_KEY")
+    
+    # Store in Vault if we have one
+    if openrouter_key:
+        store_api_key(hvac_client, 'openrouter', openrouter_key)
     
     # Step 5: Initialize Auth service (uses gofr-common VaultClient internally)
     auth, gofr_vault_client = initialize_auth_service(vault_addr, vault_token, jwt_secret)

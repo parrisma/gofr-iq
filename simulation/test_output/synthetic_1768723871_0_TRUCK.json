@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-11-24T05:56:11.401862",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzYTZhMWNkMC1lN2FhLTQ0ZTgtYjNkNi02MDdiMjQ2YjMwMTEiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzIzNjk1LCJleHAiOjE4MDAyNTk2OTUsIm5iZiI6MTc2ODcyMzY5NSwiYXVkIjoiZ29mci1hcGkifQ.O6WUQ94N796EDX8ajCZ1_L4TGxGejkLv5xTbcJBp_Ec",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc. Names New Sustainability Officer as ESG Push Continues\n\nHeavyTrucks Inc. (NASDAQ: TRUCK) announced today the appointment of Sarah Chen as Chief Sustainability Officer, the latest move in what bears are calling a desperate attempt to juice the stock with ESG window dressing.\n\nChen, who previously held sustainability roles at two Fortune 500 companies, will oversee TRUCK's environmental initiatives and carbon reduction targets. The appointment comes as the company tries to shake off its reputation as a diesel-burning dinosaur in an increasingly electric world.\n\n\"Another day, another ESG hire that won't move the needle,\" said retail trader Mike Davidson, who's been underwater on TRUCK since buying at $47 last year. \"These bagholders in management think hiring a sustainability officer is going to send this thing to the moon. News flash: the stock's been range-bound between $32 and $35 for six months.\"\n\nThe move follows TRUCK's recent pledge to achieve net-zero emissions by 2050, a target that had day traders yawning when it was announced last quarter. The stock barely budged on today's news, closing up 0.3% at $33.42 on below-average volume.\n\n\"Classic TRUCK - always late to the party,\" posted popular trading influencer @DieselBull on social media. \"While TSLA and RIVN are actually building electric trucks, these guys are hiring consultants to write reports about maybe doing something green in 30 years. Pass.\"\n\nSome institutional investors appear more patient. \"It's a necessary step for long-term positioning,\" said Amanda Torres, portfolio manager at Greenfield Capital. \"But let's be real - this isn't the catalyst that's going to break TRUCK out of its trading range.\"\n\nChen will report directly to CEO Marcus Williams and will be tasked with developing the company's first comprehensive sustainability report, due next year. She'll also oversee TRUCK's nascent electric vehicle research program, which currently represents less than 2% of the company's R&D budget.\n\nFor now, TRUCK remains stuck in neutral, with traders more focused on next month's earnings report than today's personnel announcement. The stock is down 18% year-to-date, underperforming the broader industrials sector.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

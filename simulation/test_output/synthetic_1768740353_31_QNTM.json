@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-18T02:42:53.572643",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "QUANTUM COMPUTE INC. SUBJECT OF ACQUISITION SPECULATION\n\nQuantum Compute Inc. (NASDAQ: QNTM) has emerged as the subject of acquisition rumors, according to people familiar with the matter who spoke on condition of anonymity.\n\nThe sources indicated that preliminary discussions may be underway regarding a potential acquisition of the quantum computing firm, though no formal offer has been confirmed and the identity of the potential acquirer remains undisclosed. The individuals cautioned that talks are at an early stage and may not result in a transaction.\n\nQuantum Compute Inc. shares closed at $47.23 on Tuesday, representing a market capitalization of approximately $3.2 billion. The company has not issued a statement regarding the rumors as of 14:30 EST Wednesday.\n\nThe speculation comes as Quantum Compute Inc. has expanded its commercial partnerships in recent quarters. The company reported revenue of $127 million for the fiscal year ended December 31, 2024, an increase of 34 percent compared to the prior year. The firm operates quantum computing systems for research institutions and enterprise clients across North America and Europe.\n\nIndustry consolidation in the quantum computing sector has accelerated in recent months. In January, Advanced Systems Corporation acquired Quantum Dynamics Ltd. for $1.8 billion, while Integrated Technologies Inc. purchased QuBit Solutions in November for an undisclosed sum.\n\nRepresentatives for Quantum Compute Inc. declined to comment when contacted Wednesday afternoon. The company has historically maintained a policy of not responding to market speculation.\n\nThe sources emphasized that no agreement has been reached and that Quantum Compute Inc. may elect to remain independent. The individuals also noted that other parties could emerge as potential acquirers if the company were to formally explore a sale process.\n\nQuantum Compute Inc. is scheduled to report first quarter fiscal 2025 earnings on April 28. The company has not announced any special meetings or disclosed receipt of acquisition proposals in regulatory filings.\n\nTrading volume in Quantum Compute Inc. shares remained within normal ranges on Wednesday, with approximately 2.1 million shares changing hands as of 14:30 EST, compared to the 30-day average volume of 2.4 million shares.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "client-hedge-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

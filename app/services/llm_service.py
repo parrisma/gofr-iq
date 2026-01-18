@@ -31,7 +31,7 @@ class LLMSettings:
     """Legacy LLM settings (deprecated, use GofrIqConfig instead)."""
     api_key: str | None = None
     base_url: str = "https://openrouter.ai/api/v1"
-    chat_model: str = "anthropic/claude-opus-4"
+    chat_model: str = "anthropic/claude-sonnet-4.5"
     embedding_model: str = "qwen/qwen3-embedding-8b"
     max_retries: int = 3
     timeout: int = 60
@@ -186,7 +186,7 @@ class LLMService:
             self.settings = LLMSettings(
                 api_key=os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"),
                 base_url=os.environ.get("GOFR_IQ_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
-                chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "anthropic/claude-opus-4"),
+                chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "anthropic/claude-sonnet-4.5"),
                 embedding_model=os.environ.get("GOFR_IQ_EMBEDDING_MODEL", "qwen/qwen3-embedding-8b"),
                 max_retries=int(os.environ.get("GOFR_IQ_LLM_MAX_RETRIES", "3")),
                 timeout=int(os.environ.get("GOFR_IQ_LLM_TIMEOUT", "60")),

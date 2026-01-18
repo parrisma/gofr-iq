@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING, Literal
 from mcp.server.fastmcp import FastMCP
 
 from app.config import get_config, GofrIqConfig
+from app.logger import session_logger
 from app.services import (
     DocumentStore,
     DuplicateDetector,
@@ -86,6 +87,22 @@ def create_mcp_server(
     # We initialize it but handle connection errors gracefully in service
     graph_index = GraphIndex()
 
+    # Create LLM service with config
+    # CRITICAL: OpenRouter API key MUST be set for entity extraction to work
+    openrouter_key = os.getenv("GOFR_IQ_OPENROUTER_API_KEY")
+    if not openrouter_key:
+        session_logger.error(
+            "FATAL: GOFR_IQ_OPENROUTER_API_KEY not set. "
+            "LLM service is required for entity extraction when graph index is enabled."
+        )
+        raise ValueError(
+            "GOFR_IQ_OPENROUTER_API_KEY must be set in environment. "
+            "Check docker/.env or run bootstrap.py --openrouter-key YOUR_KEY"
+        )
+    
+    llm_service = LLMService(config=config)
+    session_logger.info("LLMService initialized with OpenRouter API key")
+
     ingest_service = IngestService(
         document_store=document_store,
         source_registry=source_registry,
@@ -93,6 +110,7 @@ def create_mcp_server(
         duplicate_detector=duplicate_detector,
         embedding_index=embedding_index,
         graph_index=graph_index,
+        llm_service=llm_service,
     )
 
     # Create query service for semantic search
@@ -102,9 +120,6 @@ def create_mcp_server(
         source_registry=source_registry,
         graph_index=graph_index,
     )
-
-    # Create LLM service with config
-    llm_service = LLMService(config=config)
 
     # Create MCP server
     server = FastMCP(

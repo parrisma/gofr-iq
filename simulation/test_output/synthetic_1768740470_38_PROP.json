@@ -1,0 +1,35 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2025-12-23T01:47:50.075636",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PropCo REIT Posts Solid Revenue Beat as Commercial Real Estate Play Heats Up\n\nPropCo REIT absolutely crushed it this quarter, posting revenue numbers that blew past Street expectations and sending shares ripping higher in after-hours trading. The commercial property play reported quarterly revenue of $847 million, stomping analyst estimates of $812 million and marking a robust 14% jump from the same period last year.\n\nThis isn't your typical sleepy REIT action, folks. PROP is making serious moves in the industrial and logistics space, and the revenue growth is telling the real story here. The company's top-line expansion came primarily from aggressive lease-up activity across its warehouse portfolio, with occupancy rates hitting 96.3% compared to 92.1% a year ago. That's the kind of operational execution that separates the winners from the bagholders.\n\nManagement highlighted that rental income from properties surged 18% year-over-year, driven by both new acquisitions and rental rate increases on lease renewals. The company isn't just sitting on aging strip malls hoping for a miracle. They're actively rotating capital into high-demand logistics facilities, and it's paying off in cold hard revenue dollars.\n\nThe real kicker? Same-store sales growth came in at 9.2%, absolutely smoking the 6.5% that analysts were penciling in. When you're seeing that kind of organic growth in your existing portfolio, you know the underlying business is firing on all cylinders.\n\nPROP also announced it closed on three new industrial acquisitions during the quarter, adding another $215 million in properties to the portfolio. These deals are already contributing to the revenue stream, and management expects them to be fully operational by next quarter. The acquisition pipeline remains robust with another $400 million in properties under contract.\n\nThe stock popped nearly 7% in extended trading, and honestly, this might just be the beginning. With e-commerce continuing to drive insatiable demand for warehouse space and PROP executing flawlessly on both acquisitions and operations, the revenue trajectory looks primed to keep climbing.\n\nBears have been sleeping on this name, but the revenue growth doesn't lie. If management keeps delivering quarters like this, we could be looking at a serious re-rating situation. The revenue momentum is there, the portfolio quality is improving, and the market is finally starting to notice.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

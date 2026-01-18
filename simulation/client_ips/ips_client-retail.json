@@ -1,0 +1,56 @@
+{
+  "client_guid": "client-retail",
+  "client_name": "DiamondHands420",
+  "archetype": "RETAIL_TRADER",
+  "primary_objective": "Maximize gains through momentum trading, meme stocks, and crypto-adjacent plays; YOLO strategies with high risk tolerance",
+  "return_target": "100%+ annual return (moon or bust)",
+  "risk_tolerance": "Very High - comfortable with total loss risk; diamond hands mentality",
+  "time_horizon": "Very short term (days to weeks); swing trading",
+  "permitted_asset_classes": [
+    "High-beta equities",
+    "Crypto-related stocks",
+    "Meme stocks",
+    "Options (especially 0DTE)",
+    "SPACs and recent IPOs"
+  ],
+  "prohibited_sectors": [],
+  "geographic_focus": [
+    "US markets primarily",
+    "Crypto exchanges anywhere"
+  ],
+  "market_cap_preference": "Any cap, prefer volatile small/mid caps",
+  "esg_policy": "No formal ESG policy; may avoid companies with bad social media sentiment",
+  "esg_exclusions": [],
+  "positive_themes": [
+    "Blockchain / Web3",
+    "Electric vehicles",
+    "AI / Machine learning",
+    "Gaming and esports",
+    "Retail investor activism"
+  ],
+  "max_position_size": 0.5,
+  "max_sector_concentration": 1.0,
+  "max_single_issuer": 0.7,
+  "volatility_constraint": null,
+  "news_priority": [
+    "Social media trends",
+    "Short squeeze potential",
+    "Retail sentiment",
+    "Influencer mentions",
+    "Meme potential",
+    "Regulatory FUD"
+  ],
+  "trust_requirement": "Accept all sources (trust level 1+) including rumors and social media; speed over accuracy",
+  "alert_threshold": 30.0,
+  "regulatory_framework": [
+    "Retail brokerage account",
+    "Options trading approved"
+  ],
+  "reporting_requirements": [
+    "Screenshot P&L for Reddit",
+    "Tax forms (if gains exist)"
+  ],
+  "investment_committee_approval": [
+    "YOLO approval from r/wallstreetbets upvotes"
+  ]
+}

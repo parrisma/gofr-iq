@@ -233,6 +233,12 @@ class GraphIndex:
 
         self._driver: Optional[Driver] = None
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
     @property
     def driver(self) -> Driver:
         """Get or create the Neo4j driver"""
@@ -270,9 +276,20 @@ class GraphIndex:
         
         Creates:
         - Uniqueness constraints on GUIDs for all node types
-        - Composite uniqueness for Instrument (ticker + exchange)
+        - Singleton constraints for natural keys (ticker, code, etc.)
         - Performance indexes for common query patterns
         - Full-text search index for document content
+        
+        Singleton Node Types (must have unique natural keys):
+        - Instrument: ticker (primary tradeable identifier)
+        - Company: ticker (issuing entity)
+        - Factor: factor_id (risk/style factor)
+        - Sector: code (industry classification)
+        - Region: code (geographic classification)
+        - Source: guid (content provider)
+        - EventType: code (news event classification)
+        - ClientType: code (client classification)
+        - Index: ticker (benchmark index)
         """
         with self._get_session() as session:
             # Create uniqueness constraints for GUIDs on all node types
@@ -286,16 +303,65 @@ class GraphIndex:
                     """
                 )
 
-            # Composite uniqueness for Instrument (ticker + exchange)
+            # ===== SINGLETON CONSTRAINTS (Natural Key Uniqueness) =====
+            # These ensure that reference data nodes are true singletons
+            # and prevent duplicate creation during ingestion/loading.
+            
+            # Instrument: ticker is the canonical identifier
             session.run(
                 """
-                CREATE CONSTRAINT instrument_ticker_exchange IF NOT EXISTS
+                CREATE CONSTRAINT instrument_ticker_unique IF NOT EXISTS
                 FOR (i:Instrument)
-                REQUIRE (i.ticker, i.exchange) IS UNIQUE
+                REQUIRE i.ticker IS UNIQUE
                 """
             )
             
-            # EventType code uniqueness
+            # Company: ticker is the canonical identifier  
+            session.run(
+                """
+                CREATE CONSTRAINT company_ticker_unique IF NOT EXISTS
+                FOR (c:Company)
+                REQUIRE c.ticker IS UNIQUE
+                """
+            )
+            
+            # Factor: factor_id is the canonical identifier
+            session.run(
+                """
+                CREATE CONSTRAINT factor_id_unique IF NOT EXISTS
+                FOR (f:Factor)
+                REQUIRE f.factor_id IS UNIQUE
+                """
+            )
+            
+            # Sector: code is the canonical identifier
+            session.run(
+                """
+                CREATE CONSTRAINT sector_code_unique IF NOT EXISTS
+                FOR (s:Sector)
+                REQUIRE s.code IS UNIQUE
+                """
+            )
+            
+            # Region: code is the canonical identifier
+            session.run(
+                """
+                CREATE CONSTRAINT region_code_unique IF NOT EXISTS
+                FOR (r:Region)
+                REQUIRE r.code IS UNIQUE
+                """
+            )
+            
+            # Index: ticker is the canonical identifier
+            session.run(
+                """
+                CREATE CONSTRAINT index_ticker_unique IF NOT EXISTS
+                FOR (idx:Index)
+                REQUIRE idx.ticker IS UNIQUE
+                """
+            )
+            
+            # EventType: code is the canonical identifier
             session.run(
                 """
                 CREATE CONSTRAINT eventtype_code_unique IF NOT EXISTS
@@ -304,7 +370,7 @@ class GraphIndex:
                 """
             )
             
-            # ClientType code uniqueness
+            # ClientType: code is the canonical identifier
             session.run(
                 """
                 CREATE CONSTRAINT clienttype_code_unique IF NOT EXISTS
@@ -1089,6 +1155,82 @@ class GraphIndex:
         )
 
     # =========================================================================
+    # GROUP / REGION / SECTOR METHODS
+    # =========================================================================
+
+    def create_group(
+        self,
+        guid: str,
+        name: str,
+        description: str | None = None,
+        properties: dict | None = None,
+    ) -> GraphNode:
+        """Create a group node for access control
+        
+        Args:
+            guid: Group GUID
+            name: Group name
+            description: Optional description
+            properties: Additional properties
+            
+        Returns:
+            Created group GraphNode
+        """
+        props = properties or {}
+        props["name"] = name
+        if description:
+            props["description"] = description
+        return self.create_node(NodeLabel.GROUP, guid, props)
+
+    def create_region(
+        self,
+        guid: str,
+        name: str,
+        code: str | None = None,
+        properties: dict | None = None,
+    ) -> GraphNode:
+        """Create a region node
+        
+        Args:
+            guid: Region GUID
+            name: Region name (e.g., "North America")
+            code: Optional region code (e.g., "NA")
+            properties: Additional properties
+            
+        Returns:
+            Created region GraphNode
+        """
+        props = properties or {}
+        props["name"] = name
+        if code:
+            props["code"] = code
+        return self.create_node(NodeLabel.REGION, guid, props)
+
+    def create_sector(
+        self,
+        guid: str,
+        name: str,
+        code: str | None = None,
+        properties: dict | None = None,
+    ) -> GraphNode:
+        """Create a sector node
+        
+        Args:
+            guid: Sector GUID
+            name: Sector name (e.g., "Technology")
+            code: Optional sector code (e.g., "TECH")
+            properties: Additional properties
+            
+        Returns:
+            Created sector GraphNode
+        """
+        props = properties or {}
+        props["name"] = name
+        if code:
+            props["code"] = code
+        return self.create_node(NodeLabel.SECTOR, guid, props)
+
+    # =========================================================================
     # DOCUMENT IMPACT METHODS
     # =========================================================================
 
@@ -1135,15 +1277,24 @@ class GraphIndex:
         # Create TRIGGERED_BY relationship if event type provided
         if event_type_code:
             try:
-                self.create_relationship(
-                    RelationType.TRIGGERED_BY,
-                    NodeLabel.DOCUMENT,
-                    document_guid,
-                    NodeLabel.EVENT_TYPE,
-                    event_type_code,
-                )
-            except RuntimeError:
-                pass
+                # EventType nodes use 'code' not 'guid', so we need a custom query
+                with self._get_session() as session:
+                    result = session.run(
+                        """
+                        MATCH (d:Document {guid: $doc_guid})
+                        MATCH (e:EventType {code: $event_code})
+                        MERGE (d)-[r:TRIGGERED_BY]->(e)
+                        RETURN r
+                        """,
+                        doc_guid=document_guid,
+                        event_code=event_type_code,
+                    ).single()
+                    if result:
+                        print(f"   DEBUG TRIGGER: Created TRIGGERED_BY -> {event_type_code}")
+                    else:
+                        print(f"   DEBUG TRIGGER: Failed - EventType {event_type_code} not found")
+            except Exception as e:
+                print(f"   DEBUG TRIGGER: Error creating TRIGGERED_BY -> {event_type_code}: {e}")
                 
         return self.get_node(NodeLabel.DOCUMENT, document_guid)  # type: ignore
 

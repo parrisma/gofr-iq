@@ -7,6 +7,8 @@ Tools are organized by functionality:
 - source_tools: Source registry operations (list, get, create)
 - query_tools: Document retrieval and search
 - health_tools: Infrastructure health checks
+- client_tools: Client management and personalized feeds
+- graph_tools: Knowledge graph exploration
 
 Usage:
     from app.tools import register_all_tools
@@ -19,6 +21,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Optional
 
+from app.tools.client_tools import register_client_tools
+from app.tools.graph_tools import register_graph_tools
 from app.tools.health_tools import register_health_tools
 from app.tools.ingest_tools import register_ingest_tools
 from app.tools.query_tools import register_query_tools
@@ -37,6 +41,8 @@ __all__ = [
     "register_source_tools",
     "register_query_tools",
     "register_health_tools",
+    "register_client_tools",
+    "register_graph_tools",
     "register_all_tools",
 ]
 
@@ -67,3 +73,8 @@ def register_all_tools(
     register_source_tools(mcp, source_registry)
     register_query_tools(mcp, document_store, query_service)
     register_health_tools(mcp, graph_index, embedding_index, llm_service)
+    
+    # Register client and graph tools if graph_index is available
+    if graph_index is not None:
+        register_client_tools(mcp, graph_index)
+        register_graph_tools(mcp, graph_index)

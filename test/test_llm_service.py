@@ -36,7 +36,7 @@ def llm_settings() -> LLMSettings:
     return LLMSettings(
         api_key="test-api-key-12345",
         base_url="https://openrouter.ai/api/v1",
-        chat_model="anthropic/claude-3.5-sonnet",
+        chat_model="anthropic/claude-sonnet-4.5",
         embedding_model="openai/text-embedding-3-small",
         max_retries=3,
         timeout=60,
@@ -54,7 +54,7 @@ def mock_chat_response() -> dict[str, Any]:
     """Mock chat completion response"""
     return {
         "id": "gen-12345",
-        "model": "anthropic/claude-3.5-sonnet",
+        "model": "anthropic/claude-sonnet-4.5",
         "choices": [
             {
                 "index": 0,
@@ -78,7 +78,7 @@ def mock_json_response() -> dict[str, Any]:
     """Mock chat completion response with JSON content"""
     return {
         "id": "gen-67890",
-        "model": "anthropic/claude-3.5-sonnet",
+        "model": "anthropic/claude-sonnet-4.5",
         "choices": [
             {
                 "index": 0,
@@ -140,7 +140,7 @@ class TestLLMSettings:
         """Test default settings values"""
         settings = LLMSettings()
         assert settings.base_url == "https://openrouter.ai/api/v1"
-        assert settings.chat_model == "anthropic/claude-opus-4"
+        assert settings.chat_model == "anthropic/claude-sonnet-4.5"
         assert settings.embedding_model == "qwen/qwen3-embedding-8b"
         assert settings.max_retries == 3
         assert settings.timeout == 60
@@ -277,7 +277,7 @@ class TestLLMServiceChatCompletion:
             )
 
         assert result.content == "Hello! How can I help you today?"
-        assert result.model == "anthropic/claude-3.5-sonnet"
+        assert result.model == "anthropic/claude-sonnet-4.5"
         assert result.finish_reason == "stop"
         assert result.usage["total_tokens"] == 18
 

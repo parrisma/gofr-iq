@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-11-19T02:30:15.064176",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "QUANTUM COMPUTE ANNOUNCES COMPONENT SHIPMENT DELAY, GIGATECH INC. PRODUCTION AFFECTED\n\nQuantum Compute Corporation disclosed a delay in component shipments to multiple clients on Tuesday at 14:37 EST, with GigaTech Inc. identified as among the affected parties.\n\nThe component delay, attributed to manufacturing complications at Quantum Compute's primary fabrication facility in San Jose, California, will postpone deliveries of specialized processor modules originally scheduled for shipment between March 15 and March 31, 2024. Quantum Compute Corporation issued a formal notification to clients at 14:37 EST on March 12, 2024, stating that revised delivery timelines would extend four to six weeks beyond original contractual commitments.\n\nGigaTech Inc., which maintains a supplier relationship with Quantum Compute Corporation for quantum processing components utilized in its enterprise server systems, confirmed receipt of the delay notification at 15:12 EST. The affected components constitute critical elements in GigaTech Inc.'s Q2 2024 product release schedule, according to supply chain documentation reviewed by this publication.\n\nQuantum Compute Corporation attributed the delay to equipment calibration issues discovered during routine quality assurance protocols on March 8, 2024. The company stated that production line modifications required to address the calibration discrepancies would necessitate a temporary reduction in output capacity at its San Jose facility, which produces approximately 78 percent of components supplied to GigaTech Inc. under current contractual arrangements.\n\nGigaTech Inc. released a statement at 16:45 EST acknowledging the supplier delay and indicating that the company is assessing the impact on its production schedule. The statement noted that GigaTech Inc. maintains inventory buffers for critical components but did not specify whether existing reserves would be sufficient to maintain planned manufacturing timelines.\n\nThe supplier relationship between Quantum Compute Corporation and GigaTech Inc. was established in 2021, with Quantum Compute Corporation serving as the primary provider of quantum processing modules for GigaTech Inc.'s high-performance computing division. According to GigaTech Inc.'s most recent annual filing, components sourced from Quantum Compute Corporation represent approximately 23 percent of total component costs for the company's enterprise server product line.\n\nQuantum Compute Corporation stated that it has implemented accelerated production protocols and is evaluating options to minimize delivery timeline extensions. The company did not provide specific details regarding potential financial remedies for affected clients.\n\nBoth companies indicated they would provide updates as additional information becomes available.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "client-hedge-fund"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

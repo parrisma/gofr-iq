@@ -148,6 +148,7 @@ class SourceRegistry:
         languages: list[str] | None = None,
         trust_level: TrustLevel = TrustLevel.UNVERIFIED,
         metadata: SourceMetadata | dict[str, Any] | None = None,
+        source_guid: str | None = None,  # Optional: specify GUID for mock sources
     ) -> Source:
         """Create a new source.
 
@@ -158,15 +159,25 @@ class SourceRegistry:
             languages: Languages this source provides
             trust_level: Credibility level
             metadata: Optional additional metadata
+            source_guid: Optional source GUID (for mock/test sources, normally auto-generated)
 
         Returns:
             The created Source
 
         Raises:
-            SourceRegistryError: If creation fails
+            SourceRegistryError: If creation fails or source name already exists
         """
         try:
-            source_guid = str(uuid4())
+            # Check if a source with this name already exists
+            existing = self.find_by_name(name)
+            if existing is not None:
+                raise SourceRegistryError(
+                    f"Source with name '{name}' already exists with GUID {existing.source_guid}"
+                )
+            
+            # Use provided GUID or generate new one
+            if source_guid is None:
+                source_guid = str(uuid4())
 
             # Handle metadata conversion
             if isinstance(metadata, dict):
@@ -240,6 +251,27 @@ class SourceRegistry:
         with file_path.open("r", encoding="utf-8") as f:
             data = json.load(f)
         return Source(**data)
+
+    def find_by_name(self, name: str) -> Source | None:
+        """Find a source by exact name match.
+        
+        Args:
+            name: Source name to search for
+            
+        Returns:
+            Source if found, None otherwise
+        """
+        if not self._sources_path.exists():
+            return None
+            
+        for source_file in self._sources_path.glob("*.json"):
+            try:
+                source = self._load_from_path(source_file)
+                if source.name == name and source.active:
+                    return source
+            except Exception:
+                continue
+        return None
 
     def list_sources(
         self,

@@ -31,10 +31,13 @@ GRAPH_EXTRACTION_SYSTEM_PROMPT = """You are a financial news analyst specializin
 
 Your task is to analyze news text and extract:
 1. **Impact Assessment**: Score the news importance (0-100) and classify into tiers
-2. **Event Detection**: Identify the type of news event
-3. **Instrument Extraction**: Identify affected securities with expected price direction
-4. **Company Mentions**: Extract all company references
-5. **Summary**: One-line headline summary
+2. **Event Detection**: Identify the type of news event (for TRIGGERED_BY relationships)
+3. **Instrument Extraction**: Identify affected securities with expected price direction (PRIMARY subjects only)
+4. **Company Mentions**: Extract ALL company references (for MENTIONS relationships - includes secondary/contextual mentions)
+5. **Geographic/Sector Context**: Identify regions and sectors mentioned (for BELONGS_TO relationships)
+6. **Summary**: One-line headline summary
+
+**IMPORTANT**: Distinguish between PRIMARY instruments (direct news subjects) and MENTIONED companies (contextual references). Primary instruments get AFFECTS relationships; all companies get MENTIONS relationships.
 
 ## Impact Scoring Guidelines (Calibrated to Market Research)
 
@@ -133,19 +136,40 @@ DO extract:
 - Companies directly named in the headline
 - Companies with specific news/data in the article
 
-DO NOT extract:
+DO NOT extract as PRIMARY instruments:
 - Competitors merely mentioned for context (e.g., "unlike rival Samsung...")
 - Peer companies without specific news about them
 - Industry ETFs unless the article is specifically about the ETF
 - Companies mentioned only in passing or for comparison
 
+**BUT** DO include ALL companies in the "companies" field for MENTIONS relationships.
+
 Example - Article: "Tesla cuts prices in China amid competition from BYD and NIO"
-- Extract: TSLA (primary subject, took action)
-- Do NOT extract: BYD, NIO (mentioned as competitors, no specific news about them)
+- Primary instruments: [TSLA] (took action)
+- Companies mentioned: ["Tesla", "BYD", "NIO"] (all get MENTIONS)
+- Regions: ["Asia Pacific", "China"]
+- Sectors: ["Automotive"]
 
 Example - Article: "Apple beats earnings, iPhone outsells Samsung Galaxy"
-- Extract: AAPL (primary subject with earnings)
-- Do NOT extract: SSNLF (mentioned for comparison only)
+- Primary instruments: [AAPL] (earnings subject)
+- Companies mentioned: ["Apple", "Samsung"] (both get MENTIONS)
+- Regions: ["Global"]
+- Sectors: ["Technology", "Consumer Electronics"]
+
+## Geographic & Sector Context
+
+**Regions** (extract when mentioned or implied):
+- "North America", "Europe", "Asia Pacific", "Latin America", "Middle East", "Africa", "Global"
+- Specific countries/markets: "United States", "China", "Japan", "Germany", "United Kingdom", etc.
+
+**Sectors** (extract when companies or industries are mentioned):
+- "Technology", "Finance", "Healthcare", "Energy", "Consumer", "Industrials", "Materials", "Utilities", "Real Estate", "Telecommunications"
+- Sub-sectors: "Semiconductors", "Software", "Biotech", "Banks", "Insurance", "Oil & Gas", "Renewable Energy", etc.
+
+**Rules**:
+- If article is about a specific company, include its sector
+- If article mentions geographic regions ("China", "European markets"), extract them
+- If article is industry-wide ("tech sector rallies"), extract the sector
 
 ## Instrument Direction
 
@@ -178,7 +202,9 @@ Respond with ONLY valid JSON in this exact structure:
       "reason": "Beat earnings expectations"
     }
   ],
-  "companies": ["Apple Inc.", "Apple"],
+  "companies": ["Apple Inc.", "Apple", "Samsung"],
+  "regions": ["Global", "North America"],
+  "sectors": ["Technology", "Consumer Electronics"],
   "summary": "Apple beats Q3 earnings expectations with strong iPhone sales"
 }
 ```
@@ -192,7 +218,9 @@ Respond with ONLY valid JSON in this exact structure:
 5. If no instruments can be identified, return empty list
 6. If event type is unclear, use "OTHER" (prefer specific types over SENTIMENT)
 7. Summary should be <100 characters
-8. Include all mentioned companies in "companies" field, but only PRIMARY subjects in "instruments"
+8. **CRITICAL**: Include ALL mentioned companies in "companies" field (for MENTIONS), but only PRIMARY subjects in "instruments" (for AFFECTS)
+9. Include "regions" array with geographic context (use "Global" if unclear)
+10. Include "sectors" array with industry context based on companies mentioned
 
 ## Scoring Edge Cases & Calibration
 
@@ -284,7 +312,9 @@ class GraphExtractionResult:
         impact_tier: Tier classification (PLATINUM, GOLD, SILVER, BRONZE, STANDARD)
         events: List of detected events
         instruments: List of mentioned instruments
-        companies: List of company names mentioned
+        companies: List of company names mentioned (for MENTIONS relationships)
+        regions: List of geographic regions mentioned (for BELONGS_TO)
+        sectors: List of industry sectors mentioned (for BELONGS_TO)
         summary: One-line summary
         raw_response: Original LLM response (for debugging)
     """
@@ -293,6 +323,8 @@ class GraphExtractionResult:
     events: list[EventDetection] = field(default_factory=list)
     instruments: list[InstrumentMention] = field(default_factory=list)
     companies: list[str] = field(default_factory=list)
+    regions: list[str] = field(default_factory=list)
+    sectors: list[str] = field(default_factory=list)
     summary: str = ""
     raw_response: str = ""
     
@@ -304,6 +336,8 @@ class GraphExtractionResult:
             "events": [e.to_dict() for e in self.events],
             "instruments": [i.to_dict() for i in self.instruments],
             "companies": self.companies,
+            "regions": self.regions,
+            "sectors": self.sectors,
             "summary": self.summary,
         }
     
@@ -436,12 +470,18 @@ def parse_extraction_response(response: str) -> GraphExtractionResult:
     impact_score = int(data["impact_score"])
     impact_score = max(0, min(100, impact_score))
     
+    # DEBUG: Log extracted companies
+    companies_list = data.get("companies", [])
+    print(f"   DEBUG PARSE: Extracted {len(companies_list)} companies from LLM: {companies_list[:5]}")
+    
     return GraphExtractionResult(
         impact_score=impact_score,
         impact_tier=impact_tier,
         events=events,
         instruments=instruments,
-        companies=data.get("companies", []),
+        companies=companies_list,
+        regions=data.get("regions", []),
+        sectors=data.get("sectors", []),
         summary=data.get("summary", "")[:200],  # Truncate if too long
         raw_response=response,
     )

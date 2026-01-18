@@ -1,0 +1,73 @@
+{
+  "client_guid": "client-pension-fund",
+  "client_name": "Teachers Retirement System",
+  "archetype": "PENSION_FUND",
+  "primary_objective": "Preserve capital and generate stable returns to meet long-term pension obligations with minimal downside risk",
+  "return_target": "7-9% annual return (actuarial assumption: 7.25%)",
+  "risk_tolerance": "Low - preservation of capital paramount; max 15% drawdown tolerance",
+  "time_horizon": "Very long term (20+ years to meet obligations)",
+  "permitted_asset_classes": [
+    "Investment-grade equities",
+    "Investment-grade bonds",
+    "Index funds and ETFs",
+    "Real assets (infrastructure, real estate)"
+  ],
+  "prohibited_sectors": [
+    "Tobacco",
+    "Firearms manufacturers",
+    "Gambling",
+    "Fossil fuel extraction (coal, oil sands)",
+    "Private prisons"
+  ],
+  "geographic_focus": [
+    "Primarily US domestic",
+    "Developed international (Europe, Japan, Australia)",
+    "Limited emerging markets (<5%)"
+  ],
+  "market_cap_preference": "Large cap only ($10B+), blue-chip dividend payers",
+  "esg_policy": "Strict ESG integration with exclusionary screens; signatory to UN PRI (Principles for Responsible Investment)",
+  "esg_exclusions": [
+    "All UN Global Compact violators",
+    "Fossil fuel extraction and coal power generation",
+    "Tobacco, firearms, gambling, adult entertainment",
+    "Companies with poor labor practices or union violations",
+    "Severe environmental controversies"
+  ],
+  "positive_themes": [
+    "Clean energy transition",
+    "Education and workforce development",
+    "Healthcare accessibility",
+    "Sustainable infrastructure"
+  ],
+  "max_position_size": 0.03,
+  "max_sector_concentration": 0.2,
+  "max_single_issuer": 0.05,
+  "volatility_constraint": 18.0,
+  "news_priority": [
+    "ESG controversies",
+    "Regulatory compliance",
+    "Dividend policy changes",
+    "Credit rating changes",
+    "Systemic risk indicators"
+  ],
+  "trust_requirement": "High-trust sources only (trust level 8+) - verified, established news agencies required for investment decisions",
+  "alert_threshold": 70.0,
+  "regulatory_framework": [
+    "ERISA fiduciary standards",
+    "State pension regulations",
+    "DOL oversight",
+    "Annual actuarial review"
+  ],
+  "reporting_requirements": [
+    "Quarterly board reporting",
+    "Annual public disclosure",
+    "Beneficiary statements",
+    "ESG impact reporting"
+  ],
+  "investment_committee_approval": [
+    "All new positions",
+    "Any sector allocation change >2%",
+    "All ESG exclusions list updates",
+    "Risk limit breaches"
+  ]
+}

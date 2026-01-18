@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2025-11-30T16:31:43.614858",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "NEXUS SOFTWARE CORPORATION INITIATES FULL RECALL OF CLOUDSTREAM ENTERPRISE PLATFORM\n\nNEW YORK, January 15, 2025, 14:32 EST - Nexus Software Corporation (NASDAQ: NXS) announced a mandatory recall of its CloudStream Enterprise Platform, effective immediately, following the identification of critical security vulnerabilities in the product's core architecture.\n\nThe recall, disclosed in a filing with the Securities and Exchange Commission at 13:47 EST, affects all versions of CloudStream Enterprise Platform released between March 2023 and January 2025. Nexus Software Corporation reported that approximately 2,847 enterprise clients across North America and Europe are impacted by the action.\n\nAccording to the filing, independent security researchers identified multiple zero-day exploits within the CloudStream authentication framework on January 12, 2025. Nexus Software Corporation's internal audit, completed January 14, 2025, confirmed the vulnerabilities could permit unauthorized access to client data systems.\n\nNexus Software Corporation has suspended all sales of CloudStream Enterprise Platform and initiated client migration to temporary alternative solutions. The company estimates the recall will result in revenue reduction of $127 million to $156 million for fiscal year 2025, with additional remediation costs projected between $43 million and $67 million.\n\nThe recall represents a significant operational disruption for Nexus Software Corporation, which derived approximately 34 percent of total revenue from CloudStream Enterprise Platform in fiscal year 2024.\n\nIndustry analysts have identified Quantum Compute Corporation (NASDAQ: QNTM) as the primary beneficiary of the Nexus Software Corporation recall. Quantum Compute Corporation's directly competing DataCore Enterprise Suite maintains comparable functionality without the identified security deficiencies.\n\nQuantum Compute Corporation shares increased 7.3 percent to $84.21 in afternoon trading following the Nexus Software Corporation announcement. Nexus Software Corporation shares declined 18.6 percent to $31.47 during the same period.\n\nQuantum Compute Corporation issued a statement at 15:18 EST confirming it has received inquiries from 412 organizations regarding DataCore Enterprise Suite migration since the Nexus Software Corporation recall announcement. The company has deployed additional sales personnel to process the elevated demand volume.\n\nMarket research firm Gartner Technology Research estimates the enterprise cloud management software sector represents $8.3 billion in annual revenue. Nexus Software Corporation held approximately 11 percent market share prior to the recall, while Quantum Compute Corporation maintained 9 percent market share.\n\nNexus Software Corporation has scheduled a conference call for January 17, 2025, at 09:00 EST to address the recall timeline and financial impact.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "client-hedge-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

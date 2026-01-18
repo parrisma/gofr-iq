@@ -25,7 +25,7 @@ from app.services.group_service import (
     require_admin,
     resolve_write_group,
 )
-from app.services.source_registry import SourceNotFoundError, SourceRegistry
+from app.services.source_registry import SourceNotFoundError, SourceRegistry, SourceRegistryError
 
 if TYPE_CHECKING:
     pass
@@ -323,13 +323,35 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
                 )
 
             # Create the source (standalone entity)
-            source = source_registry.create(
-                name=name,
-                source_type=source_type_enum,
-                region=region,
-                languages=languages or ["en"],
-                trust_level=trust_level_enum,
-            )
+            try:
+                source = source_registry.create(
+                    name=name,
+                    source_type=source_type_enum,
+                    region=region,
+                    languages=languages or ["en"],
+                    trust_level=trust_level_enum,
+                )
+                message = f"Source '{name}' created successfully"
+            except SourceRegistryError as e:
+                # If source already exists, return the existing source instead of error
+                if "already exists" in str(e).lower():
+                    existing = source_registry.find_by_name(name)
+                    if existing:
+                        return success_response(
+                            data={
+                                "source_guid": existing.source_guid,
+                                "name": existing.name,
+                                "type": existing.type.value if existing.type else None,
+                                "region": existing.region,
+                                "languages": existing.languages,
+                                "trust_level": existing.trust_level.value if existing.trust_level else None,
+                                "active": existing.active,
+                                "created_at": existing.created_at.isoformat() if existing.created_at else None,
+                            },
+                            message=f"Source '{name}' already exists",
+                        )
+                # Re-raise other SourceRegistryErrors
+                raise
 
             return success_response(
                 data={
@@ -342,7 +364,7 @@ def register_source_tools(mcp: FastMCP, source_registry: SourceRegistry) -> None
                     "active": source.active,
                     "created_at": source.created_at.isoformat() if source.created_at else None,
                 },
-                message=f"Source '{name}' created successfully",
+                message=message,
             )
 
         except Exception as e:

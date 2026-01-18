@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2025-12-12T21:19:18.497508",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding Quantum",
+  "story_body": "# Quantum Corporation Reports Strong Revenue Growth Amid San Jose Expansion\n\nQuantum Corporation, the data storage technology firm headquartered in San Jose's North First Street technology corridor, announced quarterly financial results Wednesday that exceeded analyst expectations, driven by accelerating demand for its archive and backup solutions across government and enterprise sectors.\n\nThe company, which currently employs approximately 340 people across its California operations and international offices, reported total revenue of $87.3 million for the quarter ending December 31, representing a 14 percent increase compared to the same period last year. The performance marks the third consecutive quarter of year-over-year revenue expansion for the firm.\n\nProduct revenue climbed to $62.1 million, up from $53.8 million in the prior-year quarter, while the company's services and support division contributed $25.2 million. Chief Financial Officer Michael Dodson, speaking from the company's headquarters near the Guadalupe River Park, attributed the growth to heightened adoption of Quantum's ActiveScale object storage platform and continued momentum in its video surveillance and media entertainment verticals.\n\nThe results come as Santa Clara County supervisors have been discussing incentives to retain technology employers amid rising commercial real estate costs throughout Silicon Valley. Quantum has maintained its presence in San Jose since relocating from nearby Milpitas in 2020, occupying roughly 45,000 square feet of office and engineering space.\n\nCompany leadership highlighted particular strength in federal government contracts, with several agencies expanding their use of Quantum's tape-based archive systems. The company's partnership with hyperscale cloud providers also contributed to the quarter's performance, as organizations increasingly seek hybrid storage architectures combining on-premises and cloud infrastructure.\n\nSales in the Asia-Pacific region grew 22 percent year-over-year, outpacing growth in North American and European markets. CEO Jamie Lerner noted during the company's investor call that the firm has added technical personnel in Singapore and Sydney to support regional expansion efforts.\n\nLooking ahead, Quantum management projected revenue for the current quarter between $88 million and $92 million, suggesting continued momentum as data generation accelerates across industries. The company has also been investing in research and development at its San Jose facility, with engineering headcount increasing by approximately 15 positions over the past six months.\n\nQuantum shares rose 8.4 percent in after-hours trading following the announcement.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "QNTM",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "client-hedge-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

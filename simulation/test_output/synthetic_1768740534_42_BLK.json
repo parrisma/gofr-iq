@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2025-12-25T22:15:54.016957",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BankOne Corporation Issues Mandatory Recall of Digital Payment Platform\n\nNEW YORK, March 14, 2024, 09:47 EST - BankOne Corporation (NYSE: BANKO) announced a mandatory recall of its flagship BankOne SecurePay digital payment platform effective immediately, citing critical security vulnerabilities identified in the product's transaction verification system.\n\nThe recall affects approximately 3.2 million active users across North America and Europe. BankOne Corporation disclosed in a regulatory filing submitted to the Securities and Exchange Commission at 08:30 EST that the security flaw could potentially expose customer transaction data to unauthorized access.\n\nBankOne Corporation Chief Technology Officer Richard Pemberton stated in a press release issued at 09:15 EST that the company identified the vulnerability during a routine internal security audit conducted between March 8 and March 12, 2024. The company has suspended all new account registrations and is requiring existing users to migrate to alternative payment solutions within 30 days.\n\nThe recall represents a significant operational disruption for BankOne Corporation, which reported that BankOne SecurePay generated approximately $427 million in revenue during fiscal year 2023, representing 18 percent of total corporate revenue.\n\nIndustry analysts note that BlockChain Verify Incorporated (NASDAQ: BLK), a direct competitor in the digital payment verification sector, is positioned to capture market share displaced by the BankOne Corporation recall. BlockChain Verify Incorporated operates a competing platform utilizing distributed ledger technology for transaction authentication.\n\nBlockChain Verify Incorporated reported a 34 percent increase in new account inquiries between 09:00 EST and 11:00 EST on March 14, according to data released by the company's investor relations department at 12:03 EST. The company has expanded customer service staffing by 40 percent to accommodate increased demand.\n\nFinancial services analyst Margaret Chen of Whitmore Capital Research issued a note at 10:22 EST projecting that BlockChain Verify Incorporated could acquire between 1.1 million and 1.8 million former BankOne SecurePay users over the next 90 days, representing potential annualized revenue of $180 million to $295 million.\n\nBankOne Corporation shares declined 7.3 percent to $42.18 in morning trading as of 11:30 EST. BlockChain Verify Incorporated shares increased 5.8 percent to $67.92 during the same period.\n\nBankOne Corporation has not provided a timeline for the reintroduction of BankOne SecurePay or disclosed total costs associated with the recall.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "client-retail",
+      "client-hedge-fund"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

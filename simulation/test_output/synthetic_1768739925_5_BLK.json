@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-11T11:09:45.024375",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BLOCKCHAIN VERIFY CORP ANNOUNCES ROUTINE PERSONNEL AND OPERATIONAL UPDATES\n\nNEW YORK, January 15, 2025, 09:00 EST - BlockChain Verify Corp (NASDAQ: BLK) issued a routine operational update on Wednesday morning regarding personnel changes and ongoing corporate initiatives.\n\nThe company announced that Jennifer Martinez has been appointed to the position of Vice President of Internal Communications, effective February 1, 2025. Martinez previously served as Director of Corporate Affairs at the firm since March 2021. She will report directly to Chief Administrative Officer Robert Chen. The role was vacated following the retirement of Thomas Williamson in December 2024.\n\nBlockChain Verify Corp also confirmed the extension of its existing partnership with digital marketing firm Apex Media Solutions through December 2026. The arrangement, initially established in January 2023, covers standard social media management and corporate website maintenance services. Financial terms were not disclosed.\n\nIn environmental matters, the company reported completion of its annual energy consumption audit for fiscal year 2024. The audit, conducted by third-party assessor Green Metrics International, found that BlockChain Verify Corp data centers consumed approximately 47.3 gigawatt-hours of electricity during the period, representing a 2.1 percent decrease from the prior year. The reduction was attributed to routine hardware upgrades and standard efficiency improvements at the company's primary facility in Newark, New Jersey.\n\nBlockChain Verify Corp stated that 34 percent of its total energy consumption was sourced from renewable energy credits in 2024, consistent with the company's previously announced sustainability framework targets.\n\nThe company also noted that its annual diversity and inclusion report will be published in March 2025, in accordance with standard corporate reporting timelines.\n\nBlockChain Verify Corp provides blockchain verification and authentication services to enterprise clients across multiple sectors. The company operates data centers in three locations and employs approximately 890 personnel as of December 31, 2024.\n\nNo financial guidance was updated in connection with these announcements. The company maintains its next scheduled earnings release for fourth quarter 2024 results on February 12, 2025, at 16:00 EST.\n\nShares of BlockChain Verify Corp were trading at 24.17 USD at 10:30 EST on Wednesday, up 0.12 USD from the previous close.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -44,7 +44,7 @@ class GofrIqConfig(InfrastructureConfig):
     # LLM Configuration
     openrouter_api_key: Optional[str] = None
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
-    llm_model: str = "anthropic/claude-opus-4"
+    llm_model: str = "anthropic/claude-sonnet-4.5"
     embedding_model: str = "qwen/qwen3-embedding-8b"
     llm_max_retries: int = 3
     llm_timeout: int = 60
@@ -98,7 +98,7 @@ class GofrIqConfig(InfrastructureConfig):
             openrouter_base_url=env_data.get(
                 f"{prefix}_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"
             ),
-            llm_model=env_data.get(f"{prefix}_LLM_MODEL", "anthropic/claude-opus-4"),
+            llm_model=env_data.get(f"{prefix}_LLM_MODEL", "anthropic/claude-sonnet-4.5"),
             embedding_model=env_data.get(f"{prefix}_EMBEDDING_MODEL", "qwen/qwen3-embedding-8b"),
             llm_max_retries=int(env_data.get(f"{prefix}_LLM_MAX_RETRIES", "3")),
             llm_timeout=int(env_data.get(f"{prefix}_LLM_TIMEOUT", "60")),

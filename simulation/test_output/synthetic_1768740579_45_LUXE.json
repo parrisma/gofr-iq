@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-17T11:22:39.988052",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTg1ZDU0NC03YTcwLTRjZjQtYTdhYS05MWQ5YmJhZjRjZjkiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4NzM5MjE4LCJleHAiOjE4MDAyNzUyMTgsIm5iZiI6MTc2ODczOTIxOCwiYXVkIjoiZ29mci1hcGkifQ.S5q94dOs6yXB_c0QxV6oRya9FYdgcm78sq2XfsYaa-o",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "FEDERAL RESERVE RAISES INTEREST RATES 25 BASIS POINTS, LUXEBRANDS SHARES DECLINE\n\nWASHINGTON, D.C. - The Federal Reserve announced at 14:00 EST on Wednesday a 25 basis point increase to the federal funds rate, bringing the target range to 5.25-5.50 percent. The decision marks the continuation of the central bank's monetary tightening cycle aimed at controlling inflation.\n\nLuxeBrands Incorporated (NYSE: LUXE) shares fell 3.2 percent to $127.45 in afternoon trading following the announcement, reflecting investor concerns about the company's sensitivity to borrowing costs.\n\nThe rate increase directly impacts LuxeBrands Incorporated's business model, as a significant portion of luxury goods purchases are financed through consumer credit mechanisms. Industry data indicates that approximately 42 percent of luxury item transactions exceeding $5,000 involve financing arrangements, including credit cards, personal loans, and retailer-sponsored payment plans.\n\nHigher interest rates increase the cost of consumer borrowing, which analysts project will reduce demand for LuxeBrands Incorporated's product portfolio. The company's handbag collections range from $2,800 to $18,000, while its jewelry line includes items priced between $3,500 and $45,000.\n\nLuxeBrands Incorporated exhibits a beta coefficient of negative 0.8 relative to interest rate movements, indicating an inverse correlation between rate changes and company performance. Financial analysts interpret this metric to suggest that for every 100 basis point increase in rates, LuxeBrands Incorporated shares historically decline approximately 0.8 percent beyond general market movements.\n\nThe company reported in its most recent quarterly filing that 38 percent of its United States sales involved third-party financing in the previous fiscal year. Credit card penetration for purchases above $10,000 reached 67 percent during the same period.\n\nMorgan Stanley analyst Rebecca Chen issued a research note stating that the rate increase would add approximately $180 in annual interest costs for consumers financing a $10,000 luxury purchase over 24 months, assuming average credit terms.\n\nLuxeBrands Incorporated management has not issued a statement regarding the Federal Reserve decision. The company is scheduled to report third-quarter earnings on November 8, 2024.\n\nTrading volume for LuxeBrands Incorporated shares reached 2.8 million units by 15:30 EST, representing 147 percent of the 30-day average volume.\n\nThe Federal Reserve indicated in its accompanying statement that future rate decisions would depend on incoming economic data and inflation trends.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}
