@@ -584,13 +584,31 @@ class IngestService:
                 if "source_name" not in doc.metadata:
                     doc.metadata["source_name"] = source_name
                 
+                # Get trust_level from the source object (already validated above)
+                trust_level = None
+                if source and source.trust_level:
+                    # Convert TrustLevel enum to integer (1-10 scale)
+                    trust_level_map = {
+                        "high": 10,
+                        "medium": 7,
+                        "low": 5,
+                        "unverified": 3,
+                    }
+                    trust_level = trust_level_map.get(source.trust_level.value, 5)
+                
                 try:
+                    source_props = {
+                        "reliability": doc.metadata.get("reliability", 0.8)
+                    }
+                    if trust_level is not None:
+                        source_props["trust_level"] = trust_level
+                    
                     self.graph_index.create_source_node(
                         source_guid=doc.source_guid, 
                         name=source_name,
                         source_type=doc.metadata.get("source_type", "synthetic"),
                         group_guid=doc.group_guid,
-                        properties={"reliability": doc.metadata.get("reliability", 0.8)}
+                        properties=source_props
                     )
                 except Exception:
                     pass # Ignore if already exists (MERGE handles duplicates)
