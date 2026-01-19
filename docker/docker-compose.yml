@@ -71,7 +71,7 @@ services:
       - gofr-iq-neo4j-data:/data
       - gofr-iq-neo4j-logs:/logs
     environment:
-      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-gofr-dev-password}
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
       - NEO4J_PLUGINS=["apoc"]
       - NEO4J_dbms_security_procedures_unrestricted=apoc.*
       - NEO4J_dbms_memory_heap_initial__size=512m
@@ -133,9 +133,8 @@ services:
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
       - GOFR_IQ_AUTH_DISABLED=false
-      # JWT Secret for token signing/verification (shared across services)
-      - GOFR_IQ_JWT_SECRET=${GOFR_JWT_SECRET}
-      - GOFR_JWT_SECRET=${GOFR_JWT_SECRET}
+      # JWT Secret and Neo4j password loaded from Vault via AppRole (Zero-Trust Bootstrap)
+      - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD}
       # Auth Backend (Vault) - shared across all GOFR services
       - GOFR_AUTH_BACKEND=vault
       - GOFR_VAULT_URL=http://gofr-vault:${GOFR_VAULT_PORT}
@@ -147,7 +146,6 @@ services:
       - GOFR_IQ_CHROMADB_PORT=${GOFR_CHROMA_INTERNAL_PORT}
       - GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:${GOFR_NEO4J_BOLT_INTERNAL_PORT}
       - GOFR_IQ_NEO4J_USER=neo4j
-      - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD:-gofr-dev-password}
       # LLM Configuration
       - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
       - GOFR_IQ_OPENROUTER_BASE_URL=${GOFR_IQ_OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
@@ -159,6 +157,9 @@ services:
       - "${GOFR_IQ_MCP_PORT}:${GOFR_IQ_MCP_PORT}"
     volumes:
       - gofr-iq-data:/home/gofr-iq/data
+      # AppRole credentials (Zero-Trust Bootstrap)
+      # Uses HOST_PROJECT_ROOT env var set by start-prod.sh for proper path resolution
+      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-mcp.json:/run/secrets/vault_creds:ro
     networks:
       - gofr-net
     healthcheck:
@@ -221,6 +222,10 @@ services:
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
     ports:
       - "${GOFR_IQ_WEB_PORT}:${GOFR_IQ_WEB_PORT}"
+    volumes:
+      # AppRole credentials (Zero-Trust Bootstrap)
+      # Uses HOST_PROJECT_ROOT env var set by start-prod.sh for proper path resolution
+      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-web.json:/run/secrets/vault_creds:ro
     networks:
       - gofr-net
     healthcheck:
@@ -242,6 +247,8 @@ networks:
 
 # ==========================================================================
 # Volumes - Persistent
+# ==========================================================================
+# Volumes
 # ==========================================================================
 volumes:
   gofr-vault-data:

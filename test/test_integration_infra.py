@@ -6,6 +6,7 @@ These tests require running ChromaDB and Neo4j servers. Run with:
 Tests verify end-to-end workflows using real services instead of mocks.
 """
 
+import os
 import uuid
 from typing import Generator
 
@@ -18,6 +19,7 @@ from app.services.embedding_index import EmbeddingIndex
 from app.services.graph_index import GraphIndex, NodeLabel
 from app.services.ingest_service import IngestService
 from app.services.language_detector import LanguageDetector
+from app.services.llm_service import LLMService, LLMSettings, create_llm_service
 from app.services.query_service import QueryService
 from app.services.source_registry import SourceRegistry
 
@@ -137,11 +139,26 @@ def real_graph_index(
 
 
 @pytest.fixture
+def llm_service() -> LLMService | None:
+    """Provide LLMService if API key is available.
+    
+    Returns:
+        LLMService configured with OpenRouter API key, or None if not available.
+    """
+    api_key = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
+    if not api_key:
+        return None
+    settings = LLMSettings(api_key=api_key)
+    return create_llm_service(settings=settings)
+
+
+@pytest.fixture
 def ingest_service(
     document_store: DocumentStore,
     source_registry: SourceRegistry,
     real_embedding_index: EmbeddingIndex,
     real_graph_index: GraphIndex,
+    llm_service: LLMService | None,
 ) -> IngestService:
     """Provide an IngestService with real indexes."""
     return IngestService(
@@ -151,6 +168,7 @@ def ingest_service(
         duplicate_detector=DuplicateDetector(),
         embedding_index=real_embedding_index,
         graph_index=real_graph_index,
+        llm_service=llm_service,
     )
 
 

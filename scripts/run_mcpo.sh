@@ -1,6 +1,22 @@
 #!/bin/bash
 # Start GOFR-IQ MCPO wrapper server
 # Exposes MCP server as OpenAPI/REST endpoints
+#
+# Usage: ./scripts/run_mcpo.sh [OPTIONS]
+#
+# Options:
+#   -h, --help    Show this help message
+#
+# REQUIREMENTS:
+#   - MCP server must be running (scripts/run_mcp.sh or docker/start-prod.sh)
+#   - Environment variables from gofriq.env (MCP host/port, MCPO port)
+#
+# For production, use docker/start-prod.sh to start the full stack.
+# For development testing:
+#   1. Start MCP server: ./scripts/run_mcp.sh
+#   2. Start MCPO proxy: ./scripts/run_mcpo.sh
+#
+# See lib/gofr-common/scripts/readme.md for authentication guide.
 
 set -e
 

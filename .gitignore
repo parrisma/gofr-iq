@@ -207,3 +207,4 @@ config/generated/
 **/tokens.env
 tmp/tokens.env
 logs/*_tokens.json
+/secrets/

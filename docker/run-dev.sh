@@ -2,6 +2,29 @@
 # Run GOFR-IQ development container
 # Uses gofr-iq-dev:latest image (built from gofr-base:latest)
 # Standard user: gofr (UID 1000, GID 1000)
+#
+# Usage:
+#   ./docker/run-dev.sh [OPTIONS]
+#
+# Options:
+#   --mcp-port PORT      Override MCP port (default: from gofr_ports.env + 200)
+#   --mcpo-port PORT     Override MCPO port (default: from gofr_ports.env + 200)
+#   --web-port PORT      Override Web port (default: from gofr_ports.env + 200)
+#   --network NAME       Docker network (default: gofr-net)
+#   -h, --help           Show this help
+#
+# REQUIREMENTS:
+#   - Docker must be installed and running
+#   - gofr_ports.env must exist (run scripts/generate_envs.sh if missing)
+#   - gofr-iq-dev:latest image must be built (run docker/build-dev.sh)
+#
+# This container provides an isolated development environment with:
+#   - Access to host Docker socket (for managing prod containers)
+#   - Project mounted at /home/gofr/devroot/gofr-iq
+#   - Persistent data volume for state
+#   - Ports exposed for MCP/MCPO/Web servers
+#
+# See docs/development.md for full development setup guide.
 
 set -e
 

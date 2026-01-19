@@ -4,6 +4,22 @@
 # Starts the gofr-iq FastAPI web server.
 #
 # Usage: ./run_web.sh [--host HOST] [--port PORT] [--no-auth] [--log-level LEVEL]
+#
+# Options:
+#   --host HOST       Host to bind to (default: 0.0.0.0)
+#   --port PORT       Port to run on (default: from gofriq.env)
+#   --no-auth         Disable authentication
+#   --log-level LVL   Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+#   -h, --help        Show this help message
+#
+# REQUIREMENTS:
+#   - gofriq.env must exist (run scripts/generate_envs.sh if missing)
+#   - For production, use docker/start-prod.sh to start the full stack
+#   - For development testing with authentication, load secrets first:
+#       source lib/gofr-common/scripts/auth_env.sh --docker
+#       ./scripts/run_web.sh
+#
+# See lib/gofr-common/scripts/readme.md for authentication guide.
 
 set -euo pipefail
 

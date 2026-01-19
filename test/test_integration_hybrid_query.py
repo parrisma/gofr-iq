@@ -325,11 +325,25 @@ class TestHybridQueryIntegration:
 
     @pytest.fixture
     def llm_service(self) -> Optional[LLMService]:
-        """Provide LLM service if live mode is enabled."""
+        """Provide LLM service - real in live mode, mock in test mode.
+        
+        The IngestService requires LLM when graph_index is provided,
+        so we provide a mock LLM service in test mode to satisfy this requirement.
+        The mock returns empty extraction results which is fine for testing
+        the query/graph mechanics.
+        """
         if live_llm_available():
             print("  → Using live LLMService for embeddings")
             return create_llm_service()
-        return None
+        # Mock mode - provide a mock LLM service that returns empty extraction
+        from unittest.mock import MagicMock
+        mock_service = MagicMock(spec=LLMService)
+        mock_service.is_available = True
+        # Return empty extraction result (no entities found)
+        mock_service.chat_completion.return_value = MagicMock(
+            content='{"event_types": [], "instruments": [], "companies": [], "sentiment": "neutral", "confidence": 0.5}'
+        )
+        return mock_service
 
     @pytest.fixture
     def live_embedding_index(

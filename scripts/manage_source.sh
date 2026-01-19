@@ -113,6 +113,20 @@ Options:
   --token TOKEN        JWT auth token (required - determines group)
   --help, -h           Show this help message
 
+AUTHENTICATION:
+  This script requires a JWT token (--token). To obtain a token:
+  
+  1. Use a bootstrap token (365-day, admin group):
+     cat secrets/bootstrap_tokens.json
+     ./manage_source.sh list --token "eyJ..."
+  
+  2. Create a new token with auth_env.sh + auth_manager.sh:
+     source lib/gofr-common/scripts/auth_env.sh --docker
+     lib/gofr-common/scripts/auth_manager.sh create-token --group admin --ttl 1h
+     ./manage_source.sh list --token "eyJ..."
+  
+  See lib/gofr-common/scripts/readme.md for full authentication guide.
+
 Examples:
   # List all sources (requires auth token)
   ./manage_source.sh list --docker --token "$GOFR_IQ_ADMIN_TOKEN"

@@ -89,9 +89,9 @@ if [ "$MODE" == "test" ]; then
     export VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}"
     echo "  - Using Test Vault: $VAULT_ADDR"
 else
-    # Prod Mode: Expect Vault Env to be set (from .vault-init.env)
+    # Prod Mode: Expect Vault Env to be set (from secrets/ directory)
     if [ -z "${VAULT_TOKEN:-}" ]; then
-        echo "Error: VAULT_TOKEN not set. Source .vault-init.env first."
+        echo "Error: VAULT_TOKEN not set. Load from secrets/vault_root_token first."
         exit 1
     fi
     if [ -z "${VAULT_ADDR:-}" ]; then

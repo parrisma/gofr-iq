@@ -108,12 +108,16 @@ def auth_test_data(auth_flow_auth_service: AuthService):
             continue
         group_uuid = str(group.id)
         
-        # Create source (sources are now global)
-        source = source_registry.create(
-            name=f"Auth Test Source {display_name}",
-            source_type=SourceType.NEWS_AGENCY,
-            trust_level=TrustLevel.UNVERIFIED,
-        )
+        # Try to find existing source first (reuse between test runs)
+        source_name = f"Auth Test Source {display_name}"
+        source = source_registry.find_by_name(source_name)
+        if source is None:
+            # Create source (sources are now global)
+            source = source_registry.create(
+                name=source_name,
+                source_type=SourceType.NEWS_AGENCY,
+                trust_level=TrustLevel.UNVERIFIED,
+            )
         
         # Create document using UUID
         doc = Document(

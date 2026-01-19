@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-28T17:58:16.716236",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0MDUzNDNkZi04ZjAwLTQyYzktYjY0NS1iMTlhODg3ZWM3YTYiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU0NjcxLCJleHAiOjE4MDAzOTA2NzEsIm5iZiI6MTc2ODg1NDY3MSwiYXVkIjoiZ29mci1hcGkifQ.dqm81Vi4wo-Iac81ieYTBc6mE5DZUqTPvMyLHMfN4EI",
+  "title": "Update regarding VELO",
+  "story_body": "VELO CORP SHARES DECLINE AS LITHIUM PRICE SURGE PRESSURES BATTERY MATERIALS DIVISION\n\nVELO Corp (NASDAQ: VELO) closed down 3.7% at $42.18 per share on Thursday, March 13, 2025, as commodity price increases threatened to compress margins in the company's electric vehicle battery materials segment.\n\nLithium carbonate prices rose 21.3% over the past five trading sessions, reaching $28,400 per metric ton as of 14:00 EST on Thursday. The surge coincides with broader commodity market movements, including a 19.8% increase in Brent crude oil futures and a 20.4% rise in hot-rolled steel coil prices.\n\nVELO Corp derives approximately 68% of revenue from lithium-based battery component manufacturing for electric vehicle applications. The company maintains a negative beta coefficient of -1.1 relative to commodity price indices, indicating inverse correlation between input cost inflation and equity performance.\n\nChief Financial Officer Margaret Chen stated during a conference call at 09:30 EST on Thursday that lithium represents 41% of the company's total material costs. \"Each 10% increase in lithium carbonate pricing reduces our gross margin by approximately 180 basis points, assuming no price transmission to customers,\" Chen said.\n\nVELO Corp reported gross margins of 22.4% in the fiscal quarter ended December 31, 2024. Analyst projections from Barclays Capital now estimate margins may contract to 18.1% in the current quarter if lithium prices sustain present levels through March 31, 2025.\n\nThe company sources lithium carbonate through fixed-price contracts covering approximately 35% of quarterly requirements, with remaining volumes purchased on spot markets. VELO Corp's supply agreements with Albemarle Corporation and Sociedad Qu\u00edmica y Minera de Chile expire on June 30, 2025.\n\nTrading volume reached 4.2 million shares by market close on Thursday, representing 187% of the 30-day average daily volume of 2.24 million shares.\n\nSteel price increases present additional margin pressure for VELO Corp's battery housing division, which accounts for 18% of total revenue. The company utilizes 12,400 metric tons of steel monthly across three manufacturing facilities in Michigan, Nevada, and South Korea.\n\nVELO Corp is scheduled to report first-quarter fiscal 2025 earnings on April 24, 2025, at 16:00 EST.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

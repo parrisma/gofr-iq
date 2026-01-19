@@ -31,6 +31,7 @@ from app.services.embedding_index import EmbeddingIndex
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
 from app.services.ingest_service import IngestService
 from app.services.language_detector import LanguageDetector
+from app.services.llm_service import LLMService
 from app.services.source_registry import SourceRegistry
 
 
@@ -122,11 +123,36 @@ def test_sources(source_registry: SourceRegistry) -> dict[str, Source]:
 
 
 @pytest.fixture
+def mock_llm_service() -> MagicMock:
+    """Provide a mock LLM service for tests that use graph_index."""
+    import json
+    service = MagicMock(spec=LLMService)
+    service.is_available = True
+    
+    # Create a mock response with proper JSON content matching GraphExtractionResult
+    mock_response = MagicMock()
+    mock_response.content = json.dumps({
+        "impact_score": 50,
+        "impact_tier": "SILVER",
+        "events": [{"event_type": "OTHER", "confidence": 0.5, "details": "Test event"}],
+        "instruments": [],
+        "companies": [],
+        "regions": [],
+        "sectors": [],
+        "summary": "Test document summary"
+    })
+    service.chat_completion.return_value = mock_response
+    
+    return service
+
+
+@pytest.fixture
 def ingest_service(
     document_store: DocumentStore,
     source_registry: SourceRegistry,
     mock_embedding_index: MagicMock,
     mock_graph_index: MagicMock,
+    mock_llm_service: MagicMock,
 ) -> IngestService:
     """Create an IngestService with mocked indexes."""
     return IngestService(
@@ -136,6 +162,7 @@ def ingest_service(
         duplicate_detector=DuplicateDetector(),
         embedding_index=mock_embedding_index,
         graph_index=mock_graph_index,
+        llm_service=mock_llm_service,
     )
 
 

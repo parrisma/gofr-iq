@@ -316,6 +316,7 @@ if [ -z "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
     echo "  1. Get an API key from https://openrouter.ai/"
     echo "  2. Add it to lib/gofr-common/.env: GOFR_IQ_OPENROUTER_API_KEY=sk-or-v1-..."
 else
+    export GOFR_IQ_OPENROUTER_API_KEY
     echo "  OpenRouter API Key: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
 fi
 
@@ -332,6 +333,9 @@ export GOFR_VAULT_URL="http://gofr-vault-test:8200"
 export GOFR_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
 export GOFR_VAULT_PATH_PREFIX="gofr-test/auth"
 export GOFR_VAULT_MOUNT_POINT="secret"
+# Also set VAULT_ADDR and VAULT_TOKEN for gofr_env.py compatibility
+export VAULT_ADDR="http://gofr-vault-test:8200"
+export VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
 
 # Source centralized environment configuration (won't override already-set vars)
 if [ -f "${SCRIPT_DIR}/gofr-iq.env" ]; then
@@ -513,6 +517,22 @@ if [ "$START_SERVERS" = true ] && [ "$USE_DOCKER" = false ]; then
     else
         run_test_env_cmd stop || true
         exit 1
+    fi
+    
+    # ==========================================================================
+    # MINI-BOOTSTRAP: Initialize Test Vault with JWT Secret
+    # ==========================================================================
+    # MCP server requires JWT secret to be in Vault. Write it before starting servers.
+    echo -e "${BLUE}Initializing test Vault with JWT secret...${NC}"
+    if curl -sf -X POST \
+        -H "X-Vault-Token: ${VAULT_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -d "{\"data\": {\"value\": \"${GOFR_JWT_SECRET}\"}}" \
+        "${VAULT_ADDR}/v1/secret/data/gofr/config/jwt-signing-secret" >/dev/null 2>&1; then
+        echo -e "${GREEN}  JWT secret stored in test Vault${NC}"
+    else
+        echo -e "${YELLOW}  Warning: Could not store JWT in Vault (may already exist or Vault unreachable)${NC}"
+        echo "  MCP will fall back to CLI argument for JWT secret"
     fi
     
     # NOTE: Auth bootstrap (admin/public groups & tokens) happens in conftest.py

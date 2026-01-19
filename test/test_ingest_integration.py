@@ -4,6 +4,7 @@ Tests that IngestService correctly calls EmbeddingIndex and GraphIndex,
 and handles failures with rollback.
 """
 
+import json
 import uuid
 from dataclasses import dataclass
 from unittest.mock import MagicMock
@@ -20,6 +21,7 @@ from app.services import (
     SourceRegistry,
 )
 from app.services.graph_index import NodeLabel
+from app.services.llm_service import LLMService
 
 
 @dataclass
@@ -43,10 +45,34 @@ def mock_graph_index():
 
 
 @pytest.fixture
+def mock_llm_service():
+    """Provide a mock LLM service for tests that use graph_index."""
+    service = MagicMock(spec=LLMService)
+    service.is_available = True
+    
+    # Create a mock response with proper JSON content matching GraphExtractionResult
+    mock_response = MagicMock()
+    mock_response.content = json.dumps({
+        "impact_score": 50,
+        "impact_tier": "SILVER",
+        "events": [{"event_type": "OTHER", "confidence": 0.5, "details": "Test event"}],
+        "instruments": [],
+        "companies": [],
+        "regions": [],
+        "sectors": [],
+        "summary": "Test document summary"
+    })
+    service.chat_completion.return_value = mock_response
+    
+    return service
+
+
+@pytest.fixture
 def ingest_context(
     tmp_path,
     mock_embedding_index,
     mock_graph_index,
+    mock_llm_service,
 ):
     document_store = DocumentStore(base_path=tmp_path / "documents")
     source_registry = SourceRegistry(base_path=tmp_path / "sources")
@@ -67,6 +93,7 @@ def ingest_context(
         duplicate_detector=DuplicateDetector(),
         embedding_index=mock_embedding_index,
         graph_index=mock_graph_index,
+        llm_service=mock_llm_service,
     )
     
     return IngestTestContext(

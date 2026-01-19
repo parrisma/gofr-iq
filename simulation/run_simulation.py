@@ -36,10 +36,10 @@ from simulation import ingest_synthetic_stories as ingest  # noqa: E402
 from simulation import load_simulation_data
 from simulation.universe.builder import UniverseBuilder  # noqa: E402
 
-VAULT_INIT_FILE = PROJECT_ROOT / "docker" / ".vault-init.env"
+SECRETS_DIR = PROJECT_ROOT / "secrets"
 DOCKER_ENV_FILE = PROJECT_ROOT / "docker" / ".env"
 PORTS_ENV_FILE = PROJECT_ROOT / "lib" / "gofr-common" / "config" / "gofr_ports.env"
-BOOTSTRAP_TOKEN_FILE = PROJECT_ROOT / "config" / "generated" / "bootstrap_tokens.json"
+BOOTSTRAP_TOKEN_FILE = SECRETS_DIR / "bootstrap_tokens.json"
 TOKEN_TTL_SECONDS = 86400 * 365
 
 
@@ -286,7 +286,30 @@ def verify_groups(auth: AuthService, groups: List[str]):
 def mint_tokens(auth: AuthService, groups: List[str]) -> Dict[str, str]:
     tokens: Dict[str, str] = {}
     for group in groups:
-        token = auth.create_token(groups=[group], expires_in_seconds=TOKEN_TTL_SECONDS)
+        # Normalize group name for token naming (replace underscores with hyphens)
+        token_name = f"sim-{group.replace('_', '-')}"
+        
+        # Check if token already exists
+        existing_record = auth.get_token_by_name(token_name)
+        if existing_record:
+            # Reconstruct JWT from existing record
+            import jwt
+            payload = {
+                "jti": str(existing_record.id),
+                "groups": existing_record.groups,
+                "iat": int(existing_record.created_at.timestamp()),
+                "exp": int(existing_record.expires_at.timestamp()) if existing_record.expires_at else None,
+                "nbf": int(existing_record.created_at.timestamp()),
+                "aud": "gofr-api",
+            }
+            token = jwt.encode(payload, auth.secret_key, algorithm="HS256")
+        else:
+            # Create new token
+            token = auth.create_token(
+                groups=[group],
+                expires_in_seconds=TOKEN_TTL_SECONDS,
+                name=token_name,
+            )
         tokens[group] = token
     return tokens
 
@@ -570,7 +593,7 @@ def ingest_data(output_dir: Path, sources: Dict[str, str], tokens: Dict[str, str
 def main():
     parser = argparse.ArgumentParser(
         description="Run full simulation pipeline",
-        epilog="Note: Must source production environment first: source docker/.vault-init.env && source docker/.env"
+        epilog="Note: Run via ./simulation/run_simulation.sh which loads secrets from secrets/ directory"
     )
     parser.add_argument("--count", type=int, default=10, help="Stories to generate")
     parser.add_argument("--output", type=Path, default=Path("simulation/test_output"), help="Output directory")

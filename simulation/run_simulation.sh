@@ -7,7 +7,7 @@
 #
 # Prerequisites:
 #   - Production stack must be running (docker/start-prod.sh)
-#   - Bootstrap must have been run (creates .env and .vault-init.env)
+#   - Bootstrap must have been run (creates docker/.env and secrets/)
 #
 # Usage:
 #   ./simulation/run_simulation.sh [ARGS]
@@ -19,6 +19,14 @@
 #   ./simulation/run_simulation.sh --init-tokens-only
 #   ./simulation/run_simulation.sh --skip-universe --skip-clients
 #   ./simulation/run_simulation.sh --skip-generate --output simulation/test_output
+#
+# REQUIREMENTS:
+#   - Production stack running: docker/start-prod.sh must have been executed
+#   - secrets/: Must contain vault_root_token, vault_unseal_key (from start-prod.sh)
+#   - docker/.env: Must exist (created by bootstrap.py)
+#   - gofr_ports.env: Must exist (run scripts/generate_envs.sh if missing)
+#   - OpenRouter API key in Vault (required for story generation, stored via start-prod.sh)
+#   - Services healthy: Vault, Neo4j, ChromaDB must be running
 #
 # Note: Story generation requires GOFR_IQ_OPENROUTER_API_KEY to be set.
 #       Use --skip-generate to reuse existing synthetic stories.
@@ -33,7 +41,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Source production configuration (single source of truth)
 PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
-VAULT_INIT="${PROJECT_ROOT}/docker/.vault-init.env"
+SECRETS_DIR="${PROJECT_ROOT}/secrets"
 DOCKER_ENV="${PROJECT_ROOT}/docker/.env"
 
 echo "======================================================================="
@@ -47,8 +55,8 @@ if [ ! -f "$PORTS_FILE" ]; then
     exit 1
 fi
 
-if [ ! -f "$VAULT_INIT" ]; then
-    echo "❌ ERROR: $VAULT_INIT not found"
+if [ ! -f "$SECRETS_DIR/vault_root_token" ]; then
+    echo "❌ ERROR: $SECRETS_DIR/vault_root_token not found"
     echo "   Run: ./docker/start-prod.sh --fresh"
     exit 1
 fi
@@ -59,67 +67,74 @@ if [ ! -f "$DOCKER_ENV" ]; then
     exit 1
 fi
 
-# Source ONLY ports, Vault credentials, and docker env - secrets come from Vault/docker/.env
+# Source ports and docker env - Vault credentials loaded from secrets dir
 echo "📋 Loading configuration..."
 set -a
 source "$PORTS_FILE"
-source "$VAULT_INIT"
 source "$DOCKER_ENV"
 set +a
 
-# Set infrastructure endpoints (dev container is on gofr-net)
-export GOFR_IQ_NEO4J_URI="${GOFR_IQ_NEO4J_URI:-bolt://gofr-neo4j:7687}"
-export GOFR_IQ_NEO4J_USER="${GOFR_IQ_NEO4J_USER:-neo4j}"
-export GOFR_IQ_NEO4J_PASSWORD="${NEO4J_PASSWORD:-}"
-export GOFR_IQ_CHROMADB_HOST="${GOFR_IQ_CHROMADB_HOST:-gofr-chromadb}"
-export GOFR_IQ_CHROMADB_PORT="${GOFR_CHROMA_INTERNAL_PORT:-8000}"
-export GOFR_VAULT_URL="${GOFR_VAULT_URL:-http://gofr-vault:${GOFR_VAULT_PORT:-8201}}"
-
-# Require Neo4j password from docker/.env (no default fallback)
-if [ -z "${GOFR_IQ_NEO4J_PASSWORD:-}" ]; then
-    echo "❌ ERROR: GOFR_IQ_NEO4J_PASSWORD not set (check docker/.env)"
-    exit 1
+# Load Vault credentials from secrets directory (Zero-Trust Bootstrap)
+export VAULT_TOKEN=$(cat "$SECRETS_DIR/vault_root_token")
+if [ -f "$SECRETS_DIR/vault_unseal_key" ]; then
+    export VAULT_UNSEAL_KEY=$(cat "$SECRETS_DIR/vault_unseal_key")
 fi
+
+# Set infrastructure endpoints (dev container is on gofr-net)
+# ZERO-TRUST BOOTSTRAP: Use explicit values from docker/.env (no defaults)
+if [ -z "${GOFR_IQ_NEO4J_URI:-}" ]; then export GOFR_IQ_NEO4J_URI="bolt://gofr-neo4j:7687"; fi
+if [ -z "${GOFR_IQ_NEO4J_USER:-}" ]; then export GOFR_IQ_NEO4J_USER="neo4j"; fi
+if [ -z "${GOFR_IQ_CHROMADB_HOST:-}" ]; then export GOFR_IQ_CHROMADB_HOST="gofr-chromadb"; fi
+if [ -z "${GOFR_IQ_CHROMADB_PORT:-}" ]; then export GOFR_IQ_CHROMADB_PORT="8000"; fi
+if [ -z "${GOFR_VAULT_URL:-}" ]; then export GOFR_VAULT_URL="http://gofr-vault:${GOFR_VAULT_PORT}"; fi
+
+# ZERO-TRUST BOOTSTRAP: Neo4j password retrieved from Vault below
+# (Services get it via AppRole, simulation script retrieves it explicitly)
 
 # Set Vault CLI environment for vault command
 export VAULT_ADDR="${GOFR_VAULT_URL}"
 
 # ============================================================================
-# Retrieve secrets from Vault if not already in environment
+# Retrieve secrets from Vault ONLY (Zero-Trust Bootstrap)
 # ============================================================================
-echo "🔑 Checking secrets..."
+echo "🔑 Retrieving secrets from Vault..."
 
-# JWT Secret - use from docker/.env if available, otherwise get from Vault
-if [ -z "${GOFR_JWT_SECRET:-}" ]; then
-    echo "   Retrieving JWT from Vault..."
-    JWT_SECRET=$(docker exec -e VAULT_TOKEN="$VAULT_TOKEN" gofr-vault \
-        vault kv get -field=value secret/gofr/config/jwt-signing-secret 2>/dev/null || echo "")
-    if [ -z "$JWT_SECRET" ]; then
-        echo "❌ ERROR: JWT signing secret not in docker/.env or Vault"
-        echo "   Run: ./docker/start-prod.sh --fresh"
-        exit 1
-    fi
-    export GOFR_JWT_SECRET="$JWT_SECRET"
-    export GOFR_IQ_JWT_SECRET="$JWT_SECRET"
-else
-    echo "   ✓ JWT from docker/.env"
-    export GOFR_IQ_JWT_SECRET="${GOFR_JWT_SECRET}"
+# JWT Secret - MUST come from Vault (no docker/.env fallback)
+echo "   Retrieving JWT from Vault..."
+JWT_SECRET=$(docker exec -e VAULT_TOKEN="$VAULT_TOKEN" gofr-vault \
+    vault kv get -field=value secret/gofr/config/jwt-signing-secret 2>/dev/null || echo "")
+if [ -z "$JWT_SECRET" ]; then
+    echo "❌ ERROR: JWT signing secret not found in Vault"
+    echo "   Run: ./docker/start-prod.sh --fresh"
+    exit 1
 fi
+export GOFR_JWT_SECRET="$JWT_SECRET"
+export GOFR_IQ_JWT_SECRET="$JWT_SECRET"
+echo "   ✓ JWT from Vault"
 
-# OpenRouter API key - use from docker/.env if available, otherwise get from Vault
-if [ -z "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
-    echo "   Retrieving OpenRouter key from Vault..."
-    OPENROUTER_KEY=$(docker exec -e VAULT_TOKEN="$VAULT_TOKEN" gofr-vault \
-        vault kv get -field=value secret/gofr/config/api-keys/openrouter 2>/dev/null || echo "")
-    if [ -z "$OPENROUTER_KEY" ]; then
-        echo "❌ ERROR: OpenRouter API key not in docker/.env or Vault"
-        echo "   Store it with: ./docker/start-prod.sh --openrouter-key YOUR_KEY"
-        exit 1
-    fi
-    export GOFR_IQ_OPENROUTER_API_KEY="$OPENROUTER_KEY"
-else
-    echo "   ✓ OpenRouter key from docker/.env"
+# Neo4j password - MUST come from Vault
+echo "   Retrieving Neo4j password from Vault..."
+NEO4J_PASSWORD=$(docker exec -e VAULT_TOKEN="$VAULT_TOKEN" gofr-vault \
+    vault kv get -field=value secret/gofr/config/neo4j-password 2>/dev/null || echo "")
+if [ -z "$NEO4J_PASSWORD" ]; then
+    echo "❌ ERROR: Neo4j password not found in Vault"
+    echo "   Run: ./docker/start-prod.sh --fresh"
+    exit 1
 fi
+export GOFR_IQ_NEO4J_PASSWORD="$NEO4J_PASSWORD"
+echo "   ✓ Neo4j password from Vault"
+
+# OpenRouter API key - MUST come from Vault (no docker/.env fallback)
+echo "   Retrieving OpenRouter key from Vault..."
+OPENROUTER_KEY=$(docker exec -e VAULT_TOKEN="$VAULT_TOKEN" gofr-vault \
+    vault kv get -field=value secret/gofr/config/api-keys/openrouter 2>/dev/null || echo "")
+if [ -z "$OPENROUTER_KEY" ]; then
+    echo "❌ ERROR: OpenRouter API key not found in Vault"
+    echo "   Store it with: ./docker/start-prod.sh --openrouter-key YOUR_KEY"
+    exit 1
+fi
+export GOFR_IQ_OPENROUTER_API_KEY="$OPENROUTER_KEY"
+echo "   ✓ OpenRouter key from Vault"
 
 # ============================================================================
 # Health Checks & Positive Affirmations (Pre-Flight)

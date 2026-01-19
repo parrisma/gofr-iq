@@ -217,27 +217,33 @@ class GraphIndex:
         Args:
             uri: Neo4j Bolt URI (required: set GOFR_IQ_NEO4J_URI or pass explicitly)
             username: Neo4j username (default: from GOFR_IQ_NEO4J_USER or "neo4j")
-            password: Neo4j password (default: from GOFR_IQ_NEO4J_PASSWORD or "testpassword")
+            password: Neo4j password (default: from GOFR_IQ_NEO4J_PASSWORD env or /run/secrets/neo4j_password)
             database: Database name
         """
         if uri is None:
             uri = os.environ.get("GOFR_IQ_NEO4J_URI")
             if uri is None:
-                raise ValueError("Neo4j URI is required: set GOFR_IQ_NEO4J_URI or pass uri parameter")
+                raise ValueError("Neo4j URI is required: set GOFR_IQ_NEO4J_PASSWORD or pass uri parameter")
         self.uri = uri
         
-        # Read credentials from environment if not provided
+        # Read credentials from environment or Docker secret
         self.username = username or os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
-        self.password = password or os.environ.get("GOFR_IQ_NEO4J_PASSWORD", "testpassword")  # nosec B107
+        
+        # Try Docker secret first, then environment variable, then default
+        if password:
+            self.password = password
+        else:
+            # Check Docker secret
+            secret_file = "/run/secrets/neo4j_password"  # nosec B105 - path to secret file, not password
+            if os.path.exists(secret_file):
+                with open(secret_file, 'r') as f:
+                    self.password = f.read().strip()
+            else:
+                self.password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD", "testpassword")  # nosec B107
+        
         self.database = database
 
         self._driver: Optional[Driver] = None
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
 
     @property
     def driver(self) -> Driver:

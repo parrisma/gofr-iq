@@ -41,10 +41,28 @@ services:
       - VAULT_DEV_ROOT_TOKEN_ID=${GOFR_VAULT_DEV_TOKEN}
       - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
       - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_TOKEN=${GOFR_VAULT_DEV_TOKEN}
+      - GOFR_JWT_SECRET=${GOFR_JWT_SECRET}
     entrypoint: /bin/sh
     command: 
       - -c
-      - "vault server -dev -dev-root-token-id=$${VAULT_DEV_ROOT_TOKEN_ID} -dev-listen-address=$${VAULT_DEV_LISTEN_ADDRESS}"
+      - |
+        # Start Vault in background
+        vault server -dev -dev-root-token-id=$${VAULT_DEV_ROOT_TOKEN_ID} -dev-listen-address=$${VAULT_DEV_LISTEN_ADDRESS} &
+        VAULT_PID=$$!
+        # Wait for Vault to be ready
+        for i in 1 2 3 4 5 6 7 8 9 10; do
+          if vault status >/dev/null 2>&1; then
+            break
+          fi
+          sleep 1
+        done
+        # Initialize JWT secret for test MCP
+        echo "Initializing test Vault with JWT secret..."
+        vault kv put secret/gofr/config/jwt-signing-secret value="$${GOFR_JWT_SECRET}" 2>/dev/null || true
+        echo "Test Vault initialized"
+        # Wait for Vault process
+        wait $$VAULT_PID
     networks:
       - gofr-test-net
     healthcheck:
@@ -133,10 +151,12 @@ services:
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-DEBUG}
       - GOFR_JWT_SECRET=${GOFR_JWT_SECRET}
-      # Auth Backend (Vault - test container)
+      # Auth Backend (Vault - test container, dev mode)
       - GOFR_AUTH_BACKEND=vault
       - GOFR_VAULT_URL=http://gofr-vault-test:8200
       - GOFR_VAULT_TOKEN=${GOFR_VAULT_DEV_TOKEN}
+      - VAULT_TOKEN=${GOFR_VAULT_DEV_TOKEN}
+      - VAULT_ADDR=http://gofr-vault-test:8200
       - GOFR_VAULT_PATH_PREFIX=gofr-test/auth
       - GOFR_VAULT_MOUNT_POINT=secret
       # Infrastructure connections (test containers)
@@ -145,6 +165,8 @@ services:
       - GOFR_IQ_NEO4J_URI=bolt://gofr-iq-neo4j-test:7687
       - GOFR_IQ_NEO4J_USER=neo4j
       - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD:-testpassword}
+      # LLM API key for entity extraction (required for graph index)
+      - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY}
     ports:
       - "${GOFR_IQ_MCP_PORT}:${GOFR_IQ_MCP_PORT}"
     networks:

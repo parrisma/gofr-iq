@@ -145,7 +145,7 @@ if __name__ == "__main__":
                 headers={"X-Vault-Token": vault_token},
                 method="GET",
             )
-            with urllib.request.urlopen(req, timeout=10) as resp:
+            with urllib.request.urlopen(req, timeout=10) as resp:  # nosec B310 - Vault URL is trusted
                 payload = json.loads(resp.read())
             vault_jwt = payload.get("data", {}).get("data", {}).get("value")
             if not vault_jwt:

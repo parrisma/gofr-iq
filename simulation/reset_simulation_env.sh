@@ -15,19 +15,21 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Source configuration
 PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
-VAULT_INIT="${PROJECT_ROOT}/docker/.vault-init.env"
+SECRETS_DIR="${PROJECT_ROOT}/secrets"
 DOCKER_ENV="${PROJECT_ROOT}/docker/.env"
 
-if [ ! -f "$PORTS_FILE" ] || [ ! -f "$VAULT_INIT" ] || [ ! -f "$DOCKER_ENV" ]; then
+if [ ! -f "$PORTS_FILE" ] || [ ! -f "$SECRETS_DIR/vault_root_token" ] || [ ! -f "$DOCKER_ENV" ]; then
     echo "❌ Configuration files missing. Run bootstrap first."
     exit 1
 fi
 
 set -a
 source "$PORTS_FILE"
-source "$VAULT_INIT"
 source "$DOCKER_ENV"
 set +a
+
+# Load Vault credentials from secrets/ directory (Zero-Trust Bootstrap)
+export VAULT_TOKEN=$(cat "$SECRETS_DIR/vault_root_token")
 
 # Infrastructure Config
 export GOFR_IQ_NEO4J_URI="${GOFR_IQ_NEO4J_URI:-bolt://gofr-neo4j:7687}"

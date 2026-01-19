@@ -263,7 +263,7 @@ class IngestService:
             if extraction_result and extraction_result.companies:
                 print(f"   DEBUG EXTRACT: Found {len(extraction_result.companies)} companies: {extraction_result.companies}")
             else:
-                print(f"   DEBUG EXTRACT: No companies found in extraction")
+                print("   DEBUG EXTRACT: No companies found in extraction")
             
             return extraction_result
             
@@ -505,9 +505,8 @@ class IngestService:
             if source_name:
                 source = self.source_registry.find_by_name(source_name)
                 if source:
-                    # Update source_guid to use the actual source's GUID
+                    # Update source_guid to use the actual source's GUID (name lookup fallback)
                     source_guid = source.source_guid
-                    self.logger.debug(f"Source GUID {source_guid} not found, using name lookup: {source_name} -> {source.source_guid}")
                 else:
                     raise SourceValidationError(source_guid)
             else:
@@ -610,8 +609,8 @@ class IngestService:
                         group_guid=doc.group_guid,
                         properties=source_props
                     )
-                except Exception:
-                    pass # Ignore if already exists (MERGE handles duplicates)
+                except Exception:  # nosec B110 - MERGE handles duplicates, ignore already exists
+                    pass
 
                 self.graph_index.create_document_node(
                     document_guid=doc.guid,

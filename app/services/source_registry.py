@@ -269,7 +269,7 @@ class SourceRegistry:
                 source = self._load_from_path(source_file)
                 if source.name == name and source.active:
                     return source
-            except Exception:
+            except Exception:  # nosec B112 - Skip invalid source files gracefully
                 continue
         return None
 

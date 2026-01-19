@@ -140,6 +140,24 @@ curl http://localhost:8280/health
 
 ## 🔄 Lifecycle Management
 
+### Working with Vault Secrets
+
+To inspect or manage groups and tokens in Vault:
+
+```bash
+# One-liner: load Vault env (mints short-lived operator token) and list groups
+source <(./lib/gofr-common/scripts/auth_env.sh --docker)
+./lib/gofr-common/scripts/auth_manager.sh --docker groups list
+./lib/gofr-common/scripts/auth_manager.sh --docker tokens list
+```
+
+This workflow:
+1. `auth_env.sh` — mints a 1-hour operator token (least-privilege) from your root token, and reads the JWT secret.
+2. Exports `VAULT_ADDR`, `VAULT_TOKEN` (short-lived), and `GOFR_JWT_SECRET`.
+3. `auth_manager.sh` then runs using these credentials to inspect/manage auth objects.
+
+**Note**: No secrets are written to disk; all are held in memory for that shell session.
+
 ### Restarting Production
 If you need to restart the stack (e.g. after a reboot):
 

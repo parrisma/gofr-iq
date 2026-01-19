@@ -117,6 +117,19 @@ Delete Options:
 Common Options:
   --help, -h           Show this help message
 
+AUTHENTICATION:
+  This script requires a JWT auth token (--token flag). To obtain tokens:
+  
+  1. From bootstrap (365-day admin/public tokens):
+     cat secrets/bootstrap_tokens.json
+  
+  2. Create new tokens using auth_manager:
+     source <(./lib/gofr-common/scripts/auth_env.sh --docker)
+     ./lib/gofr-common/scripts/auth_manager.sh --docker tokens create \\
+       --groups admin --name my-token --ttl 30d
+  
+  See: lib/gofr-common/scripts/readme.md
+
 Examples:
   # Ingest a document
   ./manage_document.sh ingest \\

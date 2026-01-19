@@ -2,6 +2,23 @@
 # Helper to manage the local MCP / MCPO / Web servers for integration tests.
 # Keeps PID files, logs, and health checks centralized so other scripts can
 # simply invoke `./scripts/test_servers.sh start|stop|status`.
+#
+# Usage:
+#   ./scripts/test_servers.sh start    # Start all test servers
+#   ./scripts/test_servers.sh stop     # Stop all test servers
+#   ./scripts/test_servers.sh status   # Check status of test servers
+#   ./scripts/test_servers.sh --help   # Show this help
+#
+# REQUIREMENTS:
+#   - GOFR_IQ_MCP_PORT, GOFR_IQ_MCPO_PORT, GOFR_IQ_WEB_PORT must be set
+#   - GOFR_JWT_SECRET must be set (load via auth_env.sh)
+#   - Infrastructure must be running (Vault, Neo4j, ChromaDB)
+#
+# For test setup, load secrets first:
+#   source lib/gofr-common/scripts/auth_env.sh --docker
+#   ./scripts/test_servers.sh start
+#
+# See lib/gofr-common/scripts/readme.md for authentication guide.
 
 set -euo pipefail
 

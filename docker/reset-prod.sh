@@ -43,20 +43,19 @@ else
 fi
 
 echo "3. Removing Vault credentials..."
-rm -f "${PROJECT_ROOT}/docker/.vault-init.env"
-rm -f "${PROJECT_ROOT}/config/.vault-init.env"
-echo "   - Removed .vault-init.env"
+rm -rf "${PROJECT_ROOT}/secrets"
+echo "   - Removed secrets/"
 
 echo "4. Removing generated configs..."
 rm -rf "${PROJECT_ROOT}/config/generated"
-echo "   - Removed config/generated"
+rm -f "${PROJECT_ROOT}/docker/.env"
+echo "   - Removed config/generated and docker/.env"
 
 echo "================================================================="
 echo "Reset Complete. The environment is clean."
 echo "To restart from scratch:"
 echo "  1. docker compose up -d gofr-vault"
-echo "  2. (Initialize Vault & create .vault-init.env)"
-echo "  3. scripts/bootstrap.py"
-echo "  4. scripts/generate_envs.sh"
+echo "  2. uv run scripts/bootstrap.py --auto-init"
+echo "  3. ./docker/start-prod.sh --fresh"
 echo "  5. docker compose up -d"
 echo "================================================================="

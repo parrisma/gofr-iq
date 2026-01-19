@@ -9,7 +9,7 @@ Use this folder to generate and ingest synthetic news for realistic testing of i
 
 ## Quick use (happy path)
 1) Start the stack (prod or dev) so Vault/Neo4j/Chroma are running.
-2) Ensure you have valid tokens (see `docker/.vault-init.env` and `docker/.env`).
+2) Ensure you have valid credentials (see `secrets/` directory and `docker/.env`).
 3) Generate stories:
 ```bash
 uv run simulation/generate_synthetic_stories.py --help
