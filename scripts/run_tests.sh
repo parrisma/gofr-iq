@@ -466,6 +466,17 @@ cleanup_environment() {
         run_test_env_cmd stop || true
     fi
 
+    # Clean up orphaned/dangling Docker volumes left by tests
+    echo "Checking for orphaned Docker volumes..."
+    local dangling_volumes
+    dangling_volumes=$(docker volume ls -qf dangling=true 2>/dev/null || true)
+    if [ -n "$dangling_volumes" ]; then
+        echo "Removing $(echo "$dangling_volumes" | wc -l) dangling Docker volume(s)..."
+        echo "$dangling_volumes" | xargs -r docker volume rm 2>/dev/null || true
+    else
+        echo "No dangling Docker volumes found"
+    fi
+
     if [ -n "${GOFR_IQ_TOKEN_STORE:-}" ] && [ -f "${GOFR_IQ_TOKEN_STORE}" ]; then
         rm -f "${GOFR_IQ_TOKEN_STORE}" 2>/dev/null || true
     fi

@@ -333,3 +333,9 @@ echo ""
 echo "Credentials saved to: secrets/"
 echo "Environment saved to: docker/.env"
 echo ""
+
+# Post-start snapshot
+log_info "Dumping environment snapshot (docker mode)..."
+cd "$PROJECT_ROOT"
+./scripts/dump_environment.sh --docker
+cd "$SCRIPT_DIR"

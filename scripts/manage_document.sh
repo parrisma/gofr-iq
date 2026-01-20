@@ -80,6 +80,7 @@ Usage:
 Commands:
   ingest                Ingest a document into the system
   query                 Search for documents
+  stats                 Get document statistics (counts)
   delete                Permanently delete a document (admin only)
 
 Ingest Options:
@@ -401,6 +402,69 @@ query_documents() {
     return 0
 }
 
+stats_documents() {
+    local host=$1
+    local port=$2
+    local auth_token=$3
+    
+    # Validate required parameters
+    if [[ -z "$auth_token" ]]; then
+        log_error "Auth token is required (--token)"
+        return 1
+    fi
+    
+    # Initialize session
+    local session_id
+    session_id=$(mcp_initialize "$host" "$port") || return 1
+    
+    # Query with broad term to get total_found count
+    local escaped_query
+    escaped_query=$(echo "a" | python3 -c 'import sys, json; print(json.dumps(sys.stdin.read()))')
+    
+    # Build arguments JSON - request just 1 result to minimize data transfer
+    local args
+    args="{\"query\": ${escaped_query}, \"n_results\": 1, \"auth_tokens\": [\"${auth_token}\"]}"
+    
+    # Call query_documents tool
+    local response
+    response=$(mcp_call_tool "$host" "$port" "$session_id" "query_documents" "$args") || return 1
+    
+    # Parse response and extract stats
+    local json_data
+    json_data=$(echo "$response" | grep "^data:" | sed 's/^data: //')
+    
+    if [[ -z "$json_data" ]]; then
+        log_error "Empty response from server"
+        return 1
+    fi
+    
+    # Extract and format statistics using Python via stdin
+    echo "$json_data" | python3 -c '
+import sys
+import json
+
+try:
+    data = json.load(sys.stdin)
+    content = data.get("result", {}).get("content", [])
+    if content:
+        text = content[0].get("text", "{}")
+        inner = json.loads(text)
+        result_data = inner.get("data", {})
+        total_found = result_data.get("total_found", 0)
+        exec_time = result_data.get("execution_time_ms", 0)
+        
+        print(f"Total Documents: {total_found}")
+        print(f"Query Time: {exec_time:.1f}ms")
+    else:
+        print("Total Documents: 0")
+except Exception as e:
+    print(f"Error: {e}", file=sys.stderr)
+    sys.exit(1)
+'
+    
+    return 0
+}
+
 delete_document() {
     local host=$1
     local port=$2
@@ -596,6 +660,9 @@ case $COMMAND in
         ;;
     query)
         query_documents "$MCP_HOST" "$MCP_PORT" "$QUERY" "$N_RESULTS" "$AUTH_TOKEN"
+        ;;
+    stats)
+        stats_documents "$MCP_HOST" "$MCP_PORT" "$AUTH_TOKEN"
         ;;
     delete)
         delete_document "$MCP_HOST" "$MCP_PORT" "$DOCUMENT_GUID" "$GROUP_GUID" "$DATE_HINT" "$CONFIRM" "$AUTH_TOKEN"
