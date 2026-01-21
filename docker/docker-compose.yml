@@ -45,6 +45,7 @@ services:
     volumes:
       - gofr-vault-data:/vault/data
       - gofr-vault-logs:/vault/logs
+      - gofr-vault-file:/vault/file
     environment:
       - VAULT_ADDR=http://0.0.0.0:${GOFR_VAULT_PORT}
       - VAULT_API_ADDR=http://0.0.0.0:${GOFR_VAULT_PORT}
@@ -256,6 +257,9 @@ volumes:
     external: false
   gofr-vault-logs:
     name: gofr-vault-logs
+    external: false
+  gofr-vault-file:
+    name: gofr-vault-file
     external: false
   gofr-iq-neo4j-data:
     name: gofr-iq-neo4j-data

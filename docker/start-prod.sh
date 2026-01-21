@@ -198,39 +198,69 @@ else
     VAULT_ADDR="http://localhost:${GOFR_VAULT_PORT:-8201}"
 fi
 export VAULT_ADDR
-log_info "Delegating Vault readiness to bootstrap.py (auto-init/unseal if needed)..."
 
-# Step 6: Run bootstrap
-log_info "Running bootstrap.py..."
-cd "$PROJECT_ROOT"
+# Step 6: Run bootstrap only if needed (fresh install or missing bootstrap tokens)
+if [ "$FRESH_INSTALL" = true ] || [ ! -f "$SECRETS_DIR/bootstrap_tokens.json" ]; then
+    log_info "Running bootstrap.py..."
+    cd "$PROJECT_ROOT"
 
-BOOTSTRAP_ARGS=""
-if [ "$FRESH_INSTALL" = true ]; then
-    BOOTSTRAP_ARGS="--auto-init"
-fi
-if [ -n "$OPENROUTER_KEY" ]; then
-    BOOTSTRAP_ARGS="$BOOTSTRAP_ARGS --openrouter-key $OPENROUTER_KEY"
-    export GOFR_IQ_OPENROUTER_API_KEY="$OPENROUTER_KEY"
-fi
+    BOOTSTRAP_ARGS=""
+    if [ "$FRESH_INSTALL" = true ]; then
+        BOOTSTRAP_ARGS="--auto-init"
+    fi
+    if [ -n "$OPENROUTER_KEY" ]; then
+        BOOTSTRAP_ARGS="$BOOTSTRAP_ARGS --openrouter-key $OPENROUTER_KEY"
+        export GOFR_IQ_OPENROUTER_API_KEY="$OPENROUTER_KEY"
+    fi
 
-# Set VAULT_ADDR for bootstrap (use container name when inside docker network)
-export VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
-
-# Check if we're in a container (dev container)
-if [ -f /.dockerenv ]; then
-    # We're in a container - use network name
+    # Set VAULT_ADDR for bootstrap (use container name when inside docker network)
     export VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
+
+    # Check if we're in a container (dev container)
+    if [ -f /.dockerenv ]; then
+        # We're in a container - use network name
+        export VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
+    else
+        # Host machine - use localhost
+        export VAULT_ADDR="http://localhost:${GOFR_VAULT_PORT:-8201}"
+    fi
+
+    uv run scripts/bootstrap.py $BOOTSTRAP_ARGS
+
+    # Step 6.1: Run AppRole setup (Zero-Trust Bootstrap)
+    log_info "Setting up AppRole identities..."
+    uv run scripts/setup_approle.py
+    log_success "AppRole identities created"
 else
-    # Host machine - use localhost
-    export VAULT_ADDR="http://localhost:${GOFR_VAULT_PORT:-8201}"
+    log_info "Bootstrap already complete (found bootstrap_tokens.json), skipping..."
+    
+    # Wait for Vault to be ready and unseal it if needed
+    log_info "Waiting for Vault to be ready..."
+    sleep 3
+    
+    # Check if Vault is sealed and unseal it
+    if ! docker exec gofr-vault vault status 2>/dev/null | grep -q "Sealed.*false"; then
+        log_info "Vault is sealed, unsealing..."
+        if [ -f "$SECRETS_DIR/vault_unseal_key" ]; then
+            UNSEAL_KEY=$(cat "$SECRETS_DIR/vault_unseal_key")
+            docker exec -e VAULT_ADDR="${VAULT_ADDR}" gofr-vault vault operator unseal "$UNSEAL_KEY" >/dev/null
+            log_success "Vault unsealed"
+        else
+            log_error "Cannot unseal Vault: vault_unseal_key not found"
+            exit 1
+        fi
+    fi
+    
+    # Store OpenRouter key if provided
+    if [ -n "$OPENROUTER_KEY" ]; then
+        log_info "Updating OpenRouter API key in Vault..."
+        VAULT_TOKEN=$(cat "${SECRETS_DIR}/vault_root_token")
+        docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
+            gofr-vault vault kv put secret/gofr/config/api-keys/openrouter value="$OPENROUTER_KEY"
+        export GOFR_IQ_OPENROUTER_API_KEY="$OPENROUTER_KEY"
+        log_success "OpenRouter API key updated"
+    fi
 fi
-
-uv run scripts/bootstrap.py $BOOTSTRAP_ARGS
-
-# Step 6.1: Run AppRole setup (Zero-Trust Bootstrap)
-log_info "Setting up AppRole identities..."
-uv run scripts/setup_approle.py
-log_success "AppRole identities created"
 
 # Reload generated env
 if [ -f "$DOCKER_ENV_FILE" ]; then
