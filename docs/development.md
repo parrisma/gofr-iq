@@ -1,6 +1,11 @@
 # Development & Contribution Guide
 
-This guide covers how to set up your environment, run tests, and contribute code to GOFR-IQ.
+**Quick Links:**
+- **[Testing Strategy](development/testing.md)** — Test patterns, fixtures, best practices
+- **[Code Style & Standards](development/code-style.md)** — Python conventions, type hints, linting
+- **[Contributing Guide](development/contributing.md)** — Fork, PR workflow, code review
+
+---
 
 ## 🛠️ Development Environment
 
@@ -34,7 +39,7 @@ uv pip install -e ".[dev]"
 
 ## 🧪 Testing
 
-Run before you push.
+Run before you push. See [Testing Strategy](development/testing.md) for comprehensive guide.
 
 ```bash
 # Fast loop (unit only, default)

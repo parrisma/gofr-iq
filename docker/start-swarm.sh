@@ -9,7 +9,7 @@
 #   - Docker and Docker Compose installed
 #   - Port configuration in lib/gofr-common/config/gofr_ports.env
 #   - Secrets in lib/gofr-common/.env (GOFR_JWT_SECRET, etc.)
-#   - Vault secrets in docker/vault-secrets.env (VAULT_ROOT_TOKEN, unseal keys)
+#   - Vault secrets in ../secrets/vault-secrets.env (VAULT_ROOT_TOKEN, unseal keys)
 #
 # Usage:
 #   ./start-swarm.sh              # Full start (requires unsealed Vault)
@@ -41,13 +41,14 @@ source ../lib/gofr-common/config/gofr_ports.env
 source ../lib/gofr-common/.env
 
 # Load Vault production secrets if available
-if [[ -f "vault-secrets.env" ]]; then
-    source vault-secrets.env
-    echo "=== Loaded vault-secrets.env ==="
+SECRETS_FILE="../secrets/vault-secrets.env"
+if [[ -f "$SECRETS_FILE" ]]; then
+    source "$SECRETS_FILE"
+    echo "=== Loaded secrets/vault-secrets.env ==="
 else
-    echo "=== WARNING: vault-secrets.env not found ==="
+    echo "=== WARNING: secrets/vault-secrets.env not found ==="
     echo "    Using default dev token (GOFR_VAULT_DEV_TOKEN)"
-    echo "    For production: cp vault-secrets.env.template vault-secrets.env"
+    echo "    For production: cp ../secrets/vault-secrets.env.template ../secrets/vault-secrets.env"
     echo ""
 fi
 set +a
@@ -80,7 +81,7 @@ if [[ "$INFRA_ONLY" == true ]]; then
     echo ""
     echo "Next steps for fresh install:"
     echo "  1. Initialize Vault:  docker exec gofr-vault vault operator init"
-    echo "  2. Save output to:    docker/vault-secrets.env"
+    echo "  2. Save output to:    secrets/vault-secrets.env"
     echo "  3. Unseal Vault:      ./unseal-vault.sh"
     echo "  4. Enable KV engine:  docker exec -e VAULT_TOKEN=\$VAULT_ROOT_TOKEN gofr-vault vault secrets enable -path=secret kv-v2"
     echo "  5. Bootstrap auth:    docker exec -e GOFR_VAULT_TOKEN=\$VAULT_ROOT_TOKEN -e GOFR_JWT_SECRET=\$GOFR_JWT_SECRET gofr-iq-web /home/gofr-iq/lib/gofr-common/scripts/bootstrap_auth.sh --docker"

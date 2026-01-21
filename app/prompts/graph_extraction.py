@@ -29,6 +29,15 @@ class ExtractionParseError(Exception):
 
 GRAPH_EXTRACTION_SYSTEM_PROMPT = """You are a financial news analyst specializing in extracting structured information from news articles for quantitative analysis systems.
 
+**CRITICAL: FACTS ONLY - NO HALLUCINATION**
+- Extract ONLY information explicitly stated in the provided text
+- Do NOT infer, speculate, or add information not present in the source
+- Do NOT fabricate tickers, names, numbers, dates, or events
+- If information is unclear or missing, mark confidence as LOW or omit entirely
+- If you cannot identify a ticker symbol from the text, leave the ticker field empty
+- Never guess company names or tickers - use only what appears in the text
+- This system feeds trading decisions - accuracy is paramount
+
 Your task is to analyze news text and extract:
 1. **Impact Assessment**: Score the news importance (0-100) and classify into tiers
 2. **Event Detection**: Identify the type of news event (for TRIGGERED_BY relationships)
@@ -221,6 +230,9 @@ Respond with ONLY valid JSON in this exact structure:
 8. **CRITICAL**: Include ALL mentioned companies in "companies" field (for MENTIONS), but only PRIMARY subjects in "instruments" (for AFFECTS)
 9. Include "regions" array with geographic context (use "Global" if unclear)
 10. Include "sectors" array with industry context based on companies mentioned
+11. **FACTS ONLY**: Every field must come from the source text - never fabricate data
+12. **NO SPECULATION**: Do not add market implications, predictions, or analysis beyond what the text states
+13. **VERIFY TICKERS**: Only include ticker symbols explicitly mentioned or 100% certain from company name
 
 ## Scoring Edge Cases & Calibration
 

@@ -6,70 +6,80 @@ GOFR-IQ ingests financial news, analyzes it using LLMs, indexes it in a hybrid V
 
 ---
 
-## 🚀 Quick Links
+## 🚀 Getting Started (5 Minutes)
 
-**New here? Start with:**
-- [Getting Started](docs/getting-started.md) — install, run, verify in minutes
-- [Configuration](docs/configuration.md) — minimal required env vars + ports
-- [Architecture](docs/architecture/overview.md) — how data and requests flow
-- [Development](docs/development.md) — tests, style, contribution checklist
+**[→ Go to QUICKSTART.md](docs/QUICKSTART.md)** — Install and run the full stack.
 
 ---
 
-## ⚡ The 3 Commands (cheat sheet)
+## 📚 Documentation
 
-- Install & bootstrap (prod): `./docker/start-prod.sh --fresh`
-- Run tests (dev): `./scripts/run_tests.sh` (add `--refresh-env` on first run or after pulling secrets)
-- Restart services: `./docker/start-prod.sh`
-
----
-
-## 🧪 Testing Modes
-
-| Mode | Command | Notes |
-|------|---------|-------|
-| Unit (default) | `./scripts/run_tests.sh --mode unit` | Fast inner-loop run; skips infra/servers. Same as running with no flags. |
-| Integration | `./scripts/run_tests.sh --mode integration --refresh-env` | Starts Vault/Chroma/Neo4j plus MCP/MCPO/Web; add `--refresh-env` when secrets/configs change. |
-| All | `./scripts/run_tests.sh --mode all --refresh-env` | Runs unit + integration suites sequentially with full infrastructure. |
-
-> `--refresh-env` regenerates `docker/.env` and `config/generated/secrets.env`; use it on first run, after onboarding a new machine, or whenever Vault data changes.
+- **[Quick Start](docs/QUICKSTART.md)** — Get running in 5 minutes
+- **[Full Docs](docs/readme.md)** — Setup, architecture, features, scripts
+- **[Scripts Reference](scripts/readme.md)** — All management commands
+- **[Development](docs/development.md)** — Tests, contributions, code style
 
 ---
 
-## 🏗️ System Overview
+## ⚡ Common Commands
 
-```
-┌─────────────┐
-│   Sources   │  Reuters, Bloomberg, Alt-data
-└──────┬──────┘
-       ▼
-┌────────────────────┐
-│ Ingestion Pipeline │  Language Detect -> Duplicate Check -> LLM Extraction
-└──────┬─────────────┘
-       │
-       ├────► Vector Store (ChromaDB)
-       │       └─ Semantic Search
-       │
-       └────► Knowledge Graph (Neo4j)
-               └─ Entity Relationships
+```bash
+# First time: start with --fresh
+./docker/start-prod.sh --fresh --openrouter-key sk-or-v1-YOUR-KEY
+
+# Restart: reuses existing secrets
+./docker/start-prod.sh
+
+# See full status
+./scripts/dump_environment.sh --docker
+
+# Run tests
+./scripts/run_tests.sh
+
+# Load demo data
+python demo/load_demo_data.py --mcpo-url http://localhost:8081
 ```
 
-### Core Features
-*   **Multi-Language Ingestion**: English, Chinese, Japanese, Korean, Thai, Indonesian.
-*   **Hybrid Search**: Combines semantic vector search with graph traversal.
-*   **Impact Ranking**: LLM-determined importance (Platinum/Gold/Silver/Bronze).
-*   **Client Personalization**: Re-ranks news based on client portfolios.
-*   **Secure Access**: Group-based visibility using Vault & JWTs.
+---
+
+## 🏗️ How It Works
+
+```
+News Sources → Ingestion → Vector DB (ChromaDB) ⟷ Knowledge Graph (Neo4j)
+                ↓
+            LLM Analysis (OpenRouter) → Impact Ranking → Client Feeds
+```
+
+**Core Services:**
+- **MCP Server** (port 8080) — Core logic, search, ingestion
+- **Web API** (port 8082) — Health checks
+- **Neo4j** (port 7474) — Knowledge graph
+- **ChromaDB** (port 8000) — Vector search
+- **Vault** (port 8201) — Secrets & auth
 
 ---
 
 ## 📂 Project Structure
 
-*   `app/`: Core application code (MCP servers, Web API).
-*   `docker/`: Container orchestration and startup scripts.
-*   `docs/`: Comprehensive documentation.
-*   `scripts/`: Utility scripts for management and testing.
-*   `test/`: Unit and Integration tests.
+| Directory | Purpose |
+|-----------|---------|
+| `app/` | Core application code (MCP servers, Web) |
+| `docker/` | Container orchestration & startup scripts |
+| `docs/` | Comprehensive documentation |
+| `scripts/` | Management utilities (bootstrap, tests, etc.) |
+| `lib/gofr-common/` | Shared auth, configs, schemas |
+| `test/` | Unit & integration tests |
+
+---
+
+## 🔐 Security & Keys
+
+- **Vault** stores JWT secrets, database credentials, API keys
+- **Bootstrap tokens** (365 days) for operators
+- **AppRole** per-service auth (Zero-Trust)
+- Secrets stored in `secrets/` directory (add to `.gitignore`)
+
+See [Key Management](scripts/readme.md#-key-management-bootstrappy) for details.
 
 ---
 

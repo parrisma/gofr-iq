@@ -350,23 +350,8 @@ cd docker
 
 ---
 
-### start-swarm.sh
-**Purpose:** Deploy stack to Docker Swarm (multi-node).
-
----
-
 ### reset-prod.sh
 **Purpose:** Reset production stack (alias for `start-prod.sh --reset`).
-
----
-
-### unseal-vault.sh
-**Purpose:** Manual Vault unseal using stored keys.
-
-**Usage:**
-```bash
-./docker/unseal-vault.sh
-```
 
 ---
 
@@ -531,9 +516,7 @@ gofr-iq/
 │   ├── start-prod.sh                  # Main entry point (RECOMMENDED)
 │   ├── run-dev.sh                     # Dev infrastructure
 │   ├── build-prod.sh / build-*.sh     # Image builds
-│   ├── start-swarm.sh                 # Swarm deployment
 │   ├── reset-prod.sh
-│   ├── unseal-vault.sh
 │   ├── manage-infra.sh
 │   ├── run-vault.sh / backup.sh
 │   ├── entrypoint-*.sh                # Container entry scripts

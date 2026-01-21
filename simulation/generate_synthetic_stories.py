@@ -383,7 +383,13 @@ class SyntheticGenerator:
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are a financial news generator. Write realistic, journalistic news stories. Max 400 words. Do not use markdown (like **bold**) in the body, just plain text logic.",
+                    "content": (
+                        "You are a financial news generator creating SYNTHETIC TEST DATA for a news analysis system. "
+                        "Write realistic, journalistic news stories. Max 400 words. Do not use markdown (like **bold**) in the body, just plain text. "
+                        "IMPORTANT: Use ONLY the company names, tickers, and facts provided in the user prompt. "
+                        "Do NOT invent additional companies, executives, or financial figures not specified. "
+                        "Keep all numbers, dates, and relationships consistent with the prompt parameters."
+                    ),
                 },
                 {"role": "user", "content": prompt},
             ],

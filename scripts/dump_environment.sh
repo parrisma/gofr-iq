@@ -502,8 +502,6 @@ echo -e "${BOLD}Secrets & Credentials:${NC}"
 show_config_file "  Bootstrap Tokens" "${PROJECT_ROOT}/secrets/bootstrap_tokens.json"
 show_config_file "  Vault Root Token" "${PROJECT_ROOT}/secrets/vault_root_token"
 show_config_file "  Vault Unseal Key" "${PROJECT_ROOT}/secrets/vault_unseal_key"
-show_config_file "  Vault Secrets Env" "${PROJECT_ROOT}/docker/vault-secrets.env"
-
 echo ""
 echo -e "${BOLD}Library Configuration:${NC}"
 show_config_file "  gofr-common .env" "${PROJECT_ROOT}/lib/gofr-common/.env"
@@ -511,7 +509,7 @@ show_config_file "  gofr-common .env" "${PROJECT_ROOT}/lib/gofr-common/.env"
 echo ""
 echo -e "${BOLD}Scripts Environment:${NC}"
 show_config_file "  gofriq.env" "${PROJECT_ROOT}/scripts/gofriq.env"
-show_config_file "  tokens.env" "${PROJECT_ROOT}/tokens.env"
+show_config_file "  secrets/tokens.env" "${PROJECT_ROOT}/secrets/tokens.env"
 
 # Summary
 print_section "Summary" "health checks"

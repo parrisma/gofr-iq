@@ -36,7 +36,6 @@
 | **run_tests.sh** | `scripts/` | Execute pytest suite | `./scripts/run_tests.sh [--refresh-env]` |
 | **generate_envs.sh** | `scripts/` | Generate port config (SSOT) | `./scripts/generate_envs.sh` |
 | **build-prod.sh** | `docker/` | Build production image | `./docker/build-prod.sh` |
-| **unseal-vault.sh** | `docker/` | Unseal Vault manually | `./docker/unseal-vault.sh` |
 | **purge_local_data.sh** | `scripts/` | Clear local data dirs | `./scripts/purge_local_data.sh` |
 | **reset_simulation_env.sh** | `simulation/` | Clear simulation data | `./simulation/reset_simulation_env.sh` |
 | **run_mcp.sh** | `scripts/` | Launch MCP server locally | `./scripts/run_mcp.sh [--no-auth]` |

@@ -40,7 +40,7 @@ set -euo pipefail  # Exit on error, undefined vars, pipe failures
 # =============================================================================
 # LLM Note: This script enforces a "Single Source of Truth" pattern.
 # - Secrets are loaded ONLY from lib/gofr-common/.env
-# - Generated tokens are stored in tokens.env (gitignored)
+# - Generated tokens are stored in secrets/tokens.env
 # - Do NOT create local .env files in app/ or test/ subdirs; they will be ignored/overwritten.
 #
 

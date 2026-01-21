@@ -43,19 +43,30 @@ You cannot unseal Vault or authenticate as root. You must:
 
 ---
 
-## 🛠️ Helper Scripts (common tasks)
+## 🛠️ All Scripts (Quick Reference)
 
-| Need to… | Run |
-|----------|-----|
-| Fresh prod start | `./docker/start-prod.sh --fresh --openrouter-key <key>` |
-| Restart prod stack | `./docker/start-prod.sh` |
-| Rotate bootstrap tokens | `uv run scripts/bootstrap.py --rotate-tokens` |
-| Start dev infra (Neo4j/Chroma) | `cd docker && ./run-dev.sh` |
-| Run tests | `./scripts/run_tests.sh [--refresh-env]` |
-| Manage sources | `./scripts/manage_source.sh` |
-| View groups & tokens in Vault | `source <(./lib/gofr-common/scripts/auth_env.sh --docker) && ./lib/gofr-common/scripts/auth_manager.sh --docker groups list` |
+| Script | Purpose | Command |
+|--------|---------|---------|
+| **bootstrap.py** | Initialize Vault & create tokens | `uv run scripts/bootstrap.py --auto-init` |
+| **start-prod.sh** | Start full production stack | `./docker/start-prod.sh --fresh --openrouter-key <key>` |
+| **run_tests.sh** | Run unit/integration tests | `./scripts/run_tests.sh --mode all` |
+| **dump_environment.sh** | Show full system status & health | `./scripts/dump_environment.sh --docker` |
+| **manage_source.sh** | Manage data sources | `./scripts/manage_source.sh list --docker --token <token>` |
+| **manage_document.sh** | Query documents, get stats | `./scripts/manage_document.sh stats --docker --token <token>` |
+| **setup_approle.py** | Configure AppRole (Zero-Trust) | `uv run scripts/setup_approle.py` |
 
-> Pass `--refresh-env` when you need to regenerate `docker/.env` and `config/generated/secrets.env` (first run, onboarding a new machine, or after Vault credentials change).
+---
+
+### Environment & Status Checks
+
+**See everything at once:**
+```bash
+./scripts/dump_environment.sh --docker
+```
+
+Shows: Services running, ports, connection strings, configs, auth tokens, data stats, health checks.
+
+---
 
 ## 📝 Environment Templates
 

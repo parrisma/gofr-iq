@@ -9,7 +9,7 @@
 #   Configure OpenWebUI to use: http://localhost:${GOFR_IQ_MCPO_PORT}
 #
 # Usage:
-#   Use start-swarm.sh to start production stack (recommended)
+#   Use start-prod.sh to start production stack (recommended)
 #   OR manually:
 #     cd docker
 #     set -a && source ../lib/gofr-common/config/gofr_ports.env && set +a
