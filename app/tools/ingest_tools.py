@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING, Annotated, Any
 
 from pydantic import Field, ValidationError
 
+from app.logger import session_logger
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
@@ -128,7 +129,10 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             # Returns group NAME (e.g., "apac-sales")
             group_name = resolve_write_group(auth_tokens=auth_tokens)
             
+            session_logger.info(f"Tool call: ingest_document, title='{title[:50]}...', source={source_guid}, group={group_name}")
+            
             if group_name is None:
+                session_logger.warning("ingest_document: Authentication required but no token provided")
                 return error_response(
                     error_code="AUTH_REQUIRED",
                     message="Authentication required for document ingestion",
@@ -161,6 +165,7 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             )
 
         except SourceValidationError as e:
+            session_logger.error(f"ingest_document: Invalid source {source_guid}: {e}")
             return error_response(
                 error_code="INVALID_SOURCE",
                 message=str(e),
@@ -168,6 +173,7 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             )
 
         except WordCountError as e:
+            session_logger.error(f"ingest_document: Word count exceeded: {e}")
             return error_response(
                 error_code="WORD_COUNT_EXCEEDED",
                 message=str(e),
@@ -175,6 +181,7 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             )
 
         except ValidationError as e:
+            session_logger.error(f"ingest_document: Validation error: {e}")
             return error_response(
                 error_code="VALIDATION_ERROR",
                 message="Invalid input parameters",
@@ -183,6 +190,7 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             )
 
         except IngestError as e:
+            session_logger.error(f"ingest_document: Ingest error: {e}")
             return error_response(
                 error_code="INGEST_ERROR",
                 message=str(e),
@@ -190,6 +198,7 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
             )
 
         except Exception as e:
+            session_logger.error(f"ingest_document: Unexpected error: {e}", exc_info=True)
             return error_response(
                 error_code="INGEST_INTERNAL_ERROR",
                 message=f"Unexpected error during ingestion: {e!s}",

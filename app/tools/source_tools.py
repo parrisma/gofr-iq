@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING, Annotated
 
 from pydantic import Field
 
+from app.logger import session_logger
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent

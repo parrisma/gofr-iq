@@ -17,6 +17,8 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
+from app.logger import session_logger
+
 
 class ExtractionParseError(Exception):
     """Error parsing extraction response"""
@@ -482,9 +484,9 @@ def parse_extraction_response(response: str) -> GraphExtractionResult:
     impact_score = int(data["impact_score"])
     impact_score = max(0, min(100, impact_score))
     
-    # DEBUG: Log extracted companies
+    # Log extracted companies
     companies_list = data.get("companies", [])
-    print(f"   DEBUG PARSE: Extracted {len(companies_list)} companies from LLM: {companies_list[:5]}")
+    session_logger.debug(f"Parsed {len(companies_list)} companies from LLM extraction: {companies_list[:5]}")
     
     return GraphExtractionResult(
         impact_score=impact_score,

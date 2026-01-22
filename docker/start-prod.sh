@@ -304,6 +304,7 @@ log_info "Loading secrets from Vault..."
 # Get Vault root token from bootstrap output
 VAULT_TOKEN=$(cat "${PROJECT_ROOT}/secrets/vault_root_token")
 export VAULT_TOKEN
+export VAULT_ROOT_TOKEN="$VAULT_TOKEN"  # For docker-compose
 
 # Load Neo4j password (REQUIRED - fail if missing)
 NEO4J_PASSWORD=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
@@ -316,16 +317,25 @@ export NEO4J_PASSWORD
 log_success "Loaded Neo4j password from Vault"
 
 # Load OpenRouter API key (REQUIRED - fail if missing)
+# Always reload from Vault to ensure we get the latest value
+GOFR_IQ_OPENROUTER_API_KEY=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
+    gofr-vault vault kv get -field=value secret/gofr/config/api-keys/openrouter 2>/dev/null)
 if [ -z "$GOFR_IQ_OPENROUTER_API_KEY" ]; then
-    GOFR_IQ_OPENROUTER_API_KEY=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
-        gofr-vault vault kv get -field=value secret/gofr/config/api-keys/openrouter 2>/dev/null)
-    if [ -z "$GOFR_IQ_OPENROUTER_API_KEY" ]; then
-        log_error "Failed to load OpenRouter API key from Vault"
-        exit 1
-    fi
-    export GOFR_IQ_OPENROUTER_API_KEY
-    log_success "Loaded OpenRouter API key from Vault"
+    log_error "Failed to load OpenRouter API key from Vault"
+    exit 1
 fi
+export GOFR_IQ_OPENROUTER_API_KEY
+log_success "Loaded OpenRouter API key from Vault"
+
+# Load JWT signing secret (REQUIRED - fail if missing)
+GOFR_IQ_JWT_SECRET=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
+    gofr-vault vault kv get -field=value secret/gofr/config/jwt-signing-secret 2>/dev/null)
+if [ -z "$GOFR_IQ_JWT_SECRET" ]; then
+    log_error "Failed to load JWT signing secret from Vault"
+    exit 1
+fi
+export GOFR_IQ_JWT_SECRET
+log_success "Loaded JWT signing secret from Vault"
 
 # Step 7: Start all services
 log_info "Starting all services..."

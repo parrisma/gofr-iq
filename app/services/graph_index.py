@@ -19,6 +19,8 @@ from typing import Any, Optional
 from neo4j import GraphDatabase, Driver, Session
 from neo4j.exceptions import ServiceUnavailable
 
+from app.logger import session_logger
+
 
 class NodeLabel(str, Enum):
     """Node labels for the graph schema
@@ -1296,11 +1298,11 @@ class GraphIndex:
                         event_code=event_type_code,
                     ).single()
                     if result:
-                        print(f"   DEBUG TRIGGER: Created TRIGGERED_BY -> {event_type_code}")
+                        session_logger.debug(f"Created TRIGGERED_BY relationship to {event_type_code}")
                     else:
-                        print(f"   DEBUG TRIGGER: Failed - EventType {event_type_code} not found")
+                        session_logger.debug(f"EventType {event_type_code} not found for TRIGGERED_BY")
             except Exception as e:
-                print(f"   DEBUG TRIGGER: Error creating TRIGGERED_BY -> {event_type_code}: {e}")
+                session_logger.debug(f"Error creating TRIGGERED_BY to {event_type_code}: {e}")
                 
         return self.get_node(NodeLabel.DOCUMENT, document_guid)  # type: ignore
 

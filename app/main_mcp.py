@@ -90,18 +90,18 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     
+    # Parse log level first (needed for logger initialization)
+    log_level = getattr(logging, args.log_level.upper(), logging.INFO)
+
+    # Create logger for startup messages
+    startup_logger = ConsoleLogger(name="startup", level=log_level)
+    
     # Validate required port
     if args.port is None:
         parser.error("Port is required: set GOFR_IQ_MCP_PORT environment variable or use --port")
 
     # Explicitly log host/port for debugging
-    print(f"[MCP] Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}")  # nosec B104 - just logging, not binding
-
-    # Parse log level
-    log_level = getattr(logging, args.log_level.upper(), logging.INFO)
-
-    # Create logger for startup messages
-    startup_logger = ConsoleLogger(name="startup", level=log_level)
+    startup_logger.info(f"MCP Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}")
 
     try:
         # Resolve authentication configuration
@@ -220,12 +220,11 @@ if __name__ == "__main__":
             require_auth=require_auth,
         )
 
-        print(f"Starting GOFR-IQ MCP Server on {host}:{port}...")
-        print(f"Storage directory: {storage_dir}")
-        print(f"Authentication: {'Enabled' if require_auth else 'Disabled'}")
-        print("Transport: HTTP Streamable")
-        print("Press Ctrl+C to stop")
-        print()
+        startup_logger.info(f"Starting GOFR-IQ MCP Server on {host}:{port}...")
+        startup_logger.info(f"Storage directory: {storage_dir}")
+        startup_logger.info(f"Authentication: {'Enabled' if require_auth else 'Disabled'}")
+        startup_logger.info("Transport: HTTP Streamable")
+        startup_logger.info("Press Ctrl+C to stop")
 
         # Get the Starlette app from FastMCP
         # This app includes the proper lifespan context for MCP sessions
@@ -260,7 +259,7 @@ if __name__ == "__main__":
         )
 
     except KeyboardInterrupt:
-        print("\nServer stopped")
+        startup_logger.info("Server stopped")
         sys.exit(0)
     except Exception as e:
         import traceback

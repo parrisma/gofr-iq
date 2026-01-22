@@ -27,6 +27,7 @@ from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from app.logger import session_logger
 from app.models import Document, DocumentCreate, count_words
 from app.services.document_store import DocumentNotFoundError, DocumentStore
 from app.services.duplicate_detector import DuplicateDetector, DuplicateResult
@@ -259,19 +260,20 @@ class IngestService:
             # Parse the response
             extraction_result = parse_extraction_response(result.content)
             
-            # DEBUG: Log extracted companies
+            # Log extracted companies
             if extraction_result and extraction_result.companies:
-                print(f"   DEBUG EXTRACT: Found {len(extraction_result.companies)} companies: {extraction_result.companies}")
+                session_logger.debug(f"LLM extraction found {len(extraction_result.companies)} companies: {extraction_result.companies}")
             else:
-                print("   DEBUG EXTRACT: No companies found in extraction")
+                session_logger.debug("LLM extraction found no companies")
             
             return extraction_result
             
         except LLMServiceError as e:
             if require_extraction:
+                session_logger.error(f"LLM extraction failed for {doc.guid}: {e}")
                 raise LLMExtractionError(f"LLM extraction failed: {e}") from e
             # Log but don't fail ingestion when not required
-            print(f"LLM extraction failed for {doc.guid}: {e}")
+            session_logger.warning(f"LLM extraction failed for {doc.guid}: {e}")
             return create_default_result()
 
     def _apply_extraction_to_graph(
@@ -336,12 +338,12 @@ class IngestService:
         llm_event_code = primary_event.event_type if primary_event else None
         graph_event_code = EVENT_TYPE_MAPPING.get(llm_event_code) if llm_event_code else None
         
-        # DEBUG: Log event mapping
+        # Log event mapping
         if llm_event_code:
             if graph_event_code:
-                print(f"   DEBUG EVENT: {llm_event_code} -> {graph_event_code}")
+                session_logger.debug(f"Event mapping: {llm_event_code} -> {graph_event_code}")
             else:
-                print(f"   DEBUG EVENT: {llm_event_code} -> SKIPPED (no mapping)")
+                session_logger.debug(f"Event mapping: {llm_event_code} -> SKIPPED (no mapping)")
         
         # Set document impact properties
         self.graph_index.set_document_impact(
@@ -389,12 +391,12 @@ class IngestService:
                         magnitude=magnitude,
                     )
                 except Exception as e:
-                    print(f"Failed to create AFFECTS for {inst.ticker}: {e}")
+                    session_logger.error(f"Failed to create AFFECTS for {inst.ticker}: {e}")
             
             # Create MENTIONS relationships for all companies
             # This allows tracking of secondary/contextual company references
             if extraction.companies:
-                print(f"   DEBUG: Found {len(extraction.companies)} companies to link: {extraction.companies[:3]}")
+                session_logger.debug(f"Found {len(extraction.companies)} companies to link: {extraction.companies[:3]}")
             
             for company_name in extraction.companies:
                 if not company_name:
@@ -423,12 +425,12 @@ class IngestService:
                             company_ticker=company_guid,  # Using guid as ticker identifier
                             company_name=company_name_matched,
                         )
-                        print(f"   DEBUG: Created MENTIONS: {company_name} -> {company_name_matched}")
+                        session_logger.debug(f"Created MENTIONS: {company_name} -> {company_name_matched}")
                     else:
-                        print(f"   DEBUG: No match found for company: {company_name}")
+                        session_logger.debug(f"No match found for company: {company_name}")
                 except Exception as e:
                     # Silently skip unresolved companies (may be external/not in universe)
-                    print(f"   DEBUG: Error creating MENTIONS for {company_name}: {e}")
+                    session_logger.debug(f"Error creating MENTIONS for {company_name}: {e}")
 
     def _resolve_instrument_guid(self, session, ticker: str, name: str) -> str:
         """Return shared Instrument guid for ticker, creating canonical inst-<ticker> if missing."""
@@ -492,6 +494,7 @@ class IngestService:
 
         # Step 1: Generate document GUID first (so we can return it on error)
         doc_guid = str(uuid.uuid4())
+        session_logger.info(f"Starting document ingestion: guid={doc_guid}, title='{title[:50]}...', source={source_guid}, group={group_guid}")
 
         # Step 2: Validate source exists (sources are now global, not group-specific)
         try:
@@ -641,27 +644,27 @@ class IngestService:
 
         except Exception as e:
             # Rollback on failure
-            print(f"Error indexing document {doc.guid}: {e}. Rolling back.")
+            session_logger.error(f"Error indexing document {doc.guid}: {e}. Rolling back.")
 
             # 1. Remove from file store
             try:
                 self.document_store.delete(doc.guid, doc.group_guid, doc.created_at)
             except Exception as rollback_error:
-                print(f"CRITICAL: Failed to rollback file store for {doc.guid}: {rollback_error}")
+                session_logger.error(f"CRITICAL: Failed to rollback file store for {doc.guid}: {rollback_error}")
 
             # 2. Remove from embedding index
             if self.embedding_index:
                 try:
                     self.embedding_index.delete_document(doc.guid)
                 except Exception as rollback_error:
-                    print(f"CRITICAL: Failed to rollback embedding index for {doc.guid}: {rollback_error}")
+                    session_logger.error(f"CRITICAL: Failed to rollback embedding index for {doc.guid}: {rollback_error}")
 
             # 3. Remove from graph index
             if self.graph_index:
                 try:
                     self.graph_index.delete_node(NodeLabel.DOCUMENT, doc.guid)
                 except Exception as rollback_error:
-                    print(f"CRITICAL: Failed to rollback graph index for {doc.guid}: {rollback_error}")
+                    session_logger.error(f"CRITICAL: Failed to rollback graph index for {doc.guid}: {rollback_error}")
 
             return IngestResult(
                 guid=doc_guid,
@@ -678,6 +681,13 @@ class IngestService:
 
         # Determine status
         status = IngestStatus.DUPLICATE if dup_result.is_duplicate else IngestStatus.SUCCESS
+        
+        # Log successful ingestion
+        if status == IngestStatus.SUCCESS:
+            session_logger.info(f"Document ingested successfully: guid={doc_guid}, language={lang_result.language}, words={word_count}" + 
+                              (f", extraction: {len(extraction.companies) if extraction else 0} companies" if extraction else ""))
+        else:
+            session_logger.info(f"Document marked as duplicate: guid={doc_guid}, duplicate_of={dup_result.duplicate_of}, score={dup_result.score:.2f}")
 
         return IngestResult(
             guid=doc_guid,

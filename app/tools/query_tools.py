@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING, Annotated, Optional
 
 from pydantic import Field
 
+from app.logger import session_logger
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
@@ -91,6 +92,8 @@ def register_query_tools(
             group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
             # Convert group names to UUIDs for storage layer
             permitted_groups = get_group_uuids_by_names(group_names)
+            
+            session_logger.info(f"Tool call: get_document, guid={guid}, date_hint={date_hint}, groups={group_names}")
 
             # Parse date hint if provided
             date_obj: datetime | None = None
@@ -134,6 +137,7 @@ def register_query_tools(
             return success_response(data=doc_data)
 
         except DocumentNotFoundError:
+            session_logger.warning(f"get_document: Document not found: {guid}")
             return error_response(
                 error_code="DOCUMENT_NOT_FOUND",
                 message=f"Document not found: {guid}",
@@ -145,12 +149,14 @@ def register_query_tools(
             error_msg = str(e)
             # Check for access denied errors
             if "access denied" in error_msg.lower():
+                session_logger.warning(f"get_document: Access denied to document: {guid}")
                 return error_response(
                     error_code="ACCESS_DENIED",
                     message=f"Access denied to document: {guid}",
                     recovery_strategy="Document belongs to a group you can't access. Use query_documents to find accessible documents.",
                     details={"guid": guid},
                 )
+            session_logger.error(f"get_document: Failed to retrieve document {guid}: {e}")
             return error_response(
                 error_code="DOCUMENT_RETRIEVAL_FAILED",
                 message=f"Failed to retrieve document: {e!s}",
@@ -279,6 +285,8 @@ def register_query_tools(
                 # Returns group NAMES (e.g., ["apac-sales", "public"])
                 group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
                 
+                session_logger.info(f"Tool call: query_documents, query='{query[:100]}', n_results={n_results}, groups={group_names}")
+                
                 # Convert group names to UUIDs for storage lookup
                 group_guids = get_group_uuids_by_names(group_names)
 
@@ -369,6 +377,7 @@ def register_query_tools(
                 )
 
             except Exception as e:
+                session_logger.error(f"query_documents: Search failed for query '{query[:100]}': {e}", exc_info=True)
                 # Build filter summary for debugging
                 active_filters = []
                 if date_from:

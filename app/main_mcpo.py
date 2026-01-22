@@ -52,17 +52,21 @@ def main():
     mcpo_port = _get_required_port("GOFR_IQ_MCPO_PORT")
 
     auth_disabled = os.environ.get("GOFR_IQ_AUTH_DISABLED", "false").lower() in ("1", "true", "yes")
-    print(f"[MCPO] Starting on host=0.0.0.0 port={mcpo_port}")
-    print(f"[MCPO] Connecting to MCP at http://{mcp_host}:{mcp_port}/mcp")
-    print(f"[MCPO] Proxy available at http://localhost:{mcpo_port}")
-    print(f"[MCPO] Startup: auth_disabled={auth_disabled}")
+    
+    # Create logger
+    logger = ConsoleLogger(name="mcpo")
+    
+    logger.info(f"MCPO Starting on host=0.0.0.0 port={mcpo_port}")
+    logger.info(f"Connecting to MCP at http://{mcp_host}:{mcp_port}/mcp")
+    logger.info(f"Proxy available at http://localhost:{mcpo_port}")
+    logger.info(f"Startup: auth_disabled={auth_disabled}")
 
     # Check for API key
     mcpo_api_key = os.environ.get("GOFR_IQ_MCPO_API_KEY")
     if mcpo_api_key:
-        print(f"  MCPO API Key: {'*' * 8} (from GOFR_IQ_MCPO_API_KEY)")
+        logger.info(f"  MCPO API Key: {'*' * 8} (from GOFR_IQ_MCPO_API_KEY)")
     else:
-        print("  MCPO API Key: None (no authentication required)")
+        logger.info("  MCPO API Key: None (no authentication required)")
 
     # Check for auth mode
     mode = os.environ.get("GOFR_IQ_MCPO_MODE", "public").lower()
@@ -73,15 +77,15 @@ def main():
         vault_token = os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_TOKEN")
 
         if not jwt_token:
-            print("  Mode: Authenticated (but GOFR_IQ_JWT_TOKEN not set - will fail)")
+            logger.error("Mode: Authenticated (but GOFR_IQ_JWT_TOKEN not set - will fail)")
             sys.exit(1)
 
         if not jwt_secret:
-            print("  Mode: Authenticated (GOFR_IQ_JWT_SECRET required and must match Vault)")
+            logger.error("Mode: Authenticated (GOFR_IQ_JWT_SECRET required and must match Vault)")
             sys.exit(1)
 
         if not vault_addr or not vault_token:
-            print("  Mode: Authenticated (VAULT_ADDR/VAULT_TOKEN required to validate JWT secret)")
+            logger.error("Mode: Authenticated (VAULT_ADDR/VAULT_TOKEN required to validate JWT secret)")
             sys.exit(1)
 
         req = urllib.request.Request(
@@ -93,15 +97,15 @@ def main():
             payload = json.loads(resp.read())
         vault_jwt = payload.get("data", {}).get("data", {}).get("value")
         if not vault_jwt:
-            print("  Mode: Authenticated (JWT secret missing in Vault)")
+            logger.error("Mode: Authenticated (JWT secret missing in Vault)")
             sys.exit(1)
         if jwt_secret != vault_jwt:
-            print("  Mode: Authenticated (GOFR_IQ_JWT_SECRET does not match Vault jwt-signing-secret)")
+            logger.error("Mode: Authenticated (GOFR_IQ_JWT_SECRET does not match Vault jwt-signing-secret)")
             sys.exit(1)
 
-        print("  Mode: Authenticated (JWT token will be passed to MCP; secret validated)")
+        logger.info("  Mode: Authenticated (JWT token will be passed to MCP; secret validated)")
     else:
-        print("  Mode: Public (no JWT token passed to MCP)")
+        logger.info("  Mode: Public (no JWT token passed to MCP)")
 
     # Start the wrapper
     wrapper = start_mcpo_wrapper(
@@ -112,27 +116,27 @@ def main():
 
     # Set up signal handlers for graceful shutdown
     def signal_handler(signum, frame):
-        print(f"\nReceived signal {signum}, shutting down MCPO wrapper...")
+        logger.info(f"Received signal {signum}, shutting down MCPO wrapper...")
         wrapper.stop()
         sys.exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
-    print("\nMCPO proxy is running!")
-    print(f"  Health check: curl http://localhost:{mcpo_port}/health")
-    print(f"  OpenAPI spec: curl http://localhost:{mcpo_port}/openapi.json")
-    print(f"  List tools: curl http://localhost:{mcpo_port}/tools/list")
-    print("\nPress Ctrl+C to stop...")
+    logger.info("MCPO proxy is running!")
+    logger.info(f"  Health check: curl http://localhost:{mcpo_port}/health")
+    logger.info(f"  OpenAPI spec: curl http://localhost:{mcpo_port}/openapi.json")
+    logger.info(f"  List tools: curl http://localhost:{mcpo_port}/tools/list")
+    logger.info("Press Ctrl+C to stop...")
 
     try:
         # Run the wrapper
         asyncio.run(wrapper.run_async())
     except KeyboardInterrupt:
-        print("\nShutting down MCPO wrapper...")
+        logger.info("Shutting down MCPO wrapper...")
         wrapper.stop()
     except Exception as e:
-        print(f"Error running MCPO wrapper: {e}")
+        logger.error(f"Error running MCPO wrapper: {e}", exc_info=True)
         wrapper.stop()
         sys.exit(1)
 

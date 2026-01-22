@@ -133,8 +133,10 @@ services:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
+      - GOFR_IQ_LOG_FILE=/home/gofr-iq/logs/gofr-iq-mcp.log
       - GOFR_IQ_AUTH_DISABLED=false
       # JWT Secret and Neo4j password loaded from Vault via AppRole (Zero-Trust Bootstrap)
+      - GOFR_IQ_JWT_SECRET=${GOFR_IQ_JWT_SECRET}
       - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD}
       # Auth Backend (Vault) - shared across all GOFR services
       - GOFR_AUTH_BACKEND=vault
@@ -158,6 +160,7 @@ services:
       - "${GOFR_IQ_MCP_PORT}:${GOFR_IQ_MCP_PORT}"
     volumes:
       - gofr-iq-data:/home/gofr-iq/data
+      - gofr-iq-prod-logs:/home/gofr-iq/logs
       # AppRole credentials (Zero-Trust Bootstrap)
       # Uses HOST_PROJECT_ROOT env var set by start-prod.sh for proper path resolution
       - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-mcp.json:/run/secrets/vault_creds:ro
@@ -192,8 +195,12 @@ services:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_MCPO_PORT=${GOFR_IQ_MCPO_PORT}
+      - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
+      - GOFR_IQ_LOG_FILE=/home/gofr-iq/logs/gofr-iq-mcpo.log
     ports:
       - "${GOFR_IQ_MCPO_PORT}:${GOFR_IQ_MCPO_PORT}"
+    volumes:
+      - gofr-iq-prod-logs:/home/gofr-iq/logs
     networks:
       - gofr-net
     healthcheck:
@@ -221,12 +228,14 @@ services:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_WEB_PORT=${GOFR_IQ_WEB_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
+      - GOFR_IQ_LOG_FILE=/home/gofr-iq/logs/gofr-iq-web.log
     ports:
       - "${GOFR_IQ_WEB_PORT}:${GOFR_IQ_WEB_PORT}"
     volumes:
       # AppRole credentials (Zero-Trust Bootstrap)
       # Uses HOST_PROJECT_ROOT env var set by start-prod.sh for proper path resolution
       - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-web.json:/run/secrets/vault_creds:ro
+      - gofr-iq-prod-logs:/home/gofr-iq/logs
     networks:
       - gofr-net
     healthcheck:

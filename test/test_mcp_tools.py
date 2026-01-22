@@ -673,10 +673,7 @@ class TestMCPServerCreation:
     )
     def test_mcp_server_configuration(self, temp_storage: Path) -> None:
         """Test that MCP server is properly configured."""
-        import warnings
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            from app.main import create_mcp_server
+        from app.mcp_server import create_mcp_server
 
         server = create_mcp_server(
             storage_dir=temp_storage,

@@ -510,8 +510,8 @@ def _extract_write_group_from_tokens(
                 return token_info.groups[0]  # Return primary group name
         except Exception as e:  # nosec B110 - Intentionally continue on invalid tokens
             # Log and continue to next token
-            import logging
-            logging.error(f"Token verification failed: {e}")
+            from app.logger import session_logger
+            session_logger.error(f"Token verification failed for token (truncated: {token[:20]}...): {e}", exc_info=True)
             pass
     
     return None
