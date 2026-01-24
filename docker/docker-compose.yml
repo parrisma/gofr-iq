@@ -16,7 +16,6 @@
 #     docker compose up -d
 #
 # Services:
-#   - vault:    HashiCorp Vault (Auth backend) - port ${GOFR_VAULT_PORT}
 #   - neo4j:    Graph Database - ports ${GOFR_NEO4J_HTTP_PORT}, ${GOFR_NEO4J_BOLT_PORT}
 #   - chromadb: Vector Database - port ${GOFR_CHROMA_PORT}
 #   - mcp:      MCP Server (Core Logic) - port ${GOFR_IQ_MCP_PORT}
@@ -26,39 +25,9 @@
 name: gofr-iq
 
 services:
-  # ==========================================================================
-  # INFRASTRUCTURE (Shared)
-  # ==========================================================================
-  
-  # HashiCorp Vault - Auth Backend (Production Mode)
-  # Data persists in gofr-vault-data volume
-  # Requires initialization on first run and unsealing after restart
-  vault:
-    image: gofr-iq-vault:latest
-    container_name: gofr-vault
-    hostname: gofr-vault
-    restart: unless-stopped
-    cap_add:
-      - IPC_LOCK
-    ports:
-      - "${GOFR_VAULT_PORT}:${GOFR_VAULT_PORT}"
-    volumes:
-      - gofr-vault-data:/vault/data
-      - gofr-vault-logs:/vault/logs
-      - gofr-vault-file:/vault/file
-    environment:
-      - VAULT_ADDR=http://0.0.0.0:${GOFR_VAULT_PORT}
-      - VAULT_API_ADDR=http://0.0.0.0:${GOFR_VAULT_PORT}
-      - VAULT_LOG_LEVEL=info
-      - SKIP_SETCAP=true
-    networks:
-      - gofr-net
-    healthcheck:
-      test: ["CMD", "vault", "status"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+  # ============================================================================
+  # INFRASTRUCTURE (Shared, external Vault consumed)
+  # ============================================================================
 
   neo4j:
     image: gofr-iq-neo4j:latest
@@ -120,8 +89,6 @@ services:
     working_dir: /home/gofr-iq
     entrypoint: []
     depends_on:
-      vault:
-        condition: service_healthy
       neo4j:
         condition: service_healthy
       chromadb:
@@ -162,8 +129,8 @@ services:
       - gofr-iq-data:/home/gofr-iq/data
       - gofr-iq-prod-logs:/home/gofr-iq/logs
       # AppRole credentials (Zero-Trust Bootstrap)
-      # Uses HOST_PROJECT_ROOT env var set by start-prod.sh for proper path resolution
-      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-mcp.json:/run/secrets/vault_creds:ro
+      # Path goes through lib/gofr-common/secrets (canonical location)
+      - ${HOST_PROJECT_ROOT:-..}/lib/gofr-common/secrets/service_creds/gofr-mcp.json:/run/secrets/vault_creds:ro
     networks:
       - gofr-net
     healthcheck:
@@ -233,8 +200,8 @@ services:
       - "${GOFR_IQ_WEB_PORT}:${GOFR_IQ_WEB_PORT}"
     volumes:
       # AppRole credentials (Zero-Trust Bootstrap)
-      # Uses HOST_PROJECT_ROOT env var set by start-prod.sh for proper path resolution
-      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-web.json:/run/secrets/vault_creds:ro
+      # Path goes through lib/gofr-common/secrets (canonical location)
+      - ${HOST_PROJECT_ROOT:-..}/lib/gofr-common/secrets/service_creds/gofr-web.json:/run/secrets/vault_creds:ro
       - gofr-iq-prod-logs:/home/gofr-iq/logs
     networks:
       - gofr-net
@@ -261,15 +228,6 @@ networks:
 # Volumes
 # ==========================================================================
 volumes:
-  gofr-vault-data:
-    name: gofr-vault-data
-    external: false
-  gofr-vault-logs:
-    name: gofr-vault-logs
-    external: false
-  gofr-vault-file:
-    name: gofr-vault-file
-    external: false
   gofr-iq-neo4j-data:
     name: gofr-iq-neo4j-data
     external: false

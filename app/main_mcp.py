@@ -101,7 +101,11 @@ if __name__ == "__main__":
         parser.error("Port is required: set GOFR_IQ_MCP_PORT environment variable or use --port")
 
     # Explicitly log host/port for debugging
-    startup_logger.info(f"MCP Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}")
+    # B104: Intentional 0.0.0.0 binding for containerized services (accepts external connections)
+    startup_logger.info(
+        f"MCP Startup: host={args.host or os.environ.get('GOFR_IQ_MCP_HOST', '0.0.0.0')} "  # nosec B104
+        f"port={args.port or os.environ.get('GOFR_IQ_MCP_PORT', 8080)} auth_disabled={args.auth_disabled}"
+    )
 
     try:
         # Resolve authentication configuration

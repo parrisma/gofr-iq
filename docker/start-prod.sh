@@ -2,19 +2,19 @@
 # =============================================================================
 # GOFR-IQ Production Start Script
 # =============================================================================
-# Single-command production startup with automatic Vault initialization.
+# Single-command production startup consuming the shared Vault (no local Vault lifecycle).
 #
 # Usage:
-#   ./docker/start-prod.sh              # Normal start (reuses existing Vault)
-#   ./docker/start-prod.sh --fresh      # Fresh install (init new Vault)
-#   ./docker/start-prod.sh --reset      # Nuke & pave (wipe all data first)
+#   ./docker/start-prod.sh              # Normal start (uses shared Vault)
+#   ./docker/start-prod.sh --fresh      # Fresh install (still assumes shared Vault running)
+#   ./docker/start-prod.sh --reset      # Nuke & pave app data (does not touch shared Vault)
 #
 # This script:
 # 1. Sources port configuration
-# 2. Starts Vault container
-# 3. Auto-initializes/unseals Vault (if needed)
-# 4. Runs bootstrap.py to setup auth
-# 5. Starts all services
+# 2. Verifies shared Vault is running/unsealed (health gate)
+# 3. Ensures AppRole creds exist (setup_approle)
+# 4. Loads secrets from Vault
+# 5. Starts app services (no Vault container here)
 # =============================================================================
 
 set -euo pipefail
@@ -37,6 +37,14 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
 SECRETS_DIR="${PROJECT_ROOT}/secrets"
 DOCKER_ENV_FILE="${SCRIPT_DIR}/.env"
+
+# Ensure secrets path points to shared gofr-common secrets (centralized Vault)
+COMMON_SECRETS_DIR="${PROJECT_ROOT}/lib/gofr-common/secrets"
+if [ ! -e "$SECRETS_DIR" ]; then
+    ln -s "$COMMON_SECRETS_DIR" "$SECRETS_DIR"
+elif [ -d "$SECRETS_DIR" ] && [ ! -L "$SECRETS_DIR" ] && [ "$SECRETS_DIR" != "$COMMON_SECRETS_DIR" ]; then
+    log_warn "Local secrets directory detected; consider migrating to shared: $COMMON_SECRETS_DIR"
+fi
 
 # Detect host path for volume mounts (handles dev container scenario)
 # ZERO-TRUST BOOTSTRAP: Fail hard if detection fails (no fallback)
@@ -109,24 +117,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Require OpenRouter API key (prompt if interactive, fail fast otherwise)
-if [ -z "$OPENROUTER_KEY" ]; then
-    if [ -t 0 ]; then
-        echo ""
-        echo "🔑 OpenRouter API Key Required"
-        echo "The key powers LLM features (entity extraction, embeddings)."
-        read -s -p "Enter OpenRouter API Key (input hidden): " OPENROUTER_KEY
-        echo ""
-        if [ -z "$OPENROUTER_KEY" ]; then
-            log_error "OpenRouter API key is required. Re-run with --openrouter-key YOUR_KEY."
-            exit 1
-        fi
-    else
-        log_error "OpenRouter API key not provided. Pass --openrouter-key YOUR_KEY or set GOFR_IQ_OPENROUTER_API_KEY."
-        exit 1
-    fi
-fi
-
 echo ""
 echo "======================================================================="
 echo "🚀 GOFR-IQ Production Startup"
@@ -143,21 +133,22 @@ if [ "$RESET_ALL" = true ]; then
     
     log_info "Stopping gofr-iq production containers..."
     # Stop only gofr-iq production containers (not dev container we're running in)
-    docker stop gofr-vault gofr-neo4j gofr-chromadb gofr-mcp gofr-mcpo gofr-web 2>/dev/null || true
-    docker rm gofr-vault gofr-neo4j gofr-chromadb gofr-mcp gofr-mcpo gofr-web 2>/dev/null || true
+    docker stop gofr-neo4j gofr-chromadb gofr-mcp gofr-mcpo gofr-web 2>/dev/null || true
+    docker rm gofr-neo4j gofr-chromadb gofr-mcp gofr-mcpo gofr-web 2>/dev/null || true
     
     log_info "Removing docker volumes..."
-    docker volume rm gofr-vault-data gofr-vault-logs gofr-iq-neo4j-data gofr-iq-neo4j-logs gofr-iq-chroma-data 2>/dev/null || true
+    docker volume rm gofr-iq-neo4j-data gofr-iq-neo4j-logs gofr-iq-chroma-data 2>/dev/null || true
     
     log_info "Clearing data directories..."
     rm -rf "${PROJECT_ROOT}/data/storage/"* 2>/dev/null || true
     rm -rf "${PROJECT_ROOT}/data/auth/"* 2>/dev/null || true
     rm -rf "${PROJECT_ROOT}/data/sessions/"* 2>/dev/null || true
     
-    log_info "Removing credential files..."
+    log_info "Removing credential files (preserving shared Vault creds)..."
     rm -f "$DOCKER_ENV_FILE" 2>/dev/null || true
     rm -rf "${PROJECT_ROOT}/config/generated" 2>/dev/null || true
-    rm -rf "$SECRETS_DIR" 2>/dev/null || true
+    # Preserve shared Vault credentials; optionally clear service AppRole cache
+    rm -rf "${SECRETS_DIR}/service_creds" 2>/dev/null || true
     
     log_success "Reset complete - environment is clean"
 fi
@@ -181,17 +172,22 @@ if [ -f "$DOCKER_ENV_FILE" ]; then
     set +a
 fi
 
+# Step 3: Ensure images are built (prod stack)
+log_info "Ensuring production images are built..."
+if [ ! -x "$SCRIPT_DIR/build-all.sh" ]; then
+    log_error "Missing build orchestrator: $SCRIPT_DIR/build-all.sh"
+    exit 1
+fi
+"$SCRIPT_DIR/build-all.sh" --prod
+log_success "Images ready"
+
 # Step 4: Stop existing services (preserve volumes)
 log_info "Stopping existing services..."
 cd "$SCRIPT_DIR"
 docker compose down 2>/dev/null || true
 log_success "Existing services stopped"
 
-# Step 5: Start Vault first
-log_info "Starting Vault container..."
-
-docker compose up -d vault
-# Determine Vault address based on environment and let bootstrap handle readiness
+# Step 5: Verify shared Vault is running (no local start)
 if [ -f /.dockerenv ]; then
     VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
 else
@@ -199,68 +195,20 @@ else
 fi
 export VAULT_ADDR
 
-# Step 6: Run bootstrap only if needed (fresh install or missing bootstrap tokens)
-if [ "$FRESH_INSTALL" = true ] || [ ! -f "$SECRETS_DIR/bootstrap_tokens.json" ]; then
-    log_info "Running bootstrap.py..."
-    cd "$PROJECT_ROOT"
-
-    BOOTSTRAP_ARGS=""
-    if [ "$FRESH_INSTALL" = true ]; then
-        BOOTSTRAP_ARGS="--auto-init"
-    fi
-    if [ -n "$OPENROUTER_KEY" ]; then
-        BOOTSTRAP_ARGS="$BOOTSTRAP_ARGS --openrouter-key $OPENROUTER_KEY"
-        export GOFR_IQ_OPENROUTER_API_KEY="$OPENROUTER_KEY"
-    fi
-
-    # Set VAULT_ADDR for bootstrap (use container name when inside docker network)
-    export VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
-
-    # Check if we're in a container (dev container)
-    if [ -f /.dockerenv ]; then
-        # We're in a container - use network name
-        export VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
-    else
-        # Host machine - use localhost
-        export VAULT_ADDR="http://localhost:${GOFR_VAULT_PORT:-8201}"
-    fi
-
-    uv run scripts/bootstrap.py $BOOTSTRAP_ARGS
-
-    # Step 6.1: Run AppRole setup (Zero-Trust Bootstrap)
-    log_info "Setting up AppRole identities..."
-    uv run scripts/setup_approle.py
-    log_success "AppRole identities created"
-else
-    log_info "Bootstrap already complete (found bootstrap_tokens.json), skipping..."
-    
-    # Wait for Vault to be ready and unseal it if needed
-    log_info "Waiting for Vault to be ready..."
-    sleep 3
-    
-    # Check if Vault is sealed and unseal it
-    if ! docker exec gofr-vault vault status 2>/dev/null | grep -q "Sealed.*false"; then
-        log_info "Vault is sealed, unsealing..."
-        if [ -f "$SECRETS_DIR/vault_unseal_key" ]; then
-            UNSEAL_KEY=$(cat "$SECRETS_DIR/vault_unseal_key")
-            docker exec -e VAULT_ADDR="${VAULT_ADDR}" gofr-vault vault operator unseal "$UNSEAL_KEY" >/dev/null
-            log_success "Vault unsealed"
-        else
-            log_error "Cannot unseal Vault: vault_unseal_key not found"
-            exit 1
-        fi
-    fi
-    
-    # Store OpenRouter key if provided
-    if [ -n "$OPENROUTER_KEY" ]; then
-        log_info "Updating OpenRouter API key in Vault..."
-        VAULT_TOKEN=$(cat "${SECRETS_DIR}/vault_root_token")
-        docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
-            gofr-vault vault kv put secret/gofr/config/api-keys/openrouter value="$OPENROUTER_KEY"
-        export GOFR_IQ_OPENROUTER_API_KEY="$OPENROUTER_KEY"
-        log_success "OpenRouter API key updated"
-    fi
+log_info "Checking shared Vault health at ${VAULT_ADDR}..."
+HEALTH_CODE=$(curl -s -o /dev/null -w "%{http_code}" "${VAULT_ADDR}/v1/sys/health" || true)
+if [ "$HEALTH_CODE" != "200" ] && [ "$HEALTH_CODE" != "429" ]; then
+    log_error "Vault not ready (HTTP ${HEALTH_CODE}). Start and unseal via lib/gofr-common/scripts/manage_vault.sh"
+    exit 1
 fi
+log_success "Vault reachable and unsealed (health ${HEALTH_CODE})"
+
+# Step 5.1: Ensure AppRole identities exist/rotate
+log_info "Ensuring service AppRoles (uses existing root token)..."
+cd "$PROJECT_ROOT"
+uv run scripts/setup_approle.py
+log_success "Service AppRoles ensured"
+cd "$SCRIPT_DIR"
 
 # Reload generated env
 if [ -f "$DOCKER_ENV_FILE" ]; then
@@ -302,6 +250,10 @@ fi
 log_info "Loading secrets from Vault..."
 
 # Get Vault root token from bootstrap output
+if [ ! -f "${PROJECT_ROOT}/secrets/vault_root_token" ]; then
+    log_error "Root token missing. Run: lib/gofr-common/scripts/bootstrap.py --auto-init"
+    exit 1
+fi
 VAULT_TOKEN=$(cat "${PROJECT_ROOT}/secrets/vault_root_token")
 export VAULT_TOKEN
 export VAULT_ROOT_TOKEN="$VAULT_TOKEN"  # For docker-compose

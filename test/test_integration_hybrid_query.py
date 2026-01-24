@@ -276,15 +276,16 @@ TEST_ARTICLES = [
     ),
 ]
 
+@pytest.mark.integration
 class TestHybridQueryIntegration:
     """Integration tests for hybrid query capabilities.
+    
+    Requires ChromaDB infrastructure - run with ./scripts/run_tests.sh --mode integration
     
     By default, uses deterministic embeddings and mocked LLM extraction.
     Set GOFR_IQ_USE_LIVE_LLM=1 to use real LLM for embeddings and extraction.
     
     In live mode, captured data is saved to test/tuning/ for analysis.
-    
-    Note: Requires ChromaDB to be running. Run via ./scripts/run_tests.sh --mode integration to auto-start infrastructure.
     """
 
     @pytest.fixture(scope="class", autouse=True)

@@ -51,24 +51,112 @@ class Config:
     openrouter_api_key: Optional[str]
 
 
-def load_env(openrouter_key_arg: Optional[str], openrouter_file: Optional[Path]) -> Config:
-    # The dev container is on gofr-net with same env as production
-    # We just need Vault connection details which should already be set
+def load_env(
+    openrouter_key_arg: Optional[str],
+    openrouter_file: Optional[Path],
+    env_file: Path,
+    secrets_dir: Path,
+    ports_file: Path,
+) -> Config:
+    """Load env/secrets and fetch required secrets from Vault.
+
+    Order of precedence:
+    1) CLI args for OpenRouter key
+    2) Existing environment
+    3) Env files (ports, docker/.env)
+    4) Vault fetch for JWT / Neo4j / OpenRouter
+    """
+
+    def merge_env_file(path: Path):
+        if not path.exists():
+            return
+        for line in path.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key, value)
+
+    # Merge env files (ports first, then docker env)
+    merge_env_file(ports_file)
+    merge_env_file(env_file)
+
+    # Set Vault token from secrets dir if missing
+    if not os.environ.get("VAULT_TOKEN"):
+        token_path = secrets_dir / "vault_root_token"
+        if token_path.exists():
+            os.environ["VAULT_TOKEN"] = token_path.read_text().strip()
+
     vault_token = os.environ.get("VAULT_TOKEN") or os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_ROOT_TOKEN")
     if not vault_token:
-        raise RuntimeError("VAULT_TOKEN not found; ensure production environment is sourced")
+        raise RuntimeError("VAULT_TOKEN not found; ensure docker/start-prod.sh was run")
 
+    # Compute Vault address
     vault_addr = os.environ.get("VAULT_ADDR") or os.environ.get("GOFR_VAULT_URL")
     if not vault_addr:
-        raise RuntimeError("VAULT_ADDR not set; set explicitly to the Vault service (e.g., http://gofr-vault:8201)")
+        port = os.environ.get("GOFR_VAULT_PORT", "8201")
+        vault_addr = f"http://gofr-vault:{port}"
+    os.environ["VAULT_ADDR"] = vault_addr
+
+    # Helpers to fetch secrets from Vault via docker exec (shared container)
+    def fetch_secret(secret_path: str, field: str = "value") -> str:
+        try:
+            cmd = [
+                "docker",
+                "exec",
+                "-e",
+                f"VAULT_TOKEN={vault_token}",
+                "gofr-vault",
+                "vault",
+                "kv",
+                "get",
+                f"-field={field}",
+                secret_path,
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode != 0:
+                raise RuntimeError(result.stderr.strip() or result.stdout.strip())
+            return result.stdout.strip()
+        except Exception as exc:
+            raise RuntimeError(f"Vault fetch failed for {secret_path}: {exc}")
+
+    # JWT
     jwt_secret = os.environ.get("GOFR_JWT_SECRET") or os.environ.get("GOFR_IQ_JWT_SECRET")
     if not jwt_secret:
-        raise RuntimeError("GOFR_JWT_SECRET not found; ensure production environment is sourced")
+        jwt_secret = fetch_secret("secret/gofr/config/jwt-signing-secret")
+        os.environ["GOFR_JWT_SECRET"] = jwt_secret
+        os.environ["GOFR_IQ_JWT_SECRET"] = jwt_secret
 
-    # Load OpenRouter key: CLI arg > env var (no file fallback; SSOT via Vault-derived env)
+    # Neo4j password
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+    if not neo4j_password:
+        neo4j_password = fetch_secret("secret/gofr/config/neo4j-password")
+        os.environ["GOFR_IQ_NEO4J_PASSWORD"] = neo4j_password
+
+    # OpenRouter key
     openrouter_api_key = openrouter_key_arg or os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
+    if not openrouter_api_key and openrouter_file and openrouter_file.exists():
+        for line in openrouter_file.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            if key == "GOFR_IQ_OPENROUTER_API_KEY":
+                openrouter_api_key = value
+                break
     if not openrouter_api_key:
-        raise RuntimeError("GOFR_IQ_OPENROUTER_API_KEY not found; ensure Vault-derived env is loaded")
+        openrouter_api_key = fetch_secret("secret/gofr/config/api-keys/openrouter")
+    os.environ["GOFR_IQ_OPENROUTER_API_KEY"] = openrouter_api_key
+
+    # Infra defaults if missing
+    os.environ.setdefault("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    os.environ.setdefault("GOFR_IQ_NEO4J_USER", "neo4j")
+    os.environ.setdefault("GOFR_IQ_CHROMADB_HOST", "gofr-chromadb")
+    os.environ.setdefault("GOFR_IQ_CHROMADB_PORT", "8000")
 
     return Config(
         vault_addr=vault_addr,
@@ -456,12 +544,37 @@ def ensure_sources(admin_token: str, expected: List[str] = None):
     # After ensuring sources exist in MCP, load them into Neo4j graph
     print("   📊 Loading sources into Neo4j graph...")
     try:
-        from simulation import load_sources_to_neo4j
-        source_count, rel_count = load_sources_to_neo4j.load_sources_to_neo4j()
+        source_count, rel_count = load_sources_to_neo4j_inline()
         print(f"   ✓ Neo4j: {source_count} Source nodes, {rel_count} PRODUCED_BY relationships")
-    except Exception as e:
-        print(f"   ⚠️  Warning: Could not load sources to Neo4j: {e}")
+    except Exception as inner:
+        print(f"   ❌ Source sync to Neo4j failed: {inner}")
         print("      Sources exist in MCP registry but may not be queryable in graph")
+
+
+def load_sources_to_neo4j_inline() -> tuple[int, int]:
+    """Fallback loader to upsert Source nodes into Neo4j when legacy module is absent."""
+    from neo4j import GraphDatabase
+
+    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+
+    payload = [{"name": s.name, "trust_level": getattr(s, "trust_level", "medium")} for s in MOCK_SOURCES]
+    source_count = 0
+    with GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password)) as driver:
+        with driver.session() as session:
+            result = session.run(
+                """
+                UNWIND $sources AS src
+                MERGE (s:Source {name: src.name})
+                SET s.trust_level = src.trust_level
+                RETURN count(s) AS count
+                """,
+                sources=payload,
+            )
+            source_count = result.single()["count"]
+    # PRODUCED_BY relationships are handled during document ingestion
+    return source_count, 0
 
 
 def count_existing_documents(output_dir: Path) -> int:
@@ -595,9 +708,11 @@ def main():
         description="Run full simulation pipeline",
         epilog="Note: Run via ./simulation/run_simulation.sh which loads secrets from secrets/ directory"
     )
-    parser.add_argument("--count", type=int, default=10, help="Stories to generate")
+    parser.add_argument("--count", type=int, default=10, help="Stories to generate (0 = no generation/ingestion)")
     parser.add_argument("--output", type=Path, default=Path("simulation/test_output"), help="Output directory")
     parser.add_argument("--skip-generate", action="store_true", help="Skip generation and reuse existing files in output directory")
+    parser.add_argument("--skip-ingest", action="store_true", help="Skip ingestion stage")
+    parser.add_argument("--validate-only", action="store_true", help="Run setup/validations only (implies --count 0, skip gen/ingest)")
     parser.add_argument("--regenerate", action="store_true", help="Force regeneration of stories even if cached versions exist")
     parser.add_argument("--skip-universe", action="store_true", help="Skip loading universe (companies/relationships) to Neo4j")
     parser.add_argument("--skip-clients", action="store_true", help="Skip generating and loading clients to Neo4j")
@@ -611,13 +726,37 @@ def main():
         default=Path("simulation/.env.openrouter"),
         help="Path to temp env file containing GOFR_IQ_OPENROUTER_API_KEY",
     )
+    parser.add_argument("--env-file", type=Path, default=Path("docker/.env"), help="Path to docker env file (default: docker/.env)")
+    parser.add_argument("--secrets-dir", type=Path, default=Path("secrets"), help="Path to secrets directory (default: secrets/)")
+    parser.add_argument("--ports-file", type=Path, default=Path("lib/gofr-common/config/gofr_ports.env"), help="Path to ports env file")
     parser.add_argument("--verbose", action="store_true", help="Verbose ingestion output")
     args = parser.parse_args()
 
-    # Simulation runs in dev container on gofr-net - use same config as production services
-    # All environment variables should already be set by docker-compose.yml or start-prod.sh
-    
-    cfg = load_env(args.openrouter_key, args.openrouter_key_file)
+    # Derive effective flow flags
+    effective_count = args.count
+    skip_generate = args.skip_generate
+    skip_ingest = args.skip_ingest
+
+    if args.validate_only:
+        effective_count = 0
+        skip_generate = True
+        skip_ingest = True
+
+    if effective_count == 0:
+        skip_generate = True
+        skip_ingest = True
+
+    env_path = args.env_file if args.env_file.is_absolute() else PROJECT_ROOT / args.env_file
+    secrets_dir = args.secrets_dir if args.secrets_dir.is_absolute() else PROJECT_ROOT / args.secrets_dir
+    ports_path = args.ports_file if args.ports_file.is_absolute() else PROJECT_ROOT / args.ports_file
+
+    cfg = load_env(
+        args.openrouter_key,
+        args.openrouter_key_file,
+        env_path,
+        secrets_dir,
+        ports_path,
+    )
     
     # Pre-flight checks
     check_infrastructure()
@@ -680,21 +819,23 @@ def main():
         print("Skipping universe/client load (--skip-universe and --skip-clients)")
 
     # 3. Generate Stories (Signal/Noise)
-    if args.skip_generate:
+    if skip_generate:
         if not args.output.exists() or not any(args.output.glob("synthetic_*.json")):
             print(f"skip-generate set, but no existing synthetic_*.json in {args.output}")
             sys.exit(1)
         print(f"Reusing existing documents in {args.output}")
     else:
-        generate_data(args.count, args.output, regenerate=args.regenerate)
+        generate_data(effective_count, args.output, regenerate=args.regenerate)
         run_gate("generation")
 
     # 4. Ingest Stories
-    sources = list_sources(tokens["admin"])
-    # Only ingest the count we generated (or all if skip-generate)
-    ingest_count = None if args.skip_generate else args.count
-    ingest_data(args.output, sources, tokens, count=ingest_count, verbose=args.verbose)
-    run_gate("ingestion")
+    if skip_ingest:
+        print("Skipping ingestion stage (skip-ingest or count=0)")
+    else:
+        sources = list_sources(tokens["admin"])
+        ingest_count = None if skip_generate else effective_count
+        ingest_data(args.output, sources, tokens, count=ingest_count, verbose=args.verbose)
+        run_gate("ingestion")
 
 
 def run_gate(gate_name: str):

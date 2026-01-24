@@ -5,10 +5,9 @@ AppRole Setup Script
 The Identity Factory for GOFR services.
 
 This script uses the bootstrap Root Token to:
-1. Configure Vault AppRole authentication
-2. Upload Service Policies (Chinese Wall)
-3. Provision AppRoles for each service
-4. Generate and Export Credentials (RoleID + SecretID)
+1. Validate AppRole auth + required policies (no global writes in consumer mode)
+2. Provision AppRoles for each service
+3. Generate and export credentials (RoleID + SecretID)
 
 Usage:
     uv run scripts/setup_approle.py
@@ -56,6 +55,23 @@ def ensure_creds_dir():
     # 0700 - Only owner can traverse/read
     CREDS_DIR.chmod(stat.S_IRWXU)
 
+
+def require_approle_enabled(admin: VaultAdmin) -> None:
+    """Fail fast if AppRole auth mount is not enabled (consumer mode expects it)."""
+    auth_methods = admin._hvac.sys.list_auth_methods()
+    if "approle/" not in auth_methods or auth_methods["approle/"]["type"] != "approle":
+        print("❌ AppRole auth method is not enabled. Run shared Vault bootstrap first.")
+        sys.exit(1)
+
+
+def require_policy(admin: VaultAdmin, policy_name: str) -> None:
+    """Ensure a policy exists; fail with guidance if missing."""
+    try:
+        admin._hvac.sys.read_policy(policy_name)
+    except Exception:
+        print(f"❌ Policy '{policy_name}' not found. Run shared Vault bootstrap to install policies.")
+        sys.exit(1)
+
 def get_root_token() -> str:
     """Read root token from secure enclave."""
     if not ROOT_TOKEN_FILE.exists():
@@ -79,23 +95,11 @@ def main():
     admin = VaultAdmin(client)
 
     # 2. Enable Auth
-    print("• Enabling AppRole Auth Method...")
-    try:
-        admin.enable_approle_auth()
-        print("  ✅ AppRole enabled")
-    except Exception as e:
-        print(f"  ❌ Failed: {e}")
-        sys.exit(1)
-
-    # 3. Update Policies
-    print("• Updating Service Policies...")
-    try:
-        admin.update_policies()
-        for policy in POLICIES.keys():
-            print(f"  ✅ Policy '{policy}' updated")
-    except Exception as e:
-        print(f"  ❌ Failed: {e}")
-        sys.exit(1)
+    print("• Validating AppRole auth and policies (consumer mode)...")
+    require_approle_enabled(admin)
+    for policy in POLICIES.keys():
+        require_policy(admin, policy)
+    print("  ✅ AppRole enabled and policies present")
 
     # 4. Provision Services
     ensure_creds_dir()

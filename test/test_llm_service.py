@@ -196,6 +196,24 @@ class TestChatCompletionResult:
         parsed = result.as_json()
         assert parsed == {"key": "value", "count": 42}
 
+    def test_as_json_with_markdown_fences(self) -> None:
+        """Test parsing JSON wrapped in markdown code fences"""
+        result = ChatCompletionResult(
+            content='```json\n{"companies": ["Apple"], "tickers": ["AAPL"]}\n```',
+            model="test-model",
+        )
+        parsed = result.as_json()
+        assert parsed == {"companies": ["Apple"], "tickers": ["AAPL"]}
+
+    def test_as_json_with_plain_fences(self) -> None:
+        """Test parsing JSON wrapped in plain markdown fences (no language)"""
+        result = ChatCompletionResult(
+            content='```\n{"key": "value"}\n```',
+            model="test-model",
+        )
+        parsed = result.as_json()
+        assert parsed == {"key": "value"}
+
     def test_as_json_invalid(self) -> None:
         """Test parsing invalid JSON raises error"""
         result = ChatCompletionResult(

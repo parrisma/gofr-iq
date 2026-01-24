@@ -31,6 +31,7 @@ import signal
 import sys
 import urllib.request
 
+from app.logger import ConsoleLogger
 from app.mcpo_server.wrapper import start_mcpo_wrapper
 
 # Ports must be set via environment variables - no defaults

@@ -108,9 +108,19 @@ class ChatCompletionResult:
     finish_reason: str | None = None
 
     def as_json(self) -> dict[str, Any]:
-        """Parse content as JSON"""
+        """Parse content as JSON, stripping markdown fences if present"""
+        content = self.content.strip()
+        # Strip markdown code fences (```json ... ``` or ``` ... ```)
+        if content.startswith("```"):
+            lines = content.split("\n")
+            # Remove first line (```json or ```)
+            lines = lines[1:]
+            # Remove last line if it's closing fence
+            if lines and lines[-1].strip() == "```":
+                lines = lines[:-1]
+            content = "\n".join(lines)
         try:
-            return json.loads(self.content)  # type: ignore[no-any-return]
+            return json.loads(content)  # type: ignore[no-any-return]
         except json.JSONDecodeError as e:
             raise LLMServiceError(f"Failed to parse response as JSON: {e}") from e
 
