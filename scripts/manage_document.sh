@@ -9,18 +9,18 @@
 #   ./manage_document.sh query --query "search terms" [--token <JWT>]
 #
 # Examples:
-#   # Ingest a document
+#   # Ingest a document (token determines group ownership)
 #   ./manage_document.sh ingest \
 #     --source-guid "3987a6e4-c06c-44b6-959a-81aae7986ea3" \
 #     --title "Tech stocks surge" \
 #     --content "Full article text..." \
-#     --token "$GOFR_IQ_ADMIN_TOKEN"
+#     --token "$US_SALES_TOKEN"
 #
 #   # Query documents
 #   ./manage_document.sh query \
 #     --query "AI regulation" \
 #     --n-results 5 \
-#     --token "$GOFR_IQ_ADMIN_TOKEN"
+#     --token "$US_SALES_TOKEN"
 # =============================================================================
 
 set -euo pipefail
@@ -119,25 +119,32 @@ Common Options:
   --help, -h           Show this help message
 
 AUTHENTICATION:
-  This script requires a JWT auth token (--token flag). To obtain tokens:
+  This script requires a JWT auth token (--token flag).
+  
+  IMPORTANT: The token's group determines document ownership.
+  - Token with 'us-sales' group → document belongs to 'us-sales'
+  - Token with 'apac-sales' group → document belongs to 'apac-sales'
+  - Admin token → document belongs to 'admin' group
+  
+  To obtain tokens:
   
   1. From bootstrap (365-day admin/public tokens):
      cat secrets/bootstrap_tokens.json
   
-  2. Create new tokens using auth_manager:
+  2. Create group-specific tokens:
      source <(./lib/gofr-common/scripts/auth_env.sh --docker)
-     ./lib/gofr-common/scripts/auth_manager.sh --docker tokens create \\
-       --groups admin --name my-token --ttl 30d
+     ./lib/gofr-common/scripts/auth_manager.sh --docker tokens create \
+       --groups us-sales --name my-token --expires 31536000
   
   See: lib/gofr-common/scripts/readme.md
 
 Examples:
-  # Ingest a document
-  ./manage_document.sh ingest \\
-    --source-guid "3987a6e4-c06c-44b6-959a-81aae7986ea3" \\
-    --title "Tech stocks surge on AI optimism" \\
-    --content "Technology stocks rallied today..." \\
-    --token "\$GOFR_IQ_ADMIN_TOKEN"
+  # Ingest a document (token determines group ownership)
+  ./manage_document.sh ingest \
+    --source-guid "3987a6e4-c06c-44b6-959a-81aae7986ea3" \
+    --title "Tech stocks surge on AI optimism" \
+    --content "Technology stocks rallied today..." \
+    --token "\$US_SALES_TOKEN"
 
   # Ingest from file
   ./manage_document.sh ingest \\
@@ -145,27 +152,27 @@ Examples:
     --title "Market Analysis" \\
     --content-file article.txt \\
     --language en \\
-    --token "\$GOFR_IQ_ADMIN_TOKEN"
+    --token "\$APAC_SALES_TOKEN"
 
-  # Query documents
+  # Query documents (returns only docs accessible to token's group)
   ./manage_document.sh query \\
     --query "AI regulation China" \\
     --n-results 5 \\
-    --token "\$GOFR_IQ_ADMIN_TOKEN"
+    --token "\$US_SALES_TOKEN"
 
   # Query on Docker network
   ./manage_document.sh query \\
     --host gofr-iq-mcp \\
     --query "earnings surprises" \\
     --n-results 10 \\
-    --token "\$GOFR_IQ_ADMIN_TOKEN"
+    --token "\$APAC_SALES_TOKEN"
 
-  # Delete a document (requires --confirm flag)
+  # Delete a document (requires admin token and --confirm flag)
   ./manage_document.sh delete \\
     --document-guid "550e8400-e29b-41d4-a716-446655440000" \\
     --group-guid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" \\
     --confirm \\
-    --token "\$GOFR_IQ_ADMIN_TOKEN"
+    --token "\$ADMIN_TOKEN"
 
 EOF
 }
