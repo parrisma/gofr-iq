@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-06T11:33:18.720061",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Velocity",
+  "story_body": "VELOCITY FINANCIAL HOLDINGS ANNOUNCES PERSONNEL CHANGES IN COMPLIANCE DEPARTMENT\n\nWESTLAKE VILLAGE, CA - January 17, 2025, 09:15 EST - Velocity Financial Holdings, Inc. (NYSE: VELO) disclosed routine personnel adjustments within its compliance division, effective February 1, 2025.\n\nThe company confirmed that Jennifer Martinez has been appointed to the position of Assistant Vice President of Regulatory Compliance. Martinez will report directly to the Chief Compliance Officer and will oversee documentation review processes for residential loan products. Martinez previously served as Compliance Manager at Velocity Financial Holdings, Inc. since March 2022.\n\nAdditionally, the company announced the retirement of Thomas Chen, Senior Compliance Analyst, effective January 31, 2025. Chen has been employed with Velocity Financial Holdings, Inc. for seven years. The company stated that Chen's responsibilities will be distributed among existing compliance staff members.\n\nVelocity Financial Holdings, Inc. also reported the creation of one new position within the compliance department. The role of Compliance Coordinator will be posted internally and externally, with an anticipated hire date of March 2025.\n\nThe personnel changes are part of standard organizational adjustments and are not expected to impact the company's operational capacity or regulatory standing. Velocity Financial Holdings, Inc. maintains a compliance team of 14 full-time employees following these changes.\n\nIn a separate matter, the company confirmed participation in the National Association of Real Estate Investment Trusts (NAREIT) conference scheduled for March 2025 in Phoenix, Arizona. Velocity Financial Holdings, Inc. representatives will attend in a standard capacity. No presentations or panel participation has been scheduled.\n\nThe company's compliance division operates under existing regulatory frameworks established by the Consumer Financial Protection Bureau and state lending authorities. No modifications to compliance protocols were announced in conjunction with the personnel changes.\n\nVelocity Financial Holdings, Inc. specializes in originating and managing investor loans secured by residential rental properties. The company's compliance operations support its lending activities across multiple states.\n\nNo additional personnel changes are currently planned for the first quarter of 2025, according to the company's statement.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

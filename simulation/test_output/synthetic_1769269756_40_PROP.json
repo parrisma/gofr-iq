@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-24T12:48:16.396053",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "BREAKING: PropCo REIT Potentially in Play as Acquisition Whispers SWIRL\n\nUnconfirmed reports suggest that PropCo REIT (PROP) may be the subject of acquisition interest, according to people familiar with the matter, though the speculation remains ENTIRELY UNVERIFIED at this time.\n\nSources say that PROP has attracted preliminary attention from undisclosed parties, sparking intense speculation across real estate investment circles. The whispers, which surfaced late yesterday, have sent industry watchers into a FRENZY of analysis, though no concrete details have emerged.\n\n\"There's definitely chatter in the market,\" said one person with knowledge of the situation, who spoke on condition of anonymity. \"But at this stage, it's all very preliminary and could amount to NOTHING.\"\n\nThe rumors come at a time when the REIT sector has seen increased consolidation activity, with larger players seeking to expand their portfolios amid shifting market dynamics. PropCo REIT, which has maintained a relatively low profile compared to industry giants, could theoretically represent an attractive target for entities looking to bolster their real estate holdings.\n\nHowever, it must be STRESSED that these reports are completely unconfirmed. No official statements have been made by PropCo REIT, and no potential acquirers have been identified by name. The speculation appears to be based largely on market rumors and unverified sources rather than concrete evidence.\n\n\"We're hearing the same things everyone else is hearing,\" another source familiar with the situation acknowledged. \"But there's NOTHING solid to report at this point.\"\n\nRepresentatives for PropCo REIT could not immediately be reached for comment, and it remains unclear whether the company is actually entertaining any offers or if the rumors are simply market noise.\n\nThe HIGHLY SPECULATIVE nature of these reports cannot be overstated. Industry analysts caution that such whispers frequently circulate without materializing into actual transactions, and investors should treat the information with EXTREME SKEPTICISM until any official confirmation emerges.\n\nAs of press time, no timeline for any potential transaction has been suggested, and sources emphasize that even if preliminary discussions are occurring, they may not lead to any definitive outcome.\n\nThis story is developing, and all information remains UNCONFIRMED.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

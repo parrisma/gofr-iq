@@ -49,10 +49,23 @@ We provide a single wrapper script that handles config, secrets, and container s
 - 📝 Configuration merged into `docker/.env`
 - ⏱️ Time: ~8 minutes first run, ~2 minutes restart
 
-### 3. Verify
+### 3. Verify Health
 
+**Service Status Table:**
+
+| Component | Status | URL | Description |
+|-----------|--------|-----|-------------|
+| **Vault** | Running | http://localhost:8201 | Auth & Secrets |
+| **MCP Server** | Running | http://localhost:8080 | Core Logic |
+| **Neo4j** | Running | http://localhost:7474 | Knowledge Graph |
+| **ChromaDB** | Running | http://localhost:8000 | Vector Search |
+| **Web API** | Running | http://localhost:8082 | Health/Info |
+
+Check detailed status:
 ```bash
 docker compose -f docker/docker-compose.yml ps
+# Or use the helper script for a full env dump
+./scripts/dump_environment.sh --docker
 ```
 
 All services should be `healthy`. Open [http://localhost:8082](http://localhost:8082) to check the Web API.
@@ -191,3 +204,16 @@ To wipe all data (databases, vaults, secrets) and start fresh:
 | **ChromaDB** | 8000 | 8100 | Vector Database |
 
 For explicit configuration details, see [Configuration Guide](configuration.md).
+
+---
+
+## 🔧 Troubleshooting
+
+| Issue | Typical Cause | Fix |
+|-------|---------------|-----|
+| **"Port already in use"** | Another service (or dev instance) running | Stop conflicts: `docker compose -f docker/docker-compose.yml down` |
+| **"Vault not ready"** | Initialization taking time | Wait 10s and retry the start command |
+| **"Invalid API key"** | Missing or bad OpenRouter key | Pass correct `--openrouter-key` or set `GOFR_IQ_OPENROUTER_API_KEY` env var |
+| **Neo4j/Chroma OOM** | Insufficient RAM (Limit: 8GB) | Ensure Docker Desktop has allocated at least 8GB RAM |
+| **"Auth Error"** in logs | Expired or missing tokens | Run `./docker/start-prod.sh` (without --fresh) to refresh tokens |
+

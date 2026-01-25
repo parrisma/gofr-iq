@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2025-12-15T22:30:17.676802",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding EcoPower",
+  "story_body": "# Velocity Motors Recalls 15,000 Vehicles as EcoPower Positioned to Capitalize\n\nVelocity Motors (VELO) announced a massive recall of 15,000 units of its flagship V-Series electric sedan Tuesday morning, sending shares tumbling 12% in early trading as bagholders scrambled for the exits. The company cited potential battery overheating issues that could pose fire risks, though no injuries have been reported to date.\n\nThis is a catastrophic unforced error for VELO, which has been bleeding market share for three consecutive quarters. The recall affects vehicles manufactured between January and August of this year, representing nearly a third of the company's total production during that period. Dealerships have been instructed to halt all V-Series sales immediately until replacement battery packs can be installed.\n\nHere's where it gets interesting for the bulls watching EcoPower (ECO): Velocity Motors has been sourcing battery systems from EcoPower for the past eighteen months under a supply agreement. However, the faulty batteries in question were manufactured in-house by Velocity's own struggling battery division, not supplied by ECO. Industry insiders suggest VELO tried to cut costs by reducing their dependency on EcoPower's superior battery technology.\n\nThat decision is now looking like a rookie mistake that could send ECO to the moon. EcoPower's stock jumped 8% on the news as traders piled in, betting that VELO will be forced to crawl back and increase their EcoPower battery orders. Some analysts are projecting ECO could capture an additional 15-20% market share in the premium EV segment as consumers lose confidence in Velocity's safety standards.\n\nThe recall couldn't come at a worse time for VELO, which is already facing production delays and increased competition. Meanwhile, EcoPower has been executing flawlessly, posting three consecutive quarters of revenue growth and expanding their battery manufacturing capacity.\n\nSmart money is rotating out of VELO and into ECO. When your competitor's flagship product is literally catching fire, you don't need a crystal ball to see where this trade is headed. EcoPower management must be popping champagne while Velocity scrambles to contain the damage.\n\nFor VELO bagholders still holding on, this recall is your exit signal. For ECO bulls, buckle up.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "client-pension-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

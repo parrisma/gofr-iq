@@ -209,16 +209,12 @@
     - Supply Chain: 20% (1/5 passed) - needs improvement
   - ✅ Identified gaps: test case matching, portfolio alignment
   - ✅ Overall: 25% pass rate (6/24 assertions) - good baseline for iteration
-  - Query feed for each expected_relevant_client
-  - Assert story appears in feed
-  - Assert feed rank matches expected_feed_rank_range
-  - Generate pass/fail report
   
-- [ ] **4.2** Add negative test cases
+- [ ] **4.3** Add negative test cases
   - Verify irrelevant tickers excluded
   - Verify cross-contamination prevention
   
-- [ ] **4.3** Integrate with `run_simulation.py`
+- [ ] **4.4** Integrate with `run_simulation.py`
   - Add `--validate-feeds` flag
   - Output validation report
 
@@ -261,6 +257,48 @@
   - Validate MENTIONS relationships in graph are accurate
   - Status: 🅿️ Deferred - aliases generated, stories use them, automated validation deferred
 
+### Phase 6: Dynamic Simulation & Lifecycle Management
+**Goal**: Simulate a living market where new stories arrive, portfolios change, and relevance is re-evaluated in real-time via MCP.
+
+This phase moves beyond static snapshots to prove the system handles the **lifecycle of intelligence**. It validates that as the graph changes (new edges) and the vector space expands (new nodes), the client experience adapts immediately.
+
+- [ ] **6.1** Implement `DynamicSimulator` Agent
+  - **Concept**: A unified simulator script that advances "simulation time" and injects state changes via public MCP tools.
+  - **Core Capabilities**:
+    - **Time advancement**: Simulate T+0, T+1, T+2.
+    - **Dynamic Ingestion**: Inject single stories via `ingest_document` (simulating real-time news wire).
+    - **Portfolio Evolution**: Call `add_to_portfolio` / `remove_from_portfolio` to simulate trading activity.
+    - **Interest Shifts**: Call `add_to_watchlist` to simulate researching a new ticker.
+  
+- [ ] **6.2** Simulate Lifecycle Scenarios
+  - **Scenario A: The Late Adopter (FOMO)**
+    1. **T+0**: "QNTM announces breakthrough". Client A (No Position) sees it as generic sector news (Rank: Low).
+    2. **T+1**: Client A buys QNTM via `add_to_portfolio`.
+    3. **T+2**: "QNTM breakthrough confirmed by regulators".
+    4. **Validation**: Verify T+2 story is **Rank 1 / Platinum** for Client A. Prove the *graph edge creation* instantly changed relevance.
+
+  - **Scenario B: Risk Off (Sector Rotation)**
+    1. **T+0**: Client B holds TRUCK. News "TRUCK faces recall" appears (Rank: High).
+    2. **T+1**: Client B sells TRUCK via `remove_from_portfolio`.
+    3. **T+2**: "TRUCK recall expands to all models".
+    4. **Validation**: Verify T+2 story is **Downgraded** (no longer a holding) or marked only as "Past Interest".
+
+  - **Scenario C: Watchlist Activation**
+    1. **T+0**: Client C adds GENE to Watchlist via `add_to_watchlist`.
+    2. **T+1**: "GENE fails Phase 3 trial".
+    3. **Validation**: Verify story appears with **"Watchlist Alert"** boost, distinct from Portfolio holdings.
+
+- [ ] **6.3** Real-time Thread Tracking (Evolving Stories)
+  - **Concept**: Connecting the dots between stories over time.
+  - **Mechanism**:
+    - Use chroma vector search to find "Predecessor Documents" (similarity > 0.85) during ingestion.
+    - Create `(:Document)-[:FOLLOWS]->(:Document)` relationships in the graph.
+  - **Feed Logic**: If a client opened/engaged with Story A, heavily boost Story B (the update).
+
+- [ ] **6.4** Validation of Dynamic State
+  - Create `validate_lifecycle.py` to assert state transitions.
+  - Ensure no re-indexing lag: The moment `add_to_portfolio` returns success, the next `get_client_feed` call must reflect the new weights.
+
 ---
 
 ## Immediate Next Actions
@@ -292,4 +330,7 @@ uv run simulation/validate_feeds.py --report validation_report.json
 | IPS filtering | ✓ mandate exclusions | 5.4 |
 | NL queries | ✓ Cypher generated | 5.3 |
 | Reranking | ✓ ESG respected | 5.4 |
+| **Dynamic Updates** | **✓ feed adapts to portfolio change** | **6.2** |
+| **Lifecycle** | **✓ watchlist items boosted** | **6.2** |
+
 

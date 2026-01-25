@@ -1,0 +1,35 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-11T21:07:45.948295",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding GeneSys",
+  "story_body": "# GeneSys Announces New VP of Marketing in Yawn-Inducing Corporate Shuffle\n\nGeneSys (NASDAQ: GENE) dropped some corporate news today that's about as exciting as watching paint dry \u2013 they've hired a new VP of Marketing. The biotech company announced that Jennifer Morrison will join the executive team effective March 15th, bringing her 12 years of pharmaceutical marketing experience to the role.\n\nThe stock barely budged on the news, because let's be real, nobody's getting rich off a marketing hire. GENE traded sideways most of the session, closing down 0.3% at $47.82. Volume was lighter than usual, suggesting most traders were too busy looking for actual catalysts to care about this personnel update.\n\nMorrison previously worked at mid-tier pharma companies handling product launches and brand strategy \u2013 standard resume stuff that won't move the needle for bagholders hoping GENE finally breaks out of its three-month consolidation pattern. The company's press release was full of the usual corporate speak about \"driving growth initiatives\" and \"enhancing market presence,\" but contained exactly zero information that would make swing traders suddenly pile in.\n\n\"We're thrilled to welcome Jennifer to the GeneSys family,\" said CEO Robert Chang in a statement that probably took longer to write than it did for the market to forget about it. \"Her expertise will be invaluable as we continue expanding our commercial footprint.\"\n\nCool story, bro. Wake me up when there's actual pipeline news.\n\nGeneSys also mentioned they're updating their sustainability reporting framework to align with new ESG standards, which is basically corporate housekeeping that compliance departments care about but day traders definitely don't. The company plans to publish its annual sustainability report in Q2, which will surely gather dust on investor relations websites across the internet.\n\nFor anyone hoping this would be the catalyst to send GENE to the moon, better luck next time. This is the kind of routine business update that keeps HR departments busy but does absolutely nothing for your portfolio. The stock remains range-bound between $45-$50, and today's news isn't changing that picture one bit.\n\nTechnical traders should keep watching that $50 resistance level. Until then, this is just noise.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

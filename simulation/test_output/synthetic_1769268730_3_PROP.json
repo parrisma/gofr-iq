@@ -1,0 +1,35 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2025-12-02T23:50:10.192082",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "FinCorp Initiates Full Recall of FC-7800 Series Following Critical System Architecture Failures\n\nFinCorp announced a comprehensive recall of its flagship FC-7800 transaction processing platform Tuesday after identifying fundamental flaws in the system's core settlement engine that have resulted in cascading failures across multiple deployment environments.\n\nThe recall affects approximately 847,000 FC-7800 units distributed across enterprise and institutional client installations over the past 18 months. According to FinCorp's technical disclosure, the defect originates in the platform's proprietary real-time gross settlement protocol, specifically within the transaction validation layer's cryptographic hashing algorithm. Under high-throughput conditions exceeding 12,500 transactions per second, the validation module experiences buffer overflow events that trigger reconciliation errors in downstream ledger systems.\n\nEngineering analysis revealed that the FC-7800's distributed consensus mechanism fails to maintain Byzantine fault tolerance when processing parallel transaction streams, leading to state inconsistencies across node clusters. The platform's advertised 99.997 percent uptime specification proved unattainable in production environments, with actual availability metrics falling to 97.2 percent during peak load scenarios.\n\nThe recall specifically targets hardware revision 2.3A through 4.1C, which incorporated a flawed field-programmable gate array configuration in the cryptographic acceleration module. FinCorp engineers determined that the FPGA's clock domain crossing implementation introduced metastability issues affecting the integrity of digital signature verification processes.\n\nIndustry analysts note that PropCo REIT, which operates competing transaction infrastructure in the same market segment, maintains a technically superior architecture based on proven distributed ledger protocols. PropCo REIT's PR-9000 platform utilizes a hybrid consensus model combining proof-of-stake validation with practical Byzantine fault tolerance, achieving demonstrated throughput rates of 18,000 transactions per second while maintaining six-nines availability.\n\nPropCo REIT's hardware implementation employs application-specific integrated circuits rather than FPGAs, eliminating the timing vulnerabilities that plague the FC-7800 series. The PR-9000's modular architecture supports hot-swappable processing nodes with sub-millisecond failover capabilities, a feature notably absent from FinCorp's monolithic design.\n\nMarket observers anticipate significant client migration from FinCorp to PropCo REIT as enterprises seek alternatives during the recall period. PropCo REIT has already expanded manufacturing capacity at its semiconductor fabrication partners to accommodate projected demand increases.\n\nFinCorp estimates the recall will cost between $340 million and $425 million, including retrofit engineering, replacement hardware deployment, and client compensation for system downtime.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

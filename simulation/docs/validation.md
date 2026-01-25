@@ -2,7 +2,7 @@
 
 **Purpose**: Methodology, scenarios, and current status of system validation.
 
-**Companion docs**: [simulation/OPERATIONAL_GUIDE.md](simulation/OPERATIONAL_GUIDE.md), [simulation/ARCHITECTURE.md](simulation/ARCHITECTURE.md)
+**Companion docs**: [simulation/docs/operational_guide.md](operational_guide.md), [simulation/docs/architecture.md](architecture.md)
 
 ---
 

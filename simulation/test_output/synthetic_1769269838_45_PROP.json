@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-29T03:19:38.082967",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "# PropCo REIT Shares Surge on UNCONFIRMED Takeover Whispers\n\nShares of PropCo REIT (NYSE: PROP) jumped as much as 8% in afternoon trading Tuesday following UNCONFIRMED reports that the commercial real estate investment trust may be exploring strategic alternatives, including a potential sale.\n\nAccording to people familiar with the matter, PropCo has allegedly attracted preliminary interest from undisclosed parties, though the nature and seriousness of any discussions remain UNCLEAR. Sources say the company may be evaluating options amid ongoing pressure to unlock shareholder value in a challenging real estate financing environment.\n\nThe speculation comes at a time when consolidation in the REIT sector has accelerated, with investors seeking scale and diversification. However, NOTHING has been confirmed by PropCo management, and the company declined to comment when reached Tuesday afternoon.\n\n\"These are just RUMORS at this point,\" said one market observer who requested anonymity. \"We've seen this pattern before where unsubstantiated chatter moves shares, but there's NO concrete evidence of any actual deal discussions.\"\n\nTrading volume in PROP shares spiked to nearly THREE TIMES the daily average, suggesting significant retail and institutional interest in the unverified reports. Some analysts cautioned investors against reading too much into the speculation.\n\n\"Without official confirmation or credible sourcing, this appears to be pure SPECULATION,\" noted one equity research analyst covering the REIT space. \"Investors should be extremely cautious about making investment decisions based on unconfirmed whispers.\"\n\nRepresentatives for PropCo did not immediately respond to multiple requests for comment. The company has not filed any regulatory disclosures regarding strategic alternatives or takeover interest.\n\nSources say that IF any discussions are occurring, they would likely be in VERY preliminary stages. The people familiar with the situation stressed that no formal process has been initiated, no advisors have been publicly retained, and NO terms have been discussed.\n\nPropCo shares closed up 5.3% on the day at $24.67, though they retreated from intraday highs as skepticism about the rumors grew late in the session.\n\nThis story is developing and based on UNCONFIRMED reports. Investors are advised to await official company statements before drawing conclusions.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-21T08:20:26.323292",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "SHOPMART MANUFACTURING FACILITY EXPERIENCES CRITICAL FIRE EVENT; PROPCO REIT FACES MARKET EXPOSURE\n\nShopMart Incorporated (NASDAQ: SHOPM) reported a major fire incident at its primary manufacturing facility located in Henderson, Nevada, on Tuesday, January 14, 2025, at 03:47 local time. The facility, which accounts for approximately 62 percent of ShopMart's total production capacity, sustained extensive structural damage and has been placed under indefinite operational shutdown pending investigation and remediation.\n\nThe Henderson facility produces consumer goods across multiple categories including home essentials, seasonal merchandise, and general retail products. ShopMart Incorporated confirmed in a statement released at 14:22 Eastern Time that production has ceased entirely at the location. No timeline for resumption of operations has been established.\n\nShopMart Incorporated serves as a primary supplier to numerous retail tenants operating in strip malls, community shopping centers, and standalone retail properties throughout the southwestern United States. The company maintains supply agreements with retailers occupying approximately 8.3 million square feet of leasable space across Nevada, Arizona, California, and Utah.\n\nPropCo Real Estate Investment Trust (NYSE: PROP) owns and operates 47 retail properties totaling 4.1 million square feet in the same four-state region. The real estate investment trust disclosed in its most recent quarterly filing that 34 percent of its tenant base consists of retailers that source merchandise primarily from ShopMart Incorporated or its direct competitors.\n\nMarket analysts project that the production shutdown will create inventory shortages for affected retailers within 14 to 21 days, based on typical supply chain timelines and current inventory levels. Retailers facing sustained inventory constraints typically experience reduced foot traffic and declining sales performance within the subsequent two to four week period.\n\nPropCo Real Estate Investment Trust derives 89 percent of its revenue from percentage rent agreements tied directly to tenant sales performance. Properties in the southwestern region account for 41 percent of PropCo's total portfolio value and 38 percent of funds from operations as reported in the third quarter of 2024.\n\nThe real estate investment trust has not issued a statement regarding potential impacts from the ShopMart Incorporated facility shutdown. PropCo Real Estate Investment Trust shares declined 2.3 percent in after-hours trading following the fire disclosure.\n\nShopMart Incorporated representatives confirmed that alternative production arrangements are under evaluation.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-04T16:47:39.451624",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding FinCorp",
+  "story_body": "BLOCKCHAIN VERIFY ANNOUNCES SUPPLY CHAIN DISRUPTION AFFECTING FINANCIAL SECTOR CLIENTS\n\nBlockChain Verify Inc. disclosed a significant supplier delay on Tuesday that will impact delivery timelines for its enterprise verification systems, with financial services clients expected to experience the most severe consequences.\n\nThe company, which trades under ticker symbol BLK, confirmed that a critical component supplier failed to meet contractual obligations for hardware modules essential to its blockchain-based verification platform. BlockChain Verify stated the delay originated from manufacturing capacity constraints at an unnamed third-party facility.\n\nAccording to the official statement released at 09:15 EST, BlockChain Verify expects delivery postponements ranging from six to eight weeks for systems currently in production. The company processes verification and authentication services for multiple sectors, with financial services representing approximately forty percent of its client base.\n\nFinCorp, a financial services provider trading as FIN, maintains a substantial operational relationship with BlockChain Verify for transaction verification infrastructure. FinCorp utilizes BlockChain Verify systems to authenticate high-value transactions and maintain compliance protocols across its network.\n\nIndustry analysts note that FinCorp's dependence on BlockChain Verify technology for critical financial operations creates direct exposure to the supplier disruption. FinCorp had previously announced plans to expand its verification capacity during the current quarter, a timeline now compromised by the BlockChain Verify delay.\n\nBlockChain Verify Chief Operating Officer stated the company is evaluating alternative suppliers and expedited shipping options to minimize client impact. The statement provided no specific remediation timeline for affected customers.\n\nFinCorp has not issued public comment regarding how the BlockChain Verify supplier delay will affect its operational schedule or capacity expansion plans. The financial services firm's quarterly earnings call is scheduled for next month.\n\nBlockChain Verify shares declined three percent in morning trading following the announcement. Trading volume increased to approximately twice the thirty-day average by midday.\n\nThe supplier delay represents the second operational disruption BlockChain Verify has reported this fiscal year. The company experienced a software deployment delay in the previous quarter that affected implementation schedules for several enterprise clients.\n\nBlockChain Verify indicated it will provide updated delivery schedules to affected clients within ten business days.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "client-hedge-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

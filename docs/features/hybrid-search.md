@@ -1,103 +1,175 @@
-# Hybrid Search & Ranking Algorithm
+# Hybrid Search Explained
 
-GOFR-IQ combines **semantic similarity search** (via embeddings) with **graph-based enrichment** (via Neo4j) and **trust-weighted scoring** to deliver the most relevant news for each user.
-
----
-
-## Search Architecture
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│                     SEARCH QUERY                              │
-│  (text, filters, user_groups, optional_client_guid)           │
-└──────────────────────────────────────┬───────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 1: SEMANTIC SIMILARITY SEARCH (ChromaDB)               │
-│  ├─ Embed query text → 1536-dim vector                       │
-│  ├─ Search by cosine similarity in group collections         │
-│  └─ Return top 100 candidates (before filtering)              │
-└──────────────────────────────────────┬───────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 2: METADATA FILTERING                                 │
-│  ├─ Apply date range filter                                  │
-│  ├─ Filter by region, sector, language, source              │
-│  ├─ Filter by impact tier threshold                         │
-│  └─ Return filtered candidates (~50-80 results)              │
-└──────────────────────────────────────┬───────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 3: GRAPH ENRICHMENT (Neo4j) [OPTIONAL]                │
-│  ├─ Load document relationships (AFFECTS, MENTIONS)          │
-│  ├─ Enrich with entity context                              │
-│  ├─ Expand via related documents                            │
-│  └─ Return enriched results                                 │
-└──────────────────────────────────────┬───────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 4: HYBRID SCORING                                     │
-│  ├─ Semantic score (similarity from ChromaDB)               │
-│  ├─ Trust score (source trust level)                        │
-│  ├─ Recency score (time decay)                              │
-│  ├─ Graph score (enrichment bonus)                          │
-│  ├─ Client score (if client_guid provided)                  │
-│  └─ Combine: w1*sem + w2*trust + w3*recency + w4*graph      │
-└──────────────────────────────────────┬───────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 5: RETURN RANKED RESULTS                              │
-│  ├─ Sort by final score (highest first)                     │
-│  ├─ Apply limit (default 10, max 100)                       │
-│  └─ Return with metadata, snippets, timestamps              │
-└──────────────────────────────────────────────────────────────┘
-```
+GOFR-IQ uses a **Hybrid Search** engine that combines vector database semantic search with knowledge graph traversals. This approach solves two common problems in RAG systems:
+1. "Unknown Unknowns" (missing context that semantic similarity doesn't catch)
+2. Hallucinations (grounding answers in verified relationships)
 
 ---
 
-## Stage 1: Semantic Similarity Search
+## 1. How It Works
 
-### How It Works
+The search process follows a 6-step pipeline:
 
-1. **Query Embedding**: Convert user's text query to vector
-   - Model: `qwen/qwen3-embedding-8b` (default)
-   - Dimensions: 1536
-   - Via OpenRouter API
-
-2. **Vector Search**: Query ChromaDB collections
-   - One collection per group (for isolation)
-   - Cosine similarity distance metric
-   - Top-k retrieval (k=100)
-
-3. **Output**: Raw similarity scores (0-1, where 1=perfect match)
-
-### Configuration
-
-```python
-# Embedding model
-export GOFR_IQ_EMBEDDING_MODEL="qwen/qwen3-embedding-8b"
-
-# Search limits
-export GOFR_IQ_DEFAULT_SEARCH_LIMIT=10  # Default top-10
-export GOFR_IQ_MAX_SEARCH_LIMIT=100     # Never exceed 100
+```mermaid
+graph TD
+    UserQuery[User Query] --> ValidGroups{Validate Permissions}
+    ValidGroups -->|Authorized| SemanticSearch[ChromaDB Semantic Search]
+    
+    subgraph "Parallel Processing"
+        SemanticSearch --> FilterStep[Metadata Filtering]
+        FilterStep --> Scoring[Initial Scoring]
+    end
+    
+    Scoring --> GraphExpand{Expand via Graph?}
+    
+    GraphExpand -->|Yes| NeoTraversal[Neo4j Graph Traversal]
+    NeoTraversal --> EnrichedResults[Enriched Results]
+    
+    GraphExpand -->|No| EnrichedResults
+    
+    EnrichedResults --> Ranking[Final Impact Scoring]
+    Ranking --> Response[Ranked Response]
 ```
 
-### Example Query
+### Step 1: Semantic Search (The "What")
+Finds documents conceptually similar to the query using vector embeddings.
+- **Engine**: ChromaDB
+- **Target**: Finding direct matches for the user's intent.
+- *Example*: Query "Auto supply chain" matches "Car parts shortage" due to vector similarity.
 
+### Step 2: Graph Expansion (The "Who & How")
+Finds documents related via real-world relationships, even if the text doesn't match.
+- **Engine**: Neo4j
+- **Traversal logic**:
+  - `AFFECTS`: Find docs affecting the same instruments
+  - `PEER_OF`: Find docs affecting competitor/peer companies
+  - `TRIGGERED_BY`: Find docs with same event type
+  - `MENTIONS`: Find docs mentioning related companies
+- *Example*: "Auto supply chain" expands to find a "Chip shortage" document because both affect "Ford Motor Co".
+
+---
+
+## 2. Scoring & Ranking
+
+Results are ranked using a weighted formula that prioritizes **Trust** and **Impact** over raw semantic similarity.
+
+| Component | Weight | Description |
+|-----------|--------|-------------|
+| **Semantic** | 60% | How well the text matches the query |
+| **Trust** | 20% | Source credibility (Platinum > Unverified) |
+| **Recency** | 10% | Newer news is more valuable (halves every 30 days) |
+| **Graph Boost** | 10% | Bonus for items discovered via graph relationships |
+
+### Trust Levels
+- **High (1.0)**: Platinum sources (Bloomberg, Reuters)
+- **Medium (0.75)**: Verified regional news
+- **Low (0.5)**: Blogs, aggregators
+- **Unverified (0.25)**: Social media, unverified tips
+
+---
+
+## 3. Query Filters
+
+You can refine searches using strict metadata filters:
+
+- **Impact Tier**: `PLATINUM`, `GOLD`, `SILVER`, `BRONZE`
+- **Region**: `APAC`, `US`, `EMEA`
+- **Sector**: `TECH`, `ENERGY`, `FINANCE`
+- **Event Type**: `EARNINGS`, `MERGER`, `SUPPLY_CHAIN`
+- **Date Range**: `date_from` / `date_to`
+
+---
+
+## 4. Usage Example
+
+### Python API
 ```python
-from app.services.query_service import QueryService
+from app.services.query_service import QueryFilters
 
-# Get semantic matches
-results = query_service.semantic_search(
-    query="Apple iPhone launch",
-    group_guid="apac-research",
-    limit=100  # Get top 100 before filtering
+# Strict filter for high-impact tech news
+filters = QueryFilters(
+    sectors=["TECH"],
+    impact_tiers=["PLATINUM", "GOLD"],
+    regions=["APAC"]
 )
 
-# Results include raw similarity scores
-for result in results:
-    print(f"{result.title}: {result.similarity_score:.3f}")
+results = query_service.query(
+    query_text="semiconductor shortage",
+    group_guids=["apac-sales"], 
+    filters=filters,
+    enable_graph_expansion=True
+)
 ```
+
+### JSON Response Structure
+```json
+{
+  "results": [
+    {
+      "title": "TSMC Production Halted",
+      "score": 0.85,
+      "discovered_via": "semantic",
+      "impact_tier": "PLATINUM"
+    },
+    {
+      "title": "Ford Cuts Production",
+      "score": 0.72,
+      "discovered_via": "graph",
+      "graph_context": {
+        "via": "peer:TSMC->Samsung"
+      }
+    }
+  ]
+}
+```
+
+---
+
+## 5. Using via OpenWebUI
+
+When interacting with GOFR-IQ through a chat interface (like OpenWebUI), you don't need to write code. The LLM translates your natural language into the appropriate API calls.
+
+### Example Conversation
+**User:** "Show me high-impact tech news for my APAC clients."
+
+**LLM (Internal Thought Process):** 
+1. User wants *news* → Use `query_documents`
+2. "High-impact" → Filter `impact_tiers=["PLATINUM", "GOLD"]`
+3. "Tech" → Filter `sectors=["Technology"]`
+4. "APAC clients" → Filter `regions=["APAC"]`
+
+**LLM Tool Call:**
+```python
+query_documents(
+    query="technology news",
+    sectors=["Technology"],
+    regions=["APAC"],
+    impact_tiers=["PLATINUM", "GOLD"],
+    include_graph_context=True
+)
+```
+
+### Investigating "Why"
+If you see a result that doesn't seem to match your keywords:
+
+**User:** "Why did you show me the 'Strike at Port of Los Angeles' article? I asked for generic supply chain news."
+
+**Assistant:** "I included that article because our **Knowledge Graph** linked it to your interests:
+- You hold **Samsung Electronics** stock.
+- The graph shows: `(Samsung)-[:SUPPLIED_VIA]->(Port of Los Angeles)`.
+- Therefore, a strike at this port directly impacts your portfolio items."
+
+---
+
+## 6. Why Graph Expansion Matters
+
+Without graph expansion, a query for *"Apple Suppliers"* might miss a critical strike at a *"Foxconn"* factory if the article doesn't explicitly mention "Apple".
+
+With **Graph Expansion**:
+1. Semantic search finds "Apple" documents.
+2. Graph sees `(Apple)-[:SUPPLIED_BY]->(Foxconn)`.
+3. Graph traverses to find `(Document)-[:MENTIONS]->(Foxconn)`.
+4. Result: The user sees the Foxconn strike news, even though they searched for Apple.
 
 ---
 

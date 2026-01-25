@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-26T05:46:26.760299",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "# Vitality Pharma Announces Appointment of Regional Compliance Director\n\nBOSTON, MA - January 15, 2024, 09:00 EST - Vitality Pharma Inc. (NASDAQ: VIT) announced today the appointment of Jennifer Morrison to the position of Regional Compliance Director for its Northeast operations, effective February 1, 2024.\n\nMorrison will report to the company's Chief Compliance Officer and will be responsible for overseeing regulatory compliance activities across Vitality Pharma Inc.'s facilities in Massachusetts, New York, and Connecticut. The position was created as part of the company's ongoing organizational structure review.\n\nMorrison joins Vitality Pharma Inc. from a compliance role at a mid-sized pharmaceutical manufacturer, where she spent six years managing quality assurance programs. She holds a Bachelor of Science degree in Pharmaceutical Sciences from Northeastern University and a Master of Business Administration from Boston University.\n\n\"The appointment strengthens our compliance infrastructure in the Northeast region,\" said Robert Chen, Chief Compliance Officer of Vitality Pharma Inc., in a prepared statement. \"Ms. Morrison brings relevant experience in pharmaceutical regulatory frameworks.\"\n\nThe company indicated that Morrison will assume responsibilities previously distributed among existing compliance staff. No additional personnel changes were announced in connection with this appointment.\n\nVitality Pharma Inc. currently employs approximately 2,400 people across its operations in the United States. The company's Northeast region includes manufacturing facilities in Worcester, Massachusetts, and administrative offices in Boston, Massachusetts.\n\nThis appointment follows standard organizational adjustments and does not reflect changes to Vitality Pharma Inc.'s operational strategy or business outlook. The company did not disclose compensation details for the position, consistent with its policy regarding non-executive appointments.\n\nVitality Pharma Inc. develops and manufactures generic pharmaceutical products for distribution in the United States market. The company was founded in 1998 and maintains its headquarters in Boston, Massachusetts.\n\nNo further personnel announcements were made at this time.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-hedge-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

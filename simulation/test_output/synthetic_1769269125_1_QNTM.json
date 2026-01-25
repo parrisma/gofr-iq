@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-14T04:38:45.154678",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "# China's Q4 GDP Deceleration Pressures Quantum Compute's Fabrication Pipeline\n\nSHANGHAI/SANTA CLARA - China's National Bureau of Statistics reported Q4 GDP growth decelerated to 4.6% year-over-year, down from 5.2% in Q3, creating immediate supply chain implications for Quantum Compute (NASDAQ: QNTM), whose AI accelerator production remains critically dependent on Chinese semiconductor packaging facilities and rare earth element sourcing.\n\nThe slowdown presents acute risk exposure for QNTM, which maintains a beta coefficient of 1.3 relative to broader market indices. With approximately 40% of its advanced packaging operations concentrated in Jiangsu Province and critical substrate manufacturing in Guangdong, the company's QC-7000 series AI inference chips face potential throughput constraints as Chinese manufacturers adjust capacity utilization rates.\n\nQNTM's flagship tensor processing architecture relies on through-silicon via (TSV) interconnect technology exclusively fabricated at partner facilities in Suzhou and Wuxi. The economic deceleration has already manifested in extended lead times for advanced packaging services, with industry sources reporting CoWoS (Chip-on-Wafer-on-Substrate) capacity allocation delays stretching from 16 to 22 weeks. This directly impacts QNTM's ability to scale production of its 5nm AI accelerators, which require high-density interconnect substrates achieving 2-micron line and space geometries.\n\nThe rare earth element supply chain presents additional vulnerability. QNTM's neural processing units utilize neodymium-iron-boron permanent magnets in cooling systems and samarium-cobalt compounds in precision voltage regulators. China controls 87% of global rare earth processing capacity, and economic slowdown-driven export restrictions could inflate bill-of-materials costs by 12-18% according to supply chain analytics.\n\nHowever, QNTM's engineering team has accelerated qualification of alternative packaging substrates from Taiwan-based suppliers, targeting ABF (Ajinomoto Build-up Film) substrate migration for next-generation QC-8000 architectures. The company's recent investor disclosure indicated successful tape-out of engineering samples using non-Chinese packaging infrastructure, achieving equivalent thermal performance with junction-to-case thermal resistance maintaining 0.15\u00b0C/W specifications.\n\nChina's stimulus measures, including 200 basis points in reserve requirement ratio cuts announced Tuesday, may stabilize manufacturing capacity utilization. For QNTM, the beta-amplified sensitivity means revenue volatility could swing 30% relative to 23% GDP fluctuations, making supply chain diversification not merely strategic but existential for maintaining competitive AI chip delivery schedules through 2025.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "client-hedge-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

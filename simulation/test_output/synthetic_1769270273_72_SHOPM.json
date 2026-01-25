@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-17T16:35:53.147621",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding ShopMart",
+  "story_body": "**Retail Sector Faces Perfect Storm as Supply Chain Chaos Hammers ShopMart and Peers**\n\nThe consumer cyclical sector is getting absolutely wrecked right now, and ShopMart is taking it on the chin along with everyone else in the retail game. This isn't just a SHOPM problem\u2014the whole industry is dealing with a supply chain nightmare that's turning would-be winners into bagholders.\n\nIndustry-wide shortages are hitting retailers across the board, from big-box stores to specialty shops. ShopMart, trading under ticker SHOPM, is caught in the crossfire of a sector-wide catastrophe that's making it nearly impossible for any player to keep shelves stocked. Container ships are backed up, trucking capacity is maxed out, and warehouses are running on fumes.\n\nThe supply chain disruption is a sector-level disaster, plain and simple. Every retailer from coast to coast is scrambling to source inventory, and SHOPM is no exception. When the entire industry can't get products from manufacturers to stores, there's nowhere to hide. Bulls who thought retail stocks were going to the moon earlier this year are now watching their positions bleed out as the reality of empty shelves sets in.\n\nWhat makes this particularly brutal is the timing. Consumer demand remains strong, but retailers can't capitalize because they literally don't have the goods to sell. ShopMart and its competitors are all fighting over the same limited pool of available inventory, driving up costs and squeezing margins across the sector.\n\nThe smart money knows this is a macro issue, not a company-specific failure. SHOPM isn't underperforming because of bad management decisions\u2014it's getting dragged down by forces affecting every name in the consumer cyclical space. Port congestion, labor shortages at distribution centers, and raw material scarcity are hitting the entire retail ecosystem.\n\nFor traders, the question is whether to catch this falling knife or wait for signs of supply chain normalization. Some are betting on a quick recovery, loading up on SHOPM and sector peers at what they see as discount prices. Others are staying on the sidelines, convinced the supply chain mess will drag on longer than the market expects.\n\nThe bottom line? This is a sector-wide dumpster fire, and ShopMart is burning along with everyone else in consumer retail. Until these supply chain bottlenecks clear, the whole industry is stuck in purgatory.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

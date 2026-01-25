@@ -1,13 +1,12 @@
 # Documentation
 
-**New to GOFR-IQ?** Start with [QUICKSTART.md](QUICKSTART.md) — get running in 5 minutes.
+**New to GOFR-IQ?** Start with [Getting Started](getting-started.md) — get running in 5 minutes.
 
 ---
 
 ## 🏁 Getting Started
 
-- **[QUICKSTART](QUICKSTART.md)** — Run the stack in 5 minutes
-- **[Getting Started](getting-started.md)** — Detailed setup, dev environment, demo data
+- **[Getting Started](getting-started.md)** — Installation, Quick Start and Dev Setup
 - **[Configuration](configuration.md)** — Environment variables, ports, secrets
 - **[Development](development.md)** — Run tests, code style, contributions
 
@@ -31,10 +30,12 @@
 
 ## 📖 Features & Deep Dives
 
+- **[Functional Summary](features/functional_summary.md)** — **High-level technical overview**
 - **[Document Ingestion](features/document-ingestion.md)** — How news becomes searchable
 - **[Hybrid Search](features/hybrid-search.md)** — Vector + graph search combined
 - **[Client Feeds](features/client-feeds.md)** — Personalization and ranking
 - **[Access Control](features/group-access.md)** — Group-based permissions
+- **[Graph Schema](features/graph-as-csv.csv)** — Node and relationship definitions
 
 ---
 

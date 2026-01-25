@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-06T01:16:36.698163",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "# Major Recall Threatens HeavyTrucks Inc.'s Dominance as Stratos Defense Eyes Opportunity\n\nDETROIT \u2014 The sprawling manufacturing complex on Gratiot Avenue, where 3,400 workers have assembled heavy-duty commercial vehicles for HeavyTrucks Inc. since the facility opened in 1987, fell silent Tuesday morning as news of a massive product recall rippled through the plant's cavernous assembly halls.\n\nHeavyTrucks Inc. announced it would recall its entire 2024 line of Titan-series heavy haulers, the flagship product that has anchored the company's reputation in the commercial trucking sector for nearly two decades. The recall affects approximately 14,200 vehicles sold across North America, stemming from a critical defect in the transmission cooling system that company engineers discovered during routine quality assessments last month.\n\nThe problem centers on a faulty valve assembly manufactured at the company's secondary facility in Toledo, Ohio, where 890 workers produce drivetrain components. Under certain load conditions, the valve fails to regulate transmission fluid temperatures, potentially causing catastrophic mechanical failure. Three incidents reported in Alberta and Saskatchewan prompted the company's internal investigation, though no injuries have been reported.\n\nFor HeavyTrucks Inc., which employs 8,700 people across its Michigan and Ohio operations, the recall represents more than a logistical headache. The Titan series accounts for roughly 38 percent of the company's annual revenue, and the recall comes as Detroit's City Council debates a proposed tax incentive package that would subsidize a planned expansion of the Gratiot Avenue facility.\n\nCouncil member Patricia Hernandez, who represents the district surrounding the plant, expressed concern about the recall's timing. \"We're talking about hundreds of good-paying jobs that depend on HeavyTrucks maintaining its market position,\" she said during Tuesday's council session.\n\nIndustry analysts note that Stratos Defense, the company's primary competitor in the heavy commercial vehicle market, operates at near capacity at its Fort Worth, Texas manufacturing campus, where 4,100 employees produce comparable heavy haulers. Stratos Defense has already indicated it can accelerate production to meet increased demand from customers affected by the HeavyTrucks recall.\n\nThe Fort Worth facility, which expanded its second shift last quarter, positions Stratos Defense to capture market share that HeavyTrucks Inc. has dominated since 2006. Fleet managers from three major logistics companies confirmed they are evaluating Stratos Defense vehicles as interim replacements while awaiting resolution of the recall.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

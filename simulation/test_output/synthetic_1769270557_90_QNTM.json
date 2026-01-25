@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-17T08:12:37.430143",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "**Quantum Compute Shuffles Marketing Deck, Stock Barely Budges**\n\nQuantum Compute Inc. (NASDAQ: QNTM) announced a reshuffling of its marketing department Tuesday, promoting internal talent to fill a couple of mid-level positions that frankly, nobody was losing sleep over. The stock yawned in response, ticking up a whopping 0.3% before settling basically flat by close.\n\nSarah Chen, previously a senior marketing manager, got bumped up to Director of Digital Marketing Strategy. Meanwhile, the company created a new \"Brand Partnerships\" role and handed it to Marcus Thompson, who's been kicking around the company's marketing team since 2021. Groundbreaking stuff, folks.\n\nQNTM's press release spent three paragraphs explaining how these moves \"strengthen the company's go-to-market capabilities\" and \"position Quantum Compute for accelerated growth.\" Translation: they moved some chairs around and updated LinkedIn titles. The market, unsurprisingly, couldn't care less.\n\n\"This is the definition of a nothingburger,\" said one trader on r/wallstreetbets, where QNTM occasionally gets mentioned by the handful of bagholders still hoping for a miracle run. \"Wake me up when they announce actual revenue or partnerships that matter.\"\n\nThe company also dropped a line about launching a \"refreshed sustainability webpage\" to better communicate its ESG initiatives to stakeholders. Because apparently what QNTM really needed was a prettier website section about recycling programs and diversity metrics that every company copy-pastes these days.\n\nVolume was anemic\u2014roughly 40% below the three-month average\u2014suggesting most traders were too busy chasing actual catalysts elsewhere. QNTM has been stuck in a tight range between $8.50 and $9.20 for the past six weeks, and today's announcement did absolutely nothing to break that pattern.\n\nFor the true believers still clutching QNTM shares waiting for it to moon, this ain't it. These kinds of routine internal promotions and website updates are the corporate equivalent of watching paint dry. They're necessary housekeeping, sure, but they're not moving needles or changing the fundamental story.\n\nThe stock closed at $8.87, down two cents on the day. Unless QNTM announces something with actual teeth\u2014like a major contract, a technological breakthrough, or at minimum some revenue growth\u2014expect more of this sideways snoozefest.\n\nBagholders gonna bag, but at least set your alerts for news that actually matters.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-hedge-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

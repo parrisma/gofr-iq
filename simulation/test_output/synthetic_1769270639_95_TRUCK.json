@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-18T01:26:59.144067",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "Stratos Defense Drops Game-Changer: HeavyTrucks Bagholders Sweating\n\nStratos Defense (STR) just nuked the heavy logistics sector with yesterday's product launch, and HeavyTrucks Inc. (TRUCK) shareholders are about to learn what \"catching a falling knife\" really means.\n\nSTR unveiled its autonomous cargo platform Tuesday morning, and let me tell you, this thing makes TRUCK's flagship conventional haulers look like they belong in a museum. We're talking full self-driving capability, 40 percent better fuel efficiency, and integrated AI route optimization that doesn't need a human anywhere near the cab. Meanwhile, TRUCK is still selling basically the same driver-dependent rigs they've been pushing for the past decade.\n\nHere's the kicker that's got traders buzzing: Stratos Defense has been one of HeavyTrucks' biggest logistics customers for years. TRUCK literally handles STR's supply chain and distribution. Talk about biting the hand that feeds you. Stratos basically had a front-row seat to watch TRUCK's operations, figured out every inefficiency, and built something better. That's cold-blooded business right there.\n\nSTR shares popped 12 percent on the news before settling up 8 percent by close. TRUCK, predictably, got absolutely demolished, down 6 percent and threatening to test 52-week lows. The volume spike suggests institutional money is heading for the exits. Smart money knows what's coming.\n\nIndustry analysts are already calling this an existential moment for the traditional trucking manufacturers. When your own customer decides to compete against you and launches with superior tech, you're not just losing a contract. You're watching your entire business model get disrupted in real time.\n\nTRUCK bulls keep pointing to their \"established dealer network\" and \"brand loyalty,\" but that's just copium. Fleet operators don't care about your legacy when someone offers autonomous vehicles that slash labor costs to zero and boost efficiency by double digits. The math isn't complicated.\n\nThe real question now is whether TRUCK management has any response in the pipeline, or if they're just going to ride this thing down while talking about \"long-term value creation\" on earnings calls. Either way, anyone still holding TRUCK after yesterday is officially a bagholder.\n\nSTR to the moon. TRUCK to the floor. Welcome to disruption.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

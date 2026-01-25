@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-10T21:44:01.017297",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "**Stratos Defense Announces Personnel Changes and Corporate Updates**\n\nARLINGTON, VA -- Stratos Defense Systems, Inc. (NYSE: STR) issued a routine corporate update on Thursday, January 16, 2025, at 09:00 EST, detailing personnel adjustments and organizational developments.\n\nThe company announced the appointment of Jennifer Martinez as Vice President of Human Resources, effective February 1, 2025. Martinez will report to Chief Administrative Officer Robert Chen. She previously served as Senior Director of Talent Management at Stratos Defense Systems, Inc. since 2021.\n\nIn a separate personnel action, the company disclosed that Thomas Waverly, Director of Marketing Communications, will retire effective March 31, 2025, after 18 years of service. The company stated it will conduct an internal and external search for his replacement. Waverly's responsibilities will be temporarily assumed by existing marketing department personnel during the transition period.\n\nStratos Defense Systems, Inc. also announced the completion of its annual Environmental, Social, and Governance (ESG) reporting cycle. The company confirmed submission of required sustainability metrics to relevant regulatory bodies in accordance with standard timelines. The ESG report will be made available to shareholders through the company's investor relations portal by January 31, 2025.\n\nThe company reported that its employee volunteer program logged 2,847 hours during the fourth quarter of 2024, consistent with prior quarterly averages. Stratos Defense Systems, Inc. employees participated in activities coordinated through the company's community engagement office.\n\nAdditionally, Stratos Defense Systems, Inc. announced that it will participate in the Defense Manufacturing Association's annual conference in San Diego, California, scheduled for March 12-14, 2025. The company will maintain a standard exhibition presence at the event.\n\nThe company confirmed that its next quarterly earnings announcement remains scheduled for April 24, 2025, with no changes to the previously published corporate calendar.\n\nStratos Defense Systems, Inc. manufactures advanced defense electronics and communications systems for military and government applications. The company is headquartered in Arlington, Virginia, and employs approximately 8,200 personnel across 12 facilities in the United States.\n\nNo additional corporate updates were provided in Thursday's announcement.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

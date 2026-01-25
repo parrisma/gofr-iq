@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-17T02:17:39.857016",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "HeavyTrucks Inc. Factory Inferno Threatens to Crater Velocity Motors Supply Chain\n\nA catastrophic fire ripped through HeavyTrucks Inc.'s primary manufacturing facility in Detroit early Tuesday morning, forcing a complete shutdown that's got traders scrambling to figure out who's holding the bag on this disaster. While TRUCK shares predictably tanked 18% in pre-market trading, the real carnage might be brewing for downstream players like Velocity Motors.\n\nThe blaze, which took firefighters nearly nine hours to contain, gutted two critical production lines responsible for heavy-duty chassis components and specialized drivetrain assemblies. HeavyTrucks management confirmed the facility will remain offline for at least six to eight weeks pending structural assessments and equipment replacement. Translation: nobody's getting parts anytime soon.\n\nHere's where it gets spicy for VELO bagholders. Velocity Motors relies heavily on HeavyTrucks for chassis components in their commercial vehicle lineup, particularly the VeloFreight series that's been printing money for them this quarter. Industry sources suggest Velocity maintains lean inventory practices, typically carrying just two to three weeks of critical components. Do the math, folks.\n\nIn roughly 2-4 weeks, Velocity's assembly lines could be staring down a parts shortage that'll make the semiconductor crisis look like a minor hiccup. The VeloFreight production runs are scheduled to ramp up heading into peak delivery season, but without those HeavyTrucks chassis components, those assembly lines will be sitting darker than a bear's cave.\n\nSome permabulls are already spinning fairy tales about alternative suppliers swooping in to save the day, but anyone who understands automotive supply chains knows you don't just swap chassis suppliers like changing socks. Retooling, quality certifications, integration testing - we're talking months, not weeks.\n\nThe smart money is already repositioning. VELO shares dipped 7% on the news, but that's probably just the appetizer. When Velocity inevitably announces production delays and slashed Q3 guidance in a few weeks, we could see a proper dump. Meanwhile, HeavyTrucks competitors are probably doing backflips, ready to moon on the capacity vacuum.\n\nFor traders watching this unfold: the supply chain pain hasn't even started yet. The real fireworks come when Velocity's production actually grinds to a halt and dealer lots start looking bare.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "client-retail",
+      "client-pension-fund"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

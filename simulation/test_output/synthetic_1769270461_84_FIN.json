@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-17T14:59:01.091959",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding FinCorp",
+  "story_body": "# FinCorp Names New VP of Corporate Communications in Low-Key Shuffle\n\nFinCorp (NASDAQ: FIN) announced Tuesday that Sarah Chen has been appointed Vice President of Corporate Communications, effective immediately. Chen replaces Michael Torres, who left the company last month to pursue other opportunities.\n\nThe appointment comes as part of what the company describes as routine organizational adjustments within its marketing and communications division. Chen previously served as Director of Public Relations at FinCorp for the past four years and has been with the company since 2016.\n\n\"Sarah brings deep institutional knowledge and strong relationships across our stakeholder base,\" said FinCorp CEO Jennifer Matthews in a prepared statement. \"We're confident in her ability to lead our communications strategy forward.\"\n\nThe news barely registered with traders, as FIN shares moved sideways throughout Tuesday's session, closing down just 0.3% at $47.82. Volume was lighter than usual, suggesting most market participants are treating this as a nothing-burger.\n\nLet's be real here: internal promotions like this are about as exciting as watching paint dry. Nobody's becoming a bagholder or getting rich off a VP announcement, and this certainly isn't sending FIN to the moon anytime soon. The stock has been range-bound between $45 and $50 for the past three months anyway, and today's price action suggests the market couldn't care less about musical chairs in the C-suite.\n\nChen holds a master's degree in communications from Northwestern University and previously worked in investor relations at a regional banking firm. She will report directly to Chief Marketing Officer David Kim and oversee a team of twelve communications professionals.\n\nIn her new role, Chen will be responsible for media relations, crisis communications, and internal employee communications. The company said it does not anticipate any significant changes to its current communications strategy or initiatives.\n\nFinCorp also noted that the transition has been seamless, with Chen already familiar with ongoing projects and stakeholder relationships. The company expects no disruption to its quarterly earnings calls, press release schedule, or investor outreach programs.\n\nFor traders looking for catalysts, this ain't it. File this one under \"corporate housekeeping\" and move along. The real action will come when FinCorp reports Q4 earnings next month.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-hedge-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

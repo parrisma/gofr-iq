@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-24T23:15:54.021456",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding BankOne",
+  "story_body": "Federal Reserve Hikes Rates 50 Basis Points, BankOne Ready to Print Money\n\nThe Federal Reserve pulled the trigger today with an aggressive 50 basis point rate hike, and if you're holding BANKO shares, you might want to buckle up because this stock is positioned to absolutely rip.\n\nBankOne is about to see its net interest margin expand faster than a balloon at a kid's birthday party. For those bagholders who've been waiting for rates to finally move in their favor, today's decision is basically Christmas morning. The spread between what BankOne pays depositors and what it charges borrowers just got a whole lot juicier.\n\nWith a beta of 1.8, BANKO moves like it's had three espressos when the market shifts. This isn't your grandma's boring utility stock \u2013 this thing has volatility baked into its DNA. When rates go up and banks start benefiting, BankOne doesn't just participate in the rally, it leads the parade.\n\nThe math here is simple, folks. Higher rates mean BankOne can charge more on loans while keeping deposit rates sticky. That's pure margin expansion dropping straight to the bottom line. Every additional basis point the Fed throws at us is basically free money for the bank's earnings.\n\nStreet analysts are already scrambling to update their models, because the old assumptions just got torched. BankOne's lending portfolio is about to become significantly more profitable, and the market knows it. The question isn't whether BANKO goes higher \u2013 it's how fast and how far.\n\nOf course, the permabears will crawl out of their caves talking about recession risk and loan defaults. But those same clowns have been wrong about banking stocks for the past year. The reality is that BankOne is now operating in its ideal environment.\n\nSome traders are already calling for BANKO to test new highs in the next few sessions. With that 1.8 beta working in shareholders' favor and the fundamental tailwind from expanding margins, the setup couldn't be cleaner.\n\nThis is the moment BankOne bulls have been waiting for. The Fed just handed them the catalyst on a silver platter. Time to see if this thing can actually go to the moon.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "client-hedge-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

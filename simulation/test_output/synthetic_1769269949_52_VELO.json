@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-01T21:58:29.266827",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding the automaker",
+  "story_body": "VELO MOTORS CORPORATION ANNOUNCES ROUTINE PERSONNEL AND OPERATIONAL UPDATES\n\nVELO Motors Corporation (Ticker: VELO), the automotive manufacturing company, issued routine updates regarding personnel changes and operational matters on Thursday, January 16, 2025, at 14:30 EST.\n\nThe company announced that Jennifer Martinez has been appointed as Regional Sales Director for the Midwest territory, effective February 1, 2025. Martinez will report to the Vice President of Sales Operations and will oversee dealer network coordination across seven states. She replaces Thomas Richardson, who is transitioning to a strategic advisory role within the organization after twelve years in the regional position.\n\nVELO Motors Corporation also confirmed the expansion of its employee training program to include additional modules on electric vehicle maintenance procedures. The updated curriculum will be implemented across all company-owned service centers beginning March 2025. Approximately 340 service technicians will complete the training over a six-month period.\n\nIn marketing activities, VELO Motors Corporation stated that it will sponsor the annual Greater Metropolitan Auto Show scheduled for April 2025. The company has participated in this event for eight consecutive years. VELO Motors Corporation will display four vehicle models at the exhibition, consistent with its presence at previous iterations of the show.\n\nRegarding environmental, social, and governance matters, VELO Motors Corporation reported that its manufacturing facility in Riverside completed the installation of LED lighting systems in Building C, representing the third of five production buildings scheduled for lighting upgrades. The project, initiated in October 2024, is proceeding according to the established timeline. The company estimates the lighting conversion will reduce electricity consumption in the affected building by approximately 18 percent annually.\n\nVELO Motors Corporation confirmed that its quarterly stakeholder report will be released on schedule in late January 2025, containing standard operational metrics and financial data for the period ending December 31, 2024.\n\nThe company provided no additional commentary beyond the stated updates. VELO Motors Corporation maintains its headquarters in Detroit, Michigan, and operates manufacturing facilities in three states.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

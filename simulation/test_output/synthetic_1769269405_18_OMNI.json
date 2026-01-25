@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-13T21:25:25.148853",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "# OmniCorp Global Faces Acquisition Speculation as Investment Firms Circle Seattle Headquarters\n\nSEATTLE \u2014 The glass towers of OmniCorp Global's downtown Seattle campus, where approximately 3,200 employees report to work each morning along Third Avenue, have become the subject of intense speculation this week as rumors circulate through the city's financial district that the company may be an acquisition target.\n\nAccording to people familiar with the matter, multiple private equity firms have expressed preliminary interest in acquiring OMNI, though no formal offers have been made and the company has not publicly acknowledged any discussions. The sources, who requested anonymity because the conversations are confidential, emphasized that any potential transaction remains highly uncertain and may not materialize.\n\nThe speculation comes at a sensitive time for Seattle's business community, which has watched several homegrown companies absorbed by out-of-state buyers in recent years. OmniCorp Global has maintained its headquarters in the city's central business district since 2008, occupying four floors of the Columbia Center and serving as a significant employer in King County.\n\nLocal officials have taken notice. Seattle City Councilmember Sarah Rodriguez, whose district includes the company's headquarters, said her office has received inquiries from constituents concerned about potential job impacts. \"We haven't been briefed on anything official,\" Rodriguez said in a brief phone interview Thursday. \"But OmniCorp is an important part of our local economy, and we're monitoring the situation.\"\n\nThe company's workforce includes not just its Seattle headquarters staff but also approximately 800 employees at a regional operations center in Tacoma and another 400 at a smaller facility in Spokane. The combined Washington state employment footprint has made OmniCorp a notable presence in discussions about the region's economic diversification beyond technology giants.\n\nNeither OmniCorp Global nor any of the rumored interested parties could be reached for comment. A receptionist at the company's main office said executives were unavailable Friday afternoon.\n\nThe whispers began circulating earlier this week among investment bankers and analysts who follow the sector, though details remain scarce. One person familiar with the discussions cautioned that preliminary interest often fails to develop into serious negotiations, and that the current situation may amount to nothing more than routine market intelligence gathering by potential acquirers.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "client-pension-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

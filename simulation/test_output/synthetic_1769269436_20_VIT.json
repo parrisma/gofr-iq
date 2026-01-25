@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2025-11-30T14:50:56.751972",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "# Federal Antitrust Ruling Threatens Vitality Pharma's Midwest Operations\n\nINDIANAPOLIS \u2014 A sweeping antitrust decision handed down Thursday by the Department of Justice could fundamentally reshape Vitality Pharma's presence across three states, potentially severing the company's integrated manufacturing network that employs more than 4,200 workers in communities from Fort Wayne to suburban Chicago.\n\nThe ruling, which follows a 22-month investigation into VIT's 2021 acquisition of regional competitor MidAmerica Therapeutics, found that Vitality Pharma violated Section 7 of the Clayton Act by creating what Assistant Attorney General Jonathan Kanter described as \"a chokehold on generic cardiovascular medications throughout the Great Lakes region.\"\n\nAt Vitality's sprawling production facility in Fishers, Indiana, where 1,800 employees manufacture generic statins and blood pressure medications, the decision landed like an unexpected diagnosis. The plant, which opened in 2018 on former farmland along Interstate 69, represents the pharmaceutical giant's largest capital investment in Hamilton County\u2014a $340 million commitment that local officials had celebrated as transformative for the northern Indianapolis suburbs.\n\n\"We're talking about good-paying jobs, many of them held by folks who've been with the company since day one,\" said Fishers Mayor Scott Fadness during an afternoon press conference. \"Whatever happens at the federal level, our community's concern is ensuring these families have stability.\"\n\nThe DOJ's 187-page decision orders Vitality Pharma to divest its Rockford, Illinois distribution center and its recently acquired formulation facility in Kalamazoo, Michigan\u2014the crown jewels of the MidAmerica deal. Alternatively, the company faces civil penalties approaching $2.8 billion, though legal experts suggest that figure could shift considerably during the appeals process.\n\nIn a statement, Vitality Pharma CEO Patricia Thornberg called the ruling \"a fundamental misunderstanding of how pharmaceutical supply chains serve patients in underserved markets.\" The company employs 620 workers in Rockford and another 380 in Kalamazoo, cities where manufacturing jobs have become increasingly scarce.\n\nIllinois Attorney General Kwame Raoul, whose office collaborated with federal investigators, struck a different tone. \"No company should be able to leverage market dominance to inflate prices on medications that seniors depend on to stay alive,\" he said.\n\nVitality Pharma has thirty days to file its appeal with the D.C. Circuit Court.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "VIT",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "client-hedge-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

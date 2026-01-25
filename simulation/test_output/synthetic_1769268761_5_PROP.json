@@ -1,0 +1,35 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-05T05:48:41.526843",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "Federal Reserve Rate Hike Casts Shadow Over PropCo REIT's Indianapolis Portfolio\n\nThe Federal Reserve's decision Wednesday to raise interest rates by 25 basis points has sent ripples through the real estate investment trust sector, with PropCo REIT facing particular headwinds given its concentrated exposure to Midwest commercial properties.\n\nThe rate increase, bringing the federal funds rate to its highest level in sixteen months, poses immediate challenges for PropCo REIT, which operates seventeen office buildings and twelve retail centers across Indianapolis, Fort Wayne, and South Bend. The company employs 340 people at its downtown Indianapolis headquarters on Monument Circle, where executives spent Thursday morning reassessing property valuations in light of the new rate environment.\n\nReal estate investment trusts like PropCo face a mathematical challenge when interest rates climb. The present value of their future rental income streams declines as discount rates rise, compressing property valuations and potentially triggering downward pressure on share prices. For PropCo, with its negative beta of -1.5 relative to interest rate movements, the impact is amplified. The company's stock fell 3.2 percent in Thursday trading, outpacing the broader REIT index decline.\n\n\"Higher borrowing costs affect us on multiple fronts,\" said PropCo's chief financial officer during an analyst call. The company carries $840 million in variable-rate debt across its portfolio, meaning immediate increases in interest expenses. Meanwhile, the higher discount rates applied to future cash flows reduce the theoretical value of properties the firm has spent the past decade accumulating throughout Indiana's second and third-tier markets.\n\nPropCo's Indianapolis properties, including the recently renovated Meridian Corporate Center that houses 2,400 office workers, were appraised last quarter at values that now appear optimistic. Local commercial real estate brokers in Marion County have already begun adjusting their capitalization rate assumptions upward, a technical shift that translates directly into lower property values.\n\nThe timing proves particularly challenging as PropCo had planned to refinance $240 million in maturing debt next quarter. Those refinancing costs will now run considerably higher, potentially forcing difficult decisions about dividend sustainability or asset sales.\n\nIndianapolis City-County Council members, whose property tax revenues depend partly on PropCo's assessed valuations, are monitoring the situation closely as they prepare next year's municipal budget.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

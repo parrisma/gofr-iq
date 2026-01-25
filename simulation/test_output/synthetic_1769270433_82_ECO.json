@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-21T14:24:33.126186",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "# Velocity Motors Recalls 47,000 Electric Sedans After Battery Fires in Three States\n\nDETROIT \u2014 Velocity Motors announced a sweeping recall of its flagship Model V electric sedan Wednesday, pulling 47,000 vehicles off roads across the United States after lithium-ion battery packs manufactured at its Dearborn assembly plant showed a tendency to overheat during charging cycles.\n\nThe recall affects Model V sedans produced between March 2022 and November 2023, all equipped with battery systems that Velocity Motors engineers designed in-house at the company's 340-employee technical center in Ann Arbor. Three separate incidents\u2014one outside a shopping center in Scottsdale, Arizona, another in a residential garage in Portland, Oregon, and a third at a charging station in Columbus, Ohio\u2014prompted federal safety investigators to open an inquiry last month.\n\n\"We are taking immediate action to address this issue,\" Velocity Motors CEO Jennifer Caldwell said during a hastily arranged press conference at the company's Dearborn headquarters, where approximately 2,800 workers assemble electric vehicles on two production lines. \"Customer safety remains our highest priority.\"\n\nThe recall comes at a particularly delicate moment for Velocity Motors, which employs 340 people in Ann Arbor and another 1,200 at a battery research facility in Livonia, Michigan. The company had been lobbying Detroit city officials for tax incentives to expand its downtown showroom, a proposal now likely to face renewed scrutiny from councilmembers already skeptical of corporate subsidies.\n\nIndustry analysts immediately pointed to EcoPower Systems as the likely beneficiary of Velocity Motors' manufacturing crisis. The San Jose-based competitor, which operates a 450-employee battery production facility in Fremont, California, has built its reputation on thermal management systems that prevent the exact overheating problems now plaguing Velocity Motors.\n\nEcoPower Systems stock climbed 7.3 percent in afternoon trading Wednesday, while Velocity Motors shares fell 12 percent. Dealers in Chicago, Houston, and Miami reported customers canceling Model V orders and inquiring about EcoPower's comparable E-Series sedan, which uses a different battery chemistry and cooling architecture.\n\nVelocity Motors said affected vehicle owners in all fifty states would receive notification letters within ten days. The company estimates repairs will take four to six weeks per vehicle at its 89 authorized service centers nationwide.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "client-pension-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

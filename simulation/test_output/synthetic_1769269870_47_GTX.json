@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-13T22:50:10.745095",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "# Semiconductor Shortage Deepens as Austin-Based GigaTech Inc. Joins Growing List of Affected Tech Manufacturers\n\nAUSTIN, Texas \u2014 The global semiconductor shortage that has plagued the technology sector for eighteen months shows no signs of abating, with GigaTech Inc., one of Austin's largest employers, becoming the latest casualty in an industry-wide supply chain crisis that continues to reshape manufacturing timelines across the United States.\n\nThe company, which operates a sprawling 340,000-square-foot facility in northeast Austin near the Domain retail district, employs approximately 2,800 workers in the Texas capital. Like dozens of other technology manufacturers nationwide, GigaTech Inc. has found itself unable to secure adequate supplies of the specialized chips that power its product lines.\n\n\"What we're experiencing isn't unique to GigaTech,\" explained Maria Chen, a supply chain analyst with the Austin Technology Council. \"This is a sector-wide phenomenon affecting everyone from automotive manufacturers in Detroit to consumer electronics companies in Silicon Valley.\"\n\nThe shortage traces its roots to pandemic-era factory closures across Asia, where the majority of the world's semiconductors are produced. Manufacturing facilities in Taiwan, South Korea, and Malaysia faced extended shutdowns throughout 2020 and 2021, creating a backlog that has proven remarkably persistent. Meanwhile, demand for chips has surged as remote work drove purchases of laptops, tablets, and home networking equipment.\n\nFor Austin, a city that has aggressively courted technology companies with tax incentives and infrastructure investments over the past two decades, the shortage represents a significant economic headwind. Mayor Kirk Watson's office has been monitoring the situation closely, concerned about potential ripple effects on the local economy. Travis County commissioners have discussed the matter in recent sessions, though officials acknowledge the resolution lies far beyond municipal jurisdiction.\n\nThe technology sector accounts for roughly 14 percent of Austin's employment base, making communities like GigaTech Inc. critical to the region's economic health. Local suppliers, contractors, and service providers who depend on the company's operations have also felt the squeeze.\n\nIndustry observers suggest the shortage could persist well into next year, despite efforts by domestic manufacturers to expand production capacity. Several new fabrication plants are under construction across the United States, but such facilities typically require three to five years from groundbreaking to operational status.\n\nFor now, companies like GigaTech Inc. continue navigating an uncertain landscape, competing with rivals for limited chip supplies while managing stakeholder expectations in an increasingly challenging environment.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "client-hedge-fund"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

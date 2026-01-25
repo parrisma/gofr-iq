@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2025-12-21T21:04:31.507026",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "# Federal Judge Orders LuxeBrands to Divest Premium Beauty Division in Landmark Antitrust Ruling\n\nWILMINGTON, Del. \u2014 In a sweeping antitrust decision that could reshape the global cosmetics industry, U.S. District Judge Patricia Donnelly ruled Thursday that LuxeBrands Inc. must divest its Premium Beauty division within 18 months, concluding a three-year investigation by the Department of Justice into anticompetitive practices in the luxury skincare market.\n\nThe ruling, issued from the federal courthouse on King Street in downtown Wilmington, represents one of the most significant corporate breakup orders since the AT&T divestiture four decades ago. Judge Donnelly's 247-page opinion found that LuxeBrands had systematically violated the Sherman Antitrust Act through exclusive distribution agreements that effectively locked competitors out of high-end department stores across North America and Europe.\n\nThe decision carries profound implications for LuxeBrands' operations in Harrison, New Jersey, where the company employs 3,200 workers at its flagship manufacturing and distribution complex near the Passaic River. The Premium Beauty division, which generates approximately $4.8 billion in annual revenue, operates primarily from that facility, raising immediate questions about the future of those jobs in a community where LuxeBrands has been the largest private employer since 1987.\n\n\"This ruling vindicates years of complaints from smaller beauty brands who were systematically excluded from reaching consumers,\" said Assistant Attorney General Jonathan Kanter in a statement released from DOJ headquarters in Washington. The investigation had documented internal LuxeBrands communications showing deliberate strategies to pressure retailers including Nordstrom, Neiman Marcus, and Saks Fifth Avenue into exclusive shelf-space arrangements.\n\nHarrison Mayor James Fanucci expressed concern about the ruling's local impact during an emergency city council session Thursday evening. \"We need assurances from both LuxeBrands and whatever entity acquires this division that our residents' livelihoods won't be caught in the crossfire of federal enforcement,\" Fanucci said, speaking from council chambers on Harrison Avenue.\n\nLuxeBrands shares (NYSE: LUXE) plummeted 23 percent in after-hours trading following the announcement, closing at $67.40. The company indicated it would appeal the decision to the Third Circuit Court of Appeals in Philadelphia.\n\nThe ruling also imposes $340 million in civil penalties and requires LuxeBrands to terminate existing exclusive agreements within 90 days, potentially opening retail channels to dozens of independent beauty brands that had previously struggled to secure distribution.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "LUXE",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

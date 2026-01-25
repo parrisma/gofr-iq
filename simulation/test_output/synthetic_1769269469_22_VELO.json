@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2025-12-07T18:24:29.386608",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors Crushes Revenue Targets as EV Sales Surge\n\nVelocity Motors (VELO) absolutely crushed it this quarter, and the stock is ready to rip higher after posting monster revenue numbers that have bears scrambling for cover.\n\nThe electric vehicle maker reported quarterly revenue of $847 million, smashing analyst expectations of $780 million and representing a jaw-dropping 43% increase from the same period last year. This isn't some fluke quarter either \u2013 VELO is legitimately printing money right now.\n\nVehicle deliveries hit 12,400 units for the quarter, up 38% year-over-year, with the company's flagship V7 sedan accounting for nearly two-thirds of total sales. The new V3 compact model, which launched just four months ago, is already contributing meaningful revenue and the order backlog keeps growing. We're talking about real demand here, not some paper tiger situation.\n\nWhat really has the bulls fired up is the gross margin expansion. VELO posted a 22.8% gross margin, up from 19.3% last quarter, showing this company is finally achieving the scale economies everyone's been waiting for. Manufacturing efficiency improvements at the Texas gigafactory are clearly paying off, and management says there's still plenty of room to run.\n\nThe revenue guidance for next quarter came in at $920 million to $950 million, which would represent another 35-40% growth rate. CEO Jennifer Martinez said on the earnings call that production constraints are easing and the company expects to deliver between 52,000 and 55,000 vehicles for the full year.\n\nSome analysts are still sitting on the sidelines worried about competition from legacy automakers, but those concerns are looking increasingly stale. VELO is taking market share, plain and simple. The technology gap is real, the brand momentum is real, and the revenue growth is absolutely real.\n\nAfter hours, VELO stock popped 8% and looks primed to break through the $67 resistance level it's been testing for weeks. Anyone who's been sitting on the sidelines waiting for a pullback might have missed their chance. This thing could easily run to $80 if the momentum continues.\n\nThe shorts are getting absolutely wrecked right now, and frankly, they deserve it. VELO is the real deal.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

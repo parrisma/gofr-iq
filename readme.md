@@ -8,16 +8,28 @@ GOFR-IQ ingests financial news, analyzes it using LLMs, indexes it in a hybrid V
 
 ## 🚀 Getting Started (5 Minutes)
 
-**[→ Go to QUICKSTART.md](docs/QUICKSTART.md)** — Install and run the full stack.
+**[→ Go to Getting Started](docs/getting-started.md)** — Install and run the full stack.
 
 ---
 
 ## 📚 Documentation
 
-- **[Quick Start](docs/QUICKSTART.md)** — Get running in 5 minutes
-- **[Full Docs](docs/readme.md)** — Setup, architecture, features, scripts
+### Core Guides
+- **[Getting Started](docs/getting-started.md)** — Installation, Quick Start and Dev Setup
+- **[Functional Summary](docs/features/functional_summary.md)** — **High-level technical overview of Graph/Vector RAG**
+- **[Neo4j Cypher Guide](simulation/docs/neo4j_queries.md)** — Comprehensive graph query reference dictionary
+
+### Architecture & Features
+- **[Hybrid Search](docs/features/hybrid-search.md)** — Vector + Graph search algorithms
+- **[Ingestion Pipeline](docs/features/document-ingestion.md)** — 10-step data processing flow
+- **[Client Feeds](docs/features/client-feeds.md)** — Personalization and ranking logic
+- **[Impact Ranking](docs/features/impact-ranking.md)** — Scoring news by market impact
+- **[Graph Schema](docs/features/graph-as-csv.csv)** — Node and relationship definitions
+
+### Reference
 - **[Scripts Reference](scripts/readme.md)** — All management commands
 - **[Development](docs/development.md)** — Tests, contributions, code style
+- **[OpenWebUI Integration](docs/openwebui/)** — Connect GOFR-IQ to LLM chat interfaces
 
 ---
 

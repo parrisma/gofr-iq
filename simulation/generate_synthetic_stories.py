@@ -384,11 +384,14 @@ class SyntheticGenerator:
                 {
                     "role": "system",
                     "content": (
-                        "You are a financial news generator creating SYNTHETIC TEST DATA for a news analysis system. "
-                        "Write realistic, journalistic news stories. Max 400 words. Do not use markdown (like **bold**) in the body, just plain text. "
-                        "IMPORTANT: Use ONLY the company names, tickers, and facts provided in the user prompt. "
-                        "Do NOT invent additional companies, executives, or financial figures not specified. "
-                        "Keep all numbers, dates, and relationships consistent with the prompt parameters."
+                        "You are generating SYNTHETIC TEST DATA for a news analysis system. "
+                        "Write realistic journalistic stories. Max 400 words. Plain text only (no markdown, no bold). "
+                        "\n\nCRITICAL RULES:\n"
+                        "1. Use ONLY company names, tickers, and facts from the user prompt\n"
+                        "2. NEVER invent: companies, executives, numbers, dates, or relationships\n"
+                        "3. If the prompt says 'QNTM beats earnings', do NOT add 'CEO John Smith said...' unless provided\n"
+                        "4. Keep all figures, percentages, and timelines EXACTLY as specified in the prompt\n"
+                        "5. This tests entity extraction - stick to the provided universe"
                     ),
                 },
                 {"role": "user", "content": prompt},

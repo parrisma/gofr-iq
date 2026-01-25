@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-08T18:54:26.460332",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMGQ2MjRlNC00ODZlLTQ0ZGMtOTIyYS1lZmY2ZjljZDNkNjUiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY4ODU2Mzk1LCJleHAiOjE4MDAzOTIzOTUsIm5iZiI6MTc2ODg1NjM5NSwiYXVkIjoiZ29mci1hcGkifQ.0heNp4ApFlM0B12NtO6MwO46cp-1xGSE09XiYnr9zkk",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "# Quantum Compute Expands Community Outreach Program in Boulder\n\nBOULDER, Colo. \u2014 Quantum Compute Inc. (NASDAQ: QNTM) announced Tuesday that it has appointed Sarah Chen as Director of Community Engagement, a newly created position that will oversee the company's growing relationships with educational institutions and nonprofit organizations in the Boulder-Denver metropolitan area.\n\nChen, who previously served as outreach coordinator for the Colorado Technology Association, will be based at Quantum Compute's headquarters on Pearl Street, where approximately 340 employees currently work on quantum computing hardware and software development. Her appointment comes as the company seeks to deepen its roots in a city that has become increasingly competitive for tech talent.\n\nThe new director will manage QNTM's existing partnership with Boulder Valley School District, which provides coding workshops to middle school students at six schools across the district. The program, launched last fall, has reached approximately 180 students to date, according to company statements.\n\n\"We've been in Boulder for eight years now, and we want to be more than just another tech company on Pearl Street,\" said Chen in a brief interview outside the company's offices. \"This role is about building lasting relationships with the community that's supported our growth.\"\n\nThe position reflects a broader trend among Boulder's technology sector, where companies face pressure from city council members to demonstrate local investment. At a January town hall meeting, several council representatives expressed concerns about rising commercial rents displacing longtime businesses, even as tech firms expand their footprints downtown.\n\nQuantum Compute's community initiatives remain modest compared to larger Boulder employers. The company currently sponsors two annual scholarships at the University of Colorado Boulder, valued at $5,000 each, and participates in the city's adopt-a-trail program, maintaining a half-mile section of the Boulder Creek Path.\n\nChen said her immediate priorities include expanding the school district partnership and exploring potential collaborations with Front Range Community College's technical programs. The company has not announced specific budget allocations for these initiatives.\n\nThe appointment does not affect Quantum Compute's operational structure or financial guidance. Trading of QNTM shares showed minimal movement following the announcement, with the stock closing Tuesday at $34.12, up three cents from Monday's close.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "client-hedge-fund",
+      "client-retail"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

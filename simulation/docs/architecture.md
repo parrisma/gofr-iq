@@ -2,7 +2,7 @@
 
 **Purpose**: Conceptual overview of the simulation environment, data models, and system components.
 
-**Companion docs**: [simulation/OPERATIONAL_GUIDE.md](simulation/OPERATIONAL_GUIDE.md), [simulation/VALIDATION.md](simulation/VALIDATION.md)
+**Companion docs**: [simulation/docs/operational_guide.md](operational_guide.md), [simulation/docs/validation.md](validation.md)
 
 ---
 
