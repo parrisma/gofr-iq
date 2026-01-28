@@ -38,38 +38,12 @@ PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
 SECRETS_DIR="${PROJECT_ROOT}/secrets"
 DOCKER_ENV_FILE="${SCRIPT_DIR}/.env"
 
-# Check if gofr-common submodule is initialized
-SUBMODULE_DIR="${PROJECT_ROOT}/lib/gofr-common"
-if [ ! -d "$SUBMODULE_DIR" ] || [ -z "$(ls -A "$SUBMODULE_DIR" 2>/dev/null)" ]; then
-    log_error "gofr-common submodule not initialized"
-    log_info "Attempting to initialize submodule..."
-    cd "$PROJECT_ROOT"
-    if git submodule update --init --recursive; then
-        log_success "Submodule initialized successfully"
-    else
-        log_error "Failed to initialize submodule"
-        log_info "Please run: git submodule update --init --recursive"
-        exit 1
-    fi
-elif [ ! -f "$SUBMODULE_DIR/config/gofr_ports.env" ]; then
-    log_error "gofr-common submodule appears incomplete"
-    log_info "Please run: git submodule update --init --recursive"
-    exit 1
-fi
-
 # Ensure secrets path points to shared gofr-common secrets (centralized Vault)
 COMMON_SECRETS_DIR="${PROJECT_ROOT}/lib/gofr-common/secrets"
 if [ ! -e "$SECRETS_DIR" ]; then
     ln -s "$COMMON_SECRETS_DIR" "$SECRETS_DIR"
-elif [ -d "$SECRETS_DIR" ] && [ ! -L "$SECRETS_DIR" ]; then
-    # Check if directory is empty or only has gitignore-type files
-    if [ -z "$(ls -A "$SECRETS_DIR" 2>/dev/null | grep -v '^\.git')" ]; then
-        log_info "Removing empty secrets directory and creating symlink to shared secrets"
-        rm -rf "$SECRETS_DIR"
-        ln -s "$COMMON_SECRETS_DIR" "$SECRETS_DIR"
-    else
-        log_warn "Local secrets directory detected with files; consider migrating to shared: $COMMON_SECRETS_DIR"
-    fi
+elif [ -d "$SECRETS_DIR" ] && [ ! -L "$SECRETS_DIR" ] && [ "$SECRETS_DIR" != "$COMMON_SECRETS_DIR" ]; then
+    log_warn "Local secrets directory detected; consider migrating to shared: $COMMON_SECRETS_DIR"
 fi
 
 # Detect host path for volume mounts (handles dev container scenario)
