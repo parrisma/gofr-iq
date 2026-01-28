@@ -19,8 +19,10 @@ from pathlib import Path
 from typing import Dict, Tuple
 
 # SSOT: Use the centralized environment module
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from lib.gofr_common.gofr_env import (
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
+from gofr_common.gofr_env import (
     get_admin_token,
     get_token_for_group,
     get_workspace_root,

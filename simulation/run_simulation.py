@@ -23,7 +23,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
 
 # SSOT: Import env module for bootstrap tokens
-from lib.gofr_common.gofr_env import get_admin_token, get_public_token, GofrEnvError
+from gofr_common.gofr_env import get_admin_token, get_public_token, GofrEnvError
 
 from gofr_common.auth.backends.vault import VaultGroupStore, VaultTokenStore  # type: ignore[import-not-found]  # noqa: E402
 from gofr_common.auth.backends.vault_client import VaultClient  # type: ignore[import-not-found]  # noqa: E402

@@ -105,7 +105,7 @@ uv run python simulation/load_clients_to_neo4j.py
 | `secrets/service_creds/` | AppRole credentials per service |
 | `config/generated/bootstrap_tokens.json` | **Admin/public JWT tokens (`admin_token`, `public_token`)** |
 | `lib/gofr-common/config/gofr_ports.env` | All service ports |
-| **`lib/gofr_common/gofr_env.py`** | **SSOT Python module — ALL scripts import this** |
+| **`lib/gofr-common/src/gofr_common/gofr_env.py`** | **SSOT Python module — ALL scripts import this** |
 
 **Networks**: Prod/dev = gofr-net @ gofr-vault:8201 | Test = gofr-test-net @ gofr-vault:8301 (ports+100)
 
@@ -113,16 +113,18 @@ uv run python simulation/load_clients_to_neo4j.py
 
 ### ⚠️ MANDATORY: Use the SSOT Module
 
-**ALL Python scripts that need JWT tokens MUST import from `lib/gofr-common/gofr_env.py`:**
+**ALL Python scripts that need JWT tokens MUST import from `gofr_common.gofr_env`:**
 
 ```python
 # Add workspace to path if needed (for scripts outside app/)
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # adjust depth as needed
+PROJECT_ROOT = Path(__file__).resolve().parent.parent  # adjust depth as needed
+sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
 
 # THE ONLY WAY TO GET TOKENS:
-from lib.gofr_common.gofr_env import (
+from gofr_common.gofr_env import (
     get_admin_token,      # For admin ops (source create, group manage)
     get_public_token,     # For public read-only ops
     get_token_for_group,  # Maps group names → appropriate token
@@ -153,7 +155,7 @@ The SSOT module handles this, but for reference:
 
 ### Verify SSOT Module Works:
 ```bash
-uv run python lib/gofr_common/gofr_env.py
+uv run python -c "from gofr_common.gofr_env import get_admin_token; print(get_admin_token()[:20])"
 ```
 
 

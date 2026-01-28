@@ -11,6 +11,7 @@ If a linting error is a false positive, it must be explicitly suppressed with
 a comment explaining why (e.g., # noqa: F401 - imported for re-export).
 """
 
+import os
 import subprocess
 from pathlib import Path
 
@@ -88,6 +89,32 @@ class TestCodeQuality:
             pass
 
         pytest.skip("bandit not found - install with: pip install bandit")
+
+    @pytest.fixture
+    def aikido_executable(self, project_root):
+        """Get the path to the Aikido local scanner executable."""
+        # Check common locations for aikido-local-scanner
+        possible_paths = [
+            project_root / "aikido-local-scanner",
+            Path("/usr/local/bin/aikido-local-scanner"),
+            Path.home() / "aikido-local-scanner",
+        ]
+        
+        for path in possible_paths:
+            if path.exists() and path.is_file():
+                return str(path)
+        
+        # Try system path
+        try:
+            result = subprocess.run(
+                ["which", "aikido-local-scanner"], capture_output=True, text=True, check=False
+            )
+            if result.returncode == 0:
+                return result.stdout.strip()
+        except Exception:
+            pass
+        
+        return None  # Return None to allow skipping in tests
 
     def test_no_linting_errors(self, project_root, ruff_executable):
         """
@@ -260,6 +287,114 @@ class TestCodeQuality:
                 f"\n\nSECURITY VULNERABILITIES FOUND:\n\n{result.stdout}\n\n"
                 "Please fix the security issues or mark false positives with # nosec."
             )
+
+    def test_security_aikido(self, project_root, aikido_executable):
+        """
+        SECURITY CHECK: Run Aikido Security local scanner for comprehensive security analysis.
+
+        This test runs the Aikido Security local scanner which performs:
+        - SAST (Static Application Security Testing) - code analysis
+        - SCA (Software Composition Analysis) - dependency vulnerabilities
+        - Secrets detection - leaked credentials, API keys, etc.
+        - IaC scanning - infrastructure misconfigurations
+
+        REQUIREMENTS:
+        - Download aikido-local-scanner from https://app.aikido.dev/settings/integrations/localscan
+        - Set AIKIDO_API_KEY environment variable or pass via --apikey
+        - Place the binary in project root or system PATH
+
+        SETUP:
+        1. Go to https://app.aikido.dev/settings/integrations/localscan
+        2. Generate an API key
+        3. Download the scanner binary for your platform
+        4. Set: export AIKIDO_API_KEY=AIK_CI_xxx
+
+        For more information: https://help.aikido.dev/code-scanning/local-code-scanning
+        """
+        if aikido_executable is None:
+            pytest.skip(
+                "aikido-local-scanner not found - download from "
+                "https://app.aikido.dev/settings/integrations/localscan"
+            )
+
+        # Check for API key
+        api_key = os.environ.get("AIKIDO_API_KEY")
+        if not api_key:
+            pytest.skip(
+                "AIKIDO_API_KEY environment variable not set. "
+                "Get your API key from https://app.aikido.dev/settings/integrations/localscan"
+            )
+
+        # Get repository name and branch
+        repo_name = "gofr-iq"
+        try:
+            branch_result = subprocess.run(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                cwd=project_root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            branch_name = branch_result.stdout.strip() if branch_result.returncode == 0 else "main"
+        except Exception:
+            branch_name = "main"
+
+        # Build the scan command
+        cmd = [
+            aikido_executable,
+            "scan",
+            str(project_root),
+            "--apikey", api_key,
+            "--repositoryname", repo_name,
+            "--branchname", branch_name,
+            "--scan-types", "code", "dependencies", "secrets",
+            "--exclude", ".venv",
+            "--exclude", "__pycache__",
+            "--exclude", ".git",
+            "--exclude", "node_modules",
+            "--fail-on", "high",  # Fail on high or critical severity
+        ]
+
+        result = subprocess.run(
+            cmd,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=900,  # 15 minute timeout
+        )
+
+        if result.returncode != 0:
+            error_message = [
+                "",
+                "=" * 80,
+                "AIKIDO SECURITY SCAN FAILED",
+                "=" * 80,
+                "",
+                "Aikido Security found high or critical severity issues.",
+                "",
+                "SCAN OUTPUT:",
+                "",
+                result.stdout,
+                "",
+                result.stderr if result.stderr else "",
+                "",
+                "HOW TO FIX:",
+                "",
+                "1. Review the issues in your Aikido dashboard:",
+                "   https://app.aikido.dev/",
+                "",
+                "2. Fix the vulnerabilities or mark false positives in Aikido",
+                "",
+                "3. For dependency issues, update the affected packages",
+                "",
+                "4. For secrets, rotate and remove from code history",
+                "",
+                "For more information:",
+                "https://help.aikido.dev/code-scanning/local-code-scanning",
+                "",
+                "=" * 80,
+            ]
+            pytest.fail("\n".join(error_message))
 
     def test_ruff_configuration_exists(self, project_root):
         """Verify that ruff configuration exists in pyproject.toml."""

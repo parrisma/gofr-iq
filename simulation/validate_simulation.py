@@ -13,9 +13,10 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
 
 # SSOT: Import env module
-from lib.gofr_common.gofr_env import get_admin_token, GofrEnvError
+from gofr_common.gofr_env import get_admin_token, GofrEnvError
 
 
 def validate_neo4j(verbose: bool = False) -> dict:

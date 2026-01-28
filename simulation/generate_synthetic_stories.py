@@ -22,8 +22,10 @@ from pathlib import Path
 from typing import List, Optional
 
 # SSOT: Add workspace to path and import env module
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from lib.gofr_common.gofr_env import get_admin_token, GofrEnvError
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
+from gofr_common.gofr_env import get_admin_token, GofrEnvError
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
