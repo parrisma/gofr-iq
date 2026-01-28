@@ -203,7 +203,44 @@ if [ "$HEALTH_CODE" != "200" ] && [ "$HEALTH_CODE" != "429" ]; then
 fi
 log_success "Vault reachable and unsealed (health ${HEALTH_CODE})"
 
-# Step 5.1: Ensure AppRole identities exist/rotate
+# Load Vault token for subsequent operations
+if [ -f "${SECRETS_DIR}/vault_root_token" ]; then
+    VAULT_TOKEN=$(cat "${SECRETS_DIR}/vault_root_token")
+    export VAULT_TOKEN
+else
+    log_error "Root token not found. Run: lib/gofr-common/scripts/manage_vault.sh bootstrap"
+    exit 1
+fi
+
+# Step 5.1: Store app-specific secrets in Vault (fresh install only)
+if [ "$FRESH_INSTALL" = true ]; then
+    log_info "Storing initial secrets in Vault..."
+    
+    # Generate random Neo4j password
+    NEO4J_PASSWORD=$(openssl rand -base64 32 | tr -d '/+=' | head -c 24)
+    docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
+        gofr-vault vault kv put secret/gofr/config/neo4j-password value="${NEO4J_PASSWORD}"
+    log_success "Neo4j password stored"
+    
+    # Store OpenRouter API key (prompt if not provided via flag)
+    if [ -z "$OPENROUTER_KEY" ]; then
+        echo ""
+        echo "OpenRouter API Key Required"
+        echo "----------------------------"
+        echo "Get your key from: https://openrouter.ai/keys"
+        echo ""
+        read -p "Enter OpenRouter API key: " OPENROUTER_KEY
+        if [ -z "$OPENROUTER_KEY" ]; then
+            log_error "OpenRouter API key is required"
+            exit 1
+        fi
+    fi
+    docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
+        gofr-vault vault kv put secret/gofr/config/api-keys/openrouter value="${OPENROUTER_KEY}"
+    log_success "OpenRouter API key stored"
+fi
+
+# Step 5.2: Ensure AppRole identities exist/rotate
 log_info "Ensuring service AppRoles (uses existing root token)..."
 cd "$PROJECT_ROOT"
 uv run scripts/setup_approle.py
