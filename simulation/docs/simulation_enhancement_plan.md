@@ -71,7 +71,7 @@
   **Result**: 51 stories with 13 scenario types
   
 - [x] **2.4** Load universe + clients + stories
-  - ✅ Full reset with `./docker/start-prod.sh --reset`
+  - ✅ Full reset with `./scripts/start-prod.sh --reset`
   - ✅ Orchestrated via `./simulation/run_simulation.sh --count 10`
   - ✅ Universe loaded (16 companies, 24 instruments, 5 factors, 22 exposures)
   - ✅ Clients loaded (3 clients with portfolios and watchlists)
@@ -148,7 +148,7 @@
   - ✅ Event filtering infrastructure operational
   
 - [x] **3.5** Test trust gating with feed queries
-  - ✅ **Hard reset completed**: Clean environment with `./docker/start-prod.sh --reset`
+  - ✅ **Hard reset completed**: Clean environment with `./scripts/start-prod.sh --reset`
   - ✅ **Full simulation run**: 10 stories ingested successfully
   - ✅ **Graph state validated**:
     - 6 Source nodes with integer trust levels (1, 3, 6, 10, 10, 10)

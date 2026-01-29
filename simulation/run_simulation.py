@@ -91,7 +91,7 @@ def load_env(
 
     vault_token = os.environ.get("VAULT_TOKEN") or os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_ROOT_TOKEN")
     if not vault_token:
-        raise RuntimeError("VAULT_TOKEN not found; ensure docker/start-prod.sh was run")
+        raise RuntimeError("VAULT_TOKEN not found; ensure scripts/start-prod.sh was run")
 
     # Compute Vault address
     vault_addr = os.environ.get("VAULT_ADDR") or os.environ.get("GOFR_VAULT_URL")

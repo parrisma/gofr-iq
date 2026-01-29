@@ -70,8 +70,8 @@ echo "$TOKEN" > my-token.jwt  # Save it!
 
 ### Services
 ```bash
-./docker/start-prod.sh          # Start/restart production
-./docker/start-prod.sh --fresh  # First-time setup
+./scripts/start-prod.sh          # Start/restart production
+./scripts/start-prod.sh --fresh  # First-time setup
 ./docker/start-tools-prod.sh    # n8n, OpenWebUI
 ./scripts/run_tests.sh          # Run tests
 ```

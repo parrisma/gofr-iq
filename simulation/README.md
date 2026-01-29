@@ -204,7 +204,7 @@ uv run simulation/check_cache.py
 ## 🔧 Troubleshooting
 
 **Issue**: "Neo4j connection failed"  
-**Fix**: Ensure infrastructure is running: `./docker/start-prod.sh`
+**Fix**: Ensure infrastructure is running: `./scripts/start-prod.sh`
 
 **Issue**: "No documents in feed"  
 **Fix**: Run ingestion: `./simulation/run_simulation.sh --count 10`

@@ -34,9 +34,10 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+DOCKER_DIR="${PROJECT_ROOT}/docker"
 PORTS_FILE="${PROJECT_ROOT}/lib/gofr-common/config/gofr_ports.env"
 SECRETS_DIR="${PROJECT_ROOT}/secrets"
-DOCKER_ENV_FILE="${SCRIPT_DIR}/.env"
+DOCKER_ENV_FILE="${DOCKER_DIR}/.env"
 
 # Ensure secrets path points to shared gofr-common secrets (centralized Vault)
 COMMON_SECRETS_DIR="${PROJECT_ROOT}/lib/gofr-common/secrets"
@@ -174,16 +175,16 @@ fi
 
 # Step 3: Ensure images are built (prod stack)
 log_info "Ensuring production images are built..."
-if [ ! -x "$SCRIPT_DIR/build-all.sh" ]; then
-    log_error "Missing build orchestrator: $SCRIPT_DIR/build-all.sh"
+if [ ! -x "$DOCKER_DIR/build-all.sh" ]; then
+    log_error "Missing build orchestrator: $DOCKER_DIR/build-all.sh"
     exit 1
 fi
-"$SCRIPT_DIR/build-all.sh" --prod
+"$DOCKER_DIR/build-all.sh" --prod
 log_success "Images ready"
 
 # Step 4: Stop existing services (preserve volumes)
 log_info "Stopping existing services..."
-cd "$SCRIPT_DIR"
+cd "$DOCKER_DIR"
 docker compose down 2>/dev/null || true
 log_success "Existing services stopped"
 
@@ -245,7 +246,7 @@ log_info "Ensuring service AppRoles (uses existing root token)..."
 cd "$PROJECT_ROOT"
 uv run scripts/setup_approle.py
 log_success "Service AppRoles ensured"
-cd "$SCRIPT_DIR"
+cd "$DOCKER_DIR"
 
 # Reload generated env
 if [ -f "$DOCKER_ENV_FILE" ]; then
@@ -328,7 +329,7 @@ log_success "Loaded JWT signing secret from Vault"
 
 # Step 7: Start all services
 log_info "Starting all services..."
-cd "$SCRIPT_DIR"
+cd "$DOCKER_DIR"
 
 # Start infra services (don't recreate Vault - it's already running)
 docker compose up -d neo4j chromadb
@@ -367,4 +368,4 @@ echo ""
 log_info "Dumping environment snapshot (docker mode)..."
 cd "$PROJECT_ROOT"
 ./scripts/dump_environment.sh --docker
-cd "$SCRIPT_DIR"
+cd "$DOCKER_DIR"

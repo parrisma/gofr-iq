@@ -36,10 +36,10 @@ We provide a single wrapper script that handles config, secrets, and container s
 
 ```bash
 # First time install (initializes Vault & Secrets)
-./docker/start-prod.sh --fresh --openrouter-key sk-or-v1-YOUR-KEY
+./scripts/start-prod.sh --fresh --openrouter-key sk-or-v1-YOUR-KEY
 
 # Restarting (reuses existing secrets)
-./docker/start-prod.sh
+./scripts/start-prod.sh
 ```
 
 **What happens:**
@@ -186,7 +186,7 @@ cd docker && docker compose down
 To wipe all data (databases, vaults, secrets) and start fresh:
 
 ```bash
-./docker/start-prod.sh --reset
+./scripts/start-prod.sh --reset
 ```
 **Warning**: This deletes all data in `gofr-iq/data/`.
 
@@ -215,5 +215,5 @@ For explicit configuration details, see [Configuration Guide](configuration.md).
 | **"Vault not ready"** | Initialization taking time | Wait 10s and retry the start command |
 | **"Invalid API key"** | Missing or bad OpenRouter key | Pass correct `--openrouter-key` or set `GOFR_IQ_OPENROUTER_API_KEY` env var |
 | **Neo4j/Chroma OOM** | Insufficient RAM (Limit: 8GB) | Ensure Docker Desktop has allocated at least 8GB RAM |
-| **"Auth Error"** in logs | Expired or missing tokens | Run `./docker/start-prod.sh` (without --fresh) to refresh tokens |
+| **"Auth Error"** in logs | Expired or missing tokens | Run `./scripts/start-prod.sh` (without --fresh) to refresh tokens |
 

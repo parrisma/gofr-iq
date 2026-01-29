@@ -4,7 +4,7 @@
 # Standard user: gofr (UID 1000, GID 1000)
 #
 # Usage:
-#   ./docker/run-dev.sh [OPTIONS]
+#   ./scripts/run-dev.sh [OPTIONS]
 #
 # Options:
 #   --mcp-port PORT      Override MCP port (default: from gofr_ports.env + 200)

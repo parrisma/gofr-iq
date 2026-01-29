@@ -25,7 +25,7 @@ We validate GOFR-IQ by comparing **Generated Intent** against **System Output**.
 **Inputs**:
 - Stories: `simulation/test_output/synthetic_*.json` (ground truth + validation metadata)
 - IPS Profiles: `simulation/client_ips/ips_*.json`
-- Graph/Vector stores: Neo4j + ChromaDB running via `docker/start-prod.sh`
+- Graph/Vector stores: Neo4j + ChromaDB running via `scripts/start-prod.sh`
 
 **Outputs**:
 - Console summary with pass/fail by scenario
