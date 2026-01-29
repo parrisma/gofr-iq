@@ -2,19 +2,20 @@
 # =============================================================================
 # GOFR-IQ Production Start Script
 # =============================================================================
-# Single-command production startup consuming the shared Vault (no local Vault lifecycle).
+# Single-command production startup with auto Vault bootstrap.
 #
 # Usage:
-#   ./docker/start-prod.sh              # Normal start (uses shared Vault)
-#   ./docker/start-prod.sh --fresh      # Fresh install (still assumes shared Vault running)
-#   ./docker/start-prod.sh --reset      # Nuke & pave app data (does not touch shared Vault)
+#   ./scripts/start-prod.sh              # Normal start (auto-starts Vault if needed)
+#   ./scripts/start-prod.sh --fresh      # Fresh install (stores secrets in Vault)
+#   ./scripts/start-prod.sh --reset      # Wipe app data and reinitialize
+#   ./scripts/start-prod.sh --nuke       # Full clean: remove images, volumes, then reset
 #
 # This script:
 # 1. Sources port configuration
-# 2. Verifies shared Vault is running/unsealed (health gate)
+# 2. Auto-starts and bootstraps Vault if not running (via gofr-common)
 # 3. Ensures AppRole creds exist (setup_approle)
 # 4. Loads secrets from Vault
-# 5. Starts app services (no Vault container here)
+# 5. Starts app services
 # =============================================================================
 
 set -euo pipefail
@@ -66,6 +67,7 @@ export HOST_PROJECT_ROOT
 # Parse arguments
 FRESH_INSTALL=false
 RESET_ALL=false
+NUKE_ALL=false
 OPENROUTER_KEY=""
 
 while [[ $# -gt 0 ]]; do
@@ -79,16 +81,23 @@ while [[ $# -gt 0 ]]; do
             FRESH_INSTALL=true
             shift
             ;;
+        --nuke)
+            NUKE_ALL=true
+            RESET_ALL=true
+            FRESH_INSTALL=true
+            shift
+            ;;
         --openrouter-key)
             OPENROUTER_KEY="$2"
             shift 2
             ;;
         -h|--help)
-            echo "Usage: $0 [--fresh] [--reset] [--openrouter-key KEY]"
+            echo "Usage: $0 [--fresh] [--reset] [--nuke] [--openrouter-key KEY]"
             echo ""
             echo "Options:"
-            echo "  --fresh          Initialize new Vault (use after first install)"
-            echo "  --reset          Wipe all data and reinitialize (nuke & pave)"
+            echo "  --fresh          Store initial secrets in Vault (use after first install)"
+            echo "  --reset          Wipe app data and reinitialize (preserves images)"
+            echo "  --nuke           Full clean: remove images, volumes, secrets, then reset"
             echo "  --openrouter-key Store OpenRouter API key in Vault"
             echo ""
             echo "REQUIREMENTS:"
@@ -123,9 +132,9 @@ echo "======================================================================="
 echo "🚀 GOFR-IQ Production Startup"
 echo "======================================================================="
 
-# Step 0: Reset if requested
-if [ "$RESET_ALL" = true ]; then
-    log_warn "RESET MODE: This will destroy all data!"
+# Step 0a: Nuke if requested (full clean including images)
+if [ "$NUKE_ALL" = true ]; then
+    log_warn "NUKE MODE: This will destroy ALL gofr-iq data, images, and volumes!"
     read -p "Are you sure? Type 'yes' to continue: " confirm
     if [ "$confirm" != "yes" ]; then
         log_info "Aborted."
@@ -133,9 +142,41 @@ if [ "$RESET_ALL" = true ]; then
     fi
     
     log_info "Stopping gofr-iq production containers..."
-    # Stop only gofr-iq production containers (not dev container we're running in)
-    docker stop gofr-neo4j gofr-chromadb gofr-mcp gofr-mcpo gofr-web 2>/dev/null || true
-    docker rm gofr-neo4j gofr-chromadb gofr-mcp gofr-mcpo gofr-web 2>/dev/null || true
+    docker stop gofr-neo4j gofr-chromadb gofr-iq-mcp gofr-iq-mcpo gofr-iq-web 2>/dev/null || true
+    docker rm gofr-neo4j gofr-chromadb gofr-iq-mcp gofr-iq-mcpo gofr-iq-web 2>/dev/null || true
+    
+    log_info "Removing gofr-iq docker images..."
+    docker rmi gofr-iq-prod:latest gofr-iq-chromadb:latest gofr-iq-neo4j:latest gofr-iq-base:latest 2>/dev/null || true
+    log_success "Images removed"
+    
+    log_info "Removing docker volumes..."
+    docker volume rm gofr-iq-neo4j-data gofr-iq-neo4j-logs gofr-iq-chroma-data gofr-iq-data gofr-iq-prod-logs 2>/dev/null || true
+    log_success "Volumes removed"
+    
+    log_info "Clearing data directories..."
+    rm -rf "${PROJECT_ROOT}/data/storage/"* 2>/dev/null || true
+    rm -rf "${PROJECT_ROOT}/data/auth/"* 2>/dev/null || true
+    rm -rf "${PROJECT_ROOT}/data/sessions/"* 2>/dev/null || true
+    
+    log_info "Removing credential and config files..."
+    rm -f "$DOCKER_ENV_FILE" 2>/dev/null || true
+    rm -rf "${PROJECT_ROOT}/config/generated" 2>/dev/null || true
+    rm -rf "${SECRETS_DIR}/service_creds" 2>/dev/null || true
+    
+    log_success "Nuke complete - environment is clean"
+
+# Step 0b: Reset if requested (data only, preserves images)
+elif [ "$RESET_ALL" = true ]; then
+    log_warn "RESET MODE: This will destroy all app data!"
+    read -p "Are you sure? Type 'yes' to continue: " confirm
+    if [ "$confirm" != "yes" ]; then
+        log_info "Aborted."
+        exit 0
+    fi
+    
+    log_info "Stopping gofr-iq production containers..."
+    docker stop gofr-neo4j gofr-chromadb gofr-iq-mcp gofr-iq-mcpo gofr-iq-web 2>/dev/null || true
+    docker rm gofr-neo4j gofr-chromadb gofr-iq-mcp gofr-iq-mcpo gofr-iq-web 2>/dev/null || true
     
     log_info "Removing docker volumes..."
     docker volume rm gofr-iq-neo4j-data gofr-iq-neo4j-logs gofr-iq-chroma-data 2>/dev/null || true
@@ -148,7 +189,6 @@ if [ "$RESET_ALL" = true ]; then
     log_info "Removing credential files (preserving shared Vault creds)..."
     rm -f "$DOCKER_ENV_FILE" 2>/dev/null || true
     rm -rf "${PROJECT_ROOT}/config/generated" 2>/dev/null || true
-    # Preserve shared Vault credentials; optionally clear service AppRole cache
     rm -rf "${SECRETS_DIR}/service_creds" 2>/dev/null || true
     
     log_success "Reset complete - environment is clean"
@@ -188,7 +228,9 @@ cd "$DOCKER_DIR"
 docker compose down 2>/dev/null || true
 log_success "Existing services stopped"
 
-# Step 5: Verify shared Vault is running (no local start)
+# Step 5: Ensure Vault is running (auto-start and bootstrap if needed)
+VAULT_MANAGE_SCRIPT="${PROJECT_ROOT}/lib/gofr-common/scripts/manage_vault.sh"
+
 if [ -f /.dockerenv ]; then
     VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
 else
@@ -196,20 +238,46 @@ else
 fi
 export VAULT_ADDR
 
-log_info "Checking shared Vault health at ${VAULT_ADDR}..."
-HEALTH_CODE=$(curl -s -o /dev/null -w "%{http_code}" "${VAULT_ADDR}/v1/sys/health" || true)
-if [ "$HEALTH_CODE" != "200" ] && [ "$HEALTH_CODE" != "429" ]; then
-    log_error "Vault not ready (HTTP ${HEALTH_CODE}). Start and unseal via lib/gofr-common/scripts/manage_vault.sh"
-    exit 1
+log_info "Checking Vault health at ${VAULT_ADDR}..."
+HEALTH_CODE=$(curl -s -o /dev/null -w "%{http_code}" "${VAULT_ADDR}/v1/sys/health" 2>/dev/null || echo "000")
+
+if [ "$HEALTH_CODE" = "200" ] || [ "$HEALTH_CODE" = "429" ]; then
+    log_success "Vault reachable and unsealed (health ${HEALTH_CODE})"
+else
+    log_warn "Vault not ready (HTTP ${HEALTH_CODE})"
+    
+    if [ ! -x "$VAULT_MANAGE_SCRIPT" ]; then
+        log_error "Vault management script not found: $VAULT_MANAGE_SCRIPT"
+        exit 1
+    fi
+    
+    # Check if Vault needs full bootstrap or just start/unseal
+    if [ ! -f "${SECRETS_DIR}/vault_root_token" ]; then
+        log_info "No Vault credentials found - running full bootstrap..."
+        "$VAULT_MANAGE_SCRIPT" bootstrap
+    else
+        log_info "Vault credentials exist - starting and unsealing..."
+        "$VAULT_MANAGE_SCRIPT" start
+        sleep 3
+        "$VAULT_MANAGE_SCRIPT" unseal
+    fi
+    
+    # Verify Vault is now ready
+    sleep 2
+    HEALTH_CODE=$(curl -s -o /dev/null -w "%{http_code}" "${VAULT_ADDR}/v1/sys/health" 2>/dev/null || echo "000")
+    if [ "$HEALTH_CODE" != "200" ] && [ "$HEALTH_CODE" != "429" ]; then
+        log_error "Vault still not ready after bootstrap (HTTP ${HEALTH_CODE})"
+        exit 1
+    fi
+    log_success "Vault is now running and unsealed"
 fi
-log_success "Vault reachable and unsealed (health ${HEALTH_CODE})"
 
 # Load Vault token for subsequent operations
 if [ -f "${SECRETS_DIR}/vault_root_token" ]; then
     VAULT_TOKEN=$(cat "${SECRETS_DIR}/vault_root_token")
     export VAULT_TOKEN
 else
-    log_error "Root token not found. Run: lib/gofr-common/scripts/manage_vault.sh bootstrap"
+    log_error "Root token not found after Vault bootstrap"
     exit 1
 fi
 

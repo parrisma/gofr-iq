@@ -126,7 +126,6 @@ build_prod_stack() {
     run_step "Tagging gofr-iq-base" "$SCRIPT_DIR/build-base.sh"
     local chroma_image="gofr-iq-chromadb:latest"
     local neo4j_image="gofr-iq-neo4j:latest"
-    local vault_image="gofr-iq-vault:latest"
     local prod_image="gofr-iq-prod:latest"
 
     if should_build "$chroma_image" "$SCRIPT_DIR/Dockerfile.chromadb"; then
@@ -137,9 +136,8 @@ build_prod_stack() {
         run_step "Building ${neo4j_image}" "$SCRIPT_DIR/build-neo4j.sh"
     fi
 
-    if should_build "$vault_image" "$SCRIPT_DIR/Dockerfile.vault"; then
     # Vault is built in gofr-common and shared across all projects
-    fi
+    # No local vault build needed
 
     if should_build "$prod_image" "$SCRIPT_DIR/Dockerfile.prod"; then
         run_step "Building ${prod_image}" "$SCRIPT_DIR/build-prod.sh"
