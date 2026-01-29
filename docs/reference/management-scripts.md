@@ -336,7 +336,7 @@ cd docker
 
 ---
 
-### build-dev.sh / build-neo4j.sh / build-chromadb.sh / build-vault.sh / build-base.sh
+### build-dev.sh / build-neo4j.sh / build-chromadb.sh / build-base.sh
 **Purpose:** Build individual service images.
 
 **Usage:**
@@ -344,9 +344,10 @@ cd docker
 ./docker/build-dev.sh     # Development environment image
 ./docker/build-neo4j.sh   # Neo4j with constraints/plugins
 ./docker/build-chromadb.sh # ChromaDB with persistence
-./docker/build-vault.sh   # HashiCorp Vault
 ./docker/build-base.sh    # Base/common layers
 ```
+
+**Note:** Vault is built in `lib/gofr-common/docker/` (shared infrastructure).
 
 ---
 

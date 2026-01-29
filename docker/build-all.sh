@@ -138,7 +138,7 @@ build_prod_stack() {
     fi
 
     if should_build "$vault_image" "$SCRIPT_DIR/Dockerfile.vault"; then
-        run_step "Building ${vault_image}" "$SCRIPT_DIR/build-vault.sh"
+    # Vault is built in gofr-common and shared across all projects
     fi
 
     if should_build "$prod_image" "$SCRIPT_DIR/Dockerfile.prod"; then

@@ -105,7 +105,7 @@ run_builds_if_needed() {
         return 0
     fi
     echo -e "${YELLOW}Rebuilding Docker images for test infra...${NC}"
-    for script in build-vault.sh build-chromadb.sh build-neo4j.sh build-prod.sh; do
+    for script in build-chromadb.sh build-neo4j.sh build-prod.sh; do
         local path="${PROJECT_ROOT}/docker/${script}"
         if [ -f "$path" ]; then
             bash "$path"
