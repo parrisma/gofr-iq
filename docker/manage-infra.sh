@@ -216,8 +216,8 @@ do_stop() {
 do_vault_start() {
     log_info "Starting Vault on port ${GOFR_VAULT_PORT}..."
     
-    # Use local run-vault.sh script
-    local vault_script="$SCRIPT_DIR/run-vault.sh"
+    # Use gofr-common Vault management
+    local vault_script="$SCRIPT_DIR/../lib/gofr-common/scripts/manage_vault.sh"
     if [ -f "$vault_script" ]; then
         # Export port vars for the script
         export GOFR_VAULT_PORT

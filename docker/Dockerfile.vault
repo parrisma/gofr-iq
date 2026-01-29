@@ -2,7 +2,7 @@
 # Provides authentication backend and secret storage
 #
 # Build: ./build-vault.sh
-# Run:   ./run-vault.sh [-e] [-p PORT]
+# Run:   Use lib/gofr-common/scripts/manage_vault.sh
 
 FROM hashicorp/vault:1.15.6
 

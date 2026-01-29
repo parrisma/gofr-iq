@@ -360,13 +360,10 @@ cd docker
 
 ---
 
-### run-vault.sh
-**Purpose:** Start Vault container only.
-
----
-
 ### backup.sh
 **Purpose:** Backup Vault data and configurations.
+
+**Note:** Vault is managed by `lib/gofr-common/scripts/manage_vault.sh` (shared infrastructure).
 
 ---
 
@@ -513,18 +510,22 @@ gofr-iq/
 │   └── ...
 │
 ├── docker/
-│   ├── start-prod.sh                  # Main entry point (RECOMMENDED)
-│   ├── run-dev.sh                     # Dev infrastructure
 │   ├── build-prod.sh / build-*.sh     # Image builds
 │   ├── reset-prod.sh
 │   ├── manage-infra.sh
-│   ├── run-vault.sh / backup.sh
+│   ├── backup.sh
 │   ├── entrypoint-*.sh                # Container entry scripts
 │   ├── Dockerfile.prod / .dev / .neo4j / .chromadb / .vault
 │   ├── docker-compose.yml             # Prod stack
 │   ├── docker-compose-test.yml        # Test stack
 │   ├── vault-config.hcl / .json
 │   ├── readme.md (implicit)
+│   └── ...
+│
+├── scripts/
+│   ├── start-prod.sh                  # Main entry point (RECOMMENDED)
+│   ├── run-dev.sh                     # Dev infrastructure
+│   ├── manage_servers.sh              # Start/stop/status services
 │   └── ...
 │
 └── simulation/
