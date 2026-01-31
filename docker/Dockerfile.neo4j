@@ -35,8 +35,7 @@ ENV GOFR_BACKUP_MAX_COUNT=10
 ENV GOFR_BACKUP_DIR=/backups
 
 # Copy and set up custom entrypoint for backup support
-COPY entrypoint-neo4j.sh /entrypoint-neo4j.sh
-RUN chmod +x /entrypoint-neo4j.sh
+COPY --chmod=755 entrypoint-neo4j.sh /entrypoint-neo4j.sh
 
 # Create backup directory
 RUN mkdir -p /backups/neo4j /backups/logs

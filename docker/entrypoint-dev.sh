@@ -1,5 +1,12 @@
 #!/bin/bash
-set -e
+set -euo pipefail
+
+timestamp() { date "+%Y-%m-%d %H:%M:%S"; }
+log_info() { echo "[$(timestamp)] [INFO] $*"; }
+log_warn() { echo "[$(timestamp)] [WARN] $*"; }
+log_error() { echo "[$(timestamp)] [ERROR] $*" >&2; }
+
+trap 'log_error "Entrypoint failed at line $LINENO"' ERR
 
 # Standard GOFR user paths - all projects use 'gofr' user
 GOFR_USER="gofr"
@@ -8,16 +15,21 @@ PROJECT_DIR="/home/${GOFR_USER}/devroot/gofr-iq"
 COMMON_DIR="$PROJECT_DIR/lib/gofr-common"
 VENV_DIR="$PROJECT_DIR/.venv"
 
-echo "======================================================================="
-echo "GOFR-IQ Container Entrypoint"
-echo "======================================================================="
+log_info "======================================================================="
+log_info "GOFR-IQ Container Entrypoint"
+log_info "======================================================================="
 
 # Fix data directory permissions if mounted as volume
 if [ -d "$PROJECT_DIR/data" ]; then
     if [ ! -w "$PROJECT_DIR/data" ]; then
-        echo "Fixing permissions for $PROJECT_DIR/data..."
-        sudo chown -R ${GOFR_USER}:${GOFR_USER} "$PROJECT_DIR/data" 2>/dev/null || \
-            echo "Warning: Could not fix permissions. Run container with --user $(id -u):$(id -g)"
+        log_warn "Data directory not writable: $PROJECT_DIR/data"
+        if command -v sudo >/dev/null 2>&1; then
+            log_info "Attempting to fix permissions for $PROJECT_DIR/data"
+            sudo chown -R ${GOFR_USER}:${GOFR_USER} "$PROJECT_DIR/data" 2>/dev/null || \
+                log_warn "Could not fix permissions. Run container with --user $(id -u):$(id -g)"
+        else
+            log_warn "sudo not available. Run container with --user $(id -u):$(id -g)"
+        fi
     fi
 fi
 
@@ -27,41 +39,41 @@ mkdir -p "$PROJECT_DIR/logs"
 
 # Ensure virtual environment exists and is valid
 if [ ! -f "$VENV_DIR/bin/python" ] || [ ! -x "$VENV_DIR/bin/python" ]; then
-    echo "Creating Python virtual environment..."
+    log_info "Creating Python virtual environment..."
     cd "$PROJECT_DIR"
     UV_VENV_CLEAR=1 uv venv "$VENV_DIR" --python=python3.11
-    echo "Virtual environment created at $VENV_DIR"
+    log_info "Virtual environment created at $VENV_DIR"
 fi
 
 # Install gofr-common as editable package
 if [ -d "$COMMON_DIR" ]; then
-    echo "Installing gofr-common (editable)..."
+    log_info "Installing gofr-common (editable)..."
     cd "$PROJECT_DIR"
     uv pip install -e "$COMMON_DIR"
 else
-    echo "Warning: gofr-common not found at $COMMON_DIR"
-    echo "Make sure the submodule is initialized: git submodule update --init"
+    log_warn "gofr-common not found at $COMMON_DIR"
+    log_warn "Initialize the submodule: git submodule update --init"
 fi
 
 # Install project dependencies
 if [ -f "$PROJECT_DIR/pyproject.toml" ]; then
-    echo "Installing project dependencies from pyproject.toml..."
+    log_info "Installing project dependencies from pyproject.toml..."
     cd "$PROJECT_DIR"
-    uv pip install -e ".[dev]" || echo "Warning: Could not install project dependencies"
+    uv pip install -e ".[dev]" || log_warn "Could not install project dependencies"
 elif [ -f "$PROJECT_DIR/requirements.txt" ]; then
-    echo "Installing project dependencies from requirements.txt..."
+    log_info "Installing project dependencies from requirements.txt..."
     cd "$PROJECT_DIR"
-    uv pip install -r requirements.txt || echo "Warning: Could not install project dependencies"
+    uv pip install -r requirements.txt || log_warn "Could not install project dependencies"
 fi
 
 # Show installed packages
 echo ""
-echo "Environment ready. Installed packages:"
+log_info "Environment ready. Installed packages:"
 uv pip list
 
 echo ""
-echo "======================================================================="
-echo "Entrypoint complete. Executing: $@"
-echo "======================================================================="
+log_info "======================================================================="
+log_info "Entrypoint complete. Executing: $*"
+log_info "======================================================================="
 
 exec "$@"

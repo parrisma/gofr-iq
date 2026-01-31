@@ -32,8 +32,7 @@ ENV GOFR_BACKUP_MAX_COUNT=10
 ENV GOFR_BACKUP_DIR=/backups
 
 # Copy and set up custom entrypoint for backup support
-COPY entrypoint-chromadb.sh /entrypoint-chromadb.sh
-RUN chmod +x /entrypoint-chromadb.sh
+COPY --chmod=755 entrypoint-chromadb.sh /entrypoint-chromadb.sh
 
 # Create backup directory
 RUN mkdir -p /backups/chromadb /backups/logs

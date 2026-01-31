@@ -7,7 +7,7 @@
 #   - Maintains configurable retention policy
 #   - Stores backups in mounted /backups volume
 
-set -e
+set -euo pipefail
 
 BACKUP_DIR="${GOFR_BACKUP_DIR:-/backups}"
 BACKUP_ENABLED="${GOFR_BACKUP_ENABLED:-true}"
@@ -21,9 +21,13 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-log_info() { echo -e "${BLUE}[BACKUP]${NC} $1"; }
-log_success() { echo -e "${GREEN}[BACKUP]${NC} $1"; }
-log_warn() { echo -e "${YELLOW}[BACKUP]${NC} $1"; }
+timestamp() { date "+%Y-%m-%d %H:%M:%S"; }
+log_info() { echo -e "${BLUE}[BACKUP]${NC} [$(timestamp)] $1"; }
+log_success() { echo -e "${GREEN}[BACKUP]${NC} [$(timestamp)] $1"; }
+log_warn() { echo -e "${YELLOW}[BACKUP]${NC} [$(timestamp)] $1"; }
+log_error() { echo -e "${YELLOW}[BACKUP]${NC} [$(timestamp)] $1" >&2; }
+
+trap 'log_error "Entrypoint failed at line $LINENO"' ERR
 
 # Setup backup directories
 setup_backup() {
@@ -37,14 +41,15 @@ setup_backup() {
 # Rotate old backups
 rotate_backups() {
     local backup_path="$BACKUP_DIR/chromadb"
-    
+
     if [ -d "$backup_path" ]; then
         # Remove backups older than retention period
         find "$backup_path" -type f -name "*.tar.gz" -mtime +$BACKUP_RETENTION -delete 2>/dev/null || true
         
         # Keep only max count backups
-        local count=$(ls -1 "$backup_path"/*.tar.gz 2>/dev/null | wc -l)
-        if [ "$count" -gt "$BACKUP_MAX_COUNT" ]; then
+        local count
+        count=$(ls -1 "$backup_path"/*.tar.gz 2>/dev/null | wc -l | tr -d ' ')
+        if [ "${count:-0}" -gt "$BACKUP_MAX_COUNT" ]; then
             log_info "Rotating backups (keeping $BACKUP_MAX_COUNT most recent)..."
             ls -1t "$backup_path"/*.tar.gz | tail -n +$((BACKUP_MAX_COUNT + 1)) | xargs rm -f 2>/dev/null || true
         fi

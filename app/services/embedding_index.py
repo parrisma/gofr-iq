@@ -20,8 +20,12 @@ import chromadb
 from chromadb.api.types import Documents, Embeddings
 from chromadb.config import Settings as ChromaSettings
 
+from app.logger import StructuredLogger
+
 if TYPE_CHECKING:
     from app.services.llm_service import LLMService
+
+logger = StructuredLogger(__name__)
 
 
 class EmbeddingProvider(Protocol):
@@ -460,11 +464,29 @@ class EmbeddingIndex:
             metadatas.append(chunk_meta)
 
         # Add to collection (upsert to handle re-embedding)
-        self._collection.upsert(
-            ids=ids,
-            documents=documents,
-            metadatas=metadatas,
-        )
+        # When in HTTP mode with custom embedding function, pre-compute embeddings
+        if self.host and self._embedding_function:
+            # Generate embeddings client-side using OpenRouter
+            logger.info(
+                f"Generating embeddings client-side for {len(documents)} chunks using custom embedding function"
+            )
+            embeddings = self._embedding_function(documents)
+            logger.info(
+                f"Client-side embeddings generated: {len(embeddings)} vectors, dim={len(embeddings[0]) if embeddings else 0}"
+            )
+            self._collection.upsert(
+                ids=ids,
+                documents=documents,
+                metadatas=metadatas,
+                embeddings=embeddings,
+            )
+        else:
+            # Let ChromaDB generate embeddings (local mode with custom function, or HTTP mode with default)
+            self._collection.upsert(
+                ids=ids,
+                documents=documents,
+                metadatas=metadatas,
+            )
 
         return ids
 

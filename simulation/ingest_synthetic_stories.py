@@ -171,10 +171,49 @@ def ingest_document(
             if result.returncode != 0:
                 print(f"    Output: {output[:300]}")
         
-        # Classify result based on exit code first, then content
+        # Classify result based on exit code first, then parse JSON response
         if result.returncode == 0:
-            if "already exists" in output.lower() or "duplicate" in output.lower():
+            # Try to parse the actual response JSON to get real status
+            import json
+            import re
+            
+            # Extract JSON from response (look for the inner JSON in "text" field)
+            json_match = re.search(r'"text":\s*"(\{[^"]*\})"', output.replace('\n', '').replace('\\n', '\n'))
+            if json_match:
+                try:
+                    # Unescape the JSON string
+                    inner_json = json_match.group(1).replace('\\n', '\n').replace('\\"', '"')
+                    response_data = json.loads(inner_json)
+                    
+                    actual_status = response_data.get("data", {}).get("status", "")
+                    actual_error = response_data.get("data", {}).get("error", "")
+                    is_duplicate = response_data.get("data", {}).get("is_duplicate", False)
+                    
+                    if actual_status == "success":
+                        return True, "success", duration
+                    elif is_duplicate or "duplicate" in response_data.get("message", "").lower():
+                        # Only report duplicate if actually a duplicate (not a failed extraction)
+                        if actual_error:
+                            return False, f"failed: {actual_error[:150]}", duration
+                        return False, "duplicate", duration
+                    elif actual_error:
+                        return False, f"failed: {actual_error[:150]}", duration
+                    else:
+                        return False, f"status={actual_status}", duration
+                except (json.JSONDecodeError, KeyError):
+                    pass  # Fall through to simple text matching
+            
+            # Fallback: simple text matching (legacy behavior)
+            if '"status": "success"' in output and '"error"' not in output:
+                return True, "success", duration
+            elif "already exists" in output.lower():
                 return False, "duplicate", duration
+            elif '"error":' in output:
+                # Extract error message
+                error_match = re.search(r'"error":\s*"([^"]+)"', output)
+                if error_match:
+                    return False, f"failed: {error_match.group(1)[:100]}", duration
+                return False, "failed: unknown error", duration
             return True, "success", duration
         else:
             # Non-zero exit - check for specific errors

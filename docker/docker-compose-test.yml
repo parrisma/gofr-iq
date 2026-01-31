@@ -22,6 +22,10 @@
 
 name: gofr-iq-test
 
+x-gofr-ports: &gofr_ports
+  env_file:
+    - ../lib/gofr-common/config/gofr_ports.env
+
 services:
   # ==========================================================================
   # INFRASTRUCTURE (Ephemeral - Test Mode)
@@ -29,6 +33,7 @@ services:
 
   # HashiCorp Vault - Auth Backend (Dev Mode - ephemeral)
   vault:
+    <<: *gofr_ports
     image: gofr-iq-vault:latest
     container_name: gofr-vault-test
     hostname: gofr-vault-test
@@ -74,6 +79,7 @@ services:
     # No volumes - ephemeral
 
   neo4j:
+    <<: *gofr_ports
     image: gofr-iq-neo4j:latest
     container_name: gofr-iq-neo4j-test
     hostname: gofr-iq-neo4j-test
@@ -101,6 +107,7 @@ services:
       - /logs
 
   chromadb:
+    <<: *gofr_ports
     image: gofr-iq-chromadb:latest
     container_name: gofr-iq-chromadb-test
     hostname: gofr-iq-chromadb-test
@@ -127,6 +134,7 @@ services:
   # 1. MCP Server (Core Logic)
   # ==========================================================================
   mcp:
+    <<: *gofr_ports
     image: gofr-iq-prod:latest
     container_name: gofr-iq-mcp-test
     hostname: gofr-iq-mcp-test
@@ -183,6 +191,7 @@ services:
   # 2. MCPO Server (OpenAPI Wrapper)
   # ==========================================================================
   mcpo:
+    <<: *gofr_ports
     image: gofr-iq-prod:latest
     container_name: gofr-iq-mcpo-test
     hostname: gofr-iq-mcpo-test
@@ -216,6 +225,7 @@ services:
   # 3. Web Server (Health Check Only)
   # ==========================================================================
   web:
+    <<: *gofr_ports
     image: gofr-iq-prod:latest
     container_name: gofr-iq-web-test
     hostname: gofr-iq-web-test

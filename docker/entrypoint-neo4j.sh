@@ -7,7 +7,7 @@
 #   - Maintains configurable retention policy
 #   - Stores backups in mounted /backups volume
 
-set -e
+set -euo pipefail
 
 BACKUP_DIR="${GOFR_BACKUP_DIR:-/backups}"
 BACKUP_ENABLED="${GOFR_BACKUP_ENABLED:-true}"
@@ -19,11 +19,16 @@ BACKUP_MAX_COUNT="${GOFR_BACKUP_MAX_COUNT:-10}"
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+RED='\033[0;31m'
 NC='\033[0m'
 
-log_info() { echo -e "${BLUE}[BACKUP]${NC} $1"; }
-log_success() { echo -e "${GREEN}[BACKUP]${NC} $1"; }
-log_warn() { echo -e "${YELLOW}[BACKUP]${NC} $1"; }
+timestamp() { date "+%Y-%m-%d %H:%M:%S"; }
+log_info() { echo -e "${BLUE}[BACKUP]${NC} [$(timestamp)] $1"; }
+log_success() { echo -e "${GREEN}[BACKUP]${NC} [$(timestamp)] $1"; }
+log_warn() { echo -e "${YELLOW}[BACKUP]${NC} [$(timestamp)] $1"; }
+log_error() { echo -e "${RED}[BACKUP]${NC} [$(timestamp)] $1" >&2; }
+
+trap 'log_error "Entrypoint failed at line $LINENO"' ERR
 
 # Setup backup directories
 setup_backup() {
@@ -43,8 +48,9 @@ rotate_backups() {
         find "$backup_path" -type f -name "*.dump" -mtime +$BACKUP_RETENTION -delete 2>/dev/null || true
         
         # Keep only max count backups
-        local count=$(ls -1 "$backup_path"/*.dump 2>/dev/null | wc -l)
-        if [ "$count" -gt "$BACKUP_MAX_COUNT" ]; then
+        local count
+        count=$(ls -1 "$backup_path"/*.dump 2>/dev/null | wc -l | tr -d ' ')
+        if [ "${count:-0}" -gt "$BACKUP_MAX_COUNT" ]; then
             log_info "Rotating backups (keeping $BACKUP_MAX_COUNT most recent)..."
             ls -1t "$backup_path"/*.dump | tail -n +$((BACKUP_MAX_COUNT + 1)) | xargs rm -f 2>/dev/null || true
         fi
@@ -75,17 +81,23 @@ create_startup_backup() {
     
     mkdir -p /tmp/backup
     if neo4j-admin database dump neo4j --to-path=/tmp/backup 2>>"$log_file"; then
-        mv /tmp/backup/neo4j.dump "$backup_file"
-        rm -rf /tmp/backup
-        
-        local size=$(du -h "$backup_file" | cut -f1)
-        log_success "Startup backup complete: neo4j_startup_${timestamp}.dump ($size)"
-        
-        # Record in log
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Startup backup: $backup_file" >> "$log_file"
-        
-        # Rotate old backups
-        rotate_backups
+        if [ -f /tmp/backup/neo4j.dump ]; then
+            mv /tmp/backup/neo4j.dump "$backup_file"
+            rm -rf /tmp/backup
+            
+            local size
+            size=$(du -h "$backup_file" | cut -f1)
+            log_success "Startup backup complete: neo4j_startup_${timestamp}.dump ($size)"
+            
+            # Record in log
+            echo "$(date '+%Y-%m-%d %H:%M:%S') - Startup backup: $backup_file" >> "$log_file"
+            
+            # Rotate old backups
+            rotate_backups
+        else
+            log_warn "Neo4j dump file not created at expected path"
+            rm -rf /tmp/backup
+        fi
     else
         log_warn "Startup backup failed (this may be normal for new installations)"
         rm -rf /tmp/backup

@@ -20,9 +20,12 @@ from typing import Any, TYPE_CHECKING
 import httpx
 
 from app.config import GofrIqConfig
+from app.logger import StructuredLogger
 
 if TYPE_CHECKING:
     pass
+
+logger = StructuredLogger(__name__)
 
 
 # Legacy LLMSettings for backward compatibility
@@ -330,6 +333,7 @@ class LLMService:
         if max_tokens:
             payload["max_tokens"] = max_tokens
 
+        logger.info(f"LLM chat completion: model={payload['model']}, json_mode={json_mode}, messages={len(messages)}")
         response = self._make_request("/chat/completions", payload)
 
         choice = response["choices"][0]
@@ -362,6 +366,7 @@ class LLMService:
             "input": texts,
         }
 
+        logger.info(f"LLM embeddings: model={payload['model']}, texts={len(texts)}")
         response = self._make_request("/embeddings", payload)
 
         # Check for error in response body (OpenRouter returns 200 with error object)

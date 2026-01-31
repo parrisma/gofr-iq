@@ -24,12 +24,17 @@
 
 name: gofr-iq
 
+x-gofr-ports: &gofr_ports
+  env_file:
+    - ../lib/gofr-common/config/gofr_ports.env
+
 services:
   # ============================================================================
   # INFRASTRUCTURE (Shared, external Vault consumed)
   # ============================================================================
 
   neo4j:
+    <<: *gofr_ports
     image: gofr-iq-neo4j:latest
     container_name: gofr-neo4j
     hostname: gofr-neo4j
@@ -56,6 +61,7 @@ services:
       start_period: 60s
 
   chromadb:
+    <<: *gofr_ports
     image: gofr-iq-chromadb:latest
     container_name: gofr-chromadb
     hostname: gofr-chromadb
@@ -81,6 +87,7 @@ services:
   # 1. MCP Server (Core Logic)
   # ==========================================================================
   mcp:
+    <<: *gofr_ports
     image: gofr-iq-prod:latest
     container_name: gofr-iq-mcp
     hostname: gofr-iq-mcp
@@ -119,7 +126,7 @@ services:
       # LLM Configuration
       - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
       - GOFR_IQ_OPENROUTER_BASE_URL=${GOFR_IQ_OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
-      - GOFR_IQ_LLM_MODEL=${GOFR_IQ_LLM_MODEL:-anthropic/claude-sonnet-4.5}
+      - GOFR_IQ_LLM_MODEL=${GOFR_IQ_LLM_MODEL:-meta-llama/llama-3.1-70b-instruct}
       - GOFR_IQ_EMBEDDING_MODEL=${GOFR_IQ_EMBEDDING_MODEL:-qwen/qwen3-embedding-8b}
       - GOFR_IQ_LLM_TIMEOUT=${GOFR_IQ_LLM_TIMEOUT:-60}
       - GOFR_IQ_LLM_MAX_RETRIES=${GOFR_IQ_LLM_MAX_RETRIES:-3}
@@ -144,6 +151,7 @@ services:
   # 2. MCPO Server (OpenAPI Wrapper)
   # ==========================================================================
   mcpo:
+    <<: *gofr_ports
     image: gofr-iq-prod:latest
     container_name: gofr-iq-mcpo
     hostname: gofr-iq-mcpo
@@ -181,6 +189,7 @@ services:
   # 3. Web Server (Health Check Only)
   # ==========================================================================
   web:
+    <<: *gofr_ports
     image: gofr-iq-prod:latest
     container_name: gofr-iq-web
     hostname: gofr-iq-web

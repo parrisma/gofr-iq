@@ -66,12 +66,39 @@ def create_mcp_server(
     language_detector = LanguageDetector()
     duplicate_detector = DuplicateDetector()
 
+    # Create LLM service with config FIRST (needed for embedding function)
+    # CRITICAL: OpenRouter API key MUST be set for entity extraction to work
+    openrouter_key = os.getenv("GOFR_IQ_OPENROUTER_API_KEY")
+    if not openrouter_key:
+        session_logger.error(
+            "FATAL: GOFR_IQ_OPENROUTER_API_KEY not set. "
+            "LLM service is required for entity extraction when graph index is enabled."
+        )
+        raise ValueError(
+            "GOFR_IQ_OPENROUTER_API_KEY must be set in environment. "
+            "Check docker/.env or run bootstrap.py --openrouter-key YOUR_KEY"
+        )
+    
+    llm_service = LLMService(config=config)
+    session_logger.info("LLMService initialized with OpenRouter API key")
+    
+    # Create embedding function using LLM service for OpenRouter embeddings
+    from app.services.embedding_index import LLMEmbeddingFunction
+    embedding_function = LLMEmbeddingFunction(
+        llm_service=llm_service,
+        model=config.embedding_model,  # qwen/qwen3-embedding-8b
+        batch_size=100,
+    )
+    session_logger.info(f"LLM embedding function created with model: {config.embedding_model}")
+
     # Initialize indexes using config
     if config.chromadb_is_http_mode:
         # HTTP client mode - connect to ChromaDB server
+        # Pass embedding_function for client-side embedding generation
         embedding_index = EmbeddingIndex(
             host=config.chroma_host,
             port=config.chroma_port,
+            embedding_function=embedding_function,
         )
     else:
         # ChromaDB HTTP server MUST be configured - no local fallback
@@ -86,21 +113,6 @@ def create_mcp_server(
     # Graph index requires Neo4j connection
     # We initialize it but handle connection errors gracefully in service
     graph_index = GraphIndex()
-
-    # Create LLM service with config
-    # CRITICAL: OpenRouter API key MUST be set for entity extraction to work
-    openrouter_key = os.getenv("GOFR_IQ_OPENROUTER_API_KEY")
-    if not openrouter_key:
-        session_logger.error(
-            "FATAL: GOFR_IQ_OPENROUTER_API_KEY not set. "
-            "LLM service is required for entity extraction when graph index is enabled."
-        )
-        raise ValueError(
-            "GOFR_IQ_OPENROUTER_API_KEY must be set in environment. "
-            "Check docker/.env or run bootstrap.py --openrouter-key YOUR_KEY"
-        )
-    
-    llm_service = LLMService(config=config)
     session_logger.info("LLMService initialized with OpenRouter API key")
 
     ingest_service = IngestService(

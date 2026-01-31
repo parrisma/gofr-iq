@@ -6,7 +6,7 @@ FROM gofr-base:latest
 USER root
 
 # Install additional dev tools
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gh \
     openssh-server \
     dnsutils \
@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y \
     && chmod a+r /etc/apt/keyrings/docker.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list \
     && apt-get update \
-    && apt-get install -y docker-ce-cli docker-compose-plugin \
+    && apt-get install -y --no-install-recommends docker-ce-cli docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/*
 
 # Add gofr user to docker group (group will be created/mapped at runtime)
@@ -47,8 +47,7 @@ RUN mkdir -p /home/gofr/devroot/gofr-iq/data \
     && chown -R gofr:gofr /home/gofr/devroot
 
 # Copy entrypoint
-COPY docker/entrypoint-dev.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY --chmod=755 docker/entrypoint-dev.sh /entrypoint.sh
 
 WORKDIR /home/gofr/devroot/gofr-iq
 

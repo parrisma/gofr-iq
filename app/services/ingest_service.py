@@ -394,7 +394,7 @@ class IngestService:
                     session_logger.error(f"Failed to create AFFECTS for {inst.ticker}: {e}")
             
             # Create MENTIONS relationships for all companies
-            # This allows tracking of secondary/contextual company references
+            # Auto-create companies if they don't exist (like instruments)
             if extraction.companies:
                 session_logger.debug(f"Found {len(extraction.companies)} companies to link: {extraction.companies[:3]}")
             
@@ -403,34 +403,20 @@ class IngestService:
                     continue
                     
                 try:
-                    # Find company by name (case-insensitive fuzzy match)
-                    company_result = session.run(
-                        """
-                        MATCH (c:Company)
-                        WHERE toLower(c.name) CONTAINS toLower($name)
-                           OR toLower($name) CONTAINS toLower(c.name)
-                           OR any(alias IN c.aliases WHERE toLower(alias) CONTAINS toLower($name))
-                        RETURN c.guid AS guid, c.name AS name
-                        ORDER BY size(c.name) ASC
-                        LIMIT 1
-                        """,
-                        {"name": company_name}
-                    ).single()
+                    # Resolve or create company (like _resolve_instrument_guid)
+                    company_guid = self._resolve_company_guid(
+                        session=session,
+                        name=company_name,
+                    )
                     
-                    if company_result:
-                        company_guid = company_result["guid"]
-                        company_name_matched = company_result["name"]
-                        self.graph_index.add_company_mention(
-                            document_guid=document_guid,
-                            company_ticker=company_guid,  # Using guid as ticker identifier
-                            company_name=company_name_matched,
-                        )
-                        session_logger.debug(f"Created MENTIONS: {company_name} -> {company_name_matched}")
-                    else:
-                        session_logger.debug(f"No match found for company: {company_name}")
+                    self.graph_index.add_company_mention(
+                        document_guid=document_guid,
+                        company_ticker=company_guid,
+                        company_name=company_name,
+                    )
+                    session_logger.debug(f"Created MENTIONS: document -> {company_name} ({company_guid})")
                 except Exception as e:
-                    # Silently skip unresolved companies (may be external/not in universe)
-                    session_logger.debug(f"Error creating MENTIONS for {company_name}: {e}")
+                    session_logger.warning(f"Error creating MENTIONS for {company_name}: {e}")
 
     def _resolve_instrument_guid(self, session, ticker: str, name: str) -> str:
         """Return shared Instrument guid for ticker, creating canonical inst-<ticker> if missing."""
@@ -461,6 +447,48 @@ class IngestService:
             {"guid": guid, "ticker": ticker, "name": name},
         )
 
+        return guid
+
+    def _resolve_company_guid(self, session, name: str) -> str:
+        """Return Company guid for name, creating if missing.
+        
+        First tries fuzzy match on existing companies, then creates new if not found.
+        Company guid format: comp-<normalized_name>
+        """
+        # Normalize name for guid generation (lowercase, replace spaces with hyphens)
+        normalized = name.lower().replace(" ", "-").replace(".", "").replace(",", "")[:50]
+        
+        # Try fuzzy match on existing companies first
+        record = session.run(
+            """
+            MATCH (c:Company)
+            WHERE toLower(c.name) CONTAINS toLower($name)
+               OR toLower($name) CONTAINS toLower(c.name)
+               OR any(alias IN c.aliases WHERE toLower(alias) CONTAINS toLower($name))
+            RETURN c.guid AS guid, c.name AS name
+            ORDER BY size(c.name) ASC
+            LIMIT 1
+            """,
+            {"name": name},
+        ).single()
+        
+        if record and record["guid"]:
+            return record["guid"]
+        
+        # Create new company
+        guid = f"comp-{normalized}"
+        session.run(
+            """
+            MERGE (c:Company {guid: $guid})
+            SET c.name = coalesce(c.name, $name),
+                c.ticker = coalesce(c.ticker, $ticker),
+                c.aliases = coalesce(c.aliases, []),
+                c.simulation_id = coalesce(c.simulation_id, 'extracted')
+            """,
+            {"guid": guid, "name": name, "ticker": normalized.upper()[:10]},
+        )
+        session_logger.info(f"Auto-created company: {name} ({guid})")
+        
         return guid
 
     def ingest(

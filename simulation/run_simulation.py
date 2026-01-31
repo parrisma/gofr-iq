@@ -83,13 +83,14 @@ def load_env(
     merge_env_file(ports_file)
     merge_env_file(env_file)
 
-    # Set Vault token from secrets dir if missing
-    if not os.environ.get("VAULT_TOKEN"):
-        token_path = secrets_dir / "vault_root_token"
-        if token_path.exists():
-            os.environ["VAULT_TOKEN"] = token_path.read_text().strip()
-
-    vault_token = os.environ.get("VAULT_TOKEN") or os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_ROOT_TOKEN")
+    # Simulation requires root token for admin operations (creating groups, fetching secrets)
+    # Always prefer the root token from secrets file over any env var (which may be AppRole token)
+    token_path = secrets_dir / "vault_root_token"
+    if token_path.exists():
+        vault_token = token_path.read_text().strip()
+        os.environ["VAULT_TOKEN"] = vault_token  # Override any existing env var
+    else:
+        vault_token = os.environ.get("VAULT_TOKEN") or os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_ROOT_TOKEN")
     if not vault_token:
         raise RuntimeError("VAULT_TOKEN not found; ensure scripts/start-prod.sh was run")
 
@@ -106,6 +107,8 @@ def load_env(
             cmd = [
                 "docker",
                 "exec",
+                "-e",
+                "VAULT_ADDR=http://127.0.0.1:8201",
                 "-e",
                 f"VAULT_TOKEN={vault_token}",
                 "gofr-vault",
@@ -711,6 +714,7 @@ def main():
     parser.add_argument("--count", type=int, default=10, help="Stories to generate (0 = no generation/ingestion)")
     parser.add_argument("--output", type=Path, default=Path("simulation/test_output"), help="Output directory")
     parser.add_argument("--skip-generate", action="store_true", help="Skip generation and reuse existing files in output directory")
+    parser.add_argument("--ingest-only", action="store_true", help="Only ingest existing documents (alias for --skip-generate)")
     parser.add_argument("--skip-ingest", action="store_true", help="Skip ingestion stage")
     parser.add_argument("--validate-only", action="store_true", help="Run setup/validations only (implies --count 0, skip gen/ingest)")
     parser.add_argument("--regenerate", action="store_true", help="Force regeneration of stories even if cached versions exist")
@@ -734,7 +738,7 @@ def main():
 
     # Derive effective flow flags
     effective_count = args.count
-    skip_generate = args.skip_generate
+    skip_generate = args.skip_generate or args.ingest_only  # ingest-only implies skip-generate
     skip_ingest = args.skip_ingest
 
     if args.validate_only:

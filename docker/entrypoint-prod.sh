@@ -1,32 +1,41 @@
 #!/bin/bash
 # gofr-iq Production Entrypoint
 # Starts MCP, MCPO, and Web servers via supervisor
-set -e
+set -euo pipefail
+
+timestamp() { date "+%Y-%m-%d %H:%M:%S"; }
+log_info() { echo "[$(timestamp)] [INFO] $*"; }
+log_warn() { echo "[$(timestamp)] [WARN] $*"; }
+log_error() { echo "[$(timestamp)] [ERROR] $*" >&2; }
+
+trap 'log_error "Entrypoint failed at line $LINENO"' ERR
 
 # Load centralized port configuration from .env file
-GOFR_PORTS_FILE="/app/lib/gofr-common/config/gofr_ports.env"
+GOFR_PORTS_FILE="/home/gofr-iq/lib/gofr-common/config/gofr_ports.env"
 if [ -f "${GOFR_PORTS_FILE}" ]; then
     set -a  # automatically export all variables
+    # shellcheck disable=SC1090
     source "${GOFR_PORTS_FILE}"
     set +a
 else
-    echo "ERROR: Port configuration file not found: ${GOFR_PORTS_FILE}" >&2
-    exit 1
+    log_warn "Port configuration file not found: ${GOFR_PORTS_FILE}"
+    log_warn "Continuing with environment defaults"
 fi
 
 # Environment variables
 # JWT_SECRET is optional if auth is disabled
 AUTH_DISABLED="${GOFR_IQ_AUTH_DISABLED:-false}"
+JWT_SECRET="${JWT_SECRET:-${GOFR_IQ_JWT_SECRET:-}}"
 if [ "$AUTH_DISABLED" = "false" ] && [ -z "$JWT_SECRET" ]; then
-	echo "ERROR: JWT_SECRET must be set in the environment or set GOFR_IQ_AUTH_DISABLED=true for no-auth mode." >&2
-	exit 1
+    log_error "JWT secret missing. Set GOFR_IQ_JWT_SECRET or set GOFR_IQ_AUTH_DISABLED=true"
+    exit 1
 fi
 export GOFR_IQ_AUTH_DISABLED="$AUTH_DISABLED"
 
 # Port configuration (from gofr_ports.sh)
-MCP_PORT="${GOFR_IQ_MCP_PORT}"
-MCPO_PORT="${GOFR_IQ_MCPO_PORT}"
-WEB_PORT="${GOFR_IQ_WEB_PORT}"
+MCP_PORT="${GOFR_IQ_MCP_PORT:-8080}"
+MCPO_PORT="${GOFR_IQ_MCPO_PORT:-8081}"
+WEB_PORT="${GOFR_IQ_WEB_PORT:-8082}"
 
 export MCP_PORT
 export MCPO_PORT
@@ -48,17 +57,18 @@ export NEO4J_USER="${NEO4J_USER:-neo4j}"
 export NEO4J_PASSWORD="${NEO4J_PASSWORD:-}"
 
 # ChromaDB connection (from gofr_ports.sh)
-export CHROMA_HOST="${CHROMA_HOST:-gofr-chroma}"
-export CHROMA_PORT="${GOFR_CHROMA_PORT}"
+export CHROMA_HOST="${CHROMA_HOST:-gofr-chromadb}"
+export CHROMA_PORT="${GOFR_CHROMA_INTERNAL_PORT:-${GOFR_CHROMA_PORT:-8000}}"
 
 # Path to venv
 VENV_PATH="/home/gofr-iq/.venv"
 
-echo "=== gofr-iq Production Container ==="
-echo "MCP Port:-  ${MCP_PORT}"
-echo "MCPO Port:- ${MCPO_PORT}"
-echo "Web Port:-  ${WEB_PORT}"
-echo "Data Dir:-  ${GOFR_IQ_DATA_DIR}"
+log_info "=== gofr-iq Production Container ==="
+log_info "MCP Port:  ${MCP_PORT}"
+log_info "MCPO Port: ${MCPO_PORT}"
+log_info "Web Port:  ${WEB_PORT}"
+log_info "Data Dir:  ${GOFR_IQ_DATA_DIR}"
+log_info "Chroma:    ${CHROMA_HOST}:${CHROMA_PORT}"
 
 # Ensure data directories exist with correct permissions
 mkdir -p "${GOFR_IQ_DATA_DIR}" "${GOFR_IQ_STORAGE_DIR}" "${GOFR_IQ_AUTH_DIR}"
@@ -103,5 +113,5 @@ stderr_logfile=/home/gofr-iq/logs/web-error.log
 environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",GOFR_IQ_AUTH_DISABLED="%(ENV_GOFR_IQ_AUTH_DISABLED)s",WEB_PORT="%(ENV_WEB_PORT)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
 EOF
 
-echo "Starting supervisor..."
+log_info "Starting supervisor..."
 exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

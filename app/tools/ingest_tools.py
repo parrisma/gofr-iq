@@ -157,11 +157,19 @@ def register_ingest_tools(mcp: FastMCP, ingest_service: IngestService) -> None:
                 metadata=metadata,
             )
 
+            # Generate appropriate message based on actual status
+            if result.status.value == "success":
+                message = "Document ingested successfully"
+            elif result.is_duplicate:
+                message = "Document flagged as duplicate"
+            elif result.error:
+                message = f"Document processing failed: {result.error}"
+            else:
+                message = "Document processing completed with issues"
+            
             return success_response(
                 data=result.to_dict(),
-                message="Document ingested successfully"
-                if result.status.value == "success"
-                else "Document flagged as duplicate",
+                message=message,
             )
 
         except SourceValidationError as e:
