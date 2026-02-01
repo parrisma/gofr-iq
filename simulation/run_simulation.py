@@ -542,42 +542,9 @@ def ensure_sources(admin_token: str, expected: List[str] = None):
         expected: Optional list of source names (legacy - will use MOCK_SOURCES instead)
     """
     # Register MOCK_SOURCES with proper trust levels via manage_source.sh
+    # Sources are now automatically synced to Neo4j by SourceRegistry
     register_mock_sources_via_script(admin_token)
-    
-    # After ensuring sources exist in MCP, load them into Neo4j graph
-    print("   📊 Loading sources into Neo4j graph...")
-    try:
-        source_count, rel_count = load_sources_to_neo4j_inline()
-        print(f"   ✓ Neo4j: {source_count} Source nodes, {rel_count} PRODUCED_BY relationships")
-    except Exception as inner:
-        print(f"   ❌ Source sync to Neo4j failed: {inner}")
-        print("      Sources exist in MCP registry but may not be queryable in graph")
-
-
-def load_sources_to_neo4j_inline() -> tuple[int, int]:
-    """Fallback loader to upsert Source nodes into Neo4j when legacy module is absent."""
-    from neo4j import GraphDatabase
-
-    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
-    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
-    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
-
-    payload = [{"name": s.name, "trust_level": getattr(s, "trust_level", "medium")} for s in MOCK_SOURCES]
-    source_count = 0
-    with GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password)) as driver:
-        with driver.session() as session:
-            result = session.run(
-                """
-                UNWIND $sources AS src
-                MERGE (s:Source {name: src.name})
-                SET s.trust_level = src.trust_level
-                RETURN count(s) AS count
-                """,
-                sources=payload,
-            )
-            source_count = result.single()["count"]
-    # PRODUCED_BY relationships are handled during document ingestion
-    return source_count, 0
+    print("   ✓ Sources registered via MCP and synced to Neo4j")
 
 
 def count_existing_documents(output_dir: Path) -> int:

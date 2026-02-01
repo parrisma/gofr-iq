@@ -1,6 +1,9 @@
 import sys
 import logging
+import os
+import json
 from pathlib import Path
+from typing import Any
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -11,6 +14,134 @@ from simulation.generate_synthetic_clients import ClientGenerator
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+def _get_admin_token() -> str:
+    """Get admin token from bootstrap tokens file."""
+    token_file = Path(__file__).parent.parent / "secrets" / "bootstrap_tokens.json"
+    if not token_file.exists():
+        raise FileNotFoundError(
+            f"Bootstrap tokens file not found: {token_file}\n"
+            "Run ./scripts/start-prod.sh to generate tokens."
+        )
+    with open(token_file, "r") as f:
+        tokens = json.load(f)
+    return tokens["admin_token"]
+
+
+def _create_client_via_mcp(client_data: dict[str, Any], token: str) -> dict[str, Any]:
+    """Create client via MCP tools using manage_client script.
+    
+    Args:
+        client_data: Client creation parameters
+        token: Admin JWT token
+        
+    Returns:
+        Response from create_client MCP call
+    """
+    import subprocess
+    
+    project_root = Path(__file__).parent.parent
+    cmd = [
+        "uv", "run",
+        str(project_root / "scripts" / "manage_client.py"),
+        "--docker", "--token", token,
+        "create",
+        "--name", client_data["name"],
+        "--type", client_data["client_type"],
+    ]
+    
+    # Add optional parameters
+    if "alert_frequency" in client_data:
+        cmd.extend(["--alert-frequency", client_data["alert_frequency"]])
+    if "impact_threshold" in client_data:
+        cmd.extend(["--impact-threshold", str(client_data["impact_threshold"])])
+    if "mandate_type" in client_data:
+        cmd.extend(["--mandate-type", client_data["mandate_type"]])
+    if "benchmark" in client_data:
+        cmd.extend(["--benchmark", client_data["benchmark"]])
+    if "horizon" in client_data:
+        cmd.extend(["--horizon", client_data["horizon"]])
+    if client_data.get("esg_constrained", False):
+        cmd.append("--esg-constrained")
+    
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=project_root)
+    
+    if result.returncode != 0:
+        raise RuntimeError(f"Failed to create client via MCP: {result.stderr}")
+    
+    response = json.loads(result.stdout)
+    if response.get("status") == "error":
+        raise RuntimeError(f"MCP error: {response.get('message', 'Unknown error')}")
+    
+    return response
+
+
+def _add_holdings_via_mcp(client_guid: str, holdings: list[tuple[str, float]], token: str) -> None:
+    """Add holdings to client portfolio via MCP.
+    
+    Args:
+        client_guid: Client UUID
+        holdings: List of (ticker, weight) tuples
+        token: Admin JWT token
+    """
+    import subprocess
+    
+    project_root = Path(__file__).parent.parent
+    
+    for ticker, weight in holdings:
+        cmd = [
+            "uv", "run",
+            str(project_root / "scripts" / "manage_client.py"),
+            "--docker", "--token", token,
+            "add-holding",
+            client_guid,
+            "--ticker", ticker,
+            "--weight", str(weight),
+        ]
+        
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=project_root)
+        
+        if result.returncode != 0:
+            logger.warning(f"Failed to add holding {ticker} to {client_guid}: {result.stderr}")
+            continue
+        
+        response = json.loads(result.stdout)
+        if response.get("status") == "error":
+            logger.warning(f"MCP error adding {ticker}: {response.get('message', 'Unknown')}")
+
+
+def _add_watchlist_via_mcp(client_guid: str, tickers: list[str], token: str) -> None:
+    """Add watchlist items to client via MCP.
+    
+    Args:
+        client_guid: Client UUID
+        tickers: List of tickers to watch
+        token: Admin JWT token
+    """
+    import subprocess
+    
+    project_root = Path(__file__).parent.parent
+    
+    for ticker in tickers:
+        cmd = [
+            "uv", "run",
+            str(project_root / "scripts" / "manage_client.py"),
+            "--docker", "--token", token,
+            "add-watch",
+            client_guid,
+            "--ticker", ticker,
+        ]
+        
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=project_root)
+        
+        if result.returncode != 0:
+            logger.warning(f"Failed to add watch {ticker} to {client_guid}: {result.stderr}")
+            continue
+        
+        response = json.loads(result.stdout)
+        if response.get("status") == "error":
+            logger.warning(f"MCP error adding watch {ticker}: {response.get('message', 'Unknown')}")
 
 def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
     """
@@ -218,108 +349,63 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                 logger.info("Generating synthetic clients...")
                 gen = ClientGenerator(builder)
                 clients = gen.generate_clients()
-                logger.info(f"Injecting {len(clients)} Clients & Portfolios...")
-
+                logger.info(f"Creating {len(clients)} Clients via MCP...")
+                
+                # Get admin token for MCP calls
+                try:
+                    token = _get_admin_token()
+                except FileNotFoundError as e:
+                    logger.error(str(e))
+                    return
+                
                 for client in clients:
-                    # Client + profile
-                    session.run(
-                        """
-                        MERGE (c:Client {guid: $guid})
-                        SET c.name = $name,
-                            c.simulation_id = 'phase2'
-
-                        MERGE (ct:ClientType {code: $type_code})
-                        MERGE (c)-[:IS_TYPE_OF]->(ct)
-
-                        MERGE (cp:ClientProfile {guid: $profile_guid})
-                        SET cp.risk_appetite = $risk,
-                            cp.min_trust = $trust,
-                            cp.horizon = $horizon
-                        MERGE (c)-[:HAS_PROFILE]->(cp)
-
-                        WITH c
-                        MATCH (g:Group {guid: $group_guid})
-                        MERGE (c)-[:IN_GROUP]->(g)
-                        """,
-                        {
-                            "guid": client.guid,
-                            "name": client.name,
-                            "type_code": client.archetype.name.upper().replace(" ", "_"),
-                            "profile_guid": f"profile-{client.guid}",
-                            "risk": client.archetype.risk_appetite,
-                            "trust": client.archetype.min_trust_level,
-                            "horizon": client.archetype.investment_horizon,
-                            "group_guid": group["guid"],
-                        },
-                    )
-
-                    # Portfolio
-                    session.run(
-                        """
-                        MATCH (c:Client {guid: $client_guid})
-                        MERGE (p:Portfolio {guid: $port_guid})
-                        MERGE (c)-[:HAS_PORTFOLIO]->(p)
-
-                        WITH p
-                        MATCH (g:Group {guid: $group_guid})
-                        MERGE (p)-[:IN_GROUP]->(g)
-                        """,
-                        {
-                            "client_guid": client.guid,
-                            "port_guid": f"portfolio-{client.guid}",
-                            "group_guid": group["guid"],
-                        },
-                    )
-
-                    for pos in client.portfolio:
-                        session.run(
-                            """
-                            MATCH (p:Portfolio {guid: $port_guid})
-                            MATCH (i:Instrument {ticker: $ticker})
-                            MERGE (p)-[h:HOLDS]->(i)
-                            SET h.weight = $weight,
-                                h.sentiment = $sentiment
-                            """,
+                    logger.info(f"Creating client: {client.name}")
+                    
+                    # Map archetype to client type
+                    type_map = {
+                        "Hedge Fund": "HEDGE_FUND",
+                        "Pension Fund": "PENSION_FUND",
+                        "Retail Trader": "RETAIL_TRADER",
+                    }
+                    client_type = type_map.get(client.archetype.name, "HEDGE_FUND")
+                    
+                    # Map investment horizon
+                    horizon_map = {
+                        "SHORT_TERM": "short",
+                        "LONG_TERM": "long",
+                    }
+                    horizon = horizon_map.get(client.archetype.investment_horizon, "medium")
+                    
+                    # Create client via MCP (creates Client, Profile, Portfolio, Watchlist)
+                    try:
+                        response = _create_client_via_mcp(
                             {
-                                "port_guid": f"portfolio-{client.guid}",
-                                "ticker": pos.ticker,
-                                "weight": pos.weight,
-                                "sentiment": pos.sentiment,
+                                "name": client.name,
+                                "client_type": client_type,
+                                "alert_frequency": "daily",
+                                "impact_threshold": 50.0,
+                                "horizon": horizon,
                             },
+                            token,
                         )
-
-                    # Watchlist
-                    session.run(
-                        """
-                        MATCH (c:Client {guid: $client_guid})
-                        MERGE (w:Watchlist {guid: $wl_guid})
-                        SET w.name = $wl_name
-                        MERGE (c)-[:HAS_WATCHLIST]->(w)
-
-                        WITH w
-                        MATCH (g:Group {guid: $group_guid})
-                        MERGE (w)-[:IN_GROUP]->(g)
-                        """,
-                        {
-                            "client_guid": client.guid,
-                            "wl_guid": f"watchlist-{client.guid}",
-                            "wl_name": f"{client.name} Watchlist",
-                            "group_guid": group["guid"],
-                        },
-                    )
-
-                    for ticker in client.watchlist:
-                        session.run(
-                            """
-                            MATCH (w:Watchlist {guid: $wl_guid})
-                            MATCH (i:Instrument {ticker: $ticker})
-                            MERGE (w)-[:WATCHES]->(i)
-                            """,
-                            {
-                                "wl_guid": f"watchlist-{client.guid}",
-                                "ticker": ticker,
-                            },
-                        )
+                        
+                        created_guid = response["data"]["client_guid"]
+                        logger.info(f"  Created {client.name}: {created_guid}")
+                        
+                        # Add holdings
+                        if client.portfolio:
+                            holdings = [(pos.ticker, pos.weight) for pos in client.portfolio]
+                            logger.info(f"  Adding {len(holdings)} holdings...")
+                            _add_holdings_via_mcp(created_guid, holdings, token)
+                        
+                        # Add watchlist
+                        if client.watchlist:
+                            logger.info(f"  Adding {len(client.watchlist)} watchlist items...")
+                            _add_watchlist_via_mcp(created_guid, client.watchlist, token)
+                        
+                    except RuntimeError as e:
+                        logger.error(f"  Failed to create client {client.name}: {e}")
+                        continue
 
     logger.info("Simulation Data Load Complete.")
 

@@ -5,6 +5,7 @@ This module provides storage and management for news sources with:
 - Admin-only write access (enforced by callers)
 - Audit logging for changes
 - Region and type filtering
+- Automatic Neo4j synchronization (optional)
 
 Sources are stored in a flat structure:
     {base_path}/sources/{source_guid}.json
@@ -15,10 +16,13 @@ from __future__ import annotations
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from app.models import Source, SourceMetadata, SourceType, TrustLevel
+
+if TYPE_CHECKING:
+    from app.services.graph_index import GraphIndex
 
 
 class SourceNotFoundError(Exception):
@@ -74,17 +78,20 @@ class SourceRegistry:
 
     Attributes:
         base_path: Root path for all source storage
+        graph_index: Optional GraphIndex for Neo4j synchronization
     """
 
-    def __init__(self, base_path: str | Path) -> None:
+    def __init__(self, base_path: str | Path, graph_index: GraphIndex | None = None) -> None:
         """Initialize the source registry.
 
         Args:
             base_path: Root directory for source storage
+            graph_index: Optional GraphIndex for Neo4j synchronization
         """
         self.base_path = Path(base_path)
         self._sources_path = self.base_path / "sources"
         self._audit_path = self.base_path / "audit" / "sources"
+        self._graph_index = graph_index
         self._ensure_directories()
 
     def _ensure_directories(self) -> None:
@@ -139,6 +146,52 @@ class SourceRegistry:
         audit_path = self._get_audit_path(source_guid)
         with audit_path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(entry.to_dict()) + "\n")
+
+    def _sync_to_neo4j(self, source: Source, operation: str = "upsert") -> None:
+        """Sync source to Neo4j graph database.
+
+        Args:
+            source: Source to sync
+            operation: Operation type ('upsert' or 'delete')
+        """
+        if self._graph_index is None:
+            return  # Neo4j sync disabled
+
+        try:
+            if operation == "delete":
+                # Remove Source node from Neo4j
+                with self._graph_index._get_session() as session:
+                    session.run(
+                        """
+                        MATCH (s:Source {source_guid: $source_guid})
+                        DETACH DELETE s
+                        """,
+                        source_guid=source.source_guid,
+                    )
+            else:
+                # Upsert Source node to Neo4j
+                with self._graph_index._get_session() as session:
+                    session.run(
+                        """
+                        MERGE (s:Source {source_guid: $source_guid})
+                        SET s.name = $name,
+                            s.type = $type,
+                            s.region = $region,
+                            s.trust_level = $trust_level,
+                            s.active = $active,
+                            s.updated_at = datetime($updated_at)
+                        """,
+                        source_guid=source.source_guid,
+                        name=source.name,
+                        type=source.type.value if source.type else "other",
+                        region=source.region,
+                        trust_level=source.trust_level.value if source.trust_level else "unverified",
+                        active=source.active,
+                        updated_at=source.updated_at.isoformat() if source.updated_at else datetime.utcnow().isoformat(),
+                    )
+        except Exception:
+            # Log but don't fail - Neo4j sync is supplementary
+            pass  # nosec B110 - graceful degradation if Neo4j unavailable
 
     def create(
         self,
@@ -208,6 +261,9 @@ class SourceRegistry:
                 changes={"initial": data},
                 actor_group=None,
             )
+
+            # Sync to Neo4j if configured
+            self._sync_to_neo4j(source, operation="upsert")
 
             return source
         except Exception as e:
@@ -397,6 +453,9 @@ class SourceRegistry:
                     actor_group=None,
                 )
 
+            # Sync to Neo4j if configured
+            self._sync_to_neo4j(source, operation="upsert")
+
             return source
         except SourceNotFoundError:
             raise
@@ -440,6 +499,9 @@ class SourceRegistry:
                 changes={"active": {"old": was_active, "new": False}},
                 actor_group=None,
             )
+
+            # Sync to Neo4j if configured (marks as inactive)
+            self._sync_to_neo4j(source, operation="upsert")
 
             return source
         except SourceNotFoundError:

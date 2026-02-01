@@ -135,9 +135,9 @@ UNIVERSE = UniverseBuilder()
 
 # Client portfolio mappings for validation metadata
 CLIENT_PORTFOLIOS = {
-    "client-hedge-fund": ["QNTM", "BANKO", "VIT", "GTX"],
-    "client-pension-fund": ["OMNI", "SHOPM", "TRUCK"],
-    "client-retail": ["VELO", "BLK"],
+    "550e8400-e29b-41d4-a716-446655440001": ["QNTM", "BANKO", "VIT", "GTX"],  # Apex Capital (Hedge Fund)
+    "550e8400-e29b-41d4-a716-446655440002": ["OMNI", "SHOPM", "TRUCK"],  # Teachers Retirement (Pension)
+    "550e8400-e29b-41d4-a716-446655440003": ["VELO", "BLK"],  # DiamondHands420 (Retail)
 }
 
 CLIENT_WATCHLISTS = {

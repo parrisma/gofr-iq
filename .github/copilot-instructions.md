@@ -39,6 +39,13 @@ source <(./lib/gofr-common/scripts/auth_env.sh --docker)
 ./scripts/manage_source.sh list
 ```
 
+## Clients (use scripts)
+```bash
+./scripts/manage_client.sh --docker --token $TOKEN <command> [args]
+# Manage clients via MCP (create, list, get, update, delete, defunct, restore, add-holding, add-watch, validate)
+# Use --help for full usage
+```
+
 ## Simulation
 ```bash
 uv run simulation/run_simulation.py --count 50
@@ -48,3 +55,11 @@ uv run simulation/run_simulation.py --count 50
 - Use the **project logger** (e.g., `StructuredLogger`), **not** `print()` or default logging.
 - Logs must be **clear and actionable**, not cryptic.
 - All errors must include **cause, references/context**, and **recovery options** where possible.
+
+## Testing
+- **Always run `./scripts/run_tests.sh` to verify each step**, and report failures with recovery options.
+- **Test fixtures that create services with explicit settings bypass env vars.** If a fixture does `LLMSettings(api_key=key)` without other params, it uses class defaults, not `os.environ`. Always read env vars explicitly in fixtures.
+- **Deterministic embeddings**: Mock mode uses hash-based embeddings (384 dim) that produce consistent but **not semantically meaningful** vectors. Tests checking semantic similarity must either:
+  1. Skip the assertion in mock mode (`if live_llm_available()`)
+  2. Use membership assertions instead of ordering (document in results, not results[0])
+  3. Only verify query mechanics work (no errors, response not None)

@@ -62,7 +62,6 @@ def create_mcp_server(
 
     # Initialize services
     document_store = DocumentStore(base_path=storage_path / "documents")
-    source_registry = SourceRegistry(base_path=storage_path / "sources")
     language_detector = LanguageDetector()
     duplicate_detector = DuplicateDetector()
 
@@ -114,6 +113,12 @@ def create_mcp_server(
     # We initialize it but handle connection errors gracefully in service
     graph_index = GraphIndex()
     session_logger.info("LLMService initialized with OpenRouter API key")
+
+    # Initialize SourceRegistry with Neo4j sync enabled
+    source_registry = SourceRegistry(
+        base_path=storage_path / "sources",
+        graph_index=graph_index,
+    )
 
     ingest_service = IngestService(
         document_store=document_store,

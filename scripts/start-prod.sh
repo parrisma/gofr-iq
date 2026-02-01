@@ -68,6 +68,7 @@ export HOST_PROJECT_ROOT
 FRESH_INSTALL=false
 RESET_ALL=false
 NUKE_ALL=false
+BUILD_IMAGES=false
 OPENROUTER_KEY=""
 
 while [[ $# -gt 0 ]]; do
@@ -85,6 +86,11 @@ while [[ $# -gt 0 ]]; do
             NUKE_ALL=true
             RESET_ALL=true
             FRESH_INSTALL=true
+            BUILD_IMAGES=true
+            shift
+            ;;
+        --build)
+            BUILD_IMAGES=true
             shift
             ;;
         --openrouter-key)
@@ -92,12 +98,13 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         -h|--help)
-            echo "Usage: $0 [--fresh] [--reset] [--nuke] [--openrouter-key KEY]"
+            echo "Usage: $0 [--fresh] [--reset] [--nuke] [--build] [--openrouter-key KEY]"
             echo ""
             echo "Options:"
             echo "  --fresh          Store initial secrets in Vault (use after first install)"
             echo "  --reset          Wipe app data and reinitialize (preserves images)"
             echo "  --nuke           Full clean: remove images, volumes, secrets, then reset"
+            echo "  --build          Rebuild Docker images before starting (default: use existing)"
             echo "  --openrouter-key Store OpenRouter API key in Vault"
             echo ""
             echo "REQUIREMENTS:"
@@ -213,14 +220,26 @@ if [ -f "$DOCKER_ENV_FILE" ]; then
     set +a
 fi
 
-# Step 3: Ensure images are built (prod stack)
-log_info "Ensuring production images are built..."
-if [ ! -x "$DOCKER_DIR/build-all.sh" ]; then
-    log_error "Missing build orchestrator: $DOCKER_DIR/build-all.sh"
-    exit 1
+# Step 3: Build images if requested or if they don't exist
+if [ "$BUILD_IMAGES" = true ]; then
+    log_info "Building production images (--build flag set)..."
+    if [ ! -x "$DOCKER_DIR/build-all.sh" ]; then
+        log_error "Missing build orchestrator: $DOCKER_DIR/build-all.sh"
+        exit 1
+    fi
+    "$DOCKER_DIR/build-all.sh" --prod
+    log_success "Images built"
+elif ! docker image inspect gofr-iq-prod:latest >/dev/null 2>&1; then
+    log_warn "Production image not found, building..."
+    if [ ! -x "$DOCKER_DIR/build-all.sh" ]; then
+        log_error "Missing build orchestrator: $DOCKER_DIR/build-all.sh"
+        exit 1
+    fi
+    "$DOCKER_DIR/build-all.sh" --prod
+    log_success "Images built"
+else
+    log_info "Using existing images (use --build to rebuild)"
 fi
-"$DOCKER_DIR/build-all.sh" --prod
-log_success "Images ready"
 
 # Step 4: Stop existing services (preserve volumes)
 log_info "Stopping existing services..."

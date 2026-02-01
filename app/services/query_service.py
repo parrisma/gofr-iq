@@ -592,7 +592,12 @@ class QueryService:
             return []
 
     def _get_peer_instruments(self, ticker: str) -> list[str]:
-        """Get peer instruments (via PEER_OF relationship)"""
+        """Get peer instruments (via sector/company relationships)
+        
+        Note: PEER_OF relationships don't exist in current schema.
+        Returns instruments in same sector as a proxy for peers.
+        Traverses: Instrument -> Company -> Sector <- Company <- Instrument
+        """
         if not self.graph_index:
             return []
             
@@ -600,7 +605,9 @@ class QueryService:
             with self.graph_index._get_session() as session:
                 result = session.run(
                     """
-                    MATCH (i1:Instrument {ticker: $ticker})-[:PEER_OF]-(i2:Instrument)
+                    MATCH (i1:Instrument {ticker: $ticker})-[:ISSUED_BY]->(c1:Company)-[:BELONGS_TO]->(s:Sector)
+                    MATCH (i2:Instrument)-[:ISSUED_BY]->(c2:Company)-[:BELONGS_TO]->(s)
+                    WHERE i1.ticker <> i2.ticker
                     RETURN DISTINCT i2.ticker AS ticker
                     LIMIT 5
                     """,
@@ -628,10 +635,11 @@ class QueryService:
                     MATCH (d)-[:IN_GROUP]->(g:Group)
                     WHERE g.guid IN $group_guids
                     OPTIONAL MATCH (d)-[:PRODUCED_BY]->(s:Source)
-                    RETURN d.guid AS guid, d.title AS title, d.content AS content,
+                    OPTIONAL MATCH (d)-[:TRIGGERED_BY]->(e:EventType)
+                    RETURN d.guid AS guid, d.title AS title,
                            d.created_at AS created_at, d.language AS language,
                            d.impact_score AS impact_score, d.impact_tier AS impact_tier,
-                           d.event_type AS event_type,
+                           e.code AS event_type,
                            s.guid AS source_guid, s.name AS source_name
                     ORDER BY d.created_at DESC
                     LIMIT $limit

@@ -75,7 +75,7 @@ class ClientGenerator:
         watchlist = ["NXS", "FIN"]  # Monitoring other tech/fin
 
         return MockClient(
-            guid="client-hedge-fund",
+            guid="550e8400-e29b-41d4-a716-446655440001",  # Stable UUID for hedge fund client
             name="Apex Capital",
             archetype=archetype,
             portfolio=portfolio,
@@ -96,7 +96,7 @@ class ClientGenerator:
         watchlist = ["ECO", "STR"]  # Monitoring stable sectors
 
         return MockClient(
-            guid="client-pension-fund",
+            guid="550e8400-e29b-41d4-a716-446655440002",  # Stable UUID for pension fund client
             name="Teachers Retirement System",
             archetype=archetype,
             portfolio=portfolio,
@@ -116,7 +116,7 @@ class ClientGenerator:
         watchlist = ["QNTM", "LUXE"]  # Watching volatile tech
 
         return MockClient(
-            guid="client-retail",
+            guid="550e8400-e29b-41d4-a716-446655440003",  # Stable UUID for retail trader client
             name="DiamondHands420",
             archetype=archetype,
             portfolio=portfolio,

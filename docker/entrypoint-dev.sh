@@ -19,6 +19,17 @@ log_info "======================================================================
 log_info "GOFR-IQ Container Entrypoint"
 log_info "======================================================================="
 
+# Align docker group GID with host's docker socket GID (for DinD)
+if [ -S /var/run/docker.sock ]; then
+    DOCKER_SOCK_GID=$(stat -c '%g' /var/run/docker.sock 2>/dev/null)
+    CURRENT_DOCKER_GID=$(getent group docker | cut -d: -f3)
+    if [ -n "$DOCKER_SOCK_GID" ] && [ "$DOCKER_SOCK_GID" != "$CURRENT_DOCKER_GID" ]; then
+        log_info "Aligning docker group GID: $CURRENT_DOCKER_GID -> $DOCKER_SOCK_GID"
+        sudo groupmod -g "$DOCKER_SOCK_GID" docker 2>/dev/null || \
+            log_warn "Could not align docker GID. Docker commands may fail."
+    fi
+fi
+
 # Fix data directory permissions if mounted as volume
 if [ -d "$PROJECT_DIR/data" ]; then
     if [ ! -w "$PROJECT_DIR/data" ]; then

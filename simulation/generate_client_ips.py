@@ -73,7 +73,7 @@ class InvestmentPolicyStatement:
 def generate_hedge_fund_ips() -> InvestmentPolicyStatement:
     """Alpha-focused hedge fund with aggressive risk profile"""
     return InvestmentPolicyStatement(
-        client_guid="client-hedge-fund",
+        client_guid="550e8400-e29b-41d4-a716-446655440001",  # Apex Capital (Hedge Fund)
         client_name="Apex Capital",
         archetype="HEDGE_FUND",
         
@@ -147,7 +147,7 @@ def generate_hedge_fund_ips() -> InvestmentPolicyStatement:
 def generate_pension_fund_ips() -> InvestmentPolicyStatement:
     """Conservative institutional investor with fiduciary duties"""
     return InvestmentPolicyStatement(
-        client_guid="client-pension-fund",
+        client_guid="550e8400-e29b-41d4-a716-446655440002",  # Teachers Retirement (Pension Fund)
         client_name="Teachers Retirement System",
         archetype="PENSION_FUND",
         
@@ -230,7 +230,7 @@ def generate_pension_fund_ips() -> InvestmentPolicyStatement:
 def generate_retail_trader_ips() -> InvestmentPolicyStatement:
     """Aggressive retail trader with meme stock / crypto exposure"""
     return InvestmentPolicyStatement(
-        client_guid="client-retail",
+        client_guid="550e8400-e29b-41d4-a716-446655440003",  # DiamondHands420 (Retail Trader)
         client_name="DiamondHands420",
         archetype="RETAIL_TRADER",
         

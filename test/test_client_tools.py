@@ -116,6 +116,12 @@ class TestToolRegistration:
         assert "update_client_profile" in registered_tools
         assert "remove_from_portfolio" in registered_tools
         assert "remove_from_watchlist" in registered_tools
+        assert "defunct_client" in registered_tools
+        assert "restore_client" in registered_tools
+        assert "delete_client" in registered_tools
+        assert "repair_client" in registered_tools
+        assert "move_client_group" in registered_tools
+        assert "set_client_type" in registered_tools
 
     def test_create_client_description(self, registered_tools: dict[str, Any]) -> None:
         """Test create_client has proper description"""
@@ -367,6 +373,34 @@ class TestGetClientFeed:
         assert result["status"] == "error"
         assert result["error_code"] == "CLIENT_NOT_FOUND"
 
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_feed_defunct_client(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test feed blocked for defunct client"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"status": "defunct"},
+        )
+
+        tool_fn = get_tool_fn(mcp_server, "get_client_feed")
+
+        response = tool_fn(
+            client_guid="client-123",
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "error"
+        assert result["error_code"] == "CLIENT_DEFUNCT"
+
 
 # ============================================================================
 # Add to Portfolio Tests
@@ -541,6 +575,7 @@ class TestListClients:
                 "client_type": "HEDGE_FUND",
                 "group_guid": TEST_GROUP,
                 "created_at": "2025-01-01T00:00:00Z",
+                "status": "active",
             },
             {
                 "client_guid": "client-2",
@@ -548,6 +583,7 @@ class TestListClients:
                 "client_type": "LONG_ONLY",
                 "group_guid": TEST_GROUP,
                 "created_at": "2025-01-02T00:00:00Z",
+                "status": "active",
             },
         ])
         mock_session.run.return_value = mock_result
@@ -587,6 +623,7 @@ class TestListClients:
                 "client_type": "HEDGE_FUND",
                 "group_guid": TEST_GROUP,
                 "created_at": "2025-01-01T00:00:00Z",
+                "status": "active",
             },
         ])
         mock_session.run.return_value = mock_result
@@ -662,6 +699,9 @@ class TestGetClientProfile:
             "created_at": "2025-01-01T00:00:00Z",
             "client_type": "HEDGE_FUND",
             "group_guid": TEST_GROUP,
+            "status": "active",
+            "defunct_at": None,
+            "defunct_reason": None,
             "profile_guid": "profile-123",
             "mandate_type": "equity_long_short",
             "horizon": "short",
@@ -741,6 +781,9 @@ class TestGetClientProfile:
             "impact_threshold": 50.0,
             "created_at": None,
             "client_type": "HEDGE_FUND",
+            "status": None,
+            "defunct_at": None,
+            "defunct_reason": None,
             "profile_guid": None,
             "mandate_type": None,
             "horizon": None,
@@ -1235,3 +1278,103 @@ class TestRemoveFromWatchlist:
         
         assert result["status"] == "error"
         assert result["error_code"] == "WATCH_NOT_FOUND"
+
+
+# ============================================================================
+# Admin Client Tools Tests
+# ============================================================================
+
+
+class TestAdminClientTools:
+    """Tests for admin-only client tools"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_defunct_client_access_denied(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+
+        tool_fn = get_tool_fn(mcp_server, "defunct_client")
+        response = tool_fn(client_guid="client-123")
+        result = parse_response(response)
+
+        assert result["status"] == "error"
+        assert result["error_code"] == "ACCESS_DENIED"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_defunct_client_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        mock_permitted_groups.return_value = ["admin"]
+        register_client_tools(mcp_server, mock_graph_index)
+
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.single.return_value = {
+            "client_guid": "client-123",
+            "status": "defunct",
+            "defunct_at": "2026-01-01T00:00:00Z",
+        }
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+
+        tool_fn = get_tool_fn(mcp_server, "defunct_client")
+        response = tool_fn(client_guid="client-123", reason="merged")
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["status"] == "defunct"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_restore_client_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        mock_permitted_groups.return_value = ["admin"]
+        register_client_tools(mcp_server, mock_graph_index)
+
+        mock_session = MagicMock()
+        mock_result = MagicMock()
+        mock_result.single.return_value = {
+            "client_guid": "client-123",
+            "status": "active",
+        }
+        mock_session.run.return_value = mock_result
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+
+        tool_fn = get_tool_fn(mcp_server, "restore_client")
+        response = tool_fn(client_guid="client-123")
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["status"] == "active"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_delete_client_access_denied(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+
+        tool_fn = get_tool_fn(mcp_server, "delete_client")
+        response = tool_fn(client_guid="client-123")
+        result = parse_response(response)
+
+        assert result["status"] == "error"
+        assert result["error_code"] == "ACCESS_DENIED"

@@ -43,7 +43,8 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             "USES OUTPUT FROM: query_documents (entities found) | get_instrument_news (ticker context). "
             "PROVIDES INPUT TO: get_instrument_news (for detail drill-down) | get_market_context (for context). "
             "NODE_TYPES: INSTRUMENT (ticker), COMPANY, DOCUMENT (guid), EVENT_TYPE, SECTOR, CLIENT. "
-            "RELATIONSHIPS: AFFECTS|PEER_OF|MENTIONS|HOLDS|WATCHES|ISSUED_BY|BELONGS_TO. "
+            "RELATIONSHIPS: AFFECTS|MENTIONS|HOLDS|WATCHES|ISSUED_BY|BELONGS_TO|TRIGGERED_BY. "
+            "NOTE: PEER_OF defined but not created in current data. "
             "TIP: Start with node_type=INSTRUMENT, node_id=ticker (e.g., 'AAPL'). Increase max_depth to see deeper connections (slower)."
         ),
     )
@@ -59,8 +60,9 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
         )],
         relationship_types: Annotated[list[str] | None, Field(
             default=None,
-            description="Filter: AFFECTS|PEER_OF|MENTIONS|HOLDS|WATCHES|ISSUED_BY|BELONGS_TO",
-            examples=[["AFFECTS", "PEER_OF"]],
+            description="Filter: AFFECTS|MENTIONS|HOLDS|WATCHES|ISSUED_BY|BELONGS_TO|TRIGGERED_BY (PEER_OF defined but not created)",
+            examples=[["AFFECTS", "MENTIONS"]],
+
         )] = None,
         max_depth: Annotated[int, Field(
             default=1,
@@ -295,13 +297,16 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 if record:
                     context["company"] = dict(record["c"])
 
-                # Get peers if requested
+                # Get peers if requested (via sector relationships)
+                # Note: PEER_OF relationships not implemented, using sector-based peers
                 if include_peers:
                     result = session.run(
                         """
-                        MATCH (i:Instrument {guid: $guid})-[:ISSUED_BY]->(c:Company)
-                        MATCH (c)-[r:PEER_OF]-(peer:Company)
-                        RETURN peer, r.correlation as correlation
+                        MATCH (i:Instrument {guid: $guid})-[:ISSUED_BY]->(c1:Company)
+                        MATCH (c1)-[:BELONGS_TO]->(s:Sector)
+                        MATCH (c2:Company)-[:BELONGS_TO]->(s)
+                        WHERE c1.ticker <> c2.ticker
+                        RETURN c2 as peer
                         LIMIT 10
                         """,
                         guid=instrument_guid,
@@ -310,7 +315,7 @@ def register_graph_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     for record in result:
                         peers.append({
                             "company": dict(record["peer"]),
-                            "correlation": record.get("correlation"),
+                            "note": "sector-based peer (PEER_OF not implemented)",
                         })
                     context["peers"] = peers
 

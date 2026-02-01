@@ -34,6 +34,11 @@ if TYPE_CHECKING:
 ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
 
 
+def _require_admin_group(auth_tokens: list[str] | None) -> tuple[bool, list[str]]:
+    group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+    return "admin" in group_names, group_names
+
+
 def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
     """Register client tools with the MCP server."""
 
@@ -166,6 +171,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 properties={
                     "alert_frequency": alert_frequency,
                     "impact_threshold": impact_threshold,
+                    "status": "active",
                 },
             )
             
@@ -189,12 +195,34 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 client_guid=client_guid,
                 properties={"name": f"{name} Portfolio"},
             )
+
+            try:
+                graph_index.create_relationship(
+                    RelationType.IN_GROUP,
+                    NodeLabel.PORTFOLIO,
+                    portfolio_guid,
+                    NodeLabel.GROUP,
+                    group_guid,
+                )
+            except RuntimeError:
+                pass
             
             graph_index.create_watchlist(
                 guid=watchlist_guid,
                 client_guid=client_guid,
                 name=f"{name} Watchlist",
             )
+
+            try:
+                graph_index.create_relationship(
+                    RelationType.IN_GROUP,
+                    NodeLabel.WATCHLIST,
+                    watchlist_guid,
+                    NodeLabel.GROUP,
+                    group_guid,
+                )
+            except RuntimeError:
+                pass
             
             return success_response(
                 data={
@@ -307,6 +335,18 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     message=f"Client not found: {client_guid}",
                     recovery_strategy="Call list_clients to find valid client GUIDs, or create_client to create one.",
                     details={"client_guid": client_guid},
+                )
+
+            if client_node.properties.get("status") == "defunct":
+                return error_response(
+                    error_code="CLIENT_DEFUNCT",
+                    message="Client is defunct and cannot receive feeds",
+                    recovery_strategy="Restore the client or select an active client.",
+                    details={
+                        "client_guid": client_guid,
+                        "defunct_at": client_node.properties.get("defunct_at"),
+                        "defunct_reason": client_node.properties.get("defunct_reason"),
+                    },
                 )
             
             # Get feed from graph
@@ -595,6 +635,10 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
             description="Filter: HEDGE_FUND|LONG_ONLY|QUANT|PENSION|FAMILY_OFFICE (omit for all)",
             examples=["HEDGE_FUND", "PENSION"],
         )] = None,
+        include_defunct: Annotated[bool, Field(
+            default=False,
+            description="Include defunct clients in results (default: False)",
+        )] = False,
         limit: Annotated[int, Field(
             default=50,
             ge=1,
@@ -627,6 +671,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
             # Build query with optional type filter
             type_filter = ""
+            status_filter = ""
             params: dict[str, Any] = {"limit": limit}
             
             if group_guids:
@@ -639,6 +684,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 type_filter = "AND ct.code = $client_type" if group_clause else "WHERE ct.code = $client_type"
                 params["client_type"] = client_type.upper()
 
+            if not include_defunct:
+                status_filter = "AND (c.status IS NULL OR c.status <> 'defunct')" if (group_clause or type_filter) else "WHERE (c.status IS NULL OR c.status <> 'defunct')"
+
             with graph_index._get_session() as session:
                 result = session.run(
                     f"""
@@ -646,11 +694,13 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     OPTIONAL MATCH (c)-[:IS_TYPE_OF]->(ct:ClientType)
                     {group_clause}
                     {type_filter}
+                          {status_filter}
                     RETURN c.guid AS client_guid, 
                            c.name AS name,
                            ct.code AS client_type,
                            g.guid AS group_guid,
-                           c.created_at AS created_at
+                              c.created_at AS created_at,
+                              c.status AS status
                     ORDER BY c.name
                     LIMIT $limit
                     """,
@@ -665,6 +715,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                         "client_type": record["client_type"],
                         "group_guid": record["group_guid"],
                         "created_at": record["created_at"],
+                        "status": record["status"],
                     })
             
             return success_response(
@@ -673,6 +724,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     "total_count": len(clients),
                     "filters_applied": {
                         "client_type": client_type,
+                        "include_defunct": include_defunct,
                         "limit": limit,
                     },
                 },
@@ -746,6 +798,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                            c.name AS name,
                            c.alert_frequency AS alert_frequency,
                            c.impact_threshold AS impact_threshold,
+                           c.status AS status,
+                           c.defunct_at AS defunct_at,
+                           c.defunct_reason AS defunct_reason,
                            c.created_at AS created_at,
                            ct.code AS client_type,
                            g.guid AS group_guid,
@@ -784,6 +839,9 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                     "name": record["name"],
                     "client_type": record["client_type"],
                     "group_guid": record["group_guid"],
+                    "status": record["status"],
+                    "defunct_at": record["defunct_at"],
+                    "defunct_reason": record["defunct_reason"],
                     "profile": {
                         "guid": record["profile_guid"],
                         "mandate_type": record["mandate_type"],
@@ -1630,4 +1688,555 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 message=f"Failed to remove from watchlist: {e!s}",
                 recovery_strategy="Run health_check to verify Neo4j. Call get_watchlist_items to verify ticker is watched.",
                 details={"client_guid": client_guid, "ticker": ticker},
+            )
+
+    @mcp.tool(
+        name="defunct_client",
+        description=(
+            "Soft-delete a client by marking status=defunct and disabling alerts. "
+            "ADMIN ONLY. USE FOR: retired clients or migrations. "
+            "RETURNS: client_guid, status, defunct_at."
+        ),
+    )
+    def defunct_client(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to defunct",
+        )],
+        reason: Annotated[str | None, Field(
+            default=None,
+            description="Reason for defuncting",
+        )] = None,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (admin required)",
+        )] = None,
+    ) -> ToolResponse:
+        """Soft-delete a client."""
+        from datetime import datetime
+
+        is_admin, groups = _require_admin_group(auth_tokens)
+        if not is_admin:
+            return error_response(
+                error_code="ACCESS_DENIED",
+                message="Admin access required to defunct clients",
+                recovery_strategy="Use an admin token or request admin access.",
+                details={"permitted_groups": groups},
+            )
+
+        try:
+            defunct_at = datetime.utcnow().isoformat()
+            with graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})
+                    SET c.status = 'defunct',
+                        c.defunct_at = $defunct_at,
+                        c.defunct_reason = $reason,
+                        c.alert_frequency = 'weekly',
+                        c.impact_threshold = 100
+                    RETURN c.guid AS client_guid, c.status AS status, c.defunct_at AS defunct_at
+                    """,
+                    client_guid=client_guid,
+                    defunct_at=defunct_at,
+                    reason=reason,
+                )
+                record = result.single()
+                if not record:
+                    return error_response(
+                        error_code="CLIENT_NOT_FOUND",
+                        message=f"Client not found: {client_guid}",
+                        recovery_strategy="Call list_clients to find valid client GUIDs.",
+                        details={"client_guid": client_guid},
+                    )
+
+            return success_response(
+                data={
+                    "client_guid": record["client_guid"],
+                    "status": record["status"],
+                    "defunct_at": record["defunct_at"],
+                    "defunct_reason": reason,
+                },
+                message=f"Client defuncted: {client_guid}",
+            )
+        except Exception as e:
+            return error_response(
+                error_code="DEFUNCT_FAILED",
+                message=f"Failed to defunct client: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j connectivity.",
+                details={"client_guid": client_guid},
+            )
+
+    @mcp.tool(
+        name="restore_client",
+        description=(
+            "Restore a defunct client to active status. ADMIN ONLY. "
+            "RETURNS: client_guid, status."
+        ),
+    )
+    def restore_client(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to restore",
+        )],
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (admin required)",
+        )] = None,
+    ) -> ToolResponse:
+        """Restore a defunct client."""
+        is_admin, groups = _require_admin_group(auth_tokens)
+        if not is_admin:
+            return error_response(
+                error_code="ACCESS_DENIED",
+                message="Admin access required to restore clients",
+                recovery_strategy="Use an admin token or request admin access.",
+                details={"permitted_groups": groups},
+            )
+
+        try:
+            with graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})
+                    SET c.status = 'active'
+                    REMOVE c.defunct_at
+                    REMOVE c.defunct_reason
+                    RETURN c.guid AS client_guid, c.status AS status
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return error_response(
+                        error_code="CLIENT_NOT_FOUND",
+                        message=f"Client not found: {client_guid}",
+                        recovery_strategy="Call list_clients to find valid client GUIDs.",
+                        details={"client_guid": client_guid},
+                    )
+
+            return success_response(
+                data={
+                    "client_guid": record["client_guid"],
+                    "status": record["status"],
+                },
+                message=f"Client restored: {client_guid}",
+            )
+        except Exception as e:
+            return error_response(
+                error_code="RESTORE_FAILED",
+                message=f"Failed to restore client: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j connectivity.",
+                details={"client_guid": client_guid},
+            )
+
+    @mcp.tool(
+        name="move_client_group",
+        description=(
+            "Move a client (and portfolio/watchlist) to a different group. ADMIN ONLY."
+        ),
+    )
+    def move_client_group(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to move",
+        )],
+        target_group: Annotated[str, Field(
+            description="Target group name (e.g., 'us-sales')",
+        )],
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (admin required)",
+        )] = None,
+    ) -> ToolResponse:
+        """Move a client and its related nodes to a new group."""
+        is_admin, groups = _require_admin_group(auth_tokens)
+        if not is_admin:
+            return error_response(
+                error_code="ACCESS_DENIED",
+                message="Admin access required to move clients",
+                recovery_strategy="Use an admin token or request admin access.",
+                details={"permitted_groups": groups},
+            )
+
+        group_guid = get_group_uuid_by_name(target_group)
+        if group_guid is None:
+            return error_response(
+                error_code="GROUP_NOT_FOUND",
+                message=f"Group not found: {target_group}",
+                recovery_strategy="Ensure the group exists in the auth system.",
+                details={"group_name": target_group},
+            )
+
+        try:
+            with graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})
+                    OPTIONAL MATCH (c)-[:HAS_PORTFOLIO]->(p:Portfolio)
+                    OPTIONAL MATCH (c)-[:HAS_WATCHLIST]->(w:Watchlist)
+                    RETURN c.guid AS client_guid, c.name AS client_name, p.guid AS portfolio_guid, w.guid AS watchlist_guid
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return error_response(
+                        error_code="CLIENT_NOT_FOUND",
+                        message=f"Client not found: {client_guid}",
+                        recovery_strategy="Call list_clients to find valid client GUIDs.",
+                        details={"client_guid": client_guid},
+                    )
+
+                node_guids = [record["client_guid"], record["portfolio_guid"], record["watchlist_guid"]]
+                for guid in [g for g in node_guids if g]:
+                    session.run(
+                        """
+                        MATCH (n {guid: $guid})-[r:IN_GROUP]->(:Group)
+                        DELETE r
+                        """,
+                        guid=guid,
+                    )
+                    graph_index.create_relationship(
+                        RelationType.IN_GROUP,
+                        NodeLabel.CLIENT if guid == record["client_guid"] else (NodeLabel.PORTFOLIO if guid == record["portfolio_guid"] else NodeLabel.WATCHLIST),
+                        guid,
+                        NodeLabel.GROUP,
+                        group_guid,
+                    )
+
+            return success_response(
+                data={
+                    "client_guid": record["client_guid"],
+                    "client_name": record["client_name"],
+                    "group_guid": group_guid,
+                },
+                message=f"Moved client '{record['client_name']}' to group {target_group}",
+            )
+        except Exception as e:
+            return error_response(
+                error_code="MOVE_GROUP_FAILED",
+                message=f"Failed to move client group: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j connectivity.",
+                details={"client_guid": client_guid, "target_group": target_group},
+            )
+
+    @mcp.tool(
+        name="set_client_type",
+        description="Set or change a client's type (admin only).",
+    )
+    def set_client_type(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to update",
+        )],
+        client_type: Annotated[str, Field(
+            description="New client type (HEDGE_FUND, LONG_ONLY, etc.)",
+        )],
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (admin required)",
+        )] = None,
+    ) -> ToolResponse:
+        """Change the client type relationship."""
+        is_admin, groups = _require_admin_group(auth_tokens)
+        if not is_admin:
+            return error_response(
+                error_code="ACCESS_DENIED",
+                message="Admin access required to change client type",
+                recovery_strategy="Use an admin token or request admin access.",
+                details={"permitted_groups": groups},
+            )
+
+        try:
+            graph_index.create_client_type(
+                code=client_type,
+                name=client_type.replace("_", " ").title(),
+            )
+        except Exception:
+            pass  # nosec B110
+
+        try:
+            with graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})
+                    OPTIONAL MATCH (c)-[r:IS_TYPE_OF]->(:ClientType)
+                    DELETE r
+                    RETURN c.guid AS client_guid
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return error_response(
+                        error_code="CLIENT_NOT_FOUND",
+                        message=f"Client not found: {client_guid}",
+                        recovery_strategy="Call list_clients to find valid client GUIDs.",
+                        details={"client_guid": client_guid},
+                    )
+
+            graph_index.create_relationship(
+                RelationType.IS_TYPE_OF,
+                NodeLabel.CLIENT,
+                client_guid,
+                NodeLabel.CLIENT_TYPE,
+                client_type,
+            )
+
+            return success_response(
+                data={
+                    "client_guid": client_guid,
+                    "client_type": client_type,
+                },
+                message=f"Client type set to {client_type}",
+            )
+        except Exception as e:
+            return error_response(
+                error_code="SET_TYPE_FAILED",
+                message=f"Failed to set client type: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j connectivity.",
+                details={"client_guid": client_guid, "client_type": client_type},
+            )
+
+    @mcp.tool(
+        name="repair_client",
+        description=(
+            "Repair missing client relationships and core nodes. ADMIN ONLY. "
+            "Ensures IN_GROUP, HAS_PROFILE, HAS_PORTFOLIO, HAS_WATCHLIST, IS_TYPE_OF exist."
+        ),
+    )
+    def repair_client(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to repair",
+        )],
+        group_name: Annotated[str | None, Field(
+            default=None,
+            description="Group name to use if client is missing IN_GROUP",
+        )] = None,
+        client_type: Annotated[str | None, Field(
+            default=None,
+            description="Client type to use if missing IS_TYPE_OF",
+        )] = None,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (admin required)",
+        )] = None,
+    ) -> ToolResponse:
+        """Repair missing client relationships and nodes."""
+        import uuid
+
+        is_admin, groups = _require_admin_group(auth_tokens)
+        if not is_admin:
+            return error_response(
+                error_code="ACCESS_DENIED",
+                message="Admin access required to repair clients",
+                recovery_strategy="Use an admin token or request admin access.",
+                details={"permitted_groups": groups},
+            )
+
+        try:
+            with graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})
+                    OPTIONAL MATCH (c)-[:IN_GROUP]->(g:Group)
+                    OPTIONAL MATCH (c)-[:IS_TYPE_OF]->(ct:ClientType)
+                    OPTIONAL MATCH (c)-[:HAS_PROFILE]->(cp:ClientProfile)
+                    OPTIONAL MATCH (c)-[:HAS_PORTFOLIO]->(p:Portfolio)
+                    OPTIONAL MATCH (c)-[:HAS_WATCHLIST]->(w:Watchlist)
+                    RETURN c.name AS name,
+                           g.guid AS group_guid,
+                           ct.code AS client_type,
+                           cp.guid AS profile_guid,
+                           p.guid AS portfolio_guid,
+                           w.guid AS watchlist_guid
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return error_response(
+                        error_code="CLIENT_NOT_FOUND",
+                        message=f"Client not found: {client_guid}",
+                        recovery_strategy="Call list_clients to find valid client GUIDs.",
+                        details={"client_guid": client_guid},
+                    )
+
+            group_guid = record["group_guid"]
+            if group_guid is None:
+                if group_name is None:
+                    return error_response(
+                        error_code="GROUP_REQUIRED",
+                        message="Client missing group; group_name is required to repair",
+                        recovery_strategy="Provide group_name to repair IN_GROUP relationship.",
+                        details={"client_guid": client_guid},
+                    )
+                group_guid = get_group_uuid_by_name(group_name)
+                if group_guid is None:
+                    return error_response(
+                        error_code="GROUP_NOT_FOUND",
+                        message=f"Group not found: {group_name}",
+                        recovery_strategy="Ensure the group exists in the auth system.",
+                        details={"group_name": group_name},
+                    )
+                graph_index.create_relationship(
+                    RelationType.IN_GROUP,
+                    NodeLabel.CLIENT,
+                    client_guid,
+                    NodeLabel.GROUP,
+                    group_guid,
+                )
+
+            effective_type = record["client_type"] or client_type
+            if effective_type is None:
+                return error_response(
+                    error_code="CLIENT_TYPE_REQUIRED",
+                    message="Client missing type; client_type is required to repair",
+                    recovery_strategy="Provide client_type to repair IS_TYPE_OF relationship.",
+                    details={"client_guid": client_guid},
+                )
+
+            try:
+                graph_index.create_client_type(
+                    code=effective_type,
+                    name=effective_type.replace("_", " ").title(),
+                )
+            except Exception:
+                pass  # nosec B110
+
+            if record["client_type"] is None:
+                graph_index.create_relationship(
+                    RelationType.IS_TYPE_OF,
+                    NodeLabel.CLIENT,
+                    client_guid,
+                    NodeLabel.CLIENT_TYPE,
+                    effective_type,
+                )
+
+            profile_guid = record["profile_guid"] or str(uuid.uuid4())
+            if record["profile_guid"] is None:
+                graph_index.create_client_profile(
+                    guid=profile_guid,
+                    client_guid=client_guid,
+                    esg_constrained=False,
+                )
+
+            portfolio_guid = record["portfolio_guid"] or str(uuid.uuid4())
+            if record["portfolio_guid"] is None:
+                graph_index.create_portfolio(
+                    guid=portfolio_guid,
+                    client_guid=client_guid,
+                    properties={"name": f"{record['name']} Portfolio" if record["name"] else "Portfolio"},
+                )
+
+            watchlist_guid = record["watchlist_guid"] or str(uuid.uuid4())
+            if record["watchlist_guid"] is None:
+                graph_index.create_watchlist(
+                    guid=watchlist_guid,
+                    client_guid=client_guid,
+                    name=f"{record['name']} Watchlist" if record["name"] else "Watchlist",
+                )
+
+            for guid, label in [
+                (portfolio_guid, NodeLabel.PORTFOLIO),
+                (watchlist_guid, NodeLabel.WATCHLIST),
+            ]:
+                graph_index.create_relationship(
+                    RelationType.IN_GROUP,
+                    label,
+                    guid,
+                    NodeLabel.GROUP,
+                    group_guid,
+                )
+
+            return success_response(
+                data={
+                    "client_guid": client_guid,
+                    "group_guid": group_guid,
+                    "client_type": effective_type,
+                    "profile_guid": profile_guid,
+                    "portfolio_guid": portfolio_guid,
+                    "watchlist_guid": watchlist_guid,
+                },
+                message="Client repaired successfully",
+            )
+        except Exception as e:
+            return error_response(
+                error_code="REPAIR_FAILED",
+                message=f"Failed to repair client: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j connectivity.",
+                details={"client_guid": client_guid},
+            )
+
+    @mcp.tool(
+        name="delete_client",
+        description="Permanently delete a client and all related nodes (admin only).",
+    )
+    def delete_client(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to delete",
+        )],
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (admin required)",
+        )] = None,
+    ) -> ToolResponse:
+        """Delete a client and related nodes."""
+        is_admin, groups = _require_admin_group(auth_tokens)
+        if not is_admin:
+            return error_response(
+                error_code="ACCESS_DENIED",
+                message="Admin access required to delete clients",
+                recovery_strategy="Use an admin token or request admin access.",
+                details={"permitted_groups": groups},
+            )
+
+        try:
+            with graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})
+                    OPTIONAL MATCH (c)-[:HAS_PROFILE]->(cp:ClientProfile)
+                    OPTIONAL MATCH (c)-[:HAS_PORTFOLIO]->(p:Portfolio)
+                    OPTIONAL MATCH (c)-[:HAS_WATCHLIST]->(w:Watchlist)
+                    WITH c, c.guid AS guid, cp, p, w
+                    DETACH DELETE cp, p, w, c
+                    RETURN guid AS client_guid
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return error_response(
+                        error_code="CLIENT_NOT_FOUND",
+                        message=f"Client not found: {client_guid}",
+                        recovery_strategy="Call list_clients to find valid client GUIDs.",
+                        details={"client_guid": client_guid},
+                    )
+
+            return success_response(
+                data={"client_guid": record["client_guid"]},
+                message=f"Client deleted: {client_guid}",
+            )
+        except Exception as e:
+            return error_response(
+                error_code="CLIENT_DELETE_FAILED",
+                message=f"Failed to delete client: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j connectivity.",
+                details={"client_guid": client_guid},
             )

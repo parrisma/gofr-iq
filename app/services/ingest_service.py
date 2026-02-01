@@ -848,9 +848,14 @@ def create_ingest_service(
     storage_path = Path(storage_path)
 
     document_store = DocumentStore(base_path=storage_path / "documents")
-    source_registry = SourceRegistry(base_path=storage_path / "sources")
     language_detector = LanguageDetector()
     duplicate_detector = DuplicateDetector()
+
+    # Initialize SourceRegistry with Neo4j sync if graph_index is provided
+    source_registry = SourceRegistry(
+        base_path=storage_path / "sources",
+        graph_index=graph_index,
+    )
 
     return IngestService(
         document_store=document_store,

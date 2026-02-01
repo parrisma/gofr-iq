@@ -3,14 +3,14 @@
 Query Client Feed - Retrieve documents relevant to a client's portfolio.
 
 Usage:
-    uv run simulation/query_client_feed.py --client client-hedge-fund --limit 10
-    uv run simulation/query_client_feed.py --client client-pension-fund --limit 20
-    uv run simulation/query_client_feed.py --client client-retail
+    uv run simulation/query_client_feed.py --client 550e8400-e29b-41d4-a716-446655440001 --limit 10
+    uv run simulation/query_client_feed.py --client 550e8400-e29b-41d4-a716-446655440002 --limit 20
+    uv run simulation/query_client_feed.py --client 550e8400-e29b-41d4-a716-446655440003
 
 Clients:
-    client-hedge-fund    Apex Capital (QNTM, BANKO, VIT, GTX)
-    client-pension-fund  Teachers Retirement (OMNI, SHOPM, TRUCK)
-    client-retail        DiamondHands420 (VELO, BLK)
+    550e8400-e29b-41d4-a716-446655440001    Apex Capital (QNTM, BANKO, VIT, GTX)
+    550e8400-e29b-41d4-a716-446655440002  Teachers Retirement (OMNI, SHOPM, TRUCK)
+    550e8400-e29b-41d4-a716-446655440003        DiamondHands420 (VELO, BLK)
 """
 import argparse
 import json
@@ -74,7 +74,7 @@ def get_client_feed(
     5. Return ranked list
     
     Args:
-        client_guid: Client identifier (e.g., "client-hedge-fund")
+        client_guid: Client identifier (UUID format, e.g., "550e8400-e29b-41d4-a716-446655440001")
         max_results: Maximum number of results to return
         min_trust: Minimum source trust level (overrides client profile if set)
         
@@ -415,7 +415,7 @@ def main():
     parser.add_argument(
         "--client", "-c",
         required=True,
-        help="Client GUID (e.g., client-hedge-fund, client-pension-fund, client-retail)"
+        help="Client GUID (e.g., 550e8400-e29b-41d4-a716-446655440001, 550e8400-e29b-41d4-a716-446655440002, 550e8400-e29b-41d4-a716-446655440003)"
     )
     parser.add_argument(
         "--limit", "-n",

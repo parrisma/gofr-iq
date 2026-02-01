@@ -536,12 +536,30 @@ class EmbeddingIndex:
         if include_content:
             include.append("documents")
 
-        results = self._collection.query(
-            query_texts=[query],
-            n_results=n_results,
-            where=cast(Any, where),
-            include=cast(Any, include),
-        )
+        # When in HTTP mode with custom embedding function, generate query embedding client-side
+        # This ensures the query uses the same embedding model as the indexed documents
+        if self.host and self._embedding_function:
+            logger.info(
+                "Generating query embedding client-side using custom embedding function"
+            )
+            query_embeddings = self._embedding_function([query])
+            logger.info(
+                f"Client-side query embedding generated: dim={len(query_embeddings[0]) if query_embeddings else 0}"
+            )
+            results = self._collection.query(
+                query_embeddings=query_embeddings,
+                n_results=n_results,
+                where=cast(Any, where),
+                include=cast(Any, include),
+            )
+        else:
+            # Local mode - ChromaDB will use the registered embedding function
+            results = self._collection.query(
+                query_texts=[query],
+                n_results=n_results,
+                where=cast(Any, where),
+                include=cast(Any, include),
+            )
 
         # Convert to SimilarityResult objects
         similarity_results: list[SimilarityResult] = []

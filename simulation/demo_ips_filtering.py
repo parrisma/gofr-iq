@@ -188,9 +188,9 @@ def main():
     
     # Demo for each client archetype
     clients = [
-        ("client-hedge-fund", "Apex Capital (Hedge Fund)"),
-        ("client-pension-fund", "GlobalPension Fund"),
-        ("client-retail", "Individual Investor")
+        ("550e8400-e29b-41d4-a716-446655440001", "Apex Capital (Hedge Fund)"),
+        ("550e8400-e29b-41d4-a716-446655440002", "GlobalPension Fund"),
+        ("550e8400-e29b-41d4-a716-446655440003", "Individual Investor")
     ]
     
     for client_guid, client_name in clients:
