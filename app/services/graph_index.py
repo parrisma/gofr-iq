@@ -1407,30 +1407,35 @@ class GraphIndex:
              COALESCE(d.impact_score, 0) AS base_score,
              COALESCE(d.decay_lambda, 0.15) AS decay_lambda
         
-        WHERE (holds IS NOT NULL OR w IS NOT NULL OR inst IS NULL)
+        WHERE (
+              ($include_portfolio AND holds IS NOT NULL)
+              OR ($include_watchlist AND w IS NOT NULL)
+           )
         
-        // Calculate relevance without time decay for now (date parsing is complex)
-        WITH d, inst,
-             base_score + position_boost + watchlist_boost AS total_score,
-             base_score AS decayed_score
+           // Calculate relevance without time decay for now (date parsing is complex)
+           WITH d, inst,
+               base_score + position_boost + watchlist_boost AS total_score,
+               base_score AS decayed_score
         
-        RETURN DISTINCT d.guid AS document_guid,
-               d.title AS title,
-               d.impact_score AS impact_score,
-               d.impact_tier AS impact_tier,
-               d.created_at AS created_at,
-               collect(DISTINCT inst.ticker) AS affected_instruments,
-               max(total_score) AS relevance_score,
-               max(decayed_score) AS current_relevance
-        ORDER BY current_relevance DESC
-        LIMIT $limit
-        """
+           RETURN DISTINCT d.guid AS document_guid,
+                d.title AS title,
+                d.impact_score AS impact_score,
+                d.impact_tier AS impact_tier,
+                d.created_at AS created_at,
+                collect(DISTINCT inst.ticker) AS affected_instruments,
+                max(total_score) AS relevance_score,
+                max(decayed_score) AS current_relevance
+           ORDER BY current_relevance DESC
+           LIMIT $limit
+           """
         
         with self._get_session() as session:
             result = session.run(
                 query,  # type: ignore[arg-type]  # Dynamic query construction
                 client_guid=client_guid,
                 permitted_groups=permitted_groups,
+                include_portfolio=include_portfolio,
+                include_watchlist=include_watchlist,
                 limit=limit,
             )
             return [dict(record) for record in result]

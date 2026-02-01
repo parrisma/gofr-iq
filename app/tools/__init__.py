@@ -76,5 +76,5 @@ def register_all_tools(
     
     # Register client and graph tools if graph_index is available
     if graph_index is not None:
-        register_client_tools(mcp, graph_index)
+        register_client_tools(mcp, graph_index, query_service=query_service, llm_service=llm_service)
         register_graph_tools(mcp, graph_index)

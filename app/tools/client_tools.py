@@ -28,7 +28,8 @@ from app.services.group_service import (
 )
 
 if TYPE_CHECKING:
-    pass
+    from app.services.llm_service import LLMService
+    from app.services.query_service import QueryService
 
 # Type alias for MCP tool response
 ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
@@ -39,7 +40,12 @@ def _require_admin_group(auth_tokens: list[str] | None) -> tuple[bool, list[str]
     return "admin" in group_names, group_names
 
 
-def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
+def register_client_tools(
+    mcp: FastMCP,
+    graph_index: GraphIndex,
+    query_service: "QueryService | None" = None,
+    llm_service: "LLMService | None" = None,
+) -> None:
     """Register client tools with the MCP server."""
 
     @mcp.tool(
@@ -401,6 +407,139 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                 error_code="FEED_RETRIEVAL_FAILED",
                 message=f"Failed to retrieve client feed: {e!s}",
                 recovery_strategy="Verify client with get_client_profile. Run health_check if Neo4j may be down.",
+                details={"client_guid": client_guid, "limit": limit},
+            )
+
+    @mcp.tool(
+        name="get_top_client_news",
+        description=(
+            "Get top client news by combining graph relevance with semantic search. "
+            "USE FOR: 'What are the top 3 things to tell my client today?'. "
+            "RANKED BY: Relevance to holdings/watchlist + semantic fit + impact + recency. "
+            "DEFAULT: Top 3 from last 24h. "
+            "PREREQUISITE: Client must exist (use create_client first)."
+        ),
+    )
+    def get_top_client_news(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to get top news for",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        limit: Annotated[int, Field(
+            default=3,
+            ge=1,
+            le=10,
+            description="Maximum news items to return (default: 3, max: 10)",
+        )] = 3,
+        time_window_hours: Annotated[int, Field(
+            default=24,
+            ge=1,
+            le=168,
+            description="How far back to search (hours). Default 24, max 168.",
+        )] = 24,
+        min_impact_score: Annotated[float | None, Field(
+            default=None,
+            ge=0.0,
+            le=100.0,
+            description="Minimum impact score 0-100 to filter news",
+        )] = None,
+        impact_tiers: Annotated[list[str] | None, Field(
+            default=None,
+            description="Filter by impact tiers: PLATINUM, GOLD, SILVER, BRONZE, STANDARD",
+            examples=[["PLATINUM", "GOLD", "SILVER"]],
+        )] = None,
+        include_portfolio: Annotated[bool, Field(
+            default=True,
+            description="Include portfolio holdings in relevance (default: True)",
+        )] = True,
+        include_watchlist: Annotated[bool, Field(
+            default=True,
+            description="Include watchlist instruments (default: True)",
+        )] = True,
+        include_lateral_graph: Annotated[bool, Field(
+            default=True,
+            description="Include lateral graph relations like competitors/suppliers (default: True)",
+        )] = True,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
+    ) -> ToolResponse:
+        """Get top client news using hybrid graph + semantic search."""
+        try:
+            # Get permitted groups from explicit tokens or context header
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_guids = get_group_uuids_by_names(group_names)
+
+            if query_service is None:
+                return error_response(
+                    error_code="QUERY_SERVICE_UNAVAILABLE",
+                    message="Query service not configured for top client news",
+                    recovery_strategy="Ensure MCP server initializes QueryService and passes it to client tools.",
+                    details={"client_guid": client_guid},
+                )
+
+            # Validate client exists
+            client_node = graph_index.get_node(NodeLabel.CLIENT, client_guid)
+            if not client_node:
+                return error_response(
+                    error_code="CLIENT_NOT_FOUND",
+                    message=f"Client not found: {client_guid}",
+                    recovery_strategy="Call list_clients to find valid client GUIDs, or create_client to create one.",
+                    details={"client_guid": client_guid},
+                )
+
+            if client_node.properties.get("status") == "defunct":
+                return error_response(
+                    error_code="CLIENT_DEFUNCT",
+                    message="Client is defunct and cannot receive news",
+                    recovery_strategy="Restore the client or select an active client.",
+                    details={
+                        "client_guid": client_guid,
+                        "defunct_at": client_node.properties.get("defunct_at"),
+                        "defunct_reason": client_node.properties.get("defunct_reason"),
+                    },
+                )
+
+            top_news = query_service.get_top_client_news(
+                client_guid=client_guid,
+                group_guids=group_guids,
+                limit=limit,
+                time_window_hours=time_window_hours,
+                include_portfolio=include_portfolio,
+                include_watchlist=include_watchlist,
+                include_lateral_graph=include_lateral_graph,
+                min_impact_score=min_impact_score,
+                impact_tiers=impact_tiers,
+                llm_service=llm_service,
+            )
+
+            filters_applied = {
+                "time_window_hours": time_window_hours,
+                "min_impact_score": min_impact_score,
+                "impact_tiers": impact_tiers,
+                "include_portfolio": include_portfolio,
+                "include_watchlist": include_watchlist,
+                "include_lateral_graph": include_lateral_graph,
+            }
+
+            return success_response(
+                data={
+                    "articles": top_news,
+                    "total_count": len(top_news),
+                    "filters_applied": filters_applied,
+                },
+                message=f"Retrieved {len(top_news)} top news items",
+            )
+
+        except Exception as e:
+            return error_response(
+                error_code="TOP_NEWS_RETRIEVAL_FAILED",
+                message=f"Failed to retrieve top client news: {e!s}",
+                recovery_strategy="Verify client exists and QueryService is configured. Run health_check if needed.",
                 details={"client_guid": client_guid, "limit": limit},
             )
 
@@ -961,7 +1100,7 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
                            h.shares AS shares,
                            h.avg_cost AS avg_cost,
                            h.added_at AS added_at
-                    ORDER BY h.weight DESC NULLS LAST
+                    ORDER BY coalesce(h.weight, -1) DESC
                     """,
                     client_guid=client_guid,
                 )

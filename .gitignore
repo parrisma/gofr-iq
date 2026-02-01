@@ -107,6 +107,9 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+!.env.example
+!.env.template
 .envrc
 .venv
 env/
@@ -120,7 +123,6 @@ venv.bak/
 !lib/gofr-common/config/gofr_ports.env
 !lib/gofr-common/docker/gofr-swarm.env
 !lib/gofr-common/src/gofr_common/config/gofr_ports.env
-simulation/.env.*
 !docker/.env.example
 !docker/.vault-init.env.example
 
@@ -202,10 +204,21 @@ config/generated/
 **/vault-secrets.env
 **/.vault-init.env
 **/*-secrets.env
+**/vault_root_token
+**/vault_unseal_key
+**/bootstrap_tokens.json
+**/service_creds/
+**/*.pem
+**/*.key
+**/*.crt
+**/*.p12
+**/*.pfx
 **/*.jwt
+**/*.jwt_secret
 
 # Temporary tokens and credentials
 **/tokens.env
 tmp/tokens.env
 logs/*_tokens.json
 /secrets/
+**/secrets/

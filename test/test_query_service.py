@@ -930,3 +930,323 @@ class TestMCPQueryDocuments:
         # Should not raise even without query_service
         register_query_tools(mcp, document_store, None)
         assert mcp is not None
+
+
+# =============================================================================
+# Phase 14: get_top_client_news Tests
+# =============================================================================
+
+
+class TestGetTopClientNews:
+    """Tests for QueryService.get_top_client_news hybrid search"""
+
+    @pytest.fixture
+    def mock_graph_index(self) -> Generator:
+        """Create a mock GraphIndex for top client news tests."""
+        from unittest.mock import MagicMock
+
+        mock = MagicMock()
+        mock_session = MagicMock()
+        mock._get_session.return_value.__enter__ = MagicMock(return_value=mock_session)
+        mock._get_session.return_value.__exit__ = MagicMock(return_value=None)
+        yield mock, mock_session
+
+    def test_get_top_client_news_no_graph_index(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test that method returns empty list without graph index."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+        result = service.get_top_client_news(
+            client_guid="client-123",
+            group_guids=[TEST_GROUP_GUID],
+            limit=3,
+        )
+        assert result == []
+
+    def test_get_top_client_news_zero_limit(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph_index,
+    ) -> None:
+        """Test that zero limit returns empty list."""
+        mock, _ = mock_graph_index
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=mock,
+        )
+        result = service.get_top_client_news(
+            client_guid="client-123",
+            group_guids=[TEST_GROUP_GUID],
+            limit=0,
+        )
+        assert result == []
+
+    def test_get_top_client_news_client_not_found(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph_index,
+    ) -> None:
+        """Test that missing client returns empty list."""
+        mock, mock_session = mock_graph_index
+        mock_session.run.return_value.single.return_value = None
+
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=mock,
+        )
+        result = service.get_top_client_news(
+            client_guid="nonexistent-client",
+            group_guids=[TEST_GROUP_GUID],
+            limit=3,
+        )
+        assert result == []
+
+    def test_client_news_weights_for_hedge_fund(self) -> None:
+        """Test that hedge fund gets high turnover weights."""
+        from app.services.query_service import ClientNewsWeights
+
+        weights = ClientNewsWeights.for_client_type("HEDGE_FUND")
+        assert weights.semantic == 0.35
+        assert weights.graph == 0.35
+        assert weights.impact == 0.20
+        assert weights.recency == 0.10
+
+    def test_client_news_weights_for_long_only(self) -> None:
+        """Test that long-only client gets lower turnover weights."""
+        from app.services.query_service import ClientNewsWeights
+
+        weights = ClientNewsWeights.for_client_type("LONG_ONLY")
+        assert weights.semantic == 0.30
+        assert weights.graph == 0.30
+        assert weights.impact == 0.20
+        assert weights.recency == 0.20
+
+    def test_client_news_weights_for_pension(self) -> None:
+        """Test that pension fund uses long-only weights."""
+        from app.services.query_service import ClientNewsWeights
+
+        weights = ClientNewsWeights.for_client_type("PENSION")
+        assert weights.semantic == 0.30
+        assert weights.recency == 0.20
+
+    def test_client_news_weights_unknown_type(self) -> None:
+        """Test that unknown client type uses default weights."""
+        from app.services.query_service import ClientNewsWeights
+
+        weights = ClientNewsWeights.for_client_type("UNKNOWN_TYPE")
+        # Should use hedge fund (default) weights
+        assert weights.semantic == 0.35
+        assert weights.graph == 0.35
+
+    def test_within_time_window_recent(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test that recent documents pass time window check."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+        now = datetime.utcnow()
+        cutoff = now - timedelta(hours=24)
+
+        # Document created 1 hour ago should pass
+        recent = (now - timedelta(hours=1)).isoformat()
+        assert service._within_time_window(recent, cutoff) is True
+
+    def test_within_time_window_old(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test that old documents fail time window check."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+        now = datetime.utcnow()
+        cutoff = now - timedelta(hours=24)
+
+        # Document created 48 hours ago should fail
+        old = (now - timedelta(hours=48)).isoformat()
+        assert service._within_time_window(old, cutoff) is False
+
+    def test_within_time_window_none_passes(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test that documents without timestamp pass (inclusive)."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+        cutoff = datetime.utcnow() - timedelta(hours=24)
+        assert service._within_time_window(None, cutoff) is True
+
+    def test_normalize_impact_score(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test impact score normalization."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+
+        assert service._normalize_impact_score(100) == 1.0
+        assert service._normalize_impact_score(50) == 0.5
+        assert service._normalize_impact_score(0) == 0.0
+        assert service._normalize_impact_score(150) == 1.0  # Capped at 1.0
+        assert service._normalize_impact_score(-10) == 0.0  # Capped at 0.0
+        assert service._normalize_impact_score(None) == 0.0
+        assert service._normalize_impact_score("invalid") == 0.0
+
+    def test_violates_exclusions_company(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test ESG exclusion check for companies."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+
+        doc_entities = {"companies": ["Acme Corp", "Beta Inc"], "sectors": ["Technology"]}
+        exclusions = {"companies": ["ACME CORP"], "sectors": []}  # Case insensitive
+
+        assert service._violates_exclusions(doc_entities, exclusions) is True
+
+    def test_violates_exclusions_sector(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test ESG exclusion check for sectors."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+
+        doc_entities = {"companies": ["Clean Energy Co"], "sectors": ["Energy", "Utilities"]}
+        exclusions = {"companies": [], "sectors": ["ENERGY"]}  # Case insensitive
+
+        assert service._violates_exclusions(doc_entities, exclusions) is True
+
+    def test_violates_exclusions_none(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test that document without excluded entities passes."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+
+        doc_entities = {"companies": ["Good Corp"], "sectors": ["Healthcare"]}
+        exclusions = {"companies": ["Bad Corp"], "sectors": ["Tobacco"]}
+
+        assert service._violates_exclusions(doc_entities, exclusions) is False
+
+    def test_build_client_query_text_basic(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test semantic query text construction."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+
+        profile = {
+            "client_type": "HEDGE_FUND",
+            "mandate_type": "event_driven",
+            "horizon": "short",
+            "esg_constrained": True,
+        }
+        holdings = ["AAPL", "MSFT"]
+        watchlist = ["GOOGL"]
+
+        query = service._build_client_query_text(
+            profile=profile,
+            holdings=holdings,
+            watchlist=watchlist,
+            llm_service=None,
+        )
+
+        assert "HEDGE_FUND" in query
+        assert "event_driven" in query
+        assert "AAPL" in query
+        assert "MSFT" in query
+        assert "GOOGL" in query
+
+    def test_build_why_it_matters_basic(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+    ) -> None:
+        """Test why_it_matters generation without LLM."""
+        service = QueryService(
+            embedding_index=embedding_index_test,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=None,
+        )
+
+        why = service._build_why_it_matters(
+            title="Apple Earnings Beat",
+            reasons=["DIRECT_HOLDING", "SEMANTIC_MATCH"],
+            impact_score=85,
+            tickers=["AAPL"],
+            llm_service=None,
+        )
+
+        assert "DIRECT_HOLDING" in why
+        assert "SEMANTIC_MATCH" in why
+        assert "AAPL" in why

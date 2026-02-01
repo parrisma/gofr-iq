@@ -13,13 +13,19 @@ Query Flow:
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any, Optional
+from datetime import datetime, timedelta
+from typing import Any, Optional, TYPE_CHECKING
 
 from app.services.document_store import DocumentStore
 from app.services.embedding_index import EmbeddingIndex, SimilarityResult
 from app.services.graph_index import GraphIndex, NodeLabel
 from app.services.source_registry import SourceRegistry
+from app.logger import StructuredLogger
+
+if TYPE_CHECKING:
+    from app.services.llm_service import LLMService
+
+logger = StructuredLogger(__name__)
 
 
 @dataclass
@@ -74,6 +80,29 @@ class ScoringWeights:
         total = self.semantic + self.trust + self.recency + self.graph_boost
         if abs(total - 1.0) > 0.01:
             raise ValueError(f"Scoring weights must sum to 1.0, got {total}")
+
+
+@dataclass
+class ClientNewsWeights:
+    """Weights for top-client-news scoring
+
+    Attributes:
+        semantic: Weight for semantic similarity score (0-1)
+        graph: Weight for graph relevance score (0-1)
+        impact: Weight for impact score (0-1)
+        recency: Weight for recency score (0-1)
+    """
+
+    semantic: float = 0.35
+    graph: float = 0.35
+    impact: float = 0.20
+    recency: float = 0.10
+
+    @classmethod
+    def for_client_type(cls, client_type: str | None) -> "ClientNewsWeights":
+        if client_type in {"LONG_ONLY", "PENSION"}:
+            return cls(semantic=0.30, graph=0.30, impact=0.20, recency=0.20)
+        return cls()
 
 
 @dataclass
@@ -258,6 +287,537 @@ class QueryService:
             filters_applied=self._filters_to_dict(filters),
             execution_time_ms=execution_time,
         )
+
+    def get_top_client_news(
+        self,
+        client_guid: str,
+        group_guids: list[str],
+        limit: int = 3,
+        time_window_hours: int = 24,
+        include_portfolio: bool = True,
+        include_watchlist: bool = True,
+        include_lateral_graph: bool = True,
+        min_impact_score: float | None = None,
+        impact_tiers: list[str] | None = None,
+        weights: ClientNewsWeights | None = None,
+        filters: QueryFilters | None = None,
+        llm_service: "LLMService | None" = None,
+    ) -> list[dict[str, Any]]:
+        """Get top news for a client using hybrid graph + semantic search.
+
+        Returns a ranked shortlist of news items personalized for the client.
+        """
+        if not self.graph_index:
+            logger.warning("Top client news requested without graph index")
+            return []
+
+        if limit <= 0:
+            return []
+
+        profile = self._get_client_profile_context(client_guid, group_guids)
+        if not profile:
+            return []
+
+        holdings = self._get_client_holdings(client_guid) if include_portfolio else []
+        watchlist = self._get_client_watchlist(client_guid) if include_watchlist else []
+        exclusions = self._get_client_exclusions(client_guid) if profile.get("esg_constrained") else {
+            "companies": [],
+            "sectors": [],
+        }
+
+        benchmark = profile.get("benchmark")
+        holding_tickers = [h["ticker"] for h in holdings if h.get("ticker")]
+        watchlist_tickers = [t for t in watchlist if t]
+
+        if benchmark:
+            watchlist_tickers.append(benchmark)
+
+        resolved_min_impact = min_impact_score
+        if resolved_min_impact is None:
+            resolved_min_impact = profile.get("impact_threshold")
+
+        resolved_impact_tiers = impact_tiers or ["PLATINUM", "GOLD", "SILVER"]
+        weights = weights or ClientNewsWeights.for_client_type(profile.get("client_type"))
+
+        now = datetime.utcnow()
+        time_cutoff = now - timedelta(hours=time_window_hours)
+
+        # ------------------------------------------------------------
+        # Graph candidates
+        # ------------------------------------------------------------
+        graph_candidates: dict[str, dict[str, Any]] = {}
+
+        def add_graph_candidates(
+            docs: list[dict[str, Any]],
+            reason: str,
+            base_score: float,
+            position_weights: dict[str, float] | None = None,
+        ) -> None:
+            for doc in docs:
+                guid = doc.get("document_guid")
+                if not guid:
+                    continue
+                entry = graph_candidates.setdefault(guid, {
+                    "document_guid": guid,
+                    "title": doc.get("title"),
+                    "created_at": doc.get("created_at"),
+                    "impact_score": doc.get("impact_score"),
+                    "impact_tier": doc.get("impact_tier"),
+                    "affected_instruments": doc.get("affected_instruments", []),
+                    "reasons": set(),
+                    "graph_score": 0.0,
+                })
+                entry["reasons"].add(reason)
+
+                weight_boost = 0.0
+                if position_weights:
+                    for ticker in entry.get("affected_instruments", []):
+                        weight_boost = max(weight_boost, position_weights.get(ticker, 0.0))
+
+                entry["graph_score"] = max(
+                    entry["graph_score"],
+                    min(1.0, base_score + min(0.3, weight_boost)),
+                )
+
+        if holding_tickers:
+            holding_weights = {h["ticker"]: h.get("weight", 0.0) for h in holdings if h.get("ticker")}
+            direct_docs = self._get_documents_for_tickers(
+                tickers=holding_tickers,
+                group_guids=group_guids,
+                min_impact_score=resolved_min_impact,
+                impact_tiers=resolved_impact_tiers,
+            )
+            add_graph_candidates(direct_docs, "DIRECT_HOLDING", 1.0, holding_weights)
+
+        if watchlist_tickers:
+            watch_docs = self._get_documents_for_tickers(
+                tickers=watchlist_tickers,
+                group_guids=group_guids,
+                min_impact_score=resolved_min_impact,
+                impact_tiers=resolved_impact_tiers,
+            )
+            add_graph_candidates(watch_docs, "WATCHLIST", 0.8)
+
+        if include_lateral_graph and holding_tickers:
+            lateral = self._expand_lateral_tickers(holding_tickers)
+
+            if lateral.get("competitors"):
+                comp_docs = self._get_documents_for_tickers(
+                    tickers=lateral.get("competitors", []),
+                    group_guids=group_guids,
+                    min_impact_score=resolved_min_impact,
+                    impact_tiers=resolved_impact_tiers,
+                )
+                add_graph_candidates(comp_docs, "COMPETITOR", 0.6)
+
+            if lateral.get("suppliers"):
+                supply_docs = self._get_documents_for_tickers(
+                    tickers=lateral.get("suppliers", []),
+                    group_guids=group_guids,
+                    min_impact_score=resolved_min_impact,
+                    impact_tiers=resolved_impact_tiers,
+                )
+                add_graph_candidates(supply_docs, "SUPPLY_CHAIN", 0.6)
+
+            if lateral.get("peers"):
+                peer_docs = self._get_documents_for_tickers(
+                    tickers=lateral.get("peers", []),
+                    group_guids=group_guids,
+                    min_impact_score=resolved_min_impact,
+                    impact_tiers=resolved_impact_tiers,
+                )
+                add_graph_candidates(peer_docs, "PEER", 0.5)
+
+        # ------------------------------------------------------------
+        # Semantic candidates
+        # ------------------------------------------------------------
+        semantic_query = self._build_client_query_text(
+            profile=profile,
+            holdings=holding_tickers,
+            watchlist=watchlist_tickers,
+            llm_service=llm_service,
+        )
+
+        semantic_filters = filters or QueryFilters()
+        if semantic_filters.date_from is None:
+            semantic_filters.date_from = time_cutoff
+        if semantic_filters.date_to is None:
+            semantic_filters.date_to = now
+
+        semantic_results = self.query(
+            query_text=semantic_query,
+            group_guids=group_guids,
+            n_results=max(limit * 5, 15),
+            filters=semantic_filters,
+            include_graph_context=False,
+            enable_graph_expansion=True,
+        ).results
+
+        for result in semantic_results:
+            doc_guid = result.document_guid
+            entry = graph_candidates.setdefault(doc_guid, {
+                "document_guid": doc_guid,
+                "title": result.title,
+                "created_at": result.created_at.isoformat() if result.created_at else None,
+                "impact_score": result.metadata.get("impact_score"),
+                "impact_tier": result.metadata.get("impact_tier"),
+                "affected_instruments": result.metadata.get("companies", []),
+                "reasons": set(),
+                "graph_score": 0.0,
+            })
+            entry["semantic_score"] = max(entry.get("semantic_score", 0.0), result.similarity_score)
+            entry["reasons"].add("SEMANTIC_MATCH")
+
+        # ------------------------------------------------------------
+        # Apply time window + ESG exclusions
+        # ------------------------------------------------------------
+        candidates = list(graph_candidates.values())
+        candidates = [c for c in candidates if self._within_time_window(c.get("created_at"), time_cutoff)]
+
+        if exclusions["companies"] or exclusions["sectors"]:
+            entities = self._get_document_entities([c["document_guid"] for c in candidates])
+            filtered: list[dict[str, Any]] = []
+            for c in candidates:
+                doc_entities = entities.get(c["document_guid"], {"companies": [], "sectors": []})
+                if self._violates_exclusions(doc_entities, exclusions):
+                    continue
+                filtered.append(c)
+            candidates = filtered
+
+        # ------------------------------------------------------------
+        # Final scoring
+        # ------------------------------------------------------------
+        scored: list[dict[str, Any]] = []
+        for candidate in candidates:
+            impact_score = candidate.get("impact_score")
+            impact_norm = self._normalize_impact_score(impact_score)
+
+            created_at = self._parse_datetime(candidate.get("created_at"))
+            recency = self._calculate_recency_score({"created_at": created_at}, now)
+
+            semantic_score = candidate.get("semantic_score", 0.0)
+            graph_score = candidate.get("graph_score", 0.0)
+
+            final_score = (
+                weights.semantic * semantic_score
+                + weights.graph * graph_score
+                + weights.impact * impact_norm
+                + weights.recency * recency
+            )
+
+            reasons = sorted(candidate.get("reasons", set()))
+            why = self._build_why_it_matters(
+                title=candidate.get("title"),
+                reasons=reasons,
+                impact_score=impact_score,
+                tickers=candidate.get("affected_instruments", []),
+                llm_service=llm_service,
+            )
+
+            scored.append({
+                "document_guid": candidate.get("document_guid"),
+                "title": candidate.get("title"),
+                "created_at": candidate.get("created_at"),
+                "impact_score": impact_score,
+                "impact_tier": candidate.get("impact_tier"),
+                "affected_instruments": candidate.get("affected_instruments", []),
+                "relevance_score": final_score,
+                "reasons": reasons,
+                "why_it_matters": why,
+            })
+
+        scored.sort(key=lambda x: x["relevance_score"], reverse=True)
+        return scored[:limit]
+
+    def _build_client_query_text(
+        self,
+        profile: dict[str, Any],
+        holdings: list[str],
+        watchlist: list[str],
+        llm_service: "LLMService | None" = None,
+    ) -> str:
+        """Build semantic query text from client profile context."""
+        base = (
+            f"Client type: {profile.get('client_type', 'UNKNOWN')}. "
+            f"Mandate: {profile.get('mandate_type', 'unspecified')}. "
+            f"Horizon: {profile.get('horizon', 'unspecified')}. "
+            f"ESG constrained: {profile.get('esg_constrained', False)}. "
+        )
+        tickers = " ".join(sorted(set(holdings + watchlist)))
+        query = f"{base} Portfolio and watchlist tickers: {tickers}."
+
+        if llm_service is None:
+            return query
+
+        try:
+            from app.services.llm_service import ChatMessage
+
+            prompt = (
+                "Rewrite the following client context into a short search query "
+                "for relevant market news. Keep it under 25 words and include key tickers. "
+                "Return only the query text.\n\n"
+                f"{query}"
+            )
+            result = llm_service.chat_completion(
+                messages=[ChatMessage(role="user", content=prompt)],
+            )
+            return result.content.strip() or query
+        except Exception:
+            return query
+
+    def _get_client_profile_context(
+        self, client_guid: str, group_guids: list[str]
+    ) -> dict[str, Any] | None:
+        """Fetch core client profile info with group permission check."""
+        if not self.graph_index:
+            return None
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})-[:IN_GROUP]->(g:Group)
+                    WHERE g.guid IN $group_guids
+                    OPTIONAL MATCH (c)-[:IS_TYPE_OF]->(ct:ClientType)
+                    OPTIONAL MATCH (c)-[:HAS_PROFILE]->(cp:ClientProfile)
+                    OPTIONAL MATCH (cp)-[:BENCHMARKED_TO]->(b:Instrument)
+                    RETURN c.guid AS client_guid,
+                           c.impact_threshold AS impact_threshold,
+                           ct.code AS client_type,
+                           cp.mandate_type AS mandate_type,
+                           cp.horizon AS horizon,
+                           cp.esg_constrained AS esg_constrained,
+                           b.ticker AS benchmark
+                    """,
+                    client_guid=client_guid,
+                    group_guids=group_guids,
+                )
+                record = result.single()
+                if not record:
+                    return None
+                return dict(record)
+        except Exception:
+            return None
+
+    def _get_client_holdings(self, client_guid: str) -> list[dict[str, Any]]:
+        if not self.graph_index:
+            return []
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})-[:HAS_PORTFOLIO]->(p:Portfolio)-[h:HOLDS]->(i:Instrument)
+                    RETURN i.ticker AS ticker, h.weight AS weight
+                    """,
+                    client_guid=client_guid,
+                )
+                return [dict(record) for record in result if record.get("ticker")]
+        except Exception:
+            return []
+
+    def _get_client_watchlist(self, client_guid: str) -> list[str]:
+        if not self.graph_index:
+            return []
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})-[:HAS_WATCHLIST]->(w:Watchlist)-[:WATCHES]->(i:Instrument)
+                    RETURN DISTINCT i.ticker AS ticker
+                    """,
+                    client_guid=client_guid,
+                )
+                return [record["ticker"] for record in result if record.get("ticker")]
+        except Exception:
+            return []
+
+    def _get_client_exclusions(self, client_guid: str) -> dict[str, list[str]]:
+        if not self.graph_index:
+            return {"companies": [], "sectors": []}
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})-[:HAS_PROFILE]->(cp:ClientProfile)
+                    OPTIONAL MATCH (cp)-[:EXCLUDES]->(exCompany:Company)
+                    OPTIONAL MATCH (cp)-[:EXCLUDES]->(exSector:Sector)
+                    RETURN collect(DISTINCT exCompany.name) AS companies,
+                           collect(DISTINCT exSector.name) AS sectors
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return {"companies": [], "sectors": []}
+                return {
+                    "companies": [c for c in record["companies"] if c],
+                    "sectors": [s for s in record["sectors"] if s],
+                }
+        except Exception:
+            return {"companies": [], "sectors": []}
+
+    def _get_document_entities(self, document_guids: list[str]) -> dict[str, dict[str, list[str]]]:
+        if not self.graph_index or not document_guids:
+            return {}
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (d:Document)-[:AFFECTS]->(:Instrument)-[:ISSUED_BY]->(c:Company)-[:BELONGS_TO]->(s:Sector)
+                    WHERE d.guid IN $guids
+                    RETURN d.guid AS guid,
+                           collect(DISTINCT c.name) AS companies,
+                           collect(DISTINCT s.name) AS sectors
+                    """,
+                    guids=document_guids,
+                )
+                return {
+                    record["guid"]: {
+                        "companies": [c for c in record["companies"] if c],
+                        "sectors": [s for s in record["sectors"] if s],
+                    }
+                    for record in result
+                    if record.get("guid")
+                }
+        except Exception:
+            return {}
+
+    def _get_documents_for_tickers(
+        self,
+        tickers: list[str],
+        group_guids: list[str],
+        min_impact_score: float | None = None,
+        impact_tiers: list[str] | None = None,
+        limit: int = 100,
+    ) -> list[dict[str, Any]]:
+        if not self.graph_index or not tickers:
+            return []
+        query = """
+        MATCH (d:Document)-[:AFFECTS]->(i:Instrument)
+        WHERE i.ticker IN $tickers
+        MATCH (d)-[:IN_GROUP]->(g:Group)
+        WHERE g.guid IN $group_guids
+        """
+        if min_impact_score is not None:
+            query += "\n  AND d.impact_score >= $min_impact_score"
+        if impact_tiers:
+            query += "\n  AND d.impact_tier IN $impact_tiers"
+        query += """
+        RETURN d.guid AS document_guid,
+               d.title AS title,
+               d.created_at AS created_at,
+               d.impact_score AS impact_score,
+               d.impact_tier AS impact_tier,
+               collect(DISTINCT i.ticker) AS affected_instruments
+        ORDER BY d.created_at DESC
+        LIMIT $limit
+        """
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    query,
+                    tickers=tickers,
+                    group_guids=group_guids,
+                    min_impact_score=min_impact_score,
+                    impact_tiers=impact_tiers,
+                    limit=limit,
+                )
+                return [dict(record) for record in result]
+        except Exception:
+            return []
+
+    def _expand_lateral_tickers(self, tickers: list[str]) -> dict[str, list[str]]:
+        if not self.graph_index or not tickers:
+            return {"competitors": [], "suppliers": [], "peers": []}
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (i:Instrument)-[:ISSUED_BY]->(c:Company)
+                    WHERE i.ticker IN $tickers
+                    OPTIONAL MATCH (c)-[:COMPETES_WITH]-(cc:Company)-[:ISSUED_BY]->(ci:Instrument)
+                    OPTIONAL MATCH (c)<-[:SUPPLIES_TO|:SUPPLIER_OF|:PARTNER_OF]-(sc:Company)-[:ISSUED_BY]->(si:Instrument)
+                    OPTIONAL MATCH (c)-[:BELONGS_TO]->(s:Sector)<-[:BELONGS_TO]-(pc:Company)-[:ISSUED_BY]->(pi:Instrument)
+                    RETURN collect(DISTINCT ci.ticker) AS competitors,
+                           collect(DISTINCT si.ticker) AS suppliers,
+                           collect(DISTINCT pi.ticker) AS peers
+                    """,
+                    tickers=tickers,
+                )
+                record = result.single()
+                if not record:
+                    return {"competitors": [], "suppliers": [], "peers": []}
+                return {
+                    "competitors": [t for t in record["competitors"] if t],
+                    "suppliers": [t for t in record["suppliers"] if t],
+                    "peers": [t for t in record["peers"] if t],
+                }
+        except Exception:
+            return {"competitors": [], "suppliers": [], "peers": []}
+
+    def _within_time_window(self, created_at: Any, cutoff: datetime) -> bool:
+        if created_at is None:
+            return True
+        parsed = self._parse_datetime(created_at)
+        if not parsed:
+            return True
+        if parsed.tzinfo is not None and cutoff.tzinfo is None:
+            cutoff = cutoff.replace(tzinfo=parsed.tzinfo)
+        if parsed.tzinfo is None and cutoff.tzinfo is not None:
+            parsed = parsed.replace(tzinfo=cutoff.tzinfo)
+        return parsed >= cutoff
+
+    def _normalize_impact_score(self, impact_score: Any) -> float:
+        try:
+            score = float(impact_score)
+            return max(0.0, min(1.0, score / 100.0))
+        except (TypeError, ValueError):
+            return 0.0
+
+    def _violates_exclusions(
+        self,
+        doc_entities: dict[str, list[str]],
+        exclusions: dict[str, list[str]],
+    ) -> bool:
+        excluded_companies = {c.lower() for c in exclusions.get("companies", []) if c}
+        excluded_sectors = {s.lower() for s in exclusions.get("sectors", []) if s}
+
+        for company in doc_entities.get("companies", []):
+            if company and company.lower() in excluded_companies:
+                return True
+        for sector in doc_entities.get("sectors", []):
+            if sector and sector.lower() in excluded_sectors:
+                return True
+        return False
+
+    def _build_why_it_matters(
+        self,
+        title: str | None,
+        reasons: list[str],
+        impact_score: Any,
+        tickers: list[str],
+        llm_service: "LLMService | None" = None,
+    ) -> str:
+        reason_text = ", ".join(reasons) if reasons else "relevant signal"
+        ticker_text = ", ".join(tickers[:3]) if tickers else "client exposures"
+        base = f"{reason_text} impacting {ticker_text}."
+
+        if llm_service is None:
+            return base
+
+        try:
+            from app.services.llm_service import ChatMessage
+
+            prompt = (
+                "Write a single short sentence (<=20 words) explaining why this news matters to the client. "
+                "Use the reason and tickers.\n\n"
+                f"Title: {title}\nReason: {reason_text}\nTickers: {ticker_text}\nImpact: {impact_score}\n"
+            )
+            result = llm_service.chat_completion(
+                messages=[ChatMessage(role="user", content=prompt)],
+            )
+            return result.content.strip() or base
+        except Exception:
+            return base
 
     def _execute_similarity_search(
         self,

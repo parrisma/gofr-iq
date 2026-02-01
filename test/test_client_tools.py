@@ -21,6 +21,7 @@ import pytest
 from mcp.server.fastmcp import FastMCP
 
 from app.services.graph_index import GraphIndex, GraphNode, NodeLabel, RelationType
+from app.services.query_service import QueryService
 from app.tools.client_tools import register_client_tools
 
 
@@ -65,15 +66,25 @@ def mock_graph_index() -> MagicMock:
 
 
 @pytest.fixture
+def mock_query_service() -> MagicMock:
+    """Create a mock QueryService"""
+    return MagicMock(spec=QueryService)
+
+
+@pytest.fixture
 def mcp_server() -> FastMCP:
     """Create a FastMCP server for testing"""
     return FastMCP("test-client-tools")
 
 
 @pytest.fixture
-def registered_tools(mcp_server: FastMCP, mock_graph_index: MagicMock) -> dict[str, Any]:
+def registered_tools(
+    mcp_server: FastMCP,
+    mock_graph_index: MagicMock,
+    mock_query_service: MagicMock,
+) -> dict[str, Any]:
     """Register client tools and return them"""
-    register_client_tools(mcp_server, mock_graph_index)
+    register_client_tools(mcp_server, mock_graph_index, query_service=mock_query_service)
     return {tool.name: tool for tool in mcp_server._tool_manager._tools.values()}
 
 
@@ -106,6 +117,7 @@ class TestToolRegistration:
         """Test that all client tools are registered"""
         assert "create_client" in registered_tools
         assert "get_client_feed" in registered_tools
+        assert "get_top_client_news" in registered_tools
         assert "add_to_portfolio" in registered_tools
         assert "add_to_watchlist" in registered_tools
         # New tools
@@ -400,6 +412,372 @@ class TestGetClientFeed:
 
         assert result["status"] == "error"
         assert result["error_code"] == "CLIENT_DEFUNCT"
+
+
+# ============================================================================
+# Get Top Client News Tests
+# ============================================================================
+
+
+class TestGetTopClientNews:
+    """Tests for get_top_client_news tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        """Test successful top news retrieval"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+        )
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"name": "Test Fund"},
+        )
+
+        mock_query_service.get_top_client_news.return_value = [
+            {
+                "document_guid": "doc-1",
+                "title": "Client-Relevant News",
+                "impact_score": 85,
+                "impact_tier": "GOLD",
+                "relevance_score": 0.92,
+                "affected_instruments": ["AAPL"],
+                "created_at": "2025-01-15T10:00:00Z",
+                "reasons": ["DIRECT_HOLDING"],
+                "why_it_matters": "Direct holding impacted by earnings beat.",
+            }
+        ]
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="client-123",
+            limit=3,
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["total_count"] == 1
+        assert result["data"]["articles"][0]["title"] == "Client-Relevant News"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_without_query_service(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test error when QueryService is not configured"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"name": "Test Fund"},
+        )
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="client-123",
+            limit=3,
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "error"
+        assert result["error_code"] == "QUERY_SERVICE_UNAVAILABLE"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_client_not_found(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        """Test error when client is not found"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+        )
+
+        mock_graph_index.get_node.return_value = None
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="nonexistent-client-guid-1234",
+            limit=3,
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "error"
+        assert result["error_code"] == "CLIENT_NOT_FOUND"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_defunct_client(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        """Test error when client is defunct"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+        )
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={
+                "name": "Defunct Fund",
+                "status": "defunct",
+                "defunct_at": "2025-01-01T00:00:00Z",
+                "defunct_reason": "Client closed",
+            },
+        )
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="client-123",
+            limit=3,
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "error"
+        assert result["error_code"] == "CLIENT_DEFUNCT"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_with_impact_filters(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        """Test top news with impact score and tier filters"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+        )
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"name": "Test Fund"},
+        )
+
+        mock_query_service.get_top_client_news.return_value = [
+            {
+                "document_guid": "doc-platinum",
+                "title": "High Impact News",
+                "impact_score": 95,
+                "impact_tier": "PLATINUM",
+                "relevance_score": 0.95,
+                "affected_instruments": ["AAPL"],
+                "created_at": "2025-01-15T10:00:00Z",
+                "reasons": ["DIRECT_HOLDING"],
+                "why_it_matters": "Critical update.",
+            }
+        ]
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="client-123",
+            limit=5,
+            min_impact_score=80.0,
+            impact_tiers=["PLATINUM", "GOLD"],
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["filters_applied"]["min_impact_score"] == 80.0
+        assert result["data"]["filters_applied"]["impact_tiers"] == ["PLATINUM", "GOLD"]
+
+        mock_query_service.get_top_client_news.assert_called_once()
+        call_kwargs = mock_query_service.get_top_client_news.call_args[1]
+        assert call_kwargs["min_impact_score"] == 80.0
+        assert call_kwargs["impact_tiers"] == ["PLATINUM", "GOLD"]
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_with_time_window(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        """Test top news with custom time window"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+        )
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"name": "Test Fund"},
+        )
+
+        mock_query_service.get_top_client_news.return_value = []
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="client-123",
+            limit=3,
+            time_window_hours=48,
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["filters_applied"]["time_window_hours"] == 48
+
+        call_kwargs = mock_query_service.get_top_client_news.call_args[1]
+        assert call_kwargs["time_window_hours"] == 48
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_disable_lateral_graph(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        """Test top news without lateral graph expansion"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+        )
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"name": "Test Fund"},
+        )
+
+        mock_query_service.get_top_client_news.return_value = []
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="client-123",
+            limit=3,
+            include_portfolio=True,
+            include_watchlist=False,
+            include_lateral_graph=False,
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["filters_applied"]["include_portfolio"] is True
+        assert result["data"]["filters_applied"]["include_watchlist"] is False
+        assert result["data"]["filters_applied"]["include_lateral_graph"] is False
+
+        call_kwargs = mock_query_service.get_top_client_news.call_args[1]
+        assert call_kwargs["include_portfolio"] is True
+        assert call_kwargs["include_watchlist"] is False
+        assert call_kwargs["include_lateral_graph"] is False
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_get_top_news_multiple_reasons(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        """Test top news with multiple relevance reasons"""
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+        )
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"name": "Test Fund"},
+        )
+
+        mock_query_service.get_top_client_news.return_value = [
+            {
+                "document_guid": "doc-1",
+                "title": "Apple Supply Chain Disruption",
+                "impact_score": 88,
+                "impact_tier": "GOLD",
+                "relevance_score": 0.95,
+                "affected_instruments": ["AAPL", "TSM"],
+                "created_at": "2025-01-15T10:00:00Z",
+                "reasons": ["DIRECT_HOLDING", "SUPPLY_CHAIN", "SEMANTIC_MATCH"],
+                "why_it_matters": "Direct holding AAPL and supply chain TSM both affected.",
+            },
+            {
+                "document_guid": "doc-2",
+                "title": "Tech Sector Earnings Preview",
+                "impact_score": 72,
+                "impact_tier": "SILVER",
+                "relevance_score": 0.82,
+                "affected_instruments": ["GOOGL", "MSFT"],
+                "created_at": "2025-01-15T09:00:00Z",
+                "reasons": ["WATCHLIST", "PEER"],
+                "why_it_matters": "Watchlist items in same sector.",
+            },
+        ]
+
+        tool_fn = get_tool_fn(mcp_server, "get_top_client_news")
+
+        response = tool_fn(
+            client_guid="client-123",
+            limit=5,
+        )
+
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["total_count"] == 2
+
+        first_article = result["data"]["articles"][0]
+        assert "DIRECT_HOLDING" in first_article["reasons"]
+        assert "SUPPLY_CHAIN" in first_article["reasons"]
+        assert "SEMANTIC_MATCH" in first_article["reasons"]
+
+        second_article = result["data"]["articles"][1]
+        assert "WATCHLIST" in second_article["reasons"]
+        assert "PEER" in second_article["reasons"]
 
 
 # ============================================================================
