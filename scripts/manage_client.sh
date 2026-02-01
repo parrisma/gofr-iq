@@ -2,12 +2,13 @@
 # =============================================================================
 # GOFR-IQ Client Management Script (Wrapper)
 # =============================================================================
-# Usage:
-#   ./scripts/manage_client.sh <command> [options]
+# Usage (order matters):
+#   ./scripts/manage_client.sh [global options] <command> [command options]
 #
 # Examples:
-#   ./scripts/manage_client.sh list --token "$TOKEN"
-#   ./scripts/manage_client.sh create --name "Test" --type HEDGE_FUND --token "$TOKEN"
+#   ./scripts/manage_client.sh --token "$TOKEN" list
+#   ./scripts/manage_client.sh --token "$TOKEN" create --name "Test" --type HEDGE_FUND
+#   ./scripts/manage_client.sh --docker --token "$TOKEN" list
 # =============================================================================
 
 set -euo pipefail

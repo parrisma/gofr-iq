@@ -66,7 +66,7 @@ class TestSourceRegistryNeo4jSync:
         )
 
         # Update it
-        updated_source = source_registry_with_neo4j.update(
+        source_registry_with_neo4j.update(
             source_guid=source.source_guid,
             region="US",
             trust_level=TrustLevel.MEDIUM,

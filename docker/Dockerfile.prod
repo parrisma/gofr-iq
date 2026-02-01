@@ -76,6 +76,8 @@ for dep in deps:
 
 pathlib.Path("/tmp/requirements.txt").write_text("\n".join(ordered))
 PY
+# Increase timeout for large package downloads (e.g., nodejs-wheel-binaries 57MB)
+ENV UV_HTTP_TIMEOUT=180
 RUN uv pip install -r /tmp/requirements.txt
 
 # Copy project files (code last to reduce rebuilds on code changes)

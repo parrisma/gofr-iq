@@ -43,8 +43,7 @@ def _create_client_via_mcp(client_data: dict[str, Any], token: str) -> dict[str,
     
     project_root = Path(__file__).parent.parent
     cmd = [
-        "uv", "run",
-        str(project_root / "scripts" / "manage_client.py"),
+        str(project_root / "scripts" / "manage_client.sh"),
         "--docker", "--token", token,
         "create",
         "--name", client_data["name"],
@@ -91,8 +90,7 @@ def _add_holdings_via_mcp(client_guid: str, holdings: list[tuple[str, float]], t
     
     for ticker, weight in holdings:
         cmd = [
-            "uv", "run",
-            str(project_root / "scripts" / "manage_client.py"),
+            str(project_root / "scripts" / "manage_client.sh"),
             "--docker", "--token", token,
             "add-holding",
             client_guid,
@@ -125,8 +123,7 @@ def _add_watchlist_via_mcp(client_guid: str, tickers: list[str], token: str) -> 
     
     for ticker in tickers:
         cmd = [
-            "uv", "run",
-            str(project_root / "scripts" / "manage_client.py"),
+            str(project_root / "scripts" / "manage_client.sh"),
             "--docker", "--token", token,
             "add-watch",
             client_guid,

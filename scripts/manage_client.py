@@ -42,7 +42,21 @@ def load_ports_env(project_root: str) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Manage clients via MCP")
+    description = (
+        "Manage clients via MCP.\n\n"
+        "Order matters: GLOBAL OPTIONS -> COMMAND -> COMMAND OPTIONS."
+    )
+    parser = argparse.ArgumentParser(
+        description=description,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "Examples:\n"
+            "  ./scripts/manage_client.sh --token $TOKEN list\n"
+            "  ./scripts/manage_client.sh --token $TOKEN create --name \"Test\" --type HEDGE_FUND\n"
+            "  ./scripts/manage_client.sh --docker --token $TOKEN list\n"
+            "  ./scripts/manage_client.sh --dev --token $TOKEN create --name \"Local Test\"\n"
+        ),
+    )
     parser.add_argument("--docker", "--prod", action="store_true", dest="docker", help="Use docker host/ports")
     parser.add_argument("--dev", action="store_true", dest="dev", help="Use dev host/ports")
     parser.add_argument("--host", type=str, default=None, help="MCP host override")
@@ -115,6 +129,11 @@ def parse_args() -> argparse.Namespace:
 
 def build_config(args: argparse.Namespace, project_root: str) -> McpConfig:
     load_ports_env(project_root)
+
+    if args.docker and args.dev:
+        logger.error("Choose only one of --docker or --dev.")
+        sys.exit(2)
+
     token = args.token or os.environ.get("GOFR_IQ_TOKEN", "")
     if not token:
         logger.error("Missing token. Use --token or GOFR_IQ_TOKEN.")
@@ -122,7 +141,10 @@ def build_config(args: argparse.Namespace, project_root: str) -> McpConfig:
 
     host = args.host
     if host is None:
-        host = "gofr-iq-mcp"
+        if args.dev:
+            host = "localhost"
+        else:
+            host = "gofr-iq-mcp"
 
     if args.port is not None:
         port = args.port
@@ -165,7 +187,7 @@ def parse_sse_response(raw: str) -> dict[str, Any]:
         if line.startswith("data:"):
             payload = json.loads(line[5:].strip())
             return payload
-    return {}
+    return {"status": "error", "error_code": "EMPTY_RESPONSE", "message": "No data in MCP response."}
 
 
 def mcp_call(cfg: McpConfig, session_id: str, tool_name: str, arguments: dict[str, Any]) -> dict[str, Any]:
@@ -314,7 +336,23 @@ def main() -> None:
         result = run_command(args, cfg)
         sys.stdout.write(json.dumps(result, indent=2))
         sys.stdout.write("\n")
-    except (HTTPError, URLError, RuntimeError, ValueError) as exc:
+    except HTTPError as exc:
+        body = ""
+        try:
+            body = exc.read().decode("utf-8")
+        except Exception:
+            body = ""
+        logger.error(
+            "Request failed",
+            status=exc.code,
+            reason=str(exc.reason),
+            body=body.strip(),
+        )
+        sys.exit(1)
+    except URLError as exc:
+        logger.error("Network error", reason=str(exc.reason))
+        sys.exit(1)
+    except (RuntimeError, ValueError) as exc:
         logger.error("Request failed", error=str(exc))
         sys.exit(1)
 

@@ -77,6 +77,7 @@ class Scenario:
     validation: ValidationRule
     weight: float  # Selection probability weight
 
+
 @dataclass
 class MockSource:
     guid: str
@@ -85,6 +86,7 @@ class MockSource:
     persona: str
     style_guide: str
 
+
 # Source Registry with varying trust levels
 MOCK_SOURCES = [
     MockSource(
@@ -92,36 +94,36 @@ MOCK_SOURCES = [
         name="Global Wire",
         trust_level=10,
         persona="dry_factual",
-        style_guide="Dry, extremely factual, immediate. Uses formal identifiers (Full Company Name, exact Timestamps). No emotional language."
+        style_guide="Dry, extremely factual, immediate. Uses formal identifiers (Full Company Name, exact Timestamps). No emotional language.",
     ),
     MockSource(
         guid="src-market-blog",
         name="The Daily Alpha",
         trust_level=4,
         persona="opinionated",
-        style_guide="Opinionated, uses trading slang ('to the moon', 'bagholder'). Focuses on stock price action and speculation."
+        style_guide="Opinionated, uses trading slang ('to the moon', 'bagholder'). Focuses on stock price action and speculation.",
     ),
     MockSource(
         guid="src-rumor-mill",
         name="Insider Whispers",
         trust_level=2,
         persona="speculative",
-        style_guide="Vague ('sources say', 'unconfirmed reports'), volatile, sensationalist. Use capitalized words for emphasis. Explicitly unconfirmed."
+        style_guide="Vague ('sources say', 'unconfirmed reports'), volatile, sensationalist. Use capitalized words for emphasis. Explicitly unconfirmed.",
     ),
     MockSource(
         guid="src-local-gazette",
         name="Regional Business Journal",
         trust_level=8,
         persona="local_context",
-        style_guide="Hyper-specific local context. Mentions city names, employee counts, local politics. Slower, more narrative pace."
+        style_guide="Hyper-specific local context. Mentions city names, employee counts, local politics. Slower, more narrative pace.",
     ),
     MockSource(
         guid="src-tech-cruncher",
         name="Silicon Circuits",
         trust_level=6,
         persona="tech_focused",
-        style_guide="Deeply technical, focused on specs, benchmarks, and engineering details. Jargon heavy."
-    )
+        style_guide="Deeply technical, focused on specs, benchmarks, and engineering details. Jargon heavy.",
+    ),
 ]
 
 # ============================================================================
@@ -130,13 +132,23 @@ MOCK_SOURCES = [
 
 from simulation.universe.builder import UniverseBuilder, DEFAULT_GROUP
 from simulation.universe.types import MockFactor, FactorExposure
+
 # Initialize the universe builder to access the shared topology
 UNIVERSE = UniverseBuilder()
 
 # Client portfolio mappings for validation metadata
 CLIENT_PORTFOLIOS = {
-    "550e8400-e29b-41d4-a716-446655440001": ["QNTM", "BANKO", "VIT", "GTX"],  # Apex Capital (Hedge Fund)
-    "550e8400-e29b-41d4-a716-446655440002": ["OMNI", "SHOPM", "TRUCK"],  # Teachers Retirement (Pension)
+    "550e8400-e29b-41d4-a716-446655440001": [
+        "QNTM",
+        "BANKO",
+        "VIT",
+        "GTX",
+    ],  # Apex Capital (Hedge Fund)
+    "550e8400-e29b-41d4-a716-446655440002": [
+        "OMNI",
+        "SHOPM",
+        "TRUCK",
+    ],  # Teachers Retirement (Pension)
     "550e8400-e29b-41d4-a716-446655440003": ["VELO", "BLK"],  # DiamondHands420 (Retail)
 }
 
@@ -189,9 +201,7 @@ SCENARIOS = [
         target_tier="BRONZE",  # Should be downgraded from higher
         weight=0.10,
         template="News Event: M&A Rumor. Subject: {ticker} ({name}). Style Guide: {style_guide}. \nTask: Write about a rumored acquisition. Attribute to 'people familiar'. Explicitly unconfirmed. If the source is low trust, make it very speculative. If high trust, strictly cite 'rumors'.",
-        validation=ValidationRule(
-            max_score=74, expected_event="M&A_RUMOR"
-        ),
+        validation=ValidationRule(max_score=74, expected_event="M&A_RUMOR"),
     ),
     Scenario(
         name="Indirect Supplier Delay",
@@ -203,14 +213,14 @@ SCENARIOS = [
             expected_tier="GOLD", expected_event="SUPPLY_CHAIN", relationship_hops=1
         ),
     ),
-     Scenario(
+    Scenario(
         name="Competitor Product Launch",
         description="Rival launches a better product",
         target_tier="SILVER",
         weight=0.08,
         template="News Event: Competitor Product Launch. Subject: {related_ticker} ({related_name}). Threat to: {ticker} ({name}). Relationship: {relationship_desc}. Style Guide: {style_guide}. \nTask: Write a story about {related_name} launching a product that makes {name}'s flagship look obsolete. Focus on the competitive threat.",
         validation=ValidationRule(
-             expected_tier="SILVER", expected_event="PRODUCT_LAUNCH", relationship_hops=2
+            expected_tier="SILVER", expected_event="PRODUCT_LAUNCH", relationship_hops=2
         ),
     ),
     Scenario(
@@ -219,7 +229,9 @@ SCENARIOS = [
         target_tier="STANDARD",
         weight=0.20,
         template="News Event: Routine Update. Subject: {ticker} ({name}). Style Guide: {style_guide}. \nTask: Write a routine update (personnel, marketing, ESG). content should be low impact.",
-        validation=ValidationRule(max_score=49, expected_tier="STANDARD", expected_event="OTHER", relationship_hops=0),
+        validation=ValidationRule(
+            max_score=49, expected_tier="STANDARD", expected_event="OTHER", relationship_hops=0
+        ),
     ),
     # === NEW: Macro Factor Scenarios ===
     Scenario(
@@ -233,7 +245,7 @@ SCENARIOS = [
             expected_tier="GOLD",
             expected_event="MACRO_DATA",
             relationship_hops=0,
-            expected_feed_rank_range="1-10"
+            expected_feed_rank_range="1-10",
         ),
     ),
     Scenario(
@@ -248,7 +260,7 @@ SCENARIOS = [
             expected_tier="SILVER",
             expected_event="MACRO_DATA",
             relationship_hops=0,
-            expected_feed_rank_range="6-15"
+            expected_feed_rank_range="6-15",
         ),
     ),
     Scenario(
@@ -262,7 +274,7 @@ SCENARIOS = [
             expected_tier="GOLD",
             expected_event="LEGAL_RULING",
             relationship_hops=0,
-            expected_feed_rank_range="1-10"
+            expected_feed_rank_range="1-10",
         ),
     ),
     Scenario(
@@ -277,7 +289,7 @@ SCENARIOS = [
             expected_tier="SILVER",
             expected_event="MACRO_DATA",
             relationship_hops=0,
-            expected_feed_rank_range="6-15"
+            expected_feed_rank_range="6-15",
         ),
     ),
     # === NEW: Enhanced Supply Chain & Competitor Scenarios ===
@@ -292,7 +304,7 @@ SCENARIOS = [
             expected_tier="GOLD",
             expected_event="SUPPLY_CHAIN",
             relationship_hops=1,
-            expected_feed_rank_range="6-15"
+            expected_feed_rank_range="6-15",
         ),
     ),
     Scenario(
@@ -307,7 +319,7 @@ SCENARIOS = [
             expected_tier="SILVER",
             expected_event="PRODUCT_RECALL",
             relationship_hops=2,
-            expected_feed_rank_range="6-15"
+            expected_feed_rank_range="6-15",
         ),
     ),
 ]
@@ -321,7 +333,7 @@ class SyntheticGenerator:
     def __init__(self, env_path: Optional[str] = None):
         # Load config first (for tokens/sources)
         self._load_config(env_path)
-        
+
         # API key should already be in environment (from production config)
         self.api_key = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
         if not self.api_key:
@@ -329,7 +341,7 @@ class SyntheticGenerator:
                 "GOFR_IQ_OPENROUTER_API_KEY not set. "
                 "Run simulation via: ./simulation/run_simulation.sh"
             )
-        
+
         logger.info(
             f"Loaded API Key: {self.api_key[:10]}...{self.api_key[-5:] if len(self.api_key) > 5 else ''}"
         )
@@ -353,7 +365,7 @@ class SyntheticGenerator:
         # Minimal config: sources/tokens
         self.sources = MOCK_SOURCES
         self.tokens = {}
-        
+
         # Load bootstrap tokens via SSOT module
         try:
             admin_token = get_admin_token()
@@ -430,9 +442,14 @@ class SyntheticGenerator:
 
         for i in range(count):
             scenario = self._select_scenario()
-            
+
             # For macro factor scenarios, select a ticker with relevant exposure
-            if scenario.name in ["Interest Rate Impact", "Commodity Price Shock", "Regulatory Event", "China Economic Data"]:
+            if scenario.name in [
+                "Interest Rate Impact",
+                "Commodity Price Shock",
+                "Regulatory Event",
+                "China Economic Data",
+            ]:
                 # Map scenario to factor
                 factor_map = {
                     "Interest Rate Impact": "INTEREST_RATES",
@@ -441,26 +458,30 @@ class SyntheticGenerator:
                     "China Economic Data": "CHINA_ECONOMY",
                 }
                 factor_id = factor_map[scenario.name]
-                
+
                 # Find tickers with exposure to this factor
                 exposed_tickers = [
                     exp.ticker for exp in all_factor_exposures if exp.factor_id == factor_id
                 ]
-                
+
                 if not exposed_tickers:
                     # No exposures, skip this scenario
                     logger.warning(f"No exposures for {factor_id}, skipping scenario")
                     continue
-                
+
                 ticker_sym = random.choice(exposed_tickers)
                 ticker = UNIVERSE.get_ticker(ticker_sym)
-                
+
                 # Get the exposure details
-                exposure = next(e for e in all_factor_exposures if e.ticker == ticker_sym and e.factor_id == factor_id)
+                exposure = next(
+                    e
+                    for e in all_factor_exposures
+                    if e.ticker == ticker_sym and e.factor_id == factor_id
+                )
             else:
                 ticker = random.choice(all_tickers)
                 exposure = None
-            
+
             source = random.choice(MOCK_SOURCES)
 
             # Context Variables
@@ -474,20 +495,24 @@ class SyntheticGenerator:
                 "relationship_desc": "N/A",
                 "factor_exposure_desc": "N/A",
                 "factor_beta": "0.0",
-                "regulation_context": "SEC announces new disclosure requirements"
+                "regulation_context": "SEC announces new disclosure requirements",
             }
-            
+
             # Handle macro factor scenarios
             if exposure:
                 prompt_vars["factor_exposure_desc"] = exposure.description
                 prompt_vars["factor_beta"] = f"{exposure.beta:.1f}"
-                
+
                 # Context-specific regulation descriptions
                 if scenario.name == "Regulatory Event":
                     if exposure.beta > 0:
-                        prompt_vars["regulation_context"] = "Government announces favorable policy/subsidies"
+                        prompt_vars["regulation_context"] = (
+                            "Government announces favorable policy/subsidies"
+                        )
                     else:
-                        prompt_vars["regulation_context"] = "Regulators announce stricter compliance requirements"
+                        prompt_vars["regulation_context"] = (
+                            "Regulators announce stricter compliance requirements"
+                        )
             # Select competitors for "Peer Exclusion" context (Legacy support)
             competitors = [
                 t for t in all_tickers if t.ticker != ticker.ticker and t.sector == ticker.sector
@@ -495,27 +520,32 @@ class SyntheticGenerator:
             if not competitors:
                 competitors = [t for t in all_tickers if t.ticker != ticker.ticker]
             comp_sample = random.sample(competitors, min(2, len(competitors)))
-            
-            prompt_vars["competitor1"] = comp_sample[0].name if len(comp_sample) > 0 else "Competitor"
+
+            prompt_vars["competitor1"] = (
+                comp_sample[0].name if len(comp_sample) > 0 else "Competitor"
+            )
             prompt_vars["competitor2"] = comp_sample[1].name if len(comp_sample) > 1 else "Rival"
             # 30% chance to use Alias if available
             if ticker.aliases and random.random() < 0.3:
-                 # Override ticker/name with alias for the Prompt to force vague writing
-                 alias = random.choice(ticker.aliases)
-                 prompt_vars["name"] = alias
-                 # leave ticker as is for metadata, but instructions say "Subject: {ticker} ({name})"
-                 # We'll rely on the model instructions to follow the name provided in the text prompt
+                # Override ticker/name with alias for the Prompt to force vague writing
+                alias = random.choice(ticker.aliases)
+                prompt_vars["name"] = alias
+                # leave ticker as is for metadata, but instructions say "Subject: {ticker} ({name})"
+                # We'll rely on the model instructions to follow the name provided in the text prompt
 
             # Handle Relationship Scenarios
             if "related_ticker" in scenario.template:
                 # Find relationships where this ticker is the target (e.g. Supplier -> TARGET)
-                # or source depending on scenario logic. 
+                # or source depending on scenario logic.
                 # For "Supplier Delay", we want a Supplier (Source) affecting Ticker (Target).
                 # For "Competitor", we want a Competitor (Source/Target) vs Ticker.
-                
-                relevant_rels = [r for r in all_relationships 
-                                 if r.target == ticker.ticker or r.source == ticker.ticker]
-                
+
+                relevant_rels = [
+                    r
+                    for r in all_relationships
+                    if r.target == ticker.ticker or r.source == ticker.ticker
+                ]
+
                 if relevant_rels:
                     rel = random.choice(relevant_rels)
                     # Determine which is the "Related" entity
@@ -523,16 +553,18 @@ class SyntheticGenerator:
                         related_ticker_sym = rel.target
                     else:
                         related_ticker_sym = rel.source
-                    
+
                     related_ticker = UNIVERSE.get_ticker(related_ticker_sym)
-                    
+
                     prompt_vars["related_ticker"] = related_ticker.ticker
                     prompt_vars["related_name"] = related_ticker.name
                     prompt_vars["relationship_desc"] = rel.description
                 else:
                     # Fallback if no relations: Skip this scenario or pick random other
                     # For simplicity, we just pick a random other ticker as a "Competitor"
-                    related_ticker = random.choice([t for t in all_tickers if t.ticker != ticker.ticker])
+                    related_ticker = random.choice(
+                        [t for t in all_tickers if t.ticker != ticker.ticker]
+                    )
                     prompt_vars["related_ticker"] = related_ticker.ticker
                     prompt_vars["related_name"] = related_ticker.name
                     prompt_vars["relationship_desc"] = "operates in the same market"
@@ -540,17 +572,20 @@ class SyntheticGenerator:
             full_prompt = scenario.template.format(**prompt_vars)
 
             try:
-                logger.info(f"[{i+1}/{count}] Generating '{scenario.name}' for {ticker.ticker} via {source.name}")
+                logger.info(
+                    f"[{i+1}/{count}] Generating '{scenario.name}' for {ticker.ticker} via {source.name}"
+                )
                 story_body = self._generate_story_text(full_prompt)
 
                 # Use Default Simulation Group
                 group_guid = DEFAULT_GROUP["guid"]
                 token = self.tokens.get(group_guid)
-                
+
                 # If no token loaded (bootstrap failed), validation might fail downstream
                 if not token:
                     token = "placeholder_token"
-                    if i == 0: logger.warning("Using placeholder token (bootstrap tokens missing)")
+                    if i == 0:
+                        logger.warning("Using placeholder token (bootstrap tokens missing)")
 
                 # Calculate expected_relevant_clients based on portfolios and watchlists
                 expected_clients = []
@@ -559,7 +594,7 @@ class SyntheticGenerator:
                         expected_clients.append(client_guid)
                     elif ticker.ticker in CLIENT_WATCHLISTS.get(client_guid, []):
                         expected_clients.append(client_guid)
-                
+
                 # For relationship scenarios, also include clients holding the related ticker
                 if prompt_vars.get("related_ticker") != "N/A":
                     related_ticker_sym = prompt_vars["related_ticker"]
@@ -570,22 +605,21 @@ class SyntheticGenerator:
                 # Construct Output JSON
                 output_data = {
                     "source": source.name,  # Legacy field
-                    "source_name": source.name, # Standardized field
-                    "meta_source_name": source.name, # For graph node matching
-                    "source_guid": source.guid, 
+                    "source_name": source.name,  # Standardized field
+                    "meta_source_name": source.name,  # For graph node matching
+                    "source_guid": source.guid,
                     "trust_level": source.trust_level,
-                    "source_type": "NEWS_WIRE", # Default for synthetic generator
+                    "source_type": "NEWS_WIRE",  # Default for synthetic generator
                     "group_guid": group_guid,
                     "event_type": scenario.validation.expected_event,
-                    
                     "published_at": self._get_random_date(),
                     "upload_as_group": group_guid,
                     "token": token,
-                    "title": f"Update regarding {prompt_vars['name']}", 
+                    "title": f"Update regarding {prompt_vars['name']}",
                     "story_body": story_body,
                     "validation_metadata": {
                         "scenario": scenario.name,
-                        "base_ticker": ticker.ticker, # Ground truth
+                        "base_ticker": ticker.ticker,  # Ground truth
                         "expected_tier": scenario.validation.expected_tier,
                         "expected_event": scenario.validation.expected_event,
                         "expected_relevant_clients": expected_clients,

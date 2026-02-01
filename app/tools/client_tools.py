@@ -147,6 +147,13 @@ def register_client_tools(mcp: FastMCP, graph_index: GraphIndex) -> None:
 
             client_guid = str(uuid.uuid4())
             
+            # Ensure Group node exists in Neo4j (may not exist if this is first client in group)
+            # This is idempotent - MERGE will not duplicate if it already exists
+            graph_index.create_group(
+                guid=group_guid,
+                name=write_group_name,
+            )
+            
             # Create client type if it doesn't exist
             # Convert frequency string to int (realtime=100, hourly=24, daily=1, weekly=0)
             freq_map = {"realtime": 100, "hourly": 24, "daily": 1, "weekly": 0}

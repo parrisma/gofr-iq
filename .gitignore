@@ -202,6 +202,7 @@ config/generated/
 **/vault-secrets.env
 **/.vault-init.env
 **/*-secrets.env
+**/*.jwt
 
 # Temporary tokens and credentials
 **/tokens.env
