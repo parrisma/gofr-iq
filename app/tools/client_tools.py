@@ -19,6 +19,7 @@ from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
+from app.services.client_service import ClientService
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
 from app.services.group_service import (
     get_group_uuid_by_name,
@@ -47,6 +48,7 @@ def register_client_tools(
     llm_service: "LLMService | None" = None,
 ) -> None:
     """Register client tools with the MCP server."""
+    client_service = ClientService(graph_index)
 
     @mcp.tool(
         name="create_client",
@@ -770,8 +772,9 @@ def register_client_tools(
         description=(
             "List all clients in your group(s) with basic information. "
             "USE FOR: 'Show me all my clients' or 'Which clients do I manage?'. "
-            "FILTERS: Can filter by client_type (HEDGE_FUND, LONG_ONLY, etc.). "
-            "RETURNS: Client GUIDs, names, types for further operations. "
+            "FILTERS: Can filter by client_type (HEDGE_FUND, LONG_ONLY, etc.), "
+            "and optionally include/sort/filter by profile completeness score. "
+            "RETURNS: Client GUIDs, names, types (and optional score) for further operations. "
             "NEXT STEPS: Use get_client_profile for full details on a specific client."
         ),
     )
@@ -784,6 +787,20 @@ def register_client_tools(
         include_defunct: Annotated[bool, Field(
             default=False,
             description="Include defunct clients in results (default: False)",
+        )] = False,
+        include_completeness_score: Annotated[bool, Field(
+            default=False,
+            description="Include profile completeness score in results (default: False)",
+        )] = False,
+        min_completeness_score: Annotated[float | None, Field(
+            default=None,
+            ge=0.0,
+            le=1.0,
+            description="Filter: minimum profile completeness score (0.0-1.0)",
+        )] = None,
+        sort_by_completeness: Annotated[bool, Field(
+            default=False,
+            description="Sort results by completeness score (desc). Requires include_completeness_score",
         )] = False,
         limit: Annotated[int, Field(
             default=50,
@@ -803,6 +820,9 @@ def register_client_tools(
 
         Args:
             client_type: Filter by type (HEDGE_FUND, LONG_ONLY, QUANT, PENSION, FAMILY_OFFICE)
+            include_completeness_score: Include completeness score in results
+            min_completeness_score: Minimum completeness score to include
+            sort_by_completeness: Sort results by completeness score (desc)
             limit: Max clients to return (default: 50)
 
         Returns:
@@ -863,6 +883,23 @@ def register_client_tools(
                         "created_at": record["created_at"],
                         "status": record["status"],
                     })
+
+            if include_completeness_score or min_completeness_score is not None or sort_by_completeness:
+                for client in clients:
+                    score_data = client_service.calculate_profile_completeness(client["client_guid"])
+                    client["completeness_score"] = score_data.get("score", 0.0)
+                    if "error" in score_data:
+                        client["completeness_error"] = score_data["error"]
+
+                if min_completeness_score is not None:
+                    clients = [
+                        client
+                        for client in clients
+                        if client.get("completeness_score", 0.0) >= min_completeness_score
+                    ]
+
+                if sort_by_completeness:
+                    clients.sort(key=lambda item: item.get("completeness_score", 0.0), reverse=True)
             
             return success_response(
                 data={
@@ -871,6 +908,9 @@ def register_client_tools(
                     "filters_applied": {
                         "client_type": client_type,
                         "include_defunct": include_defunct,
+                        "include_completeness_score": include_completeness_score,
+                        "min_completeness_score": min_completeness_score,
+                        "sort_by_completeness": sort_by_completeness,
                         "limit": limit,
                     },
                 },
@@ -882,6 +922,83 @@ def register_client_tools(
                 error_code="CLIENT_LIST_FAILED",
                 message=f"Failed to list clients: {e!s}",
                 recovery_strategy="Run health_check to verify Neo4j. Ensure auth_tokens are valid.",
+            )
+
+    @mcp.tool(
+        name="get_client_profile_score",
+        description=(
+            "Get the Client Profile Completeness Score (CPCS) for a client. "
+            "USE FOR: 'How complete is this client profile?' or 'Show profile gaps'. "
+            "RETURNS: Score (0-1), breakdown, and missing fields. "
+            "INPUT FROM: list_clients (client_guid)."
+        ),
+    )
+    def get_client_profile_score(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to score",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
+    ) -> ToolResponse:
+        """Return profile completeness score and gaps for a client."""
+        try:
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_guids = get_group_uuids_by_names(group_names)
+
+            with graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})-[:IN_GROUP]->(g:Group)
+                    RETURN c.guid AS client_guid, g.guid AS group_guid
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return error_response(
+                        error_code="CLIENT_NOT_FOUND",
+                        message=f"Client not found: {client_guid}",
+                        recovery_strategy="Call list_clients to find valid client GUIDs.",
+                        details={"client_guid": client_guid},
+                    )
+
+                if group_guids and record["group_guid"] not in group_guids:
+                    return error_response(
+                        error_code="ACCESS_DENIED",
+                        message="You don't have access to this client's group",
+                        recovery_strategy="Use list_clients to see clients you can access, or request group access.",
+                        details={"client_guid": client_guid, "required_group": record["group_guid"]},
+                    )
+
+            score_data = client_service.calculate_profile_completeness(client_guid)
+            if "error" in score_data:
+                return error_response(
+                    error_code="PROFILE_SCORE_FAILED",
+                    message=score_data["error"],
+                    recovery_strategy="Verify client exists and has a profile. Use get_client_profile to validate.",
+                    details={"client_guid": client_guid},
+                )
+
+            return success_response(
+                data={
+                    "client_guid": client_guid,
+                    **score_data,
+                },
+                message="Profile completeness score calculated",
+            )
+
+        except Exception as e:
+            return error_response(
+                error_code="PROFILE_SCORE_FAILED",
+                message=f"Failed to calculate profile score: {e!s}",
+                recovery_strategy="Run health_check to verify Neo4j. Ensure auth_tokens are valid.",
+                details={"client_guid": client_guid},
             )
 
     @mcp.tool(
