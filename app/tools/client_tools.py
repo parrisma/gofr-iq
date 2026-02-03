@@ -90,6 +90,12 @@ def register_client_tools(
             description="Investment mandate style (e.g., 'equity_long_short', 'global_macro')",
             examples=["equity_long_short", "global_macro"],
         )] = None,
+        mandate_text: Annotated[str | None, Field(
+            default=None,
+            max_length=5000,
+            description="Free-text fund mandate description (0-5000 chars, optional)",
+            examples=["Our fund focuses on US technology stocks with strong ESG ratings."],
+        )] = None,
         benchmark: Annotated[str | None, Field(
             default=None,
             description="Benchmark ticker symbol (e.g., 'SPY', 'QQQ')",
@@ -122,6 +128,7 @@ def register_client_tools(
             alert_frequency: realtime, hourly, daily, or weekly
             impact_threshold: Min impact score 0-100 for alerts (default: 50)
             mandate_type: Investment style (e.g., 'equity_long_short')
+            mandate_text: Free-text mandate description (0-5000 chars)
             benchmark: Benchmark ticker (e.g., 'SPY')
             horizon: short, medium, or long
             esg_constrained: Apply ESG filters
@@ -154,6 +161,15 @@ def register_client_tools(
                 )
 
             client_guid = str(uuid.uuid4())
+            
+            # Validate mandate_text length if provided
+            if mandate_text is not None and len(mandate_text) > 5000:
+                return error_response(
+                    error_code="MANDATE_TEXT_TOO_LONG",
+                    message=f"Mandate text exceeds 5000 character limit: {len(mandate_text)} chars",
+                    recovery_strategy="Shorten the text to 5000 characters or less.",
+                    details={"length": len(mandate_text), "max_length": 5000},
+                )
             
             # Ensure Group node exists in Neo4j (may not exist if this is first client in group)
             # This is idempotent - MERGE will not duplicate if it already exists
@@ -192,6 +208,10 @@ def register_client_tools(
             
             # Create profile
             profile_guid = str(uuid.uuid4())
+            profile_properties = {}
+            if mandate_text:
+                profile_properties["mandate_text"] = mandate_text.strip()
+            
             graph_index.create_client_profile(
                 guid=profile_guid,
                 client_guid=client_guid,
@@ -199,6 +219,7 @@ def register_client_tools(
                 benchmark_guid=benchmark,  # Will be None if not an actual GUID
                 horizon=horizon,
                 esg_constrained=esg_constrained,
+                properties=profile_properties,
             )
             
             # Create empty portfolio and watchlist
@@ -250,6 +271,7 @@ def register_client_tools(
                     "profile": {
                         "guid": profile_guid,
                         "mandate_type": mandate_type,
+                        "mandate_text": mandate_text,
                         "benchmark": benchmark,
                         "horizon": horizon,
                         "esg_constrained": esg_constrained,
@@ -802,6 +824,10 @@ def register_client_tools(
             default=False,
             description="Sort results by completeness score (desc). Requires include_completeness_score",
         )] = False,
+        include_mandate_text: Annotated[bool, Field(
+            default=False,
+            description="Include mandate_text in results (default: False). May increase response size for large client lists.",
+        )] = False,
         limit: Annotated[int, Field(
             default=50,
             ge=1,
@@ -823,10 +849,11 @@ def register_client_tools(
             include_completeness_score: Include completeness score in results
             min_completeness_score: Minimum completeness score to include
             sort_by_completeness: Sort results by completeness score (desc)
+            include_mandate_text: Include mandate_text in results (may increase response size)
             limit: Max clients to return (default: 50)
 
         Returns:
-            clients: List of {client_guid, name, client_type, group_guid, created_at}
+            clients: List of {client_guid, name, client_type, group_guid, created_at, [mandate_text]}
             total_count: Number of clients returned
         """
         try:
@@ -853,20 +880,31 @@ def register_client_tools(
             if not include_defunct:
                 status_filter = "AND (c.status IS NULL OR c.status <> 'defunct')" if (group_clause or type_filter) else "WHERE (c.status IS NULL OR c.status <> 'defunct')"
 
+            # Build RETURN clause with optional mandate_text
+            return_clause = """c.guid AS client_guid, 
+                           c.name AS name,
+                           ct.code AS client_type,
+                           g.guid AS group_guid,
+                              c.created_at AS created_at,
+                              c.status AS status"""
+            
+            if include_mandate_text:
+                return_clause += ",\n                           cp.mandate_text AS mandate_text"
+                # Add optional match for profile if mandate_text needed
+                profile_match = "OPTIONAL MATCH (c)-[:HAS_PROFILE]->(cp:ClientProfile)"
+            else:
+                profile_match = ""
+
             with graph_index._get_session() as session:
                 result = session.run(
                     f"""
                     MATCH (c:Client)-[:IN_GROUP]->(g:Group)
                     OPTIONAL MATCH (c)-[:IS_TYPE_OF]->(ct:ClientType)
+                    {profile_match}
                     {group_clause}
                     {type_filter}
                           {status_filter}
-                    RETURN c.guid AS client_guid, 
-                           c.name AS name,
-                           ct.code AS client_type,
-                           g.guid AS group_guid,
-                              c.created_at AS created_at,
-                              c.status AS status
+                    RETURN {return_clause}
                     ORDER BY c.name
                     LIMIT $limit
                     """,
@@ -875,14 +913,17 @@ def register_client_tools(
                 
                 clients = []
                 for record in result:
-                    clients.append({
+                    client_data = {
                         "client_guid": record["client_guid"],
                         "name": record["name"],
                         "client_type": record["client_type"],
                         "group_guid": record["group_guid"],
                         "created_at": record["created_at"],
                         "status": record["status"],
-                    })
+                    }
+                    if include_mandate_text:
+                        client_data["mandate_text"] = record.get("mandate_text")
+                    clients.append(client_data)
 
             if include_completeness_score or min_completeness_score is not None or sort_by_completeness:
                 for client in clients:
@@ -911,6 +952,7 @@ def register_client_tools(
                         "include_completeness_score": include_completeness_score,
                         "min_completeness_score": min_completeness_score,
                         "sort_by_completeness": sort_by_completeness,
+                        "include_mandate_text": include_mandate_text,
                         "limit": limit,
                     },
                 },
@@ -1037,7 +1079,7 @@ def register_client_tools(
 
         Returns:
             client_guid, name, client_type, group_guid
-            profile: mandate_type, benchmark, horizon, esg_constrained
+            profile: mandate_type, mandate_text, benchmark, horizon, esg_constrained
             settings: alert_frequency, impact_threshold
             portfolio_guid, watchlist_guid, created_at
         """
@@ -1069,6 +1111,7 @@ def register_client_tools(
                            g.guid AS group_guid,
                            cp.guid AS profile_guid,
                            cp.mandate_type AS mandate_type,
+                           cp.mandate_text AS mandate_text,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
                            b.ticker AS benchmark,
@@ -1108,6 +1151,7 @@ def register_client_tools(
                     "profile": {
                         "guid": record["profile_guid"],
                         "mandate_type": record["mandate_type"],
+                        "mandate_text": record["mandate_text"],
                         "benchmark": record["benchmark"],
                         "horizon": record["horizon"],
                         "esg_constrained": record["esg_constrained"],
@@ -1406,9 +1450,9 @@ def register_client_tools(
     @mcp.tool(
         name="update_client_profile",
         description=(
-            "Update a client's profile settings (alert frequency, thresholds, investment style). "
+            "Update a client's profile settings (alert frequency, thresholds, investment style, mandate text). "
             "WORKFLOW: create_client -> get_client_profile -> update_client_profile -> get_client_feed. "
-            "USE FOR: 'Change Citadel to daily alerts' or 'Set impact threshold to 70', 'Change mandate to equity_long_short'. "
+            "USE FOR: 'Change Citadel to daily alerts' or 'Set impact threshold to 70', 'Change mandate to equity_long_short', 'Add mandate text description'. "
             "USES OUTPUT FROM: create_client (client_guid) | get_client_profile (current settings). "
             "PROVIDES INPUT TO: get_client_feed (alert settings) | get_client_profile (returns updated). "
             "PARTIAL UPDATE: Only provide fields you want to change. Omitted fields keep current values. "
@@ -1416,6 +1460,7 @@ def register_client_tools(
             "RETURNS: Updated profile with all current settings. "
             "ALERT FREQUENCY: realtime|hourly|daily|weekly. Affects notification frequency. "
             "IMPACT_THRESHOLD: 0-100. Higher = fewer alerts (only major news). 70+ for executives, 50 for analysts, 30 for researchers. "
+            "MANDATE_TEXT: Free-text fund mandate description (0-5000 chars). Contributes 17.5% to CPCS. Will enhance document search. "
             "REVERSIBLE: Keep calling update_client_profile with different values."
         ),
     )
@@ -1448,6 +1493,16 @@ def register_client_tools(
                 "Investment mandate style: equity_long_short, global_macro, event_driven, "
                 "relative_value, fixed_income, multi_strategy. Leave empty to keep current."
             ),
+        )] = None,
+        mandate_text: Annotated[str | None, Field(
+            default=None,
+            max_length=5000,
+            description=(
+                "Free-text fund mandate description (0-5000 chars). Provides detailed investment guidelines, "
+                "restrictions, objectives beyond categorical mandate_type. Empty string clears field. "
+                "Omit to keep current value. Contributes 17.5% to CPCS. Will be used to enhance document search."
+            ),
+            examples=["Our fund focuses on US technology stocks with strong ESG ratings and sustainable business models."],
         )] = None,
         benchmark: Annotated[str | None, Field(
             default=None,
@@ -1483,6 +1538,7 @@ def register_client_tools(
             alert_frequency: realtime, hourly, daily, or weekly
             impact_threshold: Min impact score 0-100 for alerts
             mandate_type: Investment style
+            mandate_text: Free-text mandate description (0-5000 chars, empty string clears)
             benchmark: Benchmark ticker
             horizon: short, medium, or long
             esg_constrained: Apply ESG filters
@@ -1521,6 +1577,19 @@ def register_client_tools(
             if mandate_type is not None:
                 updates_profile["mandate_type"] = mandate_type
                 changes.append("mandate_type")
+            
+            if mandate_text is not None:
+                # Explicit None check - empty string is valid (clears field)
+                if len(mandate_text) > 5000:
+                    return error_response(
+                        error_code="MANDATE_TEXT_TOO_LONG",
+                        message=f"Mandate text exceeds 5000 character limit: {len(mandate_text)} chars",
+                        recovery_strategy="Shorten the text to 5000 characters or less.",
+                        details={"length": len(mandate_text), "max_length": 5000},
+                    )
+                # Store stripped text (empty string clears the field)
+                updates_profile["mandate_text"] = mandate_text.strip()
+                changes.append("mandate_text")
                 
             if horizon is not None:
                 valid_horizons = ["short", "medium", "long"]
@@ -1542,7 +1611,7 @@ def register_client_tools(
                 return error_response(
                     error_code="NO_UPDATES_PROVIDED",
                     message="No update fields provided",
-                    recovery_strategy="Provide at least one field: alert_frequency, impact_threshold, mandate_type, horizon, benchmark, esg_constrained.",
+                    recovery_strategy="Provide at least one field: alert_frequency, impact_threshold, mandate_type, mandate_text, horizon, benchmark, esg_constrained.",
                 )
 
             with graph_index._get_session() as session:
@@ -1642,6 +1711,7 @@ def register_client_tools(
                            ct.code AS client_type,
                            g.guid AS group_guid,
                            cp.mandate_type AS mandate_type,
+                           cp.mandate_text AS mandate_text,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
                            b.ticker AS benchmark
@@ -1666,6 +1736,7 @@ def register_client_tools(
                     "group_guid": updated["group_guid"],
                     "profile": {
                         "mandate_type": updated["mandate_type"],
+                        "mandate_text": updated["mandate_text"],
                         "benchmark": updated["benchmark"],
                         "horizon": updated["horizon"],
                         "esg_constrained": updated["esg_constrained"],

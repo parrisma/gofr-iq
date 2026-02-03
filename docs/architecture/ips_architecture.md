@@ -53,7 +53,7 @@ Investment Policy Statements (IPS) are treated as **external documents** managed
 ```json
 {
   "client_guid": "client-hedge-fund",
-  "client_name": "Apex Capital",
+  "client_name": "Quantum Momentum Partners",
   "archetype": "Hedge Fund",
   
   "primary_objective": "Generate absolute returns...",

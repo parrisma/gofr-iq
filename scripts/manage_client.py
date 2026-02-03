@@ -53,6 +53,9 @@ def parse_args() -> argparse.Namespace:
             "Examples:\n"
             "  ./scripts/manage_client.sh --token $TOKEN list\n"
             "  ./scripts/manage_client.sh --token $TOKEN create --name \"Test\" --type HEDGE_FUND\n"
+            "  ./scripts/manage_client.sh --token $TOKEN create --name \"Fund\" --mandate-text \"US tech focus\"\n"
+            "  ./scripts/manage_client.sh --token $TOKEN update $GUID --mandate-text \"Updated mandate\"\n"
+            "  ./scripts/manage_client.sh --token $TOKEN update $GUID --clear-mandate-text\n"
             "  ./scripts/manage_client.sh --docker --token $TOKEN list\n"
             "  ./scripts/manage_client.sh --dev --token $TOKEN create --name \"Local Test\"\n"
         ),
@@ -71,6 +74,7 @@ def parse_args() -> argparse.Namespace:
     create.add_argument("--alert-frequency", default="realtime")
     create.add_argument("--impact-threshold", type=float, default=50.0)
     create.add_argument("--mandate-type", default=None)
+    create.add_argument("--mandate-text", default=None, help="Free-text fund mandate (0-5000 chars)")
     create.add_argument("--benchmark", default=None)
     create.add_argument("--horizon", default=None)
     create.add_argument("--esg-constrained", action="store_true")
@@ -88,6 +92,8 @@ def parse_args() -> argparse.Namespace:
     update.add_argument("--alert-frequency", default=None)
     update.add_argument("--impact-threshold", type=float, default=None)
     update.add_argument("--mandate-type", default=None)
+    update.add_argument("--mandate-text", default=None, help="Free-text fund mandate (0-5000 chars). Omit to keep current.")
+    update.add_argument("--clear-mandate-text", action="store_true", help="Clear mandate_text field (set to empty string)")
     update.add_argument("--benchmark", default=None)
     update.add_argument("--horizon", default=None)
     update.add_argument("--esg-constrained", choices=["true", "false"], default=None)
@@ -235,6 +241,7 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
                 "alert_frequency": args.alert_frequency,
                 "impact_threshold": args.impact_threshold,
                 "mandate_type": args.mandate_type,
+                "mandate_text": args.mandate_text,
                 "benchmark": args.benchmark,
                 "horizon": args.horizon,
                 "esg_constrained": args.esg_constrained,
@@ -255,6 +262,13 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
         )
     if args.command == "update":
         esg_value = None if args.esg_constrained is None else args.esg_constrained == "true"
+        # Handle mandate_text: --clear-mandate-text sets to "", --mandate-text sets value, omit leaves None
+        mandate_text_value = None
+        if args.clear_mandate_text:
+            mandate_text_value = ""
+        elif args.mandate_text is not None:
+            mandate_text_value = args.mandate_text
+        
         return mcp_call(
             cfg,
             session_id,
@@ -264,6 +278,7 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
                 "alert_frequency": args.alert_frequency,
                 "impact_threshold": args.impact_threshold,
                 "mandate_type": args.mandate_type,
+                "mandate_text": mandate_text_value,
                 "benchmark": args.benchmark,
                 "horizon": args.horizon,
                 "esg_constrained": esg_value,

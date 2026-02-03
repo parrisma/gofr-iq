@@ -143,7 +143,7 @@ CLIENT_PORTFOLIOS = {
         "BANKO",
         "VIT",
         "GTX",
-    ],  # Apex Capital (Hedge Fund)
+    ],  # Quantum Momentum Partners (Hedge Fund)
     "550e8400-e29b-41d4-a716-446655440002": [
         "OMNI",
         "SHOPM",

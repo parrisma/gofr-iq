@@ -188,7 +188,7 @@ def main():
     
     # Demo for each client archetype
     clients = [
-        ("550e8400-e29b-41d4-a716-446655440001", "Apex Capital (Hedge Fund)"),
+        ("550e8400-e29b-41d4-a716-446655440001", "Quantum Momentum Partners (Hedge Fund)"),
         ("550e8400-e29b-41d4-a716-446655440002", "GlobalPension Fund"),
         ("550e8400-e29b-41d4-a716-446655440003", "Individual Investor")
     ]

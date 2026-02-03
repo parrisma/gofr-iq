@@ -173,20 +173,14 @@ def discover_simulation_requirements() -> tuple:
     """
     Introspect simulation configuration to discover required groups and sources.
     
+    For now, simplified to only use group-simulation.
+    
     Returns:
         (groups, sources) - Lists of group names and source names needed for simulation
     """
-    groups = []
+    # Simplified: Just use group-simulation for all simulation data
+    groups = ["group-simulation"]
     sources = []
-    
-    # Discover groups from universe builder
-    try:
-        universe = UniverseBuilder()
-        default_group = universe.get_default_group()
-        groups.append(default_group["guid"])  # "group-simulation"
-    except Exception as e:
-        print(f"⚠️  Could not discover groups from universe: {e}")
-        groups.append("group-simulation")  # Fallback
     
     # Discover sources from story generator source registry
     try:
@@ -195,10 +189,6 @@ def discover_simulation_requirements() -> tuple:
         print(f"⚠️  Could not discover sources from generator: {e}")
         sources = ["Global Wire", "The Daily Alpha", "Insider Whispers", 
                    "Regional Business Journal", "Silicon Circuits"]  # Fallback
-    
-    # Add standard groups for backwards compatibility (can remove if not needed)
-    additional_groups = ["apac_sales", "us_sales", "apac-sales", "us-sales"]
-    groups.extend(additional_groups)
     
     return groups, sources
 
@@ -355,14 +345,41 @@ def init_auth(cfg: Config) -> AuthService:
 
 
 def ensure_groups(auth: AuthService, groups: List[str]):
+    """
+    Ensure groups exist and are active using auth_manager.sh.
+    Restores defunct groups if needed.
+    """
+    import os
+    import subprocess
+    
+    # Get admin token from environment
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    if not admin_token:
+        # Try to load from bootstrap tokens
+        bootstrap = load_bootstrap_tokens_from_file()
+        if bootstrap:
+            admin_token = bootstrap.get("admin")
+    
+    if not admin_token:
+        raise RuntimeError("Cannot ensure groups: ADMIN_TOKEN not found")
+    
     for name in groups:
-        existing = auth.groups.get_group_by_name(name)
-        if existing:
-            continue
-        try:
-            auth.groups.create_group(name, description=f"Synthetic group {name}")
-        except DuplicateGroupError:
-            pass
+        # Use auth_manager.sh to create/restore group
+        result = subprocess.run(
+            [
+                "./lib/gofr-common/scripts/auth_manager.sh",
+                "--docker",
+                "groups",
+                "create",
+                name,
+                "--description",
+                f"Synthetic group {name}",
+            ],
+            capture_output=True,
+            text=True,
+        )
+        # auth_manager.sh will restore if defunct, create if missing, or report if active
+        # All cases are success for our purposes
 
 
 def verify_groups(auth: AuthService, groups: List[str]):
@@ -375,32 +392,28 @@ def verify_groups(auth: AuthService, groups: List[str]):
 
 
 def mint_tokens(auth: AuthService, groups: List[str]) -> Dict[str, str]:
+    """
+    Create fresh tokens for each group with unique names.
+    Each simulation run gets new tokens to avoid stale/revoked token issues.
+    """
+    import random
+    import time
+    
     tokens: Dict[str, str] = {}
+    # Use timestamp + random for uniqueness
+    run_id = int(time.time() * 1000) % 100000
+    
     for group in groups:
-        # Normalize group name for token naming (replace underscores with hyphens)
-        token_name = f"sim-{group.replace('_', '-')}"
+        # Create unique token name with timestamp-based suffix
+        token_suffix = run_id + random.randint(0, 999)
+        token_name = f"sim-{group.replace('_', '-')}-{token_suffix}"
         
-        # Check if token already exists
-        existing_record = auth.get_token_by_name(token_name)
-        if existing_record:
-            # Reconstruct JWT from existing record
-            import jwt
-            payload = {
-                "jti": str(existing_record.id),
-                "groups": existing_record.groups,
-                "iat": int(existing_record.created_at.timestamp()),
-                "exp": int(existing_record.expires_at.timestamp()) if existing_record.expires_at else None,
-                "nbf": int(existing_record.created_at.timestamp()),
-                "aud": "gofr-api",
-            }
-            token = jwt.encode(payload, auth.secret_key, algorithm="HS256")
-        else:
-            # Create new token
-            token = auth.create_token(
-                groups=[group],
-                expires_in_seconds=TOKEN_TTL_SECONDS,
-                name=token_name,
-            )
+        # Always create new token (don't reuse existing)
+        token = auth.create_token(
+            groups=[group],
+            expires_in_seconds=TOKEN_TTL_SECONDS,
+            name=token_name,
+        )
         tokens[group] = token
     return tokens
 
@@ -454,6 +467,38 @@ def verify_tokens(tokens: Dict[str, str], required_groups: List[str]):
     missing = [g for g in required_groups if g not in tokens]
     if missing:
         raise RuntimeError(f"Missing tokens for groups: {missing}")
+
+
+def save_simulation_tokens(tokens: Dict[str, str], group_names: List[str]):
+    """
+    Save minted group tokens to simulation/tokens.json for later use/testing.
+    
+    This allows:
+    1. Document ingestion to use group-specific tokens (not admin)
+    2. Manual testing with saved JWT tokens
+    3. Token reuse across simulation runs
+    
+    Saves group tokens + admin bootstrap token for reference.
+    Does NOT save public token (not used in simulation).
+    """
+    token_file = PROJECT_ROOT / "simulation" / "tokens.json"
+    
+    # Build token map: group tokens + admin reference
+    saved_tokens = {}
+    for group in group_names:
+        if group in tokens:
+            saved_tokens[group] = tokens[group]
+    
+    # Add admin bootstrap token for reference (source management operations)
+    if "admin" in tokens:
+        saved_tokens["admin"] = tokens["admin"]
+    
+    # Write to file with pretty formatting
+    with open(token_file, "w") as f:
+        json.dump(saved_tokens, f, indent=2)
+    
+    print(f"   💾 Saved {len(saved_tokens)} tokens to simulation/tokens.json")
+    print(f"      Groups: {', '.join(sorted(saved_tokens.keys()))}")
 
 
 def list_sources(token: str) -> Dict[str, str]:
@@ -756,13 +801,17 @@ def main():
 
     bootstrap_tokens = load_bootstrap_tokens(cfg)
 
-    if args.mint_tokens:
-        tokens = mint_tokens(auth, required_groups + ["admin", "public"])
-    else:
-        tokens = mint_tokens(auth, required_groups)
-        tokens.update(bootstrap_tokens)
+    # Mint fresh tokens for simulation groups only
+    # Admin/public come from bootstrap (long-lived)
+    tokens = mint_tokens(auth, required_groups)
+    tokens.update(bootstrap_tokens)  # Add admin and public from bootstrap
 
     verify_tokens(tokens, required_groups + ["admin", "public"])
+    
+    # Save tokens (group-simulation + admin) to simulation/tokens.json for later use/testing
+    # This allows document ingestion to use group-specific tokens instead of admin
+    save_simulation_tokens(tokens, required_groups)
+    
     run_gate("auth")
     
     # Ensure sources exist BEFORE any generation or ingestion

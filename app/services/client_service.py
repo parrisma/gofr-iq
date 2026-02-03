@@ -20,9 +20,13 @@ class ClientService:
         
         Sections:
         1. Holdings (35%): > 0 positions or watchlist items
-        2. Mandate (35%): mandate_type, benchmark, horizon (0.33 each)
+        2. Mandate (35%): mandate_type (50%) + mandate_text (50%)
         3. Constraints (20%): esg_constrained is set
         4. Engagement (10%): primary_contact and alert_frequency exist
+        
+        Note: mandate_text is optional free-text field (0-5000 chars) that contributes
+              independently to Mandate section. Both mandate_type and mandate_text can be
+              present, one, or neither.
         
         Returns:
             Dict containing:
@@ -84,19 +88,16 @@ class ClientService:
         
         # 2. Mandate Context (35%)
         # Critical for "Idea" generation.
-        # Components: mandate_type, benchmark, horizon
+        # Components: mandate_type (50%) + mandate_text (50%)
+        # Both fields contribute independently to enable semantic document matching
         mandate_type = profile_props.get("mandate_type")
-        horizon = profile_props.get("horizon")
+        mandate_text = profile_props.get("mandate_text")
         
-        mandate_components = 0
-        if mandate_type:
-            mandate_components += 1
-        if benchmark_count > 0:
-            mandate_components += 1
-        if horizon:
-            mandate_components += 1
+        # mandate_type and mandate_text each contribute 50% (0.5) to mandate section
+        score_mandate_type = 0.5 if mandate_type else 0.0
+        score_mandate_text = 0.5 if (mandate_text and len(mandate_text.strip()) > 0) else 0.0
         
-        score_mandate = mandate_components / 3.0
+        score_mandate = score_mandate_type + score_mandate_text
         
         # 3. Constraints (20%)
         # Critical for filtering (Anti-Pitch).
@@ -140,8 +141,7 @@ class ClientService:
                     "value": score_mandate * 0.35,
                     "details": {
                         "mandate_type": bool(mandate_type),
-                        "benchmark": bool(benchmark_count > 0),
-                        "horizon": bool(horizon)
+                        "mandate_text": bool(mandate_text and len(mandate_text.strip()) > 0)
                     }
                 },
                 "constraints": {
@@ -165,8 +165,7 @@ class ClientService:
             "missing_fields": self._identify_missing_fields(
                 has_holdings,
                 mandate_type,
-                benchmark_count,
-                horizon,
+                mandate_text,
                 esg_constrained,
                 primary_contact,
                 alert_frequency,
@@ -177,8 +176,7 @@ class ClientService:
         self,
         has_holdings,
         mandate_type,
-        benchmark_count,
-        horizon,
+        mandate_text,
         esg_constrained,
         primary_contact,
         alert_frequency,
@@ -188,10 +186,8 @@ class ClientService:
             missing.append("Holdings/Watchlist (No positions or watchlist items found)")
         if not mandate_type:
             missing.append("Mandate Type (client_profile.mandate_type)")
-        if benchmark_count == 0:
-            missing.append("Benchmark (No BENCHMARKED_TO relationship)")
-        if not horizon:
-            missing.append("Investment Horizon (client_profile.horizon)")
+        if not (mandate_text and len(mandate_text.strip()) > 0):
+            missing.append("Mandate Description (client_profile.mandate_text)")
         if esg_constrained is None:
             missing.append("ESG Constraints (client_profile.esg_constrained is null)")
         if not primary_contact:

@@ -19,6 +19,12 @@
 ## Start/Stop (use scripts)
 **ALWAYS use `./scripts/start-prod.sh`** to start/restart gofr-iq services. Never use `docker compose` directly - the start script handles Vault secrets, AppRole credentials, environment loading, and proper service ordering.
 
+**CRITICAL: When updating MCP server code (app/tools/, app/services/, etc.), ALWAYS rebuild the production image BEFORE testing:**
+```bash
+./docker/build-prod.sh           # Rebuild prod image with updated code
+./scripts/start-prod.sh          # Then restart to use new image
+```
+
 ```bash
 ./scripts/start-prod.sh          # Start/restart prod stack (use this for ANY service restart)
 ./scripts/start-prod.sh --fresh  # First-time setup
@@ -140,6 +146,18 @@ driver.close()
 # Manage clients via MCP (create, list, get, update, delete, defunct, restore, add-holding, add-watch, validate)
 # Use --help for full usage
 ```
+
+### Client Profile Attributes
+- **mandate_type**: Investment style (equity_long_short, global_macro, event_driven, relative_value, fixed_income, multi_strategy)
+- **mandate_text**: Optional free-text fund mandate description (0-5000 chars)
+  - Contributes 17.5% to CPCS (50% of Mandate section weight)
+  - Will be used to enhance document search ranking for clients (semantic + graph match)
+  - Empty string clears field, omitting preserves current value
+- **benchmark**: Ticker symbol (e.g., SPY, QQQ)
+- **horizon**: short | medium | long
+- **esg_constrained**: boolean
+- **alert_frequency**: realtime | hourly | daily | weekly
+- **impact_threshold**: 0-100
 
 ## Simulation
 ```bash

@@ -17,7 +17,7 @@ GOFR-IQ is exposed via Model Context Protocol (MCP) with tools organized into ca
 
 **How to Use:**
 1. **Discover**: Call tools to see operations.
-2. **Resolve IDs**: If a user gives a name (e.g., "Apex Capital") but a tool needs a GUID, first call `list_clients` or similar to find the ID.
+2. **Resolve IDs**: If a user gives a name (e.g., "Quantum Momentum Partners") but a tool needs a GUID, first call `list_clients` or similar to find the ID.
 3. **Query**: Use `query_documents` or `get_client_feed` to find news.
 4. **Explore**: Use `list_companies` and `get_company_relationships` to navigate the graph.
 5. **Update**: Use `add_to_portfolio`/`watchlist` to track interests.

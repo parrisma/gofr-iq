@@ -180,7 +180,7 @@ If any invariant fails, the wrapper returns a clear error and remediation guidan
 
 ```bash
 ./scripts/manage_client.sh create \
-  --name "Apex Capital" \
+  --name "Quantum Momentum Partners" \
   --type HEDGE_FUND \
   --alert-frequency realtime \
   --impact-threshold 50 \

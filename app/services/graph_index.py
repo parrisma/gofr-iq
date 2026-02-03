@@ -48,7 +48,11 @@ class NodeLabel(str, Enum):
     # Client Domain
     CLIENT_TYPE = "ClientType"
     CLIENT = "Client"
-    CLIENT_PROFILE = "ClientProfile"
+    CLIENT_PROFILE = "ClientProfile"  # Properties: mandate_type, mandate_text (max 5000 chars, optional),
+                                       # benchmark_guid, turnover_rate, esg_constrained, horizon, 
+                                       # alert_frequency, impact_threshold, primary_contact
+                                       # Note: mandate_text contributes 50% to Mandate section of CPCS (0.175 weight)
+                                       # No schema migration needed - property added on first write
     PORTFOLIO = "Portfolio"
     WATCHLIST = "Watchlist"
     POSITION = "Position"
@@ -977,7 +981,12 @@ class GraphIndex:
             turnover_rate: Expected turnover (low, medium, high)
             esg_constrained: Whether ESG constraints apply
             horizon: Investment horizon
-            properties: Additional properties
+            properties: Additional properties (may include mandate_text: str 0-5000 chars)
+            
+        Note:
+            mandate_text can be provided in properties dict for free-text fund mandate description.
+            Both mandate_type and mandate_text contribute to CPCS Mandate section (50%/50% split).
+            mandate_text will be used in future for semantic document search enhancement.
             
         Returns:
             Created profile GraphNode
@@ -1417,7 +1426,8 @@ class GraphIndex:
                base_score + position_boost + watchlist_boost AS total_score,
                base_score AS decayed_score
         
-           RETURN DISTINCT d.guid AS document_guid,
+           // Group by document to prevent duplicates
+           WITH d.guid AS document_guid,
                 d.title AS title,
                 d.impact_score AS impact_score,
                 d.impact_tier AS impact_tier,
@@ -1425,6 +1435,15 @@ class GraphIndex:
                 collect(DISTINCT inst.ticker) AS affected_instruments,
                 max(total_score) AS relevance_score,
                 max(decayed_score) AS current_relevance
+           
+           RETURN document_guid,
+                title,
+                impact_score,
+                impact_tier,
+                created_at,
+                affected_instruments,
+                relevance_score,
+                current_relevance
            ORDER BY current_relevance DESC
            LIMIT $limit
            """

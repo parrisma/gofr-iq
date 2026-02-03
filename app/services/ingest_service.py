@@ -588,7 +588,21 @@ class IngestService:
 
         # Step 8 & 9: Indexing with Rollback
         try:
-            # Step 8: Index in ChromaDB (if configured)
+            # Step 8: LLM extraction FIRST (before embedding, so we can include impact_score in metadata)
+            # If we have a graph index, we MUST have entity extraction to populate relationships.
+            # Fail hard if graph is enabled but LLM service is missing.
+            if self.graph_index and not self.llm_service:
+                raise LLMExtractionError(
+                    "Graph index is enabled but LLM service is not available. "
+                    "Entity extraction is required for graph relationships. "
+                    "Ensure GOFR_IQ_OPENROUTER_API_KEY is set."
+                )
+            
+            require_extraction = bool(self.graph_index)
+            extraction = self._extract_graph_entities(doc, require_extraction=require_extraction)
+
+            # Step 9: Index in ChromaDB (if configured)
+            # Include extraction results (impact_score, impact_tier) in metadata
             if self.embedding_index:
                 # Include title and created_at in embedding metadata for query results
                 embedding_metadata = {
@@ -596,6 +610,12 @@ class IngestService:
                     "created_at": doc.created_at.isoformat() if doc.created_at else "",
                     **(doc.metadata or {}),
                 }
+                
+                # Add impact scores from extraction if available
+                if extraction:
+                    embedding_metadata["impact_score"] = extraction.impact_score
+                    embedding_metadata["impact_tier"] = extraction.impact_tier
+                
                 self.embedding_index.embed_document(
                     document_guid=doc.guid,
                     content=doc.content,
@@ -605,7 +625,7 @@ class IngestService:
                     metadata=embedding_metadata,
                 )
 
-            # Step 9: Index in Neo4j (if configured)
+            # Step 10: Index in Neo4j (if configured)
             if self.graph_index:
                 # Ensure Source exists (P0 Fix) and set source_name in metadata
                 source_name = doc.metadata.get("source_name") or f"Source-{doc.source_guid}"
@@ -652,19 +672,6 @@ class IngestService:
                     created_at=doc.created_at,
                     metadata=doc.metadata,
                 )
-
-            # Step 10: LLM extraction (required when graph is configured)
-            # If we have a graph index, we MUST have entity extraction to populate relationships.
-            # Fail hard if graph is enabled but LLM service is missing.
-            if self.graph_index and not self.llm_service:
-                raise LLMExtractionError(
-                    "Graph index is enabled but LLM service is not available. "
-                    "Entity extraction is required for graph relationships. "
-                    "Ensure GOFR_IQ_OPENROUTER_API_KEY is set."
-                )
-            
-            require_extraction = bool(self.graph_index)
-            extraction = self._extract_graph_entities(doc, require_extraction=require_extraction)
 
             # Step 11: Update graph with extracted entities (if extraction succeeded)
             if extraction and self.graph_index:

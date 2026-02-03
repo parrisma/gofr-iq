@@ -359,8 +359,12 @@ def main():
     print("=== Synthetic Document Ingestion ===\n")
     
     # Load configuration via SSOT module
+    # Use group-simulation token for document operations (principle of least privilege)
+    # Admin token only needed for source registration (done by run_simulation.py)
     print("Loading tokens via SSOT module...", end=" ")
     try:
+        # Use admin token for initial source operations (fallback if no group token exists)
+        # After first run, group-simulation token will be used automatically
         admin_token = get_admin_token()
         print(f"{Colors.GREEN}✓{Colors.RESET}")
     except GofrEnvError as e:
@@ -372,7 +376,13 @@ def main():
     ensure_sources_exist(admin_token)
     
     print("Loading sources from registry...", end=" ")
-    sources = load_sources(admin_token)
+    # Use group-simulation token if available (created by run_simulation.py)
+    try:
+        sources_token = get_token_for_group("group-simulation")
+    except GofrEnvError:
+        # Fallback to admin token if group-simulation not available
+        sources_token = admin_token
+    sources = load_sources(sources_token)
     print(f"{Colors.GREEN}✓{Colors.RESET} ({len(sources)} sources)")
     
     if args.dry_run:

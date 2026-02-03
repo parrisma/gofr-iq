@@ -29,6 +29,30 @@ def _get_admin_token() -> str:
     return tokens["admin_token"]
 
 
+def _get_simulation_token() -> str:
+    """Get group-simulation token from simulation tokens file.
+    
+    Clients should be created with group-simulation token so they're assigned
+    to the group-simulation group (not admin group).
+    """
+    token_file = Path(__file__).parent / "tokens.json"
+    if not token_file.exists():
+        raise FileNotFoundError(
+            f"Simulation tokens file not found: {token_file}\n"
+            "Run ./simulation/run_simulation.sh to generate tokens."
+        )
+    with open(token_file, "r") as f:
+        tokens = json.load(f)
+    
+    if "group-simulation" not in tokens:
+        raise KeyError(
+            "group-simulation token not found in simulation/tokens.json\n"
+            "Run ./simulation/run_simulation.sh to regenerate tokens."
+        )
+    
+    return tokens["group-simulation"]
+
+
 def _create_client_via_mcp(client_data: dict[str, Any], token: str) -> dict[str, Any]:
     """Create client via MCP tools using manage_client script.
     
@@ -139,6 +163,40 @@ def _add_watchlist_via_mcp(client_guid: str, tickers: list[str], token: str) -> 
         response = json.loads(result.stdout)
         if response.get("status") == "error":
             logger.warning(f"MCP error adding watch {ticker}: {response.get('message', 'Unknown')}")
+
+
+def _get_existing_simulation_clients(token: str) -> dict[str, str]:
+    """Get existing simulation clients by name.
+    
+    Returns:
+        Dict mapping client name to client_guid
+    """
+    import subprocess
+    
+    project_root = Path(__file__).parent.parent
+    cmd = [
+        str(project_root / "scripts" / "manage_client.sh"),
+        "--docker", "--token", token,
+        "list",
+    ]
+    
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=project_root)
+    
+    if result.returncode != 0:
+        logger.warning(f"Failed to list clients: {result.stderr}")
+        return {}
+    
+    try:
+        response = json.loads(result.stdout)
+        if response.get("status") != "success":
+            return {}
+        
+        clients = response.get("data", {}).get("clients", [])
+        # Map client names to GUIDs
+        return {c["name"]: c["client_guid"] for c in clients}
+    except (json.JSONDecodeError, KeyError) as e:
+        logger.warning(f"Failed to parse client list: {e}")
+        return {}
 
 def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
     """
@@ -346,16 +404,37 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                 logger.info("Generating synthetic clients...")
                 gen = ClientGenerator(builder)
                 clients = gen.generate_clients()
-                logger.info(f"Creating {len(clients)} Clients via MCP...")
                 
-                # Get admin token for MCP calls
+                # Get simulation token for client creation (assigns to group-simulation)
+                # Use admin token only as fallback
                 try:
-                    token = _get_admin_token()
-                except FileNotFoundError as e:
-                    logger.error(str(e))
-                    return
+                    token = _get_simulation_token()
+                except (FileNotFoundError, KeyError) as e:
+                    logger.warning(f"Simulation token not available: {e}")
+                    logger.warning("Falling back to admin token - clients will be in admin group")
+                    try:
+                        token = _get_admin_token()
+                    except FileNotFoundError as e:
+                        logger.error(str(e))
+                        return
+                
+                # Check for existing simulation clients to avoid duplicates
+                logger.info("Checking for existing simulation clients...")
+                existing_clients = _get_existing_simulation_clients(token)
+                logger.info(f"Found {len(existing_clients)} existing clients in database")
+                
+                logger.info(f"Creating/updating {len(clients)} Clients via MCP...")
                 
                 for client in clients:
+                    # Check if client already exists by name
+                    if client.name in existing_clients:
+                        existing_guid = existing_clients[client.name]
+                        logger.info(f"Client '{client.name}' already exists ({existing_guid}), skipping creation...")
+                        
+                        # Optionally update holdings/watchlist for existing client
+                        # For now, we skip to avoid duplicates
+                        continue
+                    
                     logger.info(f"Creating client: {client.name}")
                     
                     # Map archetype to client type

@@ -76,7 +76,7 @@ class ClientGenerator:
 
         return MockClient(
             guid="550e8400-e29b-41d4-a716-446655440001",  # Stable UUID for hedge fund client
-            name="Apex Capital",
+            name="Quantum Momentum Partners",
             archetype=archetype,
             portfolio=portfolio,
             watchlist=watchlist,
@@ -97,7 +97,7 @@ class ClientGenerator:
 
         return MockClient(
             guid="550e8400-e29b-41d4-a716-446655440002",  # Stable UUID for pension fund client
-            name="Teachers Retirement System",
+            name="Nebula Retirement Fund",
             archetype=archetype,
             portfolio=portfolio,
             watchlist=watchlist,

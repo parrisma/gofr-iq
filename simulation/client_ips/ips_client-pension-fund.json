@@ -1,6 +1,6 @@
 {
   "client_guid": "client-pension-fund",
-  "client_name": "Teachers Retirement System",
+  "client_name": "Nebula Retirement Fund",
   "archetype": "PENSION_FUND",
   "primary_objective": "Preserve capital and generate stable returns to meet long-term pension obligations with minimal downside risk",
   "return_target": "7-9% annual return (actuarial assumption: 7.25%)",

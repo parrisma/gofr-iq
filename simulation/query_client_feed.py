@@ -8,7 +8,7 @@ Usage:
     uv run simulation/query_client_feed.py --client 550e8400-e29b-41d4-a716-446655440003
 
 Clients:
-    550e8400-e29b-41d4-a716-446655440001    Apex Capital (QNTM, BANKO, VIT, GTX)
+    550e8400-e29b-41d4-a716-446655440001    Quantum Momentum Partners (QNTM, BANKO, VIT, GTX)
     550e8400-e29b-41d4-a716-446655440002  Teachers Retirement (OMNI, SHOPM, TRUCK)
     550e8400-e29b-41d4-a716-446655440003        DiamondHands420 (VELO, BLK)
 """

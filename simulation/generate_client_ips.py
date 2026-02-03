@@ -73,8 +73,8 @@ class InvestmentPolicyStatement:
 def generate_hedge_fund_ips() -> InvestmentPolicyStatement:
     """Alpha-focused hedge fund with aggressive risk profile"""
     return InvestmentPolicyStatement(
-        client_guid="550e8400-e29b-41d4-a716-446655440001",  # Apex Capital (Hedge Fund)
-        client_name="Apex Capital",
+        client_guid="550e8400-e29b-41d4-a716-446655440001",  # Quantum Momentum Partners (Hedge Fund)
+        client_name="Quantum Momentum Partners",
         archetype="HEDGE_FUND",
         
         primary_objective="Generate absolute returns through long/short equity strategies with alpha generation from information asymmetries and event-driven catalysts",
@@ -148,7 +148,7 @@ def generate_pension_fund_ips() -> InvestmentPolicyStatement:
     """Conservative institutional investor with fiduciary duties"""
     return InvestmentPolicyStatement(
         client_guid="550e8400-e29b-41d4-a716-446655440002",  # Teachers Retirement (Pension Fund)
-        client_name="Teachers Retirement System",
+        client_name="Nebula Retirement Fund",
         archetype="PENSION_FUND",
         
         primary_objective="Preserve capital and generate stable returns to meet long-term pension obligations with minimal downside risk",

@@ -62,7 +62,7 @@ curl -X POST "http://gofr-iq-mcp:8080/tools/list_clients" \
 #   "clients": [
 #     {
 #       "client_guid": "550e8400-e29b-41d4-a716-446655440001",
-#       "name": "Apex Capital",
+#       "name": "Quantum Momentum Partners",
 #       ...
 #     }
 #   ]
@@ -84,8 +84,8 @@ curl -X POST "http://gofr-iq-mcp:8080/tools/get_client_profile" \
 ### Stable Client GUIDs
 | Name | Type | GUID | Holdings |
 |------|------|------|----------|
-| **Apex Capital** | Hedge Fund | `550e8400-e29b-41d4-a716-446655440001` | QNTM, BANKO, VIT, GTX |
-| **Teachers Retirement System** | Pension Fund | `550e8400-e29b-41d4-a716-446655440002` | OMNI, SHOPM, TRUCK |
+| **Quantum Momentum Partners** | Hedge Fund | `550e8400-e29b-41d4-a716-446655440001` | QNTM, BANKO, VIT, GTX |
+| **Nebula Retirement Fund** | Pension Fund | `550e8400-e29b-41d4-a716-446655440002` | OMNI, SHOPM, TRUCK |
 | **DiamondHands420** | Retail Trader | `550e8400-e29b-41d4-a716-446655440003` | VELO, BLK |
 
 ### Quick Test Commands

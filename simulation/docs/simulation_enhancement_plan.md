@@ -161,8 +161,8 @@
     - Pension fund (min_trust=8): Correctly filters out (no sources meet threshold)
     - Retail trader (min_trust=1): Would get all documents
   - ✅ **Client profiles validated**:
-    - Apex Capital (hedge fund): min_trust=2, AGGRESSIVE
-    - Teachers Retirement System (pension): min_trust=8, CONSERVATIVE
+    - Quantum Momentum Partners (hedge fund): min_trust=2, AGGRESSIVE
+    - Nebula Retirement Fund (pension): min_trust=8, CONSERVATIVE
     - DiamondHands420 (retail): min_trust=1, AGGRESSIVE
   - ✅ **Query pattern confirmed**: `WHERE s.trust_level >= cp.min_trust` working correctly
   
