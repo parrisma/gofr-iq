@@ -14,6 +14,7 @@ Query Flow:
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+import json
 from typing import Any, Optional, TYPE_CHECKING
 
 from app.services.document_store import DocumentStore
@@ -536,13 +537,36 @@ class QueryService:
         watchlist: list[str],
         llm_service: "LLMService | None" = None,
     ) -> str:
-        """Build semantic query text from client profile context."""
+        """Build semantic query text from client profile context.
+        
+        Incorporates:
+        - Client type, mandate_type, horizon, ESG flag
+        - mandate_text (free-form investment description)
+        - impact_themes from restrictions (for relevance boosting)
+        - Portfolio and watchlist tickers
+        """
         base = (
             f"Client type: {profile.get('client_type', 'UNKNOWN')}. "
             f"Mandate: {profile.get('mandate_type', 'unspecified')}. "
             f"Horizon: {profile.get('horizon', 'unspecified')}. "
             f"ESG constrained: {profile.get('esg_constrained', False)}. "
         )
+        
+        # Add mandate_text if present (contributes to semantic matching)
+        mandate_text = profile.get("mandate_text")
+        if mandate_text:
+            # Truncate for query efficiency (first 500 chars)
+            truncated = mandate_text[:500].strip()
+            base += f"Investment mandate: {truncated}. "
+        
+        # Add impact themes from restrictions (for relevance boosting)
+        restrictions = profile.get("restrictions") or {}
+        impact_sustainability = restrictions.get("impact_sustainability") or {}
+        impact_themes = impact_sustainability.get("impact_themes") or []
+        if impact_themes:
+            themes_str = ", ".join(impact_themes[:10])  # Limit to 10 themes
+            base += f"Impact themes: {themes_str}. "
+        
         tickers = " ".join(sorted(set(holdings + watchlist)))
         query = f"{base} Portfolio and watchlist tickers: {tickers}."
 
@@ -568,7 +592,11 @@ class QueryService:
     def _get_client_profile_context(
         self, client_guid: str, group_guids: list[str]
     ) -> dict[str, Any] | None:
-        """Fetch core client profile info with group permission check."""
+        """Fetch core client profile info with group permission check.
+        
+        Returns profile including mandate_text and parsed restrictions for
+        semantic query building and exclusion filtering.
+        """
         if not self.graph_index:
             return None
         try:
@@ -584,8 +612,10 @@ class QueryService:
                            c.impact_threshold AS impact_threshold,
                            ct.code AS client_type,
                            cp.mandate_type AS mandate_type,
+                           cp.mandate_text AS mandate_text,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
+                           cp.restrictions AS restrictions_json,
                            b.ticker AS benchmark
                     """,
                     client_guid=client_guid,
@@ -594,7 +624,19 @@ class QueryService:
                 record = result.single()
                 if not record:
                     return None
-                return dict(record)
+                profile = dict(record)
+                
+                # Parse restrictions JSON if present
+                restrictions_json = profile.pop("restrictions_json", None)
+                if restrictions_json:
+                    try:
+                        profile["restrictions"] = json.loads(restrictions_json)
+                    except (json.JSONDecodeError, TypeError):
+                        profile["restrictions"] = None
+                else:
+                    profile["restrictions"] = None
+                
+                return profile
         except Exception:
             return None
 
@@ -631,6 +673,14 @@ class QueryService:
             return []
 
     def _get_client_exclusions(self, client_guid: str) -> dict[str, list[str]]:
+        """Get client exclusions from both graph relationships and restrictions.
+        
+        Combines:
+        - Graph EXCLUDES relationships (Company, Sector nodes)
+        - restrictions.ethical_sector.excluded_industries from profile JSON
+        
+        Returns dict with 'companies' and 'sectors' lists.
+        """
         if not self.graph_index:
             return {"companies": [], "sectors": []}
         try:
@@ -641,16 +691,35 @@ class QueryService:
                     OPTIONAL MATCH (cp)-[:EXCLUDES]->(exCompany:Company)
                     OPTIONAL MATCH (cp)-[:EXCLUDES]->(exSector:Sector)
                     RETURN collect(DISTINCT exCompany.name) AS companies,
-                           collect(DISTINCT exSector.name) AS sectors
+                           collect(DISTINCT exSector.name) AS sectors,
+                           cp.restrictions AS restrictions_json
                     """,
                     client_guid=client_guid,
                 )
                 record = result.single()
                 if not record:
                     return {"companies": [], "sectors": []}
+                
+                companies = [c for c in record["companies"] if c]
+                sectors = [s for s in record["sectors"] if s]
+                
+                # Add excluded_industries from restrictions JSON
+                restrictions_json = record.get("restrictions_json")
+                if restrictions_json:
+                    try:
+                        restrictions = json.loads(restrictions_json)
+                        ethical_sector = restrictions.get("ethical_sector") or {}
+                        excluded_industries = ethical_sector.get("excluded_industries") or []
+                        # Add to sectors list (industries map to sectors)
+                        for industry in excluded_industries:
+                            if industry and industry not in sectors:
+                                sectors.append(industry)
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+                
                 return {
-                    "companies": [c for c in record["companies"] if c],
-                    "sectors": [s for s in record["sectors"] if s],
+                    "companies": companies,
+                    "sectors": sectors,
                 }
         except Exception:
             return {"companies": [], "sectors": []}
@@ -870,8 +939,6 @@ class QueryService:
             if filters.sectors:
                 doc_sectors = metadata.get("sectors", [])
                 if isinstance(doc_sectors, str):
-                    import json
-
                     try:
                         doc_sectors = json.loads(doc_sectors)
                     except json.JSONDecodeError:
@@ -883,8 +950,6 @@ class QueryService:
             if filters.companies:
                 doc_companies = metadata.get("companies", [])
                 if isinstance(doc_companies, str):
-                    import json
-
                     try:
                         doc_companies = json.loads(doc_companies)
                     except json.JSONDecodeError:

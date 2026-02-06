@@ -23,12 +23,11 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Set, Any
+from typing import Dict, List, Any
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -68,7 +67,6 @@ class TestCase:
 
 def load_test_cases() -> List[TestCase]:
     """Load all synthetic stories and parse their validation metadata."""
-    cases = []
     if not TEST_OUTPUT_DIR.exists():
         logger.error(f"Test output directory not found: {TEST_OUTPUT_DIR}")
         return []
@@ -251,7 +249,7 @@ def run_validations(cases: List[TestCase], verbose: bool = False):
                 found_unexpected = next((item for item in feed if item.document_guid == case.doc_guid), None)
                 if found_unexpected:
                     print(f"  {Colors.RED}✗ FALSE POSITIVE in {client_guid} feed{Colors.RESET}")
-                    print(f"    Document should NOT appear here (no holdings/relationships)")
+                    print("    Document should NOT appear here (no holdings/relationships)")
                     failed += 1
                     behavior_results["False Positives"]["failed"] += 1
                 else:

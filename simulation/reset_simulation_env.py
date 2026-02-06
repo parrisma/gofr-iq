@@ -17,7 +17,6 @@ Prerequisites:
 import os
 import sys
 import argparse
-import time
 import shutil
 from pathlib import Path
 from neo4j import GraphDatabase
@@ -67,7 +66,8 @@ def reset_neo4j():
             # Delete everything
             session.run("MATCH (n) DETACH DELETE n")
             # Verify empty
-            count = session.run("MATCH (n) RETURN count(n) as c").single()["c"]
+            record = session.run("MATCH (n) RETURN count(n) as c").single()
+            count = record["c"] if record else 0
             if count == 0:
                 print(f"{GREEN}✓ Cleared{RESET}")
             else:
@@ -101,7 +101,7 @@ def init_neo4j_schema():
 def reset_chroma():
     """Reset ChromaDB collections."""
     host = os.environ["GOFR_IQ_CHROMADB_HOST"]
-    port = os.environ["GOFR_IQ_CHROMADB_PORT"]
+    port = int(os.environ["GOFR_IQ_CHROMADB_PORT"])
 
     print(f"Connecting to ChromaDB at {host}:{port}...", end=" ")
     try:
@@ -120,7 +120,7 @@ def reset_chroma():
     try:
         client.reset()
         print(f"{GREEN}✓ Reset{RESET}")
-    except Exception as e:
+    except Exception:
         print(f"{YELLOW}Reset not allowed or failed, trying collection deletion...{RESET}")
         try:
             cols = client.list_collections()
@@ -191,7 +191,8 @@ def verify_reset():
         
         driver = GraphDatabase.driver(uri, auth=(user, password))
         with driver.session() as session:
-            count = session.run("MATCH (n) RETURN count(n) as c").single()["c"]
+            record = session.run("MATCH (n) RETURN count(n) as c").single()
+            count = record["c"] if record else 0
             if count == 0:
                 print(f"  Neo4j nodes: {GREEN}0{RESET} ✓")
             else:
@@ -215,7 +216,7 @@ def verify_reset():
     # Check ChromaDB
     try:
         host = os.environ["GOFR_IQ_CHROMADB_HOST"]
-        port = os.environ["GOFR_IQ_CHROMADB_PORT"]
+        port = int(os.environ["GOFR_IQ_CHROMADB_PORT"])
         
         client = chromadb.HttpClient(host=host, port=port)
         cols = client.list_collections()
@@ -269,7 +270,7 @@ def main():
         print(f"{YELLOW}WARNING: This will delete ALL data in Neo4j, ChromaDB, and document storage.{RESET}")
         print(f"Target Neo4j: {os.environ['GOFR_IQ_NEO4J_URI']}")
         print(f"Target Chroma: {os.environ['GOFR_IQ_CHROMADB_HOST']}")
-        print(f"Target Storage: data/storage/")
+        print("Target Storage: data/storage/")
         response = input("Are you sure? (y/N) ")
         if response.lower() != 'y':
             print("Aborted.")

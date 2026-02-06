@@ -7,7 +7,6 @@ End-to-end simulation runner.
 - Ingests generated stories
 """
 import argparse
-import asyncio
 import json
 import os
 import sys
@@ -23,18 +22,17 @@ sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
 
 # SSOT: Import env module for bootstrap tokens
-from gofr_common.gofr_env import get_admin_token, get_public_token, GofrEnvError
+from gofr_common.gofr_env import get_admin_token, get_public_token, GofrEnvError  # noqa: E402 - path modification required before import
 
 from gofr_common.auth.backends.vault import VaultGroupStore, VaultTokenStore  # type: ignore[import-not-found]  # noqa: E402
 from gofr_common.auth.backends.vault_client import VaultClient  # type: ignore[import-not-found]  # noqa: E402
 from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[import-not-found]  # noqa: E402
-from gofr_common.auth.groups import DuplicateGroupError, GroupRegistry  # type: ignore[import-not-found]  # noqa: E402
+from gofr_common.auth.groups import GroupRegistry  # type: ignore[import-not-found]  # noqa: E402
 from gofr_common.auth.service import AuthService  # type: ignore[import-not-found]  # noqa: E402
 
 from simulation.generate_synthetic_stories import SyntheticGenerator, MOCK_SOURCES  # noqa: E402
 from simulation import ingest_synthetic_stories as ingest  # noqa: E402
-from simulation import load_simulation_data
-from simulation.universe.builder import UniverseBuilder  # noqa: E402
+from simulation import load_simulation_data  # noqa: E402
 
 SECRETS_DIR = PROJECT_ROOT / "secrets"
 DOCKER_ENV_FILE = PROJECT_ROOT / "docker" / ".env"
@@ -225,7 +223,7 @@ def check_infrastructure() -> None:
                     host, port = host_port, "80"
                 conn = http.client.HTTPConnection(host, int(port), timeout=2)
                 conn.request("HEAD", "/")
-                resp = conn.getresponse()
+                conn.getresponse()  # Verify connection succeeds
                 conn.close()
                 print(f"   ✅ {name:15s} responding at {uri}")
         except Exception as e:
@@ -250,10 +248,14 @@ def validate_ingestion(expected_count: int) -> None:
     
     try:
         # Neo4j: count Document nodes
+        if neo4j_password is None:
+            print("   ⚠️  Neo4j password not set")
+            return
         driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
         with driver.session() as session:
             result = session.run("MATCH (d:Document) RETURN count(d) as count")
-            neo4j_count = result.single()["count"]
+            record = result.single()
+            neo4j_count = record["count"] if record else 0
         
         # ChromaDB: count documents in collection
         chroma_client = chromadb.HttpClient(host=chroma_host, port=chroma_port)
@@ -267,12 +269,12 @@ def validate_ingestion(expected_count: int) -> None:
         if neo4j_count < expected_count:
             print(f"   ⚠️  Neo4j count ({neo4j_count}) less than expected ({expected_count})")
         else:
-            print(f"   ✅ Neo4j ingestion verified")
+            print("   ✅ Neo4j ingestion verified")
         
         if chroma_count < expected_count:
             print(f"   ⚠️  ChromaDB count ({chroma_count}) less than expected ({expected_count})")
         else:
-            print(f"   ✅ ChromaDB ingestion verified")
+            print("   ✅ ChromaDB ingestion verified")
         
         # Validate graph relationships
         print("\n🔗 Validating graph relationships...")
@@ -280,23 +282,28 @@ def validate_ingestion(expected_count: int) -> None:
         with driver.session() as session:
             # Check PRODUCED_BY relationships
             result = session.run("MATCH ()-[r:PRODUCED_BY]->() RETURN count(r) as count")
-            produced_by_count = result.single()["count"]
+            record = result.single()
+            produced_by_count = record["count"] if record else 0
             
             # Check AFFECTS relationships
             result = session.run("MATCH ()-[r:AFFECTS]->() RETURN count(r) as count")
-            affects_count = result.single()["count"]
+            record = result.single()
+            affects_count = record["count"] if record else 0
             
             # Check MENTIONS relationships
             result = session.run("MATCH ()-[r:MENTIONS]->() RETURN count(r) as count")
-            mentions_count = result.single()["count"]
+            record = result.single()
+            mentions_count = record["count"] if record else 0
             
             # Check TRIGGERED_BY relationships
             result = session.run("MATCH ()-[r:TRIGGERED_BY]->() RETURN count(r) as count")
-            triggered_by_count = result.single()["count"]
+            record = result.single()
+            triggered_by_count = record["count"] if record else 0
             
             # Check Source nodes
             result = session.run("MATCH (s:Source) RETURN count(s) as count")
-            source_count = result.single()["count"]
+            record = result.single()
+            source_count = record["count"] if record else 0
             
             print(f"   Sources:      {source_count}")
             print(f"   PRODUCED_BY:  {produced_by_count} (documents → sources)")
@@ -306,24 +313,24 @@ def validate_ingestion(expected_count: int) -> None:
             
             # Warnings for missing relationships
             if produced_by_count == 0:
-                print(f"   ⚠️  No PRODUCED_BY relationships - documents not linked to sources")
+                print("   ⚠️  No PRODUCED_BY relationships - documents not linked to sources")
             elif produced_by_count < neo4j_count:
                 print(f"   ⚠️  Only {produced_by_count}/{neo4j_count} documents linked to sources")
             else:
-                print(f"   ✅ All documents linked to sources")
+                print("   ✅ All documents linked to sources")
             
             if affects_count == 0:
-                print(f"   ⚠️  No AFFECTS relationships - check graph extraction")
+                print("   ⚠️  No AFFECTS relationships - check graph extraction")
             else:
                 print(f"   ✅ Graph extraction working ({affects_count} instrument impacts)")
             
             if mentions_count == 0:
-                print(f"   ⚠️  No MENTIONS relationships - multi-entity tracking disabled")
+                print("   ⚠️  No MENTIONS relationships - multi-entity tracking disabled")
             else:
                 print(f"   ✅ Company mentions tracked ({mentions_count} secondary references)")
             
             if triggered_by_count == 0:
-                print(f"   ⚠️  No TRIGGERED_BY relationships - event filtering disabled")
+                print("   ⚠️  No TRIGGERED_BY relationships - event filtering disabled")
             else:
                 print(f"   ✅ Event categorization working ({triggered_by_count} event triggers)")
         
@@ -365,7 +372,9 @@ def ensure_groups(auth: AuthService, groups: List[str]):
     
     for name in groups:
         # Use auth_manager.sh to create/restore group
-        result = subprocess.run(
+        # auth_manager.sh will restore if defunct, create if missing, or report if active
+        # All cases are success for our purposes
+        subprocess.run(
             [
                 "./lib/gofr-common/scripts/auth_manager.sh",
                 "--docker",
@@ -378,8 +387,6 @@ def ensure_groups(auth: AuthService, groups: List[str]):
             capture_output=True,
             text=True,
         )
-        # auth_manager.sh will restore if defunct, create if missing, or report if active
-        # All cases are success for our purposes
 
 
 def verify_groups(auth: AuthService, groups: List[str]):
@@ -506,7 +513,7 @@ def list_sources(token: str) -> Dict[str, str]:
     return ingest.load_sources(token)
 
 
-def register_source(name: str, url: str, token: str, trust_level: int = None):
+def register_source(name: str, url: str, token: str, trust_level: int | None = None):
     """Register a source via manage_source.sh with optional trust level."""
     cmd = [
         str(PROJECT_ROOT / "scripts" / "manage_source.sh"),
@@ -579,7 +586,7 @@ def register_mock_sources_via_script(admin_token: str):
     return created + existing
 
 
-def ensure_sources(admin_token: str, expected: List[str] = None):
+def ensure_sources(admin_token: str, expected: List[str] | None = None):
     """Ensure sources exist in MCP registry and Neo4j graph.
     
     Args:

@@ -78,6 +78,7 @@ def parse_args() -> argparse.Namespace:
     create.add_argument("--benchmark", default=None)
     create.add_argument("--horizon", default=None)
     create.add_argument("--esg-constrained", action="store_true")
+    create.add_argument("--restrictions-file", default=None, help="Path to JSON file with restrictions object")
 
     get_cmd = subparsers.add_parser("get")
     get_cmd.add_argument("client_guid")
@@ -97,6 +98,8 @@ def parse_args() -> argparse.Namespace:
     update.add_argument("--benchmark", default=None)
     update.add_argument("--horizon", default=None)
     update.add_argument("--esg-constrained", choices=["true", "false"], default=None)
+    update.add_argument("--restrictions-file", default=None, help="Path to JSON file with restrictions object")
+    update.add_argument("--clear-restrictions", action="store_true", help="Clear restrictions (set to empty)")
 
     delete_cmd = subparsers.add_parser("delete")
     delete_cmd.add_argument("client_guid")
@@ -231,6 +234,12 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
     session_id = mcp_initialize(cfg)
 
     if args.command == "create":
+        # Load restrictions from file if provided
+        restrictions = None
+        if args.restrictions_file:
+            with open(args.restrictions_file, "r", encoding="utf-8") as f:
+                restrictions = json.load(f)
+        
         return mcp_call(
             cfg,
             session_id,
@@ -245,6 +254,7 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
                 "benchmark": args.benchmark,
                 "horizon": args.horizon,
                 "esg_constrained": args.esg_constrained,
+                "restrictions": restrictions,
             },
         )
     if args.command == "get":
@@ -269,6 +279,14 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
         elif args.mandate_text is not None:
             mandate_text_value = args.mandate_text
         
+        # Handle restrictions: --clear-restrictions sets to {}, --restrictions-file loads JSON, omit leaves None
+        restrictions = None
+        if args.clear_restrictions:
+            restrictions = {}
+        elif args.restrictions_file:
+            with open(args.restrictions_file, "r", encoding="utf-8") as f:
+                restrictions = json.load(f)
+        
         return mcp_call(
             cfg,
             session_id,
@@ -282,6 +300,7 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
                 "benchmark": args.benchmark,
                 "horizon": args.horizon,
                 "esg_constrained": esg_value,
+                "restrictions": restrictions,
             },
         )
     if args.command == "delete":

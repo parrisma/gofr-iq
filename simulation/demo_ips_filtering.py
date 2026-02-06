@@ -18,7 +18,7 @@ from typing import Dict, List
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from simulation.client_profiler import ClientProfiler
+from simulation.client_profiler import ClientProfiler  # noqa: E402 - path modification required before import
 
 
 def load_ips(client_guid: str) -> Dict:
@@ -119,7 +119,7 @@ def demo_filtering(client_guid: str, client_name: str):
     
     # Load IPS
     ips_json = load_ips(client_guid)
-    print(f"\n📋 IPS Summary:")
+    print("\n📋 IPS Summary:")
     print(f"   Primary Objective: {ips_json['primary_objective'][:80]}...")
     print(f"   Risk Tolerance: {ips_json['risk_tolerance']}")
     print(f"   Trust Requirement: {ips_json['trust_requirement']}")
@@ -144,7 +144,7 @@ def demo_filtering(client_guid: str, client_name: str):
     
     # Show filtered documents
     if filtered_docs:
-        print(f"\n   Remaining Documents:")
+        print("\n   Remaining Documents:")
         for doc in filtered_docs:
             print(f"   • {doc['title']}")
             print(f"     Sector: {doc['sector']}, Trust: {doc['trust_level']}, Score: {doc['feed_rank']:.2f}")
@@ -159,8 +159,8 @@ def demo_filtering(client_guid: str, client_name: str):
         base_score_field="feed_rank"
     )
     
-    print(f"\n🎯 After IPS Reranking:")
-    print(f"   Top 3 Documents:")
+    print("\n🎯 After IPS Reranking:")
+    print("   Top 3 Documents:")
     for i, doc in enumerate(reranked_docs[:3], 1):
         boost = doc.get('ips_boost', 0)
         boost_str = f"+{boost:.0%}" if boost > 0 else f"{boost:.0%}"
@@ -171,7 +171,7 @@ def demo_filtering(client_guid: str, client_name: str):
     # Show removed documents
     removed_docs = [doc for doc in documents if doc not in filtered_docs]
     if removed_docs:
-        print(f"\n❌ Filtered Out:")
+        print("\n❌ Filtered Out:")
         for doc in removed_docs:
             print(f"   • {doc['title']}")
             print(f"     Sector: {doc['sector']}, Trust: {doc['trust_level']}")

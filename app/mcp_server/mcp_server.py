@@ -112,6 +112,7 @@ def create_mcp_server(
     # Graph index requires Neo4j connection
     # We initialize it but handle connection errors gracefully in service
     graph_index = GraphIndex()
+    graph_index.init_schema()
     session_logger.info("LLMService initialized with OpenRouter API key")
 
     # Initialize SourceRegistry with Neo4j sync enabled

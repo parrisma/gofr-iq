@@ -18,12 +18,11 @@ import logging
 import sys
 from pathlib import Path
 from dataclasses import dataclass, asdict
-from typing import List, Dict, Optional
+from typing import List, Optional
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from simulation.universe.types import ClientArchetype
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -22,7 +22,7 @@ from typing import Dict, Tuple
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
-from gofr_common.gofr_env import (
+from gofr_common.gofr_env import (  # noqa: E402 - path modification required before import
     get_admin_token,
     get_token_for_group,
     get_workspace_root,
@@ -83,7 +83,7 @@ def ensure_sources_exist(token: str):
                 print(f"{Colors.RED}Failed to create source {mock_src.name}: {result.stderr}{Colors.RESET}")
             else:
                  # Extract GUID from output if possible, or just re-load sources later
-                 print(f"    Created.")
+                 print("    Created.")
 
 def load_sources(token: str) -> Dict[str, str]:
     """Build source name → GUID mapping from manage_source.sh (raw JSON to avoid truncation)."""
@@ -238,7 +238,7 @@ def ingest_document(
             import os
             try:
                 os.unlink(content_file)
-            except:
+            except OSError:
                 pass
 
 
@@ -287,7 +287,7 @@ def process_story(
         # Resolve token via SSOT module
         try:
             token = get_token_for_group(group)
-        except GofrEnvError as e:
+        except GofrEnvError:
             return "failed", f"no token for group: {group}", 0.0, {}
         
         metadata = {

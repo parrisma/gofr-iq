@@ -67,7 +67,7 @@ def setup_constraints(uri: str, user: str, password: str) -> None:
             REQUIRE n.{prop} IS UNIQUE
             """
             try:
-                session.run(create_query)
+                session.run(create_query)  # type: ignore[arg-type] - f-string query
                 print(f"  ✅ Created constraint: {label}.{prop}")
             except Exception as e:
                 print(f"  ❌ Failed to create {label}.{prop}: {e}")

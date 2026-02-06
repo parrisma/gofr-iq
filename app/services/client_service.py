@@ -79,7 +79,7 @@ class ClientService:
         holding_count = data.get("holding_count", 0)
         watchlist_count = data.get("watchlist_count", 0)
         # exclude_count = data.get("exclude_count", 0) # Not used in basic scoring yet, but ready
-        benchmark_count = data.get("benchmark_count", 0)
+        benchmark_count = data.get("benchmark_count", 0)  # noqa: F841 - reserved for future CPCS benchmark section
         
         # 1. Holdings Data (35%)
         # Critical for "Maintenance" coverage.

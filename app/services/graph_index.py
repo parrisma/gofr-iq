@@ -16,7 +16,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Optional
 
-from neo4j import GraphDatabase, Driver, Session
+from neo4j import GraphDatabase, Driver, NotificationDisabledClassification, Session
 from neo4j.exceptions import ServiceUnavailable
 
 from app.logger import session_logger
@@ -258,6 +258,9 @@ class GraphIndex:
             self._driver = GraphDatabase.driver(
                 self.uri,
                 auth=(self.username, self.password),
+                notifications_disabled_classifications=[
+                    NotificationDisabledClassification.UNRECOGNIZED,
+                ],
             )
         return self._driver
 

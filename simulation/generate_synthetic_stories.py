@@ -25,7 +25,7 @@ from typing import List, Optional
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
-from gofr_common.gofr_env import get_admin_token, GofrEnvError
+from gofr_common.gofr_env import get_admin_token, GofrEnvError  # noqa: E402 - path modification required before import
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -130,8 +130,7 @@ MOCK_SOURCES = [
 # Data Definitions
 # ============================================================================
 
-from simulation.universe.builder import UniverseBuilder, DEFAULT_GROUP
-from simulation.universe.types import MockFactor, FactorExposure
+from simulation.universe.builder import UniverseBuilder, DEFAULT_GROUP  # noqa: E402 - imports after config setup
 
 # Initialize the universe builder to access the shared topology
 UNIVERSE = UniverseBuilder()

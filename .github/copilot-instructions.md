@@ -170,9 +170,28 @@ uv run simulation/run_simulation.py --count 50
 - All errors must include **cause, references/context**, and **recovery options** where possible.
 
 ## Testing
-- **Always run `./scripts/run_tests.sh` to verify each step**, and report failures with recovery options.
+- **ALWAYS use `./scripts/run_tests.sh`** to run tests. NEVER run `pytest` directly - the test script sets up infrastructure (Neo4j, ChromaDB, Vault), environment variables, and servers required for tests to pass.
+- **Do NOT skip tests** - all tests should pass. If a test is failing, fix the underlying issue rather than adding skip markers.
+- **Pre-flight check**: Run `./scripts/run_tests.sh --check` to verify environment before running tests.
 - **Test fixtures that create services with explicit settings bypass env vars.** If a fixture does `LLMSettings(api_key=key)` without other params, it uses class defaults, not `os.environ`. Always read env vars explicitly in fixtures.
 - **Deterministic embeddings**: Mock mode uses hash-based embeddings (384 dim) that produce consistent but **not semantically meaningful** vectors. Tests checking semantic similarity must either:
   1. Skip the assertion in mock mode (`if live_llm_available()`)
   2. Use membership assertions instead of ordering (document in results, not results[0])
   3. Only verify query mechanics work (no errors, response not None)
+
+### Required Secrets for Tests
+| Variable | Required | Source | Description |
+|----------|----------|--------|-------------|
+| `GOFR_IQ_OPENROUTER_API_KEY` | Yes (for LLM tests) | `lib/gofr-common/.env` or `--api-key` | OpenRouter API key (~$0.01-0.05/test) |
+| `GOFR_JWT_SECRET` | Auto-generated | `lib/gofr-common/.env` or `--jwt-secret` | JWT signing secret |
+| `GOFR_IQ_NEO4J_PASSWORD` | No (default: testpassword) | `lib/gofr-common/.env` or `--neo4j-password` | Neo4j password |
+
+### Tests That Skip Without Secrets
+- **Without `GOFR_IQ_OPENROUTER_API_KEY`**:
+  - `test_integration_llm.py` (all LLM integration tests)
+  - `test_end_to_end_ingest_query.py` (E2E tests with real LLM)
+- **Without infrastructure running** (handled by `run_tests.sh`):
+  - `test_graph_index.py` - requires Neo4j
+  - `test_mcpo_group_access.py` - requires MCPO server
+  - `test_vault_integration.py` - requires Vault backend
+

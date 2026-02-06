@@ -8,7 +8,7 @@ from __future__ import annotations
 import uuid
 import pytest
 
-from app.services.graph_index import GraphIndex, NodeLabel, RelationType
+from app.services.graph_index import GraphIndex
 from app.tools.client_tools import register_client_tools
 from mcp.server.fastmcp import FastMCP
 from unittest.mock import patch, MagicMock
@@ -21,20 +21,29 @@ TEST_PUBLIC_GROUP = "public"
 
 
 def with_auth_context(group: str = TEST_GROUP):
-    """Decorator to mock auth context for a test function."""
+    """Decorator to mock auth context for a test function.
+    
+    Note: Pytest fixtures must be declared in the wrapper function signature
+    so they are properly injected. The wrapper uses mandate_test_setup which
+    provides a graph_index with test group/client type nodes already created.
+    """
     def decorator(fn):
-        @patch('app.tools.client_tools.resolve_write_group')
-        @patch('app.tools.client_tools.resolve_permitted_groups')
-        @patch('app.tools.client_tools.get_group_uuids_by_names')
-        def wrapper(mock_get_uuids, mock_permitted, mock_write, *args, **kwargs):
-            mock_write.return_value = group
-            mock_permitted.return_value = [TEST_PUBLIC_GROUP, group]
-            # Mock UUID conversion - return same values as input for test
-            mock_get_uuids.return_value = [TEST_PUBLIC_GROUP, group]
-            return fn(*args, **kwargs)
+        # Apply patches as a context manager inside the wrapper instead of as decorators
+        # This avoids the positional argument conflict with pytest fixtures
+        def wrapper(mandate_test_setup, registered_tools, *args, **kwargs):
+            with patch('app.tools.client_tools.resolve_write_group') as mock_write, \
+                 patch('app.tools.client_tools.resolve_permitted_groups') as mock_permitted, \
+                 patch('app.tools.client_tools.get_group_uuids_by_names') as mock_get_uuids:
+                mock_write.return_value = group
+                mock_permitted.return_value = [TEST_PUBLIC_GROUP, group]
+                mock_get_uuids.return_value = [TEST_PUBLIC_GROUP, group]
+                # mandate_test_setup IS the graph_index, pass it to the test as graph_index
+                return fn(mandate_test_setup, registered_tools, *args, **kwargs)
+        # Copy function name and docstring for pytest
+        wrapper.__name__ = fn.__name__
+        wrapper.__doc__ = fn.__doc__
         return wrapper
     return decorator
-
 
 def parse_response(response: Any) -> dict[str, Any]:
     """Parse MCP tool response to dict"""
@@ -45,23 +54,45 @@ def parse_response(response: Any) -> dict[str, Any]:
     return {}
 
 
-@pytest.fixture
-def graph_index(neo4j_service) -> GraphIndex:
-    """Real GraphIndex instance for integration testing"""
-    return GraphIndex(neo4j_service)
+# NOTE: We use the global graph_index fixture from conftest.py which creates
+# a clean Neo4j state for each test and handles connection/cleanup.
 
 
 @pytest.fixture
-def mcp_server() -> FastMCP:
-    """Create a FastMCP server for testing"""
+def mandate_test_setup(graph_index: GraphIndex) -> GraphIndex:
+    """Set up test group and client type nodes required for mandate_text tests.
+    
+    Creates:
+    - Group node with TEST_GROUP guid
+    - ClientType node with HEDGE_FUND code
+    
+    Returns the graph_index for use in tests.
+    """
+    from app.services.graph_index import NodeLabel
+    
+    # Create test group node
+    graph_index.create_node(NodeLabel.GROUP, TEST_GROUP, {"name": "Test Group"})
+    
+    # Create client type node (used by IS_TYPE_OF relationship)
+    graph_index.create_node(NodeLabel.CLIENT_TYPE, "HEDGE_FUND", {"code": "HEDGE_FUND", "name": "Hedge Fund"})
+    
+    return graph_index
+
+
+@pytest.fixture
+def mandate_text_mcp_server() -> FastMCP:
+    """Create a FastMCP server for testing mandate_text"""
     return FastMCP("test-mandate-text")
 
 
 @pytest.fixture
-def registered_tools(mcp_server: FastMCP, graph_index: GraphIndex) -> dict[str, Any]:
-    """Register client tools and return them"""
-    register_client_tools(mcp_server, graph_index, query_service=MagicMock())
-    return {tool.name: tool for tool in mcp_server._tool_manager._tools.values()}
+def registered_tools(mandate_text_mcp_server: FastMCP, mandate_test_setup: GraphIndex) -> dict[str, Any]:
+    """Register client tools and return them.
+    
+    Uses mandate_test_setup to ensure group/client type nodes exist first.
+    """
+    register_client_tools(mandate_text_mcp_server, mandate_test_setup, query_service=MagicMock())
+    return {tool.name: tool for tool in mandate_text_mcp_server._tool_manager._tools.values()}
 
 
 @pytest.mark.integration

@@ -18,7 +18,6 @@ import os
 import sys
 import logging
 from dataclasses import dataclass, asdict
-from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
@@ -37,7 +36,7 @@ if not os.getenv("GOFR_IQ_NEO4J_USER"):
 # Add project root to path
 sys.path.append(str(project_root))
 
-from app.services.graph_index import GraphIndex
+from app.services.graph_index import GraphIndex  # noqa: E402 - path modification required before import
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)

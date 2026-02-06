@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
 @dataclass
 class MockTicker:
@@ -57,5 +57,7 @@ class MockClient:
     name: str
     archetype: ClientArchetype
     portfolio: List[MockPosition]
-    watchlist: List[str] # List of tickers
+    watchlist: List[str]  # List of tickers
+    mandate_text: Optional[str] = None
+    restrictions: Optional[Dict[str, Any]] = None  # ESG & compliance restrictions
 

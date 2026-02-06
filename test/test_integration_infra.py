@@ -443,7 +443,15 @@ class TestFullIntegration:
         test_group_guid: str,
     ) -> None:
         """Test that rollback works when graph indexing fails."""
+        import os
         from unittest.mock import patch
+        from app.services.llm_service import LLMSettings, create_llm_service
+        
+        # Use real LLM service from environment
+        api_key = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
+        chat_model = os.environ.get("GOFR_IQ_LLM_MODEL", "meta-llama/llama-3.1-70b-instruct")
+        settings = LLMSettings(api_key=api_key, chat_model=chat_model)
+        llm_service = create_llm_service(settings=settings)
         
         service = IngestService(
             document_store=document_store,
@@ -452,6 +460,7 @@ class TestFullIntegration:
             duplicate_detector=DuplicateDetector(),
             embedding_index=real_embedding_index,
             graph_index=real_graph_index,
+            llm_service=llm_service,
         )
         
         # Patch graph index to fail

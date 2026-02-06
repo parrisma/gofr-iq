@@ -10,15 +10,17 @@ Group Access Control:
 
 from __future__ import annotations
 
+import json
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Annotated, Any
 
-from pydantic import Field
+from pydantic import Field, ValidationError
 
 from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
+from app.models.restrictions import ClientRestrictions
 from app.services.client_service import ClientService
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
 from app.services.group_service import (
@@ -110,6 +112,16 @@ def register_client_tools(
             default=False,
             description="Apply ESG filters to news feed",
         )] = False,
+        restrictions: Annotated[dict[str, Any] | None, Field(
+            default=None,
+            description=(
+                "Structured ESG & compliance restrictions object. "
+                "Categories: ethical_sector (excluded_industries, faith_based), "
+                "impact_sustainability (impact_mandate, impact_themes, stewardship_obligations), "
+                "legal_regulatory, operational_risk, tax_accounting. "
+                "If ethical_sector.excluded_industries is non-empty, esg_constrained is auto-set to True."
+            ),
+        )] = None,
         auth_tokens: Annotated[list[str] | None, Field(
             default=None,
             description="JWT tokens for authentication (pass via API when headers not available)",
@@ -132,6 +144,7 @@ def register_client_tools(
             benchmark: Benchmark ticker (e.g., 'SPY')
             horizon: short, medium, or long
             esg_constrained: Apply ESG filters
+            restrictions: Structured ESG & compliance restrictions dict
 
         Returns:
             client_guid, portfolio_guid, watchlist_guid, profile settings,
@@ -208,9 +221,28 @@ def register_client_tools(
             
             # Create profile
             profile_guid = str(uuid.uuid4())
-            profile_properties = {}
+            profile_properties: dict[str, Any] = {}
             if mandate_text:
                 profile_properties["mandate_text"] = mandate_text.strip()
+            
+            # Validate and store restrictions
+            validated_restrictions: ClientRestrictions | None = None
+            restrictions_json: str | None = None
+            if restrictions:
+                try:
+                    validated_restrictions = ClientRestrictions(**restrictions)
+                    restrictions_json = validated_restrictions.model_dump_json()
+                    profile_properties["restrictions"] = restrictions_json
+                    # Auto-enable esg_constrained if exclusions are defined
+                    if validated_restrictions.has_exclusions():
+                        esg_constrained = True
+                except ValidationError as ve:
+                    return error_response(
+                        error_code="INVALID_RESTRICTIONS",
+                        message="Invalid restrictions schema",
+                        recovery_strategy="Check restrictions structure against documented schema.",
+                        details={"validation_errors": ve.errors()},
+                    )
             
             graph_index.create_client_profile(
                 guid=profile_guid,
@@ -275,6 +307,7 @@ def register_client_tools(
                         "benchmark": benchmark,
                         "horizon": horizon,
                         "esg_constrained": esg_constrained,
+                        "restrictions": validated_restrictions.model_dump() if validated_restrictions else None,
                     },
                     "settings": {
                         "alert_frequency": alert_frequency,
@@ -528,10 +561,11 @@ def register_client_tools(
                     },
                 )
 
+            expanded_limit = max(limit * 5, 15)
             top_news = query_service.get_top_client_news(
                 client_guid=client_guid,
                 group_guids=group_guids,
-                limit=limit,
+                limit=expanded_limit,
                 time_window_hours=time_window_hours,
                 include_portfolio=include_portfolio,
                 include_watchlist=include_watchlist,
@@ -541,9 +575,41 @@ def register_client_tools(
                 llm_service=llm_service,
             )
 
+            resolved_min_impact = min_impact_score if min_impact_score is not None else 0.0
+            missing_impact_guids = [
+                article.get("document_guid")
+                for article in top_news
+                if article.get("impact_score") is None and article.get("document_guid")
+            ]
+
+            if missing_impact_guids:
+                try:
+                    with graph_index._get_session() as session:
+                        result = session.run(
+                            """
+                            MATCH (d:Document)
+                            WHERE d.guid IN $guids
+                            RETURN d.guid AS guid, d.impact_score AS impact_score
+                            """,
+                            guids=missing_impact_guids,
+                        )
+                        impact_map = {record["guid"]: record["impact_score"] for record in result}
+
+                    for article in top_news:
+                        doc_guid = article.get("document_guid")
+                        if doc_guid in impact_map and article.get("impact_score") is None:
+                            article["impact_score"] = impact_map.get(doc_guid)
+                except Exception:  # nosec B110 - silent fail for optional backfill
+                    pass
+
+            top_news = [
+                article for article in top_news
+                if float(article.get("impact_score") or 0.0) >= resolved_min_impact
+            ][:limit]
+
             filters_applied = {
                 "time_window_hours": time_window_hours,
-                "min_impact_score": min_impact_score,
+                "min_impact_score": resolved_min_impact,
                 "impact_tiers": impact_tiers,
                 "include_portfolio": include_portfolio,
                 "include_watchlist": include_watchlist,
@@ -878,7 +944,7 @@ def register_client_tools(
                 params["client_type"] = client_type.upper()
 
             if not include_defunct:
-                status_filter = "AND (c.status IS NULL OR c.status <> 'defunct')" if (group_clause or type_filter) else "WHERE (c.status IS NULL OR c.status <> 'defunct')"
+                status_filter = "AND coalesce(c.status, 'active') <> 'defunct'" if (group_clause or type_filter) else "WHERE coalesce(c.status, 'active') <> 'defunct'"
 
             # Build RETURN clause with optional mandate_text
             return_clause = """c.guid AS client_guid, 
@@ -1114,6 +1180,7 @@ def register_client_tools(
                            cp.mandate_text AS mandate_text,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
+                           cp.restrictions AS restrictions_json,
                            b.ticker AS benchmark,
                            p.guid AS portfolio_guid,
                            w.guid AS watchlist_guid
@@ -1138,6 +1205,15 @@ def register_client_tools(
                         recovery_strategy="Use list_clients to see clients you can access, or request group access.",
                         details={"client_guid": client_guid, "required_group": record["group_guid"]},
                     )
+                
+                # Parse restrictions JSON if present
+                restrictions_data = None
+                restrictions_json = record.get("restrictions_json")
+                if restrictions_json:
+                    try:
+                        restrictions_data = json.loads(restrictions_json)
+                    except json.JSONDecodeError:
+                        restrictions_data = None
             
             return success_response(
                 data={
@@ -1155,6 +1231,7 @@ def register_client_tools(
                         "benchmark": record["benchmark"],
                         "horizon": record["horizon"],
                         "esg_constrained": record["esg_constrained"],
+                        "restrictions": restrictions_data,
                     },
                     "settings": {
                         "alert_frequency": record["alert_frequency"],
@@ -1523,6 +1600,14 @@ def register_client_tools(
                 "Leave empty to keep current."
             ),
         )] = None,
+        restrictions: Annotated[dict[str, Any] | None, Field(
+            default=None,
+            description=(
+                "Full replacement for ESG & compliance restrictions object. "
+                "Categories: ethical_sector, impact_sustainability, legal_regulatory, operational_risk, tax_accounting. "
+                "Pass empty dict {} to clear restrictions. Omit to keep current."
+            ),
+        )] = None,
         auth_tokens: Annotated[list[str] | None, Field(
             default=None,
             description="JWT tokens for authentication (pass via API when headers not available)",
@@ -1542,6 +1627,7 @@ def register_client_tools(
             benchmark: Benchmark ticker
             horizon: short, medium, or long
             esg_constrained: Apply ESG filters
+            restrictions: Full replacement for ESG restrictions object (empty dict clears)
 
         Returns:
             Updated profile with all current settings
@@ -1607,11 +1693,36 @@ def register_client_tools(
                 updates_profile["esg_constrained"] = esg_constrained
                 changes.append("esg_constrained")
 
+            # Handle restrictions update
+            validated_restrictions: ClientRestrictions | None = None
+            if restrictions is not None:
+                if restrictions == {}:
+                    # Empty dict clears restrictions
+                    updates_profile["restrictions"] = ""
+                    changes.append("restrictions")
+                else:
+                    try:
+                        validated_restrictions = ClientRestrictions(**restrictions)
+                        updates_profile["restrictions"] = validated_restrictions.model_dump_json()
+                        changes.append("restrictions")
+                        # Auto-enable esg_constrained if exclusions are defined
+                        if validated_restrictions.has_exclusions() and esg_constrained is None:
+                            updates_profile["esg_constrained"] = True
+                            if "esg_constrained" not in changes:
+                                changes.append("esg_constrained")
+                    except ValidationError as ve:
+                        return error_response(
+                            error_code="INVALID_RESTRICTIONS",
+                            message="Invalid restrictions schema",
+                            recovery_strategy="Check restrictions structure against documented schema.",
+                            details={"validation_errors": ve.errors()},
+                        )
+
             if not changes and benchmark is None:
                 return error_response(
                     error_code="NO_UPDATES_PROVIDED",
                     message="No update fields provided",
-                    recovery_strategy="Provide at least one field: alert_frequency, impact_threshold, mandate_type, mandate_text, horizon, benchmark, esg_constrained.",
+                    recovery_strategy="Provide at least one field: alert_frequency, impact_threshold, mandate_type, mandate_text, horizon, benchmark, esg_constrained, restrictions.",
                 )
 
             with graph_index._get_session() as session:

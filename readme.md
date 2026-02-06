@@ -1,4 +1,4 @@
-# GOFR-IQ: Financial News Intelligence Platform
+# GOFR-IQ: Financial News Intelligence Hub
 
 > **APAC-focused news ingestion, semantic search, and client-personalized ranking system.**
 

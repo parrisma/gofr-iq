@@ -1,7 +1,7 @@
 import sys
 import logging
-import os
 import json
+import random
 from pathlib import Path
 from typing import Any
 
@@ -9,11 +9,62 @@ from typing import Any
 sys.path.append(str(Path(__file__).parent.parent))
 
 from app.services.graph_index import GraphIndex
+from app.services.llm_service import ChatMessage, create_llm_service, llm_available, LLMService
 from simulation.universe.builder import UniverseBuilder
 from simulation.generate_synthetic_clients import ClientGenerator
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+_mandate_llm_service: LLMService | None = None
+
+
+def _random_impact_threshold(client_name: str) -> float:
+    """Generate a deterministic 'random' impact threshold in 10-pt increments.
+
+    Range: 20..80 (inclusive), rounded to 10.
+    """
+    rng = random.Random(client_name)
+    return float(rng.choice(list(range(20, 81, 10))))
+
+
+def _build_mandate_text(client_name: str) -> str:
+    """Generate a mandate text based on the client name."""
+    fallback = (
+        f"{client_name} runs a global macro strategy focused on rates, FX, and commodities. "
+        "The mandate emphasizes medium-term positioning, policy divergence, and macro dislocations. "
+        "Risk is diversified across geographies and asset classes with strict drawdown limits and "
+        "liquidity constraints."
+    )
+
+    if not llm_available():
+        return fallback
+
+    global _mandate_llm_service
+    if _mandate_llm_service is None:
+        _mandate_llm_service = create_llm_service()
+
+    try:
+        prompt = (
+            "Write a short investment mandate (2-3 sentences) for a client. "
+            "Use the client name to add a realistic flavor. "
+            "Focus on global macro, medium-term horizon, and mention rates/FX/commodities. "
+            "Keep it concise and suitable for semantic matching."
+        )
+        result = _mandate_llm_service.chat_completion(
+            messages=[
+                ChatMessage(role="system", content="You write concise investment mandates."),
+                ChatMessage(role="user", content=f"Client name: {client_name}"),
+                ChatMessage(role="user", content=prompt),
+            ],
+            temperature=0.4,
+            max_tokens=120,
+        )
+        content = result.content.strip()
+        return content or fallback
+    except Exception as exc:
+        logger.warning(f"Mandate LLM generation failed, using fallback: {exc}")
+        return fallback
 
 
 def _get_admin_token() -> str:
@@ -64,6 +115,7 @@ def _create_client_via_mcp(client_data: dict[str, Any], token: str) -> dict[str,
         Response from create_client MCP call
     """
     import subprocess
+    import tempfile
     
     project_root = Path(__file__).parent.parent
     cmd = [
@@ -81,6 +133,8 @@ def _create_client_via_mcp(client_data: dict[str, Any], token: str) -> dict[str,
         cmd.extend(["--impact-threshold", str(client_data["impact_threshold"])])
     if "mandate_type" in client_data:
         cmd.extend(["--mandate-type", client_data["mandate_type"]])
+    if "mandate_text" in client_data:
+        cmd.extend(["--mandate-text", client_data["mandate_text"]])
     if "benchmark" in client_data:
         cmd.extend(["--benchmark", client_data["benchmark"]])
     if "horizon" in client_data:
@@ -88,7 +142,22 @@ def _create_client_via_mcp(client_data: dict[str, Any], token: str) -> dict[str,
     if client_data.get("esg_constrained", False):
         cmd.append("--esg-constrained")
     
-    result = subprocess.run(cmd, capture_output=True, text=True, cwd=project_root)
+    # Handle restrictions via temp file if present
+    restrictions_file = None
+    if "restrictions" in client_data and client_data["restrictions"]:
+        restrictions_file = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False
+        )
+        json.dump(client_data["restrictions"], restrictions_file)
+        restrictions_file.close()
+        cmd.extend(["--restrictions-file", restrictions_file.name])
+    
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=project_root)
+    finally:
+        # Clean up temp file
+        if restrictions_file:
+            Path(restrictions_file.name).unlink(missing_ok=True)
     
     if result.returncode != 0:
         raise RuntimeError(f"Failed to create client via MCP: {result.stderr}")
@@ -355,7 +424,7 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                         MERGE (a)-[r:{rel.type}]->(b)
                         SET r.description = $desc,
                             r.simulation_id = 'phase1'
-                        """,
+                        """,  # type: ignore[arg-type] - f-string query with dynamic rel.type
                         {
                             "src_ticker": rel.source,
                             "tgt_ticker": rel.target,
@@ -446,11 +515,17 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                     client_type = type_map.get(client.archetype.name, "HEDGE_FUND")
                     
                     # Map investment horizon
-                    horizon_map = {
-                        "SHORT_TERM": "short",
-                        "LONG_TERM": "long",
-                    }
-                    horizon = horizon_map.get(client.archetype.investment_horizon, "medium")
+                    horizon = "medium"
+
+                    impact_threshold = _random_impact_threshold(client.name)
+                    mandate_text = client.mandate_text or _build_mandate_text(client.name)
+                    
+                    # Determine if client is ESG constrained (has exclusions)
+                    esg_constrained = False
+                    if client.restrictions:
+                        ethical = client.restrictions.get("ethical_sector", {})
+                        if ethical.get("excluded_industries"):
+                            esg_constrained = True
                     
                     # Create client via MCP (creates Client, Profile, Portfolio, Watchlist)
                     try:
@@ -458,9 +533,13 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                             {
                                 "name": client.name,
                                 "client_type": client_type,
-                                "alert_frequency": "daily",
-                                "impact_threshold": 50.0,
+                                "alert_frequency": "weekly",
+                                "impact_threshold": impact_threshold,
+                                "mandate_type": "global_macro",
+                                "mandate_text": mandate_text,
                                 "horizon": horizon,
+                                "esg_constrained": esg_constrained,
+                                "restrictions": client.restrictions,
                             },
                             token,
                         )

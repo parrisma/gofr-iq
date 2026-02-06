@@ -14,7 +14,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from simulation.run_simulation import (
+from simulation.run_simulation import (  # noqa: E402 - path modification required before import
     count_existing_documents,
     load_generation_metadata
 )

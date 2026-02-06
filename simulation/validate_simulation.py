@@ -16,7 +16,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
 
 # SSOT: Import env module
-from gofr_common.gofr_env import get_admin_token, GofrEnvError
+from gofr_common.gofr_env import get_admin_token, GofrEnvError  # noqa: E402 - path modification required before import
 
 
 def validate_neo4j(verbose: bool = False) -> dict:
@@ -42,12 +42,14 @@ def validate_neo4j(verbose: bool = False) -> dict:
     with driver.session() as session:
         # Count key node types
         for label in ["Company", "Factor", "Client", "Document", "Source"]:
-            result = session.run(f"MATCH (n:{label}) RETURN count(n) as count")
-            counts[label] = result.single()["count"]
+            result = session.run(f"MATCH (n:{label}) RETURN count(n) as count")  # type: ignore[arg-type] - f-string query
+            record = result.single()
+            counts[label] = record["count"] if record else 0
         
         # Count relationships
         result = session.run("MATCH ()-[r]->() RETURN count(r) as count")
-        counts["Relationships"] = result.single()["count"]
+        record = result.single()
+        counts["Relationships"] = record["count"] if record else 0
     
     driver.close()
     
@@ -133,7 +135,7 @@ def check_gate(gate: str, verbose: bool = False) -> bool:
         
         print(f"   Found {src_count} sources in MCP registry")
         if src_count >= 5:
-            print(f"   ✓ Sources gate passed (expected >= 5)")
+            print("   ✓ Sources gate passed (expected >= 5)")
             return True
         else:
             print(f"   ❌ Sources gate failed (found {src_count}, expected >= 5)")
@@ -147,10 +149,10 @@ def check_gate(gate: str, verbose: bool = False) -> bool:
         
         # We expect 16 companies and 5 factors
         if companies >= 16 and factors >= 5:
-            print(f"   ✓ Universe gate passed")
+            print("   ✓ Universe gate passed")
             return True
         else:
-             print(f"   ❌ Universe gate failed (expected Companies>=16, Factors>=5)")
+             print("   ❌ Universe gate failed (expected Companies>=16, Factors>=5)")
              return False
 
     elif gate == "clients":
@@ -158,10 +160,10 @@ def check_gate(gate: str, verbose: bool = False) -> bool:
         clients = counts.get("Client", 0)
         print(f"   Found Clients={clients}")
         if clients >= 3:
-            print(f"   ✓ Clients gate passed")
+            print("   ✓ Clients gate passed")
             return True
         else:
-            print(f"   ❌ Clients gate failed (expected >= 3)")
+            print("   ❌ Clients gate failed (expected >= 3)")
             return False
 
     elif gate == "generation":
@@ -181,10 +183,10 @@ def check_gate(gate: str, verbose: bool = False) -> bool:
         # OR they might not exist if it's a fresh run without generation (which is invalid for ingestion).
         # We'll enforce > 0.
         if count > 0:
-            print(f"   ✓ Generation gate passed")
+            print("   ✓ Generation gate passed")
             return True
         else:
-            print(f"   ❌ Generation gate failed (0 files found)")
+            print("   ❌ Generation gate failed (0 files found)")
             return False
 
     elif gate == "ingestion":
@@ -201,12 +203,12 @@ def check_gate(gate: str, verbose: bool = False) -> bool:
         print(f"   Files: {file_count}, Neo4j Nodes: {doc_nodes}, Embeddings: {embeddings}")
         
         if doc_nodes == 0:
-            print(f"   ❌ Ingestion gate failed (0 Document nodes)")
+            print("   ❌ Ingestion gate failed (0 Document nodes)")
             return False
             
         # Each document may create multiple embedding chunks, so embeddings >= doc_nodes
         if embeddings < doc_nodes:
-             print(f"   ❌ Ingestion gate failed (fewer embeddings than documents)")
+             print("   ❌ Ingestion gate failed (fewer embeddings than documents)")
              return False
              
         print(f"   ✓ Ingestion gate passed (embeddings/doc ratio: {embeddings/doc_nodes:.1f})")

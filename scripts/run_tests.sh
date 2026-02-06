@@ -11,6 +11,12 @@
 #   ./scripts/run_tests.sh --coverage         # Run with coverage report
 #   ./scripts/run_tests.sh --stop             # Stop test infrastructure
 #   ./scripts/run_tests.sh --cleanup-only     # Clean up containers/volumes
+#   ./scripts/run_tests.sh --check            # Pre-flight check only (no tests)
+#
+# Secrets (can be passed via environment or command line):
+#   --api-key KEY         Set GOFR_IQ_OPENROUTER_API_KEY (required for LLM tests)
+#   --jwt-secret SECRET   Set GOFR_JWT_SECRET (auto-generated if not set)
+#   --neo4j-password PWD  Set GOFR_IQ_NEO4J_PASSWORD (default: testpassword)
 #
 # Infrastructure:
 #   - Vault (gofr-vault-test) - Auth backend
@@ -19,6 +25,37 @@
 #   - MCP/MCPO/Web test servers
 #
 # All test ports are offset by +100 from production (see gofr_ports.env).
+#
+# =============================================================================
+# REQUIRED ENVIRONMENT VARIABLES
+# =============================================================================
+# These are typically loaded from lib/gofr-common/.env:
+#
+#   GOFR_IQ_OPENROUTER_API_KEY  - OpenRouter API key for LLM tests (REQUIRED)
+#                                  Tests that use LLM will SKIP without this
+#   GOFR_JWT_SECRET             - JWT signing secret (auto-generated if not set)
+#   GOFR_IQ_NEO4J_PASSWORD      - Neo4j password (default: testpassword)
+#   GOFR_IQ_LLM_MODEL           - LLM model (default: meta-llama/llama-3.1-70b-instruct)
+#
+# =============================================================================
+# SKIP CONDITIONS
+# =============================================================================
+# Tests may be skipped under these conditions:
+#
+# 1. GOFR_IQ_OPENROUTER_API_KEY not set:
+#    - test_integration_llm.py (all tests) - LLM integration tests
+#    - test_end_to_end_ingest_query.py - E2E ingest/query tests with real LLM
+#
+# 2. Neo4j not available (bolt://gofr-iq-neo4j-test:7687):
+#    - test_graph_index.py (all tests) - Graph database tests
+#
+# 3. MCPO server not running:
+#    - test_mcpo_group_access.py - Group-based access control tests
+#    - test_vault_integration.py::test_jwt_reaches_mcp_tools_via_mcpo
+#
+# 4. Vault backend not configured (GOFR_AUTH_BACKEND != "vault"):
+#    - test_vault_integration.py::TestVaultBackend (all tests)
+#
 # =============================================================================
 
 set -euo pipefail
@@ -53,10 +90,16 @@ COVERAGE_HTML=false
 STOP_ONLY=false
 CLEANUP_ONLY=false
 REBUILD_IMAGES=false
+CHECK_ONLY=false
 PYTEST_ARGS=()
 TEST_ENV_STARTED=false
 TEST_SERVERS_STARTED=false
 CLEANUP_IN_PROGRESS=false
+
+# Command-line overrides (applied after .env loading)
+CLI_API_KEY=""
+CLI_JWT_SECRET=""
+CLI_NEO4J_PASSWORD=""
 
 # Activate virtual environment
 VENV_DIR="${PROJECT_ROOT}/.venv"
@@ -96,23 +139,50 @@ while [[ $# -gt 0 ]]; do
             CLEANUP_ONLY=true
             shift
             ;;
+        --check)
+            CHECK_ONLY=true
+            shift
+            ;;
+        --api-key)
+            CLI_API_KEY="$2"
+            shift 2
+            ;;
+        --jwt-secret)
+            CLI_JWT_SECRET="$2"
+            shift 2
+            ;;
+        --neo4j-password)
+            CLI_NEO4J_PASSWORD="$2"
+            shift 2
+            ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS] [PYTEST_ARGS...]"
             echo ""
             echo "Options:"
-            echo "  --docker          Run tests inside the dev container"
-            echo "  --coverage        Enable coverage (terminal report)"
-            echo "  --coverage-html   Add HTML coverage report"
-            echo "  --rebuild         Rebuild Docker images before tests"
-            echo "  --stop            Stop test servers and exit"
-            echo "  --cleanup-only    Clean environment and exit"
-            echo "  --help, -h        Show this help message"
+            echo "  --docker            Run tests inside the dev container"
+            echo "  --coverage          Enable coverage (terminal report)"
+            echo "  --coverage-html     Add HTML coverage report"
+            echo "  --rebuild           Rebuild Docker images before tests"
+            echo "  --stop              Stop test servers and exit"
+            echo "  --cleanup-only      Clean environment and exit"
+            echo "  --check             Pre-flight check only (verify secrets, no tests)"
+            echo "  --help, -h          Show this help message"
+            echo ""
+            echo "Secrets (can also be set via environment or lib/gofr-common/.env):"
+            echo "  --api-key KEY       Set GOFR_IQ_OPENROUTER_API_KEY (required for LLM tests)"
+            echo "  --jwt-secret SECRET Set GOFR_JWT_SECRET (auto-generated if not set)"
+            echo "  --neo4j-password P  Set GOFR_IQ_NEO4J_PASSWORD (default: testpassword)"
             echo ""
             echo "Examples:"
-            echo "  $0                          # Run all tests"
-            echo "  $0 test/test_auth*.py       # Run specific tests"
-            echo "  $0 -k 'ingest'              # Run tests matching keyword"
-            echo "  $0 --coverage               # Run with coverage"
+            echo "  $0                                    # Run all tests"
+            echo "  $0 test/test_auth*.py                 # Run specific tests"
+            echo "  $0 -k 'ingest'                        # Run tests matching keyword"
+            echo "  $0 --coverage                         # Run with coverage"
+            echo "  $0 --api-key sk-or-v1-xxxxx           # Run with explicit API key"
+            echo "  $0 --check                            # Verify environment only"
+            echo ""
+            echo "Required secrets (see header for skip conditions):"
+            echo "  GOFR_IQ_OPENROUTER_API_KEY - Required for LLM tests (costs ~\$0.01-0.05)"
             exit 0
             ;;
         *)
@@ -160,6 +230,20 @@ if [ -f "${GOFR_COMMON_ENV}" ]; then
     echo "Loaded secrets from gofr-common/.env"
 fi
 
+# Apply command-line overrides (take precedence over .env)
+if [ -n "${CLI_API_KEY}" ]; then
+    export GOFR_IQ_OPENROUTER_API_KEY="${CLI_API_KEY}"
+    echo "  Using API key from command line"
+fi
+if [ -n "${CLI_JWT_SECRET}" ]; then
+    export GOFR_JWT_SECRET="${CLI_JWT_SECRET}"
+    echo "  Using JWT secret from command line"
+fi
+if [ -n "${CLI_NEO4J_PASSWORD}" ]; then
+    export GOFR_IQ_NEO4J_PASSWORD="${CLI_NEO4J_PASSWORD}"
+    echo "  Using Neo4j password from command line"
+fi
+
 # Set defaults
 export GOFR_VAULT_DEV_TOKEN="${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}"
 if [ -z "${GOFR_JWT_SECRET:-}" ]; then
@@ -198,6 +282,83 @@ else
 fi
 
 mkdir -p "${LOG_DIR}"
+
+# =============================================================================
+# PRE-FLIGHT CHECK
+# =============================================================================
+
+preflight_check() {
+    echo -e "${GREEN}=== Pre-flight Environment Check ===${NC}"
+    local warnings=0
+    local errors=0
+    
+    echo ""
+    echo -e "${BLUE}Required Secrets:${NC}"
+    
+    # Check OpenRouter API Key (required for LLM tests)
+    if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
+        echo -e "  ${GREEN}✓${NC} GOFR_IQ_OPENROUTER_API_KEY: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
+    else
+        echo -e "  ${YELLOW}⚠${NC} GOFR_IQ_OPENROUTER_API_KEY: NOT SET"
+        echo -e "    ${YELLOW}Tests that will SKIP without this:${NC}"
+        echo "      - test_integration_llm.py (all LLM integration tests)"
+        echo "      - test_end_to_end_ingest_query.py (E2E tests with real LLM)"
+        echo "    Set via: --api-key KEY, environment, or lib/gofr-common/.env"
+        ((warnings++))
+    fi
+    
+    # Check JWT Secret
+    if [ -n "${GOFR_JWT_SECRET:-}" ]; then
+        echo -e "  ${GREEN}✓${NC} GOFR_JWT_SECRET: ${GOFR_JWT_SECRET:0:20}..."
+    else
+        echo -e "  ${RED}✗${NC} GOFR_JWT_SECRET: NOT SET (will be auto-generated)"
+    fi
+    
+    # Check Neo4j password
+    echo -e "  ${GREEN}✓${NC} GOFR_IQ_NEO4J_PASSWORD: ${GOFR_IQ_NEO4J_PASSWORD:-testpassword} (default: testpassword)"
+    
+    echo ""
+    echo -e "${BLUE}Infrastructure (will be started by test runner):${NC}"
+    echo "  Vault:    gofr-vault-test:8200"
+    echo "  Neo4j:    gofr-iq-neo4j-test:7687"
+    echo "  ChromaDB: gofr-iq-chromadb-test:8000"
+    echo "  MCP:      localhost:${GOFR_IQ_MCP_PORT}"
+    echo "  MCPO:     localhost:${GOFR_IQ_MCPO_PORT}"
+    echo "  Web:      localhost:${GOFR_IQ_WEB_PORT}"
+    
+    echo ""
+    echo -e "${BLUE}Optional Settings:${NC}"
+    echo "  GOFR_IQ_LLM_MODEL: ${GOFR_IQ_LLM_MODEL:-meta-llama/llama-3.1-70b-instruct}"
+    echo "  GOFR_AUTH_BACKEND: ${GOFR_AUTH_BACKEND:-vault}"
+    
+    echo ""
+    echo -e "${BLUE}Source Files:${NC}"
+    if [ -f "${GOFR_COMMON_ENV}" ]; then
+        echo -e "  ${GREEN}✓${NC} ${GOFR_COMMON_ENV}"
+    else
+        echo -e "  ${YELLOW}⚠${NC} ${GOFR_COMMON_ENV} (not found - using defaults)"
+        ((warnings++))
+    fi
+    if [ -f "${GOFR_PORTS_FILE}" ]; then
+        echo -e "  ${GREEN}✓${NC} ${GOFR_PORTS_FILE}"
+    else
+        echo -e "  ${RED}✗${NC} ${GOFR_PORTS_FILE} (REQUIRED)"
+        ((errors++))
+    fi
+    
+    echo ""
+    if [ $errors -gt 0 ]; then
+        echo -e "${RED}Pre-flight check FAILED: $errors error(s), $warnings warning(s)${NC}"
+        return 1
+    elif [ $warnings -gt 0 ]; then
+        echo -e "${YELLOW}Pre-flight check PASSED with $warnings warning(s)${NC}"
+        echo -e "${YELLOW}Some tests may be skipped. See above for details.${NC}"
+        return 0
+    else
+        echo -e "${GREEN}Pre-flight check PASSED${NC}"
+        return 0
+    fi
+}
 
 # =============================================================================
 # HELPER FUNCTIONS
@@ -288,6 +449,15 @@ trap cleanup_environment EXIT INT TERM
 # =============================================================================
 
 print_header
+
+# Run pre-flight check
+preflight_check
+PREFLIGHT_STATUS=$?
+
+# Handle check-only mode
+if [ "$CHECK_ONLY" = true ]; then
+    exit $PREFLIGHT_STATUS
+fi
 
 # Handle stop-only mode
 if [ "$STOP_ONLY" = true ]; then
