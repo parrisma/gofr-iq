@@ -194,7 +194,7 @@ def get_client_feed(
                 supply_chain_query = """
                 MATCH (c:Client {guid: $client_guid})-[:HAS_PORTFOLIO]->(p:Portfolio)-[h:HOLDS]->(held:Instrument)
                 MATCH (held)<-[:ISSUED_BY]-(heldCompany:Company)
-                MATCH (heldCompany)<-[:SUPPLIER_OF|:SUPPLIES_TO|:PARTNER_OF]-(relatedCompany:Company)
+                MATCH (heldCompany)<-[:SUPPLIER_OF|SUPPLIES_TO|PARTNER_OF]-(relatedCompany:Company)
                 MATCH (relatedCompany)-[:ISSUED_BY]->(related:Instrument)
                 MATCH (d:Document)-[:AFFECTS]->(related)
                 MATCH (d)-[:PRODUCED_BY]->(s:Source)

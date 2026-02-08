@@ -997,3 +997,67 @@ class TestClientFeedQuery:
         )
         
         assert len(feed) == 0
+
+
+class TestDocumentThemes:
+    """Tests for set_document_themes — Step 2 of the Avatar plan."""
+
+    @pytest.fixture
+    def graph_index(self) -> Generator[GraphIndex, None, None]:
+        """Graph with a single document ready for theme assignment."""
+        uri = NEO4J_URI
+        password = NEO4J_PASSWORD
+        index = GraphIndex(uri=uri, password=password)
+        index.clear()
+        index.init_schema()
+
+        index.create_node(NodeLabel.SOURCE, "src-1", {"name": "Reuters"})
+        index.create_node(NodeLabel.GROUP, "grp-1", {"name": "Test Group"})
+        index.create_document_node("doc-001", "src-1", "grp-1", "Chip War Escalates", "en")
+
+        yield index
+        index.clear()
+        index.close()
+
+    def test_set_themes_stores_list(self, graph_index: GraphIndex) -> None:
+        """Themes list is persisted and readable via Cypher."""
+        themes = ["semiconductor", "geopolitical", "supply_chain"]
+        doc = graph_index.set_document_themes("doc-001", themes)
+
+        assert doc.properties["themes"] == themes
+
+        # Also verify via raw Cypher
+        with graph_index._get_session() as session:
+            record = session.run(
+                "MATCH (d:Document {guid: 'doc-001'}) RETURN d.themes AS themes"
+            ).single()
+            assert record is not None
+            assert set(record["themes"]) == set(themes)
+
+    def test_set_themes_empty_list(self, graph_index: GraphIndex) -> None:
+        """Setting an empty list clears any previous themes."""
+        graph_index.set_document_themes("doc-001", ["ai", "china"])
+        doc = graph_index.set_document_themes("doc-001", [])
+
+        assert doc.properties["themes"] == []
+
+    def test_set_themes_overwrites_previous(self, graph_index: GraphIndex) -> None:
+        """A second call replaces the previous list entirely."""
+        graph_index.set_document_themes("doc-001", ["ai", "semiconductor"])
+        doc = graph_index.set_document_themes("doc-001", ["esg", "energy_transition"])
+
+        assert doc.properties["themes"] == ["esg", "energy_transition"]
+
+    def test_set_themes_document_not_found(self, graph_index: GraphIndex) -> None:
+        """Raises RuntimeError for a non-existent document."""
+        with pytest.raises(RuntimeError, match="Document not found"):
+            graph_index.set_document_themes("no-such-doc", ["ai"])
+
+    def test_themes_coexist_with_impact(self, graph_index: GraphIndex) -> None:
+        """Themes and impact properties sit side-by-side on the same node."""
+        graph_index.set_document_impact("doc-001", 80.0, "GOLD", 0.10)
+        doc = graph_index.set_document_themes("doc-001", ["rates", "fx"])
+
+        assert doc.properties["impact_score"] == 80.0
+        assert doc.properties["impact_tier"] == "GOLD"
+        assert doc.properties["themes"] == ["rates", "fx"]

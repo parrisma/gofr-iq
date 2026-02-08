@@ -191,6 +191,21 @@ For each affected instrument, indicate expected price impact:
 - `MIXED`: Uncertain or mixed impact
 - `NEUTRAL`: News mentioned but no direct price impact
 
+## Thematic Tagging
+
+Tag each article with **investment themes** from this controlled vocabulary:
+
+`ai`, `semiconductor`, `ev_battery`, `supply_chain`, `m_and_a`, `rates`, `fx`, `credit`,
+`esg`, `energy_transition`, `geopolitical`, `japan`, `china`, `india`, `korea`,
+`fintech`, `biotech`, `real_estate`, `commodities`, `consumer`, `defense`,
+`cloud`, `cybersecurity`, `autonomous_vehicles`, `blockchain`
+
+**Rules**:
+- Use ONLY values from the vocabulary above (lowercase, underscores)
+- Typically 1–4 themes per article; omit if none apply
+- Choose the most specific theme: "semiconductor" over "supply_chain" for a chip shortage article
+- Only tag themes explicitly supported by the article content
+
 ## Output Format
 
 Respond with ONLY valid JSON in this exact structure:
@@ -217,6 +232,7 @@ Respond with ONLY valid JSON in this exact structure:
   "companies": ["Apple Inc.", "Apple", "Samsung"],
   "regions": ["Global", "North America"],
   "sectors": ["Technology", "Consumer Electronics"],
+  "themes": ["semiconductor", "consumer"],
   "summary": "Apple beats Q3 earnings expectations with strong iPhone sales"
 }
 ```
@@ -340,6 +356,7 @@ class GraphExtractionResult:
     companies: list[str] = field(default_factory=list)
     regions: list[str] = field(default_factory=list)
     sectors: list[str] = field(default_factory=list)
+    themes: list[str] = field(default_factory=list)
     summary: str = ""
     raw_response: str = ""
     
@@ -353,6 +370,7 @@ class GraphExtractionResult:
             "companies": self.companies,
             "regions": self.regions,
             "sectors": self.sectors,
+            "themes": self.themes,
             "summary": self.summary,
         }
     
@@ -489,6 +507,10 @@ def parse_extraction_response(response: str) -> GraphExtractionResult:
     companies_list = data.get("companies", [])
     session_logger.debug(f"Parsed {len(companies_list)} companies from LLM extraction: {companies_list[:5]}")
     
+    # Parse themes (controlled vocabulary, lowercase, strip whitespace)
+    raw_themes = data.get("themes", [])
+    themes = [t.strip().lower().replace(" ", "_") for t in raw_themes if isinstance(t, str) and t.strip()]
+
     return GraphExtractionResult(
         impact_score=impact_score,
         impact_tier=impact_tier,
@@ -497,6 +519,7 @@ def parse_extraction_response(response: str) -> GraphExtractionResult:
         companies=companies_list,
         regions=data.get("regions", []),
         sectors=data.get("sectors", []),
+        themes=themes,
         summary=data.get("summary", "")[:200],  # Truncate if too long
         raw_response=response,
     )

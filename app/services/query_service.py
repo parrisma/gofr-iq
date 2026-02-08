@@ -170,6 +170,61 @@ class QueryResponse:
     execution_time_ms: float = 0.0
 
 
+# =============================================================================
+# Avatar Feed Types (Two-Channel Model)
+# =============================================================================
+
+
+@dataclass
+class AvatarFeedItem:
+    """A single item in the client avatar feed.
+
+    Attributes:
+        document_guid: Document GUID
+        title: Document title
+        created_at: Document creation timestamp (ISO string)
+        impact_score: Impact score (0-100)
+        impact_tier: Impact tier (PLATINUM/GOLD/SILVER/BRONZE/STANDARD)
+        affected_instruments: List of ticker symbols affected
+        themes: List of document themes
+        relevance_score: Computed relevance score for this client
+        channel: Which feed channel this item belongs to (MAINTENANCE or OPPORTUNITY)
+        reason: Human-readable explanation of why this item is relevant
+    """
+
+    document_guid: str
+    title: str
+    created_at: Optional[str]
+    impact_score: Optional[float]
+    impact_tier: Optional[str]
+    affected_instruments: list[str] = field(default_factory=list)
+    themes: list[str] = field(default_factory=list)
+    relevance_score: float = 0.0
+    channel: str = "MAINTENANCE"
+    reason: str = ""
+
+
+@dataclass
+class AvatarFeed:
+    """Two-channel client avatar feed.
+
+    The maintenance channel contains news about the client's existing positions
+    (holdings + watchlist). The opportunity channel contains news matching the
+    client's mandate themes but NOT overlapping with existing positions.
+
+    Attributes:
+        client_guid: Client GUID this feed was generated for
+        maintenance: News about existing positions (holdings, watchlist)
+        opportunity: New ideas matching mandate themes (excludes existing positions)
+        combined: Merged and ranked list of all items
+    """
+
+    client_guid: str
+    maintenance: list[AvatarFeedItem] = field(default_factory=list)
+    opportunity: list[AvatarFeedItem] = field(default_factory=list)
+    combined: list[AvatarFeedItem] = field(default_factory=list)
+
+
 class QueryService:
     """Hybrid search service combining semantic similarity and graph context
 
@@ -530,6 +585,243 @@ class QueryService:
         scored.sort(key=lambda x: x["relevance_score"], reverse=True)
         return scored[:limit]
 
+    # =========================================================================
+    # AVATAR FEED (Two-Channel Model)
+    # =========================================================================
+
+    def get_client_avatar_feed(
+        self,
+        client_guid: str,
+        group_guids: list[str],
+        limit: int = 10,
+        time_window_hours: int = 24,
+        min_impact_score: float | None = None,
+        impact_tiers: list[str] | None = None,
+    ) -> AvatarFeed:
+        """Get client news feed using the two-channel avatar model.
+
+        Channel 1 (MAINTENANCE): News affecting holdings/watchlist.
+        Channel 2 (OPPORTUNITY): Mandate-themed news NOT affecting existing positions.
+
+        This method is deterministic and does not use LLM at query time.
+        Themes and mandate_themes are precomputed at ingest/profile-update time.
+
+        Args:
+            client_guid: Client GUID
+            group_guids: Permitted group GUIDs (access control)
+            limit: Maximum total items (split between channels)
+            time_window_hours: How far back to look
+            min_impact_score: Minimum impact score filter
+            impact_tiers: Impact tier filter (default: PLATINUM, GOLD, SILVER)
+
+        Returns:
+            AvatarFeed with maintenance, opportunity, and combined lists
+        """
+        if not self.graph_index:
+            logger.warning("Avatar feed requested without graph index")
+            return AvatarFeed(client_guid=client_guid)
+
+        if limit <= 0:
+            return AvatarFeed(client_guid=client_guid)
+
+        # Load client context
+        profile = self._get_client_profile_context(client_guid, group_guids)
+        if not profile:
+            return AvatarFeed(client_guid=client_guid)
+
+        holdings = self._get_client_holdings(client_guid)
+        watchlist = self._get_client_watchlist(client_guid)
+
+        holding_tickers = [h["ticker"] for h in holdings if h.get("ticker")]
+        watchlist_tickers = [t for t in watchlist if t]
+        all_position_tickers = list(set(holding_tickers + watchlist_tickers))
+
+        # DEBUG: Log avatar feed inputs
+        logger.info(f"[AVATAR_DEBUG] client_guid={client_guid} holdings={holding_tickers} watchlist={watchlist_tickers} all_tickers={all_position_tickers} group_guids={group_guids}")
+
+        # Add benchmark to watchlist if present
+        benchmark = profile.get("benchmark")
+        if benchmark and benchmark not in all_position_tickers:
+            watchlist_tickers.append(benchmark)
+            all_position_tickers.append(benchmark)
+
+        resolved_min_impact = min_impact_score
+        if resolved_min_impact is None:
+            resolved_min_impact = profile.get("impact_threshold")
+
+        resolved_impact_tiers = impact_tiers or ["PLATINUM", "GOLD", "SILVER"]
+
+        now = datetime.utcnow()
+        time_cutoff = now - timedelta(hours=time_window_hours)
+
+        # Weights for position size
+        holding_weights = {h["ticker"]: h.get("weight", 0.0) for h in holdings if h.get("ticker")}
+
+        # ─────────────────────────────────────────────────────────────────────
+        # CHANNEL 1: MAINTENANCE (news about what the client owns)
+        # ─────────────────────────────────────────────────────────────────────
+        maintenance_items: list[AvatarFeedItem] = []
+
+        if all_position_tickers:
+            position_docs = self._get_documents_for_tickers(
+                tickers=all_position_tickers,
+                group_guids=group_guids,
+                min_impact_score=resolved_min_impact,
+                impact_tiers=resolved_impact_tiers,
+                limit=limit * 3,  # Fetch extra for filtering
+            )
+            # DEBUG: Log query results
+            logger.info(f"[AVATAR_DEBUG] position_docs count={len(position_docs)} docs={[d.get('title','?')[:30] for d in position_docs]}")
+
+            for doc in position_docs:
+                if not self._within_time_window(doc.get("created_at"), time_cutoff):
+                    continue
+
+                affected = doc.get("affected_instruments", [])
+                matched_holdings = [t for t in affected if t in holding_tickers]
+                matched_watchlist = [t for t in affected if t in watchlist_tickers and t not in holding_tickers]
+
+                # Build reason
+                if matched_holdings:
+                    reason = f"Affects your {', '.join(matched_holdings[:3])} position"
+                elif matched_watchlist:
+                    reason = f"Affects your watchlist: {', '.join(matched_watchlist[:3])}"
+                else:
+                    reason = "Affects your positions"
+
+                # Score: impact × recency × position_weight
+                impact_norm = self._normalize_impact_score(doc.get("impact_score"))
+                created_at = self._parse_datetime(doc.get("created_at"))
+                recency = self._calculate_recency_score({"created_at": created_at}, now)
+                position_weight = max(
+                    (holding_weights.get(t, 0.0) for t in affected),
+                    default=0.0,
+                )
+                # Minimum weight of 0.5 for watchlist items
+                position_weight = max(position_weight, 0.5) if matched_watchlist and not matched_holdings else max(position_weight, 1.0)
+
+                score = impact_norm * recency * position_weight
+
+                maintenance_items.append(AvatarFeedItem(
+                    document_guid=doc.get("document_guid", ""),
+                    title=doc.get("title", ""),
+                    created_at=doc.get("created_at"),
+                    impact_score=doc.get("impact_score"),
+                    impact_tier=doc.get("impact_tier"),
+                    affected_instruments=affected,
+                    themes=doc.get("themes", []) or [],
+                    relevance_score=score,
+                    channel="MAINTENANCE",
+                    reason=reason,
+                ))
+
+        # ─────────────────────────────────────────────────────────────────────
+        # CHANNEL 2: OPPORTUNITY (mandate-themed news, excludes positions)
+        # ─────────────────────────────────────────────────────────────────────
+        opportunity_items: list[AvatarFeedItem] = []
+
+        # Get mandate_themes from profile (stored on ClientProfile node)
+        mandate_themes = self._get_client_mandate_themes(client_guid)
+
+        if mandate_themes:
+            theme_docs = self._get_documents_by_themes(
+                themes=mandate_themes,
+                group_guids=group_guids,
+                exclude_tickers=all_position_tickers,
+                min_impact_score=resolved_min_impact,
+                impact_tiers=resolved_impact_tiers,
+                limit=limit * 3,
+            )
+
+            for doc in theme_docs:
+                if not self._within_time_window(doc.get("created_at"), time_cutoff):
+                    continue
+
+                doc_themes = doc.get("themes", []) or []
+                matched_themes = [t for t in doc_themes if t in mandate_themes]
+
+                if not matched_themes:
+                    continue
+
+                reason = f"Matches your {', '.join(matched_themes[:3])} focus"
+
+                # Score: theme_fit × impact × recency
+                impact_norm = self._normalize_impact_score(doc.get("impact_score"))
+                created_at = self._parse_datetime(doc.get("created_at"))
+                recency = self._calculate_recency_score({"created_at": created_at}, now)
+                theme_fit = len(matched_themes) / len(mandate_themes) if mandate_themes else 0.0
+
+                score = theme_fit * impact_norm * recency
+
+                opportunity_items.append(AvatarFeedItem(
+                    document_guid=doc.get("document_guid", ""),
+                    title=doc.get("title", ""),
+                    created_at=doc.get("created_at"),
+                    impact_score=doc.get("impact_score"),
+                    impact_tier=doc.get("impact_tier"),
+                    affected_instruments=doc.get("affected_instruments", []) or [],
+                    themes=doc_themes,
+                    relevance_score=score,
+                    channel="OPPORTUNITY",
+                    reason=reason,
+                ))
+
+        # ─────────────────────────────────────────────────────────────────────
+        # MERGE & RANK
+        # ─────────────────────────────────────────────────────────────────────
+        # Dedupe by document_guid (maintenance wins if in both)
+        maintenance_guids = {item.document_guid for item in maintenance_items}
+        opportunity_items = [item for item in opportunity_items if item.document_guid not in maintenance_guids]
+
+        # Sort each channel by score
+        maintenance_items.sort(key=lambda x: x.relevance_score, reverse=True)
+        opportunity_items.sort(key=lambda x: x.relevance_score, reverse=True)
+
+        # Combined: interleave, then sort by score
+        all_items = maintenance_items + opportunity_items
+        all_items.sort(key=lambda x: x.relevance_score, reverse=True)
+
+        # Limit results
+        half_limit = limit // 2
+        return AvatarFeed(
+            client_guid=client_guid,
+            maintenance=maintenance_items[:half_limit],
+            opportunity=opportunity_items[:half_limit],
+            combined=all_items[:limit],
+        )
+
+    def _get_client_mandate_themes(self, client_guid: str) -> list[str]:
+        """Get mandate_themes from the client's profile.
+
+        Returns an empty list if no profile or no mandate_themes set.
+        """
+        if not self.graph_index:
+            return []
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (c:Client {guid: $client_guid})-[:HAS_PROFILE]->(cp:ClientProfile)
+                    RETURN cp.mandate_themes AS mandate_themes
+                    """,
+                    client_guid=client_guid,
+                )
+                record = result.single()
+                if not record:
+                    return []
+                themes = record.get("mandate_themes")
+                if themes is None:
+                    return []
+                # Handle JSON string or list
+                if isinstance(themes, str):
+                    try:
+                        themes = json.loads(themes)
+                    except json.JSONDecodeError:
+                        return []
+                return [t for t in themes if isinstance(t, str) and t]
+        except Exception:
+            return []
+
     def _build_client_query_text(
         self,
         profile: dict[str, Any],
@@ -777,10 +1069,11 @@ class QueryService:
                d.impact_score AS impact_score,
                d.impact_tier AS impact_tier,
                collect(DISTINCT i.ticker) AS affected_instruments
-        ORDER BY d.created_at DESC
+        ORDER BY created_at DESC
         LIMIT $limit
         """
         try:
+            logger.info(f"[AVATAR_DEBUG] Query: tickers={tickers}, group_guids={group_guids}, impact_tiers={impact_tiers}, min_impact={min_impact_score}")
             with self.graph_index._get_session() as session:
                 result = session.run(
                     query,
@@ -790,8 +1083,11 @@ class QueryService:
                     impact_tiers=impact_tiers,
                     limit=limit,
                 )
-                return [dict(record) for record in result]
-        except Exception:
+                docs = [dict(record) for record in result]
+                logger.info(f"[AVATAR_DEBUG] _get_documents_for_tickers returned {len(docs)} docs for tickers={tickers}")
+                return docs
+        except Exception as e:
+            logger.error(f"[AVATAR_DEBUG] _get_documents_for_tickers EXCEPTION: {e}")
             return []
 
     def _expand_lateral_tickers(self, tickers: list[str]) -> dict[str, list[str]]:
@@ -804,7 +1100,7 @@ class QueryService:
                     MATCH (i:Instrument)-[:ISSUED_BY]->(c:Company)
                     WHERE i.ticker IN $tickers
                     OPTIONAL MATCH (c)-[:COMPETES_WITH]-(cc:Company)-[:ISSUED_BY]->(ci:Instrument)
-                    OPTIONAL MATCH (c)<-[:SUPPLIES_TO|:SUPPLIER_OF|:PARTNER_OF]-(sc:Company)-[:ISSUED_BY]->(si:Instrument)
+                    OPTIONAL MATCH (c)<-[:SUPPLIES_TO|SUPPLIER_OF|PARTNER_OF]-(sc:Company)-[:ISSUED_BY]->(si:Instrument)
                     OPTIONAL MATCH (c)-[:BELONGS_TO]->(s:Sector)<-[:BELONGS_TO]-(pc:Company)-[:ISSUED_BY]->(pi:Instrument)
                     RETURN collect(DISTINCT ci.ticker) AS competitors,
                            collect(DISTINCT si.ticker) AS suppliers,
@@ -822,6 +1118,86 @@ class QueryService:
                 }
         except Exception:
             return {"competitors": [], "suppliers": [], "peers": []}
+
+    def _get_documents_by_themes(
+        self,
+        themes: list[str],
+        group_guids: list[str],
+        exclude_tickers: list[str],
+        min_impact_score: float | None = None,
+        impact_tiers: list[str] | None = None,
+        limit: int = 50,
+    ) -> list[dict[str, Any]]:
+        """Get documents matching themes but NOT affecting excluded tickers.
+
+        Used for the OPPORTUNITY channel: find mandate-relevant news that is
+        novel (doesn't overlap with existing holdings/watchlist).
+
+        Args:
+            themes: List of theme strings to match (controlled vocabulary)
+            group_guids: Permitted group GUIDs for access control
+            exclude_tickers: Tickers to exclude (client's positions)
+            min_impact_score: Minimum impact score filter
+            impact_tiers: Impact tier filter
+            limit: Maximum results
+
+        Returns:
+            List of document dicts with themes and affected_instruments
+        """
+        if not self.graph_index or not themes:
+            return []
+
+        query = """
+        MATCH (d:Document)-[:IN_GROUP]->(g:Group)
+        WHERE g.guid IN $group_guids
+          AND d.themes IS NOT NULL
+          AND any(t IN d.themes WHERE t IN $themes)
+        """
+
+        if min_impact_score is not None:
+            query += "\n  AND d.impact_score >= $min_impact_score"
+        if impact_tiers:
+            query += "\n  AND d.impact_tier IN $impact_tiers"
+
+        # Get affected instruments to filter out overlap with existing positions
+        query += """
+        OPTIONAL MATCH (d)-[:AFFECTS]->(i:Instrument)
+        WITH d, collect(DISTINCT i.ticker) AS tickers
+        """
+
+        # Exclude documents that affect any of the client's existing tickers
+        if exclude_tickers:
+            query += """
+        WHERE NONE(t IN tickers WHERE t IN $exclude_tickers)
+        """
+
+        query += """
+        RETURN d.guid AS document_guid,
+               d.title AS title,
+               d.created_at AS created_at,
+               d.impact_score AS impact_score,
+               d.impact_tier AS impact_tier,
+               d.themes AS themes,
+               tickers AS affected_instruments
+        ORDER BY created_at DESC
+        LIMIT $limit
+        """
+
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    query,
+                    themes=themes,
+                    group_guids=group_guids,
+                    exclude_tickers=exclude_tickers or [],
+                    min_impact_score=min_impact_score,
+                    impact_tiers=impact_tiers,
+                    limit=limit,
+                )
+                return [dict(record) for record in result]
+        except Exception as e:
+            logger.warning(f"Error fetching documents by themes: {e}")
+            return []
 
     def _within_time_window(self, created_at: Any, cutoff: datetime) -> bool:
         if created_at is None:

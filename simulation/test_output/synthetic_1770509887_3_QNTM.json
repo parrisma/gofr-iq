@@ -1,0 +1,37 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-15T06:54:07.928232",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute (QNTM) has announced a series of unremarkable updates across various departments, underscoring the company's continued commitment to incremental progress.\n\nIn a move expected to have minimal impact on the company's overall trajectory, QNTM has appointed a new Director of Talent Acquisition, tasked with streamlining the hiring process for engineering and research positions. The new director brings a background in technical recruitment, with a focus on attracting top talent in the fields of quantum computing and advanced materials science.\n\nOn the marketing front, QNTM has launched a revamped website featuring enhanced product documentation and technical resources. The updated site includes detailed datasheets for the company's flagship quantum processing units (QPUs), as well as expanded developer resources and API documentation. While the redesign is unlikely to generate significant buzz, it should provide a more seamless experience for existing customers and partners.\n\nIn the realm of environmental, social, and governance (ESG) initiatives, QNTM has announced a partnership with a local non-profit organization focused on promoting STEM education in underrepresented communities. The program will provide funding and resources for hands-on quantum computing workshops and curriculum development, aligning with QNTM's stated goals of promoting diversity and inclusion in the tech industry.\n\nFrom an engineering perspective, QNTM has confirmed that its latest QPU revision has completed internal validation testing, with no major issues reported. The updated design features minor tweaks to the quantum error correction subsystem, aimed at improving overall system reliability. While the changes are unlikely to have a significant impact on performance, they should help to further stabilize the company's quantum computing platform.\n\nOverall, these updates suggest a continued focus on incremental progress and process refinement at QNTM, with no major surprises or revelations on the horizon.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

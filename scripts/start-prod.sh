@@ -183,10 +183,16 @@ elif [ "$RESET_ALL" = true ]; then
     
     log_info "Stopping gofr-iq production containers..."
     docker stop gofr-neo4j gofr-chromadb gofr-iq-mcp gofr-iq-mcpo gofr-iq-web 2>/dev/null || true
-    docker rm gofr-neo4j gofr-chromadb gofr-iq-mcp gofr-iq-mcpo gofr-iq-web 2>/dev/null || true
+    docker rm -f gofr-neo4j gofr-chromadb gofr-iq-mcp gofr-iq-mcpo gofr-iq-web 2>/dev/null || true
     
     log_info "Removing docker volumes..."
-    docker volume rm gofr-iq-neo4j-data gofr-iq-neo4j-logs gofr-iq-chroma-data 2>/dev/null || true
+    # CRITICAL: Must force-remove containers first or volumes stay locked
+    # Verify volumes are actually removed - Neo4j won't accept new password if old data exists
+    for vol in gofr-iq-neo4j-data gofr-iq-neo4j-logs gofr-iq-chroma-data; do
+        if docker volume inspect "$vol" >/dev/null 2>&1; then
+            docker volume rm -f "$vol" || log_warn "Could not remove volume $vol - may need manual cleanup"
+        fi
+    done
     
     log_info "Clearing data directories..."
     rm -rf "${PROJECT_ROOT}/data/storage/"* 2>/dev/null || true
@@ -414,6 +420,20 @@ fi
 export GOFR_IQ_JWT_SECRET
 log_success "Loaded JWT signing secret from Vault"
 
+# Step 6.10: Write loaded secrets to docker/.env for external tools/scripts
+log_info "Writing Vault secrets to docker/.env..."
+# Remove stale entries first
+sed -i '/^NEO4J_PASSWORD=/d' "$DOCKER_ENV_FILE" 2>/dev/null || true
+sed -i '/^GOFR_IQ_OPENROUTER_API_KEY=/d' "$DOCKER_ENV_FILE" 2>/dev/null || true
+sed -i '/^GOFR_IQ_JWT_SECRET=/d' "$DOCKER_ENV_FILE" 2>/dev/null || true
+# Append current values
+echo "" >> "$DOCKER_ENV_FILE"
+echo "# Secrets loaded from Vault (auto-generated - do not edit)" >> "$DOCKER_ENV_FILE"
+echo "NEO4J_PASSWORD=${NEO4J_PASSWORD}" >> "$DOCKER_ENV_FILE"
+echo "GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY}" >> "$DOCKER_ENV_FILE"
+echo "GOFR_IQ_JWT_SECRET=${GOFR_IQ_JWT_SECRET}" >> "$DOCKER_ENV_FILE"
+log_success "Secrets written to docker/.env"
+
 # Step 7: Start all services
 log_info "Starting all services..."
 cd "$DOCKER_DIR"
@@ -424,6 +444,20 @@ docker compose up -d neo4j chromadb
 # Wait for infra to be healthy
 log_info "Waiting for infrastructure services..."
 sleep 5
+
+# Step 7.1: Bootstrap graph schema & taxonomy (on reset/nuke only)
+if [ "$RESET_ALL" = true ] || [ "$NUKE_ALL" = true ]; then
+    log_info "Bootstrapping graph schema and taxonomy..."
+    cd "$PROJECT_ROOT"
+    NEO4J_PASSWORD="$NEO4J_PASSWORD" uv run scripts/bootstrap_graph.py
+    BOOTSTRAP_EXIT=$?
+    cd "$DOCKER_DIR"
+    if [ $BOOTSTRAP_EXIT -ne 0 ]; then
+        log_error "Graph bootstrap failed (exit code: $BOOTSTRAP_EXIT)"
+        exit 1
+    fi
+    log_success "Graph bootstrap complete"
+fi
 
 # Force recreate app services to pick up new volume mounts (AppRole credentials)
 docker compose up -d --force-recreate mcp mcpo web

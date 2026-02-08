@@ -629,13 +629,14 @@ def load_generation_metadata(output_dir: Path) -> Optional[dict]:
         return None
 
 
-def generate_data(count: int, output_dir: Path, regenerate: bool = False):
+def generate_data(count: int, output_dir: Path, regenerate: bool = False, model: Optional[str] = None):
     """Generate synthetic stories using SSOT module for token access.
     
     Args:
         count: Number of stories to generate
         output_dir: Directory to save generated stories
         regenerate: If False, reuse existing stories if count matches; if True, always generate new
+        model: Optional LLM model name override
     """
     output_dir.mkdir(parents=True, exist_ok=True)
     
@@ -659,7 +660,7 @@ def generate_data(count: int, output_dir: Path, regenerate: bool = False):
             print(f"      Generating {count - existing_count} additional documents...")
     
     # Generate new documents
-    generator = SyntheticGenerator()
+    generator = SyntheticGenerator(model=model)
     generator.generate_batch(count, output_dir)
     save_generation_metadata(output_dir, count)
 
@@ -742,6 +743,7 @@ def main():
     parser.add_argument("--init-groups-only", action="store_true", help="Create/verify groups then stop")
     parser.add_argument("--init-tokens-only", action="store_true", help="Create/verify tokens (and groups) then stop")
     parser.add_argument("--mint-tokens", action="store_true", help="Mint fresh tokens for all groups (admin/public remain bootstrap tokens)")
+    parser.add_argument("--model", type=str, default=None, help="LLM model name for story generation (default: $GOFR_IQ_LLM_MODEL or config default)")
     parser.add_argument("--openrouter-key", type=str, help="OpenRouter API key (overrides env/file)")
     parser.add_argument(
         "--openrouter-key-file",
@@ -852,7 +854,7 @@ def main():
             sys.exit(1)
         print(f"Reusing existing documents in {args.output}")
     else:
-        generate_data(effective_count, args.output, regenerate=args.regenerate)
+        generate_data(effective_count, args.output, regenerate=args.regenerate, model=args.model)
         run_gate("generation")
 
     # 4. Ingest Stories

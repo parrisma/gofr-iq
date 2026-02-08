@@ -1250,3 +1250,496 @@ class TestGetTopClientNews:
         assert "DIRECT_HOLDING" in why
         assert "SEMANTIC_MATCH" in why
         assert "AAPL" in why
+
+
+# =============================================================================
+# Step 0 Baseline Tests — Client Avatar Transformation
+# =============================================================================
+
+
+class TestTopClientNewsBaseline:
+    """Baseline tests that lock in the current get_top_client_news contract.
+
+    These tests exist to detect regressions as we evolve the matching logic
+    toward the two-channel Client Avatar model (see docs/analysis/matching-logic-deep-dive.md).
+
+    Two invariants are tested:
+    1. Output shape — every result dict has exactly the expected keys, sorted by relevance_score desc.
+    2. Holdings outrank semantic-only — a document matching a direct holding always scores higher
+       than a document found only via semantic similarity.
+    """
+
+    # Expected keys in every result dict returned by get_top_client_news
+    EXPECTED_KEYS = {
+        "document_guid",
+        "title",
+        "created_at",
+        "impact_score",
+        "impact_tier",
+        "affected_instruments",
+        "relevance_score",
+        "reasons",
+        "why_it_matters",
+    }
+
+    # -- helpers --
+
+    @staticmethod
+    def _make_service(
+        embedding_index: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        graph_index,
+    ) -> QueryService:
+        return QueryService(
+            embedding_index=embedding_index,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=graph_index,
+        )
+
+    @staticmethod
+    def _stub_profile() -> dict:
+        return {
+            "client_guid": "client-baseline-001",
+            "client_type": "HEDGE_FUND",
+            "mandate_type": "equity_long_short",
+            "mandate_text": None,
+            "horizon": "short",
+            "esg_constrained": False,
+            "impact_threshold": 30,
+            "benchmark": None,
+            "restrictions": None,
+        }
+
+    @staticmethod
+    def _now():
+        from datetime import datetime
+        return datetime(2026, 2, 6, 12, 0, 0)
+
+    # -- fixtures --
+
+    @pytest.fixture
+    def mock_graph(self):
+        """Minimal mock GraphIndex that makes _get_session() a context-manager."""
+        from unittest.mock import MagicMock
+        mock = MagicMock()
+        mock_session = MagicMock()
+        mock._get_session.return_value.__enter__ = MagicMock(return_value=mock_session)
+        mock._get_session.return_value.__exit__ = MagicMock(return_value=None)
+        return mock
+
+    # ==================================================================
+    # Test 1 — Output shape contract
+    # ==================================================================
+    def test_top_client_news_output_shape(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """Every item returned by get_top_client_news has exactly the expected keys,
+        results are sorted descending by relevance_score, and reasons is a list of strings.
+        """
+        from unittest.mock import patch
+        from datetime import timedelta
+
+        now = self._now()
+        profile = self._stub_profile()
+
+        holdings_doc = {
+            "document_guid": "doc-holdings-001",
+            "title": "TSMC Q4 Earnings Beat",
+            "created_at": (now - timedelta(hours=2)).isoformat(),
+            "impact_score": 80,
+            "impact_tier": "GOLD",
+            "affected_instruments": ["TSM"],
+        }
+        watchlist_doc = {
+            "document_guid": "doc-watch-001",
+            "title": "Samsung Fab Expansion",
+            "created_at": (now - timedelta(hours=5)).isoformat(),
+            "impact_score": 60,
+            "impact_tier": "SILVER",
+            "affected_instruments": ["005930.KS"],
+        }
+
+        service = self._make_service(
+            embedding_index_test, document_store, source_registry, mock_graph,
+        )
+
+        with (
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[
+                {"ticker": "TSM", "weight": 0.15},
+            ]),
+            patch.object(service, "_get_client_watchlist", return_value=["005930.KS"]),
+            patch.object(service, "_get_client_exclusions", return_value={"companies": [], "sectors": []}),
+            patch.object(service, "_get_documents_for_tickers", side_effect=[
+                [holdings_doc],   # holdings call
+                [watchlist_doc],  # watchlist call
+            ]),
+            patch.object(service, "_expand_lateral_tickers", return_value={
+                "competitors": [], "suppliers": [], "peers": [],
+            }),
+            patch.object(service, "query", return_value=QueryResponse(
+                results=[], total_found=0, query="",
+            )),
+        ):
+            results = service.get_top_client_news(
+                client_guid="client-baseline-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+            )
+
+        # Must return at least the holdings + watchlist docs
+        assert len(results) >= 1, "Expected at least one result from mocked holdings/watchlist"
+
+        # Shape: every result has exactly the expected keys
+        for item in results:
+            actual_keys = set(item.keys())
+            assert actual_keys == self.EXPECTED_KEYS, (
+                f"Key mismatch: extra={actual_keys - self.EXPECTED_KEYS}, "
+                f"missing={self.EXPECTED_KEYS - actual_keys}"
+            )
+
+        # Sorted descending by relevance_score
+        scores = [item["relevance_score"] for item in results]
+        assert scores == sorted(scores, reverse=True), "Results must be sorted descending by relevance_score"
+
+        # reasons is a sorted list of non-empty strings
+        for item in results:
+            assert isinstance(item["reasons"], list), "reasons must be a list"
+            assert all(isinstance(r, str) and r for r in item["reasons"]), "each reason must be a non-empty string"
+            assert item["reasons"] == sorted(item["reasons"]), "reasons must be sorted alphabetically"
+
+    # ==================================================================
+    # Test 2 — Holdings outrank semantic-only matches
+    # ==================================================================
+    def test_top_client_news_holdings_outrank_semantic(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """A document matching a direct holding must score higher than a
+        document found only via semantic similarity (all else being equal).
+        """
+        from unittest.mock import patch
+        from datetime import timedelta
+
+        now = self._now()
+        profile = self._stub_profile()
+
+        # Holdings doc — affects a ticker the client owns
+        holdings_doc = {
+            "document_guid": "doc-hold-rank-001",
+            "title": "TSM Earnings Surge",
+            "created_at": (now - timedelta(hours=1)).isoformat(),
+            "impact_score": 70,
+            "impact_tier": "GOLD",
+            "affected_instruments": ["TSM"],
+        }
+
+        # Semantic-only doc — no ticker overlap, found only via embedding similarity
+        semantic_result = QueryResult(
+            document_guid="doc-semantic-only-001",
+            title="Global Chip Demand Outlook",
+            content_snippet="Industry-wide semiconductor forecast...",
+            score=0.0,
+            similarity_score=0.92,  # high semantic score
+            source_guid="src-001",
+            source_name="Bloomberg",
+            language="en",
+            created_at=now - timedelta(hours=1),
+            metadata={"impact_score": 70, "impact_tier": "GOLD", "companies": []},
+        )
+
+        service = self._make_service(
+            embedding_index_test, document_store, source_registry, mock_graph,
+        )
+
+        with (
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[
+                {"ticker": "TSM", "weight": 0.20},
+            ]),
+            patch.object(service, "_get_client_watchlist", return_value=[]),
+            patch.object(service, "_get_client_exclusions", return_value={"companies": [], "sectors": []}),
+            patch.object(service, "_get_documents_for_tickers", return_value=[holdings_doc]),
+            patch.object(service, "_expand_lateral_tickers", return_value={
+                "competitors": [], "suppliers": [], "peers": [],
+            }),
+            patch.object(service, "query", return_value=QueryResponse(
+                results=[semantic_result],
+                total_found=1,
+                query="",
+            )),
+        ):
+            results = service.get_top_client_news(
+                client_guid="client-baseline-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+            )
+
+        # Both documents should appear
+        guids = [r["document_guid"] for r in results]
+        assert "doc-hold-rank-001" in guids, "Holdings doc must appear in results"
+        assert "doc-semantic-only-001" in guids, "Semantic-only doc must appear in results"
+
+        # Holdings doc must rank higher
+        hold_item = next(r for r in results if r["document_guid"] == "doc-hold-rank-001")
+        sem_item = next(r for r in results if r["document_guid"] == "doc-semantic-only-001")
+        assert hold_item["relevance_score"] > sem_item["relevance_score"], (
+            f"Holdings doc ({hold_item['relevance_score']:.3f}) must outrank "
+            f"semantic-only doc ({sem_item['relevance_score']:.3f})"
+        )
+
+        # Holdings doc must have DIRECT_HOLDING reason
+        assert "DIRECT_HOLDING" in hold_item["reasons"]
+        # Semantic-only doc must NOT have DIRECT_HOLDING reason
+        assert "DIRECT_HOLDING" not in sem_item["reasons"]
+
+
+# =============================================================================
+# Step 3 Tests — Avatar Feed (Two-Channel Model)
+# =============================================================================
+
+
+class TestAvatarFeed:
+    """Tests for get_client_avatar_feed — the two-channel client avatar model.
+
+    Channel 1 (MAINTENANCE): News affecting holdings/watchlist.
+    Channel 2 (OPPORTUNITY): Mandate-themed news NOT affecting existing positions.
+
+    See docs/analysis/matching-logic-deep-dive.md for the full specification.
+    """
+
+    @staticmethod
+    def _make_service(
+        embedding_index: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        graph_index,
+    ) -> QueryService:
+        return QueryService(
+            embedding_index=embedding_index,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=graph_index,
+        )
+
+    @staticmethod
+    def _stub_profile() -> dict:
+        return {
+            "client_guid": "client-avatar-001",
+            "client_type": "HEDGE_FUND",
+            "mandate_type": "equity_long_short",
+            "mandate_text": "Asia-Pacific equities with focus on semiconductors and EVs",
+            "horizon": "medium",
+            "esg_constrained": False,
+            "impact_threshold": 30,
+            "benchmark": None,
+            "restrictions": None,
+        }
+
+    @staticmethod
+    def _now():
+        return datetime(2026, 2, 6, 12, 0, 0)
+
+    @pytest.fixture
+    def mock_graph(self):
+        """Minimal mock GraphIndex that makes _get_session() a context-manager."""
+        from unittest.mock import MagicMock
+        mock = MagicMock()
+        mock_session = MagicMock()
+        mock._get_session.return_value.__enter__ = MagicMock(return_value=mock_session)
+        mock._get_session.return_value.__exit__ = MagicMock(return_value=None)
+        return mock
+
+    # ==================================================================
+    # Test 1 — Holdings story appears in MAINTENANCE channel
+    # ==================================================================
+    def test_avatar_holdings_in_maintenance(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """A document affecting a held ticker appears in the maintenance channel."""
+        from unittest.mock import patch
+
+        now = self._now()
+        profile = self._stub_profile()
+
+        # Document that affects TSM (which client holds)
+        holdings_doc = {
+            "document_guid": "doc-maint-001",
+            "title": "TSMC Q4 Revenue Surge",
+            "created_at": (now - timedelta(hours=2)).isoformat(),
+            "impact_score": 75,
+            "impact_tier": "GOLD",
+            "affected_instruments": ["TSM"],
+            "themes": ["semiconductor"],
+        }
+
+        service = self._make_service(
+            embedding_index_test, document_store, source_registry, mock_graph,
+        )
+
+        with (
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[
+                {"ticker": "TSM", "weight": 0.20},
+            ]),
+            patch.object(service, "_get_client_watchlist", return_value=[]),
+            patch.object(service, "_get_documents_for_tickers", return_value=[holdings_doc]),
+            patch.object(service, "_get_client_mandate_themes", return_value=[]),
+            patch.object(service, "_get_documents_by_themes", return_value=[]),
+        ):
+            feed = service.get_client_avatar_feed(
+                client_guid="client-avatar-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+            )
+
+        # Document must appear in maintenance channel
+        assert len(feed.maintenance) >= 1
+        maint_guids = [item.document_guid for item in feed.maintenance]
+        assert "doc-maint-001" in maint_guids
+
+        # Verify channel and reason
+        item = next(i for i in feed.maintenance if i.document_guid == "doc-maint-001")
+        assert item.channel == "MAINTENANCE"
+        assert "TSM" in item.reason
+
+    # ==================================================================
+    # Test 2 — Mandate-themed story appears in OPPORTUNITY channel
+    # ==================================================================
+    def test_avatar_mandate_themes_in_opportunity(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """A mandate-themed document NOT affecting holdings appears in opportunity."""
+        from unittest.mock import patch
+
+        now = self._now()
+        profile = self._stub_profile()
+
+        # Document about EV batteries (matches mandate themes) but affects CATL (not held)
+        theme_doc = {
+            "document_guid": "doc-opp-001",
+            "title": "CATL Battery Tech Breakthrough",
+            "created_at": (now - timedelta(hours=3)).isoformat(),
+            "impact_score": 80,
+            "impact_tier": "GOLD",
+            "affected_instruments": ["CATL"],
+            "themes": ["ev_battery", "china"],
+        }
+
+        service = self._make_service(
+            embedding_index_test, document_store, source_registry, mock_graph,
+        )
+
+        with (
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[
+                {"ticker": "TSM", "weight": 0.20},  # Client holds TSM, not CATL
+            ]),
+            patch.object(service, "_get_client_watchlist", return_value=[]),
+            patch.object(service, "_get_documents_for_tickers", return_value=[]),
+            patch.object(service, "_get_client_mandate_themes", return_value=["ev_battery", "semiconductor"]),
+            patch.object(service, "_get_documents_by_themes", return_value=[theme_doc]),
+        ):
+            feed = service.get_client_avatar_feed(
+                client_guid="client-avatar-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+            )
+
+        # Document must appear in opportunity channel
+        assert len(feed.opportunity) >= 1
+        opp_guids = [item.document_guid for item in feed.opportunity]
+        assert "doc-opp-001" in opp_guids
+
+        # Verify channel and reason
+        item = next(i for i in feed.opportunity if i.document_guid == "doc-opp-001")
+        assert item.channel == "OPPORTUNITY"
+        assert "ev_battery" in item.reason
+
+    # ==================================================================
+    # Test 3 — Holdings story excluded from OPPORTUNITY (novelty guard)
+    # ==================================================================
+    def test_avatar_holdings_excluded_from_opportunity(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """A document affecting holdings must NOT appear in opportunity channel.
+
+        This is the "novelty guard" — opportunity is for NEW ideas only.
+        If a document appears in both channels, maintenance wins.
+        """
+        from unittest.mock import patch
+
+        now = self._now()
+        profile = self._stub_profile()
+
+        # Document affects TSM (held) AND matches mandate themes
+        overlap_doc = {
+            "document_guid": "doc-overlap-001",
+            "title": "TSMC AI Chip Capacity Expansion",
+            "created_at": (now - timedelta(hours=1)).isoformat(),
+            "impact_score": 85,
+            "impact_tier": "PLATINUM",
+            "affected_instruments": ["TSM"],
+            "themes": ["semiconductor", "ai"],
+        }
+
+        service = self._make_service(
+            embedding_index_test, document_store, source_registry, mock_graph,
+        )
+
+        with (
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[
+                {"ticker": "TSM", "weight": 0.15},
+            ]),
+            patch.object(service, "_get_client_watchlist", return_value=[]),
+            patch.object(service, "_get_documents_for_tickers", return_value=[overlap_doc]),
+            patch.object(service, "_get_client_mandate_themes", return_value=["semiconductor", "ai"]),
+            # Simulate that the same doc was returned by themes query (before exclusion logic)
+            patch.object(service, "_get_documents_by_themes", return_value=[overlap_doc]),
+        ):
+            feed = service.get_client_avatar_feed(
+                client_guid="client-avatar-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+            )
+
+        # Document must appear in maintenance (affects holding)
+        maint_guids = [item.document_guid for item in feed.maintenance]
+        assert "doc-overlap-001" in maint_guids
+
+        # Document must NOT appear in opportunity (novelty guard)
+        opp_guids = [item.document_guid for item in feed.opportunity]
+        assert "doc-overlap-001" not in opp_guids, (
+            "Holdings doc must be excluded from opportunity channel (novelty guard)"
+        )
+
+        # But it should appear exactly once in combined
+        combined_guids = [item.document_guid for item in feed.combined]
+        assert combined_guids.count("doc-overlap-001") == 1

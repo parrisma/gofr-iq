@@ -1,0 +1,67 @@
+[
+  {
+    "guid": "doc-test-01-truck-strike",
+    "title": "Heavy Truck Strike Threatens Logistics: Union Demands 15% Hike",
+    "content": "A nationwide strike at HeavyTrucks Inc facilities has halted production. The United Auto Workers union is demanding a 15% wage increase. Supply chains are expected to be disrupted for weeks.",
+    "source_guid": "source-test-global-wire",
+    "created_at": "2026-02-07T10:00:00Z",
+    "simulated_impact": {
+      "score": 60,
+      "tier": "SILVER",
+      "affects": ["TRUCK"],
+      "themes": ["labor_strike", "supply_chain"]
+    }
+  },
+  {
+    "guid": "doc-test-02-eco-subsidy",
+    "title": "New Green Energy Bill Passed: Major Subsidies for EcoPower",
+    "content": "The Senate has passed the Clean Future Act, granting significant tax credits to renewable energy providers. EcoPower Systems is named as a primary beneficiary.",
+    "source_guid": "source-test-daily-alpha",
+    "created_at": "2026-02-07T11:00:00Z",
+    "simulated_impact": {
+      "score": 85,
+      "tier": "GOLD",
+      "affects": ["ECO"],
+      "themes": ["clean_energy", "policy"]
+    }
+  },
+  {
+    "guid": "doc-test-03-nxs-ai-breakthrough",
+    "title": "Nexus Software Unveils Revolutionary Quantum AI Model",
+    "content": "Nexus Software (NXS) has revealed a new AI model capable of quantum-resistant encryption breaking. Shares surged 12% in pre-market trading.",
+    "source_guid": "source-test-silicon-circuits",
+    "created_at": "2026-02-07T12:00:00Z",
+    "simulated_impact": {
+      "score": 95,
+      "tier": "PLATINUM",
+      "affects": ["NXS"],
+      "themes": ["ai_hardware", "innovation"]
+    }
+  },
+  {
+    "guid": "doc-test-04-gene-trial-fail",
+    "title": "GeneSys Phase 3 Trial Fails to Meet Endpoints",
+    "content": "GeneSys (GENE) reported disappointing results from its flagship gene therapy trial. The stock plummeted 40% on the news.",
+    "source_guid": "source-test-insider-whispers",
+    "created_at": "2026-02-07T13:00:00Z",
+    "simulated_impact": {
+      "score": 40,
+      "tier": "BRONZE",
+      "affects": ["GENE"],
+      "themes": ["biotech", "clinical_trials"]
+    }
+  },
+  {
+    "guid": "doc-test-05-banko-earnings",
+    "title": "BankOne Reports Steady Earnings, Raises Dividend",
+    "content": "BankOne (BANKO) met analyst expectations with Q3 earnings. The board announced a 2% dividend hike, citing stable net interest margins.",
+    "source_guid": "source-test-regional-biz",
+    "created_at": "2026-02-07T14:00:00Z",
+    "simulated_impact": {
+      "score": 25,
+      "tier": "STANDARD",
+      "affects": ["BANKO"],
+      "themes": ["earnings", "dividend"]
+    }
+  }
+]

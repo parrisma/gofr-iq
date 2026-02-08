@@ -512,6 +512,17 @@ if [ "$USE_DOCKER" = false ]; then
     echo -e "${BLUE}Auth bootstrap will run in pytest session fixture (conftest.py)${NC}"
     echo ""
     
+    # Bootstrap graph schema + taxonomy (same as prod)
+    echo -e "${GREEN}=== Bootstrapping Graph Schema ===${NC}"
+    if uv run python "${SCRIPT_DIR}/bootstrap_graph.py" --verbose; then
+        echo -e "${GREEN}  Graph schema bootstrapped successfully${NC}"
+    else
+        echo -e "${RED}  Graph bootstrap failed!${NC}"
+        run_test_env_cmd stop || true
+        exit 1
+    fi
+    echo ""
+    
     # Start test servers (MCP/MCPO/Web)
     echo -e "${GREEN}=== Starting Test Servers ===${NC}"
     if run_test_servers_cmd start; then

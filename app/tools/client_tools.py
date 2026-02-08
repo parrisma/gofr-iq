@@ -43,6 +43,42 @@ def _require_admin_group(auth_tokens: list[str] | None) -> tuple[bool, list[str]
     return "admin" in group_names, group_names
 
 
+def _resolve_instrument_guid(
+    graph_index: GraphIndex,
+    ticker: str,
+    instrument_type: str = "STOCK",
+) -> str:
+    """Find an existing Instrument by ticker, or create one.
+
+    The universe builder creates instruments with ``guid = 'inst-{TICKER}'``
+    while a bare MCP creation would use ``'{TICKER}:UNKNOWN'``.  We must
+    resolve the *actual* GUID stored in the graph to avoid dangling
+    relationship errors.
+
+    Returns:
+        The ``guid`` of the matched or newly-created Instrument node.
+    """
+    upper = ticker.upper()
+    # 1. Look up by ticker property (covers instruments from any source)
+    with graph_index._get_session() as session:
+        result = session.run(
+            "MATCH (i:Instrument {ticker: $ticker}) RETURN i.guid AS guid",
+            ticker=upper,
+        )
+        record = result.single()
+        if record:
+            return record["guid"]
+
+    # 2. Not found – create a minimal placeholder so the relationship works
+    node = graph_index.create_instrument(
+        ticker=upper,
+        name=upper,
+        instrument_type=instrument_type,
+        exchange="UNKNOWN",
+    )
+    return node.guid
+
+
 def register_client_tools(
     mcp: FastMCP,
     graph_index: GraphIndex,
@@ -254,6 +290,33 @@ def register_client_tools(
                 properties=profile_properties,
             )
             
+            # Auto-enrich mandate_themes from mandate_text (LLM at create-time)
+            # Matches update_client_profile behavior for consistency
+            enriched_themes: list[str] | None = None
+            if mandate_text and mandate_text.strip():
+                from app.services.mandate_enrichment import extract_themes_from_mandate
+                from app.services.llm_service import create_llm_service
+                
+                try:
+                    with create_llm_service() as llm_service:
+                        enrichment_result = extract_themes_from_mandate(
+                            mandate_text.strip(), llm_service
+                        )
+                        if enrichment_result.success and enrichment_result.themes:
+                            enriched_themes = enrichment_result.themes
+                            # Update the profile node with enriched themes
+                            with graph_index._get_session() as session:
+                                session.run(
+                                    """
+                                    MATCH (cp:ClientProfile {guid: $profile_guid})
+                                    SET cp.mandate_themes = $themes
+                                    """,
+                                    profile_guid=profile_guid,
+                                    themes=enriched_themes,
+                                )
+                except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
+                    pass
+            
             # Create empty portfolio and watchlist
             portfolio_guid = str(uuid.uuid4())
             watchlist_guid = str(uuid.uuid4())
@@ -304,6 +367,7 @@ def register_client_tools(
                         "guid": profile_guid,
                         "mandate_type": mandate_type,
                         "mandate_text": mandate_text,
+                        "mandate_themes": enriched_themes,
                         "benchmark": benchmark,
                         "horizon": horizon,
                         "esg_constrained": esg_constrained,
@@ -464,6 +528,136 @@ def register_client_tools(
                 error_code="FEED_RETRIEVAL_FAILED",
                 message=f"Failed to retrieve client feed: {e!s}",
                 recovery_strategy="Verify client with get_client_profile. Run health_check if Neo4j may be down.",
+                details={"client_guid": client_guid, "limit": limit},
+            )
+
+    @mcp.tool(
+        name="get_client_avatar_feed",
+        description=(
+            "Get two-channel avatar news feed for a client. "
+            "MAINTENANCE channel: news about existing holdings/watchlist. "
+            "OPPORTUNITY channel: mandate-themed news for new ideas (excludes positions). "
+            "USE FOR: 'What should I know and what opportunities exist?' "
+            "PREREQUISITE: Client with portfolio + mandate_themes. "
+            "RETURNS: maintenance items, opportunity items, combined ranked list."
+        ),
+    )
+    def get_client_avatar_feed(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client to get avatar feed for",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        limit: Annotated[int, Field(
+            default=20,
+            ge=1,
+            le=100,
+            description="Maximum total items across both channels (default: 20, max: 100)",
+        )] = 20,
+        time_window_hours: Annotated[int, Field(
+            default=72,
+            ge=1,
+            le=720,
+            description="How many hours back to look for news (default: 72, max: 720)",
+        )] = 72,
+        min_impact_score: Annotated[float | None, Field(
+            default=None,
+            ge=0.0,
+            le=100.0,
+            description="Minimum impact score filter (0-100). Defaults to client's impact_threshold.",
+        )] = None,
+        impact_tiers: Annotated[list[str] | None, Field(
+            default=None,
+            description="Filter by impact tiers: PLATINUM, GOLD, SILVER, BRONZE, STANDARD",
+            examples=[["PLATINUM", "GOLD", "SILVER"]],
+        )] = None,
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication",
+        )] = None,
+    ) -> ToolResponse:
+        """Get two-channel avatar news feed.
+
+        Channel 1 (MAINTENANCE): News affecting your holdings and watchlist.
+        Channel 2 (OPPORTUNITY): Mandate-themed news NOT affecting existing positions.
+
+        Both channels are ranked by relevance. Deterministic (no LLM at query time).
+        """
+        if not query_service:
+            return error_response(
+                error_code="SERVICE_UNAVAILABLE",
+                message="Avatar feed service is not configured",
+                recovery_strategy="Ensure QueryService is initialized with graph_index.",
+            )
+
+        try:
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_guids = get_group_uuids_by_names(group_names)
+
+            # Validate client exists
+            client_node = graph_index.get_node(NodeLabel.CLIENT, client_guid)
+            if not client_node:
+                return error_response(
+                    error_code="CLIENT_NOT_FOUND",
+                    message=f"Client not found: {client_guid}",
+                    recovery_strategy="Call list_clients to find valid client GUIDs.",
+                    details={"client_guid": client_guid},
+                )
+
+            if client_node.properties.get("status") == "defunct":
+                return error_response(
+                    error_code="CLIENT_DEFUNCT",
+                    message="Client is defunct and cannot receive feeds",
+                    recovery_strategy="Restore the client or select an active client.",
+                    details={"client_guid": client_guid},
+                )
+
+            feed = query_service.get_client_avatar_feed(
+                client_guid=client_guid,
+                group_guids=group_guids,
+                limit=limit,
+                time_window_hours=time_window_hours,
+                min_impact_score=min_impact_score,
+                impact_tiers=impact_tiers,
+            )
+
+            def _serialize_item(item):
+                return {
+                    "document_guid": item.document_guid,
+                    "title": item.title,
+                    "created_at": item.created_at,
+                    "impact_score": item.impact_score,
+                    "impact_tier": item.impact_tier,
+                    "affected_instruments": item.affected_instruments,
+                    "themes": item.themes,
+                    "relevance_score": round(item.relevance_score, 4),
+                    "channel": item.channel,
+                    "reason": item.reason,
+                }
+
+            return success_response(
+                data={
+                    "client_guid": feed.client_guid,
+                    "maintenance": [_serialize_item(i) for i in feed.maintenance],
+                    "opportunity": [_serialize_item(i) for i in feed.opportunity],
+                    "combined": [_serialize_item(i) for i in feed.combined],
+                    "maintenance_count": len(feed.maintenance),
+                    "opportunity_count": len(feed.opportunity),
+                    "total_count": len(feed.combined),
+                },
+                message=(
+                    f"Avatar feed: {len(feed.maintenance)} maintenance, "
+                    f"{len(feed.opportunity)} opportunity items"
+                ),
+            )
+
+        except Exception as e:
+            return error_response(
+                error_code="AVATAR_FEED_FAILED",
+                message=f"Failed to retrieve avatar feed: {e!s}",
+                recovery_strategy="Verify client with get_client_profile. Check holdings and mandate_themes.",
                 details={"client_guid": client_guid, "limit": limit},
             )
 
@@ -711,21 +905,13 @@ def register_client_tools(
                     )
                 portfolio_guid = record["portfolio_guid"]
             
-            # Ensure instrument exists
-            try:
-                graph_index.create_instrument(
-                    ticker=ticker.upper(),
-                    name=ticker.upper(),
-                    instrument_type="STOCK",
-                    exchange="UNKNOWN",
-                )
-            except Exception:
-                pass  # nosec B110 - May already exist
-            
+            # Resolve instrument (look up by ticker, create if missing)
+            instrument_guid = _resolve_instrument_guid(graph_index, ticker)
+
             # Add holding
             graph_index.add_holding(
                 portfolio_guid=portfolio_guid,
-                instrument_guid=f"{ticker.upper()}:UNKNOWN",
+                instrument_guid=instrument_guid,
                 weight=weight,
                 shares=shares,
                 avg_cost=avg_cost,
@@ -813,18 +999,9 @@ def register_client_tools(
                     )
                 watchlist_guid = record["watchlist_guid"]
             
-            # Ensure instrument exists
-            instrument_guid = f"{ticker.upper()}:UNKNOWN"
-            try:
-                graph_index.create_instrument(
-                    ticker=ticker.upper(),
-                    name=ticker.upper(),
-                    instrument_type="STOCK",
-                    exchange="UNKNOWN",
-                )
-            except Exception:
-                pass  # nosec B110 - May already exist
-            
+            # Resolve instrument (look up by ticker, create if missing)
+            instrument_guid = _resolve_instrument_guid(graph_index, ticker)
+
             # Add to watchlist (WATCHES relationship)
             props: dict[str, Any] = {}
             if alert_threshold is not None:
@@ -1178,6 +1355,7 @@ def register_client_tools(
                            cp.guid AS profile_guid,
                            cp.mandate_type AS mandate_type,
                            cp.mandate_text AS mandate_text,
+                           cp.mandate_themes AS mandate_themes,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
                            cp.restrictions AS restrictions_json,
@@ -1228,6 +1406,7 @@ def register_client_tools(
                         "guid": record["profile_guid"],
                         "mandate_type": record["mandate_type"],
                         "mandate_text": record["mandate_text"],
+                        "mandate_themes": record["mandate_themes"],
                         "benchmark": record["benchmark"],
                         "horizon": record["horizon"],
                         "esg_constrained": record["esg_constrained"],
@@ -1608,6 +1787,17 @@ def register_client_tools(
                 "Pass empty dict {} to clear restrictions. Omit to keep current."
             ),
         )] = None,
+        mandate_themes: Annotated[list[str] | None, Field(
+            default=None,
+            description=(
+                "List of theme tags from controlled vocabulary (e.g., ['semiconductor', 'ev_battery', 'ai']). "
+                "Used by Avatar Feed for opportunity matching. Pass empty list [] to clear. Omit to keep current. "
+                "Valid themes: ai, semiconductor, ev_battery, supply_chain, m_and_a, rates, fx, credit, esg, "
+                "energy_transition, geopolitical, japan, china, india, korea, fintech, biotech, real_estate, "
+                "commodities, consumer, defense, cloud, cybersecurity, autonomous_vehicles, blockchain."
+            ),
+            examples=[["semiconductor", "ai", "japan"], ["ev_battery", "china", "supply_chain"]],
+        )] = None,
         auth_tokens: Annotated[list[str] | None, Field(
             default=None,
             description="JWT tokens for authentication (pass via API when headers not available)",
@@ -1624,6 +1814,7 @@ def register_client_tools(
             impact_threshold: Min impact score 0-100 for alerts
             mandate_type: Investment style
             mandate_text: Free-text mandate description (0-5000 chars, empty string clears)
+            mandate_themes: Theme tags for opportunity matching (empty list clears)
             benchmark: Benchmark ticker
             horizon: short, medium, or long
             esg_constrained: Apply ESG filters
@@ -1674,8 +1865,26 @@ def register_client_tools(
                         details={"length": len(mandate_text), "max_length": 5000},
                     )
                 # Store stripped text (empty string clears the field)
-                updates_profile["mandate_text"] = mandate_text.strip()
+                stripped_text = mandate_text.strip()
+                updates_profile["mandate_text"] = stripped_text
                 changes.append("mandate_text")
+                
+                # Auto-enrich mandate_themes from mandate_text (LLM at update-time only)
+                # Only if themes weren't explicitly provided and text is non-empty
+                if mandate_themes is None and stripped_text:
+                    from app.services.mandate_enrichment import extract_themes_from_mandate
+                    from app.services.llm_service import create_llm_service
+                    
+                    try:
+                        with create_llm_service() as llm_service:
+                            enrichment_result = extract_themes_from_mandate(
+                                stripped_text, llm_service
+                            )
+                            if enrichment_result.success and enrichment_result.themes:
+                                updates_profile["mandate_themes"] = enrichment_result.themes
+                                changes.append("mandate_themes (auto-enriched)")
+                    except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
+                        pass
                 
             if horizon is not None:
                 valid_horizons = ["short", "medium", "long"]
@@ -1717,6 +1926,29 @@ def register_client_tools(
                             recovery_strategy="Check restrictions structure against documented schema.",
                             details={"validation_errors": ve.errors()},
                         )
+
+            # Handle mandate_themes update (list stored as JSON)
+            if mandate_themes is not None:
+                # Validate themes against controlled vocabulary
+                valid_themes = {
+                    "ai", "semiconductor", "ev_battery", "supply_chain", "m_and_a",
+                    "rates", "fx", "credit", "esg", "energy_transition", "geopolitical",
+                    "japan", "china", "india", "korea", "fintech", "biotech",
+                    "real_estate", "commodities", "consumer", "defense", "cloud",
+                    "cybersecurity", "autonomous_vehicles", "blockchain",
+                }
+                invalid_themes = [t for t in mandate_themes if t.lower() not in valid_themes]
+                if invalid_themes:
+                    return error_response(
+                        error_code="INVALID_MANDATE_THEMES",
+                        message=f"Invalid theme(s): {', '.join(invalid_themes)}",
+                        recovery_strategy="Use themes from controlled vocabulary.",
+                        details={"invalid": invalid_themes, "valid": sorted(valid_themes)},
+                    )
+                # Normalize and store as JSON array (or Neo4j list)
+                normalized = [t.lower().strip() for t in mandate_themes]
+                updates_profile["mandate_themes"] = normalized
+                changes.append("mandate_themes")
 
             if not changes and benchmark is None:
                 return error_response(
@@ -1782,18 +2014,11 @@ def register_client_tools(
                 # Handle benchmark update (creates/updates relationship)
                 if benchmark is not None:
                     changes.append("benchmark")
-                    # Ensure instrument exists
-                    instrument_guid = f"{benchmark.upper()}:UNKNOWN"
-                    try:
-                        graph_index.create_instrument(
-                            ticker=benchmark.upper(),
-                            name=benchmark.upper(),
-                            instrument_type="ETF",
-                            exchange="UNKNOWN",
-                        )
-                    except Exception:
-                        pass  # nosec B110 - May already exist
-                    
+                    # Resolve instrument (look up by ticker, create if missing)
+                    instrument_guid = _resolve_instrument_guid(
+                        graph_index, benchmark, instrument_type="ETF",
+                    )
+
                     # Remove old benchmark relationship and create new one
                     session.run(
                         """
@@ -1823,6 +2048,7 @@ def register_client_tools(
                            g.guid AS group_guid,
                            cp.mandate_type AS mandate_type,
                            cp.mandate_text AS mandate_text,
+                           cp.mandate_themes AS mandate_themes,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
                            b.ticker AS benchmark
@@ -1848,6 +2074,7 @@ def register_client_tools(
                     "profile": {
                         "mandate_type": updated["mandate_type"],
                         "mandate_text": updated["mandate_text"],
+                        "mandate_themes": updated["mandate_themes"],
                         "benchmark": updated["benchmark"],
                         "horizon": updated["horizon"],
                         "esg_constrained": updated["esg_constrained"],

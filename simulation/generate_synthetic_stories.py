@@ -42,7 +42,7 @@ except ImportError:
 # Configuration & Constants
 # ============================================================================
 
-MODEL_NAME = "anthropic/claude-sonnet-4.5"  # or another capable model
+DEFAULT_MODEL = "meta-llama/llama-3.1-70b-instruct"
 MAX_RETRIES = 3
 TIMEOUT = 60.0
 
@@ -329,9 +329,13 @@ SCENARIOS = [
 
 
 class SyntheticGenerator:
-    def __init__(self, env_path: Optional[str] = None):
+    def __init__(self, env_path: Optional[str] = None, model: Optional[str] = None):
         # Load config first (for tokens/sources)
         self._load_config(env_path)
+
+        # Model: explicit arg > env var > default
+        self.model = model or os.environ.get("GOFR_IQ_LLM_MODEL", DEFAULT_MODEL)
+        logger.info(f"Using LLM model: {self.model}")
 
         # API key should already be in environment (from production config)
         self.api_key = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
@@ -392,7 +396,7 @@ class SyntheticGenerator:
     def _generate_story_text(self, prompt: str) -> str:
         """Call LLM to generate story body"""
         payload = {
-            "model": MODEL_NAME,
+            "model": self.model,
             "messages": [
                 {
                     "role": "system",
@@ -647,6 +651,7 @@ def main():
     parser.add_argument("--count", type=int, default=5, help="Number of stories to generate")
     parser.add_argument("--output", type=str, default="data/synthetic", help="Output directory")
     parser.add_argument("--env", type=str, help="Path to .env file")
+    parser.add_argument("--model", type=str, default=None, help=f"LLM model name (default: $GOFR_IQ_LLM_MODEL or {DEFAULT_MODEL})")
     parser.add_argument(
         "--mode",
         type=str,
@@ -658,7 +663,7 @@ def main():
     args = parser.parse_args()
 
     if args.mode == "generate":
-        generator = SyntheticGenerator(args.env)
+        generator = SyntheticGenerator(args.env, model=args.model)
         generator.generate_batch(args.count, Path(args.output))
         logger.info("Batch generation complete.")
     elif args.mode == "ingest":

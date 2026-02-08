@@ -798,9 +798,12 @@ class TestAddToPortfolio:
         
         # Mock session for portfolio lookup
         mock_session = MagicMock()
-        mock_result = MagicMock()
-        mock_result.single.return_value = {"portfolio_guid": "portfolio-123"}
-        mock_session.run.return_value = mock_result
+        # First run: portfolio lookup; second run: instrument ticker lookup
+        portfolio_result = MagicMock()
+        portfolio_result.single.return_value = {"portfolio_guid": "portfolio-123"}
+        instrument_result = MagicMock()
+        instrument_result.single.return_value = {"guid": "AAPL:NYSE"}
+        mock_session.run.side_effect = [portfolio_result, instrument_result]
         mock_session.__enter__ = MagicMock(return_value=mock_session)
         mock_session.__exit__ = MagicMock(return_value=None)
         mock_graph_index._get_session.return_value = mock_session
@@ -871,9 +874,12 @@ class TestAddToWatchlist:
         register_client_tools(mcp_server, mock_graph_index)
         
         mock_session = MagicMock()
-        mock_result = MagicMock()
-        mock_result.single.return_value = {"watchlist_guid": "watchlist-123"}
-        mock_session.run.return_value = mock_result
+        # First run: watchlist lookup; second run: instrument ticker lookup
+        watchlist_result = MagicMock()
+        watchlist_result.single.return_value = {"watchlist_guid": "watchlist-123"}
+        instrument_result = MagicMock()
+        instrument_result.single.return_value = {"guid": "TSLA:NASDAQ"}
+        mock_session.run.side_effect = [watchlist_result, instrument_result]
         mock_session.__enter__ = MagicMock(return_value=mock_session)
         mock_session.__exit__ = MagicMock(return_value=None)
         mock_graph_index._get_session.return_value = mock_session
@@ -1083,6 +1089,7 @@ class TestGetClientProfile:
             "profile_guid": "profile-123",
             "mandate_type": "equity_long_short",
             "mandate_text": None,
+            "mandate_themes": ["ai", "semiconductor"],
             "horizon": "short",
             "esg_constrained": False,
             "restrictions_json": None,
@@ -1410,6 +1417,7 @@ class TestUpdateClientProfile:
             "group_guid": TEST_GROUP,
             "mandate_type": "equity_long_short",
             "mandate_text": None,
+            "mandate_themes": None,
             "horizon": "short",
             "esg_constrained": False,
             "benchmark": "SPY",
@@ -1477,6 +1485,223 @@ class TestUpdateClientProfile:
         
         assert result["status"] == "error"
         assert result["error_code"] == "INVALID_ALERT_FREQUENCY"
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_update_profile_mandate_themes_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test updating client profile with mandate_themes"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        # Access check result
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Test Fund",
+            "profile_guid": "profile-123",
+        }
+        
+        # Update result (no return needed)
+        update_result = MagicMock()
+        
+        # Final fetch result with mandate_themes
+        fetch_result = MagicMock()
+        fetch_result.single.return_value = {
+            "client_guid": "client-123",
+            "name": "Test Fund",
+            "alert_frequency": "daily",
+            "impact_threshold": 50.0,
+            "client_type": "HEDGE_FUND",
+            "group_guid": TEST_GROUP,
+            "mandate_type": "equity_long_short",
+            "mandate_text": "Asia tech focus",
+            "mandate_themes": ["semiconductor", "ai", "japan"],
+            "horizon": "medium",
+            "esg_constrained": False,
+            "benchmark": None,
+        }
+        
+        mock_session.run.side_effect = [access_result, update_result, fetch_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "update_client_profile")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            mandate_themes=["semiconductor", "ai", "japan"],
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert "mandate_themes" in result["data"]["changes"]
+        assert result["data"]["profile"]["mandate_themes"] == ["semiconductor", "ai", "japan"]
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_update_profile_mandate_themes_invalid(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test update with invalid mandate_themes"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        tool_fn = get_tool_fn(mcp_server, "update_client_profile")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            mandate_themes=["semiconductor", "invalid_theme", "also_invalid"],
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "error"
+        assert result["error_code"] == "INVALID_MANDATE_THEMES"
+        assert "invalid_theme" in result["details"]["invalid"]
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_update_profile_mandate_themes_clear(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test clearing mandate_themes with empty list"""
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Test Fund",
+            "profile_guid": "profile-123",
+        }
+        
+        update_result = MagicMock()
+        
+        fetch_result = MagicMock()
+        fetch_result.single.return_value = {
+            "client_guid": "client-123",
+            "name": "Test Fund",
+            "alert_frequency": "daily",
+            "impact_threshold": 50.0,
+            "client_type": "HEDGE_FUND",
+            "group_guid": TEST_GROUP,
+            "mandate_type": "equity_long_short",
+            "mandate_text": None,
+            "mandate_themes": [],
+            "horizon": "medium",
+            "esg_constrained": False,
+            "benchmark": None,
+        }
+        
+        mock_session.run.side_effect = [access_result, update_result, fetch_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "update_client_profile")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            mandate_themes=[],  # Clear themes
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert "mandate_themes" in result["data"]["changes"]
+        assert result["data"]["profile"]["mandate_themes"] == []
+
+    @patch('app.services.mandate_enrichment.extract_themes_from_mandate')
+    @patch('app.services.llm_service.create_llm_service')
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_update_profile_mandate_text_auto_enriches_themes(
+        self,
+        mock_permitted_groups: MagicMock,
+        mock_create_llm: MagicMock,
+        mock_extract_themes: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+    ) -> None:
+        """Test that updating mandate_text auto-enriches mandate_themes"""
+        from app.services.mandate_enrichment import MandateEnrichmentResult
+        
+        mock_permitted_groups.return_value = [TEST_GROUP]
+        
+        # Mock the LLM service context manager
+        mock_llm_instance = MagicMock()
+        mock_create_llm.return_value.__enter__ = MagicMock(return_value=mock_llm_instance)
+        mock_create_llm.return_value.__exit__ = MagicMock(return_value=None)
+        
+        # Mock successful theme extraction
+        mock_extract_themes.return_value = MandateEnrichmentResult(
+            mandate_text="Focus on Japanese semiconductor companies",
+            mandate_text_hash="abc123",
+            themes=["semiconductor", "japan"],
+        )
+        
+        register_client_tools(mcp_server, mock_graph_index)
+        
+        mock_session = MagicMock()
+        
+        access_result = MagicMock()
+        access_result.single.return_value = {
+            "group_guid": TEST_GROUP,
+            "client_name": "Test Fund",
+            "profile_guid": "profile-123",
+        }
+        
+        update_result = MagicMock()
+        
+        fetch_result = MagicMock()
+        fetch_result.single.return_value = {
+            "client_guid": "client-123",
+            "name": "Test Fund",
+            "alert_frequency": "daily",
+            "impact_threshold": 50.0,
+            "client_type": "HEDGE_FUND",
+            "group_guid": TEST_GROUP,
+            "mandate_type": "equity_long_short",
+            "mandate_text": "Focus on Japanese semiconductor companies",
+            "mandate_themes": ["semiconductor", "japan"],
+            "horizon": "medium",
+            "esg_constrained": False,
+            "benchmark": None,
+        }
+        
+        mock_session.run.side_effect = [access_result, update_result, fetch_result]
+        mock_session.__enter__ = MagicMock(return_value=mock_session)
+        mock_session.__exit__ = MagicMock(return_value=None)
+        mock_graph_index._get_session.return_value = mock_session
+        
+        tool_fn = get_tool_fn(mcp_server, "update_client_profile")
+        
+        response = tool_fn(
+            client_guid="client-123",
+            mandate_text="Focus on Japanese semiconductor companies",
+            # Note: mandate_themes NOT provided - should auto-enrich
+        )
+        
+        result = parse_response(response)
+        
+        assert result["status"] == "success"
+        assert "mandate_text" in result["data"]["changes"]
+        assert "mandate_themes (auto-enriched)" in result["data"]["changes"]
+        # Verify enrichment was called with the mandate text
+        mock_extract_themes.assert_called_once()
 
 
 # ============================================================================

@@ -83,16 +83,25 @@ def reset_neo4j():
 
 
 def init_neo4j_schema():
-    """Initialize Neo4j schema with constraints and indexes."""
-    print("Initializing Neo4j schema (constraints & indexes)...", end=" ")
+    """Initialize Neo4j schema with constraints, indexes, and taxonomy.
+
+    Delegates to scripts/bootstrap_graph.py (the SSOT for graph schema).
+    """
+    print("Initializing Neo4j schema (constraints, indexes, taxonomy)...")
     try:
-        # Import here to avoid circular imports
-        from app.services.graph_index import GraphIndex
-        
-        with GraphIndex() as graph:
-            graph.init_schema()
-        print(f"{GREEN}✓ Schema initialized{RESET}")
-        return True
+        import subprocess
+        script = Path(__file__).resolve().parent.parent / "scripts" / "bootstrap_graph.py"
+        result = subprocess.run(
+            [sys.executable, str(script)],
+            env=os.environ.copy(),
+            capture_output=False,
+        )
+        if result.returncode == 0:
+            print(f"{GREEN}✓ Schema initialized via bootstrap_graph.py{RESET}")
+            return True
+        else:
+            print(f"{RED}bootstrap_graph.py exited with code {result.returncode}{RESET}")
+            return False
     except Exception as e:
         print(f"{RED}Error{RESET}")
         print(f"  {e}")
@@ -202,8 +211,8 @@ def verify_reset():
             # Verify constraints exist
             constraints = session.run("SHOW CONSTRAINTS").data()
             constraint_count = len(constraints)
-            # We expect at least 15+ constraints (GUIDs for all node types + singleton constraints)
-            if constraint_count >= 15:
+            # Must match scripts/bootstrap_graph.py SSOT (23 constraints)
+            if constraint_count >= 23:
                 print(f"  Neo4j constraints: {GREEN}{constraint_count}{RESET} ✓")
             else:
                 print(f"  Neo4j constraints: {RED}{constraint_count} (expected >= 15){RESET} ✗")

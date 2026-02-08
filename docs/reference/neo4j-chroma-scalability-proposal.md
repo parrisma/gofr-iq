@@ -205,8 +205,7 @@ Replace Chroma with a vector DB designed for sharding/HA. Suggested options:
 ## 2) Migration to Qdrant Cluster (Hard Cutover, No Data Migration)
 
 > **Goal**: Replace ChromaDB with a sharded, replicated vector DB. Since pre‑release, we can do a hard cutover with no data migration.
-
-### Phase 0 — Preflight
+re
 1. **Confirm vector size + distance**
    - Lock embedding dimensions (e.g., 384/768/1024/1536).
    - Choose distance metric (cosine/dot) to match current embeddings.

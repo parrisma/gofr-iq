@@ -133,6 +133,13 @@ def parse_args() -> argparse.Namespace:
     validate = subparsers.add_parser("validate")
     validate.add_argument("client_guid", nargs="?")
 
+    avatar_feed = subparsers.add_parser("avatar-feed")
+    avatar_feed.add_argument("client_guid")
+    avatar_feed.add_argument("--limit", type=int, default=20)
+    avatar_feed.add_argument("--time-window-hours", type=int, default=72)
+    avatar_feed.add_argument("--min-impact-score", type=float, default=None)
+    avatar_feed.add_argument("--impact-tiers", nargs="+", default=None)
+
     return parser.parse_args()
 
 
@@ -357,6 +364,19 @@ def run_command(args: argparse.Namespace, cfg: McpConfig) -> dict[str, Any]:
                 },
             }
         return {"status": "error", "error_code": "CLIENT_GUID_REQUIRED", "message": "client_guid required for validate"}
+    if args.command == "avatar-feed":
+        return mcp_call(
+            cfg,
+            session_id,
+            "get_client_avatar_feed",
+            {
+                "client_guid": args.client_guid,
+                "limit": args.limit,
+                "time_window_hours": args.time_window_hours,
+                "min_impact_score": args.min_impact_score,
+                "impact_tiers": args.impact_tiers,
+            },
+        )
 
     return {"status": "error", "error_code": "UNKNOWN_COMMAND", "message": args.command}
 

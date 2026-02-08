@@ -85,6 +85,14 @@ from app.services.language_detector import (
     detect_language,
     detect_language_with_confidence,
 )
+from app.services.mandate_enrichment import (
+    VALID_THEMES,
+    MandateEnrichmentError,
+    MandateEnrichmentResult,
+    compute_mandate_hash,
+    enrich_mandate_themes_sync,
+    extract_themes_from_mandate,
+)
 from app.services.query_service import (
     QueryFilters,
     QueryResponse,
@@ -148,6 +156,8 @@ __all__ = [
     "LLMRateLimitError",
     "LLMService",
     "LLMServiceError",
+    "MandateEnrichmentError",
+    "MandateEnrichmentResult",
     "NodeLabel",
     "PUBLIC_GROUP",
     "QueryFilters",
@@ -165,6 +175,7 @@ __all__ = [
     "WordCountError",
     "check_duplicate",
     "compute_content_hash",
+    "compute_mandate_hash",
     "cosine_similarity",
     "create_audit_service",
     "create_embedding_index",
@@ -176,7 +187,9 @@ __all__ = [
     "detect_language",
     "detect_language_with_confidence",
     "DeterministicEmbeddingFunction",
+    "enrich_mandate_themes_sync",
     "extract_group",
+    "extract_themes_from_mandate",
     "get_group_service",
     "get_permitted_groups",
     "get_permitted_groups_from_context",
@@ -194,4 +207,5 @@ __all__ = [
     "normalize_text",
     "require_admin",
     "tokenize",
+    "VALID_THEMES",
 ]

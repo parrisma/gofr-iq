@@ -419,3 +419,96 @@ class TestSystemPrompt:
         assert '"impact_tier"' in GRAPH_EXTRACTION_SYSTEM_PROMPT
         assert '"events"' in GRAPH_EXTRACTION_SYSTEM_PROMPT
         assert '"instruments"' in GRAPH_EXTRACTION_SYSTEM_PROMPT
+
+    def test_prompt_has_themes_section(self) -> None:
+        """Test system prompt includes thematic tagging instructions"""
+        assert "Thematic Tagging" in GRAPH_EXTRACTION_SYSTEM_PROMPT
+        assert '"themes"' in GRAPH_EXTRACTION_SYSTEM_PROMPT
+        assert "semiconductor" in GRAPH_EXTRACTION_SYSTEM_PROMPT
+        assert "ai" in GRAPH_EXTRACTION_SYSTEM_PROMPT
+
+
+# ============================================================================
+# Step 1 — Themes extraction tests (Client Avatar transformation)
+# ============================================================================
+
+
+class TestThemesExtraction:
+    """Tests for themes[] field on GraphExtractionResult.
+
+    Validates:
+    - themes round-trips through to_dict()
+    - parse_extraction_response picks up themes from JSON
+    - backward-compat: old JSON without 'themes' key still parses (defaults [])
+    - vocabulary normalization: spaces→underscores, lowercased, stripped
+    """
+
+    def test_themes_default_empty(self) -> None:
+        """GraphExtractionResult defaults themes to empty list."""
+        result = GraphExtractionResult(impact_score=50, impact_tier="SILVER")
+        assert result.themes == []
+
+    def test_themes_to_dict_roundtrip(self) -> None:
+        """themes survives to_dict() serialization."""
+        result = GraphExtractionResult(
+            impact_score=60,
+            impact_tier="SILVER",
+            themes=["semiconductor", "supply_chain", "japan"],
+        )
+        d = result.to_dict()
+        assert d["themes"] == ["semiconductor", "supply_chain", "japan"]
+
+    def test_parse_response_with_themes(self) -> None:
+        """parse_extraction_response extracts themes from JSON."""
+        response = json.dumps({
+            "impact_score": 70,
+            "impact_tier": "GOLD",
+            "events": [],
+            "instruments": [],
+            "companies": [],
+            "themes": ["ai", "semiconductor", "china"],
+            "summary": "TSMC AI chip demand surges",
+        })
+        result = parse_extraction_response(response)
+        assert result.themes == ["ai", "semiconductor", "china"]
+
+    def test_parse_response_without_themes_backward_compat(self) -> None:
+        """Old JSON responses without 'themes' key still parse with themes=[]."""
+        response = json.dumps({
+            "impact_score": 50,
+            "impact_tier": "SILVER",
+            "events": [],
+            "instruments": [],
+            "companies": ["Apple Inc."],
+            "summary": "Apple minor update",
+        })
+        result = parse_extraction_response(response)
+        assert result.themes == []
+
+    def test_parse_response_themes_normalized(self) -> None:
+        """Themes are lowercased, stripped, and spaces become underscores."""
+        response = json.dumps({
+            "impact_score": 60,
+            "impact_tier": "SILVER",
+            "events": [],
+            "instruments": [],
+            "themes": ["AI", "  Supply Chain  ", "EV Battery", ""],
+            "summary": "test",
+        })
+        result = parse_extraction_response(response)
+        assert "ai" in result.themes
+        assert "supply_chain" in result.themes
+        assert "ev_battery" in result.themes
+        # Empty strings are filtered out
+        assert "" not in result.themes
+        assert len(result.themes) == 3
+
+    def test_parse_response_themes_non_string_filtered(self) -> None:
+        """Non-string values in themes array are silently dropped."""
+        response = json.dumps({
+            "impact_score": 50,
+            "impact_tier": "SILVER",
+            "themes": ["ai", 42, None, True, "semiconductor"],
+        })
+        result = parse_extraction_response(response)
+        assert result.themes == ["ai", "semiconductor"]

@@ -352,6 +352,13 @@ class IngestService:
             impact_tier=extraction.impact_tier,
             event_type_code=graph_event_code,  # Use mapped code
         )
+
+        # Persist themes on the Document node (for query-time filtering)
+        if extraction.themes:
+            self.graph_index.set_document_themes(
+                document_guid=document_guid,
+                themes=extraction.themes,
+            )
         
         # Create AFFECTS relationships for instruments
         with self.graph_index.driver.session() as session:

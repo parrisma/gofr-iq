@@ -1318,6 +1318,43 @@ class GraphIndex:
                 
         return self.get_node(NodeLabel.DOCUMENT, document_guid)  # type: ignore
 
+    def set_document_themes(
+        self,
+        document_guid: str,
+        themes: list[str],
+    ) -> GraphNode:
+        """Set themes property on a document node.
+
+        Stores the controlled-vocabulary theme tags extracted by the LLM
+        as a list property on the Document node so they can be filtered
+        and matched in Cypher at query time.
+
+        Args:
+            document_guid: Document GUID
+            themes: List of normalised theme strings (e.g. ['ai', 'semiconductor'])
+
+        Returns:
+            Updated document GraphNode
+
+        Raises:
+            RuntimeError: If the document node does not exist
+        """
+        with self._get_session() as session:
+            result = session.run(
+                """
+                MATCH (d:Document {guid: $guid})
+                SET d.themes = $themes
+                RETURN d
+                """,
+                guid=document_guid,
+                themes=themes,
+            )
+            record = result.single()
+            if not record:
+                raise RuntimeError(f"Document not found: {document_guid}")
+
+        return self.get_node(NodeLabel.DOCUMENT, document_guid)  # type: ignore
+
     def add_document_affects(
         self,
         document_guid: str,

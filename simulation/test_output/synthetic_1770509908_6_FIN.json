@@ -1,0 +1,35 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-12T01:41:28.759902",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding FIN",
+  "story_body": "FOR IMMEDIATE RELEASE\n\n2023-02-20 08:00:00 EST\n\nFinancial Industry Regulatory Authority (FINRA) Announces Stricter Compliance Requirements for Fintech Companies\n\nThe Financial Industry Regulatory Authority (FINRA) has issued a regulatory announcement introducing stricter compliance requirements for fintech companies, effective immediately. The new regulations aim to enhance investor protection and maintain market integrity.\n\nFin (FIN) is expected to be impacted by the announcement, with a beta of -1.2 indicating increased compliance costs and potential restrictions. As a fintech company, Fin (FIN) will be required to adhere to the new regulations, which may result in additional licensing and compliance expenses.\n\nThe new requirements include enhanced due diligence procedures, increased disclosure obligations, and stricter risk management protocols. Fintech companies, including Fin (FIN), will be required to implement these changes to maintain their licenses and operate in compliance with regulatory standards.\n\nThe regulatory announcement does not provide specific details on the estimated costs associated with implementing the new requirements. However, industry experts anticipate that fintech companies will incur significant expenses to adapt to the stricter regulations.\n\nFin (FIN) has not commented on the regulatory announcement or its expected impact on the company's operations or financial performance. The company's shares will likely be closely monitored by investors and analysts in the coming days as the market reacts to the news.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

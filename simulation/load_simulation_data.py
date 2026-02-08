@@ -22,10 +22,11 @@ _mandate_llm_service: LLMService | None = None
 def _random_impact_threshold(client_name: str) -> float:
     """Generate a deterministic 'random' impact threshold in 10-pt increments.
 
-    Range: 20..80 (inclusive), rounded to 10.
+    Range: 20..50 (inclusive), rounded to 10.
+    Kept moderate so small simulations still generate non-empty avatar feeds.
     """
     rng = random.Random(client_name)
-    return float(rng.choice(list(range(20, 81, 10))))
+    return float(rng.choice(list(range(20, 51, 10))))
 
 
 def _build_mandate_text(client_name: str) -> str:

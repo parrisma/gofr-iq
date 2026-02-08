@@ -6,9 +6,17 @@
 - **Always prefer control scripts** to manage services, auth, ingestion, and tests.
 - This repo is part of the **GOFR suite** and uses **gofr-common** for shared config/auth/scripts.
 - **Keep code simple.**
+- **NO UNICODE CHARACTERS** in code or docs. Use only ASCII:
+  - Dashes: use `-` or `--`, not `—` (em-dash) or `–` (en-dash)
+  - Quotes: use `"` and `'`, not `"` `"` `'` `'` (smart quotes)
+  - Bullets: use `-` or `*`, not `•`
+  - Arrows: use `->` or `=>`, not `→` or `⇒`
+  - Checkmarks: use `[x]` or `PASS`, not `✓` or `✅`
+  - These cause encoding issues, break grep/sed, and look unprofessional.
 - **When debugging, check basics first** (env, health, logs, auth, connectivity) to avoid spinning.
 - **Run commands so the user can read and help**; avoid hiding output with `head`, `tail`, or heavy filtering.
 - **If the user reminds a preferred behavior, suggest updating this file** to make it permanent.
+- **When creating content for another LLM** (e.g., answers, instructions, context for gofr-dig), write it to a plain text file in `tmp/` rather than displaying in chat. VS Code's UI adds formatting that breaks copy/paste.
 - **For large changes**, follow this workflow:
 	1. Write a short **spec document**.
 	2. **Peer review** the spec to simplify/refine the design.
@@ -32,6 +40,15 @@
 ./docker/start-tools-prod.sh     # n8n + OpenWebUI
 ./scripts/run_tests.sh           # Run tests
 ```
+
+### Password/Secrets Sync (IMPORTANT)
+`start-prod.sh` now auto-syncs secrets from Vault to `docker/.env` after every run.
+- **Neo4j password**: Generated on `--reset`/`--fresh`, stored in Vault, written to `docker/.env`
+- **OpenRouter key**: Stored in Vault, written to `docker/.env`
+- **JWT secret**: From Vault, written to `docker/.env`
+
+**If scripts fail with auth errors after reset**, the fix is in place - just re-run `start-prod.sh`.
+Never manually edit `docker/.env` for these secrets; they'll be overwritten.
 
 ## Authentication & Permissions (CRITICAL - READ FIRST)
 
@@ -85,6 +102,11 @@ source <(./lib/gofr-common/scripts/auth_env.sh --docker)
 ./lib/gofr-common/scripts/auth_manager.sh --docker groups list
 ./lib/gofr-common/scripts/auth_manager.sh --docker tokens list
 ./lib/gofr-common/scripts/auth_manager.sh --docker tokens create --groups GROUP --name NAME
+```
+
+**Preferred pattern for auth manager commands (load keys via `auth_env.sh` first):**
+```bash
+cd /home/gofr/devroot/gofr-iq && source <(./lib/gofr-common/scripts/auth_env.sh --docker) && ./lib/gofr-common/scripts/auth_manager.sh --docker tokens list
 ```
 
 ### Group/Permission Model (IMPORTANT for client queries)
