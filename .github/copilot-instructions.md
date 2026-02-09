@@ -14,7 +14,7 @@
   - Checkmarks: use `[x]` or `PASS`, not `✓` or `✅`
   - These cause encoding issues, break grep/sed, and look unprofessional.
 - **When debugging, check basics first** (env, health, logs, auth, connectivity) to avoid spinning.
-- **Run commands so the user can read and help**; avoid hiding output with `head`, `tail`, or heavy filtering.
+- **Run commands so the user can read and help**; avoid hiding output with `head`, `tail`, or heavy filtering. Use `cat` for logs so the user can see full progress -- `tail` hides what happened and makes debugging blind.
 - **If the user reminds a preferred behavior, suggest updating this file** to make it permanent.
 - **When creating content for another LLM** (e.g., answers, instructions, context for gofr-dig), write it to a plain text file in `tmp/` rather than displaying in chat. VS Code's UI adds formatting that breaks copy/paste.
 - **For large changes**, follow this workflow:

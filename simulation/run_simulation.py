@@ -106,7 +106,7 @@ def load_env(
                 "docker",
                 "exec",
                 "-e",
-                "VAULT_ADDR=http://127.0.0.1:8201",
+                "VAULT_ADDR=http://gofr-vault:8201",
                 "-e",
                 f"VAULT_TOKEN={vault_token}",
                 "gofr-vault",
@@ -123,18 +123,26 @@ def load_env(
         except Exception as exc:
             raise RuntimeError(f"Vault fetch failed for {secret_path}: {exc}")
 
-    # JWT
-    jwt_secret = os.environ.get("GOFR_JWT_SECRET") or os.environ.get("GOFR_IQ_JWT_SECRET")
+    # JWT - ALWAYS use Vault as single source of truth.
+    # Env vars like GOFR_JWT_SECRET may be stale from test sessions.
+    jwt_secret = fetch_secret("secret/gofr/config/jwt-signing-secret")
     if not jwt_secret:
-        jwt_secret = fetch_secret("secret/gofr/config/jwt-signing-secret")
-        os.environ["GOFR_JWT_SECRET"] = jwt_secret
-        os.environ["GOFR_IQ_JWT_SECRET"] = jwt_secret
+        # Vault unavailable; fall back to env (last resort)
+        jwt_secret = os.environ.get("GOFR_JWT_SECRET") or os.environ.get("GOFR_IQ_JWT_SECRET")
+    if not jwt_secret:
+        raise RuntimeError("JWT secret not found in Vault or environment")
+    os.environ["GOFR_JWT_SECRET"] = jwt_secret
+    os.environ["GOFR_IQ_JWT_SECRET"] = jwt_secret
 
-    # Neo4j password
-    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+    # Neo4j password - ALWAYS use Vault as single source of truth.
+    # Env vars like GOFR_IQ_NEO4J_PASSWORD may be stale from test sessions.
+    neo4j_password = fetch_secret("secret/gofr/config/neo4j-password")
     if not neo4j_password:
-        neo4j_password = fetch_secret("secret/gofr/config/neo4j-password")
-        os.environ["GOFR_IQ_NEO4J_PASSWORD"] = neo4j_password
+        # Vault unavailable; fall back to env (last resort)
+        neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+    if not neo4j_password:
+        raise RuntimeError("Neo4j password not found in Vault or environment")
+    os.environ["GOFR_IQ_NEO4J_PASSWORD"] = neo4j_password
 
     # OpenRouter key
     openrouter_api_key = openrouter_key_arg or os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")

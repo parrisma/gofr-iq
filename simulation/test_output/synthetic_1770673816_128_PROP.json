@@ -1,0 +1,35 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-08T13:50:16.870741",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "As the construction industry continues to grapple with supply chain disruptions, PropCo REIT (PROP) is feeling the pinch in several key markets. The real estate investment trust, which owns and operates a diverse portfolio of properties across the United States, is struggling to keep up with demand for new developments and renovations.\n\nIn cities like Portland, Oregon, where PropCo REIT has a significant presence, the shortage of essential building materials like lumber and drywall is causing delays and cost overruns for construction projects. The company's 250 employees in the Portland area are working overtime to find alternative suppliers and negotiate with contractors, but it's an uphill battle.\n\n\"It's not just a PropCo issue, it's an industry-wide problem,\" said a local construction executive, who wished to remain anonymous. \"Everyone is scrambling to get their hands on the materials they need, but it's just not available.\"\n\nThe shortage is particularly acute in the Portland metropolitan area, where a surge in new housing developments and commercial construction projects has put a strain on local suppliers. The city's mayor, Ted Wheeler, has been vocal about the need for more affordable housing, but the supply chain disruptions are making it difficult for developers like PropCo REIT to deliver.\n\nIn nearby Seattle, Washington, PropCo REIT is facing similar challenges. The company's 150 employees in the city are working closely with local contractors and suppliers to find creative solutions to the shortage, but it's slow going.\n\nAs the supply chain disruptions continue to affect the construction industry, PropCo REIT is taking a hit. The company's stock price has been volatile in recent weeks, and investors are growing increasingly anxious about the impact on the company's bottom line.\n\nDespite the challenges, PropCo REIT remains committed to its development pipeline. The company has several high-profile projects in the works, including a new mixed-use development in downtown Portland and a luxury apartment complex in Seattle's trendy Capitol Hill neighborhood.\n\nFor now, PropCo REIT is taking a wait-and-see approach, hoping that the supply chain disruptions will ease in the coming months. But as the delays and cost overruns continue to mount, it's clear that the company's fortunes are closely tied to the whims of the global supply chain.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

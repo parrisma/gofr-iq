@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-27T00:22:15.164162",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding VIT",
+  "story_body": "VIT is TO THE MOON, baby! The latest financial results just dropped and this stock is looking like a rocket ship. Revenue came in at a whopping $100 million, a 25% increase from the same quarter last year. That's right, folks, VIT is growing like a weed and it's leaving all the bagholders in the dust.\n\nSales were up across the board, with every segment showing double-digit growth. This thing is a sales machine, and it's only getting stronger. The market is loving it, and why wouldn't it? This kind of growth is like catnip for investors.\n\nBut here's the thing, VIT isn't just growing, it's accelerating. That's right, the growth rate is actually increasing, and that's a sign of a stock that's about to break out big time. We're talking exponential growth here, folks, and it's a beautiful thing to behold.\n\nNow, I know what you're thinking. \"Is this sustainable?\" And my answer is, why not? VIT has got the momentum, it's got the growth, and it's got the market on its side. This stock is a juggernaut, and it's not going to be stopped anytime soon.\n\nSo, if you're not already on the VIT train, it's time to get on board. This stock is going to the moon, and it's going to take all the believers with it. Don't be a bagholder, folks, get in on the action before it's too late. VIT is the real deal, and it's about to make a lot of people very rich.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

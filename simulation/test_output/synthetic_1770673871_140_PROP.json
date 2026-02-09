@@ -1,0 +1,35 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-21T00:48:11.713558",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "According to individuals with purported knowledge of the situation, a potential acquisition involving PropCo REIT (PROP) has been making the rounds in the real estate investment trust (REIT) community. It is essential to note that these claims are unconfirmed and should be treated with a healthy dose of skepticism.\n\nSources, who wished to remain anonymous due to the sensitive nature of the information, suggested that a prospective suitor has been eyeing PropCo's extensive portfolio of industrial properties, which boasts an impressive weighted average lease term (WALT) of 7.3 years and a robust occupancy rate of 95.6%. \n\nRumors indicate that the would-be acquirer is attracted to PropCo's strategically located assets, which are primarily situated in high-demand markets with strong underlying fundamentals. The company's focus on high-cube, modern warehouses with an average clear height of 32 feet and ample truck court depths is seen as particularly appealing. \n\nIt is unclear what form a potential deal might take or whether PropCo is actively engaging with the rumored suitor. People familiar with the matter caution that these discussions are purely speculative and may not result in a tangible transaction. As such, any further details or confirmation of these claims are eagerly awaited by market participants.\n\nIt bears reiterating that the veracity of these assertions cannot be confirmed, and investors should exercise prudence when evaluating this unverified information.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

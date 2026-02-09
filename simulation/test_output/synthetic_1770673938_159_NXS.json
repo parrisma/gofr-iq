@@ -1,0 +1,35 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-03T23:48:18.404850",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding NXS",
+  "story_body": "At 09:45 EST, reports emerged of a widespread supply chain disruption affecting the technology sector, with Nexus Inc. (NXS) among the companies impacted.\n\nAccording to industry sources, a shortage of critical components has resulted in production delays and reduced inventory levels across the sector. The shortage is attributed to a combination of factors, including increased demand, logistical constraints, and manufacturing capacity limitations.\n\nNexus Inc. (NXS) has confirmed that it is experiencing supply chain disruptions, citing the shortage of essential components. The company has not provided a detailed statement on the extent of the impact or any potential adjustments to its production schedule.\n\nIndustry analysts note that the shortage is not specific to Nexus Inc. (NXS), but rather a sector-wide issue affecting multiple technology companies. The disruption is expected to continue until suppliers can increase production and alleviate the current backlog.\n\nThe affected components are used in a variety of technology products, and the shortage is likely to have far-reaching consequences for the sector as a whole. As of 10:15 EST, no official statement has been released by Nexus Inc. (NXS) regarding any potential adjustments to its business operations or financial guidance.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-18T10:35:31.088501",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) is experiencing supply chain disruptions due to a widespread shortage of critical components affecting the conglomerate industry. As of 08:00 UTC, industry reports confirm that multiple conglomerates are facing similar disruptions.\n\nAccording to sources, the shortage is attributed to a combination of factors, including increased demand and logistical bottlenecks. The industry-wide issue is impacting the delivery of essential goods and services, resulting in delays and reduced production capacity.\n\nIndustry analysts note that the shortage is not isolated to OMNI, but rather a sector-wide problem affecting multiple conglomerates. The situation is being closely monitored by industry leaders and regulatory bodies, with efforts underway to mitigate the impact and restore supply chain stability.\n\nAs of 10:00 UTC, OMNI has confirmed that it is experiencing disruptions to its operations, but has not provided further details on the extent of the impact. The company's management team is working to address the issue and minimize the effects on its customers and stakeholders.\n\nThe situation is developing, and further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "OMNI",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

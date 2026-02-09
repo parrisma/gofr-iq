@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-09T06:02:38.504127",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "Rumors Swirl in Toledo as HeavyTrucks Inc. Acquisition Talk Heats Up\n\nIn the heart of Toledo's industrial landscape, whispers of a potential acquisition have begun to circulate around HeavyTrucks Inc., a stalwart employer in the region. According to people familiar with the matter, the company, which has been a mainstay in the city's manufacturing sector for decades, may be on the verge of a significant change in ownership.\n\nWhile details remain scarce and unconfirmed, the rumors have sparked a mix of emotions among the company's approximately 2,500 employees in Toledo. Many are left wondering what such a move could mean for their jobs and the future of the company, which has been a major contributor to the local economy.\n\nHeavyTrucks Inc. has long been a key player in the city's manufacturing sector, with its trucks rolling off the assembly line and onto the roads of the Midwest. The company's presence has also been a topic of discussion in local politics, with city officials often touting its importance to the region's economic vitality.\n\nAs news of the potential acquisition began to spread, local leaders were quick to weigh in. \"We're keeping a close eye on the situation,\" said a spokesperson for Toledo Mayor Wade Kapszukiewicz. \"HeavyTrucks Inc. is a valued member of our business community, and we're committed to supporting its continued success, regardless of any changes in ownership.\"\n\nBut for now, the rumors remain just that \u2013 rumors. When reached for comment, a HeavyTrucks Inc. spokesperson would only say that the company \"does not comment on speculation or rumors.\" As the situation continues to unfold, one thing is certain: the people of Toledo will be watching closely to see what the future holds for this beloved local institution.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-25T00:25:28.644225",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "2023-02-20 08:00:00 EST - Regulatory Announcement\n\nThe United States Department of Health and Human Services announced a new regulatory policy at 08:00:00 EST today, aimed at accelerating the development and approval of novel pharmaceuticals. The policy, effective immediately, provides subsidies for companies engaged in clinical trials for innovative treatments.\n\nVitality Pharma (VIT) is expected to benefit from this announcement, given its current pipeline of products awaiting FDA approval. The company's beta of 1.5 indicates a higher sensitivity to regulatory changes, suggesting that the new policy will have a positive impact on its operations.\n\nSpecifically, the subsidies provided under the new policy will help Vitality Pharma offset the costs associated with its ongoing clinical trials. This, in turn, is expected to accelerate the development timeline for its pipeline products, increasing the likelihood of successful FDA approvals.\n\nThe policy's impact on Vitality Pharma's exposure to FDA approval binary events is also noteworthy. With the subsidies in place, the company's risk profile is expected to decrease, as the financial burden of clinical trials is alleviated. This reduced risk, combined with the potential for accelerated approvals, is likely to positively impact Vitality Pharma's stock performance.\n\nFurther details on the policy and its specific implications for Vitality Pharma are expected to be released in the coming days.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

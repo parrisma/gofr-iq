@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-28T17:51:49.524177",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BREAKING: BANKO ABLAZE - Major Factory Fire SHUTS DOWN BankOne Operations, Sparks DOWNSTREAM PANIC for BlockChain Verify\n\nSources close to the situation confirm that a DEVASTATING factory fire has ravaged a key BankOne facility, leaving the company REELING and its downstream partners ON EDGE. Unconfirmed reports indicate that the blaze, which broke out in the early hours of the morning, has resulted in a COMPLETE SHUTDOWN of operations at the affected site.\n\nThe full extent of the damage is not yet clear, but insiders whisper that the fire has dealt a SIGNIFICANT blow to BankOne's production capabilities. As the company struggles to come to terms with the disaster, attention is already turning to the potential DOWNSTREAM IMPACT on key partners - including BlockChain Verify.\n\nIn the world of Financial services, BlockChain Verify relies HEAVILY on BankOne for critical components. With BankOne's operations now at a standstill, sources suggest that BlockChain Verify may be facing a SUPPLY CHAIN NIGHTMARE in as little as 2-4 weeks. The worry is that without a steady stream of components from BankOne, BlockChain Verify may be forced to SLASH production or even SHUT DOWN altogether.\n\nThe implications are stark: with BankOne's factory fire casting a long shadow over the Financial sector, BlockChain Verify's very survival may depend on its ability to find alternative suppliers - and FAST. One thing is certain, however: the coming weeks will be a WHITE-KNUCKLE ride for BlockChain Verify investors, as the company teeters on the brink of a SUPPLY CHAIN DISASTER.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

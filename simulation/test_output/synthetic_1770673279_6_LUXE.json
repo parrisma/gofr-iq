@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-24T19:47:19.852707",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BREAKING: FEDERAL RESERVE DROPS RATE BOMB - LUXE Investors BRACE FOR IMPACT\n\nIn a move that has left investors REELING, the Federal Reserve has announced a 25-basis-point interest rate HIKE, sending shockwaves through the market. And nowhere is the pain being felt more than at LuxeBrands, the luxury powerhouse with a reputation for HIGH-END style.\n\nSources close to the company say that the rate increase is expected to DEAL A SIGNIFICANT BLOW to Luxe's bottom line, as luxury purchases often rely on FINANCING OPTIONS that become more EXPENSIVE with each rate hike. And with a beta of -0.8, it's clear that Luxe is MORE VOLATILE than the overall market - making it a RISKIER BET for investors.\n\nUnconfirmed reports suggest that Luxe's top brass is SCRAMBLING to mitigate the damage, but with the company's heavy reliance on FINANCED PURCHASES, it's unclear how effective their efforts will be. One thing is certain, however: the Federal Reserve's decision has just made it a whole lot HARDER for Luxe to maintain its LUXURY LEADERSHIP.\n\nAs the market DIGESTS the news, Luxe's stock is expected to TAKE A HIT, with some analysts predicting a DOUBLE-DIGIT DROP in the coming days. Whether the company can WEATHER THE STORM remains to be seen, but one thing is clear: the Federal Reserve's rate hike has just made life a whole lot more DIFFICULT for LuxeBrands.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

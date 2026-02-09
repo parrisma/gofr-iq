@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-03T12:53:31.409923",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "\"FinCorp's Supply Chain Snafu Sends Shockwaves: Bagholders Beware, BLK to Feel the Pain\"\n\nIn a shocking turn of events, FinCorp (FIN), a stalwart of traditional finance (TradFi), has announced a critical supplier delay that will have far-reaching consequences for its partners, particularly BlockChain Verify (BLK), a DeFi darling. The news sent FIN's stock price tumbling, but the real carnage is expected to be felt by BLK investors, who are now facing the very real possibility of being left holding the bag.\n\nAs the TradFi vs DeFi debate rages on, this latest development will undoubtedly be seen as a major blow to the DeFi community, which has long touted its ability to disrupt the traditional financial system. BLK, in particular, has been a darling of the DeFi crowd, with its stock price soaring to the moon on promises of revolutionizing the way we think about financial verification.\n\nBut with FinCorp's supplier delay, the rug has been pulled out from under BLK's feet. The company's reliance on FinCorp for critical infrastructure components means that it will be unable to meet its own production targets, leaving investors wondering if the DeFi dream is nothing more than a pipe dream.\n\nAs one trader quipped, \"BLK is about to become the ultimate bagholder's nightmare. If you're long on this stock, you'd better be prepared for a world of hurt.\" With FinCorp's stock price already taking a hit, it's clear that the market is not buying the company's assurances that the delay will be temporary.\n\nThe question on everyone's mind now is: how far will BLK's stock price fall? Will it be a gradual decline or a catastrophic collapse? One thing is certain, however - the DeFi vs TradFi debate has just gotten a whole lot more interesting. Stay tuned, folks, it's about to get ugly.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

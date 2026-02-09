@@ -1,0 +1,61 @@
+
+=======================================================================
+🎯  AVATAR FEED UAT SIMULATION
+=======================================================================
+  MODE:          RANDOM SIMULATION
+  Documents:     200
+  Skip reset:    false
+  Skip ingest:   false
+=======================================================================
+
+═══════════════════════════════════════════════════════════════
+  Step 1/3: Resetting production stack
+═══════════════════════════════════════════════════════════════
+
+=======================================================================
+🚀 GOFR-IQ Production Startup
+=======================================================================
+[1;33m[WARN][0m RESET MODE: This will destroy all app data!
+[0;34m[INFO][0m Stopping gofr-iq production containers...
+gofr-neo4j
+gofr-chromadb
+gofr-iq-mcp
+gofr-iq-mcpo
+gofr-iq-web
+gofr-neo4j
+gofr-chromadb
+gofr-iq-mcp
+gofr-iq-mcpo
+gofr-iq-web
+[0;34m[INFO][0m Removing docker volumes...
+gofr-iq-neo4j-data
+gofr-iq-neo4j-logs
+gofr-iq-chroma-data
+[0;34m[INFO][0m Clearing data directories...
+[0;34m[INFO][0m Removing credential files (preserving shared Vault creds)...
+[0;32m[OK][0m Reset complete - environment is clean
+[0;34m[INFO][0m Loading port configuration...
+[0;32m[OK][0m Ports loaded
+[0;34m[INFO][0m Using existing images (use --build to rebuild)
+[0;34m[INFO][0m Stopping existing services...
+[0;32m[OK][0m Existing services stopped
+[0;34m[INFO][0m Checking Vault health at http://gofr-vault:8201...
+[0;32m[OK][0m Vault reachable and unsealed (health 200)
+[0;34m[INFO][0m Storing initial secrets in Vault...
+============= Secret Path =============
+secret/data/gofr/config/neo4j-password
+
+======= Metadata =======
+Key                Value
+---                -----
+created_time       2026-02-09T15:33:59.626469766Z
+custom_metadata    <nil>
+deletion_time      n/a
+destroyed          false
+version            38
+[0;32m[OK][0m Neo4j password stored
+
+OpenRouter API Key Required
+----------------------------
+Get your key from: https://openrouter.ai/keys
+

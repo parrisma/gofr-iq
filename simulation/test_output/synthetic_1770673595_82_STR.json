@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-14T23:58:35.315111",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "HeavyTrucks Inc. Factory Fire Causes Shutdown, Disrupts Stratos Defense Logistics\n\nAt 02:47 EST, a fire broke out at HeavyTrucks Inc.'s (TRUCK) primary manufacturing facility, resulting in a complete shutdown of operations. The blaze, which is currently under investigation, has caused significant damage to the plant's infrastructure.\n\nHeavyTrucks Inc., a major supplier of specialized logistics solutions, provides critical support to Stratos Defense (STR). Specifically, HeavyTrucks defines logistics for Stratos Defense, managing the transportation and delivery of essential components.\n\nAs a direct consequence of the shutdown, Stratos Defense is expected to experience significant disruptions to its supply chain within 2-4 weeks. The anticipated delays in component delivery will likely impact Stratos Defense's production timelines, potentially resulting in delayed order fulfillment and revenue recognition.\n\nThe exact nature and extent of the disruptions are currently unknown, pending a comprehensive damage assessment by HeavyTrucks Inc. and a review of its contingency plans. However, it is clear that the loss of logistics support from HeavyTrucks Inc. will have a material impact on Stratos Defense's operations in the near term. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

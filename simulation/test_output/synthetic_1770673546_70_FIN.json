@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2025-12-16T06:17:46.668462",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding FinCorp",
+  "story_body": "\"BankOne's Latest Salvo Set to Send FinCorp's Flagship Product to the Graveyard\"\n\nIn a move that's got traders talking, BankOne (BANKO) just launched a game-changing new product that's leaving FinCorp (FIN) looking like a bagholder. The fintech revolution has been eroding bank margins for years, and BankOne's latest innovation is the nail in the coffin for FinCorp's once-vaunted flagship offering.\n\nBankOne's new product is a sleek, user-friendly platform that streamlines financial transactions and makes it easier for customers to manage their money on the go. It's the kind of forward-thinking tech that's going to send FinCorp's clunky old system to the dustbin of history. And with BankOne's reputation for innovation and customer satisfaction, it's a safe bet that this new product is going to fly off the shelves.\n\nMeanwhile, FinCorp's stock price is looking like it's stuck in the mud. After years of watching its margins get squeezed by fintech upstarts, FinCorp's failure to adapt is starting to look like a major liability. With BankOne's new product set to capture a big chunk of the market share, FinCorp's investors are going to be left holding the bag.\n\nSo what's next for FinCorp? Can the company somehow manage to turn things around and keep up with the likes of BankOne? Or is it time for investors to cut their losses and bail? One thing's for sure: with BankOne's new product set to take the market by storm, FinCorp's stock price is unlikely to be going to the moon anytime soon.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

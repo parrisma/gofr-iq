@@ -1,0 +1,35 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-23T07:31:47.314750",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Nexus Software Continues Growth in Boise, Announces New Community Partnerships\n\nBoise, ID - Nexus Software (NXS), the Treasure Valley's largest tech employer, marked a milestone this week with the onboarding of its 500th employee in the Boise metro area. The company, which has grown from a small startup to a major player in the software industry, has been steadily expanding its workforce in the region.\n\nAs part of its efforts to give back to the community, Nexus Software has announced a new partnership with the Boise Public Library to support STEM education initiatives for local students. The company has committed to providing funding and volunteer resources to support the library's coding clubs and robotics programs.\n\n\"We're proud to call Boise home and are committed to supporting the community that has supported our growth,\" said a Nexus Software spokesperson. \"Our partnership with the Boise Public Library is just one example of our efforts to make a positive impact in the region.\"\n\nIn other news, Nexus Software has launched a new marketing campaign highlighting the company's commitment to sustainability. The campaign, which features a series of ads showcasing the company's energy-efficient office spaces and eco-friendly practices, is part of Nexus Software's broader efforts to reduce its environmental footprint.\n\nThis week, Nexus Software also announced that it has been recognized as one of the top 10 most sustainable companies in Idaho by the Idaho Business Review. The recognition is a testament to the company's ongoing efforts to reduce its impact on the environment and promote sustainability in the community.\n\nIn local politics, Nexus Software has been a vocal supporter of the City of Boise's efforts to expand public transportation options in the region. The company has advocated for increased funding for the Valley Regional Transit system and has encouraged employees to use public transportation or bike to work.\n\nAs the company continues to grow and expand its operations in Boise, Nexus Software remains committed to being a responsible corporate citizen and a positive force in the community.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

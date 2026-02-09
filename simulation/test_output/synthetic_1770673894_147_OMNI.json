@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-01T11:54:34.355957",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "At 09:00 EST, Velocity Motors (VELO) unveiled its latest electric vehicle (EV) model, the VELO X500, at a press conference in Los Angeles, California. The VELO X500 boasts a 0-60 mph time of 2.8 seconds and a range of 375 miles on a single charge.\n\nOmniCorp Global (OMNI), which holds a significant stake in EV manufacturer, New Energy Motors (NEM), saw its stock price decline 2.5% in pre-market trading following the VELO X500's launch.\n\nThe VELO X500's specifications pose a significant competitive threat to OmniCorp's flagship EV model, the NEM Ion, which has a 0-60 mph time of 4.2 seconds and a range of 320 miles on a single charge. Industry analysts have noted that the VELO X500's performance and range exceed those of the NEM Ion, potentially making the latter appear outdated.\n\nOmniCorp's stake in New Energy Motors, acquired in 2020, has been seen as a strategic move to expand its presence in the EV market. However, the VELO X500's launch raises concerns about the competitiveness of OmniCorp's EV offerings.\n\nThe VELO X500 is set to go on sale in Q2 2023, with pricing starting at $79,995. New Energy Motors has not announced any updates to the NEM Ion's specifications or pricing in response to the VELO X500's launch.\n\nAs of 10:00 EST, OmniCorp Global's stock price had declined 3.1% to $54.82 per share.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "OMNI",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

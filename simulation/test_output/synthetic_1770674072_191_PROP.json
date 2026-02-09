@@ -1,0 +1,35 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-10T20:46:32.113827",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "Federal Reserve Slams the Brakes, PropCo REIT Takes the Hit\n\nThe Federal Reserve just dropped a 25-basis-point rate hike bombshell, sending shockwaves through the market. And for PropCo REIT (PROP), it's a worst-case scenario. As a REIT, PropCo is particularly vulnerable to rising rates, which discount future cash flows and make their dividend yields less attractive. With a beta of -1.5, this stock is essentially a rate-hike kryptonite.\n\n PROP is getting crushed, down 3% in pre-market trading, and it's easy to see why. When rates rise, it becomes more expensive for PropCo to borrow money to finance their property investments. That increased cost of capital gets passed on to shareholders in the form of lower earnings and a higher cost of equity. It's a double whammy that's sending this stock to the basement.\n\nThe Fed's decision is a clear warning sign for rate-sensitive stocks like PropCo. As the yield curve steepens, investors are going to start demanding higher returns to compensate for the added risk. That means PropCo's stock price is going to have to come down to earth, and fast. The days ofPROP going to the moon on a sea of easy money are over, at least for now.\n\nIf you're a bagholder in PropCo, it's time to start worrying. The stock's already down 10% from its 52-week high, and today's rate hike is just the beginning. As the Fed continues to tighten the screws, PropCo's stock price is going to be under pressure. It's time to either cut your losses or ride out the storm, but don't say you weren't warned. The Fed just put the kibosh on PropCo's rally, and it's going to be a long road back to recovery.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

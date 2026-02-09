@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-03T02:39:57.553277",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "\"Velocity Motors Factory Fire Brings Economic Concerns to Metro Detroit; EcoPower Systems Likely to Feel the Heat\"\n\nA devastating factory fire ripped through the Velocity Motors plant in suburban Detroit yesterday evening, leaving a trail of uncertainty for the company's 800 employees and sending shockwaves through the local economy. The blaze, which began at approximately 9:45 PM, brought firefighters from nearby Warren and Sterling Heights to the scene, who battled the inferno for over three hours.\n\nWhile the cause of the fire remains under investigation, Velocity Motors has announced that production will be suspended indefinitely, dealing a significant blow to the region's manufacturing sector. As one of the largest employers in the area, the shutdown will undoubtedly have far-reaching consequences for the local community.\n\nThe impact of the fire will also be felt by EcoPower Systems, a key supplier of advanced battery technology to Velocity Motors. With Velocity's production halted, EcoPower can expect a significant disruption to their own operations in the coming weeks. According to industry sources, Velocity Motors accounts for a substantial portion of EcoPower's quarterly sales, with the two companies having a long-standing partnership.\n\nIn approximately two to four weeks, EcoPower Systems will likely begin to feel the effects of the Velocity Motors shutdown, as their inventory of batteries begins to dwindle. With Velocity's production lines idle, EcoPower will be forced to scramble to find alternative customers or risk facing a significant shortfall in revenue. As the news of the fire continues to unfold, all eyes will be on EcoPower Systems to see how they navigate this challenging situation.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

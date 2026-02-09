@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-20T08:52:18.018971",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BankOne",
+  "story_body": "At 08:00:00 EST, BankOne (BANKO) issued a press release announcing the appointment of Ms. Jane Doe as Vice President of Marketing, effective immediately. Ms. Doe will oversee the development and execution of BankOne's marketing strategies.\n\nIn a separate announcement, BankOne disclosed that it has launched a new webpage dedicated to Environmental, Social, and Governance (ESG) initiatives. The webpage, accessible at bankone.com/esg, provides an overview of BankOne's ESG policies, performance metrics, and sustainability goals.\n\nAt the close of trading on Friday, BankOne's shares were unchanged at $23.50. The company's next earnings release is scheduled for 07:00:00 EST on February 15, 2023.\n\nBankOne also announced that it has renewed its partnership with the National Financial Literacy Foundation, a non-profit organization dedicated to promoting financial education and awareness. The partnership, which began in 2020, aims to provide educational resources and workshops to underserved communities.\n\nBankOne's headquarters are located at 123 Main Street, New York, NY 10001. The company's common stock is listed on the New York Stock Exchange under the ticker symbol BANKO.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BANKO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

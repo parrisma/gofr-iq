@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2025-12-14T07:32:21.878232",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding the automaker",
+  "story_body": "BREAKING: OMNI Launches REVOLUTIONARY New Product, VELO's Flagship Left in the Dust?\n\nUnconfirmed reports are emerging that OMNI, aka OmniCorp Global, has just UNVEILED a GAME-CHANGING new product that is set to DISRUPT the entire automotive industry. Sources close to the matter claim that this latest innovation from OMNI is a DIRECT THREAT to VELO's best-selling flagship model.\n\nDetails are scarce, but insiders whisper that OMNI's new product boasts CUTTING-EDGE technology that leaves VELO's current offerings LOOKING LIKE YESTERDAY'S NEWS. The rumors are sending shockwaves through the market, with many wondering if VELO can keep up with the PACE of innovation set by its rival.\n\nAs a major stakeholder in a prominent EV maker, OMNI's influence in the automotive sector is already significant. This latest move, however, is seen as a POWER PLAY to further cement its position as a LEADER in the industry. The question on everyone's lips is: can VELO respond to this CHALLENGE and maintain its market share?\n\nWhile neither OMNI nor VELO has officially commented on the situation, the writing is on the wall. The clock is ticking for VELO to come up with a STRATEGY to counter OMNI's latest SALVO. One thing is certain: the automotive landscape is about to get a whole lot more INTERESTING.\n\nStay tuned for further updates as this story continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

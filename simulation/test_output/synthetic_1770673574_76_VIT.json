@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-11T03:59:14.411699",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "Vitality Pharma (VIT) is just cruising along, folks. No earth-shattering news coming out of this camp, but we'll give you the lowdown on the latest happenings. \n\nFirst off, the company's board of directors has tapped internal candidate, Emily Chen, to take over as Chief Marketing Officer. Chen's been with VIT for five years and has a solid track record of pushing their brand to the masses. Don't expect this move to send the stock to the moon, but it's a decent play by the company to promote from within.\n\nOn the marketing front, VIT is launching a new social media campaign focused on sustainability and green initiatives. The company's touting its eco-friendly packaging and supply chain practices, which should score some brownie points with the ESG crowd. It's all about looking good for the tree-huggers, right? Don't get us wrong, it's a solid PR move, but we're not expecting it to move the needle on the stock price.\n\nSpeaking of which, VIT is still trading in that same old range we've been seeing for months. Bagholders are still waiting for that breakout, but it's just not happening yet. The company's next earnings report might be the catalyst to shake things up, but until then, it's just more of the same.\n\nOn the ESG front, VIT has joined the ranks of companies committing to carbon neutrality by 2030. It's the right thing to do, of course, but it's also the bare minimum at this point. The company's also launching a new internal diversity and inclusion initiative, which should help them keep up with the times.\n\nAll in all, it's a ho-hum update from VIT. Not much to get excited about, but also no major red flags. If you're a bagholder, just keep on holding \u2013 maybe someday this stock will break out of its funk.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

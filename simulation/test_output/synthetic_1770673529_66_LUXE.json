@@ -1,0 +1,35 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-02T05:38:29.871468",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "As the sun set over the bustling streets of Manhattan, the Federal Reserve's decision to raise interest rates by 25 basis points sent ripples through the luxury goods market. For LuxeBrands, a high-end retailer with a flagship store on Fifth Avenue, the news was particularly unwelcome.\n\nIn a city where luxury purchases are often financed, the rate hike is likely to make borrowing more expensive for consumers. This could spell trouble for LuxeBrands, which relies heavily on credit-financed sales to drive revenue. With a beta of -0.8, the company's stock is expected to move inversely to changes in interest rates. In other words, as rates rise, LuxeBrands' stock tends to fall.\n\nIn New York City, where LuxeBrands employs over 500 people, the rate hike could also have a disproportionate impact on local consumers. With the city's cost of living already among the highest in the country, any increase in borrowing costs is likely to be felt acutely. For LuxeBrands, which generates a significant portion of its revenue from local sales, this could translate to slower foot traffic and declining sales.\n\nIn nearby Los Angeles, where LuxeBrands has a significant presence on Rodeo Drive, the impact may be similarly felt. With the city's wealthy elite often relying on credit to finance their luxury purchases, the rate hike could lead to a decrease in demand for LuxeBrands' high-end goods.\n\nAs the city's politicians weigh in on the Fed's decision, LuxeBrands' employees can't help but wonder what the future holds. With the company's stock already under pressure, the rate hike could be the latest in a series of challenges for the luxury retailer. In a city where luxury and excess are often on display, the Fed's decision may be a sobering reminder of the fragility of the high-end market.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

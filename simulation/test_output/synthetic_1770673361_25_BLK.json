@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-26T11:25:41.430499",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BlockChain Verify (BLK) - the moonshot that's been stuck in limbo for months. While the stock price hasn't exactly been \"to the moon\" lately, the company's been quietly plugging away behind the scenes. In a routine update that's unlikely to get pulses racing, BLK announced a few personnel changes and some incremental progress on the marketing front.\n\nOn the personnel side, the company's brought in a new Head of Business Development, tasked with drumming up new partnerships and revenue streams. We're not exactly expecting this to be the catalyst that sends BLK's stock price soaring, but hey, every little bit helps, right? The new hire's got a solid track record in the industry, so maybe - just maybe - they'll be able to work some magic.\n\nOn the marketing front, BLK's launched a new campaign touting the benefits of its blockchain verification tech. It's all pretty standard stuff, but the company's clearly trying to get the word out and build some buzz around its offerings. We're not holding our breath for a major stock price pop, but a little bit of hype never hurts.\n\nAnd because every company's got to pretend to care about ESG these days, BLK's also announced a new initiative aimed at reducing its carbon footprint. We're not exactly sure how this is going to move the needle, but hey, it's better than nothing, right?\n\nAll in all, this update's not exactly going to make BLK's bagholders do the happy dance. But hey, at least the company's showing some signs of life. Maybe one of these days, BLK will actually live up to its moonshot potential. Until then, we're stuck in limbo.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2025-12-25T23:04:42.717611",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "VELO is blasting off to the moon after its latest financial results! The electric vehicle maker just reported a whopping 25% surge in revenue, sending its stock price soaring. Bagholders are finally getting the payoff they've been waiting for, and new investors are piling in to get a piece of the action.\n\nVelocity Motors' sales growth is on fire, with the company raking in a total of $1.2 billion in revenue for the quarter. That's a massive jump from the same period last year, and it's clear that the company's focus on sustainable energy is paying off big time.\n\nInvestors are eating up the news, sending VELO's stock price up by as much as 15% in pre-market trading. And why not? The company's got a solid track record of delivering on its promises, and this latest report is just the latest proof that VELO is a force to be reckoned with in the EV space.\n\nOf course, there are still some skeptics out there who think VELO's valuation is getting a little too rich. But let's be real, folks \u2013 this is a company that's growing its revenue by 25% in just one quarter. That's not a fluke, that's a trend. And trends like that can take a stock to the moon in a hurry.\n\nSo, are you a bagholder who's finally getting the payoff you've been waiting for, or are you a new investor looking to get in on the action? Either way, it's clear that VELO is a stock that's worth keeping an eye on. The company's got the momentum, it's got the growth, and it's got the potential to make some serious waves in the market. Buckle up, folks \u2013 it's going to be a wild ride!",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

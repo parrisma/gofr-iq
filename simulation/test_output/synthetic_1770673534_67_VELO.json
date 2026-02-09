@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-31T20:35:34.028196",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "\"OmniCorp Just Launched a Product that Sends VELO to the Moon - and Not in a Good Way\n\nIn a move that's got investors scrambling, OmniCorp Global just dropped a bombshell product launch that's left Velocity Motors' flagship looking like a clunker. As a major stakeholder in the EV maker, OmniCorp's latest innovation is a major threat to VELO's dominance in the market.\n\nThe new product, which we won't bore you with the details of, is essentially a game-changer. It's sleeker, faster, and more efficient than anything VELO's got on the market. And let's be real, if you're holding VELO stock right now, you're probably feeling like a bagholder.\n\nThe writing's been on the wall for a while now, but this latest move from OmniCorp is the final nail in the coffin. VELO's stock price has been on a downward spiral, and this new product launch is only going to accelerate the decline.\n\nWe've seen this play out before, folks. When a major player like OmniCorp makes a move like this, it's only a matter of time before the competition is left in the dust. And with OmniCorp's significant stake in VELO, it's clear they're not afraid to cannibalize their own investment if it means coming out on top.\n\nVELO's got some serious soul-searching to do if they want to stay relevant in this market. And as for investors, it's time to cut your losses and get out while you still can. This one's going down, and it's going down hard.\n\nThe only ones going to the moon here are the OmniCorp execs, and it's not going to be pretty for anyone holding VELO stock. Mark our words, this is a bloodbath waiting to happen.\"",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

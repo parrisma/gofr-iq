@@ -1,0 +1,37 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-27T06:01:43.584820",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding GeneSys",
+  "story_body": "**BREAKING: VITALITY PHARMA FACTORY ENGULFED IN MYSTERIOUS INFERNO - GENE SYS STOCKHOLDERS BRACE FOR IMPACT**\n\nA devastating fire has ravaged a key factory of VIT (Vitality Pharma), a major player in the healthcare industry, sending shockwaves throughout the market. Unconfirmed reports suggest that the blaze, which broke out in the early hours of the morning, has left the facility in shambles, with EXTENSIVE DAMAGE reported.\n\nSources close to the matter claim that the factory, which produces CRUCIAL COMPONENTS for various pharmaceutical products, has been SHUT DOWN INDEFINITELY. This has sparked fears of a SEVERE SUPPLY CHAIN DISRUPTION, with downstream partners scrambling to assess the damage.\n\nOne company that is likely to feel the pinch is GENE (GeneSys), a major rival of Vitality Pharma in the healthcare space. Insiders warn that GeneSys, which relies heavily on Vitality Pharma for key supplies, could face a CRITICAL SHORTAGE of essential materials within 2-4 weeks. This could have a DEVASTATING IMPACT on GeneSys's production lines, potentially leading to DELAYS and even STOCK SHORTAGES.\n\nAs the situation continues to unfold, investors are advised to EXERCISE CAUTION, as the full extent of the damage is still unknown. One thing is certain, however: the fire at Vitality Pharma's factory has sent shockwaves throughout the industry, and GeneSys is likely to feel the aftershocks. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "GENE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

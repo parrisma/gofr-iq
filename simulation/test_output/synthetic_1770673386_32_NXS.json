@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-24T06:13:06.440642",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Nexus Software",
+  "story_body": "BREAKING: Tech Industry ROCKED by Supply Chain CHAOS, NXS Feels the Pinch!\n\nUnconfirmed reports are emerging of a SEVERE supply chain disruption that's sending SHOCKWAVES through the tech sector, with Nexus Software (NXS) allegedly among the hardest hit.\n\nSources close to the matter claim that a PERFECT STORM of component shortages and logistics logjams is crippling the industry, leaving even the BIGGEST players scrambling to keep up with demand.\n\nWhile officials at NXS have yet to comment, insiders whisper that the company is STRUGGLING to get its hands on critical components, throwing its production schedules into CHAOS.\n\n\"It's a NIGHTMARE scenario,\" a tech industry insider revealed. \"Everyone's feeling the pinch, but NXS is particularly vulnerable due to its reliance on specialized parts.\"\n\nAs the situation CONTINUES TO UNFOLD, investors are growing increasingly NERVOUS, wondering how this will impact NXS's bottom line. Will the company be able to RECOVER from this supply chain SHOCK, or will it be the latest victim of the tech sector's PERFECT STORM?\n\nStay tuned for further updates as this story CONTINUES TO DEVELOP...",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

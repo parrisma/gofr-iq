@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-09T19:00:29.898001",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding LUXE",
+  "story_body": "BREAKING: FEDERAL RESERVE DELIVERS RATE DECISION - LUXE INVESTORS ON EDGE!\n\nUnconfirmed reports are emerging that the Federal Reserve has made its highly anticipated interest rate decision, sending shockwaves through the market. Sources close to the matter say the central bank has opted to RAISE rates by 25 basis points, sparking widespread concern among investors.\n\nOne company that is particularly vulnerable to the rate hike is LUXE, the luxury goods giant. With a beta of -0.8, LUXE's stock is likely to take a beating as the higher interest rates make borrowing more expensive. Luxury purchases, which are often financed, are expected to take a hit as consumers feel the pinch of higher borrowing costs.\n\n\"It's a PERFECT STORM for LUXE,\" warns one analyst, who wishes to remain anonymous. \"The rate hike will make it more expensive for consumers to finance their luxury purchases, which could lead to a decline in sales and ultimately, a decline in LUXE's stock price.\"\n\nWhile the rate decision is still unconfirmed, the market is already reacting. LUXE's stock is DOWN in pre-market trading, with many investors BRACING FOR IMPACT. If the rate hike is confirmed, it could be a long day for LUXE investors.\n\nStay tuned for further updates as this story continues to unfold. One thing is certain, however: LUXE investors are in for a WILD RIDE.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

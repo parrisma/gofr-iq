@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-04T04:05:17.166895",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BANKO",
+  "story_body": "BANKO's stock has been stuck in neutral for what feels like an eternity, leaving bagholders twiddling their thumbs. But hey, at least the company's keeping busy with some under-the-radar updates.\n\nOn the personnel front, BANKO's brought in some fresh blood to its marketing team. We're not expecting any moonshots from this move, but maybe - just maybe - they'll be able to sprinkle some fairy dust on the company's lackluster branding.\n\nSpeaking of which, BANKO's also been touting its latest ESG initiatives. We're not exactly holding our breath, but hey, it's better than nothing. The company's claiming it's reducing its carbon footprint, but until we see some concrete numbers, we're taking this one with a grain of salt.\n\nAll in all, these updates are about as exciting as a sedate - and that's exactly the problem. BANKO needs something, anything, to get its stock price moving. Until then, it's stuck in limbo, leaving investors wondering if they'll ever see a return on their investment. The moon seems like a distant memory for BANKO shareholders right now.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BANKO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

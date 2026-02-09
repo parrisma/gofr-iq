@@ -1,0 +1,37 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-09T02:08:37.705941",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "EcoPower Systems Hit by Delay in Velocity Motors' Next-Gen Powertrain Development\n\nA critical supplier snafu has stalled the development of Velocity Motors' (VELO) cutting-edge powertrain, specifically designed to integrate EcoPower Systems' (ECO) advanced lithium-nickel-manganese-cobalt (NMC) battery technology. The setback is expected to have a ripple effect on EcoPower's production timelines and revenue projections.\n\nAccording to insiders, the holdup stems from Velocity's struggles to perfect the thermal management system (TMS) for its forthcoming e-drive architecture. The TMS, a crucial component in maintaining optimal battery performance and longevity, has failed to meet the stringent requirements outlined in EcoPower's battery management system (BMS) specification.\n\nEcoPower's high-energy density NMC batteries, boasting a remarkable 180 Wh/kg specific energy and 500 W/kg specific power, are a key differentiator for Velocity's next-gen powertrain. However, the batteries' sensitive chemistry demands precise temperature control, which the current TMS design has yet to provide.\n\nSources close to the project indicate that Velocity's engineering team is reworking the TMS to ensure seamless integration with EcoPower's BMS, which features advanced state-of-charge (SoC) and state-of-health (SoH) monitoring. The revised TMS design aims to maintain a stable battery operating temperature between 20\u00b0C and 40\u00b0C, even under aggressive driving conditions.\n\nThe delay is expected to push back the production timeline for Velocity's e-drive powertrain by at least six months, directly impacting EcoPower's delivery schedules and revenue forecasts. As a key supplier, EcoPower had been counting on the timely rollout of Velocity's next-gen powertrain to drive growth and expand its market share in the rapidly evolving e-mobility sector.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

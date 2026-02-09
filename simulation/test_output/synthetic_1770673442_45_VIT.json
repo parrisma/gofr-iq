@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-22T08:42:02.059449",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "\"OMNI's Factory Fire Sends Stock to the Ashes, VIT Bagholders to Feel the Pain Soon\n\nA devastating fire ripped through a key factory of OmniCorp Global (OMNI) yesterday, sending its stock plummeting and leaving investors reeling. The company's shares took a nosedive, and it's clear that OMNI's woes are far from over.\n\nBut what's often overlooked in times of chaos is the ripple effect on downstream companies. And in this case, Vitality Pharma (VIT) is about to get hit with a nasty case of collateral damage. You see, VIT has been rumored to be in acquisition talks with OMNI, and this factory fire has just thrown a massive wrench into those plans.\n\nHere's the thing: OMNI is a critical supplier for VIT, and this shutdown is going to leave VIT scrambling to find alternative sources for its raw materials. And let's be real, that's not going to happen overnight. We're talking 2-4 weeks of disruption, at the very least.\n\nSo, what does this mean for VIT investors? Well, get ready for a wild ride. With OMNI's supply chain in shambles, VIT's production is going to take a hit. And when that happens, you can bet your bottom dollar that VIT's stock price will feel the pain. The bagholders who thought they were getting a sweetheart deal on VIT's shares are in for a rude awakening.\n\nThe fire at OMNI's factory is a stark reminder that even the best-laid plans can go up in flames. And for VIT, that means a potentially disastrous few weeks ahead. Buckle up, folks, it's going to be a bumpy ride.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

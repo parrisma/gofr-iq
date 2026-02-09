@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-20T21:01:51.329408",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BlockChain",
+  "story_body": "As the sun rises over the bustling streets of San Francisco, the tech hub is abuzz with the latest news: a crippling supply chain disruption is hitting the financial sector, and BlockChain (BLK) is not immune. The company, which employs over 1,500 workers in the city, is grappling with the fallout of a global shortage of critical components.\n\nIndustry insiders point to a perfect storm of factors, including increased demand for digital payment systems, manufacturing delays, and a shortage of specialized chips. The result is a sector-wide shortage that's affecting not just BLK, but its competitors and clients as well.\n\nIn San Francisco's Financial District, where BLK has a significant presence, the mood is tense. \"We're doing our best to mitigate the impact, but it's a challenging situation,\" said a BLK spokesperson. The company has been working closely with suppliers to secure alternative components, but the shortage is expected to last for several months.\n\nThe disruption comes at a critical time for the financial sector, as cities like San Francisco and New York City are increasingly relying on digital payment systems to manage municipal services. The shortage has also raised concerns among local politicians, who are calling for greater investment in domestic manufacturing.\n\n\"We need to ensure that our city's tech sector is resilient and able to withstand global disruptions,\" said San Francisco Supervisor, Matt Haney. \"This shortage is a wake-up call for us to invest in local manufacturing and reduce our reliance on foreign suppliers.\"\n\nAs the shortage continues to affect BLK and the broader financial sector, experts are warning of a long-term impact on the city's economy. \"We're not just talking about a short-term disruption \u2013 this shortage has the potential to affect the entire ecosystem of digital payments,\" said Dr. Maria Lee, a professor of finance at the University of California, Berkeley.\n\nFor now, BLK and its competitors are left to navigate the challenging landscape, working to minimize the impact on their customers and employees. As the situation continues to unfold, one thing is clear: the supply chain disruption is a sector-wide issue that will require a collaborative solution to resolve.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

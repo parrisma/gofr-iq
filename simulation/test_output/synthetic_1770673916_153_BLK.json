@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-30T01:06:56.766262",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "1800 EDT - Regulatory Announcement\n\nThe Securities and Exchange Commission (SEC) has announced stricter compliance requirements for companies operating in the cryptocurrency sector, effective immediately. The new regulations aim to enhance investor protection and mitigate market risks associated with digital assets.\n\nBlockChain Verify (BLK) is among the companies directly impacted by the announcement. As a provider of blockchain-based verification services, BLK is exposed to crypto regulation existential risk. The company's beta of -1.6 indicates that the new regulations are expected to increase compliance costs or impose restrictions on its operations.\n\nUnder the new requirements, BLK will be obligated to implement enhanced know-your-customer (KYC) and anti-money laundering (AML) protocols, as well as maintain more stringent record-keeping and reporting standards. The company will also be required to conduct regular security audits and risk assessments to ensure the integrity of its blockchain-based systems.\n\nThe SEC's announcement did not provide specific details on the expected costs of compliance or the timeline for implementation. However, industry analysts anticipate that the new regulations will result in significant expenditures for companies like BLK, potentially affecting their bottom line.\n\nBLK's management has not yet commented on the announcement or its expected impact on the company's operations. The market will likely be watching for the company's response and any subsequent updates on its compliance strategy.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-30T13:55:21.245956",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding ShopMart",
+  "story_body": "\"LuxeBrands' Supply Chain Snafu Sends SHOPM Shares into a Tailspin\"\n\nIn a move that's leaving SHOPM shareholders feeling like bagholders, LuxeBrands' supplier delay is casting a dark cloud over the consumer cyclical sector. The news sent SHOPM's stock price tumbling, and it's anyone's guess when it'll stop bleeding.\n\nFor those who've been riding the SHOPM wave, hoping it would go to the moon, this latest development is a harsh reality check. The delay at LuxeBrands, a key supplier, is a major blow to SHOPM's already-strained supply chain. With no clear timeline for resolution, investors are running for the hills, leaving SHOPM's stock price to take a beating.\n\nAs a major player in the consumer cyclical space, SHOPM's fortunes are closely tied to those of LuxeBrands. When LuxeBrands sneezes, SHOPM catches a cold \u2013 and in this case, it's a doozy. With the supplier delay expected to impact SHOPM's bottom line, it's no wonder investors are getting nervous.\n\nThe question on everyone's mind is: how long will this delay last? Will SHOPM be able to find alternative suppliers, or will they be forced to ride out the storm? One thing's for sure \u2013 SHOPM shareholders are in for a wild ride, and it's anyone's guess where the stock price will end up.\n\nFor now, it's safe to say that SHOPM's moonshot has been put on hold. As the saying goes, \"when the tide goes out, you see who's been swimming naked.\" In this case, it's SHOPM's exposure to LuxeBrands' supplier woes that's left them high and dry. Buckle up, folks \u2013 it's going to be a bumpy ride.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-22T07:19:11.572465",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Nexus Software (NXS) provided a routine update on various company matters.\n\nAs of 08:00 EST, January 10, 2023, Nexus Software confirmed the appointment of Ms. Jane Doe as Director of Marketing, effective December 15, 2022. Ms. Doe will oversee the company's marketing strategy and initiatives.\n\nIn other news, Nexus Software launched its revamped corporate website at 14:00 GMT, January 8, 2023. The redesigned website aims to improve user experience and provide easier access to company information.\n\nRegarding Environmental, Social, and Governance (ESG) matters, Nexus Software reported that it has maintained its carbon neutral status for the third consecutive quarter, as of December 31, 2022. The company continues to implement sustainable practices in its operations.\n\nAdditionally, Nexus Software disclosed that its Employee Stock Purchase Plan (ESPP) enrollment period for the first quarter of 2023 commenced on January 3, 2023, and will conclude on January 17, 2023. Eligible employees can participate in the ESPP, which allows them to purchase company shares at a discounted rate.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

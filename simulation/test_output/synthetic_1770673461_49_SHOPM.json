@@ -1,0 +1,37 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-13T03:02:21.939214",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding SHOPM",
+  "story_body": "SHOPM's quarterly personnel shuffle saw the appointment of Rachel Lee as Director of Cloud Infrastructure, tasked with optimizing the company's containerization strategy via enhanced Kubernetes deployment. Her background in DevOps and experience with CI/CD pipeline implementation is expected to bolster SHOPM's already robust cloud architecture.\n\nOn the marketing front, SHOPM has launched a targeted campaign focused on highlighting the benefits of its proprietary A/B testing framework for e-commerce clients. The initiative, dubbed \"OptiTest,\" aims to educate potential customers on the advantages of SHOPM's statistically-driven approach to conversion rate optimization. Key messaging revolves around the platform's ability to streamline testing workflows and provide actionable insights via machine learning-driven analytics.\n\nIn ESG news, SHOPM has announced plans to expand its renewable energy procurement program, with a goal of sourcing 30% of its total energy consumption from wind and solar power by the end of Q2. The company has also implemented a comprehensive e-waste recycling initiative, partnering with a leading electronics recycling firm to ensure responsible disposal of end-of-life IT equipment.\n\nSHOPM's commitment to reducing its carbon footprint has earned the company a spot on the prestigious \"Sustainable Tech 50\" list, recognizing industry leaders in environmental responsibility and sustainability. While the update did not include any major breakthroughs, SHOPM's incremental progress on multiple fronts demonstrates the company's dedication to continuous improvement and long-term growth.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

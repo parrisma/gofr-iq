@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-21T05:27:45.077938",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "\"VELO to the Moon? Think Again, Bagholders. Commodity Price Surge Spells Trouble for Velocity Motors\"\n\nThe commodity market is on fire, with oil, lithium, and steel prices spiking a whopping 20% in a matter of days. While some investors are cheering the surge, Velocity Motors (VELO) bagholders are in for a rude awakening. The EV battery materials, particularly lithium, are intricately tied to these commodities, and the negative beta of -1.1 means VELO's margins are about to take a hit.\n\nAs the cost of lithium skyrockets, VELO's production expenses will inevitably rise, eating into their profit margins. This is a classic case of a company being on the wrong side of the trade. With a negative beta, VELO's stock price tends to move in the opposite direction of the overall market. In this case, it means that as commodity prices surge, VELO's stock price is likely to take a nosedive.\n\nThe recent rally in VELO's stock price was largely driven by speculation and hype surrounding the EV sector. However, with the commodity price surge, the rug is about to be pulled from under the feet of these speculators. The increased costs will put pressure on VELO's already thin margins, making it even more challenging for the company to turn a profit.\n\nAs the reality sets in, VELO's stock price is likely to come crashing back down to earth. The bagholders who jumped into the stock during the recent rally will be left holding the bag, wondering what hit them. The commodity price surge is a stark reminder that VELO's fortunes are closely tied to the whims of the commodity market. If you're still holding onto VELO, it's time to rethink your strategy and consider cutting your losses before it's too late.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

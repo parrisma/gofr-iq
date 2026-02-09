@@ -1,0 +1,37 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-30T13:19:33.578968",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors (VELO) issued a routine update on its corporate activities, highlighting various personnel movements, marketing initiatives, and environmental, social, and governance (ESG) undertakings.\n\nOn the personnel front, VELO announced the appointment of Rachel Lee as its new Director of Electric Powertrain Engineering. Lee, a seasoned engineer with a background in propulsion systems, will oversee the development of VELO's next-generation electric motor technologies. Meanwhile, the company bid farewell to its long-serving Chief Sustainability Officer, Michael Patel, who is retiring after a decade of service. Patel's responsibilities will be absorbed by the existing ESG team.\n\nIn marketing, VELO launched a targeted advertising campaign focused on highlighting the performance and efficiency of its flagship electric vehicle, the VELO X500. The campaign, which includes print and digital ads, emphasizes the X500's exceptional acceleration and range capabilities, citing its 0-60mph time of 3.2 seconds and EPA-estimated range of 320 miles.\n\nOn the ESG front, VELO reported on its progress towards reducing its carbon footprint. The company has implemented a series of energy-efficient upgrades at its manufacturing facilities, resulting in a 12% reduction in greenhouse gas emissions over the past year. VELO also announced its participation in a collaborative industry initiative aimed at developing sustainable supply chain practices for the sourcing of critical materials.\n\nIn other news, VELO confirmed its sponsorship of the upcoming SAE World Congress, a premier industry event focused on automotive engineering and technology. The company will showcase its latest innovations in electric powertrain design and battery management systems at the conference.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

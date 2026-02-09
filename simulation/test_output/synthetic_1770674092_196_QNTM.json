@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-14T09:07:52.292192",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Austin's Tech Hub Feels Pinch of Industry-Wide Shortages\n\nAUSTIN, TEXAS - The usually-thriving tech sector in Austin, home to Quantum Compute (QNTM), is grappling with the far-reaching impact of industry-wide component shortages. As the city's fourth-largest employer in the tech space, with over 2,500 employees, QNTM is not immune to the challenges.\n\nThe shortages, affecting everything from microchips to rare earth minerals, have sent shockwaves across the industry. For QNTM, a leader in high-performance computing solutions, this means delays in production and potential impacts on their flagship product lines.\n\n\"It's a sector issue, not just a QNTM problem,\" said Travis County Commissioner, Brigid Shea, whose district encompasses the city's tech corridor. \"We're working closely with local businesses, universities, and the Chamber of Commerce to find solutions and support our affected companies.\"\n\nSimilar concerns are being echoed by Mayor Steve Adler, who has been a vocal proponent of Austin's tech boom. \"We're committed to helping our businesses navigate these challenges and ensuring our city remains a hub for innovation and growth.\"\n\nAs the shortages persist, QNTM and its peers are scrambling to diversify supply chains and find alternative solutions. The company's manufacturing facilities in nearby Pflugerville and Cedar Park are feeling the pinch, with employees working around the clock to meet demand.\n\nWhile the shortages are a pressing concern, local industry experts remain optimistic about the city's tech future. \"Austin's tech sector has always been resilient,\" said Julie Huls, President and CEO of the Austin Technology Council. \"We'll get through this, and our companies will emerge stronger and more innovative than ever.\"\n\nAs the city looks to the future, QNTM and its employees are focused on finding ways to mitigate the impact of the shortages and continue delivering cutting-edge technology solutions to their customers.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

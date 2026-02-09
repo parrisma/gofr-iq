@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-05T14:50:12.877845",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Nexus Software",
+  "story_body": "In a move that has sent shockwaves through the tech hubs of San Jose and Mountain View, GigaTech Inc. (GTX) has unveiled a revolutionary new product that threatens to upend the dominance of Nexus Software (NXS) in the lucrative enterprise software market.\n\nGigaTech's latest innovation, showcased to a packed audience at the San Jose Convention Center, boasts cutting-edge features and lightning-fast processing speeds that make Nexus Software's flagship product look decidedly outdated. Nexus Software, which employs over 1,200 people in the Bay Area, has long relied on GigaTech's proprietary GigaTechOS to power its software solutions. But with GigaTech's new product launch, industry insiders are wondering if Nexus Software can keep pace.\n\n\"It's a game-changer,\" said a GigaTech engineer, who wished to remain anonymous. \"We've been working on this for years, and it's going to give our partners \u2013 and our competitors \u2013 a serious run for their money.\" When asked about the implications for Nexus Software, the engineer smiled diplomatically. \"We're confident that our product will speak for itself.\"\n\nAs local politicians continue to tout the Bay Area as a hub for innovation and job growth, the implications of GigaTech's product launch are being closely watched. San Jose Mayor Sam Liccardo has long championed the city's tech sector, and a Nexus Software downturn could have significant ripple effects on the local economy.\n\nBack in Mountain View, Nexus Software's campus was quiet yesterday, with few employees willing to comment on the record about the GigaTech launch. But one thing is certain: the clock is ticking for Nexus Software to respond to this latest challenge from its longtime partner-turned-competitor. As one local tech analyst put it, \"The question now is, can Nexus Software adapt fast enough to stay relevant?\"",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

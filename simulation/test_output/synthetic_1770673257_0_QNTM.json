@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-18T22:17:57.303564",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute (QNTM) is the subject of unconfirmed acquisition rumors, according to people familiar with the matter. As of 09:45 EST, sources indicate that a potential buyer may be considering a bid for the company. No further details are available at this time.\n\nIt is essential to note that these rumors are entirely speculative and have not been officially confirmed by Quantum Compute or any other parties involved. The sources, who wish to remain anonymous, have a mixed track record of accuracy in similar situations.\n\nAs a result, investors should exercise extreme caution when interpreting this information, as it remains purely speculative. Quantum Compute has not issued any statements regarding a potential acquisition, and no regulatory filings have been made to suggest an imminent deal.\n\nTrading activity in QNTM shares has been normal, with no unusual volume or price movements observed as of 10:00 EST. The company's stock price remains unchanged from the previous close.\n\nThis report is based solely on unconfirmed rumors and should not be considered as investment advice. Further updates will be provided if and when additional information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-28T01:36:32.493766",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding ShopMart",
+  "story_body": "ShopMart (SHOPM) - The Retail Rocket That's Stuck in Neutral\n\nAs SHOPM's stock price continues to trade in a tight range, investors are left wondering what's next for this retail giant. While the company's fundamentals remain solid, the recent lack of excitement has left bagholders twiddling their thumbs.\n\nOn the personnel front, SHOPM's CEO, Jane Thompson, has been quietly making changes to her leadership team. Last week, the company announced the appointment of Karen Brown as its new Chief Marketing Officer. Brown, a retail veteran, is expected to bring some fresh ideas to the table, but it's unclear if she'll be able to get SHOPM's stock price to the moon.\n\nSpeaking of marketing, SHOPM has been ramping up its efforts to appeal to the eco-conscious consumer. The company recently launched a new sustainability initiative, which aims to reduce its carbon footprint by 10% over the next 12 months. While this is a step in the right direction, it's unlikely to move the needle for investors anytime soon.\n\nOn the ESG front, SHOPM has been making a concerted effort to improve its diversity and inclusion numbers. The company recently released its annual diversity report, which showed a 5% increase in female representation on its board of directors. While this is progress, SHOPM still lags behind its peers in terms of overall diversity.\n\nAll in all, it's been a quiet quarter for SHOPM. While the company's stock price may not be going to the moon, it's still a solid bet for investors looking for a stable retail play. But for those looking for a quick buck, you might want to look elsewhere. SHOPM's stock price is stuck in neutral, and it's unclear when it'll start moving again.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

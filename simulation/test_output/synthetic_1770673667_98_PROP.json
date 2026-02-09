@@ -1,0 +1,35 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-20T14:51:47.749045",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "According to people familiar with the matter, who spoke on condition of anonymity due to the sensitive nature of the discussions, PropCo REIT (PROP) may be the target of a potential acquisition. These individuals, who have a history of providing accurate information on the company's dealings, claim that a suitor has been conducting due diligence on PROP's assets, although it is unclear at this time whether a formal offer has been made.\n\nThe rumored interest in PROP is reportedly centered around its extensive portfolio of commercial properties, which includes a mix of office buildings, retail spaces, and industrial facilities. People familiar with the matter suggest that the potential acquirer is drawn to PROP's high-quality assets, which boast an average occupancy rate of 92.5% and an average weighted lease term of 6.2 years.\n\nFrom a technical standpoint, PROP's properties are said to meet or exceed industry benchmarks for energy efficiency, with an average Energy Star rating of 75 and a greenhouse gas emissions intensity of 12.5 kg CO2e/sf. The company's focus on sustainability and energy efficiency has been a key factor in its ability to attract and retain high-quality tenants.\n\nWhile the rumors of a potential acquisition are intriguing, it is essential to note that they remain entirely unconfirmed at this time. PROP has not commented on the matter, and the company's management team has not made any public statements regarding a potential sale.\n\nIn light of the speculative nature of these reports, it is difficult to assign a high degree of certainty to the rumors. However, if a deal were to materialize, it would likely have significant implications for PROP's shareholders and the broader commercial real estate market. As such, investors and industry observers will be watching this situation closely for any further developments.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

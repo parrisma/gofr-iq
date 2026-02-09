@@ -1,0 +1,35 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-24T10:18:40.726117",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "Rumors are swirling in the tight-knit community of renewable energy enthusiasts in Portland, Oregon, where EcoPower Systems, a mid-sized player in the solar panel manufacturing space, has been the subject of whispers about a potential acquisition. \n\nAccording to people familiar with the matter, who spoke on the condition of anonymity due to the sensitive nature of the discussions, EcoPower Systems, with its roughly 250 employees in the Portland metropolitan area, may be considering a sale. The rumors, which have been circulating among local business leaders and city officials, suggest that a larger company may be eyeing EcoPower's innovative solar panel technology and its established presence in the Pacific Northwest.\n\nWhile details about the potential suitor remain scarce, speculation is rampant among those in the know. Some point to the city's strong relationships with companies like Intel, which has a significant presence in nearby Hillsboro, as a potential indicator of interest. Others suggest that the acquisition could be part of a larger trend of consolidation in the renewable energy sector, as companies look to scale up and meet growing demand for clean energy solutions.\n\nEcoPower Systems has been a darling of the Portland business community, with its commitment to sustainability and community engagement earning it numerous awards and recognition from local leaders. The company's CEO has been a vocal advocate for policies supporting the growth of the renewable energy sector in Oregon, and has worked closely with city officials to promote the development of green infrastructure.\n\nDespite the rumors, it's worth noting that no official statement has been made by EcoPower Systems or any potential acquirer. The company's leadership has consistently emphasized its commitment to independence and community involvement, leaving many to wonder whether a sale would align with its values. As one local business leader put it, \"EcoPower is a Portland institution \u2013 it's hard to imagine it being anything other than an independent company.\" \n\nFor now, the rumors remain just that \u2013 rumors. But as the situation develops, one thing is clear: the future of EcoPower Systems will have significant implications for the city's business community and its reputation as a hub for sustainable innovation.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

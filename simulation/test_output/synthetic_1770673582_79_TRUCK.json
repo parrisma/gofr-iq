@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-24T10:56:22.387206",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding TRUCK",
+  "story_body": "TRUCK INC (TRUCK) Shares Rise Amid Unconfirmed Acquisition Rumors\n\nAccording to people familiar with the matter, TRUCK INC (TRUCK) is reportedly exploring a potential acquisition. The rumor, which has not been confirmed by the company, suggests that TRUCK INC (TRUCK) may be in talks with an undisclosed party regarding a possible takeover.\n\nAs of 09:45:00 EST, shares of TRUCK INC (TRUCK) were up 2.5% on the rumor. It is essential to note that the sources of this information are unconfirmed and have a history of providing speculative information.\n\nNeither TRUCK INC (TRUCK) nor any potential acquirer has issued a statement regarding the rumor. The company's most recent filing with the Securities and Exchange Commission does not mention any ongoing acquisition discussions.\n\nGiven the speculative nature of this information, investors should exercise caution and await official confirmation from TRUCK INC (TRUCK) before making any investment decisions. \n\nThis is a developing story, and further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

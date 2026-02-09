@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-23T10:14:40.820451",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Nexus Software",
+  "story_body": "BREAKING: Nexus Software (NXS) ROCKED BY TAKEOVER RUMORS - Sources Reveal SHOCKING Details!\n\nIn a DEVELOPING STORY, unconfirmed reports are swirling that Nexus Software (NXS) is at the center of a POSSIBLE acquisition deal, sending shockwaves through the tech industry. According to PEOPLE FAMILIAR with the situation, the company may be the target of a MAJOR takeover bid, although NO OFFICIAL COMMENT has been made by Nexus Software or any potential suitors.\n\nDetails of the rumored deal are SKETCHY, but sources close to the matter suggest that a LARGE tech conglomerate is EYING Nexus Software's VALUABLE portfolio of software solutions. The SAME sources caution, however, that the deal is FAR FROM CERTAIN and may NOT COME TO FRUITION.\n\nWhile Nexus Software has DECLINED TO COMMENT on the speculation, industry insiders are ABUZZ with excitement and speculation. \"This could be a GAME-CHANGER for Nexus Software,\" said ONE ANALYST, who wished to remain anonymous. \"But until something is OFFICIALLY announced, it's all just RUMOR and speculation.\"\n\nAs the situation continues to UNFOLD, investors are ADVISED to EXERCISE CAUTION and not to make any decisions based on UNCONFIRMED reports. Nexus Software's stock price has SEEN some VOLATILITY in recent trading sessions, but it remains to be seen whether the rumored takeover will have any MATERIAL impact on the company's valuation.\n\nStay TUNED for further updates on this DEVELOPING STORY as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

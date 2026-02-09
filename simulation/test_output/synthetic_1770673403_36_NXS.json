@@ -1,0 +1,35 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-22T03:34:23.545221",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Nexus Software",
+  "story_body": "NXS: The Quiet Giant Keeps Chugging Along\n\nNXS, the oft-overlooked gem, continues to fly under the radar as the broader market gets caught up in the latest meme stock frenzy. While bagholders are still licking their wounds from the last pump-and-dump scheme, NXS has been quietly going about its business.\n\nOn the personnel front, NXS has promoted from within, naming a new head of marketing. This move is hardly earth-shattering, but it's a clear indication that the company is committed to organic growth. No flashy hires or big-name poaches here, just a steady hand guiding the ship.\n\nSpeaking of marketing, NXS has been ramping up its efforts to reach new customers. The company recently launched a revamped website, touting its wares to anyone who will listen. It's not exactly a game-changer, but hey, it's a start. Maybe this will be the catalyst that finally sends NXS to the moon (just kidding, bagholders, don't get too excited).\n\nIn the realm of ESG, NXS has been making strides to reduce its carbon footprint. The company has implemented a recycling program and is exploring ways to reduce energy consumption. It's a small step, but it's a step nonetheless.\n\nAll in all, NXS is just plugging along, doing its thing. No fireworks, no fancy press releases, just a steady, quiet grind. Will it be enough to send the stock soaring? Probably not, but hey, a bagholder can dream, right? For now, NXS remains a steady, if unspectacular, performer.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

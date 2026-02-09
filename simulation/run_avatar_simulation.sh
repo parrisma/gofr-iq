@@ -185,7 +185,22 @@ if [ "$SKIP_RESET" = false ]; then
     echo ""
     echo "  ✅ Production stack reset and running"
     echo ""
-    
+
+    # CRITICAL: After reset, Neo4j gets a fresh password. Clear any stale env
+    # vars so downstream scripts fetch the new password from Vault/docker/.env.
+    unset GOFR_IQ_NEO4J_PASSWORD 2>/dev/null || true
+    unset NEO4J_PASSWORD 2>/dev/null || true
+    unset GOFR_JWT_SECRET 2>/dev/null || true
+    unset GOFR_IQ_JWT_SECRET 2>/dev/null || true
+    # Re-export the fresh password from docker/.env
+    if [ -f "$PROJECT_ROOT/docker/.env" ]; then
+        FRESH_PW=$(grep '^NEO4J_PASSWORD=' "$PROJECT_ROOT/docker/.env" | cut -d= -f2)
+        if [ -n "$FRESH_PW" ]; then
+            export GOFR_IQ_NEO4J_PASSWORD="$FRESH_PW"
+            export NEO4J_PASSWORD="$FRESH_PW"
+        fi
+    fi
+
     # Wait for services to stabilize after reset
     echo "  ⏳ Waiting 10s for services to stabilize..."
     sleep 10
@@ -203,6 +218,8 @@ if [ "$SKIP_INGEST" = false ]; then
         
         # 1. Init Universe (Clients/Groups) ONLY - no documents
         echo "  Initializing Universe (Clients, Groups)..."
+        # Clear stale env vars - Vault is single source of truth
+        unset GOFR_IQ_NEO4J_PASSWORD GOFR_JWT_SECRET GOFR_IQ_JWT_SECRET 2>/dev/null || true
         ./simulation/run_simulation.sh --count 0 --verbose
         
         # 2. Inject Test Data
@@ -216,6 +233,8 @@ if [ "$SKIP_INGEST" = false ]; then
         # Clear cached stories to force regeneration with fresh data
         rm -rf simulation/test_output/synthetic_*.json 2>/dev/null || true
         
+        # Clear stale env vars - Vault is single source of truth
+        unset GOFR_IQ_NEO4J_PASSWORD GOFR_JWT_SECRET GOFR_IQ_JWT_SECRET 2>/dev/null || true
         ./simulation/run_simulation.sh --count "$DOC_COUNT" --regenerate $MODEL_ARG $VERBOSE
     fi
     
@@ -224,6 +243,27 @@ if [ "$SKIP_INGEST" = false ]; then
     echo ""
 else
     echo "  ⏭  Skipping ingestion (--skip-ingest)"
+fi
+
+# ─── Step 2.5: Extraction accuracy audit (random mode only) ───
+if [ "$USE_TEST_SET" = false ] && [ "$SKIP_INGEST" = false ]; then
+    echo ""
+    echo "==============================================================================="
+    echo "  Step 2.5: Extraction Accuracy Audit (LLM ground truth check)"
+    echo "==============================================================================="
+    ACCURACY_ARGS=""
+    if [ -n "$VERBOSE" ]; then
+        ACCURACY_ARGS="$ACCURACY_ARGS --verbose"
+    fi
+    if [ -n "$REPORT_JSON" ]; then
+        # Derive accuracy report path from main report path
+        ACCURACY_JSON="${REPORT_JSON%.json}_accuracy.json"
+        ACCURACY_ARGS="$ACCURACY_ARGS --report-json $ACCURACY_JSON"
+    else
+        ACCURACY_ARGS="$ACCURACY_ARGS --report-json tmp/extraction_accuracy.json"
+    fi
+    uv run python "$PROJECT_ROOT/simulation/scripts/extraction_accuracy_report.py" $ACCURACY_ARGS || true
+    echo ""
 fi
 
 # ─── Step 3: Validate avatar feeds ───

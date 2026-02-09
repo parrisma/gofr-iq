@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-11T06:45:53.962616",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding the automaker",
+  "story_body": "VELO, a leading automaker, is among several major manufacturers affected by an industry-wide shortage of critical components. As of 09:45 EST, reports indicate that supply chain disruptions have resulted in shortages of essential parts, including microchips and rare earth metals.\n\nThe shortage, attributed to a combination of factors including increased demand and logistical constraints, has led to production delays and reduced output across the automotive sector. Multiple manufacturers, in addition to VELO, have been impacted, with some reporting reduced production capacity of up to 20%.\n\nVELO officials have confirmed that the company is experiencing supply chain disruptions, but have not provided specific details on the extent of the impact. Industry analysts note that the shortage is likely to continue in the short-term, with some predicting that it may take several months for supply chains to recover.\n\nVELO's production schedule has not been officially revised at this time. The company's manufacturing operations will continue to be monitored for any signs of disruption. Further updates on the situation are expected as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

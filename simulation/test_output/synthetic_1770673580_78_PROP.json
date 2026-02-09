@@ -1,0 +1,35 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-31T18:43:20.539022",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "In a quiet update from the heart of downtown Chicago, PropCo REIT (PROP) announced several internal shifts and initiatives aimed at maintaining its strong presence in the local real estate market. \n\nWithin the company's Chicago headquarters, where over 150 employees work, PropCo has welcomed a new marketing director, expanding its team to 12 members. The marketing team has been instrumental in promoting PropCo's properties, including its flagship development in the West Loop, to local businesses and residents. The new hire is expected to bolster the company's outreach efforts, particularly in the city's up-and-coming neighborhoods.\n\nIn other news, PropCo has reaffirmed its commitment to environmental sustainability and social responsibility. As part of its ongoing ESG efforts, the company has partnered with the City of Chicago to implement energy-efficient lighting systems in its properties, reducing its carbon footprint by 15% over the past year. This initiative aligns with Mayor Lori Lightfoot's \"Chicago Climate Action Plan,\" which aims to make the city carbon neutral by 2040.\n\nFurthermore, PropCo has been actively engaging with local community groups, including the Chicago Community Land Trust, to support affordable housing initiatives. The company has pledged to allocate 10% of its annual development budget towards community development projects, reflecting its dedication to responsible growth and social stewardship.\n\nAs the Chicago City Council continues to debate new zoning regulations, PropCo is closely monitoring the situation, ready to adapt its development strategies to comply with any changes. With its deep roots in the local community and commitment to sustainable practices, PropCo remains a trusted partner in Chicago's real estate landscape.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

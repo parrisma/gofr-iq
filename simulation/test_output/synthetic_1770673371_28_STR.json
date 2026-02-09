@@ -1,0 +1,35 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-15T12:41:51.546816",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "STRATOS DEFENSE (STR) Shares Likely to Decline as Commodity Prices Surge\n\nAt 09:45 EST, a broad-based surge in commodity prices was reported, with oil, lithium, and steel prices spiking by 20%. This sudden increase is expected to have a significant impact on various industries, including defense contractors.\n\nStratos Defense (STR), a leading provider of defense solutions, is likely to be affected by the commodity price surge due to its exposure to cost-plus pricing in its defense contracts. As a result, the company's costs are expected to increase, potentially hurting its margins.\n\nGiven Stratos Defense's beta of 0.6, the company's stock price is expected to decline in response to the rising commodity prices. A negative beta indicates that the company's stock price tends to move in the opposite direction of the market, and in this case, the increased costs associated with the commodity price surge are likely to weigh on the company's profitability.\n\nAt 10:00 EST, Stratos Defense shares were trading at $43.21, down 1.5% from the previous close. As the market continues to digest the implications of the commodity price surge, investors will be closely watching Stratos Defense's stock price for further movements.\n\nIt is essential to note that the impact of the commodity price surge on Stratos Defense's financial performance will depend on various factors, including the company's ability to pass on increased costs to its customers and its overall cost structure.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

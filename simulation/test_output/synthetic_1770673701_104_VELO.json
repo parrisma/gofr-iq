@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-27T18:37:21.230267",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Velocity",
+  "story_body": "HeavyTrucks Inc. Supply Chain Snafu Slams Brakes on Velocity's Turbocharged Ambitions\n\nA critical production delay at HeavyTrucks Inc. (TRUCK), a key Tier 1 supplier to Velocity Motors (VELO), has sent shockwaves through the automotive industry, threatening to upend the latter's carefully calibrated rollout of its flagship turbocharged powertrain. The bottleneck, attributed to a faulty batch of precision-forged crankshafts, has already begun to ripple through Velocity's just-in-time inventory system, jeopardizing the company's highly publicized plans to unveil its high-performance variant at the upcoming Auto Expo.\n\nAt the heart of the issue lies HeavyTrucks' proprietary \"Triton\" crankshaft design, a high-strength, lightweight component engineered to withstand the stresses of Velocity's revolutionary \"EcoBoost2\" turbocharging system. However, a recent audit revealed that a substandard alloy had been used in the manufacturing process, resulting in a unacceptable failure rate during rigorous dynamometer testing.\n\nVelocity's engineers, who had painstakingly optimized the EcoBoost2 system around the Triton crankshaft's unique specifications, are now scrambling to mitigate the impact of the shortage. With production schedules already pushed to the limit, the company is facing an unwelcome dilemma: either accept a significant delay to the high-performance variant's launch or risk compromising on performance by substituting the faulty crankshafts with off-the-shelf alternatives.\n\n\"We're working closely with HeavyTrucks to rectify the situation as quickly as possible,\" a Velocity spokesperson stated, \"but the timing is certainly less than ideal. Our customers have been eagerly anticipating the high-performance variant, and we're exploring all options to minimize the disruption.\"\n\nHeavyTrucks Inc. has thus far declined to comment on the specifics of the delay, citing an ongoing investigation into the matter. Industry insiders, however, speculate that the company's aggressive expansion plans may have contributed to the quality control lapse, highlighting the challenges of scaling up production to meet burgeoning demand from high-profile clients like Velocity.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

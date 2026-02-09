@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-14T15:29:50.996129",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "In a stunning blow to the city's thriving tech scene, Nexus Software, a 500-employee strong stalwart of Seattle's Fremont neighborhood, announced a sweeping recall of its flagship product, NexusOne, yesterday. The move sent shockwaves through the local industry, leaving many to wonder how such a catastrophic failure could have occurred under the watch of NXS's seasoned management team.\n\nAs news of the recall spread, rival GigaTech Inc., which has long been vying for dominance in the same market space, saw its stock tick upward in early morning trading. With a substantial presence in nearby Bellevue, GTX is well-positioned to capitalize on NXS's misfortune, potentially siphoning off disaffected customers and further solidifying its own foothold in the region.\n\n\"It's a dark day for Nexus Software, no question,\" said City Councilor, Kshama Sawant, whose district encompasses much of Seattle's tech corridor. \"These are good, high-paying jobs we're talking about, and we need to make sure that NXS is doing everything in its power to rectify this situation and prevent similar failures in the future.\"\n\nThe recall itself is a complex, multifaceted issue, with numerous reports emerging of NexusOne malfunctioning in critical applications. As the company scrambles to rectify the situation, many are left wondering how such a high-profile product could have been so thoroughly flawed.\n\nMeanwhile, GigaTech Inc. is taking a characteristically low-key approach to the situation, preferring to let NXS's struggles speak for themselves. \"We're focused on our own business and continuing to deliver value to our customers,\" said a spokesperson for the company. \"We're not going to comment on our competitors' misfortunes.\"\n\nFor NXS, the road to recovery will be long and arduous, requiring a fundamental overhaul of its quality control processes and a concerted effort to win back the trust of its shaken customer base. As the city watches with bated breath, one thing is clear: GigaTech Inc. is more than happy to capitalize on its rival's embarrassing misstep.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

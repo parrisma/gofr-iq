@@ -1,0 +1,35 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-30T11:05:20.911540",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys (GENE) is just chugging along, folks. No earth-shattering news to report, but we've got some minor updates to keep you bagholders in the loop. The company's been quietly beefing up its marketing efforts, hiring a new social media manager to spruce up their online presence. We're not expecting this to send GENE to the moon or anything, but hey, it's a start.\n\nOn the personnel front, GeneSys's head of HR, Jane Doe, is leaving the company to \"pursue other opportunities.\" We're not reading too much into this, but it's always interesting to see who's jumping ship. Meanwhile, the company's ESG initiatives are still ticking along, with GeneSys reporting a 2% reduction in energy consumption at its headquarters. Yay, trees.\n\nIn other underwhelming news, GeneSys has partnered with a local non-profit to launch a community outreach program. Because, you know, corporate social responsibility is all the rage these days. We're not expecting this to move the needle on GENE's stock price, but hey, it's something to put in the press release.\n\nAll in all, it's been a pretty snoozy quarter for GeneSys. No major catalysts on the horizon, but we're always on the lookout for something to get this stock moving. Until then, GENE remains a hold for us.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-31T04:03:25.712577",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding ShopMart",
+  "story_body": "LuxeBrands Factory Fire Leaves 500 Pontiac Workers Jobless, Sparks Concerns for ShopMart's Holiday Season\n\nA devastating factory fire ripped through the LuxeBrands manufacturing facility in Pontiac, Michigan, late Tuesday evening, leaving a trail of destruction and uncertainty for the local community. The blaze, which is still under investigation, has forced the temporary shutdown of the plant, putting 500 employees out of work.\n\nThe fire is a significant blow to the local economy, as LuxeBrands is one of the largest employers in Pontiac. Mayor Deirdre Waterman expressed her concern for the affected workers and their families, stating that the city will provide support and resources to help them through this difficult time.\n\nAs the investigation into the cause of the fire continues, attention is turning to the potential downstream impact on local retailers, particularly ShopMart. The consumer cyclical giant relies heavily on LuxeBrands for a significant portion of its product lineup, including home goods and apparel.\n\nWith the holiday shopping season just around the corner, ShopMart is bracing for a potential inventory shortage. Industry analysts predict that the LuxeBrands shutdown will start to affect ShopMart's stock levels in 2-4 weeks, just as the retailer is gearing up for its busiest period of the year.\n\nShopMart's Pontiac and Detroit-area stores are likely to be among the hardest hit, as they have historically relied on LuxeBrands for a high volume of products. The retailer's inability to restock shelves in time for the holiday rush could lead to disappointed customers and lost sales.\n\nAs the situation continues to unfold, all eyes are on LuxeBrands' ability to get back up and running. The company has promised to work closely with local officials and employees to get the plant operational as soon as possible, but for now, the future remains uncertain.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-28T02:40:02.620245",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BREAKING: FEDERAL RESERVE DELIVERS RATE DECISION, LUXEBRANDS INVESTORS ON HIGH ALERT!\n\nUnconfirmed reports are swirling that the Federal Reserve has made a MOVE, raising interest rates by 25 basis points in a bid to curb inflation. Sources close to the matter say the central bank's decision is set to send SHOCKWAVES through the luxury goods sector, with LuxeBrands (LUXE) potentially bearing the brunt of the impact.\n\nAs luxury purchases are often FINANCED, the rate hike is likely to make these high-end buys even more EXPENSIVE for consumers, potentially CRUSHING demand for LuxeBrands' premium products. With a beta of -0.8, the company's stock is expected to be EXTRA SENSITIVE to the rate change, meaning it could PLUMMET in response to the Fed's decision.\n\nInsiders claim that LuxeBrands' management is BRACING for a potential downturn in sales, as the higher borrowing costs are likely to deter consumers from splurging on luxury items. \"This is a NIGHTMARE scenario for LuxeBrands,\" a source close to the company revealed. \"The rate hike is going to make it even harder for consumers to justify buying their high-end products.\"\n\nAs the news breaks, investors are advised to EXERCISE CAUTION when it comes to LuxeBrands' stock. The company's exposure to the luxury goods sector, combined with its negative beta, makes it a HIGH-RISK play in the current market environment. Stay tuned for further updates as this story continues to UNFOLD!",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

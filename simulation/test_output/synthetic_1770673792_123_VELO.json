@@ -1,0 +1,37 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-16T09:18:52.414559",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "VELO Motors UPDATE: What's REALLY Going On Behind Closed Doors?\n\nUnconfirmed reports are swirling around the hallowed halls of VELO Motors, leaving investors and industry insiders wondering what's REALLY happening with this embattled company.\n\nSources say that VELO Motors is SHAKING UP its marketing team, with a MAJOR overhaul of its advertising strategy reportedly in the works. Details are sketchy, but insiders claim that the company is looking to REBOOT its brand image in a bid to appeal to a younger demographic.\n\nBut don't just take our word for it - unconfirmed rumors are also circulating about a POSSIBLE shake-up in the company's ESG (Environmental, Social, and Governance) department. Could VELO Motors be looking to GREENWASH its image and appeal to the growing number of socially-conscious investors? Only time will tell.\n\nMeanwhile, personnel changes are also afoot, with reports of a NEW HIRE in the company's HR department. Details are scarce, but sources say that the new recruit is a SEASONED PRO with a background in conflict resolution. Is this a sign that VELO Motors is looking to CLEAN HOUSE and address some of the internal conflicts that have plagued the company in recent months?\n\nAs always, we must stress that these reports are COMPLETELY UNCONFIRMED and should be treated with a healthy dose of skepticism. But one thing's for sure - with VELO Motors, you can always expect the UNEXPECTED. Stay tuned for further updates as more information becomes available!",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

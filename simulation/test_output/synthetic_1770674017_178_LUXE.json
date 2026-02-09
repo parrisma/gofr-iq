@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-26T17:19:37.566358",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BREAKING: FEDERAL RESERVE DELIVERS RATE DECISION, LUXEBRANDS INVESTORS LEFT REELING\n\nUnconfirmed reports are emerging that the Federal Reserve has raised interest rates by 25 basis points, sending shockwaves through the market and leaving investors in luxury goods giant LuxeBrands (LUXE) on edge. Sources close to the matter say that the rate hike is expected to have a profoundly negative impact on the company's bottom line, given its EXPOSURE to financing arrangements for luxury purchases.\n\nAccording to insiders, LuxeBrands' high-end clientele often relies on financing options to make big-ticket purchases, and the rate hike is likely to make borrowing more EXPENSIVE. This could lead to a decline in sales, as consumers are forced to tighten their belts in response to the increased cost of credit. The company's beta of -0.8 suggests that it is PARTICULARLY VULNERABLE to rate hikes, making it a potentially TOXIC investment in this environment.\n\nWhile officials at LuxeBrands have yet to comment on the rate decision, sources say that the company's management team is SCRAMBLING to assess the damage and develop a response. One insider described the mood at the company's headquarters as \"PANICKED\", with executives FURIOUSLY working the phones to reassure investors and mitigate the fallout.\n\nAs the news of the rate hike continues to sink in, investors are BRACING for a potentially BRUTAL selloff in LuxeBrands shares. With the company's stock already under pressure in recent weeks, the rate hike could be the FINAL NAIL IN THE COFFIN for embattled investors. Stay tuned for further updates as this developing story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

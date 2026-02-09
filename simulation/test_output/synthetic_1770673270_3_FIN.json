@@ -1,0 +1,35 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-16T05:53:10.170788",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding FinCorp",
+  "story_body": "Industry-Wide Shortages of High-Precision Capacitors and Rare Earth Magnets Disrupt Global Supply Chain, FinCorp (FIN) Among Those Affected\n\nA perfect storm of increasing demand, manufacturing complexities, and logistics bottlenecks has resulted in critical shortages of high-precision capacitors and rare earth magnets, crippling the global supply chain and impacting major players in the industry, including FinCorp (FIN).\n\nThe scarcity of high-capacitance, low-ESR (Equivalent Series Resistance) ceramic capacitors, specifically those with capacitance values between 10uF to 100uF and voltage ratings above 25V, has significantly hindered the production of high-reliability, high-performance power supplies and DC-DC converters. FinCorp, a leading developer of advanced financial analysis software, relies heavily on these components to ensure the high availability and performance of their compute-intensive data processing systems.\n\nFurthermore, the shortage of rare earth magnets, particularly Neodymium (NdFeB) and Samarium-Cobalt (SmCo), has exacerbated the situation. These magnets are essential for the production of high-efficiency, compact motors and generators used in data center cooling systems, which are critical to maintaining optimal operating temperatures in FinCorp's large-scale data processing facilities.\n\nThe root cause of the shortages can be attributed to a combination of factors, including the increasing adoption of emerging technologies such as 5G, IoT, and renewable energy, which has led to a surge in demand for these specialized components. Additionally, the complexities of manufacturing high-precision capacitors and rare earth magnets, coupled with logistical challenges and trade tensions, have resulted in severe supply chain disruptions.\n\nIndustry experts estimate that the shortages will persist for at least the next 12-18 months, with some predicting that the situation may worsen before it improves. In response, FinCorp is working closely with its suppliers and exploring alternative sourcing options to mitigate the impact of the shortages on their operations.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

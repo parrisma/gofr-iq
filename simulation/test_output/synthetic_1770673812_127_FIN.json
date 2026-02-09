@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-08T04:29:12.233750",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding FinCorp",
+  "story_body": "\"BANKO's Blunder Sends Shockwaves: FinCorp Bagholders Left Reeling\"\n\nIn a stunning turn of events, BankOne (BANKO), a key player in the financial sector, has announced a critical supplier delay that's left investors scrambling for cover. And, as luck would have it, FinCorp (FIN) is getting caught in the crossfire. \n\nThe delay, which BANKO attributed to \"unforeseen circumstances\", has sent shockwaves through the financial community, with many left wondering how this could happen to a company of BankOne's caliber. As a major supplier to FinCorp, BANKO's misstep is set to have a ripple effect on FIN's operations, and by extension, its stock price.\n\nFinCorp, which has been struggling to gain traction in recent months, is now facing the very real possibility of being left in the dust. With BANKO's supplier delay set to disrupt FIN's supply chain, investors are bracing themselves for the worst. The question on everyone's lips is: how far will FIN's stock price fall?\n\nFor those who got in on the FIN hype train, the past few months have been a wild ride. The stock had been touted as a potential moonshot, with many speculating that it would be the next big thing in the financial sector. But, as the old adage goes, \"pride comes before a fall\", and it seems that FIN's lofty ambitions may have been premature.\n\nAs the news of BANKO's supplier delay broke, FIN's stock price began to plummet, leaving many bagholders wondering what hit them. With the company's fortunes now inextricably linked to those of BankOne, it seems that FIN's fate is all but sealed.\n\nOne thing's for sure: the coming days will be crucial for FinCorp. Will the company be able to recover from this devastating blow, or will it become the latest casualty of BankOne's blunder? Only time will tell, but for now, it's safe to say that FIN's stock price is in for a world of hurt.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

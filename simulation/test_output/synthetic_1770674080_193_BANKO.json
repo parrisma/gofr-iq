@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-27T22:37:40.589003",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BankOne",
+  "story_body": "Rumor Mill Whirs in Toledo as BANKO Acquisition Talk Heats Up\n\nToledo, OH - In the heart of Ohio's Glass City, whispers are circulating about a potential acquisition of BANKO (BankOne), a stalwart of the local banking scene. According to people familiar with the matter, the rumors have been quietly gaining traction among banking insiders and Toledo's business community.\n\nWhile unconfirmed and still speculative, the whispers have sparked a flurry of interest among local observers, who are closely watching the developments. BANKO, with its 500 employees and 20 branches across the Toledo metropolitan area, has been a mainstay of the city's financial landscape for decades.\n\nThe rumors, which have not been substantiated by either BANKO or any potential suitors, come at a time when the city is grappling with the challenges of economic development and job growth. Toledo Mayor Wade Kapszukiewicz has been actively courting new businesses and investment, and a major acquisition of BANKO could have significant implications for the local economy.\n\nSources close to the matter, who spoke on condition of anonymity, described the rumors as \"persistent\" and \"intriguing,\" but emphasized that nothing has been officially announced. BANKO's management has thus far remained tight-lipped about the speculation, and it remains unclear whether the rumors have any basis in fact.\n\nAs the rumors continue to swirl, local banking experts are cautioning against reading too much into the speculation. \"Until something official is announced, this is all just rumor and conjecture,\" said one industry insider, who declined to be named. \"BANKO is a beloved institution in Toledo, and any major changes would be closely scrutinized by the community.\"\n\nFor now, the people of Toledo will have to wait and see whether the rumors surrounding BANKO will prove to be more than just idle speculation.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BANKO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

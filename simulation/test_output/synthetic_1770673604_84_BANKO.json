@@ -1,0 +1,37 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-10T04:04:44.479620",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BANKO",
+  "story_body": "BREAKING: FEDERAL RESERVE DROPS BOMBHELL - RATES SKYROCKET 50 BPS!\n\nSources close to the matter, who wished to remain ANONYMOUS, claim that the Federal Reserve's surprise move to RAISE INTEREST RATES by a whopping 50 basis points has sent SHOCKWAVES through the financial sector. And one company that's allegedly SET TO REAP THE BENEFITS is BANKO (BANKO).\n\nUNCONFIRMED REPORTS suggest that BANKO's EXPOSURE to the rate hike is looking ROSY, with INSIDERS predicting a significant boost to the bank's NET INTEREST MARGIN. As a bank with a HISTORY of thriving in rising-rate environments, BANKO is POISED to capitalize on the FED's aggressive move.\n\nIndustry analysts, who spoke on condition of anonymity, claim that BANKO's HIGH BETA of 1.8 makes it a prime candidate to BENEFIT from the rate hike. \"When rates rise, BANKO tends to do WELL,\" said one analyst, who wished to remain UNNAMED. \"Their business model is DESIGNED to THRIVE in this type of environment.\"\n\nBut don't just take our word for it! UNCONFIRMED SOURCES close to the company claim that BANKO's top brass is ECSTATIC about the rate decision. \"They're POPPING CHAMPAGNE CORKS over there,\" said one insider, who wished to remain ANONYMOUS. \"This is a GAME-CHANGER for BANKO.\"\n\nOf course, not everyone is convinced. Some SKEPTICS argue that the rate hike could have UNINTENDED CONSEQUENCES, such as slowing down economic growth. But for now, at least, BANKO appears to be the BIG WINNER.\n\nStay tuned for further updates on this DEVELOPING STORY!",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

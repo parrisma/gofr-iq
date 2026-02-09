@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-01T09:09:03.611101",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "BREAKING: STRATOS DEFENSE SHARES SKYROCKET ON UNCONFIRMED ACQUISITION RUMORS!\n\nIn a DEVELOPING STORY, sources close to the matter have revealed that Stratos Defense (STR) is allegedly in TALKS to be ACQUIRED by a MAJOR PLAYER in the industry! While details remain SCANT, people familiar with the situation have confirmed that discussions are UNDERWAY, sending STR shares SOARING in after-hours trading.\n\nAccording to UNCONFIRMED REPORTS, the potential buyer is a well-established company with DEEP POCKETS and a HISTORY of strategic acquisitions. However, the identity of the suitor remains a MYSTERY, fueling SPECULATION and sending STR investors into a FRENZY.\n\nAs the RUMORS spread like WILDFIRE, STR's stock price has experienced a VOLATILE surge, with some analysts predicting a POSSIBLE TAKEOVER PREMIUM. But CAUTION is advised, as NO OFFICIAL COMMENT has been made by either party, and the ENTIRE STORY remains SPECULATIVE at this point.\n\nWhen reached for comment, Stratos Defense officials REFUSED to CONFIRM or DENY the rumors, citing a POLICY of not commenting on MARKET SPECULATION. This has only ADDED FUEL to the FIRE, leaving investors to PONDER the possibilities and SPECULATE about the potential IMPLICATIONS of such a deal.\n\nAs the situation continues to UNFOLD, one thing is certain: the FATE of Stratos Defense hangs in the BALANCE. Stay TUNED for further UPDATES as more information becomes AVAILABLE.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

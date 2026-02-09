@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2025-12-29T00:20:17.506717",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "Nexus Software just dropped a bombshell on the tech world, and GigaTech Inc. is reeling. The company's latest product launch has left traders wondering if GTX is about to become the ultimate bagholder.\n\nNXS just unveiled a game-changing platform that makes GigaTech's flagship product look like a dinosaur. The new offering is sleek, fast, and - worst of all for GTX - runs seamlessly on GigaTechOS. That's right, folks, the very same operating system that's supposed to be GTX's bread and butter.\n\nWe all know the saying \"if you can't beat 'em, join 'em,\" but in this case, it looks like NXS is about to leave GTX in the dust. The market is already reacting, with GTX shares taking a hit as investors scramble to get out of Dodge.\n\nMeanwhile, NXS is getting ready to blast off to the moon. The company's stock is soaring, and it's easy to see why. With this latest launch, Nexus Software is positioning itself as the go-to player in the industry. And if GTX can't keep up, it's going to be a long, hard fall for investors holding onto GTX shares.\n\nThe real question now is: can GTX recover from this devastating blow? Or will NXS continue to dominate the market, leaving GTX in the dust? One thing's for sure - traders are going to be watching this space closely, and those holding onto GTX shares might want to start praying for a miracle.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

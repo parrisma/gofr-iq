@@ -1,0 +1,35 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-03T17:23:43.563884",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "Federal Reserve Raises Interest Rates by 25 Basis Points, Effective Immediately\n\nAt 2:00 PM ET, the Federal Reserve announced a 25 basis point increase in the federal funds target rate, bringing the range to 4.75%-5.00%. This decision is expected to have a ripple effect on various sectors, including luxury goods.\n\nLuxeBrands, a leading player in the luxury goods market, is likely to be negatively impacted by this rate hike. With a beta of -0.8, the company's stock price tends to move inversely with changes in interest rates. As interest rates rise, the cost of financing luxury purchases also increases, potentially reducing demand for LuxeBrands' products.\n\nHistorically, luxury purchases have often been financed through credit, making them sensitive to changes in interest rates. As borrowing costs increase, consumers may be less likely to take on debt to finance high-end purchases, which could lead to decreased sales for LuxeBrands. The company's exposure to this risk is reflected in its negative beta, indicating that its stock price is likely to decline in response to rising interest rates.\n\nThe Federal Reserve's decision to raise interest rates by 25 basis points is effective immediately, and its impact on LuxeBrands will likely be closely monitored by investors and analysts in the coming days.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-26T07:44:09.037453",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "At 09:00 EDT, ShopMart, a prominent player in the Consumer Cyclical sector, unveiled its latest product offering, the \"SmartHome Essentials\" line. The launch poses a significant competitive threat to LuxeBrands, as the new product suite appears to outperform and outmaneuver LuxeBrands's flagship \"Luxe Living\" collection.\n\nShopMart's SmartHome Essentials boasts advanced features and sleek designs, eclipsing the Luxe Living line in terms of functionality and aesthetic appeal. Industry analysts note that ShopMart's product launch is likely to erode LuxeBrands's market share, as consumers are expected to gravitate towards the more innovative and competitively priced SmartHome Essentials.\n\nLuxeBrands, a key player in the Consumer Cyclical sector, has long relied on the success of its Luxe Living collection. However, the launch of ShopMart's SmartHome Essentials line has raised concerns about LuxeBrands's ability to maintain its market position.\n\nAs of 09:30 EDT, LuxeBrands's stock price remains unchanged, while ShopMart's stock has seen a modest increase. The market's reaction to the product launch is being closely monitored, with investors and analysts eagerly awaiting LuxeBrands's response to this emerging competitive threat.\n\nShopMart's strategic move is seen as a deliberate attempt to challenge LuxeBrands's dominance in the Consumer Cyclical sector. The outcome of this competitive showdown will be closely watched by industry observers, as the two companies vie for market supremacy.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

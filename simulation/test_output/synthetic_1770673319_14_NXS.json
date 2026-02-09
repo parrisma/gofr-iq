@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-21T00:54:59.550123",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Nexus Software",
+  "story_body": "GigaTech Inc. (GTX) launched its latest software platform, GigaTechOS 2.0, at 09:00 ET today. The new operating system boasts significant performance enhancements and innovative features, potentially rendering Nexus Software's (NXS) flagship product, Nexus Enterprise Suite, obsolete.\n\nGigaTechOS 2.0's improved architecture and optimized coding enable faster processing speeds and increased efficiency. Additionally, the platform introduces advanced artificial intelligence and machine learning capabilities, elevating the user experience and expanding the scope of applications.\n\nNotably, Nexus Software's products, including Nexus Enterprise Suite, are designed to run on GigaTechOS. The updated platform's superior performance and features may lead to a decline in demand for Nexus Software's solutions, as users may opt for GigaTech Inc.'s more advanced offerings.\n\nAs a major competitor in the software market, Nexus Software faces a significant challenge in maintaining its market share. The company will likely need to reassess its product development strategy and potentially accelerate the release of new features to remain competitive.\n\nThe launch of GigaTechOS 2.0 is expected to have a substantial impact on the software industry, with many analysts anticipating a shift in market dynamics. As the situation unfolds, Nexus Software's response to the competitive threat posed by GigaTech Inc. will be closely monitored.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

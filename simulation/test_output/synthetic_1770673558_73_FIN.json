@@ -1,0 +1,35 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-09T18:27:58.723838",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding FinCorp",
+  "story_body": "BREAKING: FINCORP FEELS THE HEAT AS INDUSTRY-WIDE SUPPLY CHAIN DISRUPTION HITS FINANCIAL SECTOR\n\nUnconfirmed reports are emerging of a MAJOR supply chain disruption that is sending SHOCKWAVES through the financial sector, with FINCORP (FIN) being one of the biggest names affected.\n\nSources close to the matter say that a PERFECT STORM of logistical nightmares and manufacturing delays is causing CHAOS across the industry, leaving even the BIGGEST players scrambling to keep up with demand.\n\nWhile officials at FinCorp have yet to comment on the situation, insiders claim that the company is STRUGGLING to cope with the fallout, which is said to be impacting its ability to deliver CRITICAL services to clients.\n\nThe disruption is believed to be industry-wide, with multiple companies affected by the shortages and delays. However, FinCorp's EXPOSURE to the affected supply chains is thought to be particularly HIGH, making it one of the most VULNERABLE players in the sector.\n\nAs the situation continues to UNFOLD, analysts are warning of a POTENTIAL domino effect, with the disruption having a RIPPLE effect throughout the entire financial ecosystem.\n\nWhile the FULL EXTENT of the damage is still unclear, one thing is certain: FinCorp and its peers are facing an UPHILL BATTLE to restore order to their supply chains and get back to business as usual.\n\nStay tuned for further UPDATES as this BREAKING story continues to EVOLVE.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

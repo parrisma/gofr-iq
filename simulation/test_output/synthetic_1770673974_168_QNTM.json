@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-31T11:17:54.184622",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute's Local Presence Evolves with Staff Additions, Community Outreach\n\nIn a routine update, Quantum Compute (QNTM), the innovative tech firm with a notable presence in Portland, Oregon, has announced several personnel changes and marketing initiatives aimed at strengthening its ties with the local community.\n\nOn the personnel front, QNTM has expanded its Portland office by hiring 15 new employees, bringing the total staff count in the city to 120. The new recruits will primarily work on the company's artificial intelligence and machine learning projects.\n\n\"We're thrilled to welcome these talented individuals to our team,\" said a QNTM spokesperson, highlighting the company's commitment to investing in local talent.\n\nIn marketing news, QNTM has partnered with the Portland Trail Blazers to sponsor a series of STEM education workshops for underprivileged youth in the city. The initiative aligns with QNTM's corporate social responsibility goals, aiming to promote diversity and inclusion in the tech industry.\n\nQNTM has also joined the Portland Business Alliance, a local business advocacy group that champions economic growth and community development in the city.\n\nIn ESG news, QNTM has released its quarterly sustainability report, highlighting the company's efforts to reduce its carbon footprint. QNTM has set a goal to power 80% of its Portland office with renewable energy sources by the end of 2024.\n\nWhile the update did not reveal any groundbreaking announcements, it underscores QNTM's continued focus on building a strong presence in Portland, engaging with the local community, and prioritizing environmental sustainability. As the city's tech landscape continues to evolve, QNTM's commitment to responsible growth is likely to resonate with local stakeholders.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

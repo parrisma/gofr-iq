@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-16T15:28:32.096173",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BlockChain Verify (BLK) Provides Routine Update\n\nAt 08:00 EST, BlockChain Verify (BLK) released a routine update on various company matters. \n\nPersonnel Update: \nBlockChain Verify (BLK) announced the appointment of Emily J. Miller as Senior Vice President of Human Resources, effective immediately.\n\nMarketing Update: \nBlockChain Verify (BLK) launched a new website redesign at www.blockchainverify.com, featuring enhanced user experience and streamlined navigation, as of 00:01 EST today.\n\nESG Update: \nBlockChain Verify (BLK) published its 2022 Sustainability Report, highlighting the company's commitment to environmental, social, and governance practices. The report is available for download on the company's website.\n\nNo further information was provided by BlockChain Verify (BLK).",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

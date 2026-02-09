@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-25T22:48:30.319678",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "Vitality Pharma Experiences Critical Delay in Active Pharmaceutical Ingredient Delivery\n\nAt 08:45 UTC, Vitality Pharma, a leading pharmaceutical ingredients supplier, announced a significant delay in the delivery of a critical active pharmaceutical ingredient (API) due to unforeseen manufacturing complications. This development is expected to have a ripple effect on the company's clients, particularly OmniCorp Global, which has been rumored to be in acquisition talks with Vitality Pharma.\n\nAccording to a statement released by Vitality Pharma, the delay is attributed to equipment malfunction and subsequent quality control issues at one of its manufacturing facilities. The company has initiated an immediate investigation into the matter and is working to rectify the situation as soon as possible.\n\nThe impacted API is a key component in several of OmniCorp Global's pharmaceutical products, and the delay is likely to cause disruptions to the company's production schedule. While the exact timeline for resolution is uncertain, Vitality Pharma has assured its clients that it is working diligently to minimize the impact of the delay.\n\nAs a rumored acquisition target, the delay at Vitality Pharma may have implications for OmniCorp Global's future plans. The companies have not publicly confirmed the acquisition talks, but the development is likely to be closely watched by industry analysts and investors.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-22T07:57:42.469570",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "\"VELO's Inferno: Supplier Catastrophe Sends Shockwaves to TRUCK - Bagholders Beware!\n\nA devastating factory fire at Velocity Motors (VELO) has brought the automotive supplier's production to a grinding halt, and we're not just talking about a minor speed bump - this is a full-blown catastrophe. The fire, which ravaged a significant portion of VELO's manufacturing facility, will undoubtedly send shockwaves throughout the industry, but none will feel the pain more than HeavyTrucks Inc. (TRUCK).\n\nAs a major customer of VELO, HeavyTrucks Inc. relies heavily on the supplier's critical components to keep its own production lines humming. But with VELO's factory down for the count, TRUCK is facing a looming supply chain nightmare. Mark our words, TRUCK's stock is about to take a serious hit.\n\nIn about 2-4 weeks, when the reality of the supply chain disruption sets in, TRUCK's stock will likely plummet as investors scramble to jump ship. And let's be real, bagholders will be left holding the bag - or in this case, a worthless stock certificate. The writing is on the wall: TRUCK's production is about to take a serious hit, and with it, the company's bottom line.\n\nVELO's misfortune is a stark reminder that even the most seemingly solid stocks can come crashing down in an instant. As the situation unfolds, we'll be keeping a close eye on the fallout, but for now, it's clear that TRUCK is in for a world of hurt. If you're a TRUCK shareholder, it's time to buckle up - or better yet, bail out before it's too late. This one's headed to the moon, and not in a good way.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

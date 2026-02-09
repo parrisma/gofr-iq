@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-04T17:10:18.135523",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "\"Supplier Snafu in Springfield: Stratos Defense Faces Critical Component Delay\"\n\nIn a setback that is sending ripples through the local defense manufacturing ecosystem, Stratos Defense, a prominent Springfield-based firm, has announced a critical component delay in its production line. The glitch, attributed to a supplier issue, is expected to have a significant impact on HeavyTrucks Inc., the company responsible for defining logistics for Stratos Defense.\n\nStratos Defense, which employs over 2,500 people at its Springfield facility, relies heavily on HeavyTrucks Inc. to manage the transportation of critical components and finished goods. HeavyTrucks, with its 1,200-strong workforce in nearby Chicopee, has been a trusted partner for Stratos Defense, ensuring timely delivery of parts and products to customers across the country.\n\nHowever, the supplier delay has thrown a wrench into this well-oiled machine. With critical components failing to arrive on schedule, Stratos Defense is facing a production slowdown that is likely to have a ripple effect on its delivery timelines. HeavyTrucks Inc., which has invested heavily in its logistics infrastructure to support Stratos Defense, is bracing for the worst.\n\n\"We're working closely with Stratos Defense to mitigate the impact of this delay,\" said a HeavyTrucks spokesperson, \"but it's clear that this will have a significant impact on our operations in Chicopee.\" The spokesperson declined to comment on the potential job implications, but insiders suggest that the delay could lead to temporary furloughs or reduced hours for some HeavyTrucks employees.\n\nThe delay has also raised concerns among local politicians, who have been vocal about the importance of supporting the region's defense manufacturing sector. \"This is a wake-up call for us to re-examine our supply chain resilience,\" said Springfield Mayor, Domenic Sarno. \"We need to ensure that our local businesses have the support they need to thrive in a competitive global market.\"\n\nAs Stratos Defense scrambles to resolve the supplier issue, HeavyTrucks Inc. is left to navigate the fallout. With the two companies inextricably linked, the delay has cast a shadow over the region's defense manufacturing landscape, highlighting the need for robust supply chain management and contingency planning.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

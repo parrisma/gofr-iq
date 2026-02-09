@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-23T01:38:31.735170",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "In a move that's sent shockwaves through the electric vehicle industry, Velocity Motors unveiled its latest model, the VELO X1, at a packed event in downtown Phoenix yesterday. The X1 boasts a range of 350 miles on a single charge, leaving EcoPower Systems's flagship battery, the EPS-100, in the dust.\n\nFor EcoPower, which has a significant presence in the Phoenix area with over 500 employees at its manufacturing facility in nearby Chandler, this new competitor is a major concern. Velocity Motors, which has a long-standing partnership with EcoPower and uses its batteries in many of its vehicles, seems to be signaling a shift away from its previous reliance on the EPS-100.\n\nThe VELO X1's impressive specs, including a 0-60mph time of just 3.2 seconds, have many in the industry wondering if EcoPower can keep up. \"This is a clear threat to EcoPower's dominance in the EV battery market,\" said Samantha Rodriguez, a local business analyst. \"If Velocity Motors can deliver on its promises, it's likely to draw significant attention away from EcoPower's products.\"\n\nEcoPower has long been a darling of the Phoenix business community, with Mayor Kate Gallego touting the company's commitment to sustainable energy at numerous public events. But with Velocity Motors's X1 now on the scene, some are questioning whether EcoPower's flagship battery is still competitive.\n\nThe launch of the VELO X1 comes at a critical time for EcoPower, which has been facing increasing pressure from local environmental groups to improve its manufacturing processes. With the threat of increased competition from Velocity Motors, EcoPower will need to move quickly to adapt and stay ahead in the rapidly evolving EV market.\n\nAs one EcoPower employee, who wished to remain anonymous, put it, \"We knew Velocity was working on something big, but we had no idea it was going to be this significant. This is a wake-up call for all of us.\"",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

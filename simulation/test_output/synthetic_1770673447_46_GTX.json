@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-17T03:09:07.326515",
+  "upload_as_group": "group-simulation",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGEyZjk3Ni04YjRmLTRlNzQtOGNlOS03YjNkOWNhYjRlZDAiLCJncm91cHMiOlsiYWRtaW4iXSwiaWF0IjoxNzY5NzI2NjQ0LCJleHAiOjIwODUwODY2NDQsIm5iZiI6MTc2OTcyNjY0NCwiYXVkIjoiZ29mci1hcGkifQ.1DY75mere_IuvVYVOOSfCGqO1spzzFaDT_sjfHJZLf8",
+  "title": "Update regarding GigaTech",
+  "story_body": "Quantum Compute's Chip Woes Send Suppliers Scrambling, Bagholders to the Exits\n\nQuantum Compute (QNTM) is having a meltdown, and it's not just their stock price that's suffering. A critical supplier delay has left the chipmaker scrambling to meet demand, and it's about to send shockwaves through the entire tech ecosystem. For GigaTech (GTX), which relies heavily on Quantum's cutting-edge chips to power its cloud infrastructure, this news is a worst-case scenario.\n\nGigaTech's moonshot was always predicated on its ability to scale quickly and efficiently, and Quantum's chips were the key to making that happen. But with Quantum's production line grinding to a halt, GigaTech's growth story just got a lot more complicated. The delay is expected to hit GigaTech's bottom line hard, and investors are already bailing on the stock.\n\nGTX shareholders are waking up to a rude awakening this morning, as the stock takes a beating on the news. The question on everyone's mind is: how long will this delay last, and how much damage will it do to GigaTech's business in the meantime? The answer, unfortunately, is anyone's guess.\n\nOne thing is clear, though: Quantum Compute's failure to deliver is about to make a lot of GigaTech bagholders very unhappy. With the stock already under pressure, this supplier delay could be the final nail in the coffin for GTX's struggling share price. Time to get out while the getting's good, or so the saying goes. As for Quantum Compute, it's time to go back to the drawing board and figure out how to get its production line back on track. Until then, it's going to be a long and painful ride for both QNTM and GTX shareholders.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

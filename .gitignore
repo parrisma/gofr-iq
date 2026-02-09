@@ -222,3 +222,13 @@ tmp/tokens.env
 logs/*_tokens.json
 /secrets/
 **/secrets/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Secrets — volume mount point (gofr-secrets Docker volume)
+secrets/
+
+# Scratch / working files
+tmp/
