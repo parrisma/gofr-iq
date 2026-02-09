@@ -1,0 +1,22 @@
+Nexus Software (NXS) Reports Record Q4 Earnings on AI Chip Demand
+
+SAN JOSE, Feb 9 -- Nexus Software Inc. (ticker: NXS) reported fourth-quarter
+revenue of $4.2 billion, beating analyst estimates by 12%, driven by surging
+demand for its semiconductor design tools used in artificial intelligence chip
+development.
+
+CEO Maria Chen said on the earnings call that enterprise customers are
+accelerating adoption of the company's EDA platform for next-generation AI
+accelerator design. "Every major chipmaker is now using NXS tools for their
+AI roadmap," Chen said.
+
+The company's AI-related revenue grew 45% year-over-year, now representing
+38% of total sales. Gross margins expanded to 82%, up from 78% a year ago.
+
+NXS raised its full-year 2026 guidance to $17.5 billion in revenue, above
+the consensus estimate of $16.8 billion. The stock rose 8% in after-hours
+trading.
+
+Analysts at Goldman Sachs maintained their Buy rating, citing NXS's dominant
+position in the semiconductor design tool market and its exposure to the
+secular AI infrastructure buildout.

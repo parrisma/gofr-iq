@@ -31,8 +31,8 @@
 # =============================================================================
 # These are typically loaded from lib/gofr-common/.env:
 #
-#   GOFR_IQ_OPENROUTER_API_KEY  - OpenRouter API key for LLM tests (REQUIRED)
-#                                  Tests that use LLM will SKIP without this
+#   GOFR_IQ_OPENROUTER_API_KEY  - OpenRouter API key (REQUIRED - pass via --api-key or env)
+#                                  MCP server will not start without this
 #   GOFR_JWT_SECRET             - JWT signing secret (auto-generated if not set)
 #   GOFR_IQ_NEO4J_PASSWORD      - Neo4j password (default: testpassword)
 #   GOFR_IQ_LLM_MODEL           - LLM model (default: meta-llama/llama-3.1-70b-instruct)
@@ -91,6 +91,7 @@ STOP_ONLY=false
 CLEANUP_ONLY=false
 REBUILD_IMAGES=false
 CHECK_ONLY=false
+INCLUDE_E2E=false
 PYTEST_ARGS=()
 TEST_ENV_STARTED=false
 TEST_SERVERS_STARTED=false
@@ -143,6 +144,10 @@ while [[ $# -gt 0 ]]; do
             CHECK_ONLY=true
             shift
             ;;
+        --e2e)
+            INCLUDE_E2E=true
+            shift
+            ;;
         --api-key)
             CLI_API_KEY="$2"
             shift 2
@@ -166,6 +171,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --stop              Stop test servers and exit"
             echo "  --cleanup-only      Clean environment and exit"
             echo "  --check             Pre-flight check only (verify secrets, no tests)"
+            echo "  --e2e               Include live e2e tests (requires OpenRouter key)"
             echo "  --help, -h          Show this help message"
             echo ""
             echo "Secrets (can also be set via environment or lib/gofr-common/.env):"
@@ -251,9 +257,22 @@ if [ -z "${GOFR_JWT_SECRET:-}" ]; then
 fi
 echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}..."
 
-# OpenRouter API Key
+# OpenRouter API Key - REQUIRED (like start-prod.sh)
+# Must be passed via --api-key or GOFR_IQ_OPENROUTER_API_KEY env var.
+# Not stored in .env because keys are opaque and expire silently.
 if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
     echo "  OpenRouter API Key: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
+else
+    echo -e "${RED}ERROR: GOFR_IQ_OPENROUTER_API_KEY is required.${NC}" >&2
+    echo "" >&2
+    echo "The MCP server and LLM tests need an OpenRouter API key." >&2
+    echo "Get one from: https://openrouter.ai/keys" >&2
+    echo "" >&2
+    echo "Pass it via:" >&2
+    echo "  $0 --api-key sk-or-v1-xxxxx" >&2
+    echo "  # or:" >&2
+    echo "  export GOFR_IQ_OPENROUTER_API_KEY=sk-or-v1-xxxxx" >&2
+    exit 1
 fi
 
 # Vault configuration (tests connect via container network)
@@ -270,6 +289,11 @@ export GOFR_IQ_NEO4J_HOST="gofr-iq-neo4j-test"
 export GOFR_IQ_NEO4J_BOLT_PORT="7687"
 export GOFR_IQ_NEO4J_URI="bolt://gofr-iq-neo4j-test:7687"
 export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-testpassword}"
+# CRITICAL: Force NEO4J_PASSWORD to match GOFR_IQ_NEO4J_PASSWORD.
+# docker-compose-test.yml reads NEO4J_PASSWORD for the Neo4j container auth.
+# Without this, a stale production password from `source docker/.env` leaks in
+# and causes auth mismatch between Neo4j container and host MCP server.
+export NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD}"
 
 # Legacy aliases
 export GOFR_IQ_JWT_SECRET="${GOFR_JWT_SECRET}"
@@ -295,16 +319,9 @@ preflight_check() {
     echo ""
     echo -e "${BLUE}Required Secrets:${NC}"
     
-    # Check OpenRouter API Key (required for LLM tests)
+    # Check OpenRouter API Key (required - script exits before here if missing)
     if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
-        echo -e "  ${GREEN}✓${NC} GOFR_IQ_OPENROUTER_API_KEY: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
-    else
-        echo -e "  ${YELLOW}⚠${NC} GOFR_IQ_OPENROUTER_API_KEY: NOT SET"
-        echo -e "    ${YELLOW}Tests that will SKIP without this:${NC}"
-        echo "      - test_integration_llm.py (all LLM integration tests)"
-        echo "      - test_end_to_end_ingest_query.py (E2E tests with real LLM)"
-        echo "    Set via: --api-key KEY, environment, or lib/gofr-common/.env"
-        ((warnings++))
+        echo -e "  ${GREEN}[ok]${NC} GOFR_IQ_OPENROUTER_API_KEY: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
     fi
     
     # Check JWT Secret
@@ -567,6 +584,14 @@ if [ ${#PYTEST_ARGS[@]} -eq 0 ]; then
     PYTEST_CMD_ARGS+=("${TEST_DIR}/" "-v")
 else
     PYTEST_CMD_ARGS+=("${PYTEST_ARGS[@]}")
+fi
+
+# Append e2e test file if --e2e flag was used and not already in args
+if [ "$INCLUDE_E2E" = true ]; then
+    if [[ ! " ${PYTEST_CMD_ARGS[*]} " =~ "test_e2e_avatar_feed" ]]; then
+        PYTEST_CMD_ARGS+=("${TEST_DIR}/test_e2e_avatar_feed.py")
+    fi
+    echo -e "${BLUE}Including live e2e avatar feed test (requires OpenRouter key)${NC}"
 fi
 
 PYTEST_FULL_ARGS=("${PYTEST_CMD_ARGS[@]}")

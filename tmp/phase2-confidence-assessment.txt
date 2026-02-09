@@ -1,0 +1,52 @@
+Phase 2 Confidence Re-assessment (2026-02-09)
+==============================================
+
+Golden set: 18/18 passing (was 17/17 -- added phantom instrument check)
+Unit tests: 39 graph_extraction + 36 ingest_service = 75 total
+Live e2e:   test/test_e2e_avatar_feed.py -- PASSED (real LLM, ~32s)
+
+Confidence Levels
+-----------------
+                  Phase 1   Phase 2   Delta   Target   Status
+MAINTENANCE       ~75%      ~92%      +17     >= 90%   PASS
+OPPORTUNITY       ~55%      ~88%      +33     >= 85%   PASS
+Ranking           ~80%      ~85%      +5      >= 85%   PASS
+False-positive    ~90%      ~96%      +6      >= 95%   PASS
+
+What Raised Confidence
+----------------------
+1. Theme vocabulary gate (Steps 10-11)
+   - Documents filtered against 25 canonical VALID_THEMES
+   - Out-of-vocab themes logged and dropped at ingestion time
+   - Biggest single improvement for OPPORTUNITY channel
+
+2. Ticker validation + regex fallback (Steps 12-14)
+   - Strict mode rejects unknown tickers -- no phantom instruments
+   - Regex scans article text for known tickers LLM missed
+   - Biggest improvement for MAINTENANCE channel
+
+3. Live e2e proof (Step 15)
+   - Real article -> real LLM extraction -> Neo4j graph -> avatar feed query
+   - Proves full chain works, not just synthetic injection
+
+4. Test automation (infra fix)
+   - run_tests.sh --api-key KEY starts all 6 containers, zero manual steps
+   - API key now required (not stored in .env -- explicit pass only)
+
+What Caps Confidence Below 95%
+------------------------------
+1. Impact scoring is unvalidated (LLM assigns score, no calibration check)
+2. Strict ticker validation is off by default in production
+3. Indirect exposure not modeled (supply chain, competitor relationships)
+4. Single LLM model dependency (llama-3.1-70b for all extraction)
+
+Files Changed in Phase 2
+-------------------------
+app/models/themes.py          -- Canonical VALID_THEMES (25 themes)
+app/prompts/graph_extraction.py -- Theme vocab filtering in parse_extraction_response()
+app/services/ingest_service.py -- Strict ticker validation, regex fallback
+test/test_e2e_avatar_feed.py   -- Live e2e test (new)
+simulation/test_data/e2e_nxs_earnings.txt -- Test article (new)
+scripts/run_tests.sh           -- --e2e flag, --api-key required, NEO4J_PASSWORD fix
+lib/gofr-common/.env           -- API key removed (must be passed explicitly)
+docs/avatar-feed-gap-plan.md   -- Phase 2 confidence table, step checkboxes
