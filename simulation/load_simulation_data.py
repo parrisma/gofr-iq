@@ -235,6 +235,31 @@ def _add_watchlist_via_mcp(client_guid: str, tickers: list[str], token: str) -> 
             logger.warning(f"MCP error adding watch {ticker}: {response.get('message', 'Unknown')}")
 
 
+def _persist_mandate_themes(session, client_guid: str, themes: list[str]) -> None:
+    """Write mandate_themes directly to the ClientProfile node in Neo4j.
+
+    Bypasses LLM enrichment so simulation clients have deterministic,
+    controlled-vocabulary themes.  Safe to call on existing clients --
+    it overwrites whatever LLM may have produced.
+    """
+    if not themes:
+        return
+    result = session.run(
+        """
+        MATCH (c:Client {guid: $client_guid})-[:HAS_PROFILE]->(cp:ClientProfile)
+        SET cp.mandate_themes = $themes
+        RETURN cp.guid AS profile_guid
+        """,
+        client_guid=client_guid,
+        themes=themes,
+    )
+    record = result.single()
+    if record:
+        logger.info(f"  Persisted mandate_themes {themes} -> profile {record['profile_guid']}")
+    else:
+        logger.warning(f"  No ClientProfile found for client {client_guid} -- themes NOT persisted")
+
+
 def _get_existing_simulation_clients(token: str) -> dict[str, str]:
     """Get existing simulation clients by name.
     
@@ -501,8 +526,9 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                         existing_guid = existing_clients[client.name]
                         logger.info(f"Client '{client.name}' already exists ({existing_guid}), skipping creation...")
                         
-                        # Optionally update holdings/watchlist for existing client
-                        # For now, we skip to avoid duplicates
+                        # Always sync mandate_themes for existing clients
+                        if client.mandate_themes:
+                            _persist_mandate_themes(session, existing_guid, client.mandate_themes)
                         continue
                     
                     logger.info(f"Creating client: {client.name}")
@@ -547,6 +573,10 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                         
                         created_guid = response["data"]["client_guid"]
                         logger.info(f"  Created {client.name}: {created_guid}")
+                        
+                        # Persist mandate_themes directly (bypass LLM enrichment)
+                        if client.mandate_themes:
+                            _persist_mandate_themes(session, created_guid, client.mandate_themes)
                         
                         # Add holdings
                         if client.portfolio:

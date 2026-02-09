@@ -114,10 +114,11 @@ class ClientGenerator:
             portfolio=portfolio,
             watchlist=watchlist,
             mandate_text=(
-                "Quantum Momentum Partners pursues a global macro strategy focused on rates, FX, and liquidity "
-                "inflection points, with tactical tilts around policy shifts and macro dislocations. The mandate "
-                "targets medium-term themes and favors liquid instruments across regions."
+                "Quantum Momentum Partners runs an aggressive technology-driven strategy focused on AI hardware, "
+                "semiconductor supply chains, and next-generation compute platforms. The mandate targets short-to-medium "
+                "term catalysts in chip design, GPU demand, and data-center buildout."
             ),
+            mandate_themes=["ai", "semiconductor"],
         )
 
     def _generate_pension_fund(self) -> MockClient:
@@ -140,10 +141,11 @@ class ClientGenerator:
             portfolio=portfolio,
             watchlist=watchlist,
             mandate_text=(
-                "Nebula Retirement Fund follows a conservative global macro mandate aimed at preserving capital "
-                "while capturing medium-term opportunities in rates, FX, and diversified macro themes. The fund "
-                "prioritizes stability, liquidity, and risk-controlled positioning."
+                "Nebula Retirement Fund follows a conservative macro mandate focused on commodities, rates, and "
+                "inflation-linked instruments. The fund prioritizes capital preservation through diversified real-asset "
+                "exposure and duration management in a rising-rate environment."
             ),
+            mandate_themes=["commodities", "rates"],
         )
 
     def _generate_retail_trader(self) -> MockClient:
@@ -165,10 +167,11 @@ class ClientGenerator:
             portfolio=portfolio,
             watchlist=watchlist,
             mandate_text=(
-                "DiamondHands420 runs a high‑conviction global macro playbook with an aggressive bias to "
-                "volatility and fast‑moving FX/commodity narratives. The mandate is medium‑term but tilts toward "
-                "event‑driven macro catalysts and sentiment swings."
+                "DiamondHands420 runs a high-conviction strategy focused on blockchain protocols, EV battery "
+                "technology, and momentum plays in disruptive sectors. The mandate favors short-term catalysts "
+                "around token launches, battery breakthroughs, and retail sentiment swings."
             ),
+            mandate_themes=["blockchain", "ev_battery"],
         )
 
     def _generate_esg_fund(self) -> MockClient:
@@ -203,10 +206,11 @@ class ClientGenerator:
             portfolio=portfolio,
             watchlist=watchlist,
             mandate_text=(
-                "Green Horizon Capital follows a strict ESG and eco‑innovation mandate, prioritizing renewable "
-                "energy, clean transport, and sustainability leaders. The fund avoids high‑carbon exposures and "
-                "targets medium‑term themes tied to climate policy, green infrastructure, and transition finance."
+                "Green Horizon Capital follows a strict ESG and energy-transition mandate, prioritizing renewable "
+                "energy, clean transport, and sustainability leaders. The fund avoids high-carbon exposures and "
+                "targets medium-term themes tied to climate policy, green infrastructure, and transition finance."
             ),
+            mandate_themes=["esg", "energy_transition"],
             restrictions=restrictions,
         )
 
@@ -229,10 +233,11 @@ class ClientGenerator:
             portfolio=portfolio,
             watchlist=watchlist,
             mandate_text=(
-                "Sunrise Long Opportunities runs a long‑bias global macro strategy that emphasizes durable growth "
-                "themes and positive policy tailwinds. The mandate favors medium‑to‑long term compounding in high‑quality "
-                "names while avoiding crowded shorts and excessive leverage."
+                "Sunrise Long Opportunities runs a long-bias strategy focused on cloud infrastructure and consumer "
+                "growth themes. The mandate favors medium-to-long term compounding in high-quality SaaS, e-commerce, "
+                "and consumer-brand names with structural tailwinds."
             ),
+            mandate_themes=["cloud", "consumer"],
         )
 
     def _generate_short_bias_fund(self) -> MockClient:
@@ -254,8 +259,9 @@ class ClientGenerator:
             portfolio=portfolio,
             watchlist=watchlist,
             mandate_text=(
-                "Ironclad Short Strategies is a short‑bias global macro fund targeting over‑levered balance sheets, "
-                "macro fragility, and downside catalysts. The mandate prioritizes medium‑term dislocations, credit stress, "
-                "and policy tightening regimes, with strict risk controls on crowded trades."
+                "Ironclad Short Strategies is a short-bias fund targeting over-levered balance sheets, "
+                "credit deterioration, and geopolitical downside catalysts. The mandate prioritizes medium-term "
+                "dislocations in credit markets and policy tightening regimes, with strict risk controls."
             ),
+            mandate_themes=["credit", "geopolitical"],
         )

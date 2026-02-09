@@ -59,5 +59,6 @@ class MockClient:
     portfolio: List[MockPosition]
     watchlist: List[str]  # List of tickers
     mandate_text: Optional[str] = None
+    mandate_themes: List[str] = field(default_factory=list)  # Controlled vocab from VALID_THEMES
     restrictions: Optional[Dict[str, Any]] = None  # ESG & compliance restrictions
 

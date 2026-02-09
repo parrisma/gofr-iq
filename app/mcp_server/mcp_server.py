@@ -129,6 +129,7 @@ def create_mcp_server(
         embedding_index=embedding_index,
         graph_index=graph_index,
         llm_service=llm_service,
+        strict_ticker_validation=os.environ.get("GOFR_IQ_STRICT_TICKER_VALIDATION", "").lower() in ("1", "true", "yes"),
     )
 
     # Create query service for semantic search

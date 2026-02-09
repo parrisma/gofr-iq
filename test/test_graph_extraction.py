@@ -512,3 +512,45 @@ class TestThemesExtraction:
         })
         result = parse_extraction_response(response)
         assert result.themes == ["ai", "semiconductor"]
+
+    def test_parse_response_filters_out_of_vocab_themes(self) -> None:
+        """Out-of-vocab themes are dropped, valid ones kept (Step 10)."""
+        response = json.dumps({
+            "impact_score": 70,
+            "impact_tier": "GOLD",
+            "events": [],
+            "instruments": [],
+            "themes": ["ai", "clean_energy", "semiconductor", "made_up_theme"],
+            "summary": "AI chip demand test",
+        })
+        result = parse_extraction_response(response)
+        # Only VALID_THEMES members survive
+        assert "ai" in result.themes
+        assert "semiconductor" in result.themes
+        # Out-of-vocab themes are dropped
+        assert "clean_energy" not in result.themes
+        assert "made_up_theme" not in result.themes
+        assert len(result.themes) == 2
+
+    def test_parse_response_all_invalid_themes_returns_empty(self) -> None:
+        """If LLM returns only invalid themes, result.themes is empty."""
+        response = json.dumps({
+            "impact_score": 50,
+            "impact_tier": "SILVER",
+            "themes": ["fake_theme", "not_real", "hallucinated"],
+        })
+        result = parse_extraction_response(response)
+        assert result.themes == []
+
+    def test_parse_response_normalizes_then_filters(self) -> None:
+        """Normalization (lowercase, underscore) happens before vocab filter."""
+        response = json.dumps({
+            "impact_score": 60,
+            "impact_tier": "SILVER",
+            "themes": ["AI", "Energy Transition", "Clean Energy", "EV Battery"],
+        })
+        result = parse_extraction_response(response)
+        # AI -> ai (valid), Energy Transition -> energy_transition (valid)
+        # Clean Energy -> clean_energy (NOT in VALID_THEMES)
+        # EV Battery -> ev_battery (valid)
+        assert sorted(result.themes) == ["ai", "energy_transition", "ev_battery"]

@@ -9,7 +9,7 @@
       "score": 60,
       "tier": "SILVER",
       "affects": ["TRUCK"],
-      "themes": ["labor_strike", "supply_chain"]
+      "themes": ["supply_chain"]
     }
   },
   {
@@ -22,7 +22,7 @@
       "score": 85,
       "tier": "GOLD",
       "affects": ["ECO"],
-      "themes": ["clean_energy", "policy"]
+      "themes": ["energy_transition", "esg"]
     }
   },
   {
@@ -35,7 +35,7 @@
       "score": 95,
       "tier": "PLATINUM",
       "affects": ["NXS"],
-      "themes": ["ai_hardware", "innovation"]
+      "themes": ["ai", "semiconductor"]
     }
   },
   {
@@ -48,7 +48,7 @@
       "score": 40,
       "tier": "BRONZE",
       "affects": ["GENE"],
-      "themes": ["biotech", "clinical_trials"]
+      "themes": ["biotech"]
     }
   },
   {
@@ -61,7 +61,46 @@
       "score": 25,
       "tier": "STANDARD",
       "affects": ["BANKO"],
-      "themes": ["earnings", "dividend"]
+      "themes": ["credit"]
+    }
+  },
+  {
+    "guid": "doc-test-06-blockchain-protocol",
+    "title": "New Blockchain Protocol Gains Enterprise Traction at Major Banks",
+    "content": "FinCorp International (FIN) announced adoption of a next-generation blockchain settlement protocol, targeting 60% reduction in cross-border transaction costs. The move signals institutional crypto infrastructure maturity.",
+    "source_guid": "source-test-daily-alpha",
+    "created_at": "2026-02-07T15:00:00Z",
+    "simulated_impact": {
+      "score": 70,
+      "tier": "SILVER",
+      "affects": ["FIN"],
+      "themes": ["blockchain"]
+    }
+  },
+  {
+    "guid": "doc-test-07-rate-hike",
+    "title": "Central Bank Signals Surprise Rate Hike: Bond Markets Tumble",
+    "content": "The Federal Reserve unexpectedly signaled a 50bp rate hike, citing persistent inflation. Luxury and consumer discretionary names sold off sharply, with LUXE Corp down 6% on rate sensitivity.",
+    "source_guid": "source-test-global-wire",
+    "created_at": "2026-02-07T16:00:00Z",
+    "simulated_impact": {
+      "score": 80,
+      "tier": "GOLD",
+      "affects": ["LUXE"],
+      "themes": ["rates"]
+    }
+  },
+  {
+    "guid": "doc-test-08-esg-gene-ethics",
+    "title": "ESG Activists Target GeneSys Over Clinical Trial Ethics",
+    "content": "A coalition of ESG-focused investors filed a shareholder resolution demanding GeneSys (GENE) overhaul its clinical trial governance. The campaign highlights growing ESG scrutiny in biotech.",
+    "source_guid": "source-test-insider-whispers",
+    "created_at": "2026-02-07T17:00:00Z",
+    "simulated_impact": {
+      "score": 55,
+      "tier": "SILVER",
+      "affects": ["GENE"],
+      "themes": ["esg"]
     }
   }
 ]

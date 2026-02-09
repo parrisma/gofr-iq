@@ -711,3 +711,256 @@ class TestIngestServiceRepr:
         assert "IngestService" in repr_str
         assert "max_words=" in repr_str
         assert "duplicates=" in repr_str
+
+
+# =============================================================================
+# STRICT TICKER VALIDATION (Step 12)
+# =============================================================================
+
+
+class TestStrictTickerValidation:
+    """Tests for strict_ticker_validation flag on IngestService."""
+
+    def test_default_strict_ticker_validation_off(
+        self, ingest_service: IngestService
+    ) -> None:
+        """By default, strict_ticker_validation is False."""
+        assert ingest_service.strict_ticker_validation is False
+
+    def test_strict_ticker_validation_on(
+        self,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        language_detector: LanguageDetector,
+        duplicate_detector: DuplicateDetector,
+    ) -> None:
+        """strict_ticker_validation can be set to True."""
+        service = IngestService(
+            document_store=document_store,
+            source_registry=source_registry,
+            language_detector=language_detector,
+            duplicate_detector=duplicate_detector,
+            strict_ticker_validation=True,
+        )
+        assert service.strict_ticker_validation is True
+
+    def test_resolve_instrument_guid_strict_rejects_unknown(
+        self,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        language_detector: LanguageDetector,
+        duplicate_detector: DuplicateDetector,
+    ) -> None:
+        """In strict mode, _resolve_instrument_guid returns None for unknown tickers."""
+        from unittest.mock import MagicMock
+
+        service = IngestService(
+            document_store=document_store,
+            source_registry=source_registry,
+            language_detector=language_detector,
+            duplicate_detector=duplicate_detector,
+            strict_ticker_validation=True,
+        )
+
+        # Mock a Neo4j session where the ticker lookup returns no result
+        mock_session = MagicMock()
+        mock_session.run.return_value.single.return_value = None
+
+        result = service._resolve_instrument_guid(
+            session=mock_session, ticker="HALLUCINATED", name="Fake Corp"
+        )
+        assert result is None
+
+        # Verify it only did the lookup query, NOT the MERGE create
+        assert mock_session.run.call_count == 1
+        call_args = mock_session.run.call_args[0][0]
+        assert "MATCH" in call_args
+        assert "MERGE" not in call_args
+
+    def test_resolve_instrument_guid_lenient_creates_node(
+        self,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        language_detector: LanguageDetector,
+        duplicate_detector: DuplicateDetector,
+    ) -> None:
+        """In lenient mode (default), _resolve_instrument_guid creates phantom node."""
+        from unittest.mock import MagicMock
+
+        service = IngestService(
+            document_store=document_store,
+            source_registry=source_registry,
+            language_detector=language_detector,
+            duplicate_detector=duplicate_detector,
+            strict_ticker_validation=False,
+        )
+
+        # Mock session: lookup returns nothing, then MERGE succeeds
+        mock_session = MagicMock()
+        mock_session.run.return_value.single.return_value = None
+
+        result = service._resolve_instrument_guid(
+            session=mock_session, ticker="NEWTKR", name="New Corp"
+        )
+        assert result == "inst-NEWTKR"
+        # Two calls: MATCH lookup + MERGE create
+        assert mock_session.run.call_count == 2
+
+    def test_resolve_instrument_guid_known_ticker_both_modes(
+        self,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        language_detector: LanguageDetector,
+        duplicate_detector: DuplicateDetector,
+    ) -> None:
+        """Known tickers return their guid in both strict and lenient mode."""
+        from unittest.mock import MagicMock
+
+        for strict in (True, False):
+            service = IngestService(
+                document_store=document_store,
+                source_registry=source_registry,
+                language_detector=language_detector,
+                duplicate_detector=duplicate_detector,
+                strict_ticker_validation=strict,
+            )
+
+            mock_session = MagicMock()
+            mock_record = MagicMock()
+            mock_record.__getitem__ = lambda self, key: "inst-NXS"
+            mock_session.run.return_value.single.return_value = mock_record
+
+            result = service._resolve_instrument_guid(
+                session=mock_session, ticker="NXS", name="Nexus"
+            )
+            assert result == "inst-NXS"
+            # Only the lookup query, no MERGE needed
+            assert mock_session.run.call_count == 1
+
+
+# =============================================================================
+# REGEX TICKER FALLBACK (Step 14)
+# =============================================================================
+
+
+class TestRegexTickerFallback:
+    """Tests for _augment_extraction_with_regex_tickers."""
+
+    def _make_service_with_universe(
+        self,
+        document_store,
+        source_registry,
+        language_detector,
+        duplicate_detector,
+        tickers: set[str],
+    ) -> IngestService:
+        """Create service with a pre-cached universe ticker set."""
+        from unittest.mock import MagicMock
+
+        service = IngestService(
+            document_store=document_store,
+            source_registry=source_registry,
+            language_detector=language_detector,
+            duplicate_detector=duplicate_detector,
+            graph_index=MagicMock(),
+        )
+        service._universe_tickers = tickers
+        return service
+
+    def _make_extraction(self, tickers: list[str]):
+        """Create a minimal GraphExtractionResult with given tickers."""
+        from app.prompts.graph_extraction import GraphExtractionResult, InstrumentMention
+
+        return GraphExtractionResult(
+            impact_score=50,
+            impact_tier="SILVER",
+            instruments=[
+                InstrumentMention(ticker=t, name=t) for t in tickers
+            ],
+        )
+
+    def test_adds_missed_ticker(
+        self, document_store, source_registry, language_detector, duplicate_detector
+    ) -> None:
+        """Regex catches a known ticker the LLM missed."""
+        service = self._make_service_with_universe(
+            document_store, source_registry, language_detector, duplicate_detector,
+            tickers={"NXS", "ECO", "TRUCK"},
+        )
+        extraction = self._make_extraction(["NXS"])
+        content = "Nexus Software (NXS) beat earnings while ECO rallied on subsidy news."
+
+        added = service._augment_extraction_with_regex_tickers(content, extraction)
+
+        assert added == 1
+        tickers = [i.ticker for i in extraction.instruments]
+        assert "NXS" in tickers
+        assert "ECO" in tickers
+        assert "TRUCK" not in tickers  # Not mentioned in text
+        # The added one should be tagged regex-detected
+        eco = [i for i in extraction.instruments if i.ticker == "ECO"][0]
+        assert eco.reason == "regex-detected"
+
+    def test_no_false_positives_on_substrings(
+        self, document_store, source_registry, language_detector, duplicate_detector
+    ) -> None:
+        """Regex uses word boundaries -- no substring matches."""
+        service = self._make_service_with_universe(
+            document_store, source_registry, language_detector, duplicate_detector,
+            tickers={"AI", "ECO"},
+        )
+        extraction = self._make_extraction([])
+        # "AI" appears as substring in "SAID" and "FAIR" but not as a word
+        content = "The company SAID the FAIR price was acceptable for ecological products."
+
+        added = service._augment_extraction_with_regex_tickers(content, extraction)
+
+        # "ECO" is not in the text. "AI" might match as word in "AI" but not in "SAID"/"FAIR"
+        assert "ECO" not in [i.ticker for i in extraction.instruments]
+
+    def test_does_not_duplicate_llm_tickers(
+        self, document_store, source_registry, language_detector, duplicate_detector
+    ) -> None:
+        """Tickers already found by LLM are not added again."""
+        service = self._make_service_with_universe(
+            document_store, source_registry, language_detector, duplicate_detector,
+            tickers={"NXS", "ECO"},
+        )
+        extraction = self._make_extraction(["NXS", "ECO"])
+        content = "NXS and ECO both mentioned here."
+
+        added = service._augment_extraction_with_regex_tickers(content, extraction)
+
+        assert added == 0
+        assert len(extraction.instruments) == 2
+
+    def test_empty_universe(
+        self, document_store, source_registry, language_detector, duplicate_detector
+    ) -> None:
+        """Empty universe means no fallback matches."""
+        service = self._make_service_with_universe(
+            document_store, source_registry, language_detector, duplicate_detector,
+            tickers=set(),
+        )
+        extraction = self._make_extraction([])
+
+        added = service._augment_extraction_with_regex_tickers("NXS ECO TRUCK", extraction)
+
+        assert added == 0
+
+    def test_no_graph_index_returns_zero(
+        self, document_store, source_registry, language_detector, duplicate_detector
+    ) -> None:
+        """Without graph_index, fallback is a no-op."""
+        service = IngestService(
+            document_store=document_store,
+            source_registry=source_registry,
+            language_detector=language_detector,
+            duplicate_detector=duplicate_detector,
+            graph_index=None,
+        )
+        extraction = self._make_extraction([])
+
+        added = service._augment_extraction_with_regex_tickers("NXS mentioned", extraction)
+
+        assert added == 0

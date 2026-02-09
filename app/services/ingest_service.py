@@ -20,6 +20,7 @@ External indexing (Elasticsearch, ChromaDB, Neo4j) will be added in later phases
 
 from __future__ import annotations
 
+import os
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -205,6 +206,7 @@ class IngestService:
     graph_index: GraphIndex | None = None
     llm_service: "LLMService | None" = None
     max_word_count: int = 20_000
+    strict_ticker_validation: bool = False
 
     def _extract_graph_entities(
         self,
@@ -361,6 +363,8 @@ class IngestService:
             )
         
         # Create AFFECTS relationships for instruments
+        accepted_tickers = 0
+        rejected_tickers = 0
         with self.graph_index.driver.session() as session:
             for inst in extraction.instruments:
                 if not inst.ticker:
@@ -372,6 +376,12 @@ class IngestService:
                     ticker=inst.ticker,
                     name=inst.name or inst.ticker,
                 )
+
+                if instrument_guid is None:
+                    rejected_tickers += 1
+                    continue
+
+                accepted_tickers += 1
 
                 # Map direction to expected values
                 direction_map = {
@@ -399,6 +409,13 @@ class IngestService:
                     )
                 except Exception as e:
                     session_logger.error(f"Failed to create AFFECTS for {inst.ticker}: {e}")
+
+            total_tickers = accepted_tickers + rejected_tickers
+            if total_tickers > 0:
+                session_logger.info(
+                    f"Ticker validation: {accepted_tickers}/{total_tickers} accepted"
+                    + (f", {rejected_tickers} rejected" if rejected_tickers else "")
+                )
             
             # Create MENTIONS relationships for all companies
             # Auto-create companies if they don't exist (like instruments)
@@ -425,8 +442,12 @@ class IngestService:
                 except Exception as e:
                     session_logger.warning(f"Error creating MENTIONS for {company_name}: {e}")
 
-    def _resolve_instrument_guid(self, session, ticker: str, name: str) -> str:
-        """Return shared Instrument guid for ticker, creating canonical inst-<ticker> if missing."""
+    def _resolve_instrument_guid(self, session, ticker: str, name: str) -> str | None:
+        """Return shared Instrument guid for ticker, creating canonical inst-<ticker> if missing.
+
+        When strict_ticker_validation is True, returns None for tickers not already
+        in the instrument universe instead of auto-creating phantom nodes.
+        """
         # Prefer existing shared instruments (created by universe loader) before creating new
         record = session.run(
             """
@@ -439,6 +460,13 @@ class IngestService:
         ).single()
         if record and record["guid"]:
             return record["guid"]
+
+        # Strict mode: reject tickers not in the known universe
+        if self.strict_ticker_validation:
+            session_logger.warning(
+                f"Ticker '{ticker}' not in instrument universe -- skipping AFFECTS edge"
+            )
+            return None
 
         guid = f"inst-{ticker}"
         session.run(
@@ -455,6 +483,71 @@ class IngestService:
         )
 
         return guid
+
+    def _augment_extraction_with_regex_tickers(
+        self,
+        content: str,
+        extraction: "GraphExtractionResult",
+    ) -> int:
+        """Scan article text for known tickers the LLM missed and add them.
+
+        Loads the known instrument universe from Neo4j (cached per service
+        instance), then does a case-sensitive word-boundary scan of the
+        content.  Any known ticker found in the text but absent from the
+        LLM extraction is appended as an InstrumentMention with direction
+        NEUTRAL and reason 'regex-detected'.
+
+        Returns the number of tickers added.
+        """
+        if not self.graph_index:
+            return 0
+
+        # Lazy-cache the universe ticker set
+        if not hasattr(self, "_universe_tickers"):
+            try:
+                with self.graph_index.driver.session() as session:
+                    result = session.run("MATCH (i:Instrument) RETURN i.ticker AS t")
+                    self._universe_tickers: set[str] = {
+                        r["t"] for r in result if r["t"]
+                    }
+            except Exception as e:
+                session_logger.warning(f"Could not load instrument universe for regex fallback: {e}")
+                self._universe_tickers = set()
+
+        if not self._universe_tickers:
+            return 0
+
+        from app.prompts.graph_extraction import InstrumentMention
+
+        # Tickers already extracted by LLM
+        llm_tickers = {inst.ticker for inst in extraction.instruments}
+
+        import re
+        added = 0
+        for ticker in self._universe_tickers:
+            if ticker in llm_tickers:
+                continue
+            # Word-boundary match, case-sensitive (tickers are uppercase)
+            # Matches "NXS" but not "ANXIETY" or "nxs"
+            if re.search(rf"\b{re.escape(ticker)}\b", content):
+                extraction.instruments.append(
+                    InstrumentMention(
+                        ticker=ticker,
+                        name=ticker,
+                        direction="NEUTRAL",
+                        magnitude="LOW",
+                        reason="regex-detected",
+                    )
+                )
+                added += 1
+
+        if added:
+            session_logger.info(
+                f"Regex ticker fallback added {added} ticker(s): "
+                f"{[i.ticker for i in extraction.instruments if i.reason == 'regex-detected']}"
+            )
+
+        return added
 
     def _resolve_company_guid(self, session, name: str) -> str:
         """Return Company guid for name, creating if missing.
@@ -682,6 +775,8 @@ class IngestService:
 
             # Step 11: Update graph with extracted entities (if extraction succeeded)
             if extraction and self.graph_index:
+                # Regex ticker fallback: catch known tickers the LLM missed
+                self._augment_extraction_with_regex_tickers(doc.content, extraction)
                 self._apply_extraction_to_graph(doc.guid, extraction)
 
         except Exception as e:
@@ -880,4 +975,5 @@ def create_ingest_service(
         graph_index=graph_index,
         llm_service=llm_service,
         max_word_count=max_word_count,
+        strict_ticker_validation=os.environ.get("GOFR_IQ_STRICT_TICKER_VALIDATION", "").lower() in ("1", "true", "yes"),
     )

@@ -1,0 +1,235 @@
+{
+  "timestamp": "2026-02-09T13:24:10.394642",
+  "test_suite": "Golden Test Set",
+  "summary": {
+    "total_tests": 17,
+    "passed": 17,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "empty_feeds": 0,
+    "total_clients": 6
+  },
+  "results": [
+    {
+      "client": "INFRA",
+      "check": "Theme vocabulary gate (0 violations)",
+      "passed": true,
+      "detail": "All themes in VALID_THEMES",
+      "failure_reason": null,
+      "expected": null,
+      "actual": null
+    },
+    {
+      "client": "INFRA",
+      "check": "Schema completeness (all docs have required fields)",
+      "passed": true,
+      "detail": "All docs complete",
+      "failure_reason": null,
+      "expected": null,
+      "actual": null
+    },
+    {
+      "client": "Nebula Retirement Fund",
+      "check": "See 'Truck Strike' in Maintenance",
+      "passed": true,
+      "detail": "Found 'Heavy Truck Strike' in MAINTENANCE",
+      "failure_reason": null,
+      "expected": "'Heavy Truck Strike' in MAINTENANCE",
+      "actual": "['Heavy Truck Strike Threatens Logistics: Union Demands 15% Hike', 'New Green Energy Bill Passed: Major Subsidies for EcoPower']"
+    },
+    {
+      "client": "Ironclad Short Strategies",
+      "check": "See 'Truck Strike' in Maintenance",
+      "passed": true,
+      "detail": "Found 'Heavy Truck Strike' in MAINTENANCE",
+      "failure_reason": null,
+      "expected": "'Heavy Truck Strike' in MAINTENANCE",
+      "actual": "['Heavy Truck Strike Threatens Logistics: Union Demands 15% Hike', 'New Blockchain Protocol Gains Enterprise Traction at Major Banks']"
+    },
+    {
+      "client": "Quantum Momentum",
+      "check": "NOT see 'Truck Strike' (No Exposure)",
+      "passed": true,
+      "detail": "Correctly filtered out",
+      "failure_reason": null,
+      "expected": "Not in any channel",
+      "actual": "MAINT:False, OPP:False"
+    },
+    {
+      "client": "Green Horizon Capital",
+      "check": "See 'Green Energy' in Maintenance",
+      "passed": true,
+      "detail": "Found 'Green Energy Bill' in MAINTENANCE",
+      "failure_reason": null,
+      "expected": "'Green Energy Bill' in MAINTENANCE",
+      "actual": "['New Green Energy Bill Passed: Major Subsidies for EcoPower', 'Heavy Truck Strike Threatens Logistics: Union Demands 15% Hike']"
+    },
+    {
+      "client": "Quantum Momentum",
+      "check": "Filter low score (BankOne)",
+      "passed": true,
+      "detail": "Correctly filtered (Score 25 < Threshold)",
+      "failure_reason": null,
+      "expected": "Filtered (score 25 < threshold 40)",
+      "actual": "Found: False"
+    },
+    {
+      "client": "DiamondHands420",
+      "check": "See 'Blockchain Protocol' in Opportunity",
+      "passed": true,
+      "detail": "Found 'Blockchain Protocol' in OPPORTUNITY",
+      "failure_reason": null,
+      "expected": "'Blockchain Protocol' in OPPORTUNITY (blockchain theme)",
+      "actual": "['New Blockchain Protocol Gains Enterprise Traction at Major Banks']"
+    },
+    {
+      "client": "Quantum Momentum",
+      "check": "See 'Blockchain Protocol' in Maintenance (watches FIN)",
+      "passed": true,
+      "detail": "Found 'Blockchain Protocol' in MAINTENANCE",
+      "failure_reason": null,
+      "expected": "'Blockchain Protocol' in MAINTENANCE (watches FIN)",
+      "actual": "['Nexus Software Unveils Revolutionary Quantum AI Model', 'New Blockchain Protocol Gains Enterprise Traction at Major Banks']"
+    },
+    {
+      "client": "Nebula Retirement Fund",
+      "check": "See 'Rate Hike' in Opportunity (rates theme)",
+      "passed": true,
+      "detail": "Found 'Rate Hike' in OPPORTUNITY",
+      "failure_reason": null,
+      "expected": "'Rate Hike' in OPPORTUNITY (rates theme)",
+      "actual": "['Central Bank Signals Surprise Rate Hike: Bond Markets Tumble']"
+    },
+    {
+      "client": "Green Horizon Capital",
+      "check": "See 'ESG Ethics' in Opportunity (esg theme)",
+      "passed": true,
+      "detail": "Found 'ESG Activists Target' in OPPORTUNITY",
+      "failure_reason": null,
+      "expected": "'ESG Activists Target' in OPPORTUNITY (esg theme)",
+      "actual": "['ESG Activists Target GeneSys Over Clinical Trial Ethics']"
+    },
+    {
+      "client": "Nebula Retirement Fund",
+      "check": "NOT see 'Blockchain Protocol' in Opportunity",
+      "passed": true,
+      "detail": "Correctly excluded (no blockchain theme)",
+      "failure_reason": null,
+      "expected": "Not in OPPORTUNITY (no blockchain theme)",
+      "actual": "Found: False"
+    },
+    {
+      "client": "DiamondHands420",
+      "check": "NOT see 'Rate Hike' in Opportunity (watches LUXE)",
+      "passed": true,
+      "detail": "Correctly excluded (watches LUXE)",
+      "failure_reason": null,
+      "expected": "Not in OPPORTUNITY (watches LUXE = exclude_tickers)",
+      "actual": "Found: False"
+    },
+    {
+      "client": "Quantum",
+      "check": "Top-1 is 'Nexus Software'",
+      "passed": true,
+      "detail": "Top title: Nexus Software Unveils Revolutionary Qua",
+      "failure_reason": null,
+      "expected": "Title contains 'Nexus Software'",
+      "actual": "Nexus Software Unveils Revolutionary Quantum AI Mo"
+    },
+    {
+      "client": "Green",
+      "check": "Top-1 is 'Green Energy Bill'",
+      "passed": true,
+      "detail": "Top title: New Green Energy Bill Passed: Major Subs",
+      "failure_reason": null,
+      "expected": "Title contains 'Green Energy Bill'",
+      "actual": "New Green Energy Bill Passed: Major Subsidies for "
+    },
+    {
+      "client": "Nebula",
+      "check": "Top-1 is 'Truck Strike'",
+      "passed": true,
+      "detail": "Top title: Heavy Truck Strike Threatens Logistics: ",
+      "failure_reason": null,
+      "expected": "Title contains 'Truck Strike'",
+      "actual": "Heavy Truck Strike Threatens Logistics: Union Dema"
+    },
+    {
+      "client": "Ironclad",
+      "check": "Top-1 is 'Truck Strike'",
+      "passed": true,
+      "detail": "Top title: Heavy Truck Strike Threatens Logistics: ",
+      "failure_reason": null,
+      "expected": "Title contains 'Truck Strike'",
+      "actual": "Heavy Truck Strike Threatens Logistics: Union Dema"
+    }
+  ],
+  "client_kpis": [
+    {
+      "client_name": "Nebula Retirement Fund",
+      "client_guid": "164728d4-8819-4585-8b28-b32b4e027e2f",
+      "total_checks": 3,
+      "passed_checks": 3,
+      "coverage": 1.0,
+      "precision": 1.0,
+      "feed_empty": false,
+      "maintenance_count": 2,
+      "opportunity_count": 1
+    },
+    {
+      "client_name": "Ironclad Short Strategies",
+      "client_guid": "6fbb4c16-8309-46a9-ab37-8209328f7e94",
+      "total_checks": 1,
+      "passed_checks": 1,
+      "coverage": 1.0,
+      "precision": 1.0,
+      "feed_empty": false,
+      "maintenance_count": 2,
+      "opportunity_count": 0
+    },
+    {
+      "client_name": "Quantum Momentum Partners",
+      "client_guid": "d024b6ab-bf76-41a9-8e35-50e30a889eb2",
+      "total_checks": 3,
+      "passed_checks": 3,
+      "coverage": 1.0,
+      "precision": 1.0,
+      "feed_empty": false,
+      "maintenance_count": 2,
+      "opportunity_count": 0
+    },
+    {
+      "client_name": "Green Horizon Capital",
+      "client_guid": "4261bd73-5940-416d-b413-8ebac0b981bb",
+      "total_checks": 2,
+      "passed_checks": 2,
+      "coverage": 1.0,
+      "precision": 1.0,
+      "feed_empty": false,
+      "maintenance_count": 2,
+      "opportunity_count": 1
+    },
+    {
+      "client_name": "DiamondHands420",
+      "client_guid": "821f5406-3b36-487f-91d1-4a269ab0bf4d",
+      "total_checks": 2,
+      "passed_checks": 2,
+      "coverage": 1.0,
+      "precision": 1.0,
+      "feed_empty": false,
+      "maintenance_count": 1,
+      "opportunity_count": 1
+    },
+    {
+      "client_name": "Sunrise Long Opportunities",
+      "client_guid": "a6bdc337-17ce-4f88-9d0f-0f8e524e3940",
+      "total_checks": 0,
+      "passed_checks": 0,
+      "coverage": 0.0,
+      "precision": 1.0,
+      "feed_empty": false,
+      "maintenance_count": 1,
+      "opportunity_count": 0
+    }
+  ]
+}

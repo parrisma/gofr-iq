@@ -85,8 +85,8 @@ from app.services.language_detector import (
     detect_language,
     detect_language_with_confidence,
 )
+from app.models.themes import VALID_THEMES
 from app.services.mandate_enrichment import (
-    VALID_THEMES,
     MandateEnrichmentError,
     MandateEnrichmentResult,
     compute_mandate_hash,

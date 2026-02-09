@@ -1930,13 +1930,7 @@ def register_client_tools(
             # Handle mandate_themes update (list stored as JSON)
             if mandate_themes is not None:
                 # Validate themes against controlled vocabulary
-                valid_themes = {
-                    "ai", "semiconductor", "ev_battery", "supply_chain", "m_and_a",
-                    "rates", "fx", "credit", "esg", "energy_transition", "geopolitical",
-                    "japan", "china", "india", "korea", "fintech", "biotech",
-                    "real_estate", "commodities", "consumer", "defense", "cloud",
-                    "cybersecurity", "autonomous_vehicles", "blockchain",
-                }
+                from app.models.themes import VALID_THEMES as valid_themes
                 invalid_themes = [t for t in mandate_themes if t.lower() not in valid_themes]
                 if invalid_themes:
                     return error_response(

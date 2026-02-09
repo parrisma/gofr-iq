@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.logger import StructuredLogger
+from app.models.themes import VALID_THEMES
 from app.services.llm_service import (
     ChatCompletionResult,
     ChatMessage,
@@ -25,15 +26,6 @@ from app.services.llm_service import (
 )
 
 logger = StructuredLogger(__name__)
-
-# Controlled theme vocabulary (must match graph_extraction.py and client_tools.py)
-VALID_THEMES = frozenset({
-    "ai", "semiconductor", "ev_battery", "supply_chain", "m_and_a",
-    "rates", "fx", "credit", "esg", "energy_transition", "geopolitical",
-    "japan", "china", "india", "korea", "fintech", "biotech",
-    "real_estate", "commodities", "consumer", "defense", "cloud",
-    "cybersecurity", "autonomous_vehicles", "blockchain",
-})
 
 # System prompt for theme extraction
 MANDATE_THEME_EXTRACTION_PROMPT = """You are an expert investment analyst assistant.

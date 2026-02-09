@@ -72,6 +72,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         --test-set)
             USE_TEST_SET=true
+            REQUIRE_NONEMPTY=true  # Default for golden set: fail on empty feeds
             shift
             ;;
         --expectations)

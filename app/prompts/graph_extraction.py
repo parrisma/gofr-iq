@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from app.logger import session_logger
+from app.models.themes import VALID_THEMES
 
 
 class ExtractionParseError(Exception):
@@ -509,7 +510,15 @@ def parse_extraction_response(response: str) -> GraphExtractionResult:
     
     # Parse themes (controlled vocabulary, lowercase, strip whitespace)
     raw_themes = data.get("themes", [])
-    themes = [t.strip().lower().replace(" ", "_") for t in raw_themes if isinstance(t, str) and t.strip()]
+    normalized = [t.strip().lower().replace(" ", "_") for t in raw_themes if isinstance(t, str) and t.strip()]
+
+    # Filter against VALID_THEMES -- only keep known vocabulary
+    themes = [t for t in normalized if t in VALID_THEMES]
+    dropped = [t for t in normalized if t not in VALID_THEMES]
+    if dropped:
+        session_logger.warning(
+            f"Dropped {len(dropped)} out-of-vocab theme(s) from extraction: {dropped}"
+        )
 
     return GraphExtractionResult(
         impact_score=impact_score,
