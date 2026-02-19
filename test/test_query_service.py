@@ -1344,8 +1344,15 @@ class TestTopClientNewsBaseline:
         """
         from unittest.mock import patch
         from datetime import timedelta
+        from datetime import datetime as real_datetime
 
         now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
         profile = self._stub_profile()
 
         holdings_doc = {
@@ -1370,6 +1377,7 @@ class TestTopClientNewsBaseline:
         )
 
         with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
             patch.object(service, "_get_client_profile_context", return_value=profile),
             patch.object(service, "_get_client_holdings", return_value=[
                 {"ticker": "TSM", "weight": 0.15},
@@ -1430,8 +1438,15 @@ class TestTopClientNewsBaseline:
         """
         from unittest.mock import patch
         from datetime import timedelta
+        from datetime import datetime as real_datetime
 
         now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
         profile = self._stub_profile()
 
         # Holdings doc — affects a ticker the client owns
@@ -1463,6 +1478,7 @@ class TestTopClientNewsBaseline:
         )
 
         with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
             patch.object(service, "_get_client_profile_context", return_value=profile),
             patch.object(service, "_get_client_holdings", return_value=[
                 {"ticker": "TSM", "weight": 0.20},
@@ -1573,8 +1589,15 @@ class TestAvatarFeed:
     ) -> None:
         """A document affecting a held ticker appears in the maintenance channel."""
         from unittest.mock import patch
+        from datetime import datetime as real_datetime
 
         now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
         profile = self._stub_profile()
 
         # Document that affects TSM (which client holds)
@@ -1593,6 +1616,7 @@ class TestAvatarFeed:
         )
 
         with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
             patch.object(service, "_get_client_profile_context", return_value=profile),
             patch.object(service, "_get_client_holdings", return_value=[
                 {"ticker": "TSM", "weight": 0.20},
@@ -1631,8 +1655,15 @@ class TestAvatarFeed:
     ) -> None:
         """A mandate-themed document NOT affecting holdings appears in opportunity."""
         from unittest.mock import patch
+        from datetime import datetime as real_datetime
 
         now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
         profile = self._stub_profile()
 
         # Document about EV batteries (matches mandate themes) but affects CATL (not held)
@@ -1651,6 +1682,7 @@ class TestAvatarFeed:
         )
 
         with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
             patch.object(service, "_get_client_profile_context", return_value=profile),
             patch.object(service, "_get_client_holdings", return_value=[
                 {"ticker": "TSM", "weight": 0.20},  # Client holds TSM, not CATL
@@ -1693,8 +1725,15 @@ class TestAvatarFeed:
         If a document appears in both channels, maintenance wins.
         """
         from unittest.mock import patch
+        from datetime import datetime as real_datetime
 
         now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
         profile = self._stub_profile()
 
         # Document affects TSM (held) AND matches mandate themes
@@ -1713,6 +1752,7 @@ class TestAvatarFeed:
         )
 
         with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
             patch.object(service, "_get_client_profile_context", return_value=profile),
             patch.object(service, "_get_client_holdings", return_value=[
                 {"ticker": "TSM", "weight": 0.15},
