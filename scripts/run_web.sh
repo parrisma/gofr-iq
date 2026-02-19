@@ -15,8 +15,8 @@
 # REQUIREMENTS:
 #   - gofriq.env must exist (run scripts/generate_envs.sh if missing)
 #   - For production, use docker/start-prod.sh to start the full stack
-#   - For development testing with authentication, load secrets first:
-#       source lib/gofr-common/scripts/auth_env.sh --docker
+#   - For development testing with authentication, load operator env first (admin commands only):
+#       source <(./lib/gofr-common/scripts/auth_env.sh --docker)
 #       ./scripts/run_web.sh
 #
 # See lib/gofr-common/scripts/readme.md for authentication guide.

@@ -104,6 +104,10 @@ Goal: provision AppRole creds like gofr-doc, using gofr-common tooling, and gene
 - Include at minimum role: `gofr-iq`.
 - Include optional operator role: `gofr-admin-control` (recommended if gofr-doc uses it).
 
+Note (core secrets):
+- The JWT signing secret and the LLM API key are both core secrets under `secret/data/gofr/config/*`.
+- The same AppRole/policies used for JWT secret reads should be used for the LLM API key as well (no GOFR-IQ specific AppRole is required).
+
 3.2 Add `scripts/ensure_approle.sh`
 - Preconditions:
   - Vault is running/unsealed.
@@ -122,6 +126,9 @@ Status: DONE (files added; provisioning can be run when Vault artifacts are pres
 Added:
 - `config/gofr_approles.json`
 - `scripts/ensure_approle.sh`
+
+Note:
+- `secrets/` is a symlink to `lib/gofr-common/secrets` in this repo, so tooling may log resolved credential paths under `lib/gofr-common/secrets/service_creds` even though the stable mount path is `secrets/service_creds`.
 
 ## 4. Wire VaultIdentity creds into Docker services
 
@@ -215,6 +222,20 @@ Goal: ensure token/group registry locations are shared across GOFR services.
 Stop condition:
 - If gofr-iq writes tokens/groups elsewhere, fix prefix wiring before updating tests.
 
+Status: DONE.
+Validation performed (prod Vault on Docker network; no JWT secret env vars involved):
+- Started Vault: `./docker/manage-infra.sh vault`
+  - Note: `docker/manage-infra.sh` was fixed to call `lib/gofr-common/scripts/manage_vault.sh start` (previously invoked without a subcommand and exited with usage).
+- Provisioned/verified AppRole creds: `./scripts/ensure_approle.sh`
+- Admin validation (Docker mode):
+  - `source <(./lib/gofr-common/scripts/auth_env.sh --docker)`
+  - `./lib/gofr-common/scripts/auth_manager.sh --docker groups list`
+  - Direct Vault KV inspection:
+    - `vault kv list secret/gofr/auth/groups`
+    - `vault kv list secret/gofr/auth/tokens`
+Observed:
+- Groups and tokens exist under `secret/gofr/auth/*` (shared prefix is active).
+
 ## 7. Update operator/dev scripts and docs
 
 Goal: make scripts reflect the new operational model.
@@ -232,6 +253,15 @@ Goal: make scripts reflect the new operational model.
 
 Verification:
 - Running scripts does not instruct users to export JWT secrets.
+
+Status: DONE.
+Updates applied:
+- `scripts/run_mcp.sh`: removed legacy JWT-secret-by-env note; updated operator tooling guidance to `source <(./lib/gofr-common/scripts/auth_env.sh --docker)`; aligned prod script reference to `scripts/start-prod.sh`.
+- `scripts/run_mcpo.sh`: removed `localhost` default; defaults MCP host to `gofr-iq-mcp` (Docker service/container name) and removed `localhost` URL output.
+- `scripts/run_web.sh`: updated operator tooling guidance to the process-substitution form.
+- `scripts/manage_servers.sh`: removed unused `GOFR_IQ_JWT_SECRET` placeholder export.
+- `scripts/start-prod.sh`: no longer exports/writes `GOFR_IQ_JWT_SECRET` to `docker/.env`; only verifies `secret/gofr/config/jwt-signing-secret` exists in Vault; removed `localhost` URLs from the final service summary.
+- `docs/development/conventions.md`: removed `GOFR_JWT_SECRET` from docker/.env SSOT references.
 
 ## 8. Update tests
 
@@ -254,6 +284,12 @@ Goal: tests stop depending on per-service JWT secrets and validate the new expec
 
 Stop condition:
 - Do not skip failing tests; fix underlying issues.
+
+Status: DONE.
+Full suite result:
+- `./scripts/run_tests.sh` passed: 893 passed, 1 skipped (aikido-local-scanner not installed).
+Notes:
+- `GOFR_IQ_OPENROUTER_API_KEY` was sourced from Vault for the test process only (exported in-shell) to avoid the known baseline failure when the key is missing.
 
 ## 9. Add a bootstrap script (post-upgrade)
 
@@ -284,3 +320,94 @@ Known pitfalls to watch:
 - Missing `/run/secrets/vault_creds` in containers (VaultIdentity not active).
 - Vault path prefix not `gofr/auth` (auth island).
 - JWT audience mismatch (`aud` must be `gofr-api`).
+
+## 11. Move LLM API key to Vault (core secret) + dev/test injection
+
+Goal: stop passing the LLM API key (OpenRouter) via env vars in prod. Read it from Vault by default using the same runtime pattern as `JwtSecretProvider`. For dev/test, keep the real key in a gitignored file and inject it into the ephemeral test Vault for each test cycle.
+
+Background (current state):
+- Vault already contains `secret/gofr/config/api-keys/openrouter` with data key `value`.
+- Code currently reads `GOFR_IQ_OPENROUTER_API_KEY` from the environment (MCP startup hard-fails if missing).
+- `scripts/start-prod.sh` currently pulls the key from Vault and exports it as an env var before starting services.
+
+Design constraints:
+- This is a core/shared secret path (no GOFR-IQ specific path). Use `gofr/config/api-keys/openrouter`.
+- Follow the existing provider pattern (VaultClient + TTL cache + thread safety). No ad-hoc Vault reads sprinkled across services.
+- Backwards compatibility: keep env var override working during the transition (env var wins if set; otherwise use Vault).
+
+11.1 Confirm Vault policy access for AppRoles
+- Confirm the service policy used by MCP (`gofr-mcp-policy`) can read `secret/data/gofr/config/*`.
+- If policy coverage is missing in your environment, add it to gofr-common policy definitions.
+
+Note:
+- This should be the same AppRole/policy access model as the JWT signing secret (`gofr/config/jwt-signing-secret`).
+
+Stop condition:
+- If MCP AppRole cannot read `secret/data/gofr/config/api-keys/openrouter`, fix policy before touching application logic.
+
+11.2 Implement a Vault-backed OpenRouter key provider in gofr-common
+- Add `OpenRouterKeyProvider` in gofr-common:
+  - inputs: `vault_client`, `vault_path` (default: `gofr/config/api-keys/openrouter`), `cache_ttl_seconds`
+  - behavior: `get()` reads KV v2 secret dict and returns `value` with TTL caching
+  - logging: do not log the key; log only fingerprint/metadata (match `JwtSecretProvider` style)
+- Keep `JwtSecretProvider` unchanged.
+
+Verification:
+- Unit-test the provider behavior (cache hit/miss, missing key raises) in gofr-common if tests exist there.
+
+11.3 Wire provider into gofr-iq runtime config / auth factory
+- In gofr-iq, create an LLM API key provider using:
+  - Vault path: `gofr/config/api-keys/openrouter`
+  - TTL cache: 300s (same as JWT secret provider unless you have a reason to differ)
+- Make it accessible to code that builds LLM clients (prefer passing provider down; avoid global env reads).
+
+Backwards compatibility rule:
+- If `GOFR_IQ_OPENROUTER_API_KEY` is set, use it.
+- Else, read from Vault via provider.
+
+11.4 Remove env-var hard dependency in server startup and LLM service
+- MCP server startup must no longer read `GOFR_IQ_OPENROUTER_API_KEY` directly or hard-fail on missing env var.
+- LLM service must prefer provider (or config-provided key) and only fall back to env var as the override.
+- Error paths must be explicit and actionable (missing Vault access vs missing secret vs misconfig).
+
+Verification:
+- With Vault running and AppRole creds mounted, start MCP without setting `GOFR_IQ_OPENROUTER_API_KEY` and confirm LLM is available.
+- With env var set to a known different value, confirm env override wins.
+
+11.5 Update prod/dev scripts to stop exporting the key
+- Update `scripts/start-prod.sh`:
+  - remove the logic that pulls OpenRouter key from Vault and exports `GOFR_IQ_OPENROUTER_API_KEY`
+  - keep Vault readiness checks (Vault must be up; AppRole creds must exist)
+- Update compose/service env wiring to stop passing `GOFR_IQ_OPENROUTER_API_KEY` into containers.
+
+Stop condition:
+- If any service still requires the env var at startup, do not remove it from scripts/compose yet; fix the code first.
+
+11.6 Dev/test: store real key in a gitignored file and inject into ephemeral test Vault each cycle
+- Add a local-only file (gitignored by existing rules): `secrets/llm_api_key`.
+  - contents: a single line containing the OpenRouter API key
+  - do not commit it
+- Update `scripts/run_tests.sh`:
+  - if `GOFR_IQ_OPENROUTER_API_KEY` is set, treat it as an override (optional)
+  - else read the key from `secrets/llm_api_key`
+  - write it into the ephemeral test Vault at `secret/data/gofr/config/api-keys/openrouter` with data `{ "value": "..." }`
+  - remove the current hard-fail that requires `GOFR_IQ_OPENROUTER_API_KEY` to be set in the test process env
+
+Verification:
+- Run `./scripts/run_tests.sh` with no `GOFR_IQ_OPENROUTER_API_KEY` exported and confirm the suite still passes.
+
+11.7 Acceptance criteria
+- Prod: services start and can use LLM without `GOFR_IQ_OPENROUTER_API_KEY` being passed via env vars.
+- Dev/test: `./scripts/run_tests.sh` injects the key into ephemeral Vault each run from `secrets/llm_api_key`.
+- Security: no plaintext OpenRouter API key is printed in logs or written to committed files.
+
+Status: DONE.
+Updates applied:
+- gofr-common: added `OpenRouterKeyProvider` (Vault KV v2, TTL cached) and exported it from `gofr_common.auth`.
+- gofr-iq MCP startup: removed hard dependency on `GOFR_IQ_OPENROUTER_API_KEY`; reads from Vault by default (env var override supported).
+- gofr-iq LLM service: supports Vault provider fallback and improved configuration error messaging.
+- `scripts/run_tests.sh`: no longer hard-fails when `GOFR_IQ_OPENROUTER_API_KEY` is unset; injects OpenRouter key into ephemeral test Vault from `secrets/llm_api_key` when available.
+- Prod wiring: removed `GOFR_IQ_OPENROUTER_API_KEY` export/write from `scripts/start-prod.sh` and removed it from `docker/docker-compose.yml`.
+
+Verification:
+- `./scripts/run_tests.sh` passed: 893 passed, 1 skipped.

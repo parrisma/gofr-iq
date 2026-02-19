@@ -27,6 +27,9 @@ from app.services import (
 )
 from app.tools import register_all_tools
 
+from gofr_common.auth.backends import create_vault_client_from_env
+from gofr_common.auth.openrouter_key_provider import OpenRouterKeyProvider
+
 if TYPE_CHECKING:
     pass
 
@@ -66,20 +69,32 @@ def create_mcp_server(
     duplicate_detector = DuplicateDetector()
 
     # Create LLM service with config FIRST (needed for embedding function)
-    # CRITICAL: OpenRouter API key MUST be set for entity extraction to work
-    openrouter_key = os.getenv("GOFR_IQ_OPENROUTER_API_KEY")
-    if not openrouter_key:
-        session_logger.error(
-            "FATAL: GOFR_IQ_OPENROUTER_API_KEY not set. "
-            "LLM service is required for entity extraction when graph index is enabled."
-        )
-        raise ValueError(
-            "GOFR_IQ_OPENROUTER_API_KEY must be set in environment. "
-            "Check docker/.env or run bootstrap.py --openrouter-key YOUR_KEY"
-        )
-    
-    llm_service = LLMService(config=config)
-    session_logger.info("LLMService initialized with OpenRouter API key")
+    # OpenRouter API key is read from Vault by default; env var is an optional override.
+    openrouter_override = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
+    if openrouter_override:
+        llm_service = LLMService(config=config)
+    else:
+        try:
+            vault_client = create_vault_client_from_env(prefix="GOFR_IQ")
+            openrouter_key_provider = OpenRouterKeyProvider(vault_client=vault_client)
+            llm_service = LLMService(
+                config=config,
+                openrouter_key_provider=openrouter_key_provider,
+            )
+        except Exception as exc:
+            session_logger.error(
+                "FATAL: LLM service initialization failed",
+                cause_type=type(exc).__name__,
+                error=str(exc),
+                remediation=(
+                    "Ensure Vault is reachable and AppRole creds are mounted at /run/secrets/vault_creds, "
+                    "and ensure Vault has secret at secret/gofr/config/api-keys/openrouter (key: value). "
+                    "For local overrides, you can set GOFR_IQ_OPENROUTER_API_KEY."
+                ),
+            )
+            raise
+
+    session_logger.info("LLMService initialized")
     
     # Create embedding function using LLM service for OpenRouter embeddings
     from app.services.embedding_index import LLMEmbeddingFunction
@@ -113,7 +128,7 @@ def create_mcp_server(
     # We initialize it but handle connection errors gracefully in service
     graph_index = GraphIndex()
     graph_index.init_schema()
-    session_logger.info("LLMService initialized with OpenRouter API key")
+    session_logger.info("GraphIndex initialized")
 
     # Initialize SourceRegistry with Neo4j sync enabled
     source_registry = SourceRegistry(

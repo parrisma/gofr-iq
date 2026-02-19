@@ -695,7 +695,8 @@ class IngestService:
                 raise LLMExtractionError(
                     "Graph index is enabled but LLM service is not available. "
                     "Entity extraction is required for graph relationships. "
-                    "Ensure GOFR_IQ_OPENROUTER_API_KEY is set."
+                    "Ensure the OpenRouter API key is available via Vault (gofr/config/api-keys/openrouter) "
+                    "or set GOFR_IQ_OPENROUTER_API_KEY as an override."
                 )
             
             require_extraction = bool(self.graph_index)

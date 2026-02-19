@@ -122,7 +122,6 @@ services:
       - GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:${GOFR_NEO4J_BOLT_INTERNAL_PORT}
       - GOFR_IQ_NEO4J_USER=neo4j
       # LLM Configuration
-      - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
       - GOFR_IQ_OPENROUTER_BASE_URL=${GOFR_IQ_OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
       - GOFR_IQ_LLM_MODEL=${GOFR_IQ_LLM_MODEL:-meta-llama/llama-3.1-70b-instruct}
       - GOFR_IQ_EMBEDDING_MODEL=${GOFR_IQ_EMBEDDING_MODEL:-qwen/qwen3-embedding-8b}

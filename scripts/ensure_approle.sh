@@ -69,9 +69,8 @@ fi
 export PYTHONPATH="${PROJECT_ROOT}:${PROJECT_ROOT}/lib/gofr-common/src:${PYTHONPATH:-}"
 
 if [[ "${MODE}" == "check" ]]; then
-  uv run "${APPROLE_SCRIPT}" --project-root "${PROJECT_ROOT}" --config "${CONFIG_FILE}" --check
+  uv run -- python "${APPROLE_SCRIPT}" --project-root "${PROJECT_ROOT}" --config "${CONFIG_FILE}" --check
   exit 0
 fi
 
-uv run "${APPROLE_SCRIPT}" --project-root "${PROJECT_ROOT}" --config "${CONFIG_FILE}"
-uv run "${APPROLE_SCRIPT}" --project-root "${PROJECT_ROOT}" --config "${CONFIG_FILE}" --check
+uv run -- python "${APPROLE_SCRIPT}" --project-root "${PROJECT_ROOT}" --config "${CONFIG_FILE}"

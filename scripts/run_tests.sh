@@ -239,7 +239,7 @@ fi
 # Apply command-line overrides (take precedence over .env)
 if [ -n "${CLI_API_KEY}" ]; then
     export GOFR_IQ_OPENROUTER_API_KEY="${CLI_API_KEY}"
-    echo "  Using API key from command line"
+    echo "  Using OpenRouter API key from command line (enables live LLM tests)"
 fi
 if [ -n "${CLI_JWT_SECRET}" ]; then
     export GOFR_JWT_SECRET="${CLI_JWT_SECRET}"
@@ -258,22 +258,23 @@ if [ -z "${GOFR_JWT_SECRET:-}" ]; then
 fi
 echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}..."
 
-# OpenRouter API Key - REQUIRED (like start-prod.sh)
-# Must be passed via --api-key or GOFR_IQ_OPENROUTER_API_KEY env var.
-# Not stored in .env because keys are opaque and expire silently.
+# OpenRouter API Key
+# - Prod code reads this from Vault by default.
+# - For tests, we optionally inject a key into the ephemeral test Vault.
+# - Live integration/e2e tests remain opt-in: they typically require GOFR_IQ_OPENROUTER_API_KEY.
+OPENROUTER_KEY_FOR_VAULT=""
 if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
-    echo "  OpenRouter API Key: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
+    OPENROUTER_KEY_FOR_VAULT="${GOFR_IQ_OPENROUTER_API_KEY}"
+    echo "  OpenRouter API Key: [provided via env/cli]"
 else
-    echo -e "${RED}ERROR: GOFR_IQ_OPENROUTER_API_KEY is required.${NC}" >&2
-    echo "" >&2
-    echo "The MCP server and LLM tests need an OpenRouter API key." >&2
-    echo "Get one from: https://openrouter.ai/keys" >&2
-    echo "" >&2
-    echo "Pass it via:" >&2
-    echo "  $0 --api-key sk-or-v1-xxxxx" >&2
-    echo "  # or:" >&2
-    echo "  export GOFR_IQ_OPENROUTER_API_KEY=sk-or-v1-xxxxx" >&2
-    exit 1
+    OPENROUTER_KEY_FILE="${PROJECT_ROOT}/secrets/llm_api_key"
+    if [ -f "${OPENROUTER_KEY_FILE}" ]; then
+        OPENROUTER_KEY_FOR_VAULT="$(cat "${OPENROUTER_KEY_FILE}")"
+        echo "  OpenRouter API Key: [loaded from secrets/llm_api_key for Vault injection]"
+    else
+        echo "  OpenRouter API Key: [not provided]"
+        echo -e "${YELLOW}  Warning: No OpenRouter key found. Tests that require real LLM calls will be skipped, and any server startup requiring LLM may fail.${NC}"
+    fi
 fi
 
 # Vault configuration (tests connect via container network)
@@ -327,20 +328,22 @@ preflight_check() {
     echo ""
     echo -e "${BLUE}Required Secrets:${NC}"
     
-    # Check OpenRouter API Key (required - script exits before here if missing)
+    # Check OpenRouter API Key (optional unless running live LLM tests)
     if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
-        echo -e "  ${GREEN}[ok]${NC} GOFR_IQ_OPENROUTER_API_KEY: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
+        echo -e "  ${GREEN}[ok]${NC} GOFR_IQ_OPENROUTER_API_KEY: [set]"
+    else
+        echo -e "  ${YELLOW}[warn]${NC} GOFR_IQ_OPENROUTER_API_KEY: not set (live LLM tests will be skipped)"
     fi
     
     # Check JWT Secret
     if [ -n "${GOFR_JWT_SECRET:-}" ]; then
-        echo -e "  ${GREEN}✓${NC} GOFR_JWT_SECRET: ${GOFR_JWT_SECRET:0:20}..."
+        echo -e "  ${GREEN}[ok]${NC} GOFR_JWT_SECRET: ${GOFR_JWT_SECRET:0:20}..."
     else
-        echo -e "  ${RED}✗${NC} GOFR_JWT_SECRET: NOT SET (will be auto-generated)"
+        echo -e "  ${RED}[err]${NC} GOFR_JWT_SECRET: NOT SET (will be auto-generated)"
     fi
     
     # Check Neo4j password
-    echo -e "  ${GREEN}✓${NC} GOFR_IQ_NEO4J_PASSWORD: ${GOFR_IQ_NEO4J_PASSWORD:-testpassword} (default: testpassword)"
+    echo -e "  ${GREEN}[ok]${NC} GOFR_IQ_NEO4J_PASSWORD: ${GOFR_IQ_NEO4J_PASSWORD:-testpassword} (default: testpassword)"
     
     echo ""
     echo -e "${BLUE}Infrastructure (will be started by test runner):${NC}"
@@ -532,6 +535,20 @@ if [ "$USE_DOCKER" = false ]; then
         echo -e "${GREEN}  JWT secret stored in test Vault${NC}"
     else
         echo -e "${YELLOW}  Warning: Could not store JWT in Vault${NC}"
+    fi
+
+    # Optionally initialize test Vault with OpenRouter API key
+    if [ -n "${OPENROUTER_KEY_FOR_VAULT:-}" ]; then
+        echo -e "${BLUE}Initializing test Vault with OpenRouter API key...${NC}"
+        if curl -sf -X POST \
+            -H "X-Vault-Token: ${VAULT_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"data\": {\"value\": \"${OPENROUTER_KEY_FOR_VAULT}\"}}" \
+            "${VAULT_ADDR}/v1/secret/data/gofr/config/api-keys/openrouter" >/dev/null 2>&1; then
+            echo -e "${GREEN}  OpenRouter API key stored in test Vault${NC}"
+        else
+            echo -e "${YELLOW}  Warning: Could not store OpenRouter API key in Vault${NC}"
+        fi
     fi
     
     echo -e "${BLUE}Auth bootstrap will run in pytest session fixture (conftest.py)${NC}"

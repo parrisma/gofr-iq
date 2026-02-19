@@ -23,7 +23,7 @@ from app.config import GofrIqConfig
 from app.logger import StructuredLogger
 
 if TYPE_CHECKING:
-    pass
+    from gofr_common.auth import OpenRouterKeyProvider
 
 logger = StructuredLogger(__name__)
 
@@ -169,6 +169,7 @@ class LLMService:
         self,
         settings: LLMSettings | None = None,
         config: GofrIqConfig | None = None,
+        openrouter_key_provider: OpenRouterKeyProvider | None = None,
     ) -> None:
         """Initialize LLM service
         
@@ -181,9 +182,13 @@ class LLMService:
             Otherwise falls back to settings parameter or loads from environment.
         """
         if config is not None:
+            api_key = config.openrouter_api_key
+            if (api_key is None or len(api_key) == 0) and openrouter_key_provider is not None:
+                api_key = openrouter_key_provider.get()
+
             # Extract LLM settings from GofrIqConfig
             self.settings = LLMSettings(
-                api_key=config.openrouter_api_key,
+                api_key=api_key,
                 base_url=config.openrouter_base_url,
                 chat_model=config.llm_model,
                 embedding_model=config.embedding_model,
@@ -196,8 +201,11 @@ class LLMService:
         else:
             # Load from environment
             import os
+            api_key = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
+            if (api_key is None or len(api_key) == 0) and openrouter_key_provider is not None:
+                api_key = openrouter_key_provider.get()
             self.settings = LLMSettings(
-                api_key=os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"),
+                api_key=api_key,
                 base_url=os.environ.get("GOFR_IQ_OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
                 chat_model=os.environ.get("GOFR_IQ_LLM_MODEL", "meta-llama/llama-3.1-70b-instruct"),
                 embedding_model=os.environ.get("GOFR_IQ_EMBEDDING_MODEL", "qwen/qwen3-embedding-8b"),
@@ -215,7 +223,8 @@ class LLMService:
         """Ensure service is properly configured"""
         if not self.is_available:
             raise LLMConfigurationError(
-                "LLM service not configured. Set GOFR_IQ_OPENROUTER_API_KEY environment variable."
+                "LLM service not configured. Provide OpenRouter API key via Vault (gofr/config/api-keys/openrouter) "
+                "or set GOFR_IQ_OPENROUTER_API_KEY as an override."
             )
 
     @property

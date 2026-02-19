@@ -80,9 +80,9 @@ while [[ $# -gt 0 ]]; do
             echo "  - secrets/ directory must contain Vault credentials"
             echo "  - Neo4j and ChromaDB must be accessible"
             echo ""
-            echo "  For production, use docker/start-prod.sh to start the full stack."
+            echo "  For production, use scripts/start-prod.sh to start the full stack."
             echo "  For development testing, load operator tooling env first (for admin commands only):"
-            echo "    source lib/gofr-common/scripts/auth_env.sh --docker"
+            echo "    source <(./lib/gofr-common/scripts/auth_env.sh --docker)"
             echo "    ./scripts/run_mcp.sh"
             echo ""
             echo "  See lib/gofr-common/scripts/readme.md for authentication guide."
@@ -96,8 +96,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# NOTE: Legacy behavior may still require GOFR_IQ_JWT_SECRET/GOFR_JWT_SECRET until the auth upgrade completes.
-# This wrapper script does not enforce JWT-secret-by-env.
+# NOTE: Auth is Vault-backed; this wrapper does not require JWT signing secrets via env vars.
 
 # Build command line arguments
 CMD_ARGS=(
