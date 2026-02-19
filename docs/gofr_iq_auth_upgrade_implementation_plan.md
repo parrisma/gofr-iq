@@ -303,6 +303,18 @@ Goal: one idempotent command to bring up prerequisites, matching gofr-doc operat
   - optionally start stacks
   - optionally run `./scripts/run_tests.sh`
 
+Status: DONE.
+Added:
+- `scripts/bootstrap_gofr_iq.sh`
+
+Behavior:
+- Idempotent prereq bootstrap so `./scripts/start-prod.sh` can run cleanly.
+- Ensures submodules are initialized (when .gitmodules exists).
+- Ensures Vault is running, initialized, and unsealed (via gofr-common `manage_vault.sh`).
+- Ensures AppRole creds exist (`./scripts/ensure_approle.sh`).
+- Verifies core Vault secrets exist (JWT signing secret, OpenRouter key, Neo4j password).
+- Optional: `./scripts/bootstrap_gofr_iq.sh --tests` runs `./scripts/run_tests.sh`.
+
 ## 10. Verification checklist (acceptance)
 
 - Code/build sanity checks (if present).
