@@ -122,7 +122,7 @@ class ServerManager:
             mcpo_port: MCPO server port (required via arg or GOFR_IQ_MCPO_PORT env).
             web_port: Web API server port (required via arg or GOFR_IQ_WEB_PORT env).
             host: Host address to bind servers to. Defaults to 127.0.0.1.
-            jwt_secret: JWT secret for authentication. Required via arg or GOFR_JWT_SECRET env.
+            jwt_secret: JWT secret for authentication (optional; servers read from Vault).
         """
         # Determine project root
         if project_root is None:
@@ -136,17 +136,15 @@ class ServerManager:
         
         # Server configuration
         self.host = host
-        # Single JWT secret - NO FALLBACKS
-        # Must be set by run_tests.sh from gofr_ports.sh
+        # JWT secret kept for legacy compatibility; servers now read from Vault
         if jwt_secret:
             self.jwt_secret: str = jwt_secret
         else:
-            secret = os.environ.get("GOFR_JWT_SECRET")
-            if not secret:
-                raise ValueError(
-                    "GOFR_JWT_SECRET not set. Run tests via ./scripts/run_tests.sh "
-                    "which sources gofr_ports.sh for the single JWT secret."
-                )
+            secret = (
+                os.environ.get("GOFR_IQ_JWT_SECRET")
+                or os.environ.get("GOFR_JWT_SECRET")
+                or ""
+            )
             self.jwt_secret = secret
         
         # Initialize server configs (ports required from env if not passed)

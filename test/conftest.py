@@ -48,34 +48,24 @@ def test_env() -> dict[str, str]:
     gofr_ports.sh. This fixture only provides non-critical defaults.
     
     Required env vars (must be set by run_tests.sh):
-    - GOFR_JWT_SECRET: Single JWT signing secret (from gofr_ports.sh)
-    - GOFR_VAULT_URL: Test Vault URL
-    - GOFR_VAULT_TOKEN: Test Vault token
-    - GOFR_IQ_CHROMA_HOST/PORT: Test ChromaDB
+    - GOFR_IQ_VAULT_URL: Test Vault URL
+    - GOFR_IQ_VAULT_TOKEN: Test Vault token
+    - GOFR_IQ_CHROMADB_HOST/PORT: Test ChromaDB
     - GOFR_IQ_NEO4J_HOST/PORT: Test Neo4j
+    
+    The JWT signing secret is read from Vault at runtime by JwtSecretProvider;
+    GOFR_JWT_SECRET / GOFR_IQ_JWT_SECRET env vars are kept only for tests that
+    manually decode JWTs outside of AuthService.
     
     Returns:
         Dictionary of non-critical environment defaults.
-    
-    Raises:
-        ValueError: If required GOFR_JWT_SECRET is not set.
     """
-    # Fail fast if JWT secret not set - this is critical for auth
-    if not os.environ.get("GOFR_JWT_SECRET"):
-        raise ValueError(
-            "GOFR_JWT_SECRET not set. Run tests via ./scripts/run_tests.sh "
-            "which sources gofr_ports.sh for the single JWT secret."
-        )
-    
     # Only non-critical defaults - everything else must come from run_tests.sh
     defaults = {
         "GOFR_IQ_ENV": "TEST",
-        "GOFR_AUTH_BACKEND": "vault",
-        "GOFR_VAULT_PATH_PREFIX": "gofr-test/auth",
-        "GOFR_VAULT_MOUNT_POINT": "secret",
-        # OpenRouter API key for LLM integration tests (set in lib/gofr-common/.env)
-        # Test runner sources that file, so no need to duplicate here
-        # "GOFR_IQ_OPENROUTER_API_KEY": "...",  # DO NOT hardcode - use .env file
+        "GOFR_IQ_AUTH_BACKEND": "vault",
+        "GOFR_IQ_VAULT_PATH_PREFIX": "gofr-test/auth",
+        "GOFR_IQ_VAULT_MOUNT_POINT": "secret",
     }
     
     # Only return vars that aren't already set
@@ -138,6 +128,9 @@ def vault_auth_service():
     Uses the same Vault instance as running servers, so tokens
     created here are valid when calling MCPO/MCP/Web endpoints.
     
+    The JWT signing secret is read from Vault (gofr/config/jwt-signing-secret)
+    by JwtSecretProvider - no env var required.
+    
     This fixture requires Vault to be running (started by run_tests.sh).
     Pre-creates all common test groups to avoid InvalidGroupError.
     
@@ -145,27 +138,18 @@ def vault_auth_service():
         AuthService configured with Vault backend.
         
     Raises:
-        pytest.skip: If GOFR_AUTH_BACKEND is not set to 'vault' or Vault unavailable.
+        pytest.skip: If GOFR_IQ_AUTH_BACKEND is not set to 'vault' or Vault unavailable.
     """
     from gofr_common.auth.backends import StorageUnavailableError
     from app.auth.factory import create_auth_service
     
-    # Verify Vault backend is configured
-    backend = os.environ.get("GOFR_AUTH_BACKEND", "")
+    # Verify Vault backend is configured (prefer GOFR_IQ_*, fall back to legacy)
+    backend = os.environ.get("GOFR_IQ_AUTH_BACKEND") or os.environ.get("GOFR_AUTH_BACKEND", "")
     if backend != "vault":
         pytest.skip(f"Vault backend required, got: {backend or 'not set'}")
     
-    # Single JWT secret - NO FALLBACKS
-    # This must be set by run_tests.sh from gofr_ports.sh
-    jwt_secret = os.environ.get("GOFR_JWT_SECRET")
-    if not jwt_secret:
-        pytest.fail(
-            "GOFR_JWT_SECRET not set. Run tests via ./scripts/run_tests.sh "
-            "which sources gofr_ports.sh for the single JWT secret."
-        )
-    
     try:
-        auth = create_auth_service(secret_key=jwt_secret)
+        auth = create_auth_service(prefix="GOFR_IQ", audience="gofr-api")
     except StorageUnavailableError as e:
         pytest.skip(f"Vault unavailable: {e}")
     
@@ -244,25 +228,25 @@ def vault_config() -> dict[str, str]:
     Raises:
         ValueError: If required environment variables are not set.
     """
-    url = os.environ.get("GOFR_VAULT_URL")
-    token = os.environ.get("GOFR_VAULT_TOKEN")
+    url = os.environ.get("GOFR_IQ_VAULT_URL") or os.environ.get("GOFR_VAULT_URL")
+    token = os.environ.get("GOFR_IQ_VAULT_TOKEN") or os.environ.get("GOFR_VAULT_TOKEN")
     
     if not url:
         raise ValueError(
-            "GOFR_VAULT_URL not set. Run tests via ./scripts/run_tests.sh "
+            "GOFR_IQ_VAULT_URL not set. Run tests via ./scripts/run_tests.sh "
             "which sets up the test environment correctly."
         )
     if not token:
         raise ValueError(
-            "GOFR_VAULT_TOKEN not set. Run tests via ./scripts/run_tests.sh "
+            "GOFR_IQ_VAULT_TOKEN not set. Run tests via ./scripts/run_tests.sh "
             "which sets up the test environment correctly."
         )
     
     return {
         "url": url,
         "token": token,
-        "path_prefix": os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-test/auth"),
-        "mount_point": os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),
+        "path_prefix": os.environ.get("GOFR_IQ_VAULT_PATH_PREFIX") or os.environ.get("GOFR_VAULT_PATH_PREFIX", "gofr-test/auth"),
+        "mount_point": os.environ.get("GOFR_IQ_VAULT_MOUNT_POINT") or os.environ.get("GOFR_VAULT_MOUNT_POINT", "secret"),
     }
 
 

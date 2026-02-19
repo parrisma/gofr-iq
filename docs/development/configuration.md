@@ -2,7 +2,7 @@
 
 GOFR-IQ uses a **12-Factor App** configuration strategy. All configuration is stored in environment variables, loaded primarily from `.env` files.
 
-## 🛠️ Configuration Strategy
+## Configuration Strategy
 
 1.  **Shared Defaults**: Core infrastructure ports and limits are defined in `gofr-common`.
 2.  **Environment Variables**: Overrides from the OS or `.env` files.
@@ -13,7 +13,7 @@ GOFR-IQ uses a **12-Factor App** configuration strategy. All configuration is st
 | Variable | Why it matters | Where it comes from |
 |----------|----------------|---------------------|
 | `GOFR_IQ_OPENROUTER_API_KEY` | Enables LLM extraction | You provide (env or gofriq.env) |
-| `GOFR_IQ_JWT_SECRET` | Signs tokens (auth) | Generated/managed by `start-prod.sh` (Vault) or set manually in dev |
+| `GOFR_IQ_VAULT_URL` | Connects to Vault for auth + secrets | Defaulted in scripts; override if needed |
 | `GOFR_ENV` | Mode: `PROD`/`DEV`/`TEST` | Set in your shell before running scripts |
 
 Everything else has sensible defaults and lives in `.env` files.
@@ -28,7 +28,7 @@ Everything else has sensible defaults and lives in `.env` files.
 
 ---
 
-## 🔑 Key Environment Variables
+## Key Environment Variables
 
 ### Core Infrastructure
 
@@ -40,13 +40,15 @@ Everything else has sensible defaults and lives in `.env` files.
 
 ### Authentication & Secrets
 
-**Note**: In Production, `start-prod.sh` manages these automatically via Vault.
+**Note**: GOFR-IQ reads auth secrets (JWT signing secret, group/token registries) from Vault at runtime.
 
 | Variable | Description |
 |----------|-------------|
-| `GOFR_IQ_JWT_SECRET` | **Required**. Secret for signing auth tokens. |
 | `GOFR_IQ_OPENROUTER_API_KEY` | **Required**. API Key for LLM services. |
-| `GOFR_AUTH_BACKEND` | `vault` (prod) or `file` (dev). |
+| `GOFR_IQ_AUTH_BACKEND` | Auth backend selection (expected: `vault`). |
+| `GOFR_IQ_VAULT_URL` | Vault URL (default: `http://gofr-vault:8201`). |
+| `GOFR_IQ_VAULT_MOUNT_POINT` | Vault KV mount point (default: `secret`). |
+| `GOFR_IQ_VAULT_PATH_PREFIX` | Shared auth path prefix (required: `gofr/auth`). |
 
 ### Service Ports
 
@@ -70,7 +72,7 @@ Standard ports are defined in `lib/gofr-common/config/gofr_ports.env`.
 
 ---
 
-## 🐳 Docker Configuration
+## Docker Configuration
 
 When running with `docker compose`:
 
@@ -78,9 +80,9 @@ When running with `docker compose`:
 2.  It merges `gofr_ports.env` and authentication secrets into `docker/.env`.
 3.  Docker Compose reads `docker/.env` to configure containers.
 
-**Manual override**: You can manually edit `docker/.env` if you need to force specific values without re-running initialization.
+Do not manually edit `docker/.env` for Vault-managed secrets; it is overwritten by scripts.
 
-## 🐍 Python Configuration
+## Python Configuration
 
 In Python code, configuration is accessed via a typed singleton:
 

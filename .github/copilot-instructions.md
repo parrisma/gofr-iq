@@ -1,219 +1,55 @@
-# GOFR-IQ Copilot Instructions
+# Copilot Instructions for gofr-iq (succinct)
 
-## Core Rules
-- **Runs in a dev container** and has Docker access.
-- **Never use `localhost`**; use service hostnames (e.g., `gofr-neo4j`, `gofr-chromadb`, `gofr-vault`).
-- **Always prefer control scripts** to manage services, auth, ingestion, and tests.
-- This repo is part of the **GOFR suite** and uses **gofr-common** for shared config/auth/scripts.
-- **Keep code simple.**
-- **NO UNICODE CHARACTERS** in code or docs. Use only ASCII:
-  - Dashes: use `-` or `--`, not `—` (em-dash) or `–` (en-dash)
-  - Quotes: use `"` and `'`, not `"` `"` `'` `'` (smart quotes)
-  - Bullets: use `-` or `*`, not `•`
-  - Arrows: use `->` or `=>`, not `→` or `⇒`
-  - Checkmarks: use `[x]` or `PASS`, not `✓` or `✅`
-  - These cause encoding issues, break grep/sed, and look unprofessional.
-- **When debugging, check basics first** (env, health, logs, auth, connectivity) to avoid spinning.
-- **Run commands so the user can read and help**; avoid hiding output with `head`, `tail`, or heavy filtering. Use `cat` for logs so the user can see full progress -- `tail` hides what happened and makes debugging blind.
-- **If the user reminds a preferred behavior, suggest updating this file** to make it permanent.
-- **When creating content for another LLM** (e.g., answers, instructions, context for gofr-dig), write it to a plain text file in `tmp/` rather than displaying in chat. VS Code's UI adds formatting that breaks copy/paste.
-- **For large changes**, follow this workflow:
-	1. Write a short **spec document**.
-	2. **Peer review** the spec to simplify/refine the design.
-	3. Write a **small-step implementation plan** with checkboxes and tests (tests pass before start, pass after finish; update at each step).
-	4. **Peer review** the implementation plan to simplify/refine.
-	5. Do a **post-review** of code from functional and technical perspectives to ensure it matches the spec and is simple, clean, and robust.
+These rules are mandatory. If anything is unclear, ask before acting.
 
-## Start/Stop (use scripts)
-**ALWAYS use `./scripts/start-prod.sh`** to start/restart gofr-iq services. Never use `docker compose` directly - the start script handles Vault secrets, AppRole credentials, environment loading, and proper service ordering.
+## Non-negotiables
 
-**CRITICAL: When updating MCP server code (app/tools/, app/services/, etc.), ALWAYS rebuild the production image BEFORE testing:**
-```bash
-./docker/build-prod.sh           # Rebuild prod image with updated code
-./scripts/start-prod.sh          # Then restart to use new image
-```
+- Ask when ambiguous. Do not assume intent or make product/design decisions.
+- Show full terminal output. Do not use `head`, `tail`, or truncating pipes.
+- ASCII only in code, logs, and docs. No emoji or Unicode symbols.
+- Never use `localhost`. Use Docker service names on the gofr network (e.g., `gofr-vault`, `gofr-neo4j`).
+- Python workflow uses UV only: `uv run`, `uv add`, `uv sync`. Do not use pip/venv workflows.
+- Do not use `print()`. Use the project's `StructuredLogger`.
+- Do not rewrite pushed git history. No `git commit --amend` or rebases for pushed commits; use follow-up commits.
 
-```bash
-./scripts/start-prod.sh          # Start/restart prod stack (use this for ANY service restart)
-./scripts/start-prod.sh --fresh  # First-time setup
-./scripts/start-prod.sh --nuke   # Full clean: remove images, volumes, then rebuild
-./docker/start-tools-prod.sh     # n8n + OpenWebUI
-./scripts/run_tests.sh           # Run tests
-```
+## Default workflow
 
-### Password/Secrets Sync (IMPORTANT)
-`start-prod.sh` now auto-syncs secrets from Vault to `docker/.env` after every run.
-- **Neo4j password**: Generated on `--reset`/`--fresh`, stored in Vault, written to `docker/.env`
-- **OpenRouter key**: Stored in Vault, written to `docker/.env`
-- **JWT secret**: From Vault, written to `docker/.env`
+- Trivial fix (few lines, obvious): implement directly.
+- Anything non-trivial: write a short spec first, get approval, then a stepwise plan, get approval, then execute.
+  - Spec: WHAT/WHY + constraints + assumptions/questions (no code).
+  - Plan: small verifiable steps + update code/docs/tests + run tests before/after.
 
-**If scripts fail with auth errors after reset**, the fix is in place - just re-run `start-prod.sh`.
-Never manually edit `docker/.env` for these secrets; they'll be overwritten.
+## Environment and services
 
-## Authentication & Permissions (CRITICAL - READ FIRST)
-
-### Secret Locations (all under `secrets/` symlinked to `lib/gofr-common/secrets/`)
-- **Vault root token**: `secrets/vault_root_token` (for emergency Vault access)
-- **Vault unseal key**: `secrets/vault_unseal_key` (auto-unseals on restart)
-- **Bootstrap JWT tokens**: `secrets/bootstrap_tokens.json` (admin_token, public_token - 365-day tokens)
-- **AppRole credentials**: `secrets/service_creds/{service}_role_id` and `{service}_secret_id` (auto-mounted to containers)
-- **Docker env**: `docker/.env` (generated by scripts, contains NEO4J_PASSWORD, VAULT_TOKEN, etc.)
-- **OpenRouter API key (Vault)**: `secret/gofr/config/api-keys/openrouter`
-
-### Getting Credentials (ALWAYS use these methods)
-
-#### 1. JWT Tokens (for MCP/API access)
-```bash
-# Load Vault token + JWT secret into environment (PREFERRED)
-source <(./lib/gofr-common/scripts/auth_env.sh --docker)
-# Sets: $VAULT_ADDR, $VAULT_TOKEN, $GOFR_JWT_SECRET
-
-# Or extract admin token manually (bootstrap tokens are plain strings)
-export TOKEN=$(jq -r '.admin_token' secrets/bootstrap_tokens.json)
-```
-
-#### 2. Neo4j Password (for direct database queries)
-```bash
-# Method 1: From Vault (SAFEST - no shell escaping issues)
-export VAULT_TOKEN=$(cat secrets/vault_root_token)
-export NEO4J_PASSWORD=$(docker exec -e VAULT_ADDR=http://gofr-vault:8201 -e VAULT_TOKEN=$VAULT_TOKEN \
-  gofr-vault vault kv get -field=value secret/gofr/config/neo4j-password)
-
-# Method 2: From docker/.env (if it exists)
-source docker/.env  # Sets NEO4J_PASSWORD
-
-# Method 3: Query inside container (RECOMMENDED - avoids auth issues)
-docker exec -e NEO4J_USER=neo4j -e NEO4J_PASSWORD="$NEO4J_PASSWORD" gofr-iq-mcp \
-  python3 -c "from neo4j import GraphDatabase; ..."
-```
-
-#### 3. Vault Access (for managing secrets)
-```bash
-export VAULT_TOKEN=$(cat secrets/vault_root_token)
-export VAULT_ADDR=http://gofr-vault:8201  # or localhost:8201 if on host
-# Then use vault CLI or docker exec
-docker exec -e VAULT_ADDR=$VAULT_ADDR -e VAULT_TOKEN=$VAULT_TOKEN \
-  gofr-vault vault kv get secret/gofr/config/neo4j-password
-```
-
-### Auth Management (use gofr-common scripts)
-```bash
-source <(./lib/gofr-common/scripts/auth_env.sh --docker)
-./lib/gofr-common/scripts/auth_manager.sh --docker groups list
-./lib/gofr-common/scripts/auth_manager.sh --docker tokens list
-./lib/gofr-common/scripts/auth_manager.sh --docker tokens create --groups GROUP --name NAME
-```
-
-**Preferred pattern for auth manager commands (load keys via `auth_env.sh` first):**
-```bash
-cd /home/gofr/devroot/gofr-iq && source <(./lib/gofr-common/scripts/auth_env.sh --docker) && ./lib/gofr-common/scripts/auth_manager.sh --docker tokens list
-```
-
-### Group/Permission Model (IMPORTANT for client queries)
-- **All Client nodes MUST have `IN_GROUP` relationship** to appear in `list_clients` queries
-- **Admin token** should have access to all groups via `resolve_permitted_groups(admin_token)`
-- **Query filter**: `MATCH (c:Client)-[:IN_GROUP]->(g:Group) WHERE g.guid IN $group_guids`
-- **Debug access**: Check groups with `auth_manager.sh --docker groups list`
-
-### Safe Database Querying (avoid password escaping issues)
-
-#### ❌ DON'T (shell escaping causes auth failures)
-```bash
-# BAD - password may have special chars
-docker exec gofr-neo4j cypher-shell -u neo4j -p "$NEO4J_PASSWORD" "MATCH (n) RETURN n"
-# BAD - heredoc variable scoping issues
-python3 << 'EOF'
-password = os.environ.get("NEO4J_PASSWORD")  # Not available in heredoc
-EOF
-```
-
-#### ✅ DO (safe methods)
-```bash
-# GOOD - Query inside app container (already authenticated)
-docker exec gofr-iq-mcp python3 -c "
-from app.services.neo4j_service import Neo4jService
-from app.config import settings
-with Neo4jService(settings) as neo4j:
-    result = neo4j.run_query('MATCH (n) RETURN labels(n) as label, count(n) as count')
-    for record in result:
-        print(f'{record[\"label\"]}: {record[\"count\"]}')
-"
-
-# GOOD - Use Python with proper env var handling
-export NEO4J_PASSWORD=$(docker exec -e VAULT_TOKEN=$(cat secrets/vault_root_token) \
-  gofr-vault vault kv get -field=value secret/gofr/config/neo4j-password)
-uv run python3 -c "
-import os
-from neo4j import GraphDatabase
-driver = GraphDatabase.driver('bolt://gofr-neo4j:7687', 
-                               auth=('neo4j', os.environ['NEO4J_PASSWORD']))
-with driver.session() as session:
-    result = session.run('MATCH (n) RETURN labels(n) as label, count(n) as count')
-    for record in result:
-        print(f'{record[\"label\"]}: {record[\"count\"]}')
-driver.close()
-"
-```
-
-## Documents (use scripts)
-```bash
-./scripts/manage_document.sh ingest --source-guid UUID --title "..." --content "..." --token $TOKEN
-./scripts/manage_document.sh query --query "search" --token $TOKEN
-./scripts/manage_source.sh list
-```
-
-## Clients (use scripts)
-```bash
-./scripts/manage_client.sh --docker --token $TOKEN <command> [args]
-# Manage clients via MCP (create, list, get, update, delete, defunct, restore, add-holding, add-watch, validate)
-# Use --help for full usage
-```
-
-### Client Profile Attributes
-- **mandate_type**: Investment style (equity_long_short, global_macro, event_driven, relative_value, fixed_income, multi_strategy)
-- **mandate_text**: Optional free-text fund mandate description (0-5000 chars)
-  - Contributes 17.5% to CPCS (50% of Mandate section weight)
-  - Will be used to enhance document search ranking for clients (semantic + graph match)
-  - Empty string clears field, omitting preserves current value
-- **benchmark**: Ticker symbol (e.g., SPY, QQQ)
-- **horizon**: short | medium | long
-- **esg_constrained**: boolean
-- **alert_frequency**: realtime | hourly | daily | weekly
-- **impact_threshold**: 0-100
-
-## Simulation
-```bash
-uv run simulation/run_simulation.py --count 50
-```
-
-## Logging
-- Use the **project logger** (e.g., `StructuredLogger`), **not** `print()` or default logging.
-- Logs must be **clear and actionable**, not cryptic.
-- All errors must include **cause, references/context**, and **recovery options** where possible.
+- Dev runs in a Docker dev container; prefer repo scripts to manage services.
+- Vault is `http://gofr-vault:8201` (do not use `localhost` or `host.docker.internal` for Vault).
+- Shared auth is managed by gofr-common; prefer its scripts over ad-hoc commands.
 
 ## Testing
-- **ALWAYS use `./scripts/run_tests.sh`** to run tests. NEVER run `pytest` directly - the test script sets up infrastructure (Neo4j, ChromaDB, Vault), environment variables, and servers required for tests to pass.
-- **Do NOT skip tests** - all tests should pass. If a test is failing, fix the underlying issue rather than adding skip markers.
-- **Pre-flight check**: Run `./scripts/run_tests.sh --check` to verify environment before running tests.
-- **Test fixtures that create services with explicit settings bypass env vars.** If a fixture does `LLMSettings(api_key=key)` without other params, it uses class defaults, not `os.environ`. Always read env vars explicitly in fixtures.
-- **Deterministic embeddings**: Mock mode uses hash-based embeddings (384 dim) that produce consistent but **not semantically meaningful** vectors. Tests checking semantic similarity must either:
-  1. Skip the assertion in mock mode (`if live_llm_available()`)
-  2. Use membership assertions instead of ordering (document in results, not results[0])
-  3. Only verify query mechanics work (no errors, response not None)
 
-### Required Secrets for Tests
-| Variable | Required | Source | Description |
-|----------|----------|--------|-------------|
-| `GOFR_IQ_OPENROUTER_API_KEY` | Yes (for LLM tests) | `lib/gofr-common/.env` or `--api-key` | OpenRouter API key (~$0.01-0.05/test) |
-| `GOFR_JWT_SECRET` | Auto-generated | `lib/gofr-common/.env` or `--jwt-secret` | JWT signing secret |
-| `GOFR_IQ_NEO4J_PASSWORD` | No (default: testpassword) | `lib/gofr-common/.env` or `--neo4j-password` | Neo4j password |
+- Always run tests via `./scripts/run_tests.sh` (never `pytest` directly).
+- Do not skip failing tests. Fix the underlying issue.
 
-### Tests That Skip Without Secrets
-- **Without `GOFR_IQ_OPENROUTER_API_KEY`**:
-  - `test_integration_llm.py` (all LLM integration tests)
-  - `test_end_to_end_ingest_query.py` (E2E tests with real LLM)
-- **Without infrastructure running** (handled by `run_tests.sh`):
-  - `test_graph_index.py` - requires Neo4j
-  - `test_mcpo_group_access.py` - requires MCPO server
-  - `test_vault_integration.py` - requires Vault backend
+## Logging and errors
+
+- Log with `StructuredLogger` and include structured context (ids, urls, params, duration_ms).
+- Errors must include: cause, context, recovery options.
+- Add new error codes to `RECOVERY_STRATEGIES` in `app/errors/mapper.py` when applicable.
+- Add a domain exception in `app/exceptions/` when a generic exception is not appropriate.
+
+## MCP tool changes
+
+If adding/modifying an MCP tool in `app/mcp_server/mcp_server.py`, follow this pattern:
+
+1. Add the `Tool(...)` schema in `handle_list_tools` (inputSchema, description, annotations).
+2. Add routing in `handle_call_tool`.
+3. Implement `_handle_<tool_name>(arguments)` returning `List[TextContent]` via `_json_text(...)`.
+4. Use `_error_response(...)` or `_exception_response(...)` for all error paths.
+
+## Common scripts and auth (quick refs)
+
+- Load Vault token + JWT secret: `source <(./lib/gofr-common/scripts/auth_env.sh --docker)`
+- Manage groups/tokens: `./lib/gofr-common/scripts/auth_manager.sh --docker ...`
+- Start/restart prod stack: `./scripts/start-prod.sh`
+- Run tests: `./scripts/run_tests.sh`
 

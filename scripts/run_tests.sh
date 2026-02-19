@@ -253,7 +253,8 @@ fi
 # Set defaults
 export GOFR_VAULT_DEV_TOKEN="${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}"
 if [ -z "${GOFR_JWT_SECRET:-}" ]; then
-    export GOFR_JWT_SECRET="test-jwt-secret-$(date +%s)"
+    # Must be >= 32 bytes for HMAC-SHA256 (PyJWT 2.9+ enforces this)
+    export GOFR_JWT_SECRET="test-jwt-secret-$(openssl rand -hex 16)"
 fi
 echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}..."
 
@@ -281,6 +282,13 @@ export GOFR_VAULT_URL="http://gofr-vault-test:8200"
 export GOFR_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
 export VAULT_ADDR="http://gofr-vault-test:8200"
 export VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
+
+# Auth/Vault configuration (Option A: GOFR_IQ_* everywhere)
+export GOFR_IQ_AUTH_BACKEND="vault"
+export GOFR_IQ_VAULT_URL="http://gofr-vault-test:8200"
+export GOFR_IQ_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
+export GOFR_IQ_VAULT_MOUNT_POINT="secret"
+export GOFR_IQ_VAULT_PATH_PREFIX="gofr-test/auth"
 
 # Infrastructure hostnames (container network)
 export GOFR_IQ_CHROMADB_HOST="gofr-iq-chromadb-test"

@@ -13,7 +13,8 @@ DEV_CONTAINER="${DEV_CONTAINER:-gofr-iq-dev}"
 NETWORK_NAME="${TEST_NETWORK:-gofr-test-net}"
 
 # Default service endpoints for verification (can be overridden via env vars)
-VAULT_URL="${GOFR_VAULT_URL:-http://gofr-vault-test:8200}"
+# Prefer GOFR_IQ_* (Option A), but keep fallback to legacy GOFR_* during migration.
+VAULT_URL="${GOFR_IQ_VAULT_URL:-${GOFR_VAULT_URL:-http://gofr-vault-test:8200}}"
 CHROMA_HOST="${GOFR_IQ_CHROMADB_HOST:-gofr-iq-chromadb-test}"
 CHROMA_PORT="${GOFR_IQ_CHROMADB_PORT:-8000}"
 NEO4J_HOST="${GOFR_IQ_NEO4J_HOST:-gofr-iq-neo4j-test}"

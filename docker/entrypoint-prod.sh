@@ -23,13 +23,8 @@ else
 fi
 
 # Environment variables
-# JWT_SECRET is optional if auth is disabled
+# JWT signing secret is sourced from Vault at runtime; no JWT secret env var is required.
 AUTH_DISABLED="${GOFR_IQ_AUTH_DISABLED:-false}"
-JWT_SECRET="${JWT_SECRET:-${GOFR_IQ_JWT_SECRET:-}}"
-if [ "$AUTH_DISABLED" = "false" ] && [ -z "$JWT_SECRET" ]; then
-    log_error "JWT secret missing. Set GOFR_IQ_JWT_SECRET or set GOFR_IQ_AUTH_DISABLED=true"
-    exit 1
-fi
 export GOFR_IQ_AUTH_DISABLED="$AUTH_DISABLED"
 
 # Port configuration (from gofr_ports.sh)
@@ -43,7 +38,7 @@ export WEB_PORT
 export GOFR_IQ_MCP_PORT="$MCP_PORT"
 export GOFR_IQ_MCPO_PORT="$MCPO_PORT"
 export GOFR_IQ_WEB_PORT="$WEB_PORT"
-# Set JWT_SECRET to empty string if not set (for supervisor config compatibility)
+# Legacy env var kept for supervisor config compatibility (unused by upgraded auth).
 export JWT_SECRET="${JWT_SECRET:-}"
 
 # gofr-iq specific environment
@@ -93,7 +88,7 @@ stderr_logfile=/home/gofr-iq/logs/mcp-error.log
 environment=PATH="${VENV_PATH}/bin:%(ENV_PATH)s",VIRTUAL_ENV="${VENV_PATH}",JWT_SECRET="%(ENV_JWT_SECRET)s",GOFR_IQ_AUTH_DISABLED="%(ENV_GOFR_IQ_AUTH_DISABLED)s",MCP_PORT="%(ENV_MCP_PORT)s",GOFR_IQ_DATA_DIR="%(ENV_GOFR_IQ_DATA_DIR)s",GOFR_IQ_STORAGE_DIR="%(ENV_GOFR_IQ_STORAGE_DIR)s",GOFR_IQ_AUTH_DIR="%(ENV_GOFR_IQ_AUTH_DIR)s",NEO4J_URI="%(ENV_NEO4J_URI)s",NEO4J_USER="%(ENV_NEO4J_USER)s",NEO4J_PASSWORD="%(ENV_NEO4J_PASSWORD)s",CHROMA_HOST="%(ENV_CHROMA_HOST)s",CHROMA_PORT="%(ENV_CHROMA_PORT)s"
 
 [program:mcpo]
-command=${VENV_PATH}/bin/mcpo --host 0.0.0.0 --port ${MCPO_PORT} --server-type streamable-http -- http://localhost:${MCP_PORT}/mcp
+command=${VENV_PATH}/bin/mcpo --host 0.0.0.0 --port ${MCPO_PORT} --server-type streamable-http -- http://127.0.0.1:${MCP_PORT}/mcp
 directory=/home/gofr-iq
 user=gofr-iq
 autostart=true

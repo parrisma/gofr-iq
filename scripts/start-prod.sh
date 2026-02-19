@@ -256,11 +256,8 @@ log_success "Existing services stopped"
 # Step 5: Ensure Vault is running (auto-start and bootstrap if needed)
 VAULT_MANAGE_SCRIPT="${PROJECT_ROOT}/lib/gofr-common/scripts/manage_vault.sh"
 
-if [ -f /.dockerenv ]; then
-    VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
-else
-    VAULT_ADDR="http://localhost:${GOFR_VAULT_PORT:-8201}"
-fi
+# NOTE: This project runs inside Docker networks; use the Vault service name.
+VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
 export VAULT_ADDR
 
 log_info "Checking Vault health at ${VAULT_ADDR}..."
@@ -334,10 +331,10 @@ if [ "$FRESH_INSTALL" = true ]; then
     log_success "OpenRouter API key stored"
 fi
 
-# Step 5.2: Ensure AppRole identities exist/rotate
-log_info "Ensuring service AppRoles (uses existing root token)..."
+# Step 5.2: Ensure AppRole identities exist/rotate (align to gofr-doc)
+log_info "Ensuring service AppRoles (shared gofr-common provisioning)..."
 cd "$PROJECT_ROOT"
-uv run scripts/setup_approle.py
+bash scripts/ensure_approle.sh
 log_success "Service AppRoles ensured"
 cd "$DOCKER_DIR"
 
@@ -361,6 +358,24 @@ if [ -f "$PORTS_FILE" ]; then
         log_info "Port configuration already present in .env"
     fi
 fi
+
+# Step 6.6: Ensure GOFR_IQ_* auth/Vault configuration is present (Option A)
+log_info "Ensuring GOFR_IQ auth/Vault configuration in docker .env..."
+
+ensure_env_kv() {
+    local key="$1"
+    local value="$2"
+    if ! grep -q "^${key}=" "$DOCKER_ENV_FILE" 2>/dev/null; then
+        echo "${key}=${value}" >> "$DOCKER_ENV_FILE"
+    fi
+}
+
+ensure_env_kv "GOFR_IQ_AUTH_BACKEND" "${GOFR_IQ_AUTH_BACKEND:-vault}"
+ensure_env_kv "GOFR_IQ_VAULT_URL" "${GOFR_IQ_VAULT_URL:-http://gofr-vault:${GOFR_VAULT_PORT:-8201}}"
+ensure_env_kv "GOFR_IQ_VAULT_MOUNT_POINT" "${GOFR_IQ_VAULT_MOUNT_POINT:-secret}"
+ensure_env_kv "GOFR_IQ_VAULT_PATH_PREFIX" "${GOFR_IQ_VAULT_PATH_PREFIX:-gofr/auth}"
+
+log_success "GOFR_IQ auth/Vault configuration ensured"
 
 # Also merge shared secrets if they exist
 SHARED_ENV="${PROJECT_ROOT}/lib/gofr-common/.env"

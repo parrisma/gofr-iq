@@ -127,7 +127,7 @@ See [Authentication Architecture](authentication.md) for details.
 
 - Secrets (JWT, tokens, API keys) live only in Vault; no fallbacks or local defaults.
 - Ports come only from lib/gofr-common/config/gofr_ports.env.
-- Runtime entrypoints (MCP, MCPO, Web, Simulation) fail fast if GOFR_JWT_SECRET differs from Vault.
+- Runtime entrypoints (MCP, MCPO, Web, Simulation) read the JWT signing secret from Vault at runtime and validate JWTs with audience `gofr-api`.
 - docker/.env is generated only by bootstrap.py with Vault-derived values; generate_envs.sh never writes docker/.env.
 - Commits are blocked if GOFR_JWT_SECRET appears in tracked files.
 - `GraphIndex` - Graph updates

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "project": "gofr-iq",
+  "token_ttl": "1h",
+  "token_max_ttl": "24h",
+  "mount_point": "approle",
+  "credentials_output_dir": "secrets/service_creds",
+  "roles": [
+    {
+      "role_name": "gofr-mcp",
+      "policies": [
+        "gofr-mcp-policy"
+      ]
+    },
+    {
+      "role_name": "gofr-web",
+      "policies": [
+        "gofr-web-policy"
+      ]
+    },
+    {
+      "role_name": "gofr-admin-control",
+      "policies": [
+        "gofr-admin-control-policy"
+      ]
+    }
+  ]
+}
