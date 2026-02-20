@@ -222,12 +222,11 @@ do_vault_start() {
         # Export port vars for the script
         export GOFR_VAULT_PORT
         export GOFR_VAULT_DEV_TOKEN
-        
-        local vault_args=""
-        if [ "$TEST_MODE" = true ]; then
-            vault_args="--network gofr-test-net"
-        fi
-        bash "$vault_script" $vault_args
+
+        # manage_vault.sh requires an explicit subcommand.
+        # NOTE: It currently manages its own network (gofr-net) and does not
+        # accept a --network argument.
+        bash "$vault_script" start
     else
         log_warn "Vault run script not found at $vault_script, skipping..."
     fi

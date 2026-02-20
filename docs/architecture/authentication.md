@@ -245,12 +245,25 @@ results = await client.call_tool("query_documents", {
 ### Programmatic Token Validation
 
 ```python
-from gofr_common.auth import AuthService
+from gofr_common.auth import AuthService, GroupRegistry
+from gofr_common.auth.backends import create_stores_from_env, create_vault_client_from_env
+from gofr_common.auth.jwt_secret_provider import JwtSecretProvider
+
+vault_client = create_vault_client_from_env("GOFR_IQ")
+token_store, group_store = create_stores_from_env("GOFR_IQ", vault_client=vault_client)
+group_registry = GroupRegistry(store=group_store)
+
+secret_provider = JwtSecretProvider(
+    vault_client=vault_client,
+    vault_path="gofr/config/jwt-signing-secret",
+)
 
 auth = AuthService(
-    jwt_secret=os.getenv("GOFR_IQ_JWT_SECRET"),
     token_store=token_store,
-    groups=group_registry
+    group_registry=group_registry,
+    secret_provider=secret_provider,
+    env_prefix="GOFR_IQ",
+    audience="gofr-api",
 )
 
 # Validate token
@@ -272,7 +285,7 @@ else:
 - **Revocation**: Use Vault backend for immediate revocation
 
 ### JWT Security
-- **Secret Key**: Use strong, random `GOFR_IQ_JWT_SECRET` (min 32 chars)
+- **Secret Key**: JWT signing secret is stored in Vault and read by services at runtime (no per-service env secret)
 - **Algorithm**: HS256 (HMAC with SHA-256)
 - **Expiry**: Set reasonable exp times (30-90 days for user tokens)
 - **Claims**: Validate all standard claims (exp, iat, nbf)
@@ -291,8 +304,8 @@ else:
 # Check token expiry
 python -c "import jwt; print(jwt.decode('${TOKEN}', verify=False))"
 
-# Verify JWT secret matches
-echo $GOFR_IQ_JWT_SECRET
+# Verify Vault has the JWT signing secret and services can reach Vault
+# Path: secret/gofr/config/jwt-signing-secret
 
 # Check token in store
 python scripts/token_manager.sh list

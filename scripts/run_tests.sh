@@ -220,6 +220,50 @@ if [ -f "${GOFR_PORTS_FILE}" ]; then
     export GOFR_CHROMA_PORT="${GOFR_CHROMA_PORT_TEST:-$((GOFR_CHROMA_PORT + 100))}"
     export GOFR_NEO4J_HTTP_PORT="${GOFR_NEO4J_HTTP_PORT_TEST:-$((GOFR_NEO4J_HTTP_PORT + 100))}"
     export GOFR_NEO4J_BOLT_PORT="${GOFR_NEO4J_BOLT_PORT_TEST:-$((GOFR_NEO4J_BOLT_PORT + 100))}"
+
+    # If another repo's ephemeral stack is running, the default test ports can collide.
+    # Automatically bump ports until they're free.
+    is_port_free() {
+        local port="$1"
+
+        # Docker port publishing can reserve a host port via iptables/userland-proxy
+        # even when no process is listening on the port (so socket bind checks lie).
+        if docker ps --format '{{.Ports}}' | grep -qE "0\.0\.0\.0:${port}->|\[::\]:${port}->"; then
+            return 1
+        fi
+        return 0
+    }
+
+    ensure_free_port() {
+        local var_name="$1"
+        local port="$2"
+        local original="$2"
+        while ! is_port_free "$port"; do
+            port=$((port + 10))
+        done
+        if [ "$port" != "$original" ]; then
+            echo -e "${YELLOW}  Warning:${NC} ${var_name} port ${original} busy; using ${port}"
+        fi
+        export "${var_name}=${port}"
+    }
+
+    ensure_free_port GOFR_VAULT_PORT "${GOFR_VAULT_PORT}"
+    ensure_free_port GOFR_CHROMA_PORT "${GOFR_CHROMA_PORT}"
+    ensure_free_port GOFR_NEO4J_HTTP_PORT "${GOFR_NEO4J_HTTP_PORT}"
+    ensure_free_port GOFR_NEO4J_BOLT_PORT "${GOFR_NEO4J_BOLT_PORT}"
+    ensure_free_port GOFR_IQ_MCP_PORT "${GOFR_IQ_MCP_PORT}"
+    ensure_free_port GOFR_IQ_MCPO_PORT "${GOFR_IQ_MCPO_PORT}"
+    ensure_free_port GOFR_IQ_WEB_PORT "${GOFR_IQ_WEB_PORT}"
+
+    # Ensure downstream helpers that prefer *_PORT_TEST (e.g. docker/manage-infra.sh)
+    # see the final bumped values.
+    export GOFR_VAULT_PORT_TEST="${GOFR_VAULT_PORT}"
+    export GOFR_CHROMA_PORT_TEST="${GOFR_CHROMA_PORT}"
+    export GOFR_NEO4J_HTTP_PORT_TEST="${GOFR_NEO4J_HTTP_PORT}"
+    export GOFR_NEO4J_BOLT_PORT_TEST="${GOFR_NEO4J_BOLT_PORT}"
+    export GOFR_IQ_MCP_PORT_TEST="${GOFR_IQ_MCP_PORT}"
+    export GOFR_IQ_MCPO_PORT_TEST="${GOFR_IQ_MCPO_PORT}"
+    export GOFR_IQ_WEB_PORT_TEST="${GOFR_IQ_WEB_PORT}"
     
     echo "  Port configuration loaded (test mode with +100 offset)"
 else
@@ -239,7 +283,7 @@ fi
 # Apply command-line overrides (take precedence over .env)
 if [ -n "${CLI_API_KEY}" ]; then
     export GOFR_IQ_OPENROUTER_API_KEY="${CLI_API_KEY}"
-    echo "  Using API key from command line"
+    echo "  Using OpenRouter API key from command line (enables live LLM tests)"
 fi
 if [ -n "${CLI_JWT_SECRET}" ]; then
     export GOFR_JWT_SECRET="${CLI_JWT_SECRET}"
@@ -253,34 +297,49 @@ fi
 # Set defaults
 export GOFR_VAULT_DEV_TOKEN="${GOFR_VAULT_DEV_TOKEN:-gofr-dev-root-token}"
 if [ -z "${GOFR_JWT_SECRET:-}" ]; then
-    export GOFR_JWT_SECRET="test-jwt-secret-$(date +%s)"
+    # Must be >= 32 bytes for HMAC-SHA256 (PyJWT 2.9+ enforces this)
+    export GOFR_JWT_SECRET="test-jwt-secret-$(openssl rand -hex 16)"
 fi
 echo "  JWT Secret: ${GOFR_JWT_SECRET:0:20}..."
 
-# OpenRouter API Key - REQUIRED (like start-prod.sh)
-# Must be passed via --api-key or GOFR_IQ_OPENROUTER_API_KEY env var.
-# Not stored in .env because keys are opaque and expire silently.
+# OpenRouter API Key
+# - Prod code reads this from Vault by default.
+# - For tests, we optionally inject a key into the ephemeral test Vault.
+# - Live integration/e2e tests remain opt-in: they typically require GOFR_IQ_OPENROUTER_API_KEY.
+OPENROUTER_KEY_FOR_VAULT=""
 if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
-    echo "  OpenRouter API Key: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
+    OPENROUTER_KEY_FOR_VAULT="${GOFR_IQ_OPENROUTER_API_KEY}"
+    echo "  OpenRouter API Key: [provided via env/cli]"
 else
-    echo -e "${RED}ERROR: GOFR_IQ_OPENROUTER_API_KEY is required.${NC}" >&2
-    echo "" >&2
-    echo "The MCP server and LLM tests need an OpenRouter API key." >&2
-    echo "Get one from: https://openrouter.ai/keys" >&2
-    echo "" >&2
-    echo "Pass it via:" >&2
-    echo "  $0 --api-key sk-or-v1-xxxxx" >&2
-    echo "  # or:" >&2
-    echo "  export GOFR_IQ_OPENROUTER_API_KEY=sk-or-v1-xxxxx" >&2
-    exit 1
+    OPENROUTER_KEY_FILE="${PROJECT_ROOT}/secrets/llm_api_key"
+    if [ -f "${OPENROUTER_KEY_FILE}" ]; then
+        OPENROUTER_KEY_FOR_VAULT="$(cat "${OPENROUTER_KEY_FILE}")"
+        echo "  OpenRouter API Key: [loaded from secrets/llm_api_key for Vault injection]"
+    else
+        echo "  OpenRouter API Key: [not provided]"
+        echo -e "${YELLOW}  Warning: No OpenRouter key found. Tests that require real LLM calls will be skipped, and any server startup requiring LLM may fail.${NC}"
+    fi
+fi
+
+# If we have a key for Vault injection but the env var isn't set, export it so
+# any tests that rely on GOFR_IQ_OPENROUTER_API_KEY being present can run.
+if [ -z "${GOFR_IQ_OPENROUTER_API_KEY:-}" ] && [ -n "${OPENROUTER_KEY_FOR_VAULT}" ]; then
+    export GOFR_IQ_OPENROUTER_API_KEY="${OPENROUTER_KEY_FOR_VAULT}"
 fi
 
 # Vault configuration (tests connect via container network)
 export GOFR_AUTH_BACKEND="vault"
-export GOFR_VAULT_URL="http://gofr-vault-test:8200"
+export GOFR_VAULT_URL="http://gofr-iq-vault-test:8200"
 export GOFR_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
-export VAULT_ADDR="http://gofr-vault-test:8200"
+export VAULT_ADDR="http://gofr-iq-vault-test:8200"
 export VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
+
+# Auth/Vault configuration (Option A: GOFR_IQ_* everywhere)
+export GOFR_IQ_AUTH_BACKEND="vault"
+export GOFR_IQ_VAULT_URL="http://gofr-iq-vault-test:8200"
+export GOFR_IQ_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
+export GOFR_IQ_VAULT_MOUNT_POINT="secret"
+export GOFR_IQ_VAULT_PATH_PREFIX="gofr-test/auth"
 
 # Infrastructure hostnames (container network)
 export GOFR_IQ_CHROMADB_HOST="gofr-iq-chromadb-test"
@@ -319,24 +378,26 @@ preflight_check() {
     echo ""
     echo -e "${BLUE}Required Secrets:${NC}"
     
-    # Check OpenRouter API Key (required - script exits before here if missing)
+    # Check OpenRouter API Key (optional unless running live LLM tests)
     if [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
-        echo -e "  ${GREEN}[ok]${NC} GOFR_IQ_OPENROUTER_API_KEY: ${GOFR_IQ_OPENROUTER_API_KEY:0:15}...${GOFR_IQ_OPENROUTER_API_KEY: -4}"
+        echo -e "  ${GREEN}[ok]${NC} GOFR_IQ_OPENROUTER_API_KEY: [set]"
+    else
+        echo -e "  ${YELLOW}[warn]${NC} GOFR_IQ_OPENROUTER_API_KEY: not set (live LLM tests will be skipped)"
     fi
     
     # Check JWT Secret
     if [ -n "${GOFR_JWT_SECRET:-}" ]; then
-        echo -e "  ${GREEN}✓${NC} GOFR_JWT_SECRET: ${GOFR_JWT_SECRET:0:20}..."
+        echo -e "  ${GREEN}[ok]${NC} GOFR_JWT_SECRET: ${GOFR_JWT_SECRET:0:20}..."
     else
-        echo -e "  ${RED}✗${NC} GOFR_JWT_SECRET: NOT SET (will be auto-generated)"
+        echo -e "  ${RED}[err]${NC} GOFR_JWT_SECRET: NOT SET (will be auto-generated)"
     fi
     
     # Check Neo4j password
-    echo -e "  ${GREEN}✓${NC} GOFR_IQ_NEO4J_PASSWORD: ${GOFR_IQ_NEO4J_PASSWORD:-testpassword} (default: testpassword)"
+    echo -e "  ${GREEN}[ok]${NC} GOFR_IQ_NEO4J_PASSWORD: ${GOFR_IQ_NEO4J_PASSWORD:-testpassword} (default: testpassword)"
     
     echo ""
     echo -e "${BLUE}Infrastructure (will be started by test runner):${NC}"
-    echo "  Vault:    gofr-vault-test:8200"
+    echo "  Vault:    gofr-iq-vault-test:8200"
     echo "  Neo4j:    gofr-iq-neo4j-test:7687"
     echo "  ChromaDB: gofr-iq-chromadb-test:8000"
     echo "  MCP:      localhost:${GOFR_IQ_MCP_PORT}"
@@ -524,6 +585,20 @@ if [ "$USE_DOCKER" = false ]; then
         echo -e "${GREEN}  JWT secret stored in test Vault${NC}"
     else
         echo -e "${YELLOW}  Warning: Could not store JWT in Vault${NC}"
+    fi
+
+    # Optionally initialize test Vault with OpenRouter API key
+    if [ -n "${OPENROUTER_KEY_FOR_VAULT:-}" ]; then
+        echo -e "${BLUE}Initializing test Vault with OpenRouter API key...${NC}"
+        if curl -sf -X POST \
+            -H "X-Vault-Token: ${VAULT_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"data\": {\"value\": \"${OPENROUTER_KEY_FOR_VAULT}\"}}" \
+            "${VAULT_ADDR}/v1/secret/data/gofr/config/api-keys/openrouter" >/dev/null 2>&1; then
+            echo -e "${GREEN}  OpenRouter API key stored in test Vault${NC}"
+        else
+            echo -e "${YELLOW}  Warning: Could not store OpenRouter API key in Vault${NC}"
+        fi
     fi
     
     echo -e "${BLUE}Auth bootstrap will run in pytest session fixture (conftest.py)${NC}"

@@ -33,7 +33,6 @@ fi
 # Set defaults for secrets (suppresses docker compose warnings)
 # Real values are loaded from Vault by start-prod.sh
 export NEO4J_PASSWORD="${NEO4J_PASSWORD:-placeholder}"
-export GOFR_IQ_JWT_SECRET="${GOFR_IQ_JWT_SECRET:-placeholder}"
 
 # Colors
 RED='\033[0;31m'

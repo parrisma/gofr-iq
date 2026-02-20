@@ -664,10 +664,11 @@ def register_client_tools(
     @mcp.tool(
         name="get_top_client_news",
         description=(
-            "Get top client news by combining graph relevance with semantic search. "
+            "Get top client news using graph/ephemeral data only (no LLM). "
             "USE FOR: 'What are the top 3 things to tell my client today?'. "
-            "RANKED BY: Relevance to holdings/watchlist + semantic fit + impact + recency. "
+            "RANKED BY: Relevance to holdings/watchlist + graph relations + impact + recency. "
             "DEFAULT: Top 3 from last 24h. "
+            "For LLM enrichment (why + summary), use why_it_matters_to_client. "
             "PREREQUISITE: Client must exist (use create_client first)."
         ),
     )
@@ -755,18 +756,16 @@ def register_client_tools(
                     },
                 )
 
-            expanded_limit = max(limit * 5, 15)
             top_news = query_service.get_top_client_news(
                 client_guid=client_guid,
                 group_guids=group_guids,
-                limit=expanded_limit,
+                limit=limit,
                 time_window_hours=time_window_hours,
                 include_portfolio=include_portfolio,
                 include_watchlist=include_watchlist,
                 include_lateral_graph=include_lateral_graph,
                 min_impact_score=min_impact_score,
                 impact_tiers=impact_tiers,
-                llm_service=llm_service,
             )
 
             resolved_min_impact = min_impact_score if min_impact_score is not None else 0.0
@@ -825,6 +824,100 @@ def register_client_tools(
                 message=f"Failed to retrieve top client news: {e!s}",
                 recovery_strategy="Verify client exists and QueryService is configured. Run health_check if needed.",
                 details={"client_guid": client_guid, "limit": limit},
+            )
+
+    @mcp.tool(
+        name="why_it_matters_to_client",
+        description=(
+            "LLM augmentation for a specific (client, document) pair. "
+            "RETURNS: (1) <=30 words why it matters to the client, (2) <=30 words story summary. "
+            "USE FOR: turning a shortlisted story into a client-ready blurb."
+        ),
+    )
+    def why_it_matters_to_client(
+        client_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the client",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        document_guid: Annotated[str, Field(
+            min_length=36,
+            max_length=36,
+            pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+            description="UUID of the document",
+            examples=["550e8400-e29b-41d4-a716-446655440000"],
+        )],
+        auth_tokens: Annotated[list[str] | None, Field(
+            default=None,
+            description="JWT tokens for authentication (pass via API when headers not available)",
+        )] = None,
+    ) -> ToolResponse:
+        """Generate LLM why/summary for a single story and client."""
+        try:
+            group_names = resolve_permitted_groups(auth_tokens=auth_tokens)
+            group_guids = get_group_uuids_by_names(group_names)
+
+            if query_service is None:
+                return error_response(
+                    error_code="QUERY_SERVICE_UNAVAILABLE",
+                    message="Query service not configured for why_it_matters_to_client",
+                    recovery_strategy="Ensure MCP server initializes QueryService and passes it to client tools.",
+                    details={"client_guid": client_guid, "document_guid": document_guid},
+                )
+
+            if llm_service is None:
+                return error_response(
+                    error_code="LLM_SERVICE_UNAVAILABLE",
+                    message="LLM service not configured",
+                    recovery_strategy="Configure OpenRouter key in Vault (gofr/config/api-keys/openrouter) and restart the service.",
+                    details={"client_guid": client_guid, "document_guid": document_guid},
+                )
+
+            # Validate client exists and is permitted
+            client_node = graph_index.get_node(NodeLabel.CLIENT, client_guid)
+            if not client_node:
+                return error_response(
+                    error_code="CLIENT_NOT_FOUND",
+                    message=f"Client not found: {client_guid}",
+                    recovery_strategy="Call list_clients to find valid client GUIDs, or create_client to create one.",
+                    details={"client_guid": client_guid},
+                )
+
+            if client_node.properties.get("status") == "defunct":
+                return error_response(
+                    error_code="CLIENT_DEFUNCT",
+                    message="Client is defunct and cannot receive news",
+                    recovery_strategy="Restore the client or select an active client.",
+                    details={
+                        "client_guid": client_guid,
+                        "defunct_at": client_node.properties.get("defunct_at"),
+                        "defunct_reason": client_node.properties.get("defunct_reason"),
+                    },
+                )
+
+            augmentation = query_service.why_it_matters_to_client(
+                client_guid=client_guid,
+                document_guid=document_guid,
+                group_guids=group_guids,
+                llm_service=llm_service,
+            )
+
+            return success_response(
+                data={
+                    "client_guid": client_guid,
+                    "document_guid": document_guid,
+                    **augmentation,
+                },
+                message="Generated client-specific story augmentation",
+            )
+        except Exception as e:
+            return error_response(
+                error_code="WHY_IT_MATTERS_FAILED",
+                message=f"Failed to generate why/summary: {e!s}",
+                recovery_strategy="Verify client/document access and confirm LLM service is configured.",
+                details={"client_guid": client_guid, "document_guid": document_guid},
             )
 
     @mcp.tool(

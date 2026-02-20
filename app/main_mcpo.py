@@ -25,11 +25,9 @@ Environment Variables:
 """
 
 import asyncio
-import json
 import os
 import signal
 import sys
-import urllib.request
 
 from app.logger import ConsoleLogger
 from app.mcpo_server.wrapper import start_mcpo_wrapper
@@ -48,7 +46,7 @@ def main():
     """Main function to start MCPO wrapper."""
 
     # Get configuration from environment (required - no defaults)
-    mcp_host = os.environ.get("GOFR_IQ_MCP_HOST", "localhost")
+    mcp_host = os.environ.get("GOFR_IQ_MCP_HOST", "gofr-iq-mcp")
     mcp_port = _get_required_port("GOFR_IQ_MCP_PORT")
     mcpo_port = _get_required_port("GOFR_IQ_MCPO_PORT")
 
@@ -59,7 +57,7 @@ def main():
     
     logger.info(f"MCPO Starting on host=0.0.0.0 port={mcpo_port}")
     logger.info(f"Connecting to MCP at http://{mcp_host}:{mcp_port}/mcp")
-    logger.info(f"Proxy available at http://localhost:{mcpo_port}")
+    logger.info(f"Proxy listening on 0.0.0.0:{mcpo_port}")
     logger.info(f"Startup: auth_disabled={auth_disabled}")
 
     # Check for API key
@@ -73,38 +71,12 @@ def main():
     mode = os.environ.get("GOFR_IQ_MCPO_MODE", "public").lower()
     if mode == "auth":
         jwt_token = os.environ.get("GOFR_IQ_JWT_TOKEN")
-        jwt_secret = os.environ.get("GOFR_IQ_JWT_SECRET")
-        vault_addr = os.environ.get("GOFR_VAULT_URL") or os.environ.get("VAULT_ADDR")
-        vault_token = os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_TOKEN")
 
         if not jwt_token:
             logger.error("Mode: Authenticated (but GOFR_IQ_JWT_TOKEN not set - will fail)")
             sys.exit(1)
 
-        if not jwt_secret:
-            logger.error("Mode: Authenticated (GOFR_IQ_JWT_SECRET required and must match Vault)")
-            sys.exit(1)
-
-        if not vault_addr or not vault_token:
-            logger.error("Mode: Authenticated (VAULT_ADDR/VAULT_TOKEN required to validate JWT secret)")
-            sys.exit(1)
-
-        req = urllib.request.Request(
-            f"{vault_addr}/v1/secret/data/gofr/config/jwt-signing-secret",
-            headers={"X-Vault-Token": vault_token},
-            method="GET",
-        )
-        with urllib.request.urlopen(req, timeout=10) as resp:  # nosec B310 - Vault URL is trusted
-            payload = json.loads(resp.read())
-        vault_jwt = payload.get("data", {}).get("data", {}).get("value")
-        if not vault_jwt:
-            logger.error("Mode: Authenticated (JWT secret missing in Vault)")
-            sys.exit(1)
-        if jwt_secret != vault_jwt:
-            logger.error("Mode: Authenticated (GOFR_IQ_JWT_SECRET does not match Vault jwt-signing-secret)")
-            sys.exit(1)
-
-        logger.info("  Mode: Authenticated (JWT token will be passed to MCP; secret validated)")
+        logger.info("  Mode: Authenticated (JWT token will be passed to MCP)")
     else:
         logger.info("  Mode: Public (no JWT token passed to MCP)")
 

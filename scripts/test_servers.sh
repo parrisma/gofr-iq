@@ -11,8 +11,8 @@
 #
 # REQUIREMENTS:
 #   - GOFR_IQ_MCP_PORT, GOFR_IQ_MCPO_PORT, GOFR_IQ_WEB_PORT must be set
-#   - GOFR_JWT_SECRET must be set (load via auth_env.sh)
 #   - Infrastructure must be running (Vault, Neo4j, ChromaDB)
+#   - Auth is Vault-sourced (JwtSecretProvider + stores); no JWT secret env var is required
 #
 # For test setup, load secrets first:
 #   source lib/gofr-common/scripts/auth_env.sh --docker
@@ -44,7 +44,7 @@ require_env() {
     fi
 }
 
-for required in GOFR_IQ_MCP_PORT GOFR_IQ_MCPO_PORT GOFR_IQ_WEB_PORT GOFR_JWT_SECRET; do
+for required in GOFR_IQ_MCP_PORT GOFR_IQ_MCPO_PORT GOFR_IQ_WEB_PORT; do
     require_env "$required"
 done
 
@@ -55,7 +55,7 @@ port_in_use() {
     elif command -v ss >/dev/null 2>&1; then
         ss -tuln | grep -q ":${port} "
     else
-        nc -z localhost "$port" >/dev/null 2>&1
+        nc -z 127.0.0.1 "$port" >/dev/null 2>&1
     fi
 }
 
@@ -164,19 +164,17 @@ cmd_start() {
     start_service "mcp" "$GOFR_IQ_MCP_PORT" "app/main_mcp.py" \
         uv run python app/main_mcp.py \
         --port "$GOFR_IQ_MCP_PORT" \
-        --jwt-secret "$GOFR_JWT_SECRET" \
         --host 0.0.0.0 \
         --log-level INFO
 
     start_service "web" "$GOFR_IQ_WEB_PORT" "app/main_web.py" \
         uv run python app/main_web.py \
         --port "$GOFR_IQ_WEB_PORT" \
-        --jwt-secret "$GOFR_JWT_SECRET" \
         --host 0.0.0.0
 
     local mcp_url="http://127.0.0.1:${GOFR_IQ_MCP_PORT}/mcp"
     start_service "mcpo" "$GOFR_IQ_MCPO_PORT" "mcpo --host" \
-        mcpo --host 0.0.0.0 --port "$GOFR_IQ_MCPO_PORT" \
+        uv run mcpo --host 0.0.0.0 --port "$GOFR_IQ_MCPO_PORT" \
         --server-type streamable-http \
         -- "$mcp_url"
 }

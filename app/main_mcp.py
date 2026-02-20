@@ -18,17 +18,14 @@ Environment Variables:
     GOFR_IQ_MCP_PORT: Port for MCP server (required - from gofr_ports.sh)
     GOFR_IQ_LOG_LEVEL: Logging level (default: INFO)
     GOFR_IQ_AUTH_ENABLED: Enable/disable authentication (default: true)
-    GOFR_IQ_JWT_SECRET: JWT secret for authentication
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import os
 import sys
-import urllib.request
 
 import uvicorn
 
@@ -73,9 +70,9 @@ if __name__ == "__main__":
         "--jwt-secret",
         type=str,
         default=None,
-        help="JWT secret key (default: from GOFR_IQ_JWT_SECRET env var)",
+        help=argparse.SUPPRESS,
     )
-    # NOTE: --token-store removed - backend configured via GOFR_AUTH_BACKEND env var
+    # NOTE: backend configured via GOFR_IQ_AUTH_BACKEND/GOFR_IQ_VAULT_* env vars
     parser.add_argument(
         "--no-auth",
         action="store_true",
@@ -108,9 +105,6 @@ if __name__ == "__main__":
     )
 
     try:
-        # Resolve authentication configuration
-        jwt_secret = args.jwt_secret or os.getenv("GOFR_IQ_JWT_SECRET")
-        
         # Determine auth requirement
         # Check command line flags first (--no-auth or --auth-disabled), then environment variable
         if args.no_auth or args.auth_disabled:
@@ -126,45 +120,6 @@ if __name__ == "__main__":
             if not require_auth:
                 startup_logger.warning("Authentication disabled via GOFR_IQ_AUTH_ENABLED")
             
-            # Require explicit JWT secret in all modes
-            if require_auth and not jwt_secret:
-                startup_logger.error(
-                    "FATAL: JWT secret required",
-                    help="Set GOFR_IQ_JWT_SECRET environment variable or use --jwt-secret flag",
-                )
-                sys.exit(1)
-
-        # If auth enabled, validate JWT secret against Vault single source of truth
-        if require_auth:
-            vault_addr = os.environ.get("GOFR_VAULT_URL") or os.environ.get("VAULT_ADDR")
-            vault_token = os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_TOKEN")
-            if not vault_addr or not vault_token:
-                startup_logger.error(
-                    "FATAL: VAULT_ADDR/VAULT_TOKEN required to validate JWT secret",
-                    help="Ensure Vault env vars are set (GOFR_VAULT_URL/GOFR_VAULT_TOKEN)",
-                )
-                sys.exit(1)
-            req = urllib.request.Request(
-                f"{vault_addr}/v1/secret/data/gofr/config/jwt-signing-secret",
-                headers={"X-Vault-Token": vault_token},
-                method="GET",
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:  # nosec B310 - Vault URL is trusted
-                payload = json.loads(resp.read())
-            vault_jwt = payload.get("data", {}).get("data", {}).get("value")
-            if not vault_jwt:
-                startup_logger.error(
-                    "FATAL: JWT secret not found in Vault",
-                    help="Check secret/gofr/config/jwt-signing-secret",
-                )
-                sys.exit(1)
-            if jwt_secret != vault_jwt:
-                startup_logger.error(
-                    "FATAL: GOFR_IQ_JWT_SECRET does not match Vault jwt-signing-secret",
-                    help="Regenerate docker/.env via bootstrap.py or set correct secret",
-                )
-                sys.exit(1)
-
         # Load configuration from environment
         config = get_config()
 
@@ -186,12 +141,9 @@ if __name__ == "__main__":
         # Use resolved auth configuration
         auth_service = None
         if require_auth:
-            # jwt_secret is guaranteed non-None here (validated above)
-            assert jwt_secret is not None, "JWT secret required when auth is enabled"
-            
-            # Create AuthService using factory (backend from GOFR_AUTH_BACKEND env)
-            auth_service = create_auth_service(secret_key=jwt_secret)
-            backend = os.getenv("GOFR_AUTH_BACKEND", "memory")
+            # Create AuthService via Vault-backed secret provider + stores
+            auth_service = create_auth_service(prefix="GOFR_IQ", audience="gofr-api")
+            backend = os.getenv("GOFR_IQ_AUTH_BACKEND", os.getenv("GOFR_AUTH_BACKEND", "vault"))
             startup_logger.info(
                 "AuthService initialized",
                 backend=backend,
@@ -266,7 +218,10 @@ if __name__ == "__main__":
         startup_logger.info("Server stopped")
         sys.exit(0)
     except Exception as e:
-        import traceback
-        startup_logger.error("FATAL: Failed to start MCP server", error=str(e))
-        traceback.print_exc()
+        startup_logger.error(
+            "FATAL: Failed to start MCP server",
+            cause_type=type(e).__name__,
+            error=str(e),
+            remediation="Review logs and Vault configuration, then retry",
+        )
         sys.exit(1)

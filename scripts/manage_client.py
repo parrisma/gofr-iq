@@ -11,11 +11,17 @@ import json
 import os
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from app.logger import StructuredLogger
+# Ensure project imports resolve when running via `uv run` without editable installs.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
+
+from app.logger import StructuredLogger  # noqa: E402 - imported after sys.path bootstrap for `uv run`
 
 
 logger = StructuredLogger("manage-client")

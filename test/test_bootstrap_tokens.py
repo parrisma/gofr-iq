@@ -29,9 +29,8 @@ class TestBootstrapTokens:
 
     def test_public_token_has_public_group(self, public_token: str) -> None:
         """Verify public token contains the 'public' group."""
-        # Single JWT secret - no fallbacks
-        jwt_secret = os.environ.get("GOFR_JWT_SECRET")
-        assert jwt_secret, "GOFR_JWT_SECRET must be set"
+        jwt_secret = os.environ.get("GOFR_IQ_JWT_SECRET") or os.environ.get("GOFR_JWT_SECRET")
+        assert jwt_secret, "GOFR_IQ_JWT_SECRET or GOFR_JWT_SECRET must be set"
         
         payload = jwt.decode(
             public_token,
@@ -47,9 +46,8 @@ class TestBootstrapTokens:
 
     def test_admin_token_has_admin_group(self, admin_token: str) -> None:
         """Verify admin token contains the 'admin' group."""
-        # Single JWT secret - no fallbacks
-        jwt_secret = os.environ.get("GOFR_JWT_SECRET")
-        assert jwt_secret, "GOFR_JWT_SECRET must be set"
+        jwt_secret = os.environ.get("GOFR_IQ_JWT_SECRET") or os.environ.get("GOFR_JWT_SECRET")
+        assert jwt_secret, "GOFR_IQ_JWT_SECRET or GOFR_JWT_SECRET must be set"
         
         payload = jwt.decode(
             admin_token,

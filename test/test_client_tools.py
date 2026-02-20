@@ -118,6 +118,7 @@ class TestToolRegistration:
         assert "create_client" in registered_tools
         assert "get_client_feed" in registered_tools
         assert "get_top_client_news" in registered_tools
+        assert "why_it_matters_to_client" in registered_tools
         assert "add_to_portfolio" in registered_tools
         assert "add_to_watchlist" in registered_tools
         # New tools
@@ -454,7 +455,7 @@ class TestGetTopClientNews:
                 "affected_instruments": ["AAPL"],
                 "created_at": "2025-01-15T10:00:00Z",
                 "reasons": ["DIRECT_HOLDING"],
-                "why_it_matters": "Direct holding impacted by earnings beat.",
+                "why_it_matters_base": "DIRECT_HOLDING impacting AAPL.",
             }
         ]
 
@@ -601,7 +602,7 @@ class TestGetTopClientNews:
                 "affected_instruments": ["AAPL"],
                 "created_at": "2025-01-15T10:00:00Z",
                 "reasons": ["DIRECT_HOLDING"],
-                "why_it_matters": "Critical update.",
+                "why_it_matters_base": "DIRECT_HOLDING impacting AAPL.",
             }
         ]
 
@@ -743,7 +744,7 @@ class TestGetTopClientNews:
                 "affected_instruments": ["AAPL", "TSM"],
                 "created_at": "2025-01-15T10:00:00Z",
                 "reasons": ["DIRECT_HOLDING", "SUPPLY_CHAIN", "SEMANTIC_MATCH"],
-                "why_it_matters": "Direct holding AAPL and supply chain TSM both affected.",
+                "why_it_matters_base": "DIRECT_HOLDING, SUPPLY_CHAIN impacting AAPL, TSM.",
             },
             {
                 "document_guid": "doc-2",
@@ -754,7 +755,7 @@ class TestGetTopClientNews:
                 "affected_instruments": ["GOOGL", "MSFT"],
                 "created_at": "2025-01-15T09:00:00Z",
                 "reasons": ["WATCHLIST", "PEER"],
-                "why_it_matters": "Watchlist items in same sector.",
+                "why_it_matters_base": "WATCHLIST impacting GOOGL, MSFT.",
             },
         ]
 
@@ -778,6 +779,54 @@ class TestGetTopClientNews:
         second_article = result["data"]["articles"][1]
         assert "WATCHLIST" in second_article["reasons"]
         assert "PEER" in second_article["reasons"]
+
+
+class TestWhyItMattersToClient:
+    """Tests for why_it_matters_to_client tool"""
+
+    @patch('app.tools.client_tools.resolve_permitted_groups')
+    def test_why_it_matters_success(
+        self,
+        mock_permitted_groups: MagicMock,
+        mcp_server: FastMCP,
+        mock_graph_index: MagicMock,
+        mock_query_service: MagicMock,
+    ) -> None:
+        mock_permitted_groups.return_value = [TEST_PUBLIC_GROUP, TEST_GROUP]
+
+        mock_graph_index.get_node.return_value = GraphNode(
+            label=NodeLabel.CLIENT,
+            guid="client-123",
+            properties={"name": "Test Fund"},
+        )
+
+        mock_query_service.why_it_matters_to_client.return_value = {
+            "why_it_matters": "Client exposed via holdings; earnings change affects risk.",
+            "story_summary": "Company beat earnings; guidance raised; shares moved higher.",
+        }
+
+        register_client_tools(
+            mcp_server,
+            mock_graph_index,
+            query_service=mock_query_service,
+            llm_service=MagicMock(),
+        )
+
+        tool_fn = get_tool_fn(mcp_server, "why_it_matters_to_client")
+
+        response = tool_fn(
+            client_guid="client-123",
+            document_guid="doc-123",
+        )
+
+        result = parse_response(response)
+        assert result["status"] == "success"
+        assert result["data"]["client_guid"] == "client-123"
+        assert result["data"]["document_guid"] == "doc-123"
+        assert "why_it_matters" in result["data"]
+        assert "story_summary" in result["data"]
+
+        mock_query_service.why_it_matters_to_client.assert_called_once()
 
 
 # ============================================================================

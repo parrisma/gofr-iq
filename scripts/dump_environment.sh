@@ -154,8 +154,14 @@ else
     VAULT_URL="http://localhost:${GOFR_VAULT_PORT_TEST:-$((GOFR_VAULT_PORT + 100))}"
 fi
 
-export GOFR_VAULT_URL="${VAULT_URL}"
-export GOFR_AUTH_BACKEND="${GOFR_AUTH_BACKEND:-vault}"
+export GOFR_IQ_VAULT_URL="${VAULT_URL}"
+export GOFR_IQ_AUTH_BACKEND="${GOFR_IQ_AUTH_BACKEND:-${GOFR_AUTH_BACKEND:-vault}}"
+export GOFR_IQ_VAULT_MOUNT_POINT="${GOFR_IQ_VAULT_MOUNT_POINT:-${GOFR_VAULT_MOUNT_POINT:-secret}}"
+export GOFR_IQ_VAULT_PATH_PREFIX="${GOFR_IQ_VAULT_PATH_PREFIX:-${GOFR_VAULT_PATH_PREFIX:-gofr/auth}}"
+
+# Backwards compatibility for older scripts (during migration)
+export GOFR_VAULT_URL="${GOFR_IQ_VAULT_URL}"
+export GOFR_AUTH_BACKEND="${GOFR_IQ_AUTH_BACKEND}"
 
 # Helper functions
 obscure_secret() {

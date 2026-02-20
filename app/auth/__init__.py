@@ -38,12 +38,6 @@ from gofr_common.auth import (
     # Storage Protocols
     TokenStore,
     GroupStore,
-    # Memory backends
-    MemoryTokenStore,
-    MemoryGroupStore,
-    # File backends
-    FileTokenStore,
-    FileGroupStore,
     # Vault backends
     VaultConfig,
     VaultClient,
@@ -58,6 +52,7 @@ from gofr_common.auth import (
     create_token_store,
     create_group_store,
     create_stores_from_env,
+    create_vault_client_from_env,
     # Storage exceptions
     StorageError,
     StorageUnavailableError,
@@ -111,12 +106,6 @@ __all__ = [
     # gofr_common.auth - Storage Protocols
     "TokenStore",
     "GroupStore",
-    # gofr_common.auth - Memory backends
-    "MemoryTokenStore",
-    "MemoryGroupStore",
-    # gofr_common.auth - File backends
-    "FileTokenStore",
-    "FileGroupStore",
     # gofr_common.auth - Vault backends
     "VaultConfig",
     "VaultClient",
@@ -131,6 +120,7 @@ __all__ = [
     "create_token_store",
     "create_group_store",
     "create_stores_from_env",
+    "create_vault_client_from_env",
     # gofr_common.auth - Storage exceptions
     "StorageError",
     "StorageUnavailableError",

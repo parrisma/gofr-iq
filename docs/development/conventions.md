@@ -20,7 +20,7 @@ This is to be read periodically by LLM Agents so as their context window fades i
 ./docker/manage-infra.sh status # health check
 ```
 
-**bootstrap.py writes to docker/.env**: `GOFR_JWT_SECRET`, `VAULT_ROOT_TOKEN`, `NEO4J_PASSWORD`, `GOFR_IQ_OPENROUTER_API_KEY`
+**bootstrap.py writes to docker/.env**: `VAULT_ROOT_TOKEN`, `NEO4J_PASSWORD`, `GOFR_IQ_OPENROUTER_API_KEY`
 
 ### Testing
 ```bash
@@ -99,7 +99,7 @@ uv run python simulation/load_clients_to_neo4j.py
 
 | Path | Contents |
 |------|----------|
-| **`docker/.env`** | **SSOT: `GOFR_JWT_SECRET`, `NEO4J_PASSWORD`, `GOFR_IQ_OPENROUTER_API_KEY`** |
+| **`docker/.env`** | **SSOT: `NEO4J_PASSWORD`, `GOFR_IQ_OPENROUTER_API_KEY`** |
 | `secrets/vault_root_token` | `VAULT_TOKEN` (Zero-Trust Bootstrap) |
 | `secrets/vault_unseal_key` | `VAULT_UNSEAL_KEY` |
 | `secrets/service_creds/` | AppRole credentials per service |

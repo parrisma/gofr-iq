@@ -20,6 +20,9 @@ if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
     source "${SCRIPT_DIR}/gofriq.env"
 fi
 
+# Ensure vendored gofr-common is importable for local runs
+export PYTHONPATH="${PROJECT_ROOT}:${PROJECT_ROOT}/lib/gofr-common/src:${PYTHONPATH:-}"
+
 # Configuration with environment variable fallbacks
 HOST="${GOFR_IQ_MCP_HOST:-${GOFR_IQ_HOST:-0.0.0.0}}"
 PORT="${GOFR_IQ_MCP_PORT}"
@@ -62,7 +65,10 @@ while [[ $# -gt 0 ]]; do
             echo "  -h, --help            Show this help message"
             echo ""
             echo "Environment Variables (required unless --no-auth):"
-            echo "  GOFR_JWT_SECRET          JWT secret for authentication (from Vault)"
+            echo "  GOFR_IQ_AUTH_BACKEND     Auth backend (expected: vault)"
+            echo "  GOFR_IQ_VAULT_URL        Vault URL (default: http://gofr-vault:8201)"
+            echo "  GOFR_IQ_VAULT_MOUNT_POINT Vault KV mount (default: secret)"
+            echo "  GOFR_IQ_VAULT_PATH_PREFIX Shared auth prefix (required: gofr/auth)"
             echo "  GOFR_IQ_MCP_HOST         Default host (default: 0.0.0.0)"
             echo "  GOFR_IQ_MCP_PORT         Default port (from gofriq.env)"
             echo "  GOFR_IQ_STORAGE_DIR      Storage directory"
@@ -74,9 +80,9 @@ while [[ $# -gt 0 ]]; do
             echo "  - secrets/ directory must contain Vault credentials"
             echo "  - Neo4j and ChromaDB must be accessible"
             echo ""
-            echo "  For production, use docker/start-prod.sh to start the full stack."
-            echo "  For development testing, load secrets first:"
-            echo "    source lib/gofr-common/scripts/auth_env.sh --docker"
+            echo "  For production, use scripts/start-prod.sh to start the full stack."
+            echo "  For development testing, load operator tooling env first (for admin commands only):"
+            echo "    source <(./lib/gofr-common/scripts/auth_env.sh --docker)"
             echo "    ./scripts/run_mcp.sh"
             echo ""
             echo "  See lib/gofr-common/scripts/readme.md for authentication guide."
@@ -90,11 +96,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Validate authentication configuration
-if [ "$NO_AUTH" = "false" ] && [ -z "${GOFR_JWT_SECRET:-}" ]; then
-    echo -e "${YELLOW}WARNING: No JWT secret configured and authentication is enabled${NC}"
-    echo -e "${YELLOW}Set GOFR_JWT_SECRET environment variable or use --no-auth${NC}"
-fi
+# NOTE: Auth is Vault-backed; this wrapper does not require JWT signing secrets via env vars.
 
 # Build command line arguments
 CMD_ARGS=(

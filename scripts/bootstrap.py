@@ -57,6 +57,7 @@ try:
     from gofr_common.auth.backends.vault_client import VaultClient  # type: ignore[import-not-found]
     from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[import-not-found]
     from gofr_common.auth.groups import GroupRegistry  # type: ignore[import-not-found]
+    from gofr_common.auth.jwt_secret_provider import JwtSecretProvider  # type: ignore[import-not-found]
 except ImportError as e:
     print(f"Error importing dependencies: {e}")
     print("Ensure you're running with: uv run scripts/bootstrap.py")
@@ -383,11 +384,18 @@ def initialize_auth_service(vault_url: str, vault_token: str, jwt_secret: str) -
         )
         gofr_vault_client = VaultClient(vault_config)
         
+        # Create JWT secret provider backed by Vault
+        secret_provider = JwtSecretProvider(
+            vault_client=gofr_vault_client,
+            vault_path="gofr/config/jwt-signing-secret",
+        )
+        
         # Create Auth service with Vault stores
         auth = AuthService(
             token_store=VaultTokenStore(gofr_vault_client),
             group_registry=GroupRegistry(VaultGroupStore(gofr_vault_client)),
-            secret_key=jwt_secret
+            secret_provider=secret_provider,
+            audience="gofr-api",
         )
         
         # GroupRegistry auto-creates reserved groups (admin, public) on init

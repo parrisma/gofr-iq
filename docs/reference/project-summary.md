@@ -48,7 +48,8 @@ Decay by tier: PLATINUM(0.05) → GOLD(0.10) → SILVER(0.15) → BRONZE(0.20) �
 
 Config via `scripts/gofriq.env`. Key variables:
 - `GOFR_IQ_OPENROUTER_API_KEY` - LLM extraction
-- `GOFR_IQ_JWT_SECRET` - Authentication
+- `GOFR_IQ_AUTH_BACKEND` - Auth backend selection (expected: `vault`)
+- `GOFR_IQ_VAULT_URL`, `GOFR_IQ_VAULT_MOUNT_POINT`, `GOFR_IQ_VAULT_PATH_PREFIX` - Vault auth/secrets configuration
 - `GOFR_IQ_CHROMADB_HOST`, `GOFR_IQ_NEO4J_URI` - Infrastructure
 
 ## Tests

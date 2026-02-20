@@ -136,7 +136,7 @@ done
 
 echo ""
 echo "======================================================================="
-echo "🚀 GOFR-IQ Production Startup"
+echo "GOFR-IQ Production Startup"
 echo "======================================================================="
 
 # Step 0a: Nuke if requested (full clean including images)
@@ -233,7 +233,7 @@ if [ "$BUILD_IMAGES" = true ]; then
         log_error "Missing build orchestrator: $DOCKER_DIR/build-all.sh"
         exit 1
     fi
-    "$DOCKER_DIR/build-all.sh" --prod
+    "$DOCKER_DIR/build-all.sh" --prod --force
     log_success "Images built"
 elif ! docker image inspect gofr-iq-prod:latest >/dev/null 2>&1; then
     log_warn "Production image not found, building..."
@@ -256,11 +256,8 @@ log_success "Existing services stopped"
 # Step 5: Ensure Vault is running (auto-start and bootstrap if needed)
 VAULT_MANAGE_SCRIPT="${PROJECT_ROOT}/lib/gofr-common/scripts/manage_vault.sh"
 
-if [ -f /.dockerenv ]; then
-    VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
-else
-    VAULT_ADDR="http://localhost:${GOFR_VAULT_PORT:-8201}"
-fi
+# NOTE: This project runs inside Docker networks; use the Vault service name.
+VAULT_ADDR="http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
 export VAULT_ADDR
 
 log_info "Checking Vault health at ${VAULT_ADDR}..."
@@ -334,10 +331,10 @@ if [ "$FRESH_INSTALL" = true ]; then
     log_success "OpenRouter API key stored"
 fi
 
-# Step 5.2: Ensure AppRole identities exist/rotate
-log_info "Ensuring service AppRoles (uses existing root token)..."
+# Step 5.2: Ensure AppRole identities exist/rotate (align to gofr-doc)
+log_info "Ensuring service AppRoles (shared gofr-common provisioning)..."
 cd "$PROJECT_ROOT"
-uv run scripts/setup_approle.py
+bash scripts/ensure_approle.sh
 log_success "Service AppRoles ensured"
 cd "$DOCKER_DIR"
 
@@ -361,6 +358,24 @@ if [ -f "$PORTS_FILE" ]; then
         log_info "Port configuration already present in .env"
     fi
 fi
+
+# Step 6.6: Ensure GOFR_IQ_* auth/Vault configuration is present (Option A)
+log_info "Ensuring GOFR_IQ auth/Vault configuration in docker .env..."
+
+ensure_env_kv() {
+    local key="$1"
+    local value="$2"
+    if ! grep -q "^${key}=" "$DOCKER_ENV_FILE" 2>/dev/null; then
+        echo "${key}=${value}" >> "$DOCKER_ENV_FILE"
+    fi
+}
+
+ensure_env_kv "GOFR_IQ_AUTH_BACKEND" "${GOFR_IQ_AUTH_BACKEND:-vault}"
+ensure_env_kv "GOFR_IQ_VAULT_URL" "${GOFR_IQ_VAULT_URL:-http://gofr-vault:${GOFR_VAULT_PORT:-8201}}"
+ensure_env_kv "GOFR_IQ_VAULT_MOUNT_POINT" "${GOFR_IQ_VAULT_MOUNT_POINT:-secret}"
+ensure_env_kv "GOFR_IQ_VAULT_PATH_PREFIX" "${GOFR_IQ_VAULT_PATH_PREFIX:-gofr/auth}"
+
+log_success "GOFR_IQ auth/Vault configuration ensured"
 
 # Also merge shared secrets if they exist
 SHARED_ENV="${PROJECT_ROOT}/lib/gofr-common/.env"
@@ -399,39 +414,34 @@ fi
 export NEO4J_PASSWORD
 log_success "Loaded Neo4j password from Vault"
 
-# Load OpenRouter API key (REQUIRED - fail if missing)
-# Always reload from Vault to ensure we get the latest value
-GOFR_IQ_OPENROUTER_API_KEY=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
-    gofr-vault vault kv get -field=value secret/gofr/config/api-keys/openrouter 2>/dev/null)
-if [ -z "$GOFR_IQ_OPENROUTER_API_KEY" ]; then
-    log_error "Failed to load OpenRouter API key from Vault"
+# Confirm OpenRouter API key exists (services read it directly from Vault via OpenRouterKeyProvider)
+OPENROUTER_KEY_EXISTS=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
+    gofr-vault vault kv get -field=value secret/gofr/config/api-keys/openrouter 2>/dev/null || true)
+if [ -z "$OPENROUTER_KEY_EXISTS" ]; then
+    log_error "OpenRouter API key missing in Vault at secret/gofr/config/api-keys/openrouter"
+    log_error "Remediation: run this script with --fresh (or use --openrouter-key) to store it, then retry"
     exit 1
 fi
-export GOFR_IQ_OPENROUTER_API_KEY
-log_success "Loaded OpenRouter API key from Vault"
+log_success "Verified OpenRouter API key exists in Vault"
 
-# Load JWT signing secret (REQUIRED - fail if missing)
-GOFR_IQ_JWT_SECRET=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
-    gofr-vault vault kv get -field=value secret/gofr/config/jwt-signing-secret 2>/dev/null)
-if [ -z "$GOFR_IQ_JWT_SECRET" ]; then
-    log_error "Failed to load JWT signing secret from Vault"
+# Confirm JWT signing secret exists (services read it directly from Vault via JwtSecretProvider)
+JWT_SIGNING_SECRET_EXISTS=$(docker exec -e VAULT_ADDR="${VAULT_ADDR}" -e VAULT_TOKEN="${VAULT_TOKEN}" \
+    gofr-vault vault kv get -field=value secret/gofr/config/jwt-signing-secret 2>/dev/null || true)
+if [ -z "$JWT_SIGNING_SECRET_EXISTS" ]; then
+    log_error "JWT signing secret missing in Vault at secret/gofr/config/jwt-signing-secret"
+    log_error "Remediation: run lib/gofr-common/scripts/manage_vault.sh jwt-secret (or bootstrap) then retry"
     exit 1
 fi
-export GOFR_IQ_JWT_SECRET
-log_success "Loaded JWT signing secret from Vault"
+log_success "Verified JWT signing secret exists in Vault"
 
 # Step 6.10: Write loaded secrets to docker/.env for external tools/scripts
 log_info "Writing Vault secrets to docker/.env..."
 # Remove stale entries first
 sed -i '/^NEO4J_PASSWORD=/d' "$DOCKER_ENV_FILE" 2>/dev/null || true
-sed -i '/^GOFR_IQ_OPENROUTER_API_KEY=/d' "$DOCKER_ENV_FILE" 2>/dev/null || true
-sed -i '/^GOFR_IQ_JWT_SECRET=/d' "$DOCKER_ENV_FILE" 2>/dev/null || true
 # Append current values
 echo "" >> "$DOCKER_ENV_FILE"
 echo "# Secrets loaded from Vault (auto-generated - do not edit)" >> "$DOCKER_ENV_FILE"
 echo "NEO4J_PASSWORD=${NEO4J_PASSWORD}" >> "$DOCKER_ENV_FILE"
-echo "GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY}" >> "$DOCKER_ENV_FILE"
-echo "GOFR_IQ_JWT_SECRET=${GOFR_IQ_JWT_SECRET}" >> "$DOCKER_ENV_FILE"
 log_success "Secrets written to docker/.env"
 
 # Step 7: Start all services
@@ -471,15 +481,15 @@ docker compose ps
 
 echo ""
 log_success "======================================================================="
-log_success "🎉 GOFR-IQ Production Stack Started!"
+log_success "GOFR-IQ Production Stack Started!"
 log_success "======================================================================="
 echo ""
 echo "Services:"
-echo "  - Vault:    http://localhost:${GOFR_VAULT_PORT:-8201}"
-echo "  - MCP:      http://localhost:${GOFR_IQ_MCP_PORT:-8080}"
-echo "  - Web:      http://localhost:${GOFR_IQ_WEB_PORT:-8082}"
-echo "  - Neo4j:    http://localhost:${GOFR_NEO4J_HTTP_PORT:-7474}"
-echo "  - ChromaDB: http://localhost:${GOFR_CHROMA_PORT:-8000}"
+echo "  - Vault:    http://gofr-vault:${GOFR_VAULT_PORT:-8201}"
+echo "  - MCP:      http://gofr-iq-mcp:${GOFR_IQ_MCP_PORT:-8080}"
+echo "  - Web:      http://gofr-iq-web:${GOFR_IQ_WEB_PORT:-8082}"
+echo "  - Neo4j:    http://gofr-neo4j:${GOFR_NEO4J_HTTP_PORT:-7474}"
+echo "  - ChromaDB: http://gofr-chromadb:${GOFR_CHROMA_PORT:-8000}"
 echo ""
 echo "Credentials saved to: secrets/"
 echo "Environment saved to: docker/.env"

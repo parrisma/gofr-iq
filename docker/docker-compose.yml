@@ -92,39 +92,41 @@ services:
     container_name: gofr-iq-mcp
     hostname: gofr-iq-mcp
     restart: unless-stopped
-    user: gofr-iq
+    user: root
     working_dir: /home/gofr-iq
-    entrypoint: []
+    entrypoint: ["/home/gofr-iq/entrypoint-prod.sh"]
     depends_on:
       neo4j:
         condition: service_healthy
       chromadb:
         condition: service_healthy
-    command: >
-      /home/gofr-iq/.venv/bin/python -m app.main_mcp
-      --host 0.0.0.0 --port ${GOFR_IQ_MCP_PORT}
+    command:
+      - /home/gofr-iq/.venv/bin/python
+      - -m
+      - app.main_mcp
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "${GOFR_IQ_MCP_PORT}"
     environment:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
       - GOFR_IQ_LOG_FILE=/home/gofr-iq/logs/gofr-iq-mcp.log
       - GOFR_IQ_AUTH_DISABLED=false
-      # JWT Secret and Neo4j password loaded from Vault via AppRole (Zero-Trust Bootstrap)
-      - GOFR_IQ_JWT_SECRET=${GOFR_IQ_JWT_SECRET}
+      # Auth is Vault-sourced (JwtSecretProvider + stores)
       - GOFR_IQ_NEO4J_PASSWORD=${NEO4J_PASSWORD}
       # Auth Backend (Vault) - shared across all GOFR services
-      - GOFR_AUTH_BACKEND=vault
-      - GOFR_VAULT_URL=http://gofr-vault:${GOFR_VAULT_PORT}
-      - GOFR_VAULT_TOKEN=${VAULT_ROOT_TOKEN:-gofr-dev-root-token}
-      - GOFR_VAULT_PATH_PREFIX=gofr/auth
-      - GOFR_VAULT_MOUNT_POINT=secret
+      - GOFR_IQ_AUTH_BACKEND=vault
+      - GOFR_IQ_VAULT_URL=http://gofr-vault:${GOFR_VAULT_PORT}
+      - GOFR_IQ_VAULT_PATH_PREFIX=gofr/auth
+      - GOFR_IQ_VAULT_MOUNT_POINT=secret
       # Infrastructure connections
       - GOFR_IQ_CHROMADB_HOST=gofr-chromadb
       - GOFR_IQ_CHROMADB_PORT=${GOFR_CHROMA_INTERNAL_PORT}
       - GOFR_IQ_NEO4J_URI=bolt://gofr-neo4j:${GOFR_NEO4J_BOLT_INTERNAL_PORT}
       - GOFR_IQ_NEO4J_USER=neo4j
       # LLM Configuration
-      - GOFR_IQ_OPENROUTER_API_KEY=${GOFR_IQ_OPENROUTER_API_KEY:-}
       - GOFR_IQ_OPENROUTER_BASE_URL=${GOFR_IQ_OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
       - GOFR_IQ_LLM_MODEL=${GOFR_IQ_LLM_MODEL:-meta-llama/llama-3.1-70b-instruct}
       - GOFR_IQ_EMBEDDING_MODEL=${GOFR_IQ_EMBEDDING_MODEL:-qwen/qwen3-embedding-8b}
@@ -135,9 +137,8 @@ services:
     volumes:
       - gofr-iq-data:/home/gofr-iq/data
       - gofr-iq-prod-logs:/home/gofr-iq/logs
-      # AppRole credentials (Zero-Trust Bootstrap)
-      # Path goes through lib/gofr-common/secrets (canonical location)
-      - ${HOST_PROJECT_ROOT:-..}/lib/gofr-common/secrets/service_creds/gofr-mcp.json:/run/secrets/vault_creds:ro
+      # AppRole credentials (staged for entrypoint copy-and-chown)
+      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-mcp.json:/run/gofr-secrets/vault_creds:ro
     networks:
       - gofr-net
     healthcheck:
@@ -194,23 +195,31 @@ services:
     container_name: gofr-iq-web
     hostname: gofr-iq-web
     restart: unless-stopped
-    user: gofr-iq
+    user: root
     working_dir: /home/gofr-iq
-    entrypoint: []
-    command: >
-      /home/gofr-iq/.venv/bin/python -m app.main_web
-      --host 0.0.0.0 --port ${GOFR_IQ_WEB_PORT}
+    entrypoint: ["/home/gofr-iq/entrypoint-prod.sh"]
+    command:
+      - /home/gofr-iq/.venv/bin/python
+      - -m
+      - app.main_web
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "${GOFR_IQ_WEB_PORT}"
     environment:
       - GOFR_IQ_ENV=PROD
       - GOFR_IQ_WEB_PORT=${GOFR_IQ_WEB_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
       - GOFR_IQ_LOG_FILE=/home/gofr-iq/logs/gofr-iq-web.log
+      - GOFR_IQ_AUTH_BACKEND=vault
+      - GOFR_IQ_VAULT_URL=http://gofr-vault:${GOFR_VAULT_PORT}
+      - GOFR_IQ_VAULT_PATH_PREFIX=gofr/auth
+      - GOFR_IQ_VAULT_MOUNT_POINT=secret
     ports:
       - "${GOFR_IQ_WEB_PORT}:${GOFR_IQ_WEB_PORT}"
     volumes:
-      # AppRole credentials (Zero-Trust Bootstrap)
-      # Path goes through lib/gofr-common/secrets (canonical location)
-      - ${HOST_PROJECT_ROOT:-..}/lib/gofr-common/secrets/service_creds/gofr-web.json:/run/secrets/vault_creds:ro
+      # AppRole credentials (staged for entrypoint copy-and-chown)
+      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-web.json:/run/gofr-secrets/vault_creds:ro
       - gofr-iq-prod-logs:/home/gofr-iq/logs
     networks:
       - gofr-net

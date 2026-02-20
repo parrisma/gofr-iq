@@ -44,9 +44,8 @@ RUN mkdir -p /home/gofr-iq/app \
 
 WORKDIR /home/gofr-iq
 
-# Copy dependency manifests first (maximize cache reuse)
+# Copy dependency manifest first (maximize cache reuse)
 COPY --chown=gofr-iq:gofr-iq pyproject.toml /home/gofr-iq/
-COPY --chown=gofr-iq:gofr-iq lib/gofr-common/pyproject.toml /home/gofr-iq/lib/gofr-common/pyproject.toml
 
 # Create venv and install dependencies (as root to avoid permission issues)
 RUN uv venv /home/gofr-iq/.venv --python=python3.11
@@ -54,45 +53,23 @@ RUN uv venv /home/gofr-iq/.venv --python=python3.11
 ENV VIRTUAL_ENV=/home/gofr-iq/.venv
 ENV PATH="/home/gofr-iq/.venv/bin:$PATH"
 
-# Install dependencies from pyproject.toml files (no source code yet)
-RUN python - <<'PY'
-import pathlib
-import tomllib
-
-def load_deps(path: str) -> list[str]:
-    data = tomllib.loads(pathlib.Path(path).read_text())
-    return data.get("project", {}).get("dependencies", [])
-
-deps = []
-deps.extend(load_deps("pyproject.toml"))
-deps.extend(load_deps("lib/gofr-common/pyproject.toml"))
-
-seen = set()
-ordered = []
-for dep in deps:
-    if dep not in seen:
-        ordered.append(dep)
-        seen.add(dep)
-
-pathlib.Path("/tmp/requirements.txt").write_text("\n".join(ordered))
-PY
-# Increase timeout for large package downloads (e.g., nodejs-wheel-binaries 57MB)
+# Increase timeout for large package downloads
 ENV UV_HTTP_TIMEOUT=180
-RUN uv pip install -r /tmp/requirements.txt
 
 # Copy project files (code last to reduce rebuilds on code changes)
 COPY --chown=gofr-iq:gofr-iq readme.md /home/gofr-iq/
 COPY --chown=gofr-iq:gofr-iq app/ /home/gofr-iq/app/
 COPY --chown=gofr-iq:gofr-iq lib/ /home/gofr-iq/lib/
 
-# Install gofr-common and main project in editable mode (no deps)
-RUN uv pip install -e ./lib/gofr-common --no-deps && uv pip install -e . --no-deps
+# Install gofr-common and main project in editable mode (install deps from pinned pyproject.toml)
+RUN uv pip install -e ./lib/gofr-common && uv pip install -e .
 
 # Fix ownership after installation
 RUN chown -R gofr-iq:gofr-iq /home/gofr-iq
 
-# Copy entrypoint script
-COPY --chown=gofr-iq:gofr-iq --chmod=755 docker/entrypoint-prod.sh /home/gofr-iq/entrypoint-prod.sh
+# Copy entrypoint script (avoid BuildKit-only COPY --chmod)
+COPY --chown=gofr-iq:gofr-iq docker/entrypoint-prod.sh /home/gofr-iq/entrypoint-prod.sh
+RUN chmod 755 /home/gofr-iq/entrypoint-prod.sh
 
 # Expose ports
 # 8080: MCP Server

@@ -913,7 +913,7 @@ class TestRegexTickerFallback:
         # "AI" appears as substring in "SAID" and "FAIR" but not as a word
         content = "The company SAID the FAIR price was acceptable for ecological products."
 
-        added = service._augment_extraction_with_regex_tickers(content, extraction)
+        service._augment_extraction_with_regex_tickers(content, extraction)
 
         # "ECO" is not in the text. "AI" might match as word in "AI" but not in "SAID"/"FAIR"
         assert "ECO" not in [i.ticker for i in extraction.instruments]

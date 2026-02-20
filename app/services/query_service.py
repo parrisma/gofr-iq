@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 import json
 from typing import Any, Optional, TYPE_CHECKING
 
+from app.models import count_words
 from app.services.document_store import DocumentStore
 from app.services.embedding_index import EmbeddingIndex, SimilarityResult
 from app.services.graph_index import GraphIndex, NodeLabel
@@ -356,12 +357,10 @@ class QueryService:
         min_impact_score: float | None = None,
         impact_tiers: list[str] | None = None,
         weights: ClientNewsWeights | None = None,
-        filters: QueryFilters | None = None,
-        llm_service: "LLMService | None" = None,
     ) -> list[dict[str, Any]]:
-        """Get top news for a client using hybrid graph + semantic search.
+        """Get top news for a client using graph/ephemeral data only.
 
-        Returns a ranked shortlist of news items personalized for the client.
+        This method is deterministic and does not perform any LLM calls.
         """
         if not self.graph_index:
             logger.warning("Top client news requested without graph index")
@@ -485,46 +484,6 @@ class QueryService:
                 add_graph_candidates(peer_docs, "PEER", 0.5)
 
         # ------------------------------------------------------------
-        # Semantic candidates
-        # ------------------------------------------------------------
-        semantic_query = self._build_client_query_text(
-            profile=profile,
-            holdings=holding_tickers,
-            watchlist=watchlist_tickers,
-            llm_service=llm_service,
-        )
-
-        semantic_filters = filters or QueryFilters()
-        if semantic_filters.date_from is None:
-            semantic_filters.date_from = time_cutoff
-        if semantic_filters.date_to is None:
-            semantic_filters.date_to = now
-
-        semantic_results = self.query(
-            query_text=semantic_query,
-            group_guids=group_guids,
-            n_results=max(limit * 5, 15),
-            filters=semantic_filters,
-            include_graph_context=False,
-            enable_graph_expansion=True,
-        ).results
-
-        for result in semantic_results:
-            doc_guid = result.document_guid
-            entry = graph_candidates.setdefault(doc_guid, {
-                "document_guid": doc_guid,
-                "title": result.title,
-                "created_at": result.created_at.isoformat() if result.created_at else None,
-                "impact_score": result.metadata.get("impact_score"),
-                "impact_tier": result.metadata.get("impact_tier"),
-                "affected_instruments": result.metadata.get("companies", []),
-                "reasons": set(),
-                "graph_score": 0.0,
-            })
-            entry["semantic_score"] = max(entry.get("semantic_score", 0.0), result.similarity_score)
-            entry["reasons"].add("SEMANTIC_MATCH")
-
-        # ------------------------------------------------------------
         # Apply time window + ESG exclusions
         # ------------------------------------------------------------
         candidates = list(graph_candidates.values())
@@ -551,23 +510,24 @@ class QueryService:
             created_at = self._parse_datetime(candidate.get("created_at"))
             recency = self._calculate_recency_score({"created_at": created_at}, now)
 
-            semantic_score = candidate.get("semantic_score", 0.0)
             graph_score = candidate.get("graph_score", 0.0)
 
             final_score = (
-                weights.semantic * semantic_score
-                + weights.graph * graph_score
+                weights.graph * graph_score
                 + weights.impact * impact_norm
                 + weights.recency * recency
             )
 
             reasons = sorted(candidate.get("reasons", set()))
-            why = self._build_why_it_matters(
+            # Build a deterministic baseline explanation first.
+            # If LLM is enabled, we'll generate LLM "why" only for the final top-N
+            # results (batched) after ranking to avoid O(candidates) chat calls.
+            why_base = self._build_why_it_matters(
                 title=candidate.get("title"),
                 reasons=reasons,
                 impact_score=impact_score,
                 tickers=candidate.get("affected_instruments", []),
-                llm_service=llm_service,
+                llm_service=None,
             )
 
             scored.append({
@@ -579,11 +539,129 @@ class QueryService:
                 "affected_instruments": candidate.get("affected_instruments", []),
                 "relevance_score": final_score,
                 "reasons": reasons,
-                "why_it_matters": why,
+                "why_it_matters_base": why_base,
             })
 
         scored.sort(key=lambda x: x["relevance_score"], reverse=True)
         return scored[:limit]
+
+    def why_it_matters_to_client(
+        self,
+        client_guid: str,
+        document_guid: str,
+        group_guids: list[str],
+        llm_service: "LLMService",
+    ) -> dict[str, str]:
+        """Generate LLM augmentation for a specific (client, document) pair.
+
+        Returns two short strings:
+        - why_it_matters: <= 30 words, client-specific
+        - story_summary: <= 30 words, story-only
+        """
+
+        if not self.graph_index:
+            raise RuntimeError("why_it_matters_to_client requires graph index")
+
+        profile = self._get_client_profile_context(client_guid, group_guids)
+        if not profile:
+            raise RuntimeError("Client not found or not permitted")
+
+        holdings = self._get_client_holdings(client_guid)
+        watchlist = self._get_client_watchlist(client_guid)
+
+        holding_tickers = [h.get("ticker") for h in holdings if h.get("ticker")]
+        holding_weights = {h.get("ticker"): float(h.get("weight") or 0.0) for h in holdings if h.get("ticker")}
+        watchlist_tickers = [t for t in watchlist if t]
+
+        doc = self.document_store.load_with_access_check(
+            guid=document_guid,
+            permitted_groups=group_guids,
+        )
+
+        # Keep prompt bounded: include a truncated excerpt of content.
+        content_words = doc.content.split()
+        excerpt_words = content_words[:500]
+        excerpt = " ".join(excerpt_words)
+
+        client_context = {
+            "client_guid": client_guid,
+            "client_type": profile.get("client_type"),
+            "mandate_type": profile.get("mandate_type"),
+            "horizon": profile.get("horizon"),
+            "esg_constrained": bool(profile.get("esg_constrained")),
+            "impact_threshold": profile.get("impact_threshold"),
+            "benchmark": profile.get("benchmark"),
+            "restrictions": profile.get("restrictions"),
+            "holdings": [
+                {"ticker": t, "weight": holding_weights.get(t, 0.0)}
+                for t in holding_tickers[:25]
+            ],
+            "watchlist": watchlist_tickers[:25],
+        }
+
+        document_context = {
+            "document_guid": doc.guid,
+            "title": doc.title,
+            "created_at": doc.created_at.isoformat() if doc.created_at else None,
+            "impact_score": doc.metadata.get("impact_score"),
+            "impact_tier": doc.metadata.get("impact_tier"),
+            "affected_instruments": doc.metadata.get("affected_instruments") or doc.metadata.get("companies"),
+            "content_excerpt": excerpt,
+        }
+
+        try:
+            from app.services.llm_service import ChatMessage
+
+            prompt = (
+                "You are assisting a sales trader briefing a client.\n"
+                "Use ONLY the provided client context and story excerpt. Do NOT invent facts.\n\n"
+                "Return ONLY valid JSON with exactly these keys:\n"
+                "{\"why_it_matters\": \"...\", \"story_summary\": \"...\"}\n\n"
+                "Constraints:\n"
+                "- why_it_matters: max 30 words, must be specific to the client\n"
+                "- story_summary: max 30 words, story-only summary\n\n"
+                f"Client: {json.dumps(client_context, ensure_ascii=True)}\n"
+                f"Story: {json.dumps(document_context, ensure_ascii=True)}\n"
+            )
+
+            result = llm_service.chat_completion(
+                messages=[ChatMessage(role="user", content=prompt)],
+                json_mode=True,
+                temperature=0.2,
+                max_tokens=250,
+            )
+
+            payload = result.as_json()
+            if not isinstance(payload, dict):
+                raise ValueError("LLM returned non-object JSON")
+
+            why = payload.get("why_it_matters")
+            summary = payload.get("story_summary")
+            if not isinstance(why, str) or not isinstance(summary, str):
+                raise ValueError("LLM JSON missing required string fields")
+
+        except Exception as exc:
+            raise RuntimeError(f"LLM augmentation failed: {exc}")
+
+        def _truncate_to_words(text: str, max_words: int) -> str:
+            words = text.split()
+            if len(words) <= max_words:
+                return text.strip()
+            return " ".join(words[:max_words]).strip()
+
+        why = _truncate_to_words(why, 30)
+        summary = _truncate_to_words(summary, 30)
+
+        # Defensive validation (after truncation)
+        if count_words(why) > 30:
+            why = _truncate_to_words(why, 30)
+        if count_words(summary) > 30:
+            summary = _truncate_to_words(summary, 30)
+
+        return {
+            "why_it_matters": why,
+            "story_summary": summary,
+        }
 
     # =========================================================================
     # AVATAR FEED (Two-Channel Model)
