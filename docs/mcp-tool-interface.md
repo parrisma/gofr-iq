@@ -22,7 +22,7 @@
 - get_client_profile(client_guid) -> {name, client_type, alert_frequency, impact_threshold, mandate_type, benchmark, ...}
 - update_client_profile(client_guid, alert_frequency?, impact_threshold?, mandate_type?, benchmark?) -> {updated_fields,...}
 - get_client_feed(client_guid, limit?, min_impact_score?, impact_tiers?, include_portfolio?, include_watchlist?) -> {articles:[...]}
-- get_top_client_news(client_guid, limit?, time_window_hours?, min_impact_score?, impact_tiers?, include_portfolio?, include_watchlist?, include_lateral_graph?) -> {articles:[...], why_it_matters_base}
+- get_top_client_news(client_guid, limit?, time_window_hours?, min_impact_score?, impact_tiers?, include_portfolio?, include_watchlist?, include_lateral_graph?) -> {articles:[... (each includes why_it_matters_base)], ...}
 - why_it_matters_to_client(client_guid, document_guid) -> {why_it_matters (<=30 words), story_summary (<=30 words)}
 
 ### Portfolio
