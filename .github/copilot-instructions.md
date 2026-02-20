@@ -1,55 +1,112 @@
-# Copilot Instructions for gofr-iq (succinct)
+# Copilot Instructions for gofr-iq
 
-These rules are mandatory. If anything is unclear, ask before acting.
+## GENERAL SECTION (ROOT, MACHINE)
 
-## Non-negotiables
+ALL RULES ARE MANDATORY.
 
-- Ask when ambiguous. Do not assume intent or make product/design decisions.
-- Show full terminal output. Do not use `head`, `tail`, or truncating pipes.
-- ASCII only in code, logs, and docs. No emoji or Unicode symbols.
-- Never use `localhost`. Use Docker service names on the gofr network (e.g., `gofr-vault`, `gofr-neo4j`).
-- Python workflow uses UV only: `uv run`, `uv add`, `uv sync`. Do not use pip/venv workflows.
-- Do not use `print()`. Use the project's `StructuredLogger`.
-- Do not rewrite pushed git history. No `git commit --amend` or rebases for pushed commits; use follow-up commits.
+## A. COMMON PATTERNS, TRUTHS, AXIOMS, BEST PRACTICE
 
-## Default workflow
+## A1. HARD RULES (MUST/NEVER)
 
-- Trivial fix (few lines, obvious): implement directly.
-- Anything non-trivial: write a short spec first, get approval, then a stepwise plan, get approval, then execute.
-  - Spec: WHAT/WHY + constraints + assumptions/questions (no code).
-  - Plan: small verifiable steps + update code/docs/tests + run tests before/after.
+R0 SIMPLICITY: Be brief. Add complexity/verbosity ONLY when needed.
+R1 CLARITY: If ambiguous -> ASK. Never guess intent or make design/product decisions.
+R2 COLLAB: Treat user as partner. Show enough command output for review; do not hide critical output; do not burn context on noise.
+R3 LONG_FORM: If longer than a few sentences -> write `docs/*.md`, not chat.
+R4 FORMAT: Technical chat answers are plain text. Markdown is for documents only.
+R5 NETWORK: Never use `localhost`. Use Docker service names on `gofr-net`. Host Docker: `host.docker.internal`.
+R6 ASCII: ASCII only in code/output. No emoji/Unicode/box drawing.
+R7 GIT: Never rewrite pushed history (no `--amend`, no `rebase -i`). Use follow-up commits.
+R8 PYTHON: UV only (`uv run`, `uv add`, `uv sync`). No pip/venv.
+R9 LOGGING: `StructuredLogger` only. Never `print()` or stdlib `logging`.
 
-## Environment and services
+## A2. WORKFLOW (DECISION TREE)
 
-- Dev runs in a Docker dev container; prefer repo scripts to manage services.
-- Vault is `http://gofr-vault:8201` (do not use `localhost` or `host.docker.internal` for Vault).
-- Shared auth is managed by gofr-common; prefer its scripts over ad-hoc commands.
+IF change is trivial (few lines, obvious) -> implement directly.
+ELSE -> Spec -> Plan -> Execute.
 
-## Testing
+SPEC: `docs/<feature>_spec.md` (WHAT/WHY, constraints, assumptions, no code) -> user approval REQUIRED.
+PLAN: `docs/<feature>_implementation_plan.md` (small verifiable steps, no code; update code/docs/tests; run full tests before/after) -> user approval REQUIRED.
+EXECUTE: follow plan step-by-step; mark DONE; if uncovered problems appear -> STOP and discuss.
 
-- Always run tests via `./scripts/run_tests.sh` (never `pytest` directly).
-- Do not skip failing tests. Fix the underlying issue.
+## A3. ISSUE RESOLUTION
 
-## Logging and errors
+IF bug is not an obvious one-line fix -> write `docs/<issue>_strategy.md` BEFORE code.
+Strategy MUST include: symptom, hypothesised root cause, assumptions + validation, diagnostics order.
+Stay on root cause. Side-issues are recorded, not chased. No root-cause claims without evidence + user validation.
 
-- Log with `StructuredLogger` and include structured context (ids, urls, params, duration_ms).
-- Errors must include: cause, context, recovery options.
-- Add new error codes to `RECOVERY_STRATEGIES` in `app/errors/mapper.py` when applicable.
-- Add a domain exception in `app/exceptions/` when a generic exception is not appropriate.
+## A4. PLATFORM GROUND TRUTHS
 
-## MCP tool changes
+- Network: `gofr-net`. Docker service names only.
+- Vault: `http://gofr-vault:8201`. Root token: `lib/gofr-common/secrets/vault_root_token`. Never `localhost` for Vault.
+- Auth: shared across services. Vault path `gofr/auth`. JWT audience `gofr-api`.
+- Prefer `gofr_common` helpers (auth, config, storage, logging).
 
-If adding/modifying an MCP tool in `app/mcp_server/mcp_server.py`, follow this pattern:
+## A5. TESTING
 
-1. Add the `Tool(...)` schema in `handle_list_tools` (inputSchema, description, annotations).
-2. Add routing in `handle_call_tool`.
-3. Implement `_handle_<tool_name>(arguments)` returning `List[TextContent]` via `_json_text(...)`.
-4. Use `_error_response(...)` or `_exception_response(...)` for all error paths.
+- Always use `./scripts/run_tests.sh` (env + service lifecycle). Never raw `pytest`.
+- Fix code quality issues before running tests.
+- Flags: `--coverage`, `-k "keyword"`, `-v`. Run targeted first, full suite after.
+- Fix all failures, even seemingly unrelated ones.
+- Improve `run_tests.sh` if it lacks a needed capability.
 
-## Common scripts and auth (quick refs)
+## A6. ERRORS
 
-- Load Vault token + JWT secret: `source <(./lib/gofr-common/scripts/auth_env.sh --docker)`
-- Manage groups/tokens: `./lib/gofr-common/scripts/auth_manager.sh --docker ...`
-- Start/restart prod stack: `./scripts/start-prod.sh`
-- Run tests: `./scripts/run_tests.sh`
+- Surface root cause, not side effects.
+- Include: cause, context/references, recovery options.
+- Register in `RECOVERY_STRATEGIES` (`app/errors/mapper.py`).
+- New domain exceptions go in `app/exceptions/`. Do not reuse generic exceptions.
 
+## A7. MCP TOOL PATTERN
+
+In `app/mcp_server/mcp_server.py`, every tool requires:
+1. `Tool(...)` in `handle_list_tools` (inputSchema, description, annotations).
+2. Routing in `handle_call_tool`.
+3. `_handle_<name>(arguments)` -> `List[TextContent]` via `_json_text(...)`.
+4. Errors via `_error_response(...)` / `_exception_response(...)` only.
+
+## A8. CODE QUALITY / HARDENING
+
+Review all code as senior engineer + security SME:
+- No secrets in code/logs; validate external inputs.
+- No unbounded loops/memory; timeouts required; fail closed; least privilege.
+- Maintain `test/code_quality/test_code_quality.py` for structural checks.
+
+## A9. PLATFORM SCRIPTS (paths relative to project root)
+
+| Script | Purpose |
+|--------|---------|
+| `lib/gofr-common/scripts/auth_env.sh` | Export `VAULT_ADDR`, `VAULT_TOKEN`, `GOFR_JWT_SECRET`. Usage: `source <(./lib/gofr-common/scripts/auth_env.sh --docker)` |
+| `lib/gofr-common/scripts/auth_manager.sh` | Manage auth groups/tokens (list, create, inspect, revoke). |
+| `lib/gofr-common/scripts/bootstrap_auth.sh` | One-time auth bootstrap (groups + initial tokens). |
+| `lib/gofr-common/scripts/bootstrap_platform.sh` | Idempotent platform bootstrap (Vault, auth, services). |
+| `lib/gofr-common/scripts/manage_vault.sh` | Vault lifecycle: start, stop, status, logs, init, unseal, health. |
+
+## PROJECT SECTION (gofr-iq)
+
+PROJECT_PURPOSE: intelligence, knowledge graph, analytics service.
+RUNTIME: Python (UV).
+ENV: VS Code dev container on Docker network `gofr-net`.
+SERVICE: Neo4j at `gofr-neo4j` (Docker network).
+MCP: server uses factory pattern via `create_mcp_server()`.
+
+SCRIPTS (use these; do not reinvent workflows):
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/run_tests.sh` | Run tests (unit, integration, coverage). THE test entry point. |
+| `scripts/start-prod.sh` | Start (or `--build` and start) the production containers. |
+| `scripts/run_mcp.sh` | Start the MCP server. |
+| `scripts/run_mcpo.sh` | Start the MCPO wrapper. |
+| `scripts/run_web.sh` | Start the web server. |
+| `scripts/manage_servers.sh` | Start/stop/restart server processes. |
+| `scripts/manage_client.sh` | Client management operations. |
+| `scripts/manage_document.sh` | Document management operations. |
+| `scripts/manage_source.sh` | Source management operations. |
+| `scripts/bootstrap_gofr_iq.sh` | Bootstrap gofr-iq environment. |
+| `scripts/bootstrap_graph.py` | Bootstrap the Neo4j knowledge graph. |
+| `scripts/test_servers.sh` | Test that server endpoints are responding. |
+| `scripts/test_env.sh` | Validate the environment is correctly configured. |
+| `scripts/dump_environment.sh` | Dump current environment variables for debugging. |
+| `scripts/purge_local_data.sh` | Purge local data directories. |
+| `scripts/run_golden_baseline.sh` | Run golden baseline extraction tests. |
+| `scripts/reset-sim-env.sh` | Reset simulation environment. |
