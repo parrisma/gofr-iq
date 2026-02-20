@@ -1,203 +1,136 @@
-# GOFR-IQ Simulation Environment
+# GOFR-IQ simulation
 
-**Purpose**: Generate and test synthetic financial news for validating client-centric feed intelligence.
+Purpose
+- Populate a realistic, self-contained graph/vector dataset (universe, clients, documents) for validation.
+- Run repeatable baseline tests that show, with a high degree of confidence, that GOFR-IQ routes valuable documents to the right client profiles and filters noise.
 
----
+This folder contains two complementary test modes:
+1) Deterministic "golden set" tests (recommended for regression confidence).
+2) LLM-driven synthetic generation + ingestion (recommended for end-to-end realism and extraction stress).
 
-## 🚀 Quick Start
 
-```bash
-# 1. Start infrastructure
-./docker/start-prod.sh
+## Quick start (recommended, deterministic)
 
-# 2. Run full simulation (universe + 10 stories)
-./simulation/run_simulation.sh --count 10
+From repo root:
 
-# 3. Query a client's feed
-./simulation/query_client_feed.py --client client-hedge-fund
+1) Bring up prerequisites (Vault, AppRole creds, core secrets):
 
-# 4. Validate results
-./simulation/validate_feeds.py
-```
+   ./scripts/bootstrap_gofr_iq.sh
 
-**That's it!** The orchestrator handles everything: auth, sources, universe loading, story generation, and ingestion.
+2) Run the avatar feed UAT using the deterministic golden test set:
 
----
+   ./simulation/run_avatar_simulation.sh --test-set --report-json tmp/avatar_report.json --report-md tmp/avatar_report.md
 
-## 📚 What Is This?
+3) Optionally compare against the saved golden baseline:
 
-The simulation environment proves GOFR-IQ's core value proposition: **Client-Centric Retrieval-Augmented Story Selection**.
+   uv run simulation/scripts/golden_baseline.py diff --current tmp/avatar_report.json
 
-### Problem Statement
-Financial professionals are drowning in noise. A hedge fund trader holding AAPL doesn't care about wheat futures. A pension fund with ESG constraints doesn't want tobacco news.
 
-### Solution
-GOFR-IQ combines:
-- **Graph Intelligence**: Portfolio holdings → Document relationships
-- **Semantic Search**: Vector similarity for nuanced relevance
-- **IPS Filtering**: Investment Policy Statements enforce client mandates
-- **Trust Gating**: High-trust sources for conservative clients, rumors for aggressive traders
+## What is in here
 
-### Validation Goals
-1. **Precision**: Client with AAPL position sees AAPL news (not random stocks)
-2. **Propagation**: Client with GTX sees news about QNTM (GTX's supplier)
-3. **Trust Gating**: Pension fund (min_trust=8) filters low-trust rumors
-4. **IPS Enforcement**: ESG-constrained client doesn't see tobacco stories
+Entry points
+- run_avatar_simulation.sh: end-to-end UAT pipeline (reset, ingest, validate). Supports "golden set" injection.
+- run_simulation.sh: thin wrapper around run_simulation.py (creates auth artifacts, loads universe/clients, generates/ingests docs, runs stage gates).
+- reset_simulation_env.sh: soft reset (wipes Neo4j, ChromaDB, storage) without rebuilding containers.
 
----
+Core pipeline
+- run_simulation.py: orchestrates auth setup, source registration, universe/client load, story generation, ingestion, and stage gates.
+- load_simulation_data.py: loads universe + synthetic clients into Neo4j using MCP scripts.
+- generate_synthetic_stories.py: generates LLM-driven stories with ground truth validation metadata.
+- ingest_synthetic_stories.py: ingests story JSONs via manage_document tooling.
 
-## 🏗️ Components
+Validation and analysis
+- validate_avatar_feeds.py: queries MCP avatar feeds (MAINTENANCE + OPPORTUNITY) and asserts invariants.
+- scripts/validate_test_set.py: golden test matrix runner (the most "certain" baseline tests).
+- scripts/extraction_accuracy_report.py: compares expected impacts in generated stories vs what landed in Neo4j.
+- validate_feeds.py: validates classic feed routing behaviors (holdings, supply chain, competitor, macro, trust gating).
+- query_client_feed.py: inspect a client's "classic" feed directly from Neo4j.
 
-### Core Scripts (Orchestrated)
-- **`run_simulation.sh`** - Master orchestrator (auth → universe → stories → ingestion)
-- **`reset_simulation_env.sh`** - Clean slate (wipes Neo4j, ChromaDB, storage)
+Data
+- universe/: deterministic universe topology (tickers, relationships, factors, exposures).
+- client_ips/: example IPS JSON profiles (used by profiler demos).
+- test_output/: cached generated stories (LLM mode).
+- test_data/avatar_test_set.json: deterministic documents for golden set injection.
+- test_data/golden_baseline.json: last saved golden baseline results.
 
-### Generation
-- **`generate_synthetic_stories.py`** - LLM-powered story generation with validation metadata
-- **`generate_client_ips.py`** - Investment Policy Statement generation
 
-### Loading
-- **`ingest_synthetic_stories.py`** - Document ingestion (Neo4j + ChromaDB)
-- **`load_simulation_data.py`** - Consolidated universe + clients loader
-- **`setup_neo4j_constraints.py`** - Schema constraints
+## Prerequisites and assumptions
 
-### Query & Validation
-- **`query_client_feed.py`** - CLI for querying client feeds
-- **`validate_feeds.py`** - Automated validation harness
-- **`client_profiler.py`** - IPS-based filtering & reranking
-- **`demo_ips_filtering.py`** - IPS demo (shows filtering in action)
+- Use Docker service names on gofr-net (no localhost). Examples used here:
+  - Vault: http://gofr-vault:8201
+  - Neo4j: bolt://gofr-neo4j:7687
+  - ChromaDB: gofr-chromadb:8000
 
-### Data
-- **`universe/builder.py`** - Mock universe (16 companies, relationships, factors)
-- **`client_ips/*.json`** - Investment Policy Statements
-- **`test_output/*.json`** - Generated synthetic stories
-- **`tokens.json`** - Cached auth tokens
+- Package/tooling: UV only.
+- Credentials:
+  - The LLM key is expected to be available via the normal GOFR-IQ runtime configuration (Vault-backed by default; env override is supported in some paths).
+  - Simulation creates and writes tokens to simulation/tokens.json. Treat this file as sensitive.
 
----
 
-## 📖 Documentation Index
+## Workflows
 
-### Operational
-- **[OPERATIONAL_GUIDE.md](OPERATIONAL_GUIDE.md)** - Step-by-step SOP for running simulations
-  - Prerequisites, workflows, troubleshooting
-  - Manual vs orchestrated runs
-  - Stage gate validation
+### A) Deterministic baseline tests (golden set)
 
-### Technical
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design & rationale
-  - Universe model (companies, relationships, factors)
-  - Client archetypes & portfolios
-  - IPS architecture (external JSON, filtering logic)
-  - Graph schema & feed intelligence
+Goal: repeatable, high-certainty signal that "valuable docs surface for the right client profiles".
 
-### Testing
-- **[VALIDATION.md](VALIDATION.md)** - Test results & status
-  - Phase completion status
-  - Validation scenarios & pass rates
-  - IPS demo results
-  - Known issues & next steps
+Run:
 
-### Planning (Archive)
-- **[archive/planning/](archive/planning/)** - Historical analysis documents
-  - Gap analysis, enhancement proposals
-  - Useful for understanding evolution
+  ./simulation/run_avatar_simulation.sh --test-set --require-nonempty --min-pass-rate 0.9 --report-json tmp/avatar_report.json --report-md tmp/avatar_report.md
 
----
+Notes
+- The deterministic documents are defined in simulation/test_data/avatar_test_set.json.
+- Data injection bypasses LLM extraction (see simulation/scripts/inject_test_data.py).
+- Validation is performed via MCP tool calls (see simulation/scripts/validate_test_set.py).
 
-## 🎯 Common Operations
+Golden baseline management
+- Save current results as the new golden baseline:
 
-### Reset Environment
-```bash
-./simulation/reset_simulation_env.sh --force
-```
-Wipes Neo4j, ChromaDB, and storage. Use before running new simulation to avoid data contamination.
+  uv run simulation/scripts/golden_baseline.py save --from tmp/avatar_report.json
 
-### Generate Stories Only
-```bash
-uv run simulation/generate_synthetic_stories.py --count 50 --output-dir test_output/
-```
-Generates synthetic stories without ingestion. Useful for reviewing content before loading.
+- Diff current results vs golden:
 
-### Query Client Feed
-```bash
-# Hedge fund (aggressive, min_trust=2)
-./simulation/query_client_feed.py --client client-hedge-fund --limit 20
+  uv run simulation/scripts/golden_baseline.py diff --current tmp/avatar_report.json
 
-# Pension fund (conservative, min_trust=8)
-./simulation/query_client_feed.py --client client-pension-fund --limit 20
 
-# Retail trader (permissive, min_trust=1)
-./simulation/query_client_feed.py --client client-retail --limit 20
-```
+### B) End-to-end realism (LLM generation + ingestion)
 
-### Validate Feed Quality
-```bash
-# Run full validation suite
-./simulation/validate_feeds.py
+Goal: stress the full pipeline (generation, ingestion, extraction, graph wiring, trust gating).
 
-# Validate specific client
-./simulation/validate_feeds.py --client client-hedge-fund
-```
+Run 200 docs:
 
-### Demo IPS Filtering
-```bash
-# Shows how same documents get filtered differently per client
-uv run simulation/demo_ips_filtering.py
-```
+  ./simulation/run_avatar_simulation.sh --count 200 --report-json tmp/avatar_uat.json
 
-### Check Data State
-```bash
-# Count documents
-uv run simulation/check_documents.py
+Run the classic feed validation:
 
-# Check story cache
-uv run simulation/check_cache.py
-```
+  uv run simulation/validate_feeds.py --verbose
 
----
+Extraction accuracy report (expected vs actual in Neo4j):
 
-## 🏛️ Architecture Highlights
+  uv run simulation/scripts/extraction_accuracy_report.py --report-json tmp/extraction_accuracy.json
 
-### Universe Model
-- **16 Companies**: OmniCorp, QuantumTech, BankOne, VelocityMotors, etc.
-- **Relationships**: SUPPLIES_TO, COMPETES_WITH, PARTNER_OF, EXPOSED_TO
-- **Factors**: Interest rates, commodity prices, regulation, consumer sentiment
-- **Clients**: 3 archetypes (hedge fund, pension fund, retail)
 
-### Story Generation
-- **LLM-Powered**: Claude generates realistic financial narratives
-- **Scenario-Based**: Direct holdings, supply chain, competitor, macro, ESG
-- **Validation Metadata**: Each story tagged with expected clients, relationship hops
-- **Caching**: Reuses generated stories to save API costs
+### C) Populate data only (universe + clients + sources, no docs)
 
-### Feed Intelligence
-1. **Graph Traversal**: `(Client)-[:HOLDS]->(Instrument)<-[:AFFECTS]-(Document)`
-2. **Semantic Search**: ChromaDB finds similar content via embeddings
-3. **Trust Filtering**: Filter by source trust level (min_trust from ClientProfile)
-4. **IPS Enforcement**: Sector exclusions, ESG concerns, theme alignment
-5. **Hybrid Scoring**: Combines graph distance + similarity + trust + recency
+Goal: create the universe and client set so you can manually ingest or run partial tests.
 
----
+  ./simulation/run_simulation.sh --validate-only
 
-## 🎓 Learning Path
 
-### New Users
-1. Read [OPERATIONAL_GUIDE.md](OPERATIONAL_GUIDE.md) - Understand workflow
-2. Run `./simulation/run_simulation.sh --count 5` - See it work
-3. Query feeds: `./simulation/query_client_feed.py --client client-hedge-fund`
-4. Review [ARCHITECTURE.md](ARCHITECTURE.md) - Understand the "why"
+## Current state and known gaps
 
-### Developers
-1. Study `universe/builder.py` - Mock universe structure
-2. Review `generate_synthetic_stories.py` - LLM prompting patterns
-3. Trace `query_client_feed.py` - Feed query logic
-4. Read [VALIDATION.md](VALIDATION.md) - Test scenarios
+- Grouping: the simulation currently uses a single group (group-simulation) as the default container for all simulation data.
+  - If you need multi-group testing (cross-group isolation), the extension point is run_simulation.py (discover_simulation_requirements, token minting, and story upload_as_group).
 
-### Traders/Business Users
-1. Run `./simulation/demo_ips_filtering.py` - See IPS in action
-2. Review `client_ips/*.json` - Example Investment Policy Statements
-3. Query different clients - See personalization
-4. Read [ARCHITECTURE.md](ARCHITECTURE.md) "IPS Architecture" section
+- Certainty: prefer the golden set tests for regression confidence. The LLM-driven mode is useful for realism but will always have some nondeterminism.
+
+
+## Docs
+
+- docs/operational_guide.md
+- docs/architecture.md
+- docs/validation.md
+- docs/neo4j_queries.md
+- docs/simulation_enhancement_plan.md
 
 ---
 
