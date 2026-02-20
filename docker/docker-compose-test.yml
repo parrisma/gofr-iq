@@ -35,8 +35,8 @@ services:
   vault:
     <<: *gofr_ports
     image: gofr-iq-vault:latest
-    container_name: gofr-vault-test
-    hostname: gofr-vault-test
+    container_name: gofr-iq-vault-test
+    hostname: gofr-iq-vault-test
     restart: "no"
     cap_add:
       - IPC_LOCK

@@ -220,6 +220,50 @@ if [ -f "${GOFR_PORTS_FILE}" ]; then
     export GOFR_CHROMA_PORT="${GOFR_CHROMA_PORT_TEST:-$((GOFR_CHROMA_PORT + 100))}"
     export GOFR_NEO4J_HTTP_PORT="${GOFR_NEO4J_HTTP_PORT_TEST:-$((GOFR_NEO4J_HTTP_PORT + 100))}"
     export GOFR_NEO4J_BOLT_PORT="${GOFR_NEO4J_BOLT_PORT_TEST:-$((GOFR_NEO4J_BOLT_PORT + 100))}"
+
+    # If another repo's ephemeral stack is running, the default test ports can collide.
+    # Automatically bump ports until they're free.
+    is_port_free() {
+        local port="$1"
+
+        # Docker port publishing can reserve a host port via iptables/userland-proxy
+        # even when no process is listening on the port (so socket bind checks lie).
+        if docker ps --format '{{.Ports}}' | grep -qE "0\.0\.0\.0:${port}->|\[::\]:${port}->"; then
+            return 1
+        fi
+        return 0
+    }
+
+    ensure_free_port() {
+        local var_name="$1"
+        local port="$2"
+        local original="$2"
+        while ! is_port_free "$port"; do
+            port=$((port + 10))
+        done
+        if [ "$port" != "$original" ]; then
+            echo -e "${YELLOW}  Warning:${NC} ${var_name} port ${original} busy; using ${port}"
+        fi
+        export "${var_name}=${port}"
+    }
+
+    ensure_free_port GOFR_VAULT_PORT "${GOFR_VAULT_PORT}"
+    ensure_free_port GOFR_CHROMA_PORT "${GOFR_CHROMA_PORT}"
+    ensure_free_port GOFR_NEO4J_HTTP_PORT "${GOFR_NEO4J_HTTP_PORT}"
+    ensure_free_port GOFR_NEO4J_BOLT_PORT "${GOFR_NEO4J_BOLT_PORT}"
+    ensure_free_port GOFR_IQ_MCP_PORT "${GOFR_IQ_MCP_PORT}"
+    ensure_free_port GOFR_IQ_MCPO_PORT "${GOFR_IQ_MCPO_PORT}"
+    ensure_free_port GOFR_IQ_WEB_PORT "${GOFR_IQ_WEB_PORT}"
+
+    # Ensure downstream helpers that prefer *_PORT_TEST (e.g. docker/manage-infra.sh)
+    # see the final bumped values.
+    export GOFR_VAULT_PORT_TEST="${GOFR_VAULT_PORT}"
+    export GOFR_CHROMA_PORT_TEST="${GOFR_CHROMA_PORT}"
+    export GOFR_NEO4J_HTTP_PORT_TEST="${GOFR_NEO4J_HTTP_PORT}"
+    export GOFR_NEO4J_BOLT_PORT_TEST="${GOFR_NEO4J_BOLT_PORT}"
+    export GOFR_IQ_MCP_PORT_TEST="${GOFR_IQ_MCP_PORT}"
+    export GOFR_IQ_MCPO_PORT_TEST="${GOFR_IQ_MCPO_PORT}"
+    export GOFR_IQ_WEB_PORT_TEST="${GOFR_IQ_WEB_PORT}"
     
     echo "  Port configuration loaded (test mode with +100 offset)"
 else
@@ -277,16 +321,22 @@ else
     fi
 fi
 
+# If we have a key for Vault injection but the env var isn't set, export it so
+# any tests that rely on GOFR_IQ_OPENROUTER_API_KEY being present can run.
+if [ -z "${GOFR_IQ_OPENROUTER_API_KEY:-}" ] && [ -n "${OPENROUTER_KEY_FOR_VAULT}" ]; then
+    export GOFR_IQ_OPENROUTER_API_KEY="${OPENROUTER_KEY_FOR_VAULT}"
+fi
+
 # Vault configuration (tests connect via container network)
 export GOFR_AUTH_BACKEND="vault"
-export GOFR_VAULT_URL="http://gofr-vault-test:8200"
+export GOFR_VAULT_URL="http://gofr-iq-vault-test:8200"
 export GOFR_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
-export VAULT_ADDR="http://gofr-vault-test:8200"
+export VAULT_ADDR="http://gofr-iq-vault-test:8200"
 export VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
 
 # Auth/Vault configuration (Option A: GOFR_IQ_* everywhere)
 export GOFR_IQ_AUTH_BACKEND="vault"
-export GOFR_IQ_VAULT_URL="http://gofr-vault-test:8200"
+export GOFR_IQ_VAULT_URL="http://gofr-iq-vault-test:8200"
 export GOFR_IQ_VAULT_TOKEN="${GOFR_VAULT_DEV_TOKEN}"
 export GOFR_IQ_VAULT_MOUNT_POINT="secret"
 export GOFR_IQ_VAULT_PATH_PREFIX="gofr-test/auth"
@@ -347,7 +397,7 @@ preflight_check() {
     
     echo ""
     echo -e "${BLUE}Infrastructure (will be started by test runner):${NC}"
-    echo "  Vault:    gofr-vault-test:8200"
+    echo "  Vault:    gofr-iq-vault-test:8200"
     echo "  Neo4j:    gofr-iq-neo4j-test:7687"
     echo "  ChromaDB: gofr-iq-chromadb-test:8000"
     echo "  MCP:      localhost:${GOFR_IQ_MCP_PORT}"

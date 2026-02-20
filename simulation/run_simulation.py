@@ -51,18 +51,16 @@ class Config:
 
 def load_env(
     openrouter_key_arg: Optional[str],
-    openrouter_file: Optional[Path],
     env_file: Path,
     secrets_dir: Path,
     ports_file: Path,
 ) -> Config:
     """Load env/secrets and fetch required secrets from Vault.
 
-    Order of precedence:
-    1) CLI args for OpenRouter key
-    2) Existing environment
-    3) Env files (ports, docker/.env)
-    4) Vault fetch for JWT / Neo4j / OpenRouter
+    Order of precedence for OpenRouter key:
+    1) CLI --openrouter-key arg
+    2) Vault (SSOT)
+    3) Environment variable (fallback if Vault unreachable)
     """
 
     def merge_env_file(path: Path):
@@ -144,21 +142,15 @@ def load_env(
         raise RuntimeError("Neo4j password not found in Vault or environment")
     os.environ["GOFR_IQ_NEO4J_PASSWORD"] = neo4j_password
 
-    # OpenRouter key
-    openrouter_api_key = openrouter_key_arg or os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
-    if not openrouter_api_key and openrouter_file and openrouter_file.exists():
-        for line in openrouter_file.read_text().splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if "=" not in line:
-                continue
-            key, value = line.split("=", 1)
-            if key == "GOFR_IQ_OPENROUTER_API_KEY":
-                openrouter_api_key = value
-                break
+    # OpenRouter key - Vault is SSOT; CLI arg overrides, env is last resort
+    openrouter_api_key = openrouter_key_arg
     if not openrouter_api_key:
-        openrouter_api_key = fetch_secret("secret/gofr/config/api-keys/openrouter")
+        try:
+            openrouter_api_key = fetch_secret("secret/gofr/config/api-keys/openrouter")
+        except RuntimeError:
+            openrouter_api_key = os.environ.get("GOFR_IQ_OPENROUTER_API_KEY")
+    if not openrouter_api_key:
+        raise RuntimeError("OpenRouter API key not found in Vault or environment")
     os.environ["GOFR_IQ_OPENROUTER_API_KEY"] = openrouter_api_key
 
     # Infra defaults if missing
@@ -352,49 +344,43 @@ def validate_ingestion(expected_count: int) -> None:
 def init_auth(cfg: Config) -> AuthService:
     vault_config = VaultConfig(url=cfg.vault_addr, token=cfg.vault_token, mount_point="secret")
     client = VaultClient(vault_config)
+    # gofr-common: AuthService now resolves JWT signing secret via JwtSecretProvider.
+    from gofr_common.auth import JwtSecretProvider  # type: ignore[import-not-found]
+
+    provider = JwtSecretProvider(
+        vault_client=client,
+        vault_path="gofr/config/jwt-signing-secret",
+        cache_ttl_seconds=300,
+    )
+
     return AuthService(
         token_store=VaultTokenStore(client),
         group_registry=GroupRegistry(VaultGroupStore(client)),
-        secret_key=cfg.jwt_secret,
+        secret_provider=provider,
+        env_prefix="GOFR_IQ",
+        audience="gofr-api",
     )
 
 
 def ensure_groups(auth: AuthService, groups: List[str]):
+    """Ensure groups exist and are active.
+
+    Use the Vault-backed GroupRegistry directly (via AuthService) so this
+    script remains self-contained and does not depend on external CLI tools
+    or pre-existing bootstrap tokens.
     """
-    Ensure groups exist and are active using auth_manager.sh.
-    Restores defunct groups if needed.
-    """
-    import os
-    import subprocess
-    
-    # Get admin token from environment
-    admin_token = os.environ.get("ADMIN_TOKEN")
-    if not admin_token:
-        # Try to load from bootstrap tokens
-        bootstrap = load_bootstrap_tokens_from_file()
-        if bootstrap:
-            admin_token = bootstrap.get("admin")
-    
-    if not admin_token:
-        raise RuntimeError("Cannot ensure groups: ADMIN_TOKEN not found")
-    
     for name in groups:
-        # Use auth_manager.sh to create/restore group
-        # auth_manager.sh will restore if defunct, create if missing, or report if active
-        # All cases are success for our purposes
-        subprocess.run(
-            [
-                "./lib/gofr-common/scripts/auth_manager.sh",
-                "--docker",
-                "groups",
-                "create",
-                name,
-                "--description",
-                f"Synthetic group {name}",
-            ],
-            capture_output=True,
-            text=True,
-        )
+        existing = auth.groups.get_group_by_name(name)
+        if existing is None:
+            auth.groups.create_group(name=name, description=f"Synthetic group {name}")
+            continue
+
+        if not existing.is_active:
+            # Reactivate defunct group (GroupRegistry does not expose a public
+            # "restore" method; update the backing store directly).
+            existing.is_active = True
+            existing.defunct_at = None
+            auth.groups._store.put(str(existing.id), existing)  # type: ignore[attr-defined]
 
 
 def verify_groups(auth: AuthService, groups: List[str]):
@@ -752,13 +738,7 @@ def main():
     parser.add_argument("--init-tokens-only", action="store_true", help="Create/verify tokens (and groups) then stop")
     parser.add_argument("--mint-tokens", action="store_true", help="Mint fresh tokens for all groups (admin/public remain bootstrap tokens)")
     parser.add_argument("--model", type=str, default=None, help="LLM model name for story generation (default: $GOFR_IQ_LLM_MODEL or config default)")
-    parser.add_argument("--openrouter-key", type=str, help="OpenRouter API key (overrides env/file)")
-    parser.add_argument(
-        "--openrouter-key-file",
-        type=Path,
-        default=Path("simulation/.env.openrouter"),
-        help="Path to temp env file containing GOFR_IQ_OPENROUTER_API_KEY",
-    )
+    parser.add_argument("--openrouter-key", type=str, help="OpenRouter API key (overrides Vault)")
     parser.add_argument("--env-file", type=Path, default=Path("docker/.env"), help="Path to docker env file (default: docker/.env)")
     parser.add_argument("--secrets-dir", type=Path, default=Path("secrets"), help="Path to secrets directory (default: secrets/)")
     parser.add_argument("--ports-file", type=Path, default=Path("lib/gofr-common/config/gofr_ports.env"), help="Path to ports env file")
@@ -785,7 +765,6 @@ def main():
 
     cfg = load_env(
         args.openrouter_key,
-        args.openrouter_key_file,
         env_path,
         secrets_dir,
         ports_path,
@@ -816,12 +795,25 @@ def main():
         print("Groups created and verified; exiting (--init-groups-only)")
         return
 
-    bootstrap_tokens = load_bootstrap_tokens(cfg)
+    # Mint fresh tokens for this run.
+    # Important: admin-only MCP tools require tokens that can be validated via
+    # the backing token store (require_store=True). Some historical bootstrap
+    # tokens may not exist in the store, so we mint a fresh admin/public token
+    # each run and persist them in Vault.
+    import time
 
-    # Mint fresh tokens for simulation groups only
-    # Admin/public come from bootstrap (long-lived)
     tokens = mint_tokens(auth, required_groups)
-    tokens.update(bootstrap_tokens)  # Add admin and public from bootstrap
+    run_id = int(time.time() * 1000) % 100000
+    tokens["admin"] = auth.create_token(
+        groups=["admin"],
+        expires_in_seconds=TOKEN_TTL_SECONDS,
+        name=f"sim-admin-{run_id}",
+    )
+    tokens["public"] = auth.create_token(
+        groups=["public"],
+        expires_in_seconds=TOKEN_TTL_SECONDS,
+        name=f"sim-public-{run_id}",
+    )
 
     verify_tokens(tokens, required_groups + ["admin", "public"])
     

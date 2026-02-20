@@ -1279,7 +1279,7 @@ class TestTopClientNewsBaseline:
         "affected_instruments",
         "relevance_score",
         "reasons",
-        "why_it_matters",
+        "why_it_matters_base",
     }
 
     # -- helpers --
@@ -1391,9 +1391,6 @@ class TestTopClientNewsBaseline:
             patch.object(service, "_expand_lateral_tickers", return_value={
                 "competitors": [], "suppliers": [], "peers": [],
             }),
-            patch.object(service, "query", return_value=QueryResponse(
-                results=[], total_found=0, query="",
-            )),
         ):
             results = service.get_top_client_news(
                 client_guid="client-baseline-001",
@@ -1426,7 +1423,7 @@ class TestTopClientNewsBaseline:
     # ==================================================================
     # Test 2 — Holdings outrank semantic-only matches
     # ==================================================================
-    def test_top_client_news_holdings_outrank_semantic(
+    def test_top_client_news_holdings_outrank_watchlist(
         self,
         embedding_index_test: EmbeddingIndex,
         document_store: DocumentStore,
@@ -1434,7 +1431,7 @@ class TestTopClientNewsBaseline:
         mock_graph,
     ) -> None:
         """A document matching a direct holding must score higher than a
-        document found only via semantic similarity (all else being equal).
+        watchlist match (all else being equal).
         """
         from unittest.mock import patch
         from datetime import timedelta
@@ -1459,19 +1456,14 @@ class TestTopClientNewsBaseline:
             "affected_instruments": ["TSM"],
         }
 
-        # Semantic-only doc — no ticker overlap, found only via embedding similarity
-        semantic_result = QueryResult(
-            document_guid="doc-semantic-only-001",
-            title="Global Chip Demand Outlook",
-            content_snippet="Industry-wide semiconductor forecast...",
-            score=0.0,
-            similarity_score=0.92,  # high semantic score
-            source_guid="src-001",
-            source_name="Bloomberg",
-            language="en",
-            created_at=now - timedelta(hours=1),
-            metadata={"impact_score": 70, "impact_tier": "GOLD", "companies": []},
-        )
+        watchlist_doc = {
+            "document_guid": "doc-watch-rank-001",
+            "title": "Sector Peer Update",
+            "created_at": (now - timedelta(hours=1)).isoformat(),
+            "impact_score": 70,
+            "impact_tier": "GOLD",
+            "affected_instruments": ["005930.KS"],
+        }
 
         service = self._make_service(
             embedding_index_test, document_store, source_registry, mock_graph,
@@ -1483,17 +1475,15 @@ class TestTopClientNewsBaseline:
             patch.object(service, "_get_client_holdings", return_value=[
                 {"ticker": "TSM", "weight": 0.20},
             ]),
-            patch.object(service, "_get_client_watchlist", return_value=[]),
+            patch.object(service, "_get_client_watchlist", return_value=["005930.KS"]),
             patch.object(service, "_get_client_exclusions", return_value={"companies": [], "sectors": []}),
-            patch.object(service, "_get_documents_for_tickers", return_value=[holdings_doc]),
+            patch.object(service, "_get_documents_for_tickers", side_effect=[
+                [holdings_doc],
+                [watchlist_doc],
+            ]),
             patch.object(service, "_expand_lateral_tickers", return_value={
                 "competitors": [], "suppliers": [], "peers": [],
             }),
-            patch.object(service, "query", return_value=QueryResponse(
-                results=[semantic_result],
-                total_found=1,
-                query="",
-            )),
         ):
             results = service.get_top_client_news(
                 client_guid="client-baseline-001",
@@ -1505,20 +1495,20 @@ class TestTopClientNewsBaseline:
         # Both documents should appear
         guids = [r["document_guid"] for r in results]
         assert "doc-hold-rank-001" in guids, "Holdings doc must appear in results"
-        assert "doc-semantic-only-001" in guids, "Semantic-only doc must appear in results"
+        assert "doc-watch-rank-001" in guids, "Watchlist doc must appear in results"
 
         # Holdings doc must rank higher
         hold_item = next(r for r in results if r["document_guid"] == "doc-hold-rank-001")
-        sem_item = next(r for r in results if r["document_guid"] == "doc-semantic-only-001")
-        assert hold_item["relevance_score"] > sem_item["relevance_score"], (
+        watch_item = next(r for r in results if r["document_guid"] == "doc-watch-rank-001")
+        assert hold_item["relevance_score"] > watch_item["relevance_score"], (
             f"Holdings doc ({hold_item['relevance_score']:.3f}) must outrank "
-            f"semantic-only doc ({sem_item['relevance_score']:.3f})"
+            f"watchlist doc ({watch_item['relevance_score']:.3f})"
         )
 
         # Holdings doc must have DIRECT_HOLDING reason
         assert "DIRECT_HOLDING" in hold_item["reasons"]
-        # Semantic-only doc must NOT have DIRECT_HOLDING reason
-        assert "DIRECT_HOLDING" not in sem_item["reasons"]
+        # Watchlist doc must NOT have DIRECT_HOLDING reason
+        assert "DIRECT_HOLDING" not in watch_item["reasons"]
 
 
 # =============================================================================
