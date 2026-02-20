@@ -233,7 +233,7 @@ if [ "$BUILD_IMAGES" = true ]; then
         log_error "Missing build orchestrator: $DOCKER_DIR/build-all.sh"
         exit 1
     fi
-    "$DOCKER_DIR/build-all.sh" --prod
+    "$DOCKER_DIR/build-all.sh" --prod --force
     log_success "Images built"
 elif ! docker image inspect gofr-iq-prod:latest >/dev/null 2>&1; then
     log_warn "Production image not found, building..."

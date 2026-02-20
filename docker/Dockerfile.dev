@@ -46,8 +46,9 @@ RUN mkdir -p /home/gofr/devroot/gofr-iq/data \
     && mkdir -p /home/gofr/devroot/gofr-common \
     && chown -R gofr:gofr /home/gofr/devroot
 
-# Copy entrypoint
-COPY --chmod=755 docker/entrypoint-dev.sh /entrypoint.sh
+# Copy entrypoint (avoid BuildKit-only COPY --chmod)
+COPY docker/entrypoint-dev.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
 WORKDIR /home/gofr/devroot/gofr-iq
 
