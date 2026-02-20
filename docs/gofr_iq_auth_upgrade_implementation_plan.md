@@ -333,6 +333,13 @@ Known pitfalls to watch:
 - Vault path prefix not `gofr/auth` (auth island).
 - JWT audience mismatch (`aud` must be `gofr-api`).
 
+Status: DONE.
+Verification results:
+- Full test suite: 893 passed, 1 skipped (Step 8).
+- Prod run: `env -u GOFR_IQ_JWT_SECRET -u GOFR_JWT_SECRET ./scripts/start-prod.sh --build` completed with zero manual steps; all containers healthy (MCP, MCPO, Web, Neo4j, ChromaDB).
+- Entrypoint copy-and-chown pattern aligned to gofr-doc: start as root, copy creds from staging mount, chown to app user, drop privileges via `exec su`.
+- All known pitfalls resolved (env prefix, vault_creds mount, path prefix, JWT audience).
+
 ## 11. Move LLM API key to Vault (core secret) + dev/test injection
 
 Goal: stop passing the LLM API key (OpenRouter) via env vars in prod. Read it from Vault by default using the same runtime pattern as `JwtSecretProvider`. For dev/test, keep the real key in a gitignored file and inject it into the ephemeral test Vault for each test cycle.
