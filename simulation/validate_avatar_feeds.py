@@ -208,27 +208,40 @@ def _parse_lambdas(raw: str) -> list[float]:
 
 
 @dataclass
-class Phase3Case:
+class CalibrationCase:
+    """A synthetic calibration case (Phase3 or Phase4) for bias sweep validation."""
     scenario: str
     base_ticker: str
     title: str
     expected_clients: list[str]
 
 
-def _load_phase3_cases() -> list[Phase3Case]:
-    """Load Phase 3 stress-test cases from simulation/test_output.
+# Backward compat alias
+Phase3Case = CalibrationCase
+
+# Phase4 negative-control scenario names (suppression tests, not Recall@3)
+_PHASE4_NEGATIVE_SCENARIOS = {
+    "Phase4 N1 Generic Sector Chatter",
+    "Phase4 N2 Wrong Theme Strong Headline",
+}
+
+
+def _load_calibration_cases(
+    prefix: str,
+    excluded_scenarios: set[str] | None = None,
+) -> list[CalibrationCase]:
+    """Load calibration cases from simulation/test_output matching *prefix*.
 
     Bias sweep validation matches by title (not GUID), so cases must have
-    deterministic unique titles.
+    deterministic unique titles.  Only the most recent file per scenario is
+    used so that Recall@3 is comparable run-to-run.
     """
     out_dir = PROJECT_ROOT / "simulation" / "test_output"
     if not out_dir.exists():
         return []
 
-    # Only evaluate the most recent file for each Phase3 scenario.
-    # This avoids older simulation runs inflating the case count and
-    # makes Recall@3 comparable run-to-run.
-    latest_by_scenario: dict[str, Phase3Case] = {}
+    excluded = excluded_scenarios or set()
+    latest_by_scenario: dict[str, CalibrationCase] = {}
     for path in sorted(out_dir.glob("synthetic_*.json"), reverse=True):
         try:
             data = json.loads(path.read_text())
@@ -237,11 +250,10 @@ def _load_phase3_cases() -> list[Phase3Case]:
 
         meta = data.get("validation_metadata") or {}
         scenario = meta.get("scenario")
-        if not (isinstance(scenario, str) and scenario.startswith("Phase3")):
+        if not (isinstance(scenario, str) and scenario.startswith(prefix)):
             continue
 
-        # Scenario D is "noise"; it is expected to be suppressed, not recalled.
-        if scenario.startswith("Phase3 D"):
+        if scenario in excluded:
             continue
 
         if scenario in latest_by_scenario:
@@ -250,7 +262,6 @@ def _load_phase3_cases() -> list[Phase3Case]:
         title = data.get("title")
         if not isinstance(title, str) or not title:
             continue
-
         title = title.strip()
         if not title:
             continue
@@ -266,16 +277,33 @@ def _load_phase3_cases() -> list[Phase3Case]:
         if not base_ticker:
             continue
 
-        case = Phase3Case(
+        case = CalibrationCase(
             scenario=scenario,
             base_ticker=base_ticker,
             title=title,
             expected_clients=[c for c in expected if isinstance(c, str) and c],
         )
-
         latest_by_scenario[scenario] = case
 
     return list(latest_by_scenario.values())
+
+
+def _load_phase3_cases() -> list[CalibrationCase]:
+    """Load Phase 3 cases, excluding noise (Phase3 D)."""
+    return _load_calibration_cases(
+        "Phase3",
+        excluded_scenarios={"Phase3 D Noise Generic Sector Chatter"},
+    )
+
+
+def _load_phase4_cases() -> list[CalibrationCase]:
+    """Load Phase 4 cases, excluding negative controls from Recall@3."""
+    return _load_calibration_cases("Phase4", excluded_scenarios=_PHASE4_NEGATIVE_SCENARIOS)
+
+
+def _load_phase4_negative_cases() -> list[CalibrationCase]:
+    """Load Phase 4 negative control cases for suppression testing."""
+    return _load_calibration_cases("Phase4 N")
 
 
 def _top_unique_titles(articles: list[dict[str, Any]], n: int = 3) -> list[str]:
@@ -296,6 +324,61 @@ def _top_unique_titles(articles: list[dict[str, Any]], n: int = 3) -> list[str]:
         if len(out) >= n:
             break
     return out
+
+
+def _compute_recall_at_k(
+    cases: list[CalibrationCase],
+    per_client: dict[str, list[dict[str, Any]]],
+    live_guid_set: set[str],
+    mock_guid_to_live_guid: dict[str, str],
+    name_to_guid: dict[str, str],
+    k: int = 3,
+) -> tuple[int, int]:
+    """Compute Recall@K for a set of calibration cases.
+
+    Returns (hits, total_pairs).
+    """
+    total_pairs = 0
+    hits = 0
+    for case in cases:
+        for expected_id in case.expected_clients:
+            live_guid: str | None = None
+            if expected_id in live_guid_set:
+                live_guid = expected_id
+            elif expected_id in mock_guid_to_live_guid:
+                live_guid = mock_guid_to_live_guid[expected_id]
+            elif expected_id in name_to_guid:
+                live_guid = name_to_guid[expected_id]
+            if not live_guid:
+                continue
+            total_pairs += 1
+            articles = per_client.get(live_guid, [])
+            titles = _top_unique_titles(articles, n=k)
+            prefix = f"[{case.scenario}] {case.base_ticker}"
+            if any(t.startswith(prefix) for t in titles):
+                hits += 1
+    return hits, total_pairs
+
+
+def _compute_suppression_rate(
+    negative_cases: list[CalibrationCase],
+    per_client: dict[str, list[dict[str, Any]]],
+    k: int = 3,
+) -> tuple[int, int]:
+    """Count how many (case, client) pairs correctly suppress the negative case.
+
+    Returns (suppressed_count, total_pairs).
+    """
+    total = 0
+    false_positives = 0
+    for case in negative_cases:
+        for live_guid, articles in per_client.items():
+            total += 1
+            titles = _top_unique_titles(articles, n=k)
+            prefix = f"[{case.scenario}] {case.base_ticker}"
+            if any(t.startswith(prefix) for t in titles):
+                false_positives += 1
+    return total - false_positives, total
 
 
 # ---------------------------------------------------------------------------
@@ -546,14 +629,17 @@ def main():
             sys.exit(1)
 
         phase3_cases = _load_phase3_cases()
-        if not phase3_cases:
-            print("❌ No Phase3 synthetic cases found in simulation/test_output")
-            print("   Generate + ingest Phase3 stories, then rerun with --bias-sweep")
+        phase4_cases = _load_phase4_cases()
+        phase4_neg_cases = _load_phase4_negative_cases()
+
+        if not phase3_cases and not phase4_cases:
+            print("No Phase3 or Phase4 synthetic cases found in simulation/test_output")
+            print("   Generate + ingest calibration stories, then rerun with --bias-sweep")
             sys.exit(1)
 
         live_guid_set = {c.get("client_guid") for c in live_clients if c.get("client_guid")}
 
-        # Phase3 synthetic cases encode expected clients using the stable mock GUIDs
+        # Calibration cases encode expected clients using the stable mock GUIDs
         # from simulation/generate_synthetic_clients.py. Map those to live MCP GUIDs
         # via client name, and also accept raw live GUIDs or client names.
         mock_guid_to_live_guid: dict[str, str] = {}
@@ -571,9 +657,10 @@ def main():
             if live_guid:
                 live_guid_to_positions[live_guid] = set(_get_client_position_tickers(mock_client))
 
-        print("\nPhase 3 bias sweep: get_top_client_news")
+        print("\nBias sweep: get_top_client_news")
         print(f"  lambdas={lambdas}")
         print(f"  phase3_cases={len(phase3_cases)}")
+        print(f"  phase4_cases={len(phase4_cases)} (+ {len(phase4_neg_cases)} negative controls)")
 
         for lam in lambdas:
             per_client: dict[str, list[dict[str, Any]]] = {}
@@ -614,35 +701,41 @@ def main():
         for lam in lambdas:
             per_client = sweep_results.get(lam, {})
 
-            # Recall@3: intended stress-test story present in Top 3
-            total_pairs = 0
-            hits = 0
-            for case in phase3_cases:
-                for expected_id in case.expected_clients:
-                    live_guid: str | None = None
+            # Phase3 Recall@3
+            p3_hits, p3_total = _compute_recall_at_k(
+                phase3_cases, per_client, live_guid_set,
+                mock_guid_to_live_guid, name_to_guid,
+            ) if phase3_cases else (0, 0)
+            p3_recall = (p3_hits / p3_total) if p3_total else 0.0
 
-                    # 1) already a live GUID
-                    if expected_id in live_guid_set:
-                        live_guid = expected_id
-                    # 2) stable mock GUID
-                    elif expected_id in mock_guid_to_live_guid:
-                        live_guid = mock_guid_to_live_guid[expected_id]
-                    # 3) client name
-                    elif expected_id in name_to_guid:
-                        live_guid = name_to_guid[expected_id]
+            # Phase4 Recall@3 (mandate needles + relationship hops)
+            p4_hits, p4_total = _compute_recall_at_k(
+                phase4_cases, per_client, live_guid_set,
+                mock_guid_to_live_guid, name_to_guid,
+            ) if phase4_cases else (0, 0)
+            p4_recall = (p4_hits / p4_total) if p4_total else 0.0
 
-                    if not live_guid:
-                        continue
+            # Phase4 sub-groups
+            p4m_cases = [c for c in phase4_cases if " M" in c.scenario]
+            p4r_cases = [c for c in phase4_cases if " R" in c.scenario]
 
-                    total_pairs += 1
-                    articles = per_client.get(live_guid, [])
-                    titles = _top_unique_titles(articles, n=3)
-                    # Match by Phase3 scenario prefix + base ticker, since company name
-                    # variations across runs can change the title suffix.
-                    prefix = f"[{case.scenario}] {case.base_ticker}"
-                    if any(t.startswith(prefix) for t in titles):
-                        hits += 1
-            recall_at_3 = (hits / total_pairs) if total_pairs else 0.0
+            p4m_hits, p4m_total = _compute_recall_at_k(
+                p4m_cases, per_client, live_guid_set,
+                mock_guid_to_live_guid, name_to_guid,
+            ) if p4m_cases else (0, 0)
+            p4m_recall = (p4m_hits / p4m_total) if p4m_total else 0.0
+
+            p4r_hits, p4r_total = _compute_recall_at_k(
+                p4r_cases, per_client, live_guid_set,
+                mock_guid_to_live_guid, name_to_guid,
+            ) if p4r_cases else (0, 0)
+            p4r_recall = (p4r_hits / p4r_total) if p4r_total else 0.0
+
+            # Phase4 negative control suppression
+            neg_suppressed, neg_total = _compute_suppression_rate(
+                phase4_neg_cases, per_client,
+            ) if phase4_neg_cases else (0, 0)
+            neg_rate = (neg_suppressed / neg_total) if neg_total else 1.0
 
             # Alpha score: proportion of Top 3 with no overlap with positions
             alpha_n = 0
@@ -663,7 +756,14 @@ def main():
 
             print("\nBias sweep metrics")
             print(f"  lambda={lam:.2f}")
-            print(f"  Recall@3={recall_at_3:.3f} ({hits}/{total_pairs})")
+            if phase3_cases:
+                print(f"  Phase3 Recall@3={p3_recall:.3f} ({p3_hits}/{p3_total})")
+            if phase4_cases:
+                print(f"  Phase4 Recall@3={p4_recall:.3f} ({p4_hits}/{p4_total})")
+                print(f"    Mandate needles={p4m_recall:.3f} ({p4m_hits}/{p4m_total})")
+                print(f"    Relationship hops={p4r_recall:.3f} ({p4r_hits}/{p4r_total})")
+            if phase4_neg_cases:
+                print(f"  Phase4 Suppression={neg_rate:.3f} ({neg_suppressed}/{neg_total})")
             print(f"  AlphaScore={alpha_score:.3f} ({alpha_n}/{alpha_total})")
 
         sys.exit(0)

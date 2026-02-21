@@ -148,14 +148,35 @@ CLIENT_PORTFOLIOS = {
         "OMNI",
         "SHOPM",
         "TRUCK",
-    ],  # Teachers Retirement (Pension)
-    "550e8400-e29b-41d4-a716-446655440003": ["VELO", "BLK"],  # DiamondHands420 (Retail)
+    ],  # Nebula Retirement Fund (Pension)
+    "550e8400-e29b-41d4-a716-446655440003": [
+        "VELO",
+        "BLK",
+    ],  # DiamondHands420 (Retail)
+    "550e8400-e29b-41d4-a716-446655440004": [
+        "ECO",
+        "STR",
+        "SHOPM",
+    ],  # Green Horizon Capital (ESG)
+    "550e8400-e29b-41d4-a716-446655440005": [
+        "QNTM",
+        "SHOPM",
+        "GTX",
+    ],  # Sunrise Long Opportunities (Long Bias)
+    "550e8400-e29b-41d4-a716-446655440006": [
+        "BANKO",
+        "OMNI",
+        "TRUCK",
+    ],  # Ironclad Short Strategies (Short Bias)
 }
 
 CLIENT_WATCHLISTS = {
-    "client-hedge-fund": ["NXS", "FIN"],
-    "client-pension-fund": ["ECO", "STR"],
-    "client-retail": ["QNTM", "LUXE"],
+    "550e8400-e29b-41d4-a716-446655440001": ["NXS", "FIN"],
+    "550e8400-e29b-41d4-a716-446655440002": ["ECO", "STR"],
+    "550e8400-e29b-41d4-a716-446655440003": ["QNTM", "LUXE"],
+    "550e8400-e29b-41d4-a716-446655440004": ["OMNI", "TRUCK"],
+    "550e8400-e29b-41d4-a716-446655440005": ["VIT", "ECO"],
+    "550e8400-e29b-41d4-a716-446655440006": ["FIN", "STR"],
 }
 
 SCENARIOS = [
@@ -412,6 +433,267 @@ SCENARIOS = [
             expected_feed_rank_range="16+",
         ),
     ),
+
+    # =====================================================================
+    # Phase 4 Calibration Scenarios (mandate needles, relationship hops,
+    # negative controls).  weight=0.0 -> never randomly selected.
+    # =====================================================================
+
+    # --- Group A: Mandate-targeted non-holding needles ---
+    Scenario(
+        name="Phase4 M1 AI Compute Supply Chain",
+        description="AI compute demand creating semiconductor fab bottlenecks (mandate: ai/semiconductor)",
+        target_tier="GOLD",
+        weight=0.0,
+        template=(
+            "News Event: AI Compute Supply Chain. Subject: {ticker} ({name}). "
+            "Theme: AI hardware and semiconductor supply chain. Style Guide: {style_guide}.\n"
+            "Task: Write a breaking story about surging AI compute demand creating semiconductor "
+            "fabrication bottlenecks. {name} has emerged as a key player requiring massive GPU "
+            "clusters for AI-driven research. Focus on semiconductor shortage implications and "
+            "data-center buildout pressure."
+        ),
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="MACRO_DATA",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440001"],
+            relationship_hops=0,
+            expected_feed_rank_range="1-10",
+        ),
+    ),
+    Scenario(
+        name="Phase4 M2 Rates Shock Inflation Print",
+        description="Rate hike / inflation print impacting real-asset valuations (mandate: commodities/rates)",
+        target_tier="GOLD",
+        weight=0.0,
+        template=(
+            "News Event: Rates Shock / Inflation Print. Subject: {ticker} ({name}). "
+            "Theme: Interest rates, inflation, and macro impact. Style Guide: {style_guide}.\n"
+            "Task: Write a breaking story about a surprise central bank rate decision or "
+            "inflation print directly impacting {name}. Frame around rising rates, yield curve "
+            "dynamics, and specific impact on real-asset and commodity-linked valuations."
+        ),
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="MACRO_DATA",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440002"],
+            relationship_hops=0,
+            expected_feed_rank_range="1-10",
+        ),
+    ),
+    Scenario(
+        name="Phase4 M3 Crypto Protocol Exploit",
+        description="Blockchain protocol exploit / regulatory headline (mandate: blockchain/ev_battery)",
+        target_tier="GOLD",
+        weight=0.0,
+        template=(
+            "News Event: Crypto Protocol Exploit / Regulatory. Subject: {ticker} ({name}). "
+            "Theme: Blockchain and cryptocurrency. Style Guide: {style_guide}.\n"
+            "Task: Write a breaking story about a major crypto protocol exploit or regulatory "
+            "crackdown reshaping the blockchain landscape and {name}'s competitive position. "
+            "Focus on DeFi security, protocol vulnerabilities, and regulatory response."
+        ),
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="LEGAL_RULING",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440003"],
+            relationship_hops=0,
+            expected_feed_rank_range="1-10",
+        ),
+    ),
+    Scenario(
+        name="Phase4 M4 Energy Transition Policy",
+        description="Policy catalyst for energy transition / clean transport (mandate: esg/energy_transition)",
+        target_tier="GOLD",
+        weight=0.0,
+        template=(
+            "News Event: Energy Transition Policy Catalyst. Subject: {ticker} ({name}). "
+            "Theme: ESG and energy transition policy. Style Guide: {style_guide}.\n"
+            "Task: Write a story about a major policy decision (subsidy, carbon tax, or "
+            "regulation) driving energy transition. Explain the specific impact on {name}'s "
+            "clean energy or sustainable transport strategy. Frame through ESG and climate "
+            "policy lenses."
+        ),
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="LEGAL_RULING",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440004"],
+            relationship_hops=0,
+            expected_feed_rank_range="1-10",
+        ),
+    ),
+    Scenario(
+        name="Phase4 M5 Cloud Pricing SaaS Shift",
+        description="Cloud pricing / SaaS demand shift (mandate: cloud/consumer)",
+        target_tier="GOLD",
+        weight=0.0,
+        template=(
+            "News Event: Cloud Pricing / SaaS Demand Shift. Subject: {ticker} ({name}). "
+            "Theme: Cloud infrastructure and consumer digital transformation. "
+            "Style Guide: {style_guide}.\n"
+            "Task: Write a story about a significant cloud pricing shift or SaaS demand wave "
+            "impacting {name}'s digital commerce strategy. Focus on cloud adoption, e-commerce "
+            "growth, and consumer technology themes."
+        ),
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="MACRO_DATA",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440005"],
+            relationship_hops=0,
+            expected_feed_rank_range="1-10",
+        ),
+    ),
+    Scenario(
+        name="Phase4 M6 Credit Downgrade Geopolitical",
+        description="Credit downgrade amid geopolitical risk (mandate: credit/geopolitical)",
+        target_tier="GOLD",
+        weight=0.0,
+        template=(
+            "News Event: Credit Downgrade / Geopolitical Shock. Subject: {ticker} ({name}). "
+            "Theme: Credit deterioration and geopolitical risk. Style Guide: {style_guide}.\n"
+            "Task: Write a story about a credit downgrade or geopolitical event creating "
+            "downside risk for {name}. Focus on credit market stress, leverage concerns, and "
+            "policy tightening. Frame as a risk catalyst for short-biased strategies."
+        ),
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="MACRO_DATA",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440006"],
+            relationship_hops=0,
+            expected_feed_rank_range="1-10",
+        ),
+    ),
+
+    # --- Group B: Relationship-hop calibration ---
+    Scenario(
+        name="Phase4 R1 Supplier Disruption 1Hop",
+        description="EcoPower battery disruption impacting Velocity Motors (1-hop partner)",
+        target_tier="GOLD",
+        weight=0.0,
+        template=(
+            "News Event: Supplier Disruption. Primary Subject: {related_ticker} ({related_name}). "
+            "Impacted: {ticker} ({name}). Relationship: {relationship_desc}. "
+            "Style Guide: {style_guide}.\n"
+            "Task: Write about a critical supply disruption at {related_name} that directly "
+            "threatens {name}'s operations because {relationship_desc}. The headline should "
+            "focus on {related_name}, but the body must explain the downstream impact on {name}."
+        ),
+        validation=ValidationRule(
+            min_score=70,
+            expected_tier="GOLD",
+            expected_event="SUPPLY_CHAIN",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440003"],
+            relationship_hops=1,
+            expected_feed_rank_range="6-15",
+        ),
+    ),
+    Scenario(
+        name="Phase4 R2 Competitor Recall 2Hop",
+        description="GeneSys product recall benefiting Vitality Pharma (2-hop competitor)",
+        target_tier="SILVER",
+        weight=0.0,
+        template=(
+            "News Event: Competitor Product Recall. Subject: {related_ticker} ({related_name}). "
+            "Beneficiary: {ticker} ({name}). Relationship: {relationship_desc}. "
+            "Style Guide: {style_guide}.\n"
+            "Task: Write about {related_name}'s major product recall or clinical trial failure. "
+            "Explain how {name}, their direct competitor, stands to gain market share and "
+            "investor confidence. Focus on the competitive dynamics."
+        ),
+        validation=ValidationRule(
+            min_score=50,
+            max_score=74,
+            expected_tier="SILVER",
+            expected_event="PRODUCT_RECALL",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440001"],
+            relationship_hops=2,
+            expected_feed_rank_range="6-15",
+        ),
+    ),
+    Scenario(
+        name="Phase4 R3 Systemic Multi-Ticker Shock",
+        description="Systemic logistics crisis affecting OMNI, SHOPM, TRUCK (multi-holding)",
+        target_tier="PLATINUM",
+        weight=0.0,
+        template=(
+            "News Event: Systemic Supply Chain Crisis. "
+            "Affected: {affected_tickers_csv}. Style Guide: {style_guide}.\n"
+            "Task: Write about a systemic logistics and supply chain crisis affecting all of: "
+            "{affected_tickers_csv}. Mention each ticker explicitly with specific impact "
+            "details. Frame as a broad macro shock with cascading consequences."
+        ),
+        validation=ValidationRule(
+            min_score=90,
+            expected_tier="PLATINUM",
+            expected_event="MACRO_DATA",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440002"],
+            relationship_hops=1,
+            expected_feed_rank_range="1-5",
+        ),
+    ),
+
+    # --- Group C: Negative controls ---
+    Scenario(
+        name="Phase4 N1 Generic Sector Chatter",
+        description="Generic noise that should not rank for any client",
+        target_tier="STANDARD",
+        weight=0.0,
+        template=(
+            "News Event: Generic Sector Chatter. Subject: {ticker} ({name}). "
+            "Style Guide: {style_guide}.\n"
+            "Task: Write a vague, low-signal sector roundup mentioning {name}. No concrete "
+            "catalyst, no specific numbers, and no actionable facts. It should read like "
+            "background noise."
+        ),
+        validation=ValidationRule(
+            max_score=35,
+            expected_tier="STANDARD",
+            expected_event="OTHER",
+            must_match_event=False,
+            expected_relevant_clients=[],
+            relationship_hops=0,
+            expected_feed_rank_range="16+",
+        ),
+    ),
+    Scenario(
+        name="Phase4 N2 Wrong Theme Strong Headline",
+        description="Strong headline with off-mandate theme (false positive guard)",
+        target_tier="SILVER",
+        weight=0.0,
+        template=(
+            "News Event: Agricultural Policy Impact. Subject: {ticker} ({name}). "
+            "Style Guide: {style_guide}.\n"
+            "Task: Write a strong, attention-grabbing headline and story about agricultural "
+            "subsidies, crop yields, and farming policy changes. Mention {name} only briefly "
+            "in passing context. The story must be primarily about agriculture and food "
+            "production, not matching any financial technology, energy, blockchain, or "
+            "defense themes."
+        ),
+        validation=ValidationRule(
+            max_score=49,
+            expected_tier="STANDARD",
+            expected_event="OTHER",
+            must_match_event=False,
+            expected_relevant_clients=[],
+            relationship_hops=0,
+            expected_feed_rank_range="16+",
+        ),
+    ),
 ]
 
 # ============================================================================
@@ -566,10 +848,13 @@ class SyntheticGenerator:
         def _generate_one(i: int):
             scenario = _scenario_for_index(i)
 
-            # Phase 3: steer scenario selection toward deterministic tickers so
-            # bias-sweep validation can reliably match titles.
+            # Phase 3 / Phase 4: steer scenario selection toward deterministic
+            # tickers so bias-sweep validation can reliably match titles.
             forced_ticker_sym: str | None = None
             forced_affected_tickers: list[str] | None = None
+            forced_related_ticker_sym: str | None = None
+            forced_relationship_desc: str | None = None
+
             if scenario.name == "Phase3 A Defense Tail Holding Failure":
                 forced_ticker_sym = "NXS"
             elif scenario.name == "Phase3 B Offense Thematic M&A":
@@ -578,6 +863,37 @@ class SyntheticGenerator:
                 # Hedge fund holdings (stable simulation client) - use three tickers.
                 forced_affected_tickers = ["QNTM", "BANKO", "VIT"]
                 forced_ticker_sym = forced_affected_tickers[0]
+
+            # Phase 4 calibration: mandate needles
+            elif scenario.name == "Phase4 M1 AI Compute Supply Chain":
+                forced_ticker_sym = "GENE"
+            elif scenario.name == "Phase4 M2 Rates Shock Inflation Print":
+                forced_ticker_sym = "PROP"
+            elif scenario.name == "Phase4 M3 Crypto Protocol Exploit":
+                forced_ticker_sym = "FIN"
+            elif scenario.name == "Phase4 M4 Energy Transition Policy":
+                forced_ticker_sym = "VELO"
+            elif scenario.name == "Phase4 M5 Cloud Pricing SaaS Shift":
+                forced_ticker_sym = "LUXE"
+            elif scenario.name == "Phase4 M6 Credit Downgrade Geopolitical":
+                forced_ticker_sym = "VIT"
+            # Phase 4 calibration: relationship hops
+            elif scenario.name == "Phase4 R1 Supplier Disruption 1Hop":
+                forced_ticker_sym = "VELO"
+                forced_related_ticker_sym = "ECO"
+                forced_relationship_desc = "Velocity Motors uses EcoPower batteries"
+            elif scenario.name == "Phase4 R2 Competitor Recall 2Hop":
+                forced_ticker_sym = "VIT"
+                forced_related_ticker_sym = "GENE"
+                forced_relationship_desc = "GeneSys vs Vitality Pharma in Healthcare"
+            elif scenario.name == "Phase4 R3 Systemic Multi-Ticker Shock":
+                forced_affected_tickers = ["OMNI", "SHOPM", "TRUCK"]
+                forced_ticker_sym = forced_affected_tickers[0]
+            # Phase 4 calibration: negative controls
+            elif scenario.name == "Phase4 N1 Generic Sector Chatter":
+                forced_ticker_sym = "PROP"
+            elif scenario.name == "Phase4 N2 Wrong Theme Strong Headline":
+                forced_ticker_sym = "GENE"
 
             # For macro factor scenarios, select a ticker with relevant exposure
             if scenario.name in [
@@ -678,39 +994,47 @@ class SyntheticGenerator:
 
             # Handle Relationship Scenarios
             if "related_ticker" in scenario.template:
-                # Find relationships where this ticker is the target (e.g. Supplier -> TARGET)
-                # or source depending on scenario logic.
-                # For "Supplier Delay", we want a Supplier (Source) affecting Ticker (Target).
-                # For "Competitor", we want a Competitor (Source/Target) vs Ticker.
-
-                relevant_rels = [
-                    r
-                    for r in all_relationships
-                    if r.target == ticker.ticker or r.source == ticker.ticker
-                ]
-
-                if relevant_rels:
-                    rel = random.choice(relevant_rels)
-                    # Determine which is the "Related" entity
-                    if rel.source == ticker.ticker:
-                        related_ticker_sym = rel.target
-                    else:
-                        related_ticker_sym = rel.source
-
-                    related_ticker = UNIVERSE.get_ticker(related_ticker_sym)
-
+                if forced_related_ticker_sym:
+                    # Phase 4: deterministic related ticker
+                    related_ticker = UNIVERSE.get_ticker(forced_related_ticker_sym)
                     prompt_vars["related_ticker"] = related_ticker.ticker
                     prompt_vars["related_name"] = related_ticker.name
-                    prompt_vars["relationship_desc"] = rel.description
-                else:
-                    # Fallback if no relations: Skip this scenario or pick random other
-                    # For simplicity, we just pick a random other ticker as a "Competitor"
-                    related_ticker = random.choice(
-                        [t for t in all_tickers if t.ticker != ticker.ticker]
+                    prompt_vars["relationship_desc"] = (
+                        forced_relationship_desc or "related entity"
                     )
-                    prompt_vars["related_ticker"] = related_ticker.ticker
-                    prompt_vars["related_name"] = related_ticker.name
-                    prompt_vars["relationship_desc"] = "operates in the same market"
+                else:
+                    # Find relationships where this ticker is the target (e.g. Supplier -> TARGET)
+                    # or source depending on scenario logic.
+                    # For "Supplier Delay", we want a Supplier (Source) affecting Ticker (Target).
+                    # For "Competitor", we want a Competitor (Source/Target) vs Ticker.
+
+                    relevant_rels = [
+                        r
+                        for r in all_relationships
+                        if r.target == ticker.ticker or r.source == ticker.ticker
+                    ]
+
+                    if relevant_rels:
+                        rel = random.choice(relevant_rels)
+                        # Determine which is the "Related" entity
+                        if rel.source == ticker.ticker:
+                            related_ticker_sym = rel.target
+                        else:
+                            related_ticker_sym = rel.source
+
+                        related_ticker = UNIVERSE.get_ticker(related_ticker_sym)
+
+                        prompt_vars["related_ticker"] = related_ticker.ticker
+                        prompt_vars["related_name"] = related_ticker.name
+                        prompt_vars["relationship_desc"] = rel.description
+                    else:
+                        # Fallback if no relations: pick random other ticker as "Competitor"
+                        related_ticker = random.choice(
+                            [t for t in all_tickers if t.ticker != ticker.ticker]
+                        )
+                        prompt_vars["related_ticker"] = related_ticker.ticker
+                        prompt_vars["related_name"] = related_ticker.name
+                        prompt_vars["relationship_desc"] = "operates in the same market"
 
             full_prompt = scenario.template.format(**prompt_vars)
 
@@ -747,14 +1071,14 @@ class SyntheticGenerator:
                             expected_clients.append(client_guid)
 
                 # Construct Output JSON
-                if scenario.name.startswith("Phase3"):
+                if scenario.name.startswith(("Phase3", "Phase4")):
                     title = f"[{scenario.name}] {prompt_vars['ticker']} - {prompt_vars['name']}"
                 else:
                     title = f"Update regarding {prompt_vars['name']}"
 
                 published_at = (
                     self._get_recent_date(hours_back=1)
-                    if scenario.name.startswith("Phase3")
+                    if scenario.name.startswith(("Phase3", "Phase4"))
                     else self._get_random_date()
                 )
 
@@ -837,6 +1161,11 @@ def main():
         help="Generate exactly one story per Phase3 scenario (A-D)",
     )
     parser.add_argument(
+        "--phase4",
+        action="store_true",
+        help="Generate exactly one story per Phase4 calibration scenario",
+    )
+    parser.add_argument(
         "--mode",
         type=str,
         default="generate",
@@ -858,6 +1187,17 @@ def main():
                 count=len(phase3_scenarios),
                 output_dir=Path(args.output),
                 scenarios_override=phase3_scenarios,
+            )
+        elif args.phase4:
+            phase4_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase4")]
+            if not phase4_scenarios:
+                raise RuntimeError(
+                    "No Phase4 scenarios found. Expected scenario names starting with 'Phase4'."
+                )
+            generator.generate_batch(
+                count=len(phase4_scenarios),
+                output_dir=Path(args.output),
+                scenarios_override=phase4_scenarios,
             )
         else:
             generator.generate_batch(args.count, Path(args.output))

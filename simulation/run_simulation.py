@@ -630,6 +630,7 @@ def generate_data(
     regenerate: bool = False,
     model: Optional[str] = None,
     phase3: bool = False,
+    phase4: bool = False,
     gen_workers: int = 1,
 ):
     """Generate synthetic stories using SSOT module for token access.
@@ -643,9 +644,17 @@ def generate_data(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     phase3_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase3")] if phase3 else []
-    requested_count = len(phase3_scenarios) if phase3 else count
+    phase4_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase4")] if phase4 else []
+    if phase3:
+        requested_count = len(phase3_scenarios)
+    elif phase4:
+        requested_count = len(phase4_scenarios)
+    else:
+        requested_count = count
     if phase3 and requested_count == 0:
         raise RuntimeError("--phase3 set but no Phase3 scenarios found (expected names starting with 'Phase3')")
+    if phase4 and requested_count == 0:
+        raise RuntimeError("--phase4 set but no Phase4 scenarios found (expected names starting with 'Phase4')")
     
     # Check if we can reuse existing documents
     if not regenerate:
@@ -676,6 +685,13 @@ def generate_data(
             requested_count,
             output_dir,
             scenarios_override=phase3_scenarios,
+            max_workers=gen_workers,
+        )
+    elif phase4:
+        generator.generate_batch(
+            requested_count,
+            output_dir,
+            scenarios_override=phase4_scenarios,
             max_workers=gen_workers,
         )
     else:
@@ -819,6 +835,11 @@ def main():
         action="store_true",
         help="Generate/ingest exactly one story per Phase3 scenario (A-D)",
     )
+    parser.add_argument(
+        "--phase4",
+        action="store_true",
+        help="Generate/ingest exactly one story per Phase4 calibration scenario",
+    )
     parser.add_argument("--skip-universe", action="store_true", help="Skip loading universe (companies/relationships) to Neo4j")
     parser.add_argument("--skip-clients", action="store_true", help="Skip generating and loading clients to Neo4j")
     parser.add_argument("--init-groups-only", action="store_true", help="Create/verify groups then stop")
@@ -850,10 +871,15 @@ def main():
     skip_ingest = args.skip_ingest
 
     phase3_count = len([s for s in SCENARIOS if s.name.startswith("Phase3")])
+    phase4_count = len([s for s in SCENARIOS if s.name.startswith("Phase4")])
     if args.phase3:
         if phase3_count == 0:
             raise RuntimeError("--phase3 set but no Phase3 scenarios found (expected names starting with 'Phase3')")
         effective_count = phase3_count
+    elif args.phase4:
+        if phase4_count == 0:
+            raise RuntimeError("--phase4 set but no Phase4 scenarios found (expected names starting with 'Phase4')")
+        effective_count = phase4_count
 
     if args.validate_only:
         effective_count = 0
@@ -965,6 +991,7 @@ def main():
             regenerate=args.regenerate,
             model=args.model,
             phase3=args.phase3,
+            phase4=getattr(args, 'phase4', False),
             gen_workers=args.gen_workers,
         )
         run_gate("generation")
@@ -975,13 +1002,18 @@ def main():
     else:
         sources = list_sources(tokens["admin"])
         ingest_count = None if skip_generate else effective_count
+        scenario_prefix_val = None
+        if args.phase3:
+            scenario_prefix_val = "Phase3"
+        elif getattr(args, 'phase4', False):
+            scenario_prefix_val = "Phase4"
         ingest_data(
             args.output,
             sources,
             tokens,
             count=ingest_count,
             verbose=args.verbose,
-            scenario_prefix="Phase3" if args.phase3 else None,
+            scenario_prefix=scenario_prefix_val,
             ingest_workers=args.ingest_workers,
         )
         run_gate("ingestion")
