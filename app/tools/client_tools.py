@@ -314,6 +314,21 @@ def register_client_tools(
                                     profile_guid=profile_guid,
                                     themes=enriched_themes,
                                 )
+
+                        # Also persist mandate embedding for hybrid retrieval (M4)
+                        try:
+                            embedding = llm_service.generate_embedding(mandate_text.strip())
+                            with graph_index._get_session() as session:
+                                session.run(
+                                    """
+                                    MATCH (cp:ClientProfile {guid: $profile_guid})
+                                    SET cp.mandate_embedding = $embedding
+                                    """,
+                                    profile_guid=profile_guid,
+                                    embedding=embedding,
+                                )
+                        except Exception:  # nosec B110 - embedding failure non-fatal
+                            pass
                 except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
                     pass
             
@@ -715,6 +730,12 @@ def register_client_tools(
             default=True,
             description="Include lateral graph relations like competitors/suppliers (default: True)",
         )] = True,
+        opportunity_bias: Annotated[float, Field(
+            default=0.0,
+            ge=0.0,
+            le=1.0,
+            description="Opportunity bias lambda in [0,1]. 0=defense, 1=offense.",
+        )] = 0.0,
         auth_tokens: Annotated[list[str] | None, Field(
             default=None,
             description="JWT tokens for authentication (pass via API when headers not available)",
@@ -766,6 +787,7 @@ def register_client_tools(
                 include_lateral_graph=include_lateral_graph,
                 min_impact_score=min_impact_score,
                 impact_tiers=impact_tiers,
+                opportunity_bias=opportunity_bias,
             )
 
             resolved_min_impact = min_impact_score if min_impact_score is not None else 0.0
@@ -1976,8 +1998,21 @@ def register_client_tools(
                             if enrichment_result.success and enrichment_result.themes:
                                 updates_profile["mandate_themes"] = enrichment_result.themes
                                 changes.append("mandate_themes (auto-enriched)")
+
+                            # Persist mandate embedding whenever mandate_text is set (M4)
+                            try:
+                                updates_profile["mandate_embedding"] = llm_service.generate_embedding(stripped_text)
+                                if "mandate_embedding" not in changes:
+                                    changes.append("mandate_embedding (auto-embedded)")
+                            except Exception:  # nosec B110 - embedding failure is non-fatal
+                                pass
                     except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
                         pass
+                elif mandate_themes is None and not stripped_text:
+                    # Clearing mandate_text also clears embedding
+                    updates_profile["mandate_embedding"] = []
+                    if "mandate_embedding" not in changes:
+                        changes.append("mandate_embedding (cleared)")
                 
             if horizon is not None:
                 valid_horizons = ["short", "medium", "long"]

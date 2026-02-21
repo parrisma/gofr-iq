@@ -94,18 +94,16 @@ SCRIPTS (use these; do not reinvent workflows):
 | Script | Purpose |
 |--------|---------|
 | `scripts/run_tests.sh` | Run tests (unit, integration, coverage). THE test entry point. |
-| `scripts/start-prod.sh` | Start (or `--build` and start) the production containers. |
-| `scripts/run_mcp.sh` | Start the MCP server. |
-| `scripts/run_mcpo.sh` | Start the MCPO wrapper. |
-| `scripts/run_web.sh` | Start the web server. |
+| `docker/start-prod.sh` | Start (or `--build` and start) the production containers. |
+| `docker/stop-prod.sh` | Stop production containers. |
 | `scripts/manage_servers.sh` | Start/stop/restart server processes. |
 | `scripts/manage_client.sh` | Client management operations. |
 | `scripts/manage_document.sh` | Document management operations. |
 | `scripts/manage_source.sh` | Source management operations. |
-| `scripts/bootstrap_gofr_iq.sh` | Bootstrap gofr-iq environment. |
+| `scripts/bootstrap.sh` | Bootstrap gofr-iq environment. |
 | `scripts/bootstrap_graph.py` | Bootstrap the Neo4j knowledge graph. |
 | `scripts/test_servers.sh` | Test that server endpoints are responding. |
-| `scripts/test_env.sh` | Validate the environment is correctly configured. |
+| `scripts/start-test-env.sh` | Start/stop/verify ephemeral test infrastructure. |
 | `scripts/dump_environment.sh` | Dump current environment variables for debugging. |
 | `scripts/purge_local_data.sh` | Purge local data directories. |
 | `scripts/run_golden_baseline.sh` | Run golden baseline extraction tests. |

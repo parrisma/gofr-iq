@@ -129,16 +129,41 @@ def _mcp_call(host: str, port: int, session_id: str, tool: str, args: dict, toke
     with urlopen(req, timeout=120) as resp:
         raw = resp.read().decode("utf-8")
 
-    # Parse SSE response
+    # Parse SSE response.
+    # Some MCP servers emit multiple `data:` events; use the last well-formed JSON payload.
+    last_outer: dict[str, Any] | None = None
     for line in raw.splitlines():
-        if line.startswith("data:"):
-            outer = json.loads(line[5:].strip())
-            result = outer.get("result", {})
-            content = result.get("content", [])
-            if content and isinstance(content, list) and "text" in content[0]:
-                return json.loads(content[0]["text"])
-            return outer
-    return {"status": "error", "message": "Empty MCP response"}
+        if not line.startswith("data:"):
+            continue
+        payload = line[5:].strip()
+        if not payload:
+            continue
+        try:
+            last_outer = json.loads(payload)
+        except Exception:
+            continue
+
+    if not last_outer:
+        return {"status": "error", "message": "Empty or non-JSON MCP response"}
+
+    # Tool handlers in this repo return JSON encoded as TextContent.text.
+    result = last_outer.get("result", {})
+    content = result.get("content", [])
+    if content and isinstance(content, list) and isinstance(content[0], dict) and "text" in content[0]:
+        text = content[0].get("text")
+        if isinstance(text, str):
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError:
+                return {
+                    "status": "error",
+                    "message": "Non-JSON tool response text",
+                    "tool": tool,
+                    "raw_text": text,
+                }
+
+    # Fall back to returning the outer MCP envelope.
+    return last_outer
 
 
 # ---------------------------------------------------------------------------
@@ -167,6 +192,110 @@ def _get_client_position_tickers(client) -> list[str]:
     holding_tickers = [p.ticker for p in client.portfolio]
     watchlist_tickers = list(client.watchlist)
     return list(set(holding_tickers + watchlist_tickers))
+
+
+def _parse_lambdas(raw: str) -> list[float]:
+    values: list[float] = []
+    for part in (raw or "").split(","):
+        part = part.strip()
+        if not part:
+            continue
+        val = float(part)
+        if val < 0.0 or val > 1.0:
+            raise ValueError(f"lambda must be in [0,1], got {val}")
+        values.append(val)
+    return values or [0.0, 0.5, 1.0]
+
+
+@dataclass
+class Phase3Case:
+    scenario: str
+    base_ticker: str
+    title: str
+    expected_clients: list[str]
+
+
+def _load_phase3_cases() -> list[Phase3Case]:
+    """Load Phase 3 stress-test cases from simulation/test_output.
+
+    Bias sweep validation matches by title (not GUID), so cases must have
+    deterministic unique titles.
+    """
+    out_dir = PROJECT_ROOT / "simulation" / "test_output"
+    if not out_dir.exists():
+        return []
+
+    # Only evaluate the most recent file for each Phase3 scenario.
+    # This avoids older simulation runs inflating the case count and
+    # makes Recall@3 comparable run-to-run.
+    latest_by_scenario: dict[str, Phase3Case] = {}
+    for path in sorted(out_dir.glob("synthetic_*.json"), reverse=True):
+        try:
+            data = json.loads(path.read_text())
+        except Exception:
+            continue
+
+        meta = data.get("validation_metadata") or {}
+        scenario = meta.get("scenario")
+        if not (isinstance(scenario, str) and scenario.startswith("Phase3")):
+            continue
+
+        # Scenario D is "noise"; it is expected to be suppressed, not recalled.
+        if scenario.startswith("Phase3 D"):
+            continue
+
+        if scenario in latest_by_scenario:
+            continue
+
+        title = data.get("title")
+        if not isinstance(title, str) or not title:
+            continue
+
+        title = title.strip()
+        if not title:
+            continue
+
+        expected = meta.get("expected_relevant_clients") or []
+        if not isinstance(expected, list):
+            expected = []
+
+        base_ticker = meta.get("base_ticker")
+        if not isinstance(base_ticker, str) or not base_ticker:
+            continue
+        base_ticker = base_ticker.strip().upper()
+        if not base_ticker:
+            continue
+
+        case = Phase3Case(
+            scenario=scenario,
+            base_ticker=base_ticker,
+            title=title,
+            expected_clients=[c for c in expected if isinstance(c, str) and c],
+        )
+
+        latest_by_scenario[scenario] = case
+
+    return list(latest_by_scenario.values())
+
+
+def _top_unique_titles(articles: list[dict[str, Any]], n: int = 3) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for a in articles:
+        t = a.get("title")
+        if not isinstance(t, str):
+            continue
+        t = t.strip()
+        if not t:
+            continue
+        norm = t.lower()
+        if norm in seen:
+            continue
+        seen.add(norm)
+        out.append(t)
+        if len(out) >= n:
+            break
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -349,6 +478,16 @@ def validate_avatar_feed(
 def main():
     parser = argparse.ArgumentParser(description="Validate avatar feeds against real MCP")
     parser.add_argument("--verbose", "-v", action="store_true")
+    parser.add_argument(
+        "--bias-sweep",
+        action="store_true",
+        help="Run Phase 3 bias sweep validation using get_top_client_news",
+    )
+    parser.add_argument(
+        "--lambdas",
+        default="0,0.5,1",
+        help="Comma-separated lambda values in [0,1] (default: 0,0.5,1)",
+    )
     parser.add_argument("--host", default="gofr-iq-mcp")
     parser.add_argument("--port", type=int, default=None)
     args = parser.parse_args()
@@ -395,6 +534,139 @@ def main():
         print(f"  Found {len(live_clients)} clients in MCP")
         for c in live_clients:
             print(f"    {c['name']} → {c['client_guid']}")
+
+    # ---------------------------------------------------------------------
+    # Phase 3: bias sweep mode (Top Client News)
+    # ---------------------------------------------------------------------
+    if args.bias_sweep:
+        try:
+            lambdas = _parse_lambdas(args.lambdas)
+        except ValueError as e:
+            print(f"❌ Invalid --lambdas: {e}")
+            sys.exit(1)
+
+        phase3_cases = _load_phase3_cases()
+        if not phase3_cases:
+            print("❌ No Phase3 synthetic cases found in simulation/test_output")
+            print("   Generate + ingest Phase3 stories, then rerun with --bias-sweep")
+            sys.exit(1)
+
+        live_guid_set = {c.get("client_guid") for c in live_clients if c.get("client_guid")}
+
+        # Phase3 synthetic cases encode expected clients using the stable mock GUIDs
+        # from simulation/generate_synthetic_clients.py. Map those to live MCP GUIDs
+        # via client name, and also accept raw live GUIDs or client names.
+        mock_guid_to_live_guid: dict[str, str] = {}
+        for mock_client in clients:
+            live_guid = name_to_guid.get(mock_client.name)
+            if live_guid and isinstance(mock_client.guid, str):
+                mock_guid_to_live_guid[mock_client.guid] = live_guid
+        # Cache: lambda -> live_client_guid -> articles
+        sweep_results: dict[float, dict[str, list[dict[str, Any]]]] = {}
+
+        # Precompute position tickers per live guid (via mock client name)
+        live_guid_to_positions: dict[str, set[str]] = {}
+        for mock_client in clients:
+            live_guid = name_to_guid.get(mock_client.name)
+            if live_guid:
+                live_guid_to_positions[live_guid] = set(_get_client_position_tickers(mock_client))
+
+        print("\nPhase 3 bias sweep: get_top_client_news")
+        print(f"  lambdas={lambdas}")
+        print(f"  phase3_cases={len(phase3_cases)}")
+
+        for lam in lambdas:
+            per_client: dict[str, list[dict[str, Any]]] = {}
+            for mock_client in clients:
+                live_guid = name_to_guid.get(mock_client.name)
+                if not live_guid:
+                    continue
+
+                resp = _mcp_call(
+                    args.host,
+                    port,
+                    session_id,
+                    "get_top_client_news",
+                    {
+                        "client_guid": live_guid,
+                        "limit": 10,
+                        "time_window_hours": 6,
+                        "opportunity_bias": lam,
+                    },
+                    token,
+                )
+                if resp.get("status") != "success":
+                    msg = resp.get("message", "unknown")
+                    raw_text = resp.get("raw_text")
+                    if isinstance(raw_text, str) and raw_text:
+                        preview = raw_text.replace("\n", " ").strip()[:220]
+                        msg = f"{msg} (raw_text='{preview}')"
+                    print(f"  ⚠ get_top_client_news failed: client={mock_client.name} lambda={lam}: {msg}")
+                    continue
+
+                articles = (resp.get("data", {}) or {}).get("articles", [])
+                if not isinstance(articles, list):
+                    articles = []
+                per_client[live_guid] = [a for a in articles if isinstance(a, dict)]
+
+            sweep_results[lam] = per_client
+
+        for lam in lambdas:
+            per_client = sweep_results.get(lam, {})
+
+            # Recall@3: intended stress-test story present in Top 3
+            total_pairs = 0
+            hits = 0
+            for case in phase3_cases:
+                for expected_id in case.expected_clients:
+                    live_guid: str | None = None
+
+                    # 1) already a live GUID
+                    if expected_id in live_guid_set:
+                        live_guid = expected_id
+                    # 2) stable mock GUID
+                    elif expected_id in mock_guid_to_live_guid:
+                        live_guid = mock_guid_to_live_guid[expected_id]
+                    # 3) client name
+                    elif expected_id in name_to_guid:
+                        live_guid = name_to_guid[expected_id]
+
+                    if not live_guid:
+                        continue
+
+                    total_pairs += 1
+                    articles = per_client.get(live_guid, [])
+                    titles = _top_unique_titles(articles, n=3)
+                    # Match by Phase3 scenario prefix + base ticker, since company name
+                    # variations across runs can change the title suffix.
+                    prefix = f"[{case.scenario}] {case.base_ticker}"
+                    if any(t.startswith(prefix) for t in titles):
+                        hits += 1
+            recall_at_3 = (hits / total_pairs) if total_pairs else 0.0
+
+            # Alpha score: proportion of Top 3 with no overlap with positions
+            alpha_n = 0
+            alpha_total = 0
+            for live_guid, articles in per_client.items():
+                positions = live_guid_to_positions.get(live_guid, set())
+                for a in _top_unique_titles(articles, n=3):
+                    # Find the corresponding article dict for affected tickers
+                    a = next((x for x in articles if isinstance(x, dict) and (x.get("title") or "").strip() == a), {})
+                    affected = a.get("affected_instruments") or []
+                    if not isinstance(affected, list):
+                        affected = []
+                    affected_set = {t for t in affected if isinstance(t, str)}
+                    if positions and not (affected_set & positions):
+                        alpha_n += 1
+                    alpha_total += 1
+            alpha_score = (alpha_n / alpha_total) if alpha_total else 0.0
+
+            print("\nBias sweep metrics")
+            print(f"  lambda={lam:.2f}")
+            print(f"  Recall@3={recall_at_3:.3f} ({hits}/{total_pairs})")
+            print(f"  AlphaScore={alpha_score:.3f} ({alpha_n}/{alpha_total})")
+
+        sys.exit(0)
 
     summary = ValidationSummary()
 

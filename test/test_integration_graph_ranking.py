@@ -86,6 +86,16 @@ def mock_graph_index() -> MagicMock:
     mock = MagicMock(spec=GraphIndex)
     mock.NodeLabel = NodeLabel
     mock.RelationType = RelationType
+
+    # Provide a context-managed session for code paths that use _get_session()
+    session_cm = MagicMock()
+    session = MagicMock()
+    session_cm.__enter__.return_value = session
+    session_cm.__exit__.return_value = False
+    mock._get_session.return_value = session_cm
+    # Default: no records returned unless a test configures otherwise
+    session.run.return_value.single.return_value = None
+
     return mock
 
 

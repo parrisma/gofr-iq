@@ -36,10 +36,10 @@ We provide a single wrapper script that handles config, secrets, and container s
 
 ```bash
 # First time install (initializes Vault & Secrets)
-./scripts/start-prod.sh --fresh --openrouter-key sk-or-v1-YOUR-KEY
+./docker/start-prod.sh --fresh --openrouter-key sk-or-v1-YOUR-KEY
 
 # Restarting (reuses existing secrets)
-./scripts/start-prod.sh
+./docker/start-prod.sh
 ```
 
 **What happens:**
@@ -115,9 +115,9 @@ uv pip install -e .
 Copy the example environment and add your keys:
 
 ```bash
-cp scripts/gofriq.env.example scripts/gofriq.env
+cp scripts/project.env.example scripts/project.env
 # Edit to add your OPENROUTER_API_KEY
-nano scripts/gofriq.env
+nano scripts/project.env
 ```
 
 ### 3. Start Infrastructure Only (Dev)
@@ -186,7 +186,7 @@ cd docker && docker compose down
 To wipe all data (databases, vaults, secrets) and start fresh:
 
 ```bash
-./scripts/start-prod.sh --reset
+./docker/start-prod.sh --reset
 ```
 **Warning**: This deletes all data in `gofr-iq/data/`.
 
@@ -215,5 +215,5 @@ For explicit configuration details, see [Configuration Guide](configuration.md).
 | **"Vault not ready"** | Initialization taking time | Wait 10s and retry the start command |
 | **"Invalid API key"** | Missing or bad OpenRouter key | Pass correct `--openrouter-key` or set `GOFR_IQ_OPENROUTER_API_KEY` env var |
 | **Neo4j/Chroma OOM** | Insufficient RAM (Limit: 8GB) | Ensure Docker Desktop has allocated at least 8GB RAM |
-| **"Auth Error"** in logs | Expired or missing tokens | Run `./scripts/start-prod.sh` (without --fresh) to refresh tokens |
+| **"Auth Error"** in logs | Expired or missing tokens | Run `./docker/start-prod.sh` (without --fresh) to refresh tokens |
 

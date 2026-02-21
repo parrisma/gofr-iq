@@ -70,4 +70,4 @@ Shows: Services running, ports, connection strings, configs, auth tokens, data s
 
 ## 📝 Environment Templates
 
-*   **`gofriq.env.example`**: Template for your local `.env`. Copy to `gofriq.env` and populate with your API keys (like OpenRouter). Never commit `gofriq.env`.
+*   **`project.env.example`**: Template for your local `.env`. Copy to `project.env` and populate with your API keys (like OpenRouter). Never commit `project.env`.

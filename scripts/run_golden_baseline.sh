@@ -96,7 +96,7 @@ if [ -f "$DOCKER_ENV" ]; then
     set +a
 else
     echo -e "${RED}ERROR: docker/.env not found. Is production infra set up?${NC}" >&2
-    echo "Run ./scripts/start-prod.sh first." >&2
+    echo "Run ./docker/start-prod.sh first." >&2
     exit 1
 fi
 

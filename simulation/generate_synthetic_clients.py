@@ -103,6 +103,7 @@ class ClientGenerator:
             MockPosition("BANKO", 0.12, "LONG"),  # Fintech bank
             MockPosition("VIT", 0.10, "LONG"),  # Luxury EV
             MockPosition("GTX", 0.08, "LONG"),  # Cloud/gaming
+            MockPosition("NXS", 0.005, "LONG"),  # Tail holding for stress testing
         ]
 
         watchlist = ["NXS", "FIN"]  # Monitoring other tech/fin

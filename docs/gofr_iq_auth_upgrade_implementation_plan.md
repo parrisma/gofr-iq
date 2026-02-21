@@ -78,8 +78,8 @@ Goal: one consistent prefix for all auth-related gofr-common factories in gofr-i
 - `GOFR_IQ_VAULT_PATH_PREFIX=gofr/auth`
 
 Files to review/update (as applicable):
-- `scripts/gofriq.env` and/or `scripts/gofriq.env.example`
-- any docker env generation scripts used by `./scripts/start-prod.sh`
+- `scripts/project.env` and/or `scripts/project.env.example`
+- any docker env generation scripts used by `./docker/start-prod.sh`
 
 2.2 Remove or de-emphasize per-service JWT secret vars in docs/help
 - Remove references that imply `GOFR_IQ_JWT_SECRET` is required.
@@ -89,9 +89,9 @@ Verification:
 
 Status: DONE.
 Updated env/templates/scripts/docs to prefer GOFR_IQ_* auth/Vault variables:
-- `scripts/gofriq.env`, `scripts/gofriq.env.example`
-- `scripts/test_env.sh`, `scripts/dump_environment.sh`, `scripts/run_mcp.sh`
-- `scripts/start-prod.sh` (ensures GOFR_IQ_* Vault/auth config is written to `docker/.env`)
+- `scripts/project.env`, `scripts/project.env.example`
+- `scripts/start-test-env.sh`, `scripts/dump_environment.sh`
+- `docker/start-prod.sh` (ensures GOFR_IQ_* Vault/auth config is written to `docker/.env`)
 - `docker/.env.example`
 - `docs/development/configuration.md`, `docs/architecture/overview.md`, `docs/reference/project-summary.md`, `docs/architecture/authentication.md`
 
@@ -141,7 +141,7 @@ Goal: all long-running services (MCP, MCPO, web) use VaultIdentity by reading `/
   - Ensure GOFR_IQ_* Vault env vars are present.
 
 4.2 Prod wiring
-- Ensure `./scripts/start-prod.sh` results in containers with `/run/secrets/vault_creds` present.
+- Ensure `./docker/start-prod.sh` results in containers with `/run/secrets/vault_creds` present.
 
 Verification:
 - In each running container: `test -f /run/secrets/vault_creds`.
@@ -152,7 +152,7 @@ Stop condition:
 Status: DONE (prod wiring).
 Updated:
 - `docker/docker-compose.yml` mounts `/run/secrets/vault_creds:ro` for `mcp`, `mcpo`, `web` from `secrets/service_creds/`.
-- `scripts/start-prod.sh` now provisions AppRole creds via `scripts/ensure_approle.sh`.
+- `docker/start-prod.sh` now provisions AppRole creds via `scripts/ensure_approle.sh`.
 
 Note: `docker/docker-compose-test.yml` intentionally remains dev-token based (no VaultIdentity mount) to avoid requiring AppRoles in the ephemeral test Vault.
 
@@ -240,12 +240,9 @@ Observed:
 
 Goal: make scripts reflect the new operational model.
 
-7.1 Update scripts to remove JWT secret requirements
-- `scripts/run_mcp.sh`, `scripts/run_mcpo.sh`, `scripts/run_web.sh` (and any related help text).
-- Replace with:
-  - "Vault must be available"
-  - "AppRole creds must be present/mounted"
-  - optionally, "run `./scripts/ensure_approle.sh`"
+7.1 Remove redundant local-run entrypoints
+- Remove `scripts/run_mcp.sh`, `scripts/run_mcpo.sh`, `scripts/run_web.sh`.
+- Supported runtime entrypoint is `./docker/start-prod.sh`.
 
 7.2 Keep operator tooling guidance
 - `source <(./lib/gofr-common/scripts/auth_env.sh --docker)` for admin commands.
@@ -256,11 +253,9 @@ Verification:
 
 Status: DONE.
 Updates applied:
-- `scripts/run_mcp.sh`: removed legacy JWT-secret-by-env note; updated operator tooling guidance to `source <(./lib/gofr-common/scripts/auth_env.sh --docker)`; aligned prod script reference to `scripts/start-prod.sh`.
-- `scripts/run_mcpo.sh`: removed `localhost` default; defaults MCP host to `gofr-iq-mcp` (Docker service/container name) and removed `localhost` URL output.
-- `scripts/run_web.sh`: updated operator tooling guidance to the process-substitution form.
+- Removed `scripts/run_mcp.sh`, `scripts/run_mcpo.sh`, `scripts/run_web.sh`.
 - `scripts/manage_servers.sh`: removed unused `GOFR_IQ_JWT_SECRET` placeholder export.
-- `scripts/start-prod.sh`: no longer exports/writes `GOFR_IQ_JWT_SECRET` to `docker/.env`; only verifies `secret/gofr/config/jwt-signing-secret` exists in Vault; removed `localhost` URLs from the final service summary.
+- `docker/start-prod.sh`: no longer exports/writes `GOFR_IQ_JWT_SECRET` to `docker/.env`; only verifies `secret/gofr/config/jwt-signing-secret` exists in Vault; removed `localhost` URLs from the final service summary.
 - `docs/development/conventions.md`: removed `GOFR_JWT_SECRET` from docker/.env SSOT references.
 
 ## 8. Update tests
@@ -295,7 +290,7 @@ Notes:
 
 Goal: one idempotent command to bring up prerequisites, matching gofr-doc operator workflow.
 
-9.1 Add `scripts/bootstrap_gofr_iq.sh` only after Steps 1-8 are green
+9.1 Add `scripts/bootstrap.sh` only after Steps 1-8 are green
 - Responsibilities (match gofr-doc as closely as practical):
   - ensure submodules present
   - ensure Vault running/unsealed
@@ -305,15 +300,15 @@ Goal: one idempotent command to bring up prerequisites, matching gofr-doc operat
 
 Status: DONE.
 Added:
-- `scripts/bootstrap_gofr_iq.sh`
+- `scripts/bootstrap.sh`
 
 Behavior:
-- Idempotent prereq bootstrap so `./scripts/start-prod.sh` can run cleanly.
+- Idempotent prereq bootstrap so `./docker/start-prod.sh` can run cleanly.
 - Ensures submodules are initialized (when .gitmodules exists).
 - Ensures Vault is running, initialized, and unsealed (via gofr-common `manage_vault.sh`).
 - Ensures AppRole creds exist (`./scripts/ensure_approle.sh`).
 - Verifies core Vault secrets exist (JWT signing secret, OpenRouter key, Neo4j password).
-- Optional: `./scripts/bootstrap_gofr_iq.sh --tests` runs `./scripts/run_tests.sh`.
+- Optional: `./scripts/bootstrap.sh --tests` runs `./scripts/run_tests.sh`.
 
 ## 10. Verification checklist (acceptance)
 
@@ -325,7 +320,7 @@ Behavior:
   - `./scripts/ensure_approle.sh` succeeds
   - MCP, MCPO, web start without JWT secret env vars
 - Prod run:
-  - `./scripts/start-prod.sh` works without exporting JWT secrets
+  - `./docker/start-prod.sh` works without exporting JWT secrets
 
 Known pitfalls to watch:
 - Env prefix mismatch (GOFR_IQ_* set, but factory called with prefix GOFR).
@@ -336,7 +331,7 @@ Known pitfalls to watch:
 Status: DONE.
 Verification results:
 - Full test suite: 893 passed, 1 skipped (Step 8).
-- Prod run: `env -u GOFR_IQ_JWT_SECRET -u GOFR_JWT_SECRET ./scripts/start-prod.sh --build` completed with zero manual steps; all containers healthy (MCP, MCPO, Web, Neo4j, ChromaDB).
+- Prod run: `env -u GOFR_IQ_JWT_SECRET -u GOFR_JWT_SECRET ./docker/start-prod.sh --build` completed with zero manual steps; all containers healthy (MCP, MCPO, Web, Neo4j, ChromaDB).
 - Entrypoint copy-and-chown pattern aligned to gofr-doc: start as root, copy creds from staging mount, chown to app user, drop privileges via `exec su`.
 - All known pitfalls resolved (env prefix, vault_creds mount, path prefix, JWT audience).
 
@@ -347,7 +342,7 @@ Goal: stop passing the LLM API key (OpenRouter) via env vars in prod. Read it fr
 Background (current state):
 - Vault already contains `secret/gofr/config/api-keys/openrouter` with data key `value`.
 - Code currently reads `GOFR_IQ_OPENROUTER_API_KEY` from the environment (MCP startup hard-fails if missing).
-- `scripts/start-prod.sh` currently pulls the key from Vault and exports it as an env var before starting services.
+- `docker/start-prod.sh` currently pulls the key from Vault and exports it as an env var before starting services.
 
 Design constraints:
 - This is a core/shared secret path (no GOFR-IQ specific path). Use `gofr/config/api-keys/openrouter`.
@@ -394,7 +389,7 @@ Verification:
 - With env var set to a known different value, confirm env override wins.
 
 11.5 Update prod/dev scripts to stop exporting the key
-- Update `scripts/start-prod.sh`:
+- Update `docker/start-prod.sh`:
   - remove the logic that pulls OpenRouter key from Vault and exports `GOFR_IQ_OPENROUTER_API_KEY`
   - keep Vault readiness checks (Vault must be up; AppRole creds must exist)
 - Update compose/service env wiring to stop passing `GOFR_IQ_OPENROUTER_API_KEY` into containers.
@@ -426,7 +421,7 @@ Updates applied:
 - gofr-iq MCP startup: removed hard dependency on `GOFR_IQ_OPENROUTER_API_KEY`; reads from Vault by default (env var override supported).
 - gofr-iq LLM service: supports Vault provider fallback and improved configuration error messaging.
 - `scripts/run_tests.sh`: no longer hard-fails when `GOFR_IQ_OPENROUTER_API_KEY` is unset; injects OpenRouter key into ephemeral test Vault from `secrets/llm_api_key` when available.
-- Prod wiring: removed `GOFR_IQ_OPENROUTER_API_KEY` export/write from `scripts/start-prod.sh` and removed it from `docker/docker-compose.yml`.
+- Prod wiring: removed `GOFR_IQ_OPENROUTER_API_KEY` export/write from `docker/start-prod.sh` and removed it from `docker/docker-compose.yml`.
 
 Verification:
 - `./scripts/run_tests.sh` passed: 893 passed, 1 skipped.

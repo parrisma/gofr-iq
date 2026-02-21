@@ -1,7 +1,7 @@
 # GOFR-IQ MCP Tool Interface (Concise)
 
 ## How to Call
-- Base URL: http://gofr-iq:8080
+- Base URL: http://gofr-iq-mcp:8080
 - Endpoint pattern: POST /tools/{tool_name} with JSON body
 - Auth: Authorization: Bearer <token> (preferred) or body field auth_tokens: ["<token>"]
 - Response envelope (success): {status: "success", data: {...}, message: "..."}
@@ -22,8 +22,28 @@
 - get_client_profile(client_guid) -> {name, client_type, alert_frequency, impact_threshold, mandate_type, benchmark, ...}
 - update_client_profile(client_guid, alert_frequency?, impact_threshold?, mandate_type?, benchmark?) -> {updated_fields,...}
 - get_client_feed(client_guid, limit?, min_impact_score?, impact_tiers?, include_portfolio?, include_watchlist?) -> {articles:[...]}
-- get_top_client_news(client_guid, limit?, time_window_hours?, min_impact_score?, impact_tiers?, include_portfolio?, include_watchlist?, include_lateral_graph?) -> {articles:[... (each includes why_it_matters_base)], ...}
+- get_top_client_news(client_guid, limit?, time_window_hours?, min_impact_score?, impact_tiers?, include_portfolio?, include_watchlist?, include_lateral_graph?, opportunity_bias?) -> {articles:[...], ...}
 - why_it_matters_to_client(client_guid, document_guid) -> {why_it_matters (<=30 words), story_summary (<=30 words)}
+
+#### get_top_client_news (Alpha Engine)
+Purpose: return the top-N most relevant stories for a client using hybrid scoring (holdings/watchlist + lateral graph + mandate themes + optional mandate embeddings).
+
+Key inputs:
+- limit: 1-10
+- time_window_hours: 1-168
+- include_lateral_graph: if true, considers suppliers/competitors/peers connected to holdings
+- opportunity_bias ($\lambda$): 0.0-1.0
+  - 0.0 = defense bias (prioritise direct holdings + risk)
+  - 1.0 = offense bias (prioritise thematic + "unknown known" opportunities)
+  - note: vector/embedding-based candidates only activate when $\lambda > 0.5$ AND client profile has `mandate_embedding`
+
+Returned article fields (per item):
+- document_guid, title, created_at
+- affected_instruments: list[str]
+- impact_score, impact_tier
+- relevance_score: float
+- reasons: list[str] (e.g., DIRECT_HOLDING, WATCHLIST, COMPETITOR, SUPPLY_CHAIN, THEMATIC, VECTOR)
+- why_it_matters_base: deterministic short explanation (no LLM)
 
 ### Portfolio
 - add_to_portfolio(client_guid, ticker, weight, shares?, avg_cost?) -> {ticker, weight, shares}
@@ -218,6 +238,40 @@ POST /tools/get_client_feed
 }
 ```
 Returns: News articles ranked by relevance to the client's holdings and watchlist.
+
+### Pattern 8: Get Top Client News (Defense vs Offense)
+
+Defense (risk-first):
+```json
+POST /tools/get_top_client_news
+{
+  "client_guid": "550e8400-e29b-41d4-a716-446655440000",
+  "limit": 3,
+  "time_window_hours": 24,
+  "opportunity_bias": 0.0,
+  "include_portfolio": true,
+  "include_watchlist": true,
+  "include_lateral_graph": true
+}
+```
+
+Offense (opportunity-first):
+```json
+POST /tools/get_top_client_news
+{
+  "client_guid": "550e8400-e29b-41d4-a716-446655440000",
+  "limit": 3,
+  "time_window_hours": 24,
+  "opportunity_bias": 1.0,
+  "include_portfolio": true,
+  "include_watchlist": true,
+  "include_lateral_graph": true
+}
+```
+
+Returns:
+- data.articles: ranked list (highest relevance_score first)
+- each article includes `why_it_matters_base` and `reasons` for UI display/debugging
 
 ---
 

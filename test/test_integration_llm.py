@@ -1,7 +1,10 @@
 """Integration tests for LLM Service
 
 Live tests that make real API calls to OpenRouter.
-These tests are SKIPPED by default unless GOFR_IQ_OPENROUTER_API_KEY is set.
+
+These tests are OPT-IN. They are skipped unless BOTH:
+- GOFR_IQ_OPENROUTER_API_KEY is set, and
+- GOFR_IQ_RUN_LLM_INTEGRATION_TESTS is truthy (1/true/yes)
 
 To run:
     GOFR_IQ_OPENROUTER_API_KEY=your-key pytest test/test_integration_llm.py -v
@@ -9,6 +12,7 @@ To run:
 
 from __future__ import annotations
 
+import os
 import pytest
 
 from app.services.llm_service import (
@@ -27,10 +31,14 @@ from app.services.embedding_index import (
 # Qwen3 embedding model produces 4096-dimensional vectors
 EMBEDDING_DIMENSIONS = 4096
 
-# Skip all tests if LLM is not available
+def _live_llm_tests_enabled() -> bool:
+    return os.environ.get("GOFR_IQ_RUN_LLM_INTEGRATION_TESTS", "").lower() in {"1", "true", "yes"}
+
+
+# Skip all tests unless explicitly enabled
 pytestmark = pytest.mark.skipif(
-    not llm_available(),
-    reason="GOFR_IQ_OPENROUTER_API_KEY not set",
+    (not llm_available()) or (not _live_llm_tests_enabled()),
+    reason="Live LLM tests are opt-in (set GOFR_IQ_RUN_LLM_INTEGRATION_TESTS=1)",
 )
 
 

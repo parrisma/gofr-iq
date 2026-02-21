@@ -7,7 +7,7 @@
 # JWT signing secret is read from Vault at runtime by JwtSecretProvider
 # (no env var needed).
 #
-# Usage in docker-compose.yml:
+# Usage in compose.prod.yml:
 #   user: root
 #   entrypoint: ["/home/gofr-iq/entrypoint-prod.sh"]
 #   command:

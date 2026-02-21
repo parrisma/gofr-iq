@@ -30,6 +30,7 @@ from .query import (
     SimilarityMode,
 )
 from .source import Source, SourceMetadata, SourceType, TrustLevel
+from .client_profile import ClientProfile
 
 __all__ = [
     # Document models
@@ -60,4 +61,6 @@ __all__ = [
     "SourceMetadata",
     "SourceType",
     "TrustLevel",
+    # Client models
+    "ClientProfile",
 ]

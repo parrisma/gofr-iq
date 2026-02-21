@@ -80,7 +80,7 @@ PROJECT_NAME="gofr-iq"
 TEST_DIR="test"
 COVERAGE_SOURCE="app"
 LOG_DIR="${PROJECT_ROOT}/logs"
-TEST_ENV_SCRIPT="${SCRIPT_DIR}/test_env.sh"
+TEST_ENV_SCRIPT="${SCRIPT_DIR}/start-test-env.sh"
 TEST_SERVERS_SCRIPT="${SCRIPT_DIR}/test_servers.sh"
 
 # State tracking

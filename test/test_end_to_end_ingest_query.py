@@ -40,6 +40,16 @@ from app.services.query_service import QueryService
 from app.services.source_registry import SourceRegistry
 
 
+def _live_llm_tests_enabled() -> bool:
+    return os.environ.get("GOFR_IQ_RUN_LLM_INTEGRATION_TESTS", "").lower() in {"1", "true", "yes"}
+
+
+pytestmark = pytest.mark.skipif(
+    not _live_llm_tests_enabled(),
+    reason="Live LLM e2e tests are opt-in (set GOFR_IQ_RUN_LLM_INTEGRATION_TESTS=1)",
+)
+
+
 # =============================================================================
 # Test Fixtures
 # =============================================================================

@@ -61,7 +61,7 @@ Simulation currently embeds graph bootstrap logic inside simulation code paths. 
 | # | Task | Test gate |
 |---|------|-----------|
 | 1 | ✅ **Create `scripts/bootstrap_graph.py`** — 23 constraints, 11 indexes, 30 taxonomy nodes. `--validate-only` / `--no-reference-data` / `--verbose` flags. Idempotent via MERGE. | Tested: fresh, idempotent rerun, validate-only — ALL PASSED. |
-| 2 | ✅ **Wire into `start-prod.sh`** — after Neo4j healthy + before app service startup, gated on `--reset` or `--nuke`. | `echo "yes" \| ./scripts/start-prod.sh --reset` — bootstrap output in logs, all 5 services healthy. |
+| 2 | ✅ **Wire into `start-prod.sh`** — after Neo4j healthy + before app service startup, gated on `--reset` or `--nuke`. | `echo "yes" \| ./docker/start-prod.sh --reset` — bootstrap output in logs, all 5 services healthy. |
 | 3 | ✅ **Wire into simulation** — `reset_simulation_env.py` now delegates `init_neo4j_schema()` to `bootstrap_graph.py` via subprocess. Constraint threshold updated to ≥23. `run_avatar_simulation.sh` gets bootstrap via `start-prod.sh --reset`. | Code updated, no standalone test needed (run_avatar_simulation.sh tests end-to-end). |
 | 4 | **Run existing tests** — ensure no regressions. | `./scripts/run_tests.sh` passes. |
 | 5 | **Post-review** — check for any remaining duplicated schema/taxonomy code. | Clean. |

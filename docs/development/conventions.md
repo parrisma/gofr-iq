@@ -14,9 +14,9 @@ This is to be read periodically by LLM Agents so as their context window fades i
 
 ### Environment
 ```bash
-./scripts/start-prod.sh          # normal start
-./scripts/start-prod.sh --fresh  # init fresh Vault
-./scripts/start-prod.sh --reset  # nuke & pave (⚠️ destroys all data)
+./docker/start-prod.sh          # normal start
+./docker/start-prod.sh --fresh  # init fresh Vault
+./docker/start-prod.sh --reset  # nuke & pave (⚠️ destroys all data)
 ./docker/manage-infra.sh status # health check
 ```
 

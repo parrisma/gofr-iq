@@ -293,7 +293,8 @@ class EmbeddingIndex:
         if host:
             # HTTP client mode - connect to ChromaDB server
             # Note: port is validated above when host is provided
-            assert self.port is not None  # type narrowing for pyright
+            if self.port is None:
+                raise ValueError("ChromaDB port must be set when host is provided")
             self._client = chromadb.HttpClient(
                 host=host,
                 port=self.port,
@@ -592,6 +593,78 @@ class EmbeddingIndex:
                 metadata=dict(meta) if meta else {},
             )
             similarity_results.append(result)
+
+        return similarity_results
+
+    def search_by_embedding(
+        self,
+        query_embedding: list[float],
+        n_results: int = 10,
+        group_guids: Optional[list[str]] = None,
+        source_guids: Optional[list[str]] = None,
+        languages: Optional[list[str]] = None,
+        include_content: bool = True,
+    ) -> list[SimilarityResult]:
+        """Search for similar documents using a precomputed query embedding."""
+        if not query_embedding:
+            return []
+
+        where_filters: list[dict[str, Any]] = []
+
+        if group_guids:
+            where_filters.append({"group_guid": {"$in": group_guids}})
+
+        if source_guids:
+            where_filters.append({"source_guid": {"$in": source_guids}})
+
+        if languages:
+            where_filters.append({"language": {"$in": languages}})
+
+        where: dict[str, Any] | None = None
+        if len(where_filters) == 1:
+            where = where_filters[0]
+        elif len(where_filters) > 1:
+            where = {"$and": where_filters}
+
+        include: list[Any] = ["metadatas", "distances"]
+        if include_content:
+            include.append("documents")
+
+        results = self._collection.query(
+            query_embeddings=[query_embedding],
+            n_results=n_results,
+            where=cast(Any, where),
+            include=cast(Any, include),
+        )
+
+        similarity_results: list[SimilarityResult] = []
+
+        if not results["ids"] or not results["ids"][0]:
+            return similarity_results
+
+        ids = results["ids"][0]
+        distances = results.get("distances")
+        distances_list = distances[0] if distances else []
+        metadatas = results.get("metadatas")
+        metadatas_list = metadatas[0] if metadatas else []
+        documents = results.get("documents")
+        documents_list = documents[0] if documents else []
+
+        for i, chunk_id in enumerate(ids):
+            meta = metadatas_list[i] if i < len(metadatas_list) else {}
+            distance = distances_list[i] if i < len(distances_list) else 1.0
+            content = documents_list[i] if i < len(documents_list) else ""
+
+            score = 1.0 - float(distance)
+            similarity_results.append(
+                SimilarityResult(
+                    document_guid=str(meta.get("document_guid", "")),
+                    chunk_id=chunk_id,
+                    content=str(content) if content else "",
+                    score=score,
+                    metadata=dict(meta) if meta else {},
+                )
+            )
 
         return similarity_results
 

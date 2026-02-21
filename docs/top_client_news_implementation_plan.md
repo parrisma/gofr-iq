@@ -4,6 +4,18 @@
 **Specs**: [docs/top_client_news_logic_spec.md](docs/top_client_news_logic_spec.md)
 **Goal**: Transform `get_top_client_news` from a static retrieval into a dynamic "Alpha Engine" maximizing relevance and utility.
 
+## Progress (as of 2026-02-21)
+
+**Implemented:** M0 through M6 (Phase 1 + Phase 2) are complete and the full test suite is green.
+
+**How to run tests:**
+*   Targeted gate (M0): `./scripts/run_tests.sh -k "duplicate or alias"`
+*   Full suite (deterministic): `./scripts/run_tests.sh`
+*   Full suite including live LLM integration/e2e tests (opt-in):
+        *   `GOFR_IQ_RUN_LLM_INTEGRATION_TESTS=1 ./scripts/run_tests.sh --api-key <openrouter-key>`
+
+**Remaining:** Phase 3 (simulation validation scenarios + bias sweep) is in progress; Phase 4 (tuning/calibration) is pending.
+
 ## Milestones (Source Control Checkpoints)
 
 Each milestone below should be implemented as a small PR with its own tests and a clear rollback surface. The goal is that every merge leaves the system runnable and measurable.
@@ -15,7 +27,11 @@ Each milestone below should be implemented as a small PR with its own tests and 
 
 **M0: Baseline + Guardrails**
 *   Deliverables: small unit tests for duplicate detection + alias resolution (even before wiring into ingestion), and a short doc note in this plan describing how to run the targeted checks.
-*   Exit criteria: `./scripts/run_tests.sh -k "duplicate|alias"` is green.
+*   Exit criteria: `./scripts/run_tests.sh -k "duplicate or alias"` is green.
+
+**M0 targeted checks**
+*   Run: `./scripts/run_tests.sh -k "duplicate or alias"`
+*   Tests covered today: `test/test_duplicate_detection.py` and `test/test_alias_resolution.py`
 
 **M1: Client Profile App Model (schema + adapters)**
 *   Deliverables: `app/models/client_profile.py` (Pydantic), plus adapter code so `QueryService` can parse Neo4j profile properties without changing query semantics.
@@ -42,45 +58,45 @@ Each milestone below should be implemented as a small PR with its own tests and 
 *   Exit criteria: simulation scenarios pass; bias sweep shows monotonic behavior (thematic items rise as $\lambda$ increases).
 
 ## Phase 1: Foundations & Data Enrichment
-*Status: Ready to Start*
+*Status: Completed*
 
 **Objective**: Ensure the data graph has the necessary semantic pathways (Themes, Embeddings, Event Types) before we change the retrieval logic.
 
 1.  **Refactor Client Profile Model**
-    *   [ ] Promote `ClientProfile` from a simulation artifact to a first-class Pydantic model in `app/models/client_profile.py`.
-    *   [ ] Add `mandate_text`, `mandate_themes: list[str]`, `mandate_embedding: list[float]` fields.
-        *   [ ] Update `QueryService` to use this model instead of raw dicts.
+        *   [x] Promote `ClientProfile` from a simulation artifact to a first-class Pydantic model in `app/models/client_profile.py`.
+        *   [x] Add `mandate_text`, `mandate_themes: list[str]`, `mandate_embedding: list[float]` fields.
+                *   [x] Update `QueryService` to use this model instead of raw dicts.
         *   Milestone: M1
 
 2.  **Enrich Client Mandates (Thematic Extraction)**
-        *   [ ] Update mandate enrichment to extract themes into `ClientProfile.mandate_themes`.
-        *   [ ] Add `ClientProfile.mandate_embedding` (vector) to the schema (graph property and/or Chroma collection; choose one canonical path).
-    *   [ ] Batch process all existing simulation clients to populate these fields.
+        *   [x] Update mandate enrichment to extract themes into `ClientProfile.mandate_themes`.
+        *   [x] Add `ClientProfile.mandate_embedding` (vector) to the schema and persist it.
+        *   [x] Batch/backfill existing clients to populate these fields.
         *   *Test*: Verify `MATCH (c:ClientProfile) WHERE c.mandate_themes IS NOT NULL RETURN count(c)` > 0.
-    *   *Test*: Verify embeddings are stored in ChromaDB (optional, or just graph properties).
+        *   *Test*: Verify embeddings are stored in ChromaDB (optional, or just graph properties).
         *   Milestone: M4
 
 3.  **Enrich Documents (Thematic & Event Tagging)**
-    *   [ ] Verify `IngestService` tags documents with `VALID_THEMES`.
-    *   [ ] Verify `IngestService` maps `event_type` correctly (e.g., "M_AND_A", "EARNINGS").
-    *   [ ] Ensure Documents have vector embeddings stored in ChromaDB upon ingestion.
-    *   *Test*: Verify `MATCH (d:Document) WHERE d.themes IS NOT NULL RETURN count(d)` > 0.
+        *   [x] Verify `IngestService` tags documents with `VALID_THEMES`.
+        *   [x] Verify `IngestService` maps `event_type` correctly (e.g., "M_AND_A", "EARNINGS").
+        *   [x] Ensure Documents have vector embeddings stored in ChromaDB upon ingestion.
+        *   *Test*: Verify `MATCH (d:Document) WHERE d.themes IS NOT NULL RETURN count(d)` > 0.
         *   Milestone: M4 (prerequisite for hybrid retrieval)
 
 4.  **Entity Alias Resolution (Instruments & Clients)**
-    *   [ ] **Schema**: Add `Alias` node type to `graph_index.py init_schema()` with
+    *   [x] **Schema**: Add `Alias` node type to `graph_index.py init_schema()` with
             properties `value`, `scheme`, `canonical_guid`. Add `HAS_ALIAS` relationship
             type. Add uniqueness constraint on `(scheme, value)`.
             `scheme` values: `TICKER | RIC | SEDOL | ISIN | CUSIP | FIGI | NAME_VARIANT`
             (instruments) or `SFDC | BBG_FIRM | LEGAL_NAME | DESK_ALIAS` (clients).
-    *   [ ] **`AliasResolver` service** (~150 lines): `resolve(value, scheme=None) -> canonical_guid`.
+    *   [x] **`AliasResolver` service** (~150 lines): `resolve(value, scheme=None) -> canonical_guid`.
             Cypher: `MATCH (a:Alias {value: $v})-[:HAS_ALIAS]-(target) RETURN target.guid`.
             LRU cache to avoid hitting Neo4j on every ingest call.
-    *   [ ] **Ingestion hook**: In `IngestService._index_instruments`, before calling
+    *   [x] **Ingestion hook**: In `IngestService._index_instruments`, before calling
             `create_instrument`, run extracted company names / tickers through
             `AliasResolver.resolve()`. If it matches a canonical node, reuse it instead of
             creating a duplicate. Log unresolved aliases for review.
-    *   [ ] **Bulk seed script**: CSV/JSON loader (`scripts/load_aliases.py`) to import
+    *   [x] **Bulk seed script**: CSV/JSON loader (`scripts/load_aliases.py`) to import
             reference data (Bloomberg export, Salesforce dump, ticker->name variant mappings).
     *   *Test*: Ingest a story referencing "Alphabet" and verify it resolves to the `GOOGL`
             Instrument node via alias lookup.
@@ -103,22 +119,22 @@ Each milestone below should be implemented as a small PR with its own tests and 
     - `group` parameter accepted but unused.
 
     **Proposed improvements:**
-    *   [ ] **Use ChromaDB for near-duplicate detection**: At ingest, query ChromaDB
+    *   [x] **Use ChromaDB for near-duplicate detection**: At ingest, query ChromaDB
             for documents with cosine similarity > 0.85 within a 48-hour window. This
             replaces the O(N) in-memory scan with ChromaDB's optimised ANN index and
             catches semantic paraphrases the bag-of-words approach misses.
-    *   [ ] **Lower similarity threshold to 0.85**: Calibrated to catch multi-source
+    *   [x] **Lower similarity threshold to 0.85**: Calibrated to catch multi-source
             wire rewrites while avoiding false positives on recurring events.
-    *   [ ] **Add entity+event fingerprint**: After extraction, compute a "story fingerprint"
+    *   [x] **Add entity+event fingerprint**: After extraction, compute a "story fingerprint"
             from `(sorted affected_tickers, event_type, date)`. Two documents with the same
             fingerprint within 24 hours are near-certain duplicates regardless of wording.
             Fast O(1) lookup in a dict/Neo4j index without any vector math.
-    *   [ ] **Temporal windowing**: Only compare against documents from the last 48 hours,
+    *   [x] **Temporal windowing**: Only compare against documents from the last 48 hours,
             not all history. Eliminates cross-quarter false positives.
-    *   [ ] **Persist hash index to Neo4j**: Store `content_hash` as a property on the
+    *   [x] **Persist hash index to Neo4j**: Store `content_hash` as a property on the
             Document node with a Neo4j index. On startup, no need to reload all documents
             into memory -- the hash check becomes a Cypher lookup.
-    *   [ ] **Cross-language dedup via embeddings**: Documents are embedded in a
+    *   [x] **Cross-language dedup via embeddings**: Documents are embedded in a
             language-agnostic model. ChromaDB similarity already handles this if we use it.
     *   *Test*: Ingest the same AAPL earnings story from 3 different sources with different
             wording. Verify only the first is scored; the other two are flagged as duplicates.
@@ -127,56 +143,108 @@ Each milestone below should be implemented as a small PR with its own tests and 
         *   Milestone: M3
 
 ## Phase 2: Core Algorithm Upgrade (The Engine)
-*Status: Blocked by Phase 1*
+*Status: Completed*
 
 **Objective**: Rewrite `QueryService.get_top_client_news` to implement the Hybrid Scoring/Bias Logic.
 
 6.  **Refactor Signature & Interface**
-    *   [ ] Update `get_top_client_news` to accept `opportunity_bias: float = 0.0`.
-    *   [ ] Create `ScoringConfig` dataclass to hold the dynamic weights (derived from $\lambda$) and replace/extend `ClientNewsWeights`.
+        *   [x] Update `get_top_client_news` to accept `opportunity_bias: float = 0.0`.
+        *   [x] Create `ScoringConfig` dataclass to hold the dynamic weights (derived from $\lambda$) and replace/extend `ClientNewsWeights`.
         *   Milestone: M5
 
 7.  **Implement Hybrid Retrieval (Graph + Vector)**
-    *   [ ] **Graph Query**: Enhance existing `_get_documents_for_tickers` to support path counting (influence boost).
-    *   [ ] **Vector Query**: Implement `_get_documents_by_vector(mandate_embedding)` using `EmbeddingIndex` when $\lambda > 0.5$.
-    *   [ ] **Merge Strategy**: Union results by `document_guid` and track source (`graph` vs `vector`).
+        *   [x] **Graph Query**: Enhance existing `_get_documents_for_tickers` to support path counting (influence boost).
+        *   [x] **Vector Query**: Implement `_get_documents_by_vector(mandate_embedding)` using `EmbeddingIndex` when $\lambda > 0.5$.
+        *   [x] **Merge Strategy**: Union results by `document_guid` and track source (`graph` vs `vector`).
         *   Milestone: M6
 
 8.  **Implement Dynamic Scoring Strategy**
-    *   [ ] Code the $\lambda$ formulas for Base Score (Holdings vs. Thematic).
-    *   [ ] Code the **Exponential Recency** decay ($t_{1/2} = 60m$).
-    *   [ ] Code the **Non-Linear Position Boost** (Logarithmic).
-    *   [ ] Code the **Influence Boost** (Path counting).
+        *   [x] Code the $\lambda$ formulas for Base Score (Holdings vs. Thematic).
+        *   [x] Code the **Exponential Recency** decay ($t_{1/2} = 60m$).
+        *   [x] Code the **Non-Linear Position Boost** (Logarithmic).
+        *   [x] Code the **Influence Boost** (Path counting).
         *   Milestone: M6
 
 ## Phase 3: Validating with Simulation (Sunshine & Rain)
-*Status: Blocked by Phase 2*
+*Status: Completed*
 
 **Objective**: Prove the algo works by generating stress-test scenarios where "Old Algo" fails and "New Algo" succeeds.
 
 9.  **Upgrade Synthetic Story Generator (`generate_synthetic_stories.py`)**
-    *   [ ] **Scenario A (Defense)**: "Massive failure in a 0.5% tail holding." (Should likely be ignored/low-ranked unless $\lambda=0.0$).
-    *   [ ] **Scenario B (Offense)**: "Competitor M&A in a sector matching Client Mandate." (Should be #1 rank when $\lambda=1.0$).
-    *   [ ] **Scenario C (Systemic)**: "Supplier explosion affecting 3 holdings." (Should bubble up via Influence boost).
-    *   [ ] **Scenario D (Noise)**: "Generic sector noise." (Should be suppressed).
+        *   [x] **Scenario A (Defense)**: "Massive failure in a 0.5% tail holding." (Should likely be ignored/low-ranked unless $\lambda=0.0$).
+        *   [x] **Scenario B (Offense)**: "Competitor M&A in a sector matching Client Mandate." (Should be #1 rank when $\lambda=1.0$).
+        *   [x] **Scenario C (Systemic)**: "Supplier explosion affecting 3 holdings." (Should bubble up via Influence boost).
+        *   [x] **Scenario D (Noise)**: "Generic sector noise." (Should be suppressed).
+        *   [x] Add deterministic generation mode: `uv run python simulation/generate_synthetic_stories.py --mode generate --phase3 --output simulation/test_output`
+        *   [x] Add end-to-end runner flag: `./simulation/run_simulation.sh --phase3 --regenerate`
 
 10. **Refine Avatar Simulation (`validate_avatar_feeds.py`)**
-    *   [ ] Add `bias_sweep` mode: Run validation at $\lambda=[0.0, 0.5, 1.0]$.
-    *   [ ] **Metric: Recall@3**: How often is the *intended* stress-test story found in the Top 3?
-    *   [ ] **Metric: Alpha Score**: (Custom metric measuring relevance of non-holdings).
+        *   [x] Add `bias_sweep` mode: Run validation at $\lambda=[0.0, 0.5, 1.0]$.
+        *   [x] **Metric: Recall@3**: How often is the *intended* stress-test story found in the Top 3?
+        *   [x] **Metric: Alpha Score**: (Custom metric measuring relevance of non-holdings).
+        *   [x] Command: `uv run python simulation/validate_avatar_feeds.py --bias-sweep --lambdas 0,0.5,1`
+
+**Phase 3 measured results (latest run):**
+*   Bias sweep (Recall@3) for scenarios A/B/C (noise scenario D excluded):
+                *   $\lambda=0.0$: Recall@3 = 1.000 (3/3)
+                *   $\lambda=0.5$: Recall@3 = 1.000 (3/3)
+                *   $\lambda=1.0$: Recall@3 = 1.000 (3/3)
 
 ## Phase 4: Tuning & Calibration (The "Sales Trader" Loop)
-*Status: Blocked by Phase 3*
+*Status: Ready to Start*
 
 **Objective**: Determine the optimal default weights using quantitative feedback.
 
+**Core idea**: Phase 4 is not "generate 500 and hope". We will:
+1) create a large, noisy document pool (realistic competition),
+2) inject a small set of deterministic, known-good "calibration" stories with encoded expectations,
+3) run the avatar simulation as the measurement harness to confirm client-specific ranking and relationship handling across $\lambda$.
+
 11. **Run Large-Scale Simulation**
-    *   [ ] `run_simulation.sh --count 500`.
-    *   [ ] Inspect `test_output/` JSONs.
+    *   [ ] Generate + ingest a large background corpus (the "market noise" / competition set):
+            *   Command: `./simulation/run_simulation.sh --count 500 --regenerate`.
+            *   Purpose: create enough competing documents so the ranking function is forced to make trade-offs (holdings vs thematic vs recency vs influence).
+    *   [ ] Inject deterministic calibration cases (the "known needles") AFTER the 500-run:
+            *   Command: `./simulation/run_simulation.sh --phase3 --regenerate`.
+            *   What gets injected (Phase 3 A/B/C; D is noise and is intentionally excluded from Recall@3 evaluation):
+                    *   **Phase3 A (Defense / tail holding failure)**: expected to be relevant for exactly the client(s) in `validation_metadata.expected_relevant_clients` (today: `...0001`).
+                    *   **Phase3 B (Offense / thematic M&A, non-holding)**: expected to rise as $\lambda$ increases, and to be relevant for the mandate-aligned client(s) (today: `...0003`).
+                    *   **Phase3 C (Systemic / multi-holding shock)**: expected to rank very high for the impacted-holdings client(s) (today: `...0001`), and it exercises the influence/path logic by mentioning multiple tickers.
+            *   Why we inject AFTER the 500-run: the avatar harness selects the most recent synthetic file per Phase3 scenario from `simulation/test_output/`, and the stories must also be recent enough to be queryable in the time window.
+    *   [ ] Inspect `simulation/test_output/` JSONs for the injected cases (sanity check):
+            *   Confirm each Phase3 JSON has:
+                    *   `validation_metadata.scenario` starting with `Phase3`
+                    *   deterministic title prefix (used for matching)
+                    *   `validation_metadata.expected_relevant_clients`
+                    *   `validation_metadata.base_ticker`
+    *   [x] Smoke run after full reset: `./simulation/run_simulation.sh --count 20 --regenerate` (all gates passed; 20 uploaded, 0 failed).
 
 12. **Quantify "Bias Sensitivity"**
-    *   [ ] Measure crossover point: At what $\lambda$ does a "5-star Competitor News" overtake a "3-star Direct Holding"?
-    *   [ ] Calibrate weights to ensure the crossover feels intuitive (e.g., around $\lambda=0.6$).
+    *   [ ] Use avatar simulation as the measurement harness (client-specific validation):
+            *   Command: `uv run python simulation/validate_avatar_feeds.py --bias-sweep --lambdas 0,0.25,0.5,0.75,1`
+            *   What this verifies:
+                    *   **Client-specific ranking**: each injected Phase3 case encodes `expected_relevant_clients`; Recall@3 checks the intended story appears in the Top 3 for the intended client(s).
+                    *   **Relationship handling under competition**: the large background corpus ensures the graph/vector candidate generation and scoring must fight for top slots; if relationships/path boosts are broken, the injected cases stop surfacing.
+                    *   **Bias response**: Phase3 B is the primary needle for the thematic/non-holding path; if $\lambda$ is working, its rank should improve as $\lambda$ increases.
+            *   What this does NOT prove by itself:
+                    *   It does not guarantee a clean crossover curve unless the background corpus contains enough plausible thematic candidates; that is why we run the 500 background corpus first.
+    *   [ ] Measure crossover point ("sales trader" intuition target): At what $\lambda$ does a strong thematic/non-holding item overtake a mid-strength holding-driven item?
+            *   Tooling: `uv run python simulation/measure_bias_sensitivity.py --lambdas 0,0.25,0.5,0.75,1`
+            *   Interpretation:
+                    *   If ranks are flat across all $\lambda$, either (a) thematic candidates are not entering the candidate set, or (b) $\lambda$ weights are not being applied, or (c) the injected set is too weak relative to holdings-driven items.
+    *   [ ] Preconditions to make the $\lambda$ sweep meaningful:
+            *   Ensure client mandate embeddings exist (vector path only activates when $\lambda>0.5$ AND `mandate_embedding` exists).
+            *   Ensure document theme tags are present/queryable (theme-based retrieval participates at all $\lambda$).
+            *   Ensure Phase3 cases are recently ingested (the MCP time window is capped; old injected docs silently disappear from the evaluation window).
+
+    **Where the avatar simulation fits**:
+    *   Phase 3 used it to prove the algorithm works on a clean, small set.
+    *   Phase 4 uses it as the regression harness while we tune weights against a large, noisy corpus.
+    *   The avatar harness is the fastest way to answer: "Did we break client-specific ranking or relationship traversal while changing weights?" before paying the cost of repeated 500-run iterations.
+
+        **Phase 4 measured results (clean env + 20 stories + Phase3 injected; 6h window):**
+        *   `Sunrise Long Opportunities`: Scenario B rank improved as $\lambda$ increased (B=6 at $\lambda=0.0$ -> B=2 at $\lambda=1.0$); Scenario C stayed rank 1.
+        *   `Quantum Momentum Partners`: Scenario A/B/C ranks shifted slightly at high $\lambda$ (A improved to rank 3; C moved to rank 2 at $\lambda=1.0$).
 
 13. **Final Polish**
     *   [ ] Update `AvatarFeed` to support the new scoring model if needed (or keep separate).

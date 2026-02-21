@@ -15,7 +15,7 @@
 #   ./simulation/run_avatar_simulation.sh --test-set          # Inject Golden Set test data (Clean Start)
 #
 # Pipeline:
-#   1. ./scripts/start-prod.sh --reset    (tear down all data)
+#   1. ./docker/start-prod.sh --reset    (tear down all data)
 #   2. ./simulation/run_simulation.sh     (create groups, sources, clients, generate+ingest docs)
 #   3. uv run simulation/validate_avatar_feeds.py  (query feeds via MCP, assert invariants)
 # =============================================================================
@@ -181,7 +181,7 @@ if [ "$SKIP_RESET" = false ]; then
         OPENROUTER_ARG="--openrouter-key $OPENROUTER_KEY"
     fi
     # Use yes to auto-confirm the reset prompt
-    echo "yes" | ./scripts/start-prod.sh --reset $OPENROUTER_ARG
+    echo "yes" | ./docker/start-prod.sh --reset $OPENROUTER_ARG
     echo ""
     echo "  ✅ Production stack reset and running"
     echo ""

@@ -16,16 +16,16 @@ import random
 import time
 import argparse
 import logging
+import concurrent.futures
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import List, Optional
 
-# SSOT: Add workspace to path and import env module
+# Add workspace to path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "lib" / "gofr-common" / "src"))
-from gofr_common.gofr_env import get_admin_token, GofrEnvError  # noqa: E402 - path modification required before import
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -142,6 +142,7 @@ CLIENT_PORTFOLIOS = {
         "BANKO",
         "VIT",
         "GTX",
+        "NXS",
     ],  # Quantum Momentum Partners (Hedge Fund)
     "550e8400-e29b-41d4-a716-446655440002": [
         "OMNI",
@@ -321,6 +322,96 @@ SCENARIOS = [
             expected_feed_rank_range="6-15",
         ),
     ),
+
+    # =====================================================================
+    # Phase 3 Stress-Test Scenarios (Sunshine & Rain)
+    # =====================================================================
+    Scenario(
+        name="Phase3 A Defense Tail Holding Failure",
+        description="Massive failure in a small (0.5%) tail holding",
+        target_tier="PLATINUM",
+        weight=0.02,
+        template=(
+            "News Event: Operational Failure / Catastrophe. Subject: {ticker} ({name}). "
+            "Context: This is a small tail holding (~0.5% weight) but the downside risk is severe. "
+            "Style Guide: {style_guide}.\n"
+            "Task: Write a breaking news story about a catastrophic operational failure (fraud, product failure, regulatory stop) "
+            "that could plausibly be existential for the company. Be specific and urgent."
+        ),
+        validation=ValidationRule(
+            min_score=90,
+            expected_tier="PLATINUM",
+            expected_event="FRAUD_SCANDAL",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440001"],
+            relationship_hops=0,
+            expected_feed_rank_range="6-15",
+        ),
+    ),
+    Scenario(
+        name="Phase3 B Offense Thematic M&A",
+        description="Competitor M&A in a sector matching client mandate (non-holding)",
+        target_tier="PLATINUM",
+        weight=0.02,
+        template=(
+            "News Event: Competitor M&A / Strategic Acquisition. Subject: {ticker} ({name}). "
+            "Theme: {sector} and mandate-aligned catalysts. Style Guide: {style_guide}.\n"
+            "Task: Write a story about a competitor acquisition (or takeover interest) that signals a major thematic shift "
+            "in the sector. Make the implications clear for mandate-themed investors, not just holders of the stock."
+        ),
+        validation=ValidationRule(
+            min_score=90,
+            expected_tier="PLATINUM",
+            expected_event="M_AND_A",
+            must_match_event=False,
+            # Target a client that reliably sees LUXE in the simulation baseline.
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440003"],
+            relationship_hops=0,
+            expected_feed_rank_range="1-5",
+        ),
+    ),
+    Scenario(
+        name="Phase3 C Systemic Multi-Holding Shock",
+        description="Systemic supplier explosion impacting 3 holdings",
+        target_tier="PLATINUM",
+        weight=0.02,
+        template=(
+            "News Event: Systemic Supply Shock / Explosion / Shutdown. "
+            "Affected holdings: {affected_tickers_csv}. Style Guide: {style_guide}.\n"
+            "Task: Write a breaking story about a systemic shock (e.g. major supplier plant explosion or critical component shortage) "
+            "that is explicitly impacting ALL of: {affected_tickers_csv}. Make sure each ticker is mentioned clearly in the body."
+        ),
+        validation=ValidationRule(
+            min_score=90,
+            expected_tier="PLATINUM",
+            expected_event="MACRO_DATA",
+            must_match_event=False,
+            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440001"],
+            relationship_hops=1,
+            expected_feed_rank_range="1-5",
+        ),
+    ),
+    Scenario(
+        name="Phase3 D Noise Generic Sector Chatter",
+        description="Generic sector noise that should be suppressed",
+        target_tier="STANDARD",
+        weight=0.02,
+        template=(
+            "News Event: Generic Sector Noise. Subject: {sector}. Mention: {ticker} ({name}). "
+            "Style Guide: {style_guide}.\n"
+            "Task: Write a vague, low-signal sector roundup with no concrete catalyst, no numbers, and no actionable facts. "
+            "It should read like noise."
+        ),
+        validation=ValidationRule(
+            max_score=35,
+            expected_tier="STANDARD",
+            expected_event="OTHER",
+            must_match_event=False,
+            expected_relevant_clients=[],
+            relationship_hops=0,
+            expected_feed_rank_range="16+",
+        ),
+    ),
 ]
 
 # ============================================================================
@@ -345,11 +436,23 @@ class SyntheticGenerator:
                 "Run simulation via: ./simulation/run_simulation.sh"
             )
 
-        logger.info(
-            f"Loaded API Key: {self.api_key[:10]}...{self.api_key[-5:] if len(self.api_key) > 5 else ''}"
-        )
+        logger.info("Loaded OpenRouter API key from environment (redacted)")
 
         self.client = httpx.Client(
+            base_url="https://openrouter.ai/api/v1",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "HTTP-Referer": "https://github.com/gofr/gofr-iq",
+                "X-Title": "Gofr-IQ Synthetic Generator",
+            },
+            timeout=TIMEOUT,
+        )
+
+    def _create_client(self):
+        """Create a dedicated client (safe for use from a worker thread)."""
+        import httpx
+
+        return httpx.Client(
             base_url="https://openrouter.ai/api/v1",
             headers={
                 "Authorization": f"Bearer {self.api_key}",
@@ -365,20 +468,8 @@ class SyntheticGenerator:
             logger.error("Custom env files are not supported; use Vault-derived environment")
             sys.exit(1)
 
-        # Minimal config: sources/tokens
+        # Minimal config: sources
         self.sources = MOCK_SOURCES
-        self.tokens = {}
-
-        # Load bootstrap tokens via SSOT module
-        try:
-            admin_token = get_admin_token()
-            # Map the default simulation group GUID to the admin token for simplified access/ingestion
-            self.tokens["group-simulation"] = admin_token
-            logger.info("✓ Loaded admin token for group-simulation via SSOT module")
-        except GofrEnvError as e:
-            logger.error(f"Failed to load tokens via SSOT module: {e}")
-            logger.error("Run: uv run python scripts/bootstrap.py")
-            sys.exit(1)
 
     def _select_scenario(self) -> Scenario:
         weights = [s.weight for s in SCENARIOS]
@@ -393,8 +484,22 @@ class SyntheticGenerator:
         date = date.replace(hour=hours, minute=mins)
         return date.isoformat()
 
-    def _generate_story_text(self, prompt: str) -> str:
-        """Call LLM to generate story body"""
+    def _get_recent_date(self, hours_back: int = 24) -> str:
+        """Return a recent timestamp within the last N hours.
+
+        Phase 3 validation relies on MCP tool windows capped at 168h, so
+        Phase3 stories must be recent enough to be queryable.
+        """
+        hours_back = max(1, int(hours_back))
+        mins_back = random.randint(0, hours_back * 60)
+        date = datetime.now() - timedelta(minutes=mins_back)
+        return date.isoformat()
+
+    def _generate_story_text(self, prompt: str, client=None) -> str:
+        """Call LLM to generate story body."""
+        if client is None:
+            client = self.client
+
         payload = {
             "model": self.model,
             "messages": [
@@ -419,7 +524,7 @@ class SyntheticGenerator:
 
         for attempt in range(MAX_RETRIES):
             try:
-                response = self.client.post("/chat/completions", json=payload)
+                response = client.post("/chat/completions", json=payload)
                 if response.status_code == 200:
                     data = response.json()
                     return data["choices"][0]["message"]["content"].strip()
@@ -434,17 +539,45 @@ class SyntheticGenerator:
 
         raise RuntimeError("Failed to generate story after retries")
 
-    def generate_batch(self, count: int, output_dir: Path):
+    def generate_batch(
+        self,
+        count: int,
+        output_dir: Path,
+        scenarios_override: list[Scenario] | None = None,
+        max_workers: int = 1,
+    ):
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"Generating {count} stories to {output_dir}...")
+        if max_workers < 1:
+            raise ValueError("max_workers must be >= 1")
+
+        total = len(scenarios_override) if scenarios_override is not None else count
+        logger.info(f"Generating {total} stories to {output_dir}...")
 
         all_tickers = UNIVERSE.get_tickers()
         all_relationships = UNIVERSE.get_relationships()
         all_factor_exposures = UNIVERSE.get_factor_exposures()
 
-        for i in range(count):
-            scenario = self._select_scenario()
+        def _scenario_for_index(i: int) -> Scenario:
+            if scenarios_override is not None:
+                return scenarios_override[i]
+            return self._select_scenario()
+
+        def _generate_one(i: int):
+            scenario = _scenario_for_index(i)
+
+            # Phase 3: steer scenario selection toward deterministic tickers so
+            # bias-sweep validation can reliably match titles.
+            forced_ticker_sym: str | None = None
+            forced_affected_tickers: list[str] | None = None
+            if scenario.name == "Phase3 A Defense Tail Holding Failure":
+                forced_ticker_sym = "NXS"
+            elif scenario.name == "Phase3 B Offense Thematic M&A":
+                forced_ticker_sym = "LUXE"
+            elif scenario.name == "Phase3 C Systemic Multi-Holding Shock":
+                # Hedge fund holdings (stable simulation client) - use three tickers.
+                forced_affected_tickers = ["QNTM", "BANKO", "VIT"]
+                forced_ticker_sym = forced_affected_tickers[0]
 
             # For macro factor scenarios, select a ticker with relevant exposure
             if scenario.name in [
@@ -470,9 +603,9 @@ class SyntheticGenerator:
                 if not exposed_tickers:
                     # No exposures, skip this scenario
                     logger.warning(f"No exposures for {factor_id}, skipping scenario")
-                    continue
+                    return False
 
-                ticker_sym = random.choice(exposed_tickers)
+                ticker_sym = forced_ticker_sym or random.choice(exposed_tickers)
                 ticker = UNIVERSE.get_ticker(ticker_sym)
 
                 # Get the exposure details
@@ -482,7 +615,10 @@ class SyntheticGenerator:
                     if e.ticker == ticker_sym and e.factor_id == factor_id
                 )
             else:
-                ticker = random.choice(all_tickers)
+                if forced_ticker_sym:
+                    ticker = UNIVERSE.get_ticker(forced_ticker_sym)
+                else:
+                    ticker = random.choice(all_tickers)
                 exposure = None
 
             source = random.choice(MOCK_SOURCES)
@@ -496,10 +632,14 @@ class SyntheticGenerator:
                 "related_ticker": "N/A",
                 "related_name": "N/A",
                 "relationship_desc": "N/A",
+                "affected_tickers_csv": ticker.ticker,
                 "factor_exposure_desc": "N/A",
                 "factor_beta": "0.0",
                 "regulation_context": "SEC announces new disclosure requirements",
             }
+
+            if forced_affected_tickers:
+                prompt_vars["affected_tickers_csv"] = ", ".join(forced_affected_tickers)
 
             # Handle macro factor scenarios
             if exposure:
@@ -574,29 +714,30 @@ class SyntheticGenerator:
 
             full_prompt = scenario.template.format(**prompt_vars)
 
+            client = None
             try:
+                if max_workers > 1:
+                    client = self._create_client()
+
                 logger.info(
-                    f"[{i+1}/{count}] Generating '{scenario.name}' for {ticker.ticker} via {source.name}"
+                    f"[{i+1}/{total}] Generating '{scenario.name}' for {ticker.ticker} via {source.name}"
                 )
-                story_body = self._generate_story_text(full_prompt)
+                story_body = self._generate_story_text(full_prompt, client=client)
 
                 # Use Default Simulation Group
                 group_guid = DEFAULT_GROUP["guid"]
-                token = self.tokens.get(group_guid)
 
-                # If no token loaded (bootstrap failed), validation might fail downstream
-                if not token:
-                    token = "placeholder_token"
-                    if i == 0:
-                        logger.warning("Using placeholder token (bootstrap tokens missing)")
-
-                # Calculate expected_relevant_clients based on portfolios and watchlists
+                # Calculate expected_relevant_clients based on portfolios and watchlists,
+                # unless the scenario explicitly defines expected clients.
                 expected_clients = []
-                for client_guid, portfolio in CLIENT_PORTFOLIOS.items():
-                    if ticker.ticker in portfolio:
-                        expected_clients.append(client_guid)
-                    elif ticker.ticker in CLIENT_WATCHLISTS.get(client_guid, []):
-                        expected_clients.append(client_guid)
+                if scenario.validation.expected_relevant_clients:
+                    expected_clients = list(scenario.validation.expected_relevant_clients)
+                else:
+                    for client_guid, portfolio in CLIENT_PORTFOLIOS.items():
+                        if ticker.ticker in portfolio:
+                            expected_clients.append(client_guid)
+                        elif ticker.ticker in CLIENT_WATCHLISTS.get(client_guid, []):
+                            expected_clients.append(client_guid)
 
                 # For relationship scenarios, also include clients holding the related ticker
                 if prompt_vars.get("related_ticker") != "N/A":
@@ -606,6 +747,17 @@ class SyntheticGenerator:
                             expected_clients.append(client_guid)
 
                 # Construct Output JSON
+                if scenario.name.startswith("Phase3"):
+                    title = f"[{scenario.name}] {prompt_vars['ticker']} - {prompt_vars['name']}"
+                else:
+                    title = f"Update regarding {prompt_vars['name']}"
+
+                published_at = (
+                    self._get_recent_date(hours_back=1)
+                    if scenario.name.startswith("Phase3")
+                    else self._get_random_date()
+                )
+
                 output_data = {
                     "source": source.name,  # Legacy field
                     "source_name": source.name,  # Standardized field
@@ -615,10 +767,9 @@ class SyntheticGenerator:
                     "source_type": "NEWS_WIRE",  # Default for synthetic generator
                     "group_guid": group_guid,
                     "event_type": scenario.validation.expected_event,
-                    "published_at": self._get_random_date(),
+                    "published_at": published_at,
                     "upload_as_group": group_guid,
-                    "token": token,
-                    "title": f"Update regarding {prompt_vars['name']}",
+                    "title": title,
                     "story_body": story_body,
                     "validation_metadata": {
                         "scenario": scenario.name,
@@ -637,8 +788,36 @@ class SyntheticGenerator:
                 with open(output_dir / filename, "w") as f:
                     json.dump(output_data, f, indent=2)
 
+                return True
             except Exception as e:
                 logger.error(f"Failed to generate story {i}: {e}")
+                return False
+            finally:
+                if client is not None:
+                    try:
+                        client.close()
+                    except Exception:
+                        pass
+
+        if max_workers == 1:
+            ok = 0
+            for i in range(total):
+                if _generate_one(i):
+                    ok += 1
+            logger.info(f"Batch generation complete: {ok}/{total} succeeded")
+            return
+
+        ok = 0
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = [executor.submit(_generate_one, i) for i in range(total)]
+            for f in concurrent.futures.as_completed(futures):
+                try:
+                    if f.result():
+                        ok += 1
+                except Exception as e:
+                    logger.error(f"Generation worker failed: {e}")
+
+        logger.info(f"Batch generation complete: {ok}/{total} succeeded")
 
 
 # ============================================================================
@@ -653,6 +832,11 @@ def main():
     parser.add_argument("--env", type=str, help="Path to .env file")
     parser.add_argument("--model", type=str, default=None, help=f"LLM model name (default: $GOFR_IQ_LLM_MODEL or {DEFAULT_MODEL})")
     parser.add_argument(
+        "--phase3",
+        action="store_true",
+        help="Generate exactly one story per Phase3 scenario (A-D)",
+    )
+    parser.add_argument(
         "--mode",
         type=str,
         default="generate",
@@ -664,7 +848,19 @@ def main():
 
     if args.mode == "generate":
         generator = SyntheticGenerator(args.env, model=args.model)
-        generator.generate_batch(args.count, Path(args.output))
+        if args.phase3:
+            phase3_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase3")]
+            if not phase3_scenarios:
+                raise RuntimeError(
+                    "No Phase3 scenarios found. Expected scenario names starting with 'Phase3'."
+                )
+            generator.generate_batch(
+                count=len(phase3_scenarios),
+                output_dir=Path(args.output),
+                scenarios_override=phase3_scenarios,
+            )
+        else:
+            generator.generate_batch(args.count, Path(args.output))
         logger.info("Batch generation complete.")
     elif args.mode == "ingest":
         logger.info("Ingestion mode not yet implemented.")

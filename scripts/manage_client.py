@@ -197,7 +197,7 @@ def mcp_initialize(cfg: McpConfig) -> str:
         },
         method="POST",
     )
-    with urlopen(req, timeout=30) as resp:
+    with urlopen(req, timeout=30) as resp:  # nosec B310 - controlled URL (local MCP endpoint)
         session_id = resp.headers.get("mcp-session-id")
         if not session_id:
             raise RuntimeError("Missing MCP session id in response")
@@ -233,7 +233,7 @@ def mcp_call(cfg: McpConfig, session_id: str, tool_name: str, arguments: dict[st
         },
         method="POST",
     )
-    with urlopen(req, timeout=60) as resp:
+    with urlopen(req, timeout=60) as resp:  # nosec B310 - controlled URL (local MCP endpoint)
         raw = resp.read().decode("utf-8")
     payload = parse_sse_response(raw)
     result = payload.get("result", {})

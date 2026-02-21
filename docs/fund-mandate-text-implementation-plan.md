@@ -307,7 +307,7 @@ with Neo4jService(settings) as neo4j:
 **Goal**: Verify production services with real clients  
 **Steps**:
 - [x] Rebuild production image: `./docker/build-prod.sh`
-- [x] Restart services: `./scripts/start-prod.sh`
+- [x] Restart services: `./docker/start-prod.sh`
 - [x] Test CLI create with mandate_text
 - [x] Test CLI update mandate_text
 - [x] Test CLI clear mandate_text (--clear-mandate-text)
@@ -440,7 +440,7 @@ CLIENT_GUID=$(uuidgen)
 ## Rollback Plan
 
 If critical issues arise post-deployment:
-1. **Immediate**: Revert to previous container image via `./scripts/start-prod.sh` with older tag
+1. **Immediate**: Revert to previous container image via `./docker/start-prod.sh` with older tag
 2. **Database**: No rollback needed (mandate_text is optional, ignored if not present in code)
 3. **Clients**: Existing clients unaffected (field remains null until explicitly set)
 4. **UI**: Remove mandate_text UI elements or disable via feature flag

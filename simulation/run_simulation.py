@@ -12,6 +12,7 @@ import os
 import sys
 import subprocess
 import urllib.request
+import concurrent.futures
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -30,7 +31,7 @@ from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[i
 from gofr_common.auth.groups import GroupRegistry  # type: ignore[import-not-found]  # noqa: E402
 from gofr_common.auth.service import AuthService  # type: ignore[import-not-found]  # noqa: E402
 
-from simulation.generate_synthetic_stories import SyntheticGenerator, MOCK_SOURCES  # noqa: E402
+from simulation.generate_synthetic_stories import SyntheticGenerator, MOCK_SOURCES, SCENARIOS  # noqa: E402
 from simulation import ingest_synthetic_stories as ingest  # noqa: E402
 from simulation import load_simulation_data  # noqa: E402
 
@@ -88,7 +89,7 @@ def load_env(
     else:
         vault_token = os.environ.get("VAULT_TOKEN") or os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_ROOT_TOKEN")
     if not vault_token:
-        raise RuntimeError("VAULT_TOKEN not found; ensure scripts/start-prod.sh was run")
+        raise RuntimeError("VAULT_TOKEN not found; ensure docker/start-prod.sh was run")
 
     # Compute Vault address
     vault_addr = os.environ.get("VAULT_ADDR") or os.environ.get("GOFR_VAULT_URL")
@@ -623,7 +624,14 @@ def load_generation_metadata(output_dir: Path) -> Optional[dict]:
         return None
 
 
-def generate_data(count: int, output_dir: Path, regenerate: bool = False, model: Optional[str] = None):
+def generate_data(
+    count: int,
+    output_dir: Path,
+    regenerate: bool = False,
+    model: Optional[str] = None,
+    phase3: bool = False,
+    gen_workers: int = 1,
+):
     """Generate synthetic stories using SSOT module for token access.
     
     Args:
@@ -633,35 +641,76 @@ def generate_data(count: int, output_dir: Path, regenerate: bool = False, model:
         model: Optional LLM model name override
     """
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    phase3_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase3")] if phase3 else []
+    requested_count = len(phase3_scenarios) if phase3 else count
+    if phase3 and requested_count == 0:
+        raise RuntimeError("--phase3 set but no Phase3 scenarios found (expected names starting with 'Phase3')")
     
     # Check if we can reuse existing documents
     if not regenerate:
         existing_count = count_existing_documents(output_dir)
         metadata = load_generation_metadata(output_dir)
         
-        if existing_count >= count:
+        if existing_count >= requested_count:
             if metadata and metadata.get("count") == existing_count:
                 print(f"   ♻️  Reusing {existing_count} existing documents (use --regenerate to force new generation)")
                 print(f"      Generated: {__import__('datetime').datetime.fromtimestamp(metadata.get('timestamp', 0)).strftime('%Y-%m-%d %H:%M:%S')}")
                 return
             else:
-                print(f"   ♻️  Found {existing_count} existing documents (requesting {count})")
-                if existing_count > count:
-                    print(f"      Will use the {count} most recent documents")
+                print(f"   ♻️  Found {existing_count} existing documents (requesting {requested_count})")
+                if existing_count > requested_count:
+                    print(f"      Will use the {requested_count} most recent documents")
                     return
         elif existing_count > 0:
-            print(f"   ⚠️  Found {existing_count} existing documents, but need {count}")
-            print(f"      Generating {count - existing_count} additional documents...")
+            print(f"   ⚠️  Found {existing_count} existing documents, but need {requested_count}")
+            print(f"      Generating {requested_count - existing_count} additional documents...")
     
     # Generate new documents
+    if gen_workers < 1:
+        raise ValueError("gen_workers must be >= 1")
+
     generator = SyntheticGenerator(model=model)
-    generator.generate_batch(count, output_dir)
-    save_generation_metadata(output_dir, count)
+    if phase3:
+        generator.generate_batch(
+            requested_count,
+            output_dir,
+            scenarios_override=phase3_scenarios,
+            max_workers=gen_workers,
+        )
+    else:
+        generator.generate_batch(requested_count, output_dir, max_workers=gen_workers)
+    save_generation_metadata(output_dir, requested_count)
 
 
-def ingest_data(output_dir: Path, sources: Dict[str, str], tokens: Dict[str, str], count: Optional[int] = None, verbose: bool = False):
-    """Ingest stories from output directory. If count is specified, only process the most recent count files."""
+def ingest_data(
+    output_dir: Path,
+    sources: Dict[str, str],
+    tokens: Dict[str, str],
+    count: Optional[int] = None,
+    verbose: bool = False,
+    scenario_prefix: Optional[str] = None,
+    ingest_workers: int = 1,
+):
+    """Ingest stories from output directory.
+
+    If count is specified, only process the most recent count files (after any filtering).
+    If scenario_prefix is specified, only ingest documents whose validation_metadata.scenario starts with it.
+    """
     story_files = sorted(output_dir.glob("synthetic_*.json"), reverse=True)  # Newest first
+
+    if scenario_prefix:
+        filtered: list[Path] = []
+        for path in story_files:
+            try:
+                data = json.loads(path.read_text())
+            except Exception:
+                continue
+            meta = data.get("validation_metadata") or {}
+            scenario = meta.get("scenario")
+            if isinstance(scenario, str) and scenario.startswith(scenario_prefix):
+                filtered.append(path)
+        story_files = filtered
     
     if count and count > 0:
         story_files = story_files[:count]
@@ -696,21 +745,54 @@ def ingest_data(output_dir: Path, sources: Dict[str, str], tokens: Dict[str, str
     if missing_sources:
         raise RuntimeError(f"Sources not registered but referenced in stories: {missing_sources}")
 
+    if ingest_workers < 1:
+        raise ValueError("ingest_workers must be >= 1")
+
     uploaded = 0
     failed = 0
-    for idx, story_file in enumerate(story_files, 1):
-        status, message, duration, _meta = ingest.process_story(
-            story_file, sources, dry_run=False, verbose=verbose
-        )
-        prefix = f"[{idx}/{len(story_files)}] {story_file.name}"
-        if status == "uploaded":
-            print(f"{prefix} OK ({duration:.1f}s)")
-            uploaded += 1
-        elif status == "duplicate":
-            print(f"{prefix} duplicate")
-        else:
-            print(f"{prefix} failed: {message}")
-            failed += 1
+    total = len(story_files)
+
+    if ingest_workers == 1:
+        for idx, story_file in enumerate(story_files, 1):
+            status, message, duration, _meta = ingest.process_story(
+                story_file, sources, dry_run=False, verbose=verbose
+            )
+            prefix = f"[{idx}/{total}] {story_file.name}"
+            if status == "uploaded":
+                print(f"{prefix} OK ({duration:.1f}s)")
+                uploaded += 1
+            elif status == "duplicate":
+                print(f"{prefix} duplicate")
+            else:
+                print(f"{prefix} failed: {message}")
+                failed += 1
+    else:
+        idx_by_path = {p: i for i, p in enumerate(story_files, 1)}
+
+        def _ingest_one(path: Path):
+            return ingest.process_story(path, sources, dry_run=False, verbose=verbose)
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=ingest_workers) as executor:
+            future_by_path = {executor.submit(_ingest_one, p): p for p in story_files}
+            completed = 0
+            for fut in concurrent.futures.as_completed(future_by_path):
+                story_file = future_by_path[fut]
+                idx = idx_by_path.get(story_file, 0)
+                try:
+                    status, message, duration, _meta = fut.result()
+                except Exception as e:
+                    status, message, duration = "failed", f"exception: {e}", 0.0
+
+                completed += 1
+                prefix = f"[{idx}/{total}] {story_file.name} ({completed}/{total} done)"
+                if status == "uploaded":
+                    print(f"{prefix} OK ({duration:.1f}s)")
+                    uploaded += 1
+                elif status == "duplicate":
+                    print(f"{prefix} duplicate")
+                else:
+                    print(f"{prefix} failed: {message}")
+                    failed += 1
     
     print(f"\n📊 Ingestion complete: {uploaded} uploaded, {failed} failed")
     
@@ -732,6 +814,11 @@ def main():
     parser.add_argument("--skip-ingest", action="store_true", help="Skip ingestion stage")
     parser.add_argument("--validate-only", action="store_true", help="Run setup/validations only (implies --count 0, skip gen/ingest)")
     parser.add_argument("--regenerate", action="store_true", help="Force regeneration of stories even if cached versions exist")
+    parser.add_argument(
+        "--phase3",
+        action="store_true",
+        help="Generate/ingest exactly one story per Phase3 scenario (A-D)",
+    )
     parser.add_argument("--skip-universe", action="store_true", help="Skip loading universe (companies/relationships) to Neo4j")
     parser.add_argument("--skip-clients", action="store_true", help="Skip generating and loading clients to Neo4j")
     parser.add_argument("--init-groups-only", action="store_true", help="Create/verify groups then stop")
@@ -743,12 +830,30 @@ def main():
     parser.add_argument("--secrets-dir", type=Path, default=Path("secrets"), help="Path to secrets directory (default: secrets/)")
     parser.add_argument("--ports-file", type=Path, default=Path("lib/gofr-common/config/gofr_ports.env"), help="Path to ports env file")
     parser.add_argument("--verbose", action="store_true", help="Verbose ingestion output")
+    parser.add_argument(
+        "--gen-workers",
+        type=int,
+        default=1,
+        help="Synthetic story generation worker threads (default: 1)",
+    )
+    parser.add_argument(
+        "--ingest-workers",
+        type=int,
+        default=1,
+        help="Ingestion worker threads (default: 1)",
+    )
     args = parser.parse_args()
 
     # Derive effective flow flags
     effective_count = args.count
     skip_generate = args.skip_generate or args.ingest_only  # ingest-only implies skip-generate
     skip_ingest = args.skip_ingest
+
+    phase3_count = len([s for s in SCENARIOS if s.name.startswith("Phase3")])
+    if args.phase3:
+        if phase3_count == 0:
+            raise RuntimeError("--phase3 set but no Phase3 scenarios found (expected names starting with 'Phase3')")
+        effective_count = phase3_count
 
     if args.validate_only:
         effective_count = 0
@@ -854,7 +959,14 @@ def main():
             sys.exit(1)
         print(f"Reusing existing documents in {args.output}")
     else:
-        generate_data(effective_count, args.output, regenerate=args.regenerate, model=args.model)
+        generate_data(
+            effective_count,
+            args.output,
+            regenerate=args.regenerate,
+            model=args.model,
+            phase3=args.phase3,
+            gen_workers=args.gen_workers,
+        )
         run_gate("generation")
 
     # 4. Ingest Stories
@@ -863,7 +975,15 @@ def main():
     else:
         sources = list_sources(tokens["admin"])
         ingest_count = None if skip_generate else effective_count
-        ingest_data(args.output, sources, tokens, count=ingest_count, verbose=args.verbose)
+        ingest_data(
+            args.output,
+            sources,
+            tokens,
+            count=ingest_count,
+            verbose=args.verbose,
+            scenario_prefix="Phase3" if args.phase3 else None,
+            ingest_workers=args.ingest_workers,
+        )
         run_gate("ingestion")
 
 
