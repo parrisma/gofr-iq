@@ -7,7 +7,7 @@
   "source_type": "NEWS_WIRE",
   "group_guid": "group-simulation",
   "event_type": "OTHER",
-  "published_at": "2026-02-22T04:04:21.227993",
+  "published_at": "2026-02-22T11:08:58.490946",
   "upload_as_group": "group-simulation",
   "title": "Update regarding FIN",
   "story_body": "FIN's engineering team has completed a series of incremental updates to their proprietary FINOS operating system, bringing the current version to 4.2.1. The latest iteration includes tweaks to the system's latency compensation algorithm, resulting in a 3.7% reduction in mean round-trip times for high-frequency trading applications.\n\nOn the personnel front, FIN's Chief Technology Officer, Maria Rodriguez, has been appointed to the board of the Open Compute Project, a consortium focused on promoting open standards for datacenter hardware. This move is seen as a strategic play to further FIN's involvement in the development of next-generation datacenter infrastructure.\n\nIn marketing news, FIN has launched a targeted campaign aimed at promoting their FINtastic developer community, which provides resources and support for engineers working on FINOS-based projects. The campaign includes a series of webinars, workshops, and hackathons focused on showcasing the platform's capabilities and fostering collaboration among developers.\n\nOn the environmental, social, and governance (ESG) front, FIN has released its annual sustainability report, highlighting the company's efforts to reduce its carbon footprint through the adoption of renewable energy sources and energy-efficient datacenter design. The report notes that FIN has achieved a 12% reduction in greenhouse gas emissions over the past fiscal year, exceeding its internally set targets.",
