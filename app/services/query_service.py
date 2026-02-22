@@ -181,8 +181,8 @@ class ScoringConfig:
     competitor_base: float
     supplier_base: float
     peer_base: float
-    vector_similarity_threshold: float = 0.5
-    vector_activation_threshold: float = 0.5
+    vector_similarity_threshold: float = 0.4  # Lowered to catch more relevant signals
+    vector_activation_threshold: float = 0.0  # Enabled for all profiles (Defense needs signals too)
     recency_half_life_minutes: float = 60.0
 
     @staticmethod
@@ -219,10 +219,14 @@ class ScoringConfig:
 
         return cls(
             opportunity_bias=lam,
-            direct_holding_base=1.0 - (0.4 * lam),
+            # Direct holding cap lowered (1.0 -> 0.9) to allow strong discovery signals to compete.
+            # At lam=1.0 (Alpha), base is 0.4, so a 0.8 Vector match wins.
+            direct_holding_base=0.9 - (0.5 * lam),
             watchlist_base=0.80,
-            thematic_base=0.5 + (0.5 * lam),
-            vector_base=0.4 + (0.4 * lam),
+            # Thematic boost: starts higher (0.6) for defense warnings, maxes at 0.9.
+            thematic_base=0.6 + (0.3 * lam),
+            # Vector boost: starts at 0.5, maxes at 0.9.
+            vector_base=0.5 + (0.4 * lam),
             # Lateral relevance depends on the intended "mode":
             # - defense (lam=0): supplier/ops risk is most relevant
             # - offense (lam=1): peer/competitor relative-value is more relevant
@@ -659,35 +663,35 @@ class QueryService:
             except Exception:
                 vector_hits = []
 
-                best_sim: dict[str, float] = {}
-                for hit in vector_hits:
-                    if not hit.document_guid:
-                        continue
-                    if hit.score < scoring.vector_similarity_threshold:
-                        continue
-                    best_sim[hit.document_guid] = max(best_sim.get(hit.document_guid, 0.0), float(hit.score))
+            best_sim: dict[str, float] = {}
+            for hit in vector_hits:
+                if not hit.document_guid:
+                    continue
+                if hit.score < scoring.vector_similarity_threshold:
+                    continue
+                best_sim[hit.document_guid] = max(best_sim.get(hit.document_guid, 0.0), float(hit.score))
 
-                if best_sim:
-                    summaries = self._get_documents_by_guids(list(best_sim.keys()), group_guids)
-                    for doc in summaries:
-                        guid = doc.get("document_guid")
-                        if not guid:
-                            continue
-                        entry = graph_candidates.setdefault(guid, {
-                            "document_guid": guid,
-                            "title": doc.get("title"),
-                            "created_at": doc.get("created_at"),
-                            "impact_score": doc.get("impact_score"),
-                            "impact_tier": doc.get("impact_tier"),
-                            "affected_instruments": doc.get("affected_instruments", []),
-                            "themes": doc.get("themes", []) if isinstance(doc.get("themes"), list) else [],
-                            "reasons": set(),
-                            "graph_score": 0.0,
-                            "vector_score": 0.0,
-                        })
-                        entry["reasons"].add("VECTOR")
-                        sim = best_sim.get(guid, 0.0)
-                        entry["vector_score"] = max(entry.get("vector_score", 0.0), min(1.0, scoring.vector_base * sim))
+            if best_sim:
+                summaries = self._get_documents_by_guids(list(best_sim.keys()), group_guids)
+                for doc in summaries:
+                    guid = doc.get("document_guid")
+                    if not guid:
+                        continue
+                    entry = graph_candidates.setdefault(guid, {
+                        "document_guid": guid,
+                        "title": doc.get("title"),
+                        "created_at": doc.get("created_at"),
+                        "impact_score": doc.get("impact_score"),
+                        "impact_tier": doc.get("impact_tier"),
+                        "affected_instruments": doc.get("affected_instruments", []),
+                        "themes": doc.get("themes", []) if isinstance(doc.get("themes"), list) else [],
+                        "reasons": set(),
+                        "graph_score": 0.0,
+                        "vector_score": 0.0,
+                    })
+                    entry["reasons"].add("VECTOR")
+                    sim = best_sim.get(guid, 0.0)
+                    entry["vector_score"] = max(entry.get("vector_score", 0.0), min(1.0, scoring.vector_base * sim))
 
         # ------------------------------------------------------------
         # Apply time window + ESG exclusions
@@ -744,6 +748,27 @@ class QueryService:
                             pos_boost,
                             0.3 * (math.log(1 + rank_percentile) / math.log(2)),
                         )
+            
+            # In Alpha mode (high lambda), we care less about reinforcing existing positions.
+            # Dampen the position boost as opportunity bias increases.
+            # lambda=0 -> 1.0x factor. lambda=1 -> 0.5x factor.
+            pos_boost_factor = 1.0 - (0.5 * scoring.opportunity_bias)
+            pos_boost *= pos_boost_factor
+
+            # Discovery Boost: Help non-position items compete if they have high semantic relevance.
+            # Only applies if NOT a direct holding/watchlist item, and lambda > 0.
+            discovery_boost = 0.0
+            points_to_holding = any(r in reasons_set for r in ("DIRECT_HOLDING", "WATCHLIST"))
+            
+            if not points_to_holding and scoring.opportunity_bias > 0.1:
+                # Check for strong signals elsewhere
+                is_strong_vector = vector_score > 0.6
+                is_thematic = "THEMATIC" in reasons_set
+                
+                if is_strong_vector or is_thematic:
+                     # Boost scales aggressively with opportunity bias, up to +0.40
+                     # We need this to overcome the natural advantage of holdings (pos_boost + exact graph match)
+                     discovery_boost = 0.40 * scoring.opportunity_bias
 
             # Core scoring: graph and vector contribute independently.
             # This ensures weights.semantic is an actual knob (BUG-1) and avoids
@@ -756,9 +781,12 @@ class QueryService:
             )
 
             # Boosts are explicitly capped to keep scores bounded.
-            final_score = base_score + influence_boost + min(0.3, pos_boost)
+            final_score = base_score + influence_boost + min(0.3, pos_boost) + discovery_boost
 
             reasons = sorted(candidate.get("reasons", set()))
+            if discovery_boost > 0.0:
+                reasons.append("DISCOVERY")
+
             # Build a deterministic baseline explanation first.
             # If LLM is enabled, we'll generate LLM "why" only for the final top-N
             # results (batched) after ranking to avoid O(candidates) chat calls.
