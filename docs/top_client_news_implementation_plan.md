@@ -191,29 +191,53 @@ Each milestone below should be implemented as a small PR with its own tests and 
                 *   $\lambda=1.0$: Recall@3 = 1.000 (3/3)
 
 ## Phase 4: Tuning & Calibration (The "Sales Trader" Loop)
-*Status: Ready to Start*
+*Status: In Progress*
 
 **Objective**: Determine the optimal default weights using quantitative feedback.
 
 **Core idea**: Phase 4 is not "generate 500 and hope". We will:
 1) create a large, noisy document pool (realistic competition),
-2) inject a small set of deterministic, known-good "calibration" stories with encoded expectations,
-3) run the avatar simulation as the measurement harness to confirm client-specific ranking and relationship handling across $\lambda$.
+2) inject deterministic calibration stories targeting all 6 client mandates, with encoded expectations,
+3) run the avatar simulation as the measurement harness to confirm client-specific ranking, relationship handling, and negative-control suppression across $\lambda$.
+
+**Simulation capabilities (implemented):**
+*   `CLIENT_PORTFOLIOS` and `CLIENT_WATCHLISTS` cover all 6 stable clients (GUIDs `...0001` through `...0006`), matching `simulation/generate_synthetic_clients.py`.
+*   28 total scenarios (17 random-pool + 4 Phase3 + 11 Phase4). Phase4 scenarios have `weight=0.0` so they are never randomly selected.
+*   Phase4 calibration set (11 scenarios in 3 groups):
+    *   **Group A -- Mandate needles (M1-M6)**: one per client archetype, non-holding thematic stories targeting AI/semiconductor, commodities/rates, blockchain, ESG/energy-transition, cloud/consumer, and credit/geopolitical mandates.
+    *   **Group B -- Relationship hops (R1-R3)**: 1-hop supplier disruption (ECO->VELO), 2-hop competitor recall (GENE->VIT), and systemic multi-ticker shock (OMNI+SHOPM+TRUCK).
+    *   **Group C -- Negative controls (N1-N2)**: generic sector noise and wrong-theme strong headline (should NOT rank in Top 3 for any client).
+*   Each Phase4 case has deterministic title (`[Phase4 <name>] TICKER - Name`), forced ticker selection, and recent timestamps (within 1h).
+*   Harness reports per-group metrics: Phase3 Recall@3, Phase4 Recall@3, mandate needles, relationship hops, negative-control suppression rate, and AlphaScore.
 
 11. **Run Large-Scale Simulation**
     *   [ ] Generate + ingest a large background corpus (the "market noise" / competition set):
             *   Command: `./simulation/run_simulation.sh --count 500 --regenerate`.
             *   Purpose: create enough competing documents so the ranking function is forced to make trade-offs (holdings vs thematic vs recency vs influence).
-    *   [ ] Inject deterministic calibration cases (the "known needles") AFTER the 500-run:
+    *   [ ] Inject Phase3 calibration cases:
             *   Command: `./simulation/run_simulation.sh --phase3 --regenerate`.
             *   What gets injected (Phase 3 A/B/C; D is noise and is intentionally excluded from Recall@3 evaluation):
-                    *   **Phase3 A (Defense / tail holding failure)**: expected to be relevant for exactly the client(s) in `validation_metadata.expected_relevant_clients` (today: `...0001`).
-                    *   **Phase3 B (Offense / thematic M&A, non-holding)**: expected to rise as $\lambda$ increases, and to be relevant for the mandate-aligned client(s) (today: `...0003`).
-                    *   **Phase3 C (Systemic / multi-holding shock)**: expected to rank very high for the impacted-holdings client(s) (today: `...0001`), and it exercises the influence/path logic by mentioning multiple tickers.
-            *   Why we inject AFTER the 500-run: the avatar harness selects the most recent synthetic file per Phase3 scenario from `simulation/test_output/`, and the stories must also be recent enough to be queryable in the time window.
-    *   [ ] Inspect `simulation/test_output/` JSONs for the injected cases (sanity check):
-            *   Confirm each Phase3 JSON has:
-                    *   `validation_metadata.scenario` starting with `Phase3`
+                    *   **Phase3 A (Defense / tail holding failure)**: expected client `...0001`.
+                    *   **Phase3 B (Offense / thematic M&A, non-holding)**: expected to rise as $\lambda$ increases; expected client `...0003`.
+                    *   **Phase3 C (Systemic / multi-holding shock)**: exercises influence/path logic; expected client `...0001`.
+    *   [ ] Inject Phase4 calibration cases:
+            *   Command: `./simulation/run_simulation.sh --phase4 --regenerate`.
+            *   What gets injected (11 scenarios):
+                    *   **M1 AI Compute Supply Chain** (GENE): expected client `...0001` (Quantum Momentum Partners, ai/semiconductor mandate).
+                    *   **M2 Rates Shock Inflation Print** (PROP): expected client `...0002` (Nebula Retirement Fund, commodities/rates mandate).
+                    *   **M3 Crypto Protocol Exploit** (FIN): expected client `...0003` (DiamondHands420, blockchain/ev_battery mandate).
+                    *   **M4 Energy Transition Policy** (VELO): expected client `...0004` (Green Horizon Capital, esg/energy_transition mandate).
+                    *   **M5 Cloud Pricing SaaS Shift** (LUXE): expected client `...0005` (Sunrise Long Opportunities, cloud/consumer mandate).
+                    *   **M6 Credit Downgrade Geopolitical** (VIT): expected client `...0006` (Ironclad Short Strategies, credit/geopolitical mandate).
+                    *   **R1 Supplier Disruption 1Hop** (ECO->VELO): expected client `...0003`; tests 1-hop partner traversal.
+                    *   **R2 Competitor Recall 2Hop** (GENE->VIT): expected client `...0001`; tests 2-hop competitor traversal.
+                    *   **R3 Systemic Multi-Ticker Shock** (OMNI+SHOPM+TRUCK): expected client `...0002`; tests multi-holding influence boost.
+                    *   **N1 Generic Sector Chatter** (PROP): expected clients `[]`; should NOT appear in Top 3 for any client.
+                    *   **N2 Wrong Theme Strong Headline** (GENE): expected clients `[]`; false-positive guard.
+            *   Why inject AFTER the 500-run: the avatar harness selects the most recent synthetic file per scenario, and stories must be recent enough to be queryable in the time window.
+    *   [ ] Inspect `simulation/test_output/` JSONs for injected cases (sanity check):
+            *   Confirm each Phase3/Phase4 JSON has:
+                    *   `validation_metadata.scenario` starting with `Phase3` or `Phase4`
                     *   deterministic title prefix (used for matching)
                     *   `validation_metadata.expected_relevant_clients`
                     *   `validation_metadata.base_ticker`
@@ -223,24 +247,40 @@ Each milestone below should be implemented as a small PR with its own tests and 
     *   [ ] Use avatar simulation as the measurement harness (client-specific validation):
             *   Command: `uv run python simulation/validate_avatar_feeds.py --bias-sweep --lambdas 0,0.25,0.5,0.75,1`
             *   What this verifies:
-                    *   **Client-specific ranking**: each injected Phase3 case encodes `expected_relevant_clients`; Recall@3 checks the intended story appears in the Top 3 for the intended client(s).
-                    *   **Relationship handling under competition**: the large background corpus ensures the graph/vector candidate generation and scoring must fight for top slots; if relationships/path boosts are broken, the injected cases stop surfacing.
-                    *   **Bias response**: Phase3 B is the primary needle for the thematic/non-holding path; if $\lambda$ is working, its rank should improve as $\lambda$ increases.
-            *   What this does NOT prove by itself:
-                    *   It does not guarantee a clean crossover curve unless the background corpus contains enough plausible thematic candidates; that is why we run the 500 background corpus first.
+                    *   **Client-specific ranking (all 6 clients)**: each Phase3 and Phase4 case encodes `expected_relevant_clients`; Recall@3 checks the intended story appears in the Top 3 for the intended client(s).
+                    *   **Mandate coverage**: Phase4 M1-M6 target each of the 6 client archetypes independently; if mandate embedding or theme matching is broken for a specific archetype, it shows up as a per-client recall gap.
+                    *   **Relationship handling under competition**: R1 (1-hop supplier), R2 (2-hop competitor), and R3 (multi-holding systemic) are additional diagnostic needles beyond Phase3 C. If graph traversal or influence boost is broken, these cases stop surfacing for the intended clients.
+                    *   **Negative-control suppression**: N1 and N2 should NOT appear in any client's Top 3. The harness reports a suppression rate (target: 1.0).
+                    *   **Bias response**: Phase3 B and Phase4 M1-M6 are the primary needles for the thematic/non-holding path; their rank should improve as $\lambda$ increases.
+            *   Harness output per $\lambda$:
+                    *   Phase3 Recall@3 (A/B/C)
+                    *   Phase4 Recall@3 (all non-negative cases)
+                    *   Phase4 Mandate needles Recall@3 (M1-M6)
+                    *   Phase4 Relationship hops Recall@3 (R1-R3)
+                    *   Phase4 Suppression rate (N1-N2)
+                    *   AlphaScore (proportion of Top 3 with no holdings overlap)
     *   [ ] Measure crossover point ("sales trader" intuition target): At what $\lambda$ does a strong thematic/non-holding item overtake a mid-strength holding-driven item?
             *   Tooling: `uv run python simulation/measure_bias_sensitivity.py --lambdas 0,0.25,0.5,0.75,1`
             *   Interpretation:
                     *   If ranks are flat across all $\lambda$, either (a) thematic candidates are not entering the candidate set, or (b) $\lambda$ weights are not being applied, or (c) the injected set is too weak relative to holdings-driven items.
+                    *   If Phase4 mandate needles show recall for the wrong clients, tighten ticker/theme specificity in prompts or adjust `expected_relevant_clients`.
     *   [ ] Preconditions to make the $\lambda$ sweep meaningful:
             *   Ensure client mandate embeddings exist (vector path only activates when $\lambda>0.5$ AND `mandate_embedding` exists).
             *   Ensure document theme tags are present/queryable (theme-based retrieval participates at all $\lambda$).
-            *   Ensure Phase3 cases are recently ingested (the MCP time window is capped; old injected docs silently disappear from the evaluation window).
+            *   Ensure Phase3 + Phase4 cases are recently ingested (the MCP time window is capped; old injected docs silently disappear from the evaluation window).
 
     **Where the avatar simulation fits**:
-    *   Phase 3 used it to prove the algorithm works on a clean, small set.
-    *   Phase 4 uses it as the regression harness while we tune weights against a large, noisy corpus.
+    *   Phase 3 used it to prove the algorithm works on a clean, small set (4 scenarios, 1 client archetype).
+    *   Phase 4 uses it as the regression harness + tuning dashboard against a large, noisy corpus with all 6 client archetypes, relationship-hop validation, and negative-control suppression.
     *   The avatar harness is the fastest way to answer: "Did we break client-specific ranking or relationship traversal while changing weights?" before paying the cost of repeated 500-run iterations.
+
+    **Suggested Phase 4 workflow:**
+    ```
+    ./simulation/run_simulation.sh --count 500 --regenerate
+    ./simulation/run_simulation.sh --phase3 --regenerate
+    ./simulation/run_simulation.sh --phase4 --regenerate
+    uv run python simulation/validate_avatar_feeds.py --bias-sweep --lambdas 0,0.25,0.5,0.75,1
+    ```
 
         **Phase 4 measured results (clean env + 20 stories + Phase3 injected; 6h window):**
         *   `Sunrise Long Opportunities`: Scenario B rank improved as $\lambda$ increased (B=6 at $\lambda=0.0$ -> B=2 at $\lambda=1.0$); Scenario C stayed rank 1.

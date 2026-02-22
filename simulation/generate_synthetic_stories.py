@@ -168,6 +168,18 @@ CLIENT_PORTFOLIOS = {
         "OMNI",
         "TRUCK",
     ],  # Ironclad Short Strategies (Short Bias)
+    "550e8400-e29b-41d4-a716-446655440007": [
+        "GENE",
+        "VIT",
+    ],  # Genomics Partners
+    "550e8400-e29b-41d4-a716-446655440008": [
+        "PROP",
+        "BANKO",
+    ],  # Macro Rates Fund
+    "550e8400-e29b-41d4-a716-446655440009": [
+        "FIN",
+        "BLK",
+    ],  # Crypto Ventures
 }
 
 CLIENT_WATCHLISTS = {
@@ -177,6 +189,9 @@ CLIENT_WATCHLISTS = {
     "550e8400-e29b-41d4-a716-446655440004": ["OMNI", "TRUCK"],
     "550e8400-e29b-41d4-a716-446655440005": ["VIT", "ECO"],
     "550e8400-e29b-41d4-a716-446655440006": ["FIN", "STR"],
+    "550e8400-e29b-41d4-a716-446655440007": ["QNTM", "GTX"],
+    "550e8400-e29b-41d4-a716-446655440008": ["OMNI", "TRUCK"],
+    "550e8400-e29b-41d4-a716-446655440009": ["BANKO", "QNTM"],
 }
 
 SCENARIOS = [
@@ -364,7 +379,13 @@ SCENARIOS = [
             expected_tier="PLATINUM",
             expected_event="FRAUD_SCANDAL",
             must_match_event=False,
-            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440001"],
+            # Expanded to include clients reachable via lateral graph hops
+            # (e.g., competitors of NXS such as GTX/QNTM) so we can measure
+            # hop-based retrieval separately from direct-holding retrieval.
+            expected_relevant_clients=[
+                "550e8400-e29b-41d4-a716-446655440001",
+                "550e8400-e29b-41d4-a716-446655440005",
+            ],
             relationship_hops=0,
             expected_feed_rank_range="6-15",
         ),
@@ -385,8 +406,14 @@ SCENARIOS = [
             expected_tier="PLATINUM",
             expected_event="M_AND_A",
             must_match_event=False,
-            # Target a client that reliably sees LUXE in the simulation baseline.
-            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440003"],
+            # Expanded to include competitor holders (SHOPM) alongside the
+            # direct watchlist client (DiamondHands420) to exercise lateral hops.
+            expected_relevant_clients=[
+                "550e8400-e29b-41d4-a716-446655440003",
+                "550e8400-e29b-41d4-a716-446655440002",
+                "550e8400-e29b-41d4-a716-446655440004",
+                "550e8400-e29b-41d4-a716-446655440005",
+            ],
             relationship_hops=0,
             expected_feed_rank_range="1-5",
         ),
@@ -458,7 +485,10 @@ SCENARIOS = [
             expected_tier="GOLD",
             expected_event="MACRO_DATA",
             must_match_event=False,
-            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440001"],
+            expected_relevant_clients=[
+                "550e8400-e29b-41d4-a716-446655440001",
+                "550e8400-e29b-41d4-a716-446655440007",
+            ],
             relationship_hops=0,
             expected_feed_rank_range="1-10",
         ),
@@ -480,7 +510,10 @@ SCENARIOS = [
             expected_tier="GOLD",
             expected_event="MACRO_DATA",
             must_match_event=False,
-            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440002"],
+            expected_relevant_clients=[
+                "550e8400-e29b-41d4-a716-446655440002",
+                "550e8400-e29b-41d4-a716-446655440008",
+            ],
             relationship_hops=0,
             expected_feed_rank_range="1-10",
         ),
@@ -502,7 +535,10 @@ SCENARIOS = [
             expected_tier="GOLD",
             expected_event="LEGAL_RULING",
             must_match_event=False,
-            expected_relevant_clients=["550e8400-e29b-41d4-a716-446655440003"],
+            expected_relevant_clients=[
+                "550e8400-e29b-41d4-a716-446655440003",
+                "550e8400-e29b-41d4-a716-446655440009",
+            ],
             relationship_hops=0,
             expected_feed_rank_range="1-10",
         ),

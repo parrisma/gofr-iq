@@ -31,7 +31,13 @@ from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[i
 from gofr_common.auth.groups import GroupRegistry  # type: ignore[import-not-found]  # noqa: E402
 from gofr_common.auth.service import AuthService  # type: ignore[import-not-found]  # noqa: E402
 
-from simulation.generate_synthetic_stories import SyntheticGenerator, MOCK_SOURCES, SCENARIOS  # noqa: E402
+from simulation.generate_synthetic_stories import (  # noqa: E402
+    SyntheticGenerator,
+    MOCK_SOURCES,
+    SCENARIOS,
+    CLIENT_PORTFOLIOS,
+    CLIENT_WATCHLISTS,
+)
 from simulation import ingest_synthetic_stories as ingest  # noqa: E402
 from simulation import load_simulation_data  # noqa: E402
 
@@ -340,6 +346,196 @@ def validate_ingestion(expected_count: int) -> None:
     except Exception as e:
         print(f"   ⚠️  Could not validate ingestion: {e}")
         print("   (This is informational; ingestion may still have succeeded)")
+
+
+def validate_client_portfolios() -> None:
+    """Compare live Neo4j portfolios/watchlists against static simulation expectations.
+
+    Synthetic story JSONs stamp validation_metadata.expected_relevant_clients using
+    the static CLIENT_PORTFOLIOS/CLIENT_WATCHLISTS dicts (keyed by the stable mock
+    client GUIDs).
+
+    But live clients are created via MCP (UUIDs assigned at runtime), so this check
+    compares by *client name* to detect drift that would invalidate Recall@K.
+    """
+    from neo4j import GraphDatabase
+
+    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+    if not neo4j_password:
+        print("WARNING: validate_client_portfolios: GOFR_IQ_NEO4J_PASSWORD not set; skipping")
+        return
+
+    # Map stable mock GUIDs -> names via the canonical generator.
+    try:
+        from simulation.generate_synthetic_clients import ClientGenerator
+        from simulation.universe.builder import UniverseBuilder
+
+        builder = UniverseBuilder()
+        gen = ClientGenerator(builder)
+        mock_clients = gen.generate_clients()
+        guid_to_name = {
+            c.guid: c.name
+            for c in mock_clients
+            if isinstance(getattr(c, "guid", None), str) and isinstance(getattr(c, "name", None), str)
+        }
+    except Exception as exc:
+        print(f"WARNING: validate_client_portfolios: failed to load mock clients: {exc}")
+        return
+
+    expected_holdings_by_name: dict[str, set[str]] = {}
+    expected_watchlist_by_name: dict[str, set[str]] = {}
+    for mock_guid, tickers in CLIENT_PORTFOLIOS.items():
+        name = guid_to_name.get(mock_guid)
+        if name:
+            expected_holdings_by_name[name] = {t for t in tickers if isinstance(t, str) and t}
+    for mock_guid, tickers in CLIENT_WATCHLISTS.items():
+        name = guid_to_name.get(mock_guid)
+        if name:
+            expected_watchlist_by_name[name] = {t for t in tickers if isinstance(t, str) and t}
+
+    names = sorted(set(expected_holdings_by_name.keys()) | set(expected_watchlist_by_name.keys()))
+    if not names:
+        print("WARNING: validate_client_portfolios: no expected clients; skipping")
+        return
+
+    query = """
+    MATCH (c:Client)
+    WHERE c.name IN $names
+    OPTIONAL MATCH (c)-[:HAS_PORTFOLIO]->(:Portfolio)-[:HOLDS]->(h:Instrument)
+    WITH c, collect(DISTINCT h.ticker) AS holdings
+    OPTIONAL MATCH (c)-[:HAS_WATCHLIST]->(:Watchlist)-[:WATCHES]->(w:Instrument)
+    RETURN c.name AS name,
+           c.guid AS client_guid,
+           holdings AS holdings,
+           collect(DISTINCT w.ticker) AS watchlist
+    ORDER BY c.name
+    """
+
+    driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+    try:
+        with driver.session() as session:
+            rows = list(session.run(query, names=names))
+    finally:
+        driver.close()
+
+    live_by_name: dict[str, dict[str, set[str]]] = {}
+    for r in rows:
+        name = r.get("name")
+        if not isinstance(name, str) or not name:
+            continue
+        holdings = {t for t in (r.get("holdings") or []) if isinstance(t, str) and t}
+        watchlist = {t for t in (r.get("watchlist") or []) if isinstance(t, str) and t}
+        live_by_name[name] = {"holdings": holdings, "watchlist": watchlist}
+
+    print("Portfolio parity check (expected vs live Neo4j)")
+    missing_clients = [n for n in names if n not in live_by_name]
+    if missing_clients:
+        print(f"WARNING: missing clients in Neo4j by name: {missing_clients}")
+
+    for name in names:
+        expected_hold = expected_holdings_by_name.get(name, set())
+        expected_watch = expected_watchlist_by_name.get(name, set())
+        live = live_by_name.get(name, {"holdings": set(), "watchlist": set()})
+        live_hold = live.get("holdings", set())
+        live_watch = live.get("watchlist", set())
+
+        if not live_hold and not live_watch:
+            print(f"WARNING: {name}: live holdings/watchlist empty")
+
+        missing_hold = sorted(expected_hold - live_hold)
+        missing_watch = sorted(expected_watch - live_watch)
+        if missing_hold or missing_watch:
+            print(
+                f"WARNING: {name}: missing expected tickers: holdings_missing={missing_hold} "
+                f"watchlist_missing={missing_watch}"
+            )
+
+    # Explicit BUG-3 check: Phase3 B expects DiamondHands420 watches LUXE.
+    dh = live_by_name.get("DiamondHands420")
+    if dh is not None and "LUXE" not in dh.get("watchlist", set()):
+        print("WARNING: DiamondHands420 live watchlist missing LUXE; Phase3 B Recall expectations may be invalid")
+
+
+def backfill_group_simulation_mandate_embeddings(limit: int = 200) -> None:
+    """Backfill ClientProfile.mandate_embedding for group-simulation clients only.
+
+    This is intended for simulation runs to ensure VECTOR eligibility is real.
+    It is idempotent and scoped to group-simulation (fail closed).
+    """
+    from neo4j import GraphDatabase
+
+    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+    if not neo4j_password:
+        print("WARNING: mandate embedding backfill: GOFR_IQ_NEO4J_PASSWORD not set; skipping")
+        return
+
+    # Avoid embedding API calls if not configured.
+    if not os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"):
+        print("WARNING: mandate embedding backfill: GOFR_IQ_OPENROUTER_API_KEY not set; skipping")
+        return
+
+    from app.services.llm_service import create_llm_service
+
+    driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+    try:
+        with driver.session() as session:
+            rows = list(
+                session.run(
+                    """
+                    MATCH (g:Group {name: $group_name})<-[:IN_GROUP]-(c:Client)-[:HAS_PROFILE]->(cp:ClientProfile)
+                    WHERE cp.mandate_text IS NOT NULL AND trim(cp.mandate_text) <> ''
+                      AND (cp.mandate_embedding IS NULL OR size(cp.mandate_embedding) = 0)
+                    RETURN c.guid AS client_guid, c.name AS name, cp.guid AS profile_guid, cp.mandate_text AS mandate_text
+                    LIMIT $limit
+                    """,
+                    group_name="group-simulation",
+                    limit=int(limit),
+                )
+            )
+
+        if not rows:
+            print("Mandate embedding backfill: no candidates (group-simulation)")
+            return
+
+        print(f"Mandate embedding backfill: candidates={len(rows)} (group-simulation)")
+
+        with create_llm_service() as llm:
+            updated = 0
+            for r in rows:
+                client_guid = r.get("client_guid")
+                profile_guid = r.get("profile_guid")
+                mandate_text = r.get("mandate_text")
+                name = r.get("name")
+                if not isinstance(profile_guid, str) or not isinstance(mandate_text, str):
+                    continue
+                try:
+                    embedding = llm.generate_embedding(mandate_text)
+                except Exception as exc:
+                    print(f"WARNING: mandate embedding backfill failed for {name} ({client_guid}): {exc}")
+                    continue
+
+                # Persist and verify the property length.
+                with driver.session() as session:
+                    rec = session.run(
+                        """
+                        MATCH (cp:ClientProfile {guid: $profile_guid})
+                        SET cp.mandate_embedding = $embedding
+                        RETURN coalesce(size(cp.mandate_embedding), 0) AS emb_len
+                        """,
+                        profile_guid=profile_guid,
+                        embedding=embedding,
+                    ).single()
+                emb_len = int(rec["emb_len"]) if rec and rec.get("emb_len") is not None else 0
+                if emb_len > 0:
+                    updated += 1
+
+            print(f"Mandate embedding backfill complete: updated={updated}")
+    finally:
+        driver.close()
 
 
 def init_auth(cfg: Config) -> AuthService:
@@ -908,6 +1104,15 @@ def main():
     parser.add_argument("--ports-file", type=Path, default=Path("lib/gofr-common/config/gofr_ports.env"), help="Path to ports env file")
     parser.add_argument("--verbose", action="store_true", help="Verbose ingestion output")
     parser.add_argument(
+        "--backfill-mandate-embeddings",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Backfill ClientProfile.mandate_embedding for group-simulation clients after client load. "
+            "Default: enabled. Use --no-backfill-mandate-embeddings to disable."
+        ),
+    )
+    parser.add_argument(
         "--refresh-timestamps",
         action="store_true",
         help=(
@@ -1064,6 +1269,9 @@ def main():
             run_gate("universe")
         if load_clients_flag:
             run_gate("clients")
+            validate_client_portfolios()
+            if getattr(args, "backfill_mandate_embeddings", True):
+                backfill_group_simulation_mandate_embeddings(limit=200)
     else:
         print("Skipping universe/client load (--skip-universe and --skip-clients)")
 
@@ -1090,7 +1298,10 @@ def main():
         print("Skipping ingestion stage (skip-ingest or count=0)")
     else:
         sources = list_sources(tokens["admin"])
-        ingest_count = None if skip_generate else effective_count
+        # When reusing existing synthetic_*.json (--skip-generate/--ingest-only),
+        # treat --count as an ingestion limit (most recent N). This prevents
+        # accidentally ingesting the entire cache when a small smoke-test was intended.
+        ingest_count = effective_count
         scenario_prefix_val = None
         if args.phase3:
             scenario_prefix_val = "Phase3"

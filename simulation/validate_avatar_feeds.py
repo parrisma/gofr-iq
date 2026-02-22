@@ -40,6 +40,9 @@ from simulation.generate_synthetic_clients import ClientGenerator  # noqa: E402
 from simulation.universe.builder import UniverseBuilder  # noqa: E402
 
 
+_ALL_IMPACT_TIERS = ["PLATINUM", "GOLD", "SILVER", "BRONZE", "STANDARD"]
+
+
 def _get_simulation_token() -> str:
     """Get group-simulation token from simulation/tokens.json.
     
@@ -339,6 +342,23 @@ def _top_unique_titles(articles: list[dict[str, Any]], n: int = 3) -> list[str]:
         if len(out) >= n:
             break
     return out
+
+
+def _reason_breakdown(articles: list[dict[str, Any]], n: int) -> dict[str, int]:
+    """Aggregate reason counts across the top-N articles.
+
+    Each article can contribute multiple reasons.
+    """
+    counts: dict[str, int] = {}
+    for a in articles[: max(0, n)]:
+        reasons = a.get("reasons")
+        if not isinstance(reasons, list):
+            continue
+        for r in reasons:
+            if not isinstance(r, str) or not r:
+                continue
+            counts[r] = counts.get(r, 0) + 1
+    return dict(sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])))
 
 
 def _compute_recall_at_k(
@@ -677,6 +697,52 @@ def main():
         print(f"  phase3_cases={len(phase3_cases)}")
         print(f"  phase4_cases={len(phase4_cases)} (+ {len(phase4_neg_cases)} negative controls)")
 
+        # Vector/thematic readiness diagnostics (requires get_client_profile)
+        themes_ready = 0
+        embed_ready = 0
+        text_ready = 0
+        per_client_readiness: list[tuple[str, int, int]] = []
+        for mock_client in clients:
+            live_guid = name_to_guid.get(mock_client.name)
+            if not live_guid:
+                continue
+            prof_resp = _mcp_call(
+                args.host,
+                port,
+                session_id,
+                "get_client_profile",
+                {"client_guid": live_guid},
+                token,
+            )
+            if prof_resp.get("status") != "success":
+                continue
+            profile = (prof_resp.get("data", {}) or {}).get("profile", {})
+            mandate_themes = profile.get("mandate_themes")
+            themes_len = 0
+            if isinstance(mandate_themes, list):
+                themes_len = len([t for t in mandate_themes if isinstance(t, str) and t.strip()])
+            embed_len = profile.get("mandate_embedding_len")
+            embed_len = int(embed_len) if isinstance(embed_len, (int, float)) else 0
+
+            mandate_text = profile.get("mandate_text")
+            has_text = isinstance(mandate_text, str) and bool(mandate_text.strip())
+
+            if themes_len > 0:
+                themes_ready += 1
+            if embed_len > 0:
+                embed_ready += 1
+            if has_text:
+                text_ready += 1
+            per_client_readiness.append((mock_client.name, themes_len, embed_len))
+
+        print("\nReadiness (from get_client_profile)")
+        print(f"  clients_with_mandate_themes={themes_ready}/{len(per_client_readiness)}")
+        print(f"  clients_with_mandate_embedding={embed_ready}/{len(per_client_readiness)}")
+        print(f"  clients_with_mandate_text={text_ready}/{len(per_client_readiness)}")
+        if args.verbose:
+            for name, tlen, elen in per_client_readiness:
+                print(f"  - {name}: mandate_themes_len={tlen} mandate_embedding_len={elen}")
+
         for lam in lambdas:
             per_client: dict[str, list[dict[str, Any]]] = {}
             for mock_client in clients:
@@ -694,6 +760,8 @@ def main():
                         "limit": 10,
                         "time_window_hours": 6,
                         "opportunity_bias": lam,
+                        "min_impact_score": 0,
+                        "impact_tiers": _ALL_IMPACT_TIERS,
                     },
                     token,
                 )
@@ -716,35 +784,44 @@ def main():
         for lam in lambdas:
             per_client = sweep_results.get(lam, {})
 
-            # Phase3 Recall@3
-            p3_hits, p3_total = _compute_recall_at_k(
-                phase3_cases, per_client, live_guid_set,
-                mock_guid_to_live_guid, name_to_guid,
-            ) if phase3_cases else (0, 0)
-            p3_recall = (p3_hits / p3_total) if p3_total else 0.0
+            returned_counts = [len(v) for v in per_client.values()]
+            zero_returns = sum(1 for c in returned_counts if c == 0)
+            avg_return = (sum(returned_counts) / len(returned_counts)) if returned_counts else 0.0
+            reasons_top10: dict[str, int] = {}
+            for articles in per_client.values():
+                for r, n in _reason_breakdown(articles, n=10).items():
+                    reasons_top10[r] = reasons_top10.get(r, 0) + n
+            reasons_top10 = dict(sorted(reasons_top10.items(), key=lambda kv: (-kv[1], kv[0])))
 
-            # Phase4 Recall@3 (mandate needles + relationship hops)
-            p4_hits, p4_total = _compute_recall_at_k(
-                phase4_cases, per_client, live_guid_set,
-                mock_guid_to_live_guid, name_to_guid,
-            ) if phase4_cases else (0, 0)
-            p4_recall = (p4_hits / p4_total) if p4_total else 0.0
-
-            # Phase4 sub-groups
-            p4m_cases = [c for c in phase4_cases if " M" in c.scenario]
-            p4r_cases = [c for c in phase4_cases if " R" in c.scenario]
-
-            p4m_hits, p4m_total = _compute_recall_at_k(
-                p4m_cases, per_client, live_guid_set,
-                mock_guid_to_live_guid, name_to_guid,
-            ) if p4m_cases else (0, 0)
-            p4m_recall = (p4m_hits / p4m_total) if p4m_total else 0.0
-
-            p4r_hits, p4r_total = _compute_recall_at_k(
-                p4r_cases, per_client, live_guid_set,
-                mock_guid_to_live_guid, name_to_guid,
-            ) if p4r_cases else (0, 0)
-            p4r_recall = (p4r_hits / p4r_total) if p4r_total else 0.0
+            # Recall@K
+            recall_k = [3, 5, 10]
+            p3_by_k: dict[int, tuple[int, int]] = {}
+            p4_by_k: dict[int, tuple[int, int]] = {}
+            p4m_by_k: dict[int, tuple[int, int]] = {}
+            p4r_by_k: dict[int, tuple[int, int]] = {}
+            for k in recall_k:
+                if phase3_cases:
+                    p3_by_k[k] = _compute_recall_at_k(
+                        phase3_cases, per_client, live_guid_set,
+                        mock_guid_to_live_guid, name_to_guid, k=k,
+                    )
+                if phase4_cases:
+                    p4_by_k[k] = _compute_recall_at_k(
+                        phase4_cases, per_client, live_guid_set,
+                        mock_guid_to_live_guid, name_to_guid, k=k,
+                    )
+                    p4m_cases = [c for c in phase4_cases if " M" in c.scenario]
+                    p4r_cases = [c for c in phase4_cases if " R" in c.scenario]
+                    if p4m_cases:
+                        p4m_by_k[k] = _compute_recall_at_k(
+                            p4m_cases, per_client, live_guid_set,
+                            mock_guid_to_live_guid, name_to_guid, k=k,
+                        )
+                    if p4r_cases:
+                        p4r_by_k[k] = _compute_recall_at_k(
+                            p4r_cases, per_client, live_guid_set,
+                            mock_guid_to_live_guid, name_to_guid, k=k,
+                        )
 
             # Phase4 negative control suppression
             neg_suppressed, neg_total = _compute_suppression_rate(
@@ -771,12 +848,28 @@ def main():
 
             print("\nBias sweep metrics")
             print(f"  lambda={lam:.2f}")
+            print(f"  returned_articles_avg={avg_return:.2f} clients_zero_return={zero_returns}/{len(returned_counts)}")
+            if reasons_top10:
+                top_reasons = ", ".join([f"{k}={v}" for k, v in list(reasons_top10.items())[:8]])
+                print(f"  top10_reason_counts={top_reasons}")
+
             if phase3_cases:
-                print(f"  Phase3 Recall@3={p3_recall:.3f} ({p3_hits}/{p3_total})")
+                for k in recall_k:
+                    hits, total = p3_by_k.get(k, (0, 0))
+                    rec = (hits / total) if total else 0.0
+                    print(f"  Phase3 Recall@{k}={rec:.3f} ({hits}/{total})")
+
             if phase4_cases:
-                print(f"  Phase4 Recall@3={p4_recall:.3f} ({p4_hits}/{p4_total})")
-                print(f"    Mandate needles={p4m_recall:.3f} ({p4m_hits}/{p4m_total})")
-                print(f"    Relationship hops={p4r_recall:.3f} ({p4r_hits}/{p4r_total})")
+                for k in recall_k:
+                    hits, total = p4_by_k.get(k, (0, 0))
+                    rec = (hits / total) if total else 0.0
+                    mh, mt = p4m_by_k.get(k, (0, 0))
+                    mr = (mh / mt) if mt else 0.0
+                    rh, rt = p4r_by_k.get(k, (0, 0))
+                    rr = (rh / rt) if rt else 0.0
+                    print(f"  Phase4 Recall@{k}={rec:.3f} ({hits}/{total})")
+                    print(f"    Mandate needles@{k}={mr:.3f} ({mh}/{mt})")
+                    print(f"    Relationship hops@{k}={rr:.3f} ({rh}/{rt})")
             if phase4_neg_cases:
                 print(f"  Phase4 Suppression={neg_rate:.3f} ({neg_suppressed}/{neg_total})")
             print(f"  AlphaScore={alpha_score:.3f} ({alpha_n}/{alpha_total})")

@@ -152,7 +152,15 @@ def ingest_document(
         #     cmd.extend(["--metadata", json.dumps(metadata)])
         
         if verbose:
-            print(f"    CMD: {cmd}")
+            safe_cmd = list(cmd)
+            if "--token" in safe_cmd:
+                try:
+                    token_idx = safe_cmd.index("--token") + 1
+                    if token_idx < len(safe_cmd):
+                        safe_cmd[token_idx] = "[REDACTED]"
+                except ValueError:
+                    pass
+            print(f"    CMD: {safe_cmd}")
             print(f"    Content file: {content_file}")
         
         result = subprocess.run(

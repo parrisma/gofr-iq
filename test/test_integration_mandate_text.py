@@ -353,3 +353,30 @@ def test_get_client_profile_null_mandate_text(graph_index: GraphIndex, registere
     # Verify: mandate_text is null or empty
     assert result["status"] == "success"
     assert result["data"]["profile"]["mandate_text"] in [None, ""]
+
+
+    @pytest.mark.integration
+    @with_auth_context()
+    def test_get_client_profile_includes_mandate_embedding_len(graph_index: GraphIndex, registered_tools: dict):
+        """Test that get_client_profile returns mandate_embedding_len when embedding exists."""
+        client_guid = str(uuid.uuid4())
+        profile_guid = str(uuid.uuid4())
+
+        graph_index.create_client(
+            guid=client_guid,
+            name="Test Embedding Len Client",
+            client_type_code="HEDGE_FUND",
+            group_guid=TEST_GROUP,
+        )
+        graph_index.create_client_profile(
+            guid=profile_guid,
+            client_guid=client_guid,
+            properties={"mandate_embedding": [0.1, 0.2, 0.3]},
+        )
+
+        get_tool = registered_tools["get_client_profile"]
+        response = get_tool.fn(client_guid=client_guid)
+        result = parse_response(response)
+
+        assert result["status"] == "success"
+        assert result["data"]["profile"]["mandate_embedding_len"] == 3

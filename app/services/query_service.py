@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 import json
 import math
+import os
 from typing import Any, Optional, TYPE_CHECKING
 
 from app.models import count_words
@@ -101,11 +102,71 @@ class ClientNewsWeights:
     impact: float = 0.20
     recency: float = 0.10
 
+    def with_env_overrides(self) -> "ClientNewsWeights":
+        """Apply optional env overrides and normalize to sum to 1.0.
+
+        Supported env vars:
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_SEMANTIC
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_GRAPH
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_IMPACT
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_RECENCY
+
+        If overrides are present but do not sum to 1.0, the weights are
+        normalized proportionally (fail-closed to the default on invalid input).
+        """
+
+        def _read_float(key: str) -> float | None:
+            raw = os.environ.get(key)
+            if raw is None:
+                return None
+            try:
+                return float(raw)
+            except (TypeError, ValueError):
+                return None
+
+        semantic = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_SEMANTIC")
+        graph = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_GRAPH")
+        impact = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_IMPACT")
+        recency = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_RECENCY")
+
+        if semantic is None and graph is None and impact is None and recency is None:
+            return self
+
+        proposed = ClientNewsWeights(
+            semantic=self.semantic if semantic is None else semantic,
+            graph=self.graph if graph is None else graph,
+            impact=self.impact if impact is None else impact,
+            recency=self.recency if recency is None else recency,
+        )
+
+        total = proposed.semantic + proposed.graph + proposed.impact + proposed.recency
+        if total <= 0.0:
+            logger.warning(
+                "Invalid client news weight overrides (sum<=0); ignoring",
+                total=total,
+            )
+            return self
+
+        normalized = ClientNewsWeights(
+            semantic=proposed.semantic / total,
+            graph=proposed.graph / total,
+            impact=proposed.impact / total,
+            recency=proposed.recency / total,
+        )
+        logger.info(
+            "Applied client news weight overrides",
+            semantic=normalized.semantic,
+            graph=normalized.graph,
+            impact=normalized.impact,
+            recency=normalized.recency,
+        )
+        return normalized
+
     @classmethod
     def for_client_type(cls, client_type: str | None) -> "ClientNewsWeights":
         if client_type in {"LONG_ONLY", "PENSION"}:
-            return cls(semantic=0.30, graph=0.30, impact=0.20, recency=0.20)
-        return cls()
+            return cls(semantic=0.30, graph=0.30, impact=0.20, recency=0.20).with_env_overrides()
+        return cls().with_env_overrides()
 
 
 @dataclass(frozen=True)
@@ -117,9 +178,27 @@ class ScoringConfig:
     watchlist_base: float
     thematic_base: float
     vector_base: float
-    lateral_base: float
-    vector_similarity_threshold: float = 0.75
+    competitor_base: float
+    supplier_base: float
+    peer_base: float
+    vector_similarity_threshold: float = 0.5
+    vector_activation_threshold: float = 0.5
     recency_half_life_minutes: float = 60.0
+
+    @staticmethod
+    def _env_float_clamped(key: str, default: float, lo: float = 0.0, hi: float = 1.0) -> float:
+        raw = os.environ.get(key)
+        if raw is None:
+            return default
+        try:
+            val = float(raw)
+        except (TypeError, ValueError):
+            return default
+        if val < lo:
+            return lo
+        if val > hi:
+            return hi
+        return val
 
     @classmethod
     def from_opportunity_bias(cls, opportunity_bias: float) -> "ScoringConfig":
@@ -129,13 +208,31 @@ class ScoringConfig:
         if lam > 1.0:
             lam = 1.0
 
+        vector_activation_threshold = cls._env_float_clamped(
+            "GOFR_IQ_VECTOR_ACTIVATION_THRESHOLD",
+            default=cls.vector_activation_threshold,
+        )
+        vector_similarity_threshold = cls._env_float_clamped(
+            "GOFR_IQ_VECTOR_SIMILARITY_THRESHOLD",
+            default=cls.vector_similarity_threshold,
+        )
+
         return cls(
             opportunity_bias=lam,
             direct_holding_base=1.0 - (0.4 * lam),
             watchlist_base=0.80,
             thematic_base=0.5 + (0.5 * lam),
             vector_base=0.4 + (0.4 * lam),
-            lateral_base=0.4 + (0.4 * lam),
+            # Lateral relevance depends on the intended "mode":
+            # - defense (lam=0): supplier/ops risk is most relevant
+            # - offense (lam=1): peer/competitor relative-value is more relevant
+            competitor_base=0.4 + (0.3 * lam),
+            supplier_base=0.6 - (0.2 * lam),
+            peer_base=0.4 + (0.2 * lam),
+            vector_activation_threshold=vector_activation_threshold,
+            vector_similarity_threshold=vector_similarity_threshold,
+            # Recency should decay slower as we move toward opportunity bias.
+            recency_half_life_minutes=60.0 + (120.0 * lam),
         )
 
 
@@ -499,7 +596,7 @@ class QueryService:
                     min_impact_score=resolved_min_impact,
                     impact_tiers=resolved_impact_tiers,
                 )
-                add_graph_candidates(comp_docs, "COMPETITOR", scoring.lateral_base)
+                add_graph_candidates(comp_docs, "COMPETITOR", scoring.competitor_base)
 
             if lateral.get("suppliers"):
                 supply_docs = self._get_documents_for_tickers(
@@ -508,7 +605,7 @@ class QueryService:
                     min_impact_score=resolved_min_impact,
                     impact_tiers=resolved_impact_tiers,
                 )
-                add_graph_candidates(supply_docs, "SUPPLY_CHAIN", scoring.lateral_base)
+                add_graph_candidates(supply_docs, "SUPPLY_CHAIN", scoring.supplier_base)
 
             if lateral.get("peers"):
                 peer_docs = self._get_documents_for_tickers(
@@ -517,7 +614,7 @@ class QueryService:
                     min_impact_score=resolved_min_impact,
                     impact_tiers=resolved_impact_tiers,
                 )
-                add_graph_candidates(peer_docs, "PEER", scoring.lateral_base)
+                add_graph_candidates(peer_docs, "PEER", scoring.peer_base)
 
         # Thematic candidates: mandate_themes tags on documents
         mandate_themes = profile.get("mandate_themes") or []
@@ -536,18 +633,31 @@ class QueryService:
             add_graph_candidates(thematic_docs, "THEMATIC", scoring.thematic_base)
 
         # Vector candidates: mandate embedding similarity (semantic "unknown knowns")
-        if self.embedding_index and scoring.opportunity_bias > 0.5:
+        if self.embedding_index and scoring.opportunity_bias > scoring.vector_activation_threshold:
             mandate_embedding = profile.get("mandate_embedding") or []
-            if isinstance(mandate_embedding, list) and mandate_embedding:
-                try:
+            mandate_text = profile.get("mandate_text")
+
+            vector_hits: list[SimilarityResult] = []
+            try:
+                if isinstance(mandate_embedding, list) and mandate_embedding:
                     vector_hits = self.embedding_index.search_by_embedding(
                         query_embedding=mandate_embedding,
                         n_results=25,
                         group_guids=group_guids,
                         include_content=False,
                     )
-                except Exception:
-                    vector_hits = []
+                elif isinstance(mandate_text, str) and mandate_text.strip():
+                    # Fallback: derive the query embedding from mandate_text at query time.
+                    # This unblocks VECTOR even if client profiles have not been backfilled
+                    # with a stored mandate_embedding in Neo4j.
+                    vector_hits = self.embedding_index.search(
+                        query=mandate_text.strip(),
+                        n_results=25,
+                        group_guids=group_guids,
+                        include_content=False,
+                    )
+            except Exception:
+                vector_hits = []
 
                 best_sim: dict[str, float] = {}
                 for hit in vector_hits:
@@ -615,7 +725,7 @@ class QueryService:
 
             reasons_set = candidate.get("reasons", set())
             distinct_paths = len(reasons_set) if isinstance(reasons_set, set) else 1
-            influence_boost = 0.1 * max(0, distinct_paths - 1)
+            influence_boost = min(0.3, 0.1 * max(0, distinct_paths - 1))
 
             pos_boost = 0.0
             if holdings:
@@ -635,13 +745,18 @@ class QueryService:
                             0.3 * (math.log(1 + rank_percentile) / math.log(2)),
                         )
 
-            hybrid = max(graph_score, vector_score) + influence_boost + pos_boost
-
-            final_score = (
-                weights.graph * hybrid
+            # Core scoring: graph and vector contribute independently.
+            # This ensures weights.semantic is an actual knob (BUG-1) and avoids
+            # max() erasing convergent evidence (MODEL-2).
+            base_score = (
+                weights.graph * graph_score
+                + weights.semantic * vector_score
                 + weights.impact * impact_norm
                 + weights.recency * recency
             )
+
+            # Boosts are explicitly capped to keep scores bounded.
+            final_score = base_score + influence_boost + min(0.3, pos_boost)
 
             reasons = sorted(candidate.get("reasons", set()))
             # Build a deterministic baseline explanation first.

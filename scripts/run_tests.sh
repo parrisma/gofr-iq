@@ -148,6 +148,16 @@ while [[ $# -gt 0 ]]; do
             INCLUDE_E2E=true
             shift
             ;;
+        --llm|--llm-tests|--run-llm)
+            # Force-enable live LLM integration/e2e tests (costs money)
+            export GOFR_IQ_RUN_LLM_INTEGRATION_TESTS="1"
+            shift
+            ;;
+        --no-llm|--skip-llm)
+            # Force-disable live LLM integration/e2e tests
+            export GOFR_IQ_RUN_LLM_INTEGRATION_TESTS="0"
+            shift
+            ;;
         --api-key)
             CLI_API_KEY="$2"
             shift 2
@@ -172,6 +182,8 @@ while [[ $# -gt 0 ]]; do
             echo "  --cleanup-only      Clean environment and exit"
             echo "  --check             Pre-flight check only (verify secrets, no tests)"
             echo "  --e2e               Include live e2e tests (requires OpenRouter key)"
+            echo "  --llm               Force-enable live LLM tests (sets GOFR_IQ_RUN_LLM_INTEGRATION_TESTS=1)"
+            echo "  --no-llm            Disable live LLM tests (sets GOFR_IQ_RUN_LLM_INTEGRATION_TESTS=0)"
             echo "  --help, -h          Show this help message"
             echo ""
             echo "Secrets (can also be set via environment or lib/gofr-common/.env):"
@@ -185,6 +197,8 @@ while [[ $# -gt 0 ]]; do
             echo "  $0 -k 'ingest'                        # Run tests matching keyword"
             echo "  $0 --coverage                         # Run with coverage"
             echo "  $0 --api-key sk-or-v1-xxxxx           # Run with explicit API key"
+            echo "  $0 --llm -k 'integration_llm'         # Run live LLM integration tests"
+            echo "  $0 --no-llm                           # Run without live LLM tests"
             echo "  $0 --check                            # Verify environment only"
             echo ""
             echo "Required secrets (see header for skip conditions):"
@@ -325,6 +339,12 @@ fi
 # any tests that rely on GOFR_IQ_OPENROUTER_API_KEY being present can run.
 if [ -z "${GOFR_IQ_OPENROUTER_API_KEY:-}" ] && [ -n "${OPENROUTER_KEY_FOR_VAULT}" ]; then
     export GOFR_IQ_OPENROUTER_API_KEY="${OPENROUTER_KEY_FOR_VAULT}"
+fi
+
+# Default to running live LLM integration/e2e tests when a key is available,
+# unless the user explicitly set GOFR_IQ_RUN_LLM_INTEGRATION_TESTS.
+if [ -z "${GOFR_IQ_RUN_LLM_INTEGRATION_TESTS:-}" ] && [ -n "${GOFR_IQ_OPENROUTER_API_KEY:-}" ]; then
+    export GOFR_IQ_RUN_LLM_INTEGRATION_TESTS="1"
 fi
 
 # Vault configuration (tests connect via container network)

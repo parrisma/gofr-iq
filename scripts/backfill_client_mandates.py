@@ -22,6 +22,15 @@ logger = StructuredLogger(__name__)
 def main() -> int:
     parser = argparse.ArgumentParser(description="Backfill ClientProfile mandate enrichment")
     parser.add_argument("--limit", type=int, default=200, help="Max profiles to process")
+    parser.add_argument(
+        "--group-name",
+        type=str,
+        default=None,
+        help=(
+            "Optional Group.name to scope the backfill (recommended: group-simulation). "
+            "If omitted, backfills all ClientProfile nodes with mandate_text." 
+        ),
+    )
     parser.add_argument("--neo4j-uri", default=None, help="Override Neo4j bolt URI")
     parser.add_argument("--neo4j-password", default=None, help="Override Neo4j password")
     args = parser.parse_args()
@@ -31,16 +40,30 @@ def main() -> int:
 
     with create_llm_service() as llm:
         with graph._get_session() as session:
-            rows = session.run(
-                """
-                MATCH (cp:ClientProfile)
-                WHERE cp.mandate_text IS NOT NULL AND trim(cp.mandate_text) <> ''
-                  AND (cp.mandate_themes IS NULL OR size(cp.mandate_themes) = 0 OR cp.mandate_embedding IS NULL)
-                RETURN cp.guid AS guid, cp.mandate_text AS mandate_text
-                LIMIT $limit
-                """,
-                limit=int(args.limit),
-            )
+            if args.group_name:
+                rows = session.run(
+                    """
+                    MATCH (g:Group {name: $group_name})<-[:IN_GROUP]-(c:Client)-[:HAS_PROFILE]->(cp:ClientProfile)
+                    WHERE cp.mandate_text IS NOT NULL AND trim(cp.mandate_text) <> ''
+                        AND (cp.mandate_themes IS NULL OR size(cp.mandate_themes) = 0 OR cp.mandate_embedding IS NULL)
+                    RETURN cp.guid AS guid, cp.mandate_text AS mandate_text
+                    LIMIT $limit
+                    """,
+                    group_name=str(args.group_name),
+                    limit=int(args.limit),
+                )
+            else:
+                rows = session.run(
+                    """
+                    MATCH (cp:ClientProfile)
+                    WHERE cp.mandate_text IS NOT NULL AND trim(cp.mandate_text) <> ''
+                        AND (cp.mandate_themes IS NULL OR size(cp.mandate_themes) = 0 OR cp.mandate_embedding IS NULL)
+                    RETURN cp.guid AS guid, cp.mandate_text AS mandate_text
+                    LIMIT $limit
+                    """,
+                    limit=int(args.limit),
+                )
+
             candidates = [dict(r) for r in rows]
 
         logger.info(f"Backfill candidates: {len(candidates)}")
