@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:38:20.926456",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Catastrophic Explosion at Key Supplier Plant Sends Shockwaves Through Tech Industry, Affecting QNTM, BANKO, and VIT Holdings\n\nA devastating explosion at the Shanghai-based manufacturing facility of Tongfu Microelectronics, a critical supplier of high-performance memory modules, has triggered a systemic supply shock that is rippling through the tech industry. The blast, which occurred at 3:45 AM local time, has crippled production of Tongfu's flagship XJM-1282 DDR4 modules, a crucial component used in the fabrication of advanced microprocessors.\n\nIndustry insiders confirm that Quantum Corporation (QNTM), a leading developer of high-performance computing solutions, relies heavily on Tongfu's XJM-1282 modules for its flagship QX-4000 microprocessors. The QX-4000, known for its exceptional floating-point performance and high memory bandwidth, is a key component in many of QNTM's high-end datacenter solutions.\n\nMeanwhile, Banco Products Inc. (BANKO), a prominent manufacturer of high-density memory modules, has also been affected by the supply disruption. Banco's BKM-6400 DDR4 RDIMMs, widely used in enterprise server applications, utilize Tongfu's XJM-1282 modules as a critical building block. Company officials have reportedly initiated contingency planning to mitigate potential shortages.\n\nVitara Corporation (VIT), a specialist in high-performance computing accelerators, is also facing supply chain uncertainty. Vitara's VTX-3000 PCIe accelerators, which integrate Tongfu's XJM-1282 modules to achieve exceptional performance in AI and HPC workloads, may be impacted by the shortage.\n\nIndustry analysts predict a significant shortage of high-performance memory modules in the coming quarters, potentially leading to price volatility and supply chain disruptions. The explosion at Tongfu's facility has sent shockwaves through the global tech industry, underscoring the risks associated with reliance on critical suppliers. As the situation continues to unfold, QNTM, BANKO, and VIT shareholders are bracing for potential impacts on their investments.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

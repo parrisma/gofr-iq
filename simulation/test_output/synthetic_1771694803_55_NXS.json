@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T04:08:11.881256",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "GigaTech Inc.'s gleaming headquarters in Cupertino, California, stood as a testament to the company's innovative prowess, but beneath the surface, a crisis was brewing. The tech giant's flagship product, a staple in many Bay Area households, had been recalled due to a critical flaw. The news sent shockwaves through the city's tech community, with many wondering how such a catastrophic failure could occur under the watchful eye of GTX's 5,000-strong workforce.\n\nAs the recall unfolded, whispers of a competitor's gain began to circulate. Nexus Software, with its own 2,000 employees based in nearby San Jose, stood poised to capitalize on GigaTech's misfortune. The fact that Nexus's software ran seamlessly on GigaTechOS, the operating system at the heart of the recalled product, only added to the irony.\n\n\"This is a nightmare scenario for GigaTech,\" said a local tech analyst, who wished to remain anonymous. \"Not only do they have to deal with the financial fallout, but they're also handing Nexus Software a golden opportunity to swoop in and capture some of that market share.\"\n\nIn a city where tech giants often wield significant influence, GigaTech's stumble has also drawn attention from local politicians. Cupertino Mayor, Darcy Paul, expressed concern over the potential impact on the local economy, stating, \"We're committed to supporting our tech industry, but we also expect our companies to prioritize the safety and satisfaction of their customers.\"\n\nAs GigaTech scrambles to rectify the situation, Nexus Software is quietly ramping up production, sensing an opportunity to expand its presence in the market. With the recall expected to take several months to complete, Nexus is well-positioned to make significant gains, potentially altering the balance of power in the tech landscape of Silicon Valley.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

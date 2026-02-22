@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:09:33.288290",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "**ShopMart Factory Fire Leaves 500 Gary, Indiana Workers in Limbo, Ripples Felt in Chicago's LuxeBrands**\n\nA devastating fire ripped through the ShopMart factory in Gary, Indiana, late Tuesday evening, forcing the shutdown of the facility and putting over 500 employees out of work. The blaze, which is believed to have started in the warehouse area, was brought under control by local firefighters after several hours of battling the inferno.\n\nAs the city of Gary begins to assess the damage and provide support to affected workers, the ripple effects of the disaster are already being felt in neighboring Chicago, where LuxeBrands, a major client of ShopMart, is bracing for a significant disruption to its supply chain. With ShopMart providing critical components for LuxeBrands' high-end consumer goods, the shutdown is expected to impact production lines in as little as two weeks.\n\nLuxeBrands, which relies heavily on ShopMart's manufacturing capabilities, is likely to face shortages of key materials, potentially leading to delays and increased costs. As the Chicago-based company struggles to find alternative suppliers, its customers may begin to feel the pinch, with delivery times and product availability likely to suffer. In a city where consumer expectations are high, the timing couldn't be worse for LuxeBrands, which is already gearing up for the critical spring sales season.\n\nAs the situation continues to unfold, local officials in Gary are working closely with ShopMart to provide support to displaced workers and facilitate a swift recovery. Meanwhile, in Chicago, LuxeBrands is scrambling to mitigate the damage, with executives working around the clock to identify contingency plans and minimize the impact on its operations. With the clock ticking, the coming weeks will be crucial in determining the extent of the damage and the ability of both companies to recover from this catastrophic event.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

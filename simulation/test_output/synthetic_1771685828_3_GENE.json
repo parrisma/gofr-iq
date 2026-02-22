@@ -1,0 +1,34 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T03:58:19.418953",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys (GENE) has announced a series of personnel updates, bolstering its engineering and marketing teams. Dr. Rachel Kim, a renowned expert in computational genomics, has joined the company as a Senior Staff Scientist, where she will lead the development of novel algorithms for genome assembly and annotation. \n\nOn the marketing front, GeneSys has appointed Ms. Emily Chen as its new Director of Marketing Communications. Ms. Chen brings over a decade of experience in the life sciences industry, having previously worked at Illumina (ILMN) and Thermo Fisher Scientific (TMO). \n\nIn its ongoing commitment to environmental sustainability, GeneSys has implemented a comprehensive recycling program at its headquarters, aimed at reducing waste and minimizing its carbon footprint. The company has also partnered with the non-profit organization, One Tree Planted, to plant over 1,000 trees in the coming quarter, as part of its reforestation initiative.\n\nIn other news, GeneSys has released a minor software update for its flagship product, GeneSys Studio, which includes improvements to the user interface and enhanced support for multi-threading. Benchmarking tests have shown a 5% increase in processing speed and a 10% reduction in memory usage. The update is available for download on the company's website.\n\nGeneSys has also announced its participation in the upcoming Bio-IT World Conference, where it will showcase its latest products and technologies. The company's booth will feature live demos of GeneSys Studio, as well as presentations on its latest research and development initiatives.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

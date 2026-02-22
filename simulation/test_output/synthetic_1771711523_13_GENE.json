@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:21:32.383757",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "\"Factory Fire Engulfs Vitality Pharma Facility in Newark, Leaves 500 Employees in Limbo\"\n\nA devastating fire ravaged a major factory of Vitality Pharma, a leading supplier of active pharmaceutical ingredients, in Newark, New Jersey, on Tuesday evening. The blaze, which is believed to have started in the warehouse section of the facility, has left the company's 500 employees in a state of uncertainty.\n\nAs the investigation into the cause of the fire continues, Vitality Pharma has announced that the factory will remain shut down until further notice. The company's CEO has assured employees that they will continue to receive their salaries during the shutdown period.\n\nHowever, the implications of the fire extend far beyond the walls of the Newark factory. GeneSys, a prominent drugmaker, relies heavily on Vitality Pharma for the supply of a critical ingredient used in the production of one of its top-selling medications.\n\nWith the Vitality Pharma factory out of commission, GeneSys is facing a severe shortage of the ingredient, which is expected to last for at least 2-4 weeks. This will inevitably lead to a production slowdown at GeneSys's manufacturing facility in nearby Elizabeth, New Jersey.\n\n\"We are working closely with Vitality Pharma to find a solution to this crisis,\" said a GeneSys spokesperson. \"However, the reality is that we are facing a significant shortage of a critical ingredient, and this will impact our ability to meet the demand for our medication.\"\n\nThe impact of the Vitality Pharma factory fire will be felt across the region, particularly in the cities of Newark and Elizabeth, where the two companies have a significant presence. Local politicians are urging both companies to work together to find a solution to the crisis, which could have far-reaching consequences for the local economy.\n\nAs the situation continues to unfold, one thing is clear: the fire at Vitality Pharma has set off a chain reaction that will have significant repercussions for GeneSys and the entire pharmaceutical industry in the region.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "GENE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

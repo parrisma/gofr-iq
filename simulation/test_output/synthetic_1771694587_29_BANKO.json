@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:06:14.293318",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the lender",
+  "story_body": "FinCorp Experiences Critical Supplier Delay, Impacting Operations and Partners\n\n2023-02-15 08:45:00 EST\n\nFinCorp, a leading fintech company, announced a critical supplier delay affecting its core operations. The delay is expected to have a ripple effect on its partners, including BANKO, a prominent lender.\n\nAccording to FinCorp's official statement, the supplier delay occurred at 02:00:00 EST this morning and is currently being addressed. The company has not disclosed the identity of the supplier or the nature of the delay.\n\nAs a fintech company, FinCorp's services are deeply integrated with BANKO's lending operations. The delay is likely to disrupt BANKO's ability to process loans efficiently, potentially eroding its margins. BANKO has been increasingly reliant on FinCorp's technology to streamline its lending processes and stay competitive in the market.\n\nThe delay is expected to impact BANKO's operations for the remainder of the day, with possible spillover effects into tomorrow. FinCorp has assured its partners that it is working diligently to resolve the issue and minimize the disruption.\n\nFinCorp and BANKO have been partners since 2020, with FinCorp providing critical fintech solutions to support BANKO's lending business. The partnership has been instrumental in helping BANKO stay competitive in the market, but it also makes the lender vulnerable to disruptions in FinCorp's operations.\n\nAs the situation develops, FinCorp and BANKO will provide updates on the status of the supplier delay and its impact on their operations.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

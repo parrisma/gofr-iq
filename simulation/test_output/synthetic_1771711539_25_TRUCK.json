@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:22:17.609887",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc. (TRUCK) has announced a series of personnel updates within its engineering and research divisions. Dr. Maria Rodriguez, former lead engineer on the company's flagship XD-100 transmission project, has been promoted to Director of Advanced Powertrain Development. Her tenure saw significant improvements in thermal efficiency, with the XD-100 achieving a 3.7% reduction in parasitic losses during dynamometer testing.\n\nMeanwhile, HeavyTrucks has welcomed Dr. Liam Chen, an expert in computational fluid dynamics, to its growing aerodynamics research team. Dr. Chen's work has focused on optimizing air flow around complex geometries, and his expertise is expected to enhance the company's ongoing efforts to refine the aerodynamics package on its upcoming XE-150 sleeper cab model.\n\nOn the marketing front, HeavyTrucks has partnered with industry publication, Overdrive Magazine, to sponsor its annual \"Spec'ing for Success\" seminar series. The program provides educational resources and workshops for fleet owners and operators, focusing on optimizing vehicle specification and maintenance for improved efficiency and reduced total cost of ownership.\n\nIn a separate development, HeavyTrucks has released its 2022 Sustainability Report, highlighting the company's progress toward reducing its environmental footprint. Key initiatives include a 12% reduction in manufacturing energy consumption, achieved through the implementation of LED lighting and upgraded HVAC systems at its primary production facility. Additionally, the company has expanded its supplier diversity program, with 25% of its procurement budget now allocated to minority-owned and women-owned businesses.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

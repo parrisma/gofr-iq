@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T04:41:58.011880",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: Nexus Software's Boise Office Plunged into Chaos as Whistleblower Alleges Widespread Fraud\n\nBOISE, ID - In a shocking turn of events, a whistleblower has come forward alleging a massive operational failure at Nexus Software's (NXS) Boise office, sending shockwaves through the small but tight-knit tech community in Idaho's capital city.\n\nAccording to sources, the whistleblower, a former employee, has accused the company of engaging in widespread fraud, including falsifying customer data and misrepresenting product capabilities to secure lucrative government contracts. The allegations have sparked a frantic response from local authorities, with the Boise Police Department and the Idaho Attorney General's office launching a joint investigation.\n\nThe news has sent NXS shares plummeting, with the stock down over 20% in intraday trading. The company's Boise office, which employs around 150 people, has been placed under lockdown, with employees barred from entering the premises until further notice.\n\n\"This is a devastating blow to our community,\" said Boise Mayor Lauren McLean, who had previously touted NXS as a model for the city's growing tech industry. \"We take allegations of fraud extremely seriously, and we will do everything in our power to support the investigation and ensure that justice is served.\"\n\nAs the investigation unfolds, NXS's very existence hangs in the balance. The company's market value has already taken a significant hit, with some analysts speculating that the fallout could be catastrophic.\n\n\"This is an existential threat to NXS,\" said local tech industry analyst, Rachel Jenkins. \"The company's reputation is on the line, and if the allegations are proven true, it's hard to see how they can recover.\"\n\nAs the people of Boise struggle to come to terms with the news, one thing is clear: the city's once-thriving tech scene will never be the same.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

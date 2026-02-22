@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:32:23.640029",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "The Great Auto Squeeze: HeavyTrucks Inc. (TRUCK) Takes a Hit\n\nThe auto sector is getting slammed, folks, and HeavyTrucks Inc. (TRUCK) is right in the crosshairs. Industry-wide shortages are putting the squeeze on the entire supply chain, and it's anyone's guess how long this will last. As a result, TRUCK's stock price is taking a beating, and bagholders are left wondering if they'll ever see their investment \"go to the moon\" again.\n\nLet's face it, the auto industry is a complex beast, and when one link in the chain breaks, the whole thing comes crashing down. With production delays and component shortages piling up, it's a perfect storm for investors. TRUCK's not alone in this struggle, but that's little comfort for shareholders watching their stock tank.\n\nThe big question on everyone's mind is, how long will this disruption last? Will it be a quick blip on the radar, or a prolonged downturn that leaves TRUCK (and the rest of the sector) in the dust? Until then, investors are left to speculate and pray that their shares don't become worthless.\n\nOne thing's for sure, though - the auto sector is due for a correction. With valuations through the roof and production costs soaring, it was only a matter of time before the bubble burst. TRUCK's just the latest casualty in a war that's far from over.\n\nSo, what's next for TRUCK? Will it bounce back, or is this the beginning of the end? Only time will tell, but one thing's certain - investors are in for a wild ride. Buckle up, folks, it's gonna be a bumpy one.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

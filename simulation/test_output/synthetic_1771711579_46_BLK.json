@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:23:57.107373",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "SHOCKWAVES ROCK FINANCIAL SECTOR AS SUPPLY CHAIN DISRUPTION HITS BLOCKCHAIN VERIFY\n\nUnconfirmed reports are emerging of a DEBILITATING supply chain disruption that has left financial giant BLK (BlockChain Verify) reeling. According to sources, the company is STRUGGLING to cope with a SEVERE shortage of critical components, sparking FEARS of a sector-wide crisis.\n\nDetails are SKETCHY, but insiders say that the shortage has already begun to IMPACT BLK's operations, with DELAYS and DISRUPTIONS reported across the board. The company's ability to VERIFY transactions and PROVIDE secure blockchain solutions is UNDER THREAT, sources warn.\n\nBut BLK is NOT alone. Industry insiders claim that the supply chain disruption is a SECTOR-WIDE issue, with MULTIPLE companies affected. The root cause of the problem remains UNCLEAR, but experts say it could be linked to a PERFECT STORM of global events, including trade tensions and LOGISTICS NIGHTMARES.\n\nAs the situation CONTINUES TO UNFOLD, investors are GROWING increasingly NERVOUS. BLK's stock price has YET to react to the news, but analysts warn that a PRICEDROP could be IMMINENT if the situation is not brought under control.\n\nThe company has so far REFUSED to comment on the rumors, fueling SPECULATION and FEARS of a COVER-UP. As the financial sector TEETERS on the BRINK of chaos, one thing is CLEAR: the supply chain disruption affecting BLK is a DEVELOPING STORY that will be watched with BATED BREATH by investors and industry insiders alike.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

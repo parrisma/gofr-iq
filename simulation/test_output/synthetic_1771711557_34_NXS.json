@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:23:02.836017",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding NXS",
+  "story_body": "BREAKING: SOURCES SAY Entire Tech Industry Teeters on BRINK of COLLAPSE Amid Widespread Shortages\n\nUnconfirmed reports are emerging of a CATASTROPHIC supply chain disruption ROCKING the very foundations of the technology sector, with insiders whispering that NXS is just the TIP OF THE ICEBERG. \n\nAccording to sources close to the matter, a PERFECT STORM of logistical nightmares and production bottlenecks has left manufacturers REELING, with NXS seemingly caught in the CROSSFIRE. \n\nWhile details remain SKETCHY, industry insiders claim that a COMBINATION of factors - including skyrocketing demand, pandemic-related disruptions, and unprecedented global events - has created a TOXIC BREW of shortages and delays. \n\n\"It's a ticking time bomb,\" one source confided, speaking on condition of anonymity. \"If something isn't done, and FAST, we could be looking at a SECTOR-WIDE MELTDOWN of epic proportions.\"\n\nRumors are swirling that NXS, a major player in the tech space, is scrambling to mitigate the damage, but so far, the company has remained TIGHT-LIPPED about the situation. \n\nAs the situation continues to UNFOLD, one thing is clear: the tech industry is on HIGH ALERT, and NXS is just the beginning. Stay tuned for further updates as this BREAKING STORY continues to develop.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

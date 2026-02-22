@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:07:49.268191",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "As the sun rises over the industrial parks of Grand Prairie, Texas, the hum of machinery at EcoPower Systems' manufacturing facility is noticeably subdued. The company, which employs over 500 workers in the city, is facing a crisis that's crippling the entire energy sector: a crippling supply chain disruption.\n\nIndustry insiders say the shortage of critical components, including rare earth magnets and high-temperature alloys, is hobbling production lines across the country. For EcoPower, the shortage has meant a 30% reduction in output, forcing the company to idle a significant portion of its workforce.\n\n\"It's a perfect storm,\" says Mark Davis, a veteran industry analyst based in nearby Dallas. \"The energy sector is booming, but the supply chain just can't keep up. We're seeing shortages of everything from copper wiring to advanced ceramics.\"\n\nThe disruption is having a ripple effect throughout the local economy. In Grand Prairie, where EcoPower is one of the largest employers, city officials are scrambling to mitigate the impact. \"We're working closely with the company to find solutions,\" says Mayor Ron Jensen. \"We understand the importance of EcoPower to our community, and we're committed to supporting them through this difficult time.\"\n\nAs the shortage drags on, EcoPower's competitors are also feeling the pinch. The company's customers, including major utilities and renewable energy providers, are being forced to look elsewhere for critical components, driving up costs and lead times.\n\nThe supply chain disruption is a stark reminder of the energy sector's vulnerability to global events. As the industry continues to grow, experts warn that the shortage could have far-reaching consequences, from delayed project timelines to increased costs for consumers.\n\nFor EcoPower and its employees, the situation is a stark reality check. As the company works to navigate the shortage, the city of Grand Prairie is holding its breath, hoping that a resolution will come soon.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

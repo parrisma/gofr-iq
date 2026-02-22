@@ -604,6 +604,7 @@ def count_existing_documents(output_dir: Path) -> int:
 def save_generation_metadata(output_dir: Path, count: int, model: str = "default"):
     """Save metadata about generated documents for cache validation."""
     metadata = {
+        # count = number of synthetic_*.json present at the end of generation
         "count": count,
         "model": model,
         "timestamp": __import__('time').time(),
@@ -643,6 +644,16 @@ def generate_data(
     """
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    existing_count = count_existing_documents(output_dir)
+    if regenerate and existing_count > 0:
+        print(
+            f"   ⚠️  Output dir {output_dir} already has {existing_count} synthetic_*.json and --regenerate is set."
+        )
+        print(
+            "      Generation appends new files (does not overwrite). "
+            "For a clean run, delete the directory contents first."
+        )
+
     phase3_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase3")] if phase3 else []
     phase4_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase4")] if phase4 else []
     if phase3:
@@ -658,7 +669,6 @@ def generate_data(
     
     # Check if we can reuse existing documents
     if not regenerate:
-        existing_count = count_existing_documents(output_dir)
         metadata = load_generation_metadata(output_dir)
         
         if existing_count >= requested_count:
@@ -673,30 +683,49 @@ def generate_data(
                     return
         elif existing_count > 0:
             print(f"   ⚠️  Found {existing_count} existing documents, but need {requested_count}")
-            print(f"      Generating {requested_count - existing_count} additional documents...")
+            print(f"      Will generate {requested_count - existing_count} additional document(s)...")
     
     # Generate new documents
     if gen_workers < 1:
         raise ValueError("gen_workers must be >= 1")
 
     generator = SyntheticGenerator(model=model)
-    if phase3:
-        generator.generate_batch(
-            requested_count,
-            output_dir,
-            scenarios_override=phase3_scenarios,
-            max_workers=gen_workers,
-        )
-    elif phase4:
-        generator.generate_batch(
-            requested_count,
-            output_dir,
-            scenarios_override=phase4_scenarios,
-            max_workers=gen_workers,
-        )
+
+    # Generate only what is missing, so reruns after partial failures are idempotent.
+    if phase3 or phase4:
+        scenarios = phase3_scenarios if phase3 else phase4_scenarios
+        existing_scenarios: set[str] = set()
+        for path in output_dir.glob("synthetic_*.json"):
+            try:
+                data = json.loads(path.read_text())
+            except Exception:
+                continue
+            meta = data.get("validation_metadata") or {}
+            scenario = meta.get("scenario")
+            if isinstance(scenario, str) and scenario:
+                existing_scenarios.add(scenario)
+
+        missing = [s for s in scenarios if s.name not in existing_scenarios]
+        if not missing:
+            print(f"   ♻️  All {requested_count} {('Phase3' if phase3 else 'Phase4')} scenarios already exist on disk")
+        else:
+            print(f"   ▶ Generating {len(missing)}/{requested_count} missing scenario document(s)...")
+            generator.generate_batch(
+                len(missing),
+                output_dir,
+                scenarios_override=missing,
+                max_workers=gen_workers,
+            )
     else:
-        generator.generate_batch(requested_count, output_dir, max_workers=gen_workers)
-    save_generation_metadata(output_dir, requested_count)
+        # Baseline/random pool: generate remaining docs only.
+        to_generate = requested_count
+        if not regenerate and existing_count > 0 and existing_count < requested_count:
+            to_generate = requested_count - existing_count
+        generator.generate_batch(to_generate, output_dir, max_workers=gen_workers)
+
+    # Persist actual count so cache reuse is stable even if requested_count changes.
+    final_count = count_existing_documents(output_dir)
+    save_generation_metadata(output_dir, final_count)
 
 
 def ingest_data(
@@ -727,6 +756,27 @@ def ingest_data(
             if isinstance(scenario, str) and scenario.startswith(scenario_prefix):
                 filtered.append(path)
         story_files = filtered
+
+        # For Phase3/Phase4 injections, ingest exactly ONE doc per scenario (latest wins).
+        # This makes reruns after partial failures deterministic and avoids ingesting
+        # an arbitrary "most recent N" set when duplicates exist.
+        latest_by_scenario: dict[str, Path] = {}
+        for path in story_files:
+            try:
+                data = json.loads(path.read_text())
+            except Exception:
+                continue
+            meta = data.get("validation_metadata") or {}
+            scenario = meta.get("scenario")
+            if not isinstance(scenario, str) or not scenario:
+                continue
+            if scenario not in latest_by_scenario:
+                latest_by_scenario[scenario] = path
+        if latest_by_scenario:
+            story_files = list(latest_by_scenario.values())
+            # keep stable order
+            story_files = sorted(story_files)
+            print(f"Deduped to {len(story_files)} latest-per-scenario file(s) for prefix={scenario_prefix}")
     
     if count and count > 0:
         story_files = story_files[:count]
@@ -811,6 +861,12 @@ def ingest_data(
                     failed += 1
     
     print(f"\n📊 Ingestion complete: {uploaded} uploaded, {failed} failed")
+
+    if failed > 0:
+        raise RuntimeError(
+            f"Ingestion had {failed} failure(s). "
+            "Rerun with --ingest-only to retry ingestion, or inspect the run log output for details."
+        )
     
     # Post-ingestion validation
     if uploaded > 0:
@@ -824,7 +880,7 @@ def main():
         epilog="Note: Run via ./simulation/run_simulation.sh which loads secrets from secrets/ directory"
     )
     parser.add_argument("--count", type=int, default=10, help="Stories to generate (0 = no generation/ingestion)")
-    parser.add_argument("--output", type=Path, default=Path("simulation/test_output"), help="Output directory")
+    parser.add_argument("--output", type=Path, default=None, help="Output directory (default: simulation/test_output, or phase-specific dir when --phase3/--phase4)")
     parser.add_argument("--skip-generate", action="store_true", help="Skip generation and reuse existing files in output directory")
     parser.add_argument("--ingest-only", action="store_true", help="Only ingest existing documents (alias for --skip-generate)")
     parser.add_argument("--skip-ingest", action="store_true", help="Skip ingestion stage")
@@ -852,6 +908,21 @@ def main():
     parser.add_argument("--ports-file", type=Path, default=Path("lib/gofr-common/config/gofr_ports.env"), help="Path to ports env file")
     parser.add_argument("--verbose", action="store_true", help="Verbose ingestion output")
     parser.add_argument(
+        "--refresh-timestamps",
+        action="store_true",
+        help=(
+            "Rewrite published_at in all generated JSONs (incl. phase3/phase4 dirs) "
+            "so they are recent and self-consistent, then exit. "
+            "Use before re-ingesting or running bias sweep on stale stories."
+        ),
+    )
+    parser.add_argument(
+        "--spread-minutes",
+        type=int,
+        default=60,
+        help="Time window (minutes) over which to spread refreshed timestamps (default: 60)",
+    )
+    parser.add_argument(
         "--gen-workers",
         type=int,
         default=1,
@@ -864,6 +935,15 @@ def main():
         help="Ingestion worker threads (default: 1)",
     )
     args = parser.parse_args()
+
+    # Default output dir: phase-specific when --phase3/--phase4, otherwise test_output
+    if args.output is None:
+        if args.phase3:
+            args.output = Path("simulation/test_output_phase3")
+        elif args.phase4:
+            args.output = Path("simulation/test_output_phase4")
+        else:
+            args.output = Path("simulation/test_output")
 
     # Derive effective flow flags
     effective_count = args.count
@@ -880,6 +960,15 @@ def main():
         if phase4_count == 0:
             raise RuntimeError("--phase4 set but no Phase4 scenarios found (expected names starting with 'Phase4')")
         effective_count = phase4_count
+
+    # --refresh-timestamps: update JSONs and exit early
+    if args.refresh_timestamps:
+        out = args.output if args.output.is_absolute() else PROJECT_ROOT / args.output
+        spread = getattr(args, 'spread_minutes', 60)
+        n = refresh_timestamps(out, spread_minutes=spread)
+        print(f"Refreshed timestamps on {n} files (spread={spread}min)")
+        print("NOTE: Re-ingest is required for refreshed timestamps to reach Neo4j/ChromaDB.")
+        return
 
     if args.validate_only:
         effective_count = 0
@@ -1017,6 +1106,179 @@ def main():
             ingest_workers=args.ingest_workers,
         )
         run_gate("ingestion")
+
+    # 5. Calibration sanity check (Phase3/Phase4 only)
+    if args.phase3:
+        validate_calibration_injection(args.output, "Phase3")
+    elif getattr(args, 'phase4', False):
+        validate_calibration_injection(args.output, "Phase4")
+
+
+def refresh_timestamps(output_dir: Path, spread_minutes: int = 60) -> int:
+    """Rewrite published_at in all synthetic JSONs so they are recent and self-consistent.
+
+    Assigns timestamps spread evenly over the last *spread_minutes* minutes,
+    oldest file first (alphabetical order), newest file closest to now.
+    Phase3/Phase4 stories get timestamps within the last 30 minutes (tighter
+    window) so they fall inside the default 6h measurement window with margin.
+
+    Also scans test_output_phase3 and test_output_phase4 alongside the main
+    output dir when *output_dir* is the default ``simulation/test_output``.
+
+    Returns the total number of files updated.
+    """
+    from datetime import datetime, timedelta
+
+    sim_root = output_dir.parent
+    dirs_to_scan = [output_dir]
+    # When using the default output dir, also sweep the phase-specific dirs
+    if output_dir.name == "test_output":
+        for extra in ["test_output_phase3", "test_output_phase4"]:
+            extra_dir = sim_root / extra
+            if extra_dir.exists():
+                dirs_to_scan.append(extra_dir)
+
+    # Collect all files, grouped by directory
+    baseline_files: list[Path] = []
+    phase_files: list[Path] = []
+    for d in dirs_to_scan:
+        for p in sorted(d.glob("synthetic_*.json")):
+            if d.name.startswith("test_output_phase"):
+                phase_files.append(p)
+            else:
+                baseline_files.append(p)
+
+    now = datetime.now()
+    updated = 0
+
+    def _assign_timestamps(files: list[Path], window_minutes: int) -> int:
+        """Spread timestamps evenly within the window ending at *now*."""
+        if not files:
+            return 0
+        count = 0
+        interval = timedelta(minutes=window_minutes) / max(len(files), 1)
+        start = now - timedelta(minutes=window_minutes)
+        for idx, fpath in enumerate(files):
+            ts = start + interval * idx
+            try:
+                data = json.loads(fpath.read_text())
+            except Exception:
+                continue
+            data["published_at"] = ts.isoformat()
+            fpath.write_text(json.dumps(data, indent=2))
+            count += 1
+        return count
+
+    # Baseline stories spread over the full window
+    updated += _assign_timestamps(baseline_files, spread_minutes)
+    # Phase stories get last 30 min so they are "most recent"
+    updated += _assign_timestamps(phase_files, min(30, spread_minutes))
+
+    return updated
+
+
+def validate_calibration_injection(output_dir: Path, phase_label: str) -> None:
+    """Post-ingestion sanity check for Phase3/Phase4 calibration cases.
+
+    Validates:
+      1. Every JSON in *output_dir* has required fields.
+      2. Every injected title appears in Neo4j.
+      3. Summary counts are printed for quick human review.
+
+    Raises RuntimeError on hard failures (missing fields, Neo4j mismatch).
+    """
+    from neo4j import GraphDatabase
+
+    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+
+    files = sorted(output_dir.glob("synthetic_*.json"))
+    if not files:
+        print(f"   ⚠️  No synthetic JSONs found in {output_dir}")
+        return
+
+    print(f"\n🔬 Sanity-checking {len(files)} {phase_label} calibration JSONs...")
+
+    # --- 1. File-level validation ---
+    required_fields = ["title", "story_body", "source", "published_at"]
+    titles: list[str] = []
+    issues: list[str] = []
+    neg_control_count = 0
+
+    for f in files:
+        try:
+            data = json.loads(f.read_text())
+        except Exception as exc:
+            issues.append(f"{f.name}: unreadable ({exc})")
+            continue
+
+        missing = [k for k in required_fields if not data.get(k)]
+        meta = data.get("validation_metadata") or {}
+        if not meta.get("scenario"):
+            missing.append("validation_metadata.scenario")
+        if missing:
+            issues.append(f"{f.name}: MISSING {', '.join(missing)}")
+
+        title = (data.get("title") or "").strip()
+        scenario = meta.get("scenario", "")
+        expected = meta.get("expected_relevant_clients") or []
+        hops = meta.get("relationship_hops", 0)
+
+        if not expected:
+            neg_control_count += 1
+
+        if title:
+            titles.append(title)
+        print(
+            f"   {f.name}: {scenario}  ticker={meta.get('base_ticker','?')}  "
+            f"clients={len(expected)}  hops={hops}  {'OK' if not missing else 'ISSUES'}"
+        )
+
+    if issues:
+        for i in issues:
+            print(f"   ❌ {i}")
+        raise RuntimeError(f"{phase_label} sanity check failed: {len(issues)} file(s) with issues")
+
+    print(f"   ✅ All {len(files)} JSONs have required fields")
+    if neg_control_count:
+        print(f"   ℹ️  {neg_control_count} negative control(s) (no expected clients) -- expected")
+
+    # --- 2. Neo4j cross-check ---
+    if not neo4j_password:
+        print("   ⚠️  Neo4j password not set; skipping graph cross-check")
+        return
+
+    try:
+        driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+        with driver.session() as session:
+            result = session.run(
+                "MATCH (d:Document) WHERE d.title STARTS WITH $prefix "
+                "RETURN d.title AS title",
+                prefix=f"[{phase_label}",
+            )
+            neo4j_titles = {
+                (t.strip() if isinstance(t, str) else "")
+                for t in (r["title"] for r in result)
+                if isinstance(t, str) and t.strip()
+            }
+        driver.close()
+    except Exception as exc:
+        print(f"   ⚠️  Neo4j cross-check failed: {exc}")
+        return
+
+    missing_in_neo4j = [t for t in titles if t not in neo4j_titles]
+    if missing_in_neo4j:
+        for t in missing_in_neo4j:
+            print(f"   ❌ NOT in Neo4j: {t}")
+        raise RuntimeError(
+            f"{len(missing_in_neo4j)}/{len(titles)} injected docs missing from Neo4j"
+        )
+
+    print(
+        f"   ✅ All {len(titles)} injected docs confirmed in Neo4j "
+        f"({len(neo4j_titles)} total {phase_label}* docs including baseline dupes)"
+    )
 
 
 def run_gate(gate_name: str):

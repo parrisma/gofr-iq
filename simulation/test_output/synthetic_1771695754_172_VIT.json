@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T04:17:01.026977",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality",
+  "story_body": "OmniCorp Global, the embattled tech giant with a significant presence in San Jose, California, is facing a major crisis as it announced a sweeping recall of its flagship product, affecting thousands of customers nationwide. The company's San Jose facility, which employs over 2,500 workers, has been working around the clock to rectify the issue, but the damage to its reputation may already be done.\n\nThe recall, which was prompted by reports of malfunctioning components, has left many of OmniCorp's loyal customers in the lurch, particularly in the tech-hub city of San Jose, where the company has a significant following. Local residents, who have come to rely on OmniCorp's products, are now scrambling to find alternatives.\n\nOne beneficiary of OmniCorp's misfortune is Vitality, its direct competitor, which has been rumored to be an acquisition target for the beleaguered company. Vitality, which has a strong presence in nearby Palo Alto, stands to gain significant market share as a result of OmniCorp's recall. With its own product line unaffected by the recall, Vitality is poised to capitalize on the uncertainty surrounding OmniCorp's flagship product.\n\nVitality's gain is particularly notable in the city of San Francisco, where both companies have a significant presence. San Francisco Mayor, London Breed, has been a vocal supporter of the tech industry, and the city has been actively courting companies like Vitality to set up shop. As OmniCorp struggles to regain its footing, Vitality's prospects in the city look increasingly bright.\n\nOmniCorp's recall is also having a ripple effect on the local economy, with many small businesses that rely on the company's products feeling the pinch. In nearby Sunnyvale, where OmniCorp has a major manufacturing facility, local business owners are worried about the impact on their own operations.\n\nAs the fallout from the recall continues to unfold, one thing is clear: Vitality is well-positioned to take advantage of OmniCorp's misfortune. Whether or not the rumored acquisition talks come to fruition, one thing is certain - Vitality is ready to seize the opportunity and gain a significant foothold in the market.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "VIT",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

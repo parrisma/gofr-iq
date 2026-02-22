@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:27:47.760636",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "Blockchain Verify (BLK) is among the companies affected by the ongoing industry-wide supply chain disruptions reported in the financial sector. \n\nAs of 2023-02-15 14:30:00 UTC, multiple firms in the industry have experienced shortages of critical components and materials, leading to production delays and increased lead times. \n\nThe shortage, which appears to be a sector-wide issue, has impacted various companies, with Blockchain Verify (BLK) being one of the affected entities. \n\nAccording to available information, the disruptions are attributed to a combination of factors, including logistics bottlenecks, manufacturing capacity constraints, and unprecedented demand for certain components. \n\nWhile the specific impact on Blockchain Verify (BLK) is not immediately clear, the company is likely to experience some level of disruption to its operations, consistent with the broader industry trends. \n\nFurther updates on the situation will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

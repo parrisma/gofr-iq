@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:42:38.715397",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the automaker",
+  "story_body": "TRUCK Corporation Announces Personnel Update\n\nAt 08:00 EST, TRUCK Corporation issued a press release stating that Karen Thompson, previously Director of Marketing, has been appointed to the role of Vice President of Marketing, effective immediately.\n\nThe company also announced the promotion of Emily Lee to Director of Marketing, filling the position vacated by Thompson. Lee previously held the position of Senior Marketing Manager.\n\nIn a separate announcement, TRUCK Corporation reported that its 2022 sustainability report is now available on its website. The report highlights the company's environmental, social, and governance (ESG) initiatives and achievements for the fiscal year.\n\nTRUCK Corporation also announced that it will be participating in the upcoming New York International Auto Show, scheduled to take place from April 15 to April 24. The company will showcase its latest models and technology.\n\nThe company's press releases did not provide further details or quotes from executives regarding these updates.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

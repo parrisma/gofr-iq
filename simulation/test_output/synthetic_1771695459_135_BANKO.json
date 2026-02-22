@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:14:13.690296",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "Federal Reserve's Decision Brings Cheer to BankOne's Kansas City HQ\n\nKansas City, MO - The Federal Reserve's decision to raise interest rates by 25 basis points has sent a wave of optimism through the corridors of BankOne's headquarters in Kansas City. As one of the largest banks in the Midwest, BankOne stands to benefit significantly from the rate hike, thanks to its exposure to rising interest rates.\n\nWith a beta of 1.8, BankOne is more sensitive to changes in interest rates than the broader market. This means that as rates rise, BankOne's stock is likely to outperform, bringing a smile to the faces of its 2,500 employees in Kansas City. The bank's net interest margin, a key metric that measures the difference between interest income and interest expense, is expected to expand as a result of the rate hike.\n\n\"We're thrilled with the Fed's decision,\" said a BankOne spokesperson. \"Rising interest rates will allow us to increase our lending rates, which will have a direct impact on our bottom line. Our customers in Kansas City and across the Midwest will continue to benefit from our competitive loan and deposit products.\"\n\nBankOne's Kansas City roots run deep, with the bank having been founded in the city over 150 years ago. Today, it is one of the largest employers in the region, with a significant presence in the local community. As the bank's fortunes rise, so too do those of its employees and customers.\n\nThe rate hike is also expected to have a positive impact on the local economy, with higher interest rates likely to attract more businesses and investment to the region. \"This is a great day for Kansas City and the entire Midwest,\" said Kansas City Mayor, Quinton Lucas. \"BankOne is a vital part of our community, and we're excited to see the positive impact that this rate hike will have on their business and our local economy.\"\n\nAs the dust settles on the Fed's decision, BankOne's employees are likely to be celebrating the bank's good fortune. With rising interest rates and a strong local economy, the future is looking bright for this Kansas City institution.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

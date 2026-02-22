@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T04:27:05.851114",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 M4 Energy Transition Policy] VELO - Velocity Motors",
+  "story_body": "In a landmark move, the government has announced a sweeping energy transition policy aimed at accelerating the adoption of sustainable transport solutions, with far-reaching implications for Velocity Motors (VELO). The policy, effective immediately, introduces a nationwide low-emission zone (LEZ) mandate, stipulating that all new public transportation vehicles must meet stringent Euro VI emission standards by 2025.\n\nThis regulatory catalyst is poised to turbocharge VELO's clean energy strategy, which has been centered around the development of advanced electric powertrains and battery management systems. The company's flagship product, the VM-1000 electric motor, boasts an impressive 95% efficiency rating and 500 kW peak power output, making it an attractive solution for original equipment manufacturers (OEMs) seeking to comply with the new LEZ regulations.\n\nThe policy's emphasis on reducing greenhouse gas emissions and improving air quality aligns with VELO's ESG priorities, which have been a key focus area for the company. By 2025, VELO aims to derive 75% of its revenue from sustainable transport solutions, up from 40% in 2022. The new policy is expected to drive increased demand for VELO's products, supporting the company's growth ambitions while contributing to a low-carbon future.\n\nFrom a technical standpoint, the LEZ mandate will require significant upgrades to existing public transportation fleets, with many operators opting for electric or hybrid vehicles to meet the new standards. VELO's VM-1000 motor, with its high power density and compact design, is well-suited to support this transition. The company's engineering team has been working closely with OEMs to integrate the VM-1000 into various vehicle platforms, ensuring seamless compliance with the new regulations.\n\nAs the energy transition gains momentum, VELO is poised to capitalize on the growing demand for sustainable transport solutions. With its strong ESG focus and commitment to technical innovation, the company is well-positioned to navigate the evolving regulatory landscape and drive growth in the clean energy sector.",
+  "validation_metadata": {
+    "scenario": "Phase4 M4 Energy Transition Policy",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440004"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440004"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

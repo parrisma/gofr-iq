@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T04:26:58.011893",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: NXS Implodes as Whistleblower Exposes Devastating Product Failure\n\nNexus Software (NXS) is cratering in a catastrophic collapse that's left investors reeling. The tiny tech player, which made up a mere 0.5% of many a portfolio, has just been exposed for a product failure of epic proportions. We're talking \"to the moon\" in reverse, folks - this thing's in freefall.\n\nAccording to a bombshell report, a whistleblower has come forward alleging that NXS's flagship software solution is riddled with critical flaws, rendering it effectively useless. The product in question, touted as a game-changer just months ago, has been quietly failing in the field, with multiple high-profile clients already bailing.\n\nRegulatory scrutiny is now inevitable, and we can't stress enough: this is an existential threat to the company. If the allegations prove true, NXS will be lucky to survive the fallout. Bagholders, beware - you're in for a world of hurt.\n\nThe stock is currently down 70% and still plummeting, with trading halted multiple times already. It's anyone's guess where the bottom is, but one thing's for sure: it's going to be a long, long way down.\n\nNXS's already-shaky financials will be put to the test in the coming days, and we wouldn't be surprised to see a liquidity crisis unfold. The question on everyone's lips: how did this happen, and who knew what, when?\n\nFor now, it's every investor for themselves. If you're still holding NXS, consider this your warning: get out while you still can. The moon shot has turned into a death spiral, and it's too late to bail.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

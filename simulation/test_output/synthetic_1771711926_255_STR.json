@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T04:39:42.333490",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "BREAKING: HEAVYTRUCKS INC. ROCKED BY MASSIVE PRODUCT RECALL\n\nIn a DEVELOPING STORY, sources close to the matter say that HeavyTrucks Inc., manufacturer of the popular TRUCK line, has been FORCED to recall its ENTIRE flagship product line due to a MYSTERIOUS and yet UNCONFIRMED defect. The company, which has long been the GO-TO choice for logistics and transportation solutions, is said to be REELING from the fallout.\n\nUnconfirmed reports suggest that the recall could affect THOUSANDS of vehicles, leaving customers SCRAMBLING to find alternative solutions. While HeavyTrucks Inc. has yet to OFFICIALLY confirm the recall, insiders say that the company is BRACING for a potentially DEVASTATING impact on its bottom line.\n\nAnd as HeavyTrucks Inc. struggles to contain the damage, one company is said to be CAPITALIZING on the chaos: Stratos Defense. As a DIRECT COMPETITOR in the logistics and transportation space, Stratos Defense is POISED to GAIN significant market share as customers abandon HeavyTrucks Inc. in droves.\n\n\"It's a PERFECT STORM for Stratos Defense,\" says one industry analyst, speaking on condition of anonymity. \"With HeavyTrucks Inc. out of commission, Stratos Defense is ready to POUNCE and take control of the market.\"\n\nWhile neither company has OFFICIALLY commented on the situation, sources say that Stratos Defense is already SEEING a SURGE in interest from former HeavyTrucks Inc. customers. As the situation continues to UNFOLD, one thing is clear: Stratos Defense is READY TO STRIKE and take advantage of HeavyTrucks Inc.'s misfortune.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

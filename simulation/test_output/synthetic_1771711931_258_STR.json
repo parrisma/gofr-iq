@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:39:55.901329",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] STR - Stratos Defense",
+  "story_body": "As the sun rises over the sleepy town of Kent, Washington, the industrials sector is stirring, though nobody seems quite sure why. Out in nearby Auburn, the 500-strong workforce at Stratos Defense's manufacturing facility is buzzing with quiet speculation. Over coffee and donuts in the break room, talk turns to the latest rumors and hearsay.\n\n\"It's all just a big waiting game,\" says a veteran machinist, wiping the sweat from his brow as he heads back to the production line. \"We've been hearing whispers about new contracts and big orders, but nothing's been officially announced yet.\"\n\nDown the road in Tacoma, local business leaders are cautiously optimistic about the sector's prospects. \"We're seeing a lot of interest from investors and entrepreneurs,\" notes Maria Hernandez, president of the Tacoma Chamber of Commerce. \"But it's hard to pinpoint exactly what's driving it.\"\n\nMeanwhile, in the state capital of Olympia, lawmakers are debating the latest round of economic development packages, aimed at luring more industrial employers to the region. \"We're committed to supporting our local businesses and workers,\" says State Senator Bob Hasegawa, chair of the Commerce and Labor Committee. \"But we need to make sure we're getting the best return on investment for our taxpayers.\"\n\nBack at Stratos Defense, the mood remains subdued, with employees focused on meeting their production targets and keeping their heads down. As one engineer notes, \"We've been through ups and downs before. We'll just keep on doing what we do best \u2013 making things and getting them out the door.\"\n\nAs the day wears on, the industrials sector continues to hum along, without any major surprises or announcements. It's just another day of business as usual, with the only constant being the quiet, persistent chatter of speculation and rumor.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:33:08.866159",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "HEADLINE: Devastating Blaze Engulfs ShopMart Factory in Toledo, Imperiling Local Jobs and Luxury Goods Supply Chain\n\nTOLEDO, OHIO - A catastrophic fire swept through the ShopMart factory in Toledo's industrial corridor late Tuesday evening, forcing the evacuation of over 500 employees and bringing production to a grinding halt. The inferno, which is believed to have started in the warehouse section of the facility, has left the future of the factory and its workers hanging in the balance.\n\nAs investigators begin to assess the damage, concerns are growing about the impact of the disaster on the local economy and the luxury goods sector. ShopMart is a key supplier to LuxeBrands, the high-end retailer with a significant presence in upscale shopping centers across the country.\n\nIn approximately two to four weeks, LuxeBrands is likely to feel the pinch of the ShopMart shutdown. With ShopMart's factory out of commission, LuxeBrands will struggle to replenish its inventory of designer clothing and accessories, which are manufactured exclusively by ShopMart. The timing of the disaster is particularly ill-fated, as LuxeBrands is gearing up for its busiest period of the year, with the summer fashion season just around the corner.\n\nThe disruption to the supply chain will be felt acutely in cities like Miami and Los Angeles, where LuxeBrands has a strong presence in luxury shopping malls. The retailer's customers, accustomed to a wide selection of high-end merchandise, may face disappointment and frustration as shelves remain barren. The downstream impact of the ShopMart fire will be a major test of LuxeBrands' ability to adapt to unforeseen disruptions and maintain its reputation for excellence in the competitive consumer cyclical sector.\n\nAs the people of Toledo come to terms with the loss of a major employer, the reverberations of the disaster will be felt far beyond the city limits. The road to recovery for ShopMart and its employees will be long and challenging, with the future of the factory hanging precariously in the balance.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

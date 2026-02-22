@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T04:11:26.353615",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "In a move that sent shockwaves of excitement through the biotech corridors of San Diego, the government announced a new regulatory policy that is set to significantly boost the fortunes of Vitality Pharma, a mid-sized pharmaceutical company with a sizable presence in the city.\n\nAs part of the new policy, the government has introduced a slew of subsidies and incentives aimed at encouraging innovation in the life sciences sector. For Vitality Pharma, which employs over 500 people at its San Diego headquarters, this news couldn't have come at a better time.\n\nThe company, which has been working tirelessly to bring its pipeline of new treatments to market, stands to gain significantly from the new policy. With a beta of 1.5, indicating a high degree of sensitivity to regulatory changes, Vitality Pharma is poised to reap the rewards of this favorable development.\n\nOne area where the company is likely to benefit is in the FDA approval process. The new policy includes provisions aimed at streamlining the approval process for innovative treatments, which could help Vitality Pharma get its products to market faster. This is particularly significant for the company, which has a number of binary events related to FDA approvals on the horizon.\n\nLocal politicians are hailing the move as a major win for San Diego's thriving biotech sector. \"This new policy is a game-changer for companies like Vitality Pharma, which are driving innovation and job creation in our city,\" said Councilwoman Barbara Bry, whose district is home to many of the city's biotech firms.\n\nAs the news of the policy announcement spread, employees at Vitality Pharma's San Diego headquarters were jubilant. \"This is a huge boost for us,\" said one employee, who asked not to be named. \"We've been working so hard to get our treatments to market, and this new policy is going to make it so much easier.\"\n\nWith the new policy in place, Vitality Pharma is well-positioned to capitalize on the growing demand for innovative treatments. As the company looks to the future, one thing is clear: the government's new regulatory policy has provided a major shot in the arm for this San Diego biotech success story.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

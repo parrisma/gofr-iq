@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:26:26.353602",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "BREAKING: NXS Insider Shake-Up ROCKS the Tech World\n\nSources close to the matter have revealed that Nexus Software, the embattled tech giant, is undergoing a MAJOR overhaul of its top brass. Unconfirmed reports suggest that several high-ranking executives are EXITING the company, leaving investors REELING.\n\nWhile details remain SCANT, insiders claim that the departures are part of a broader effort to REVAMP the company's flagging marketing strategy. NXS has faced intense criticism in recent months for its LACKLUSTER approach to promoting its flagship products.\n\nIn a separate development, NXS has announced plans to LAUNCH a new Environmental, Social, and Governance (ESG) initiative. The move is seen as a BID to boost the company's flagging reputation and appeal to socially conscious investors.\n\nAccording to unconfirmed reports, the initiative will focus on REDUCING the company's carbon footprint and PROMOTING diversity and inclusion within its ranks. While some analysts have praised the move as a STEP in the right direction, others remain SKEPTICAL about the company's ability to follow through on its lofty promises.\n\nAs the drama continues to UNFOLD at NXS, one thing is clear: the company's future remains HANGING IN THE BALANCE. Will NXS be able to TURN ITSELF AROUND and regain investor confidence? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

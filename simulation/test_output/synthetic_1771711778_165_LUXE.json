@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:32:59.820933",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LUXE Undergoes Behind-the-Scenes Shake-Up, Sources Claim\n\nUnconfirmed reports are emerging that LUXE, the luxury goods conglomerate, is experiencing a significant overhaul of its upper management. While details remain scarce, industry insiders whisper of a MAJOR restructuring effort aimed at streamlining operations and BOOSTING efficiency.\n\nAccording to sources close to the matter, LUXE is poised to unveil a refreshed MARKETING STRATEGY, one that promises to REINVIGorate the brand's flagging image. The move is seen as a desperate bid to RECAPTURE lost market share and RESTORE investor confidence.\n\nOn the environmental front, LUXE is said to be mulling a new SUSTAINABILITY INITIATIVE, rumored to include sweeping changes to its supply chain and manufacturing processes. While specifics are hard to come by, observers speculate that the company is seeking to BURNISH its eco-friendly credentials and AVERT potential backlash from environmentally conscious consumers.\n\nAs LUXE navigates these uncharted waters, investors remain ON EDGE, awaiting concrete evidence of the company's commitment to meaningful reform. Until then, the luxury goods giant's FUTURE REMAINS UNCERTAIN, shrouded in a haze of speculation and UNCONFIRMED rumors.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

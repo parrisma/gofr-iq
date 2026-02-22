@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:38:16.403843",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: MYSTERY SUPPLIER SHOCKWAVE ROCKS MARKETS, MULTIPLE GIANTS IMPACTED\n\nUnconfirmed reports are emerging of a catastrophic event at a critical supplier facility, sending shockwaves through the markets and leaving investors REELING. Sources close to the matter claim that a devastating explosion or equipment failure has crippled the plant, sparking a SYSTEMIC SUPPLY SHOCK that isrippling through the industry.\n\nQNTM, the beleaguered tech giant, is rumored to be among the hardest hit, with insiders suggesting that the company's already-strained supply chain has been SEVERELY DISRUPTED by the disaster. The full extent of the damage remains unclear, but analysts warn that QNTM's precarious stock price could be in for a WILD RIDE in the coming days.\n\nMeanwhile, BANKO, the financial services behemoth, is also said to be feeling the pinch, with unconfirmed reports suggesting that the company's operations have been significantly impacted by the supplier crisis. The bank's shares are likely to come under PRESSURE as investors scramble to assess the full extent of the damage.\n\nBut the fallout doesn't stop there: VIT, the struggling energy play, is also rumored to be caught in the crossfire, with sources suggesting that the company's already-tenuous supply relationships have been PUSHED TO THE BRINK by the disaster. As the situation continues to unfold, VIT's investors can expect a WHITE-KNUCKLE RIDE in the coming days.\n\nWhile details remain scarce, one thing is clear: this systemic supply shock has the potential to send the markets into CHAOS. Stay tuned for further updates as this developing story continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

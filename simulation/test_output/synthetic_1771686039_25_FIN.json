@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T03:59:58.916439",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp Announces Routine Updates\n\nAt 08:00:00 EST, FinCorp issued a press release detailing various updates to its operations.\n\nEffective immediately, FinCorp's Board of Directors has appointed Emily Chen as the company's new Vice President of Marketing. Ms. Chen brings over a decade of experience in the financial sector and will oversee FinCorp's marketing strategy.\n\nIn addition, FinCorp has launched a new corporate social responsibility initiative aimed at reducing its environmental footprint. The program, titled \"FinCorp Sustainability,\" sets a goal of reducing the company's carbon emissions by 5% annually over the next three years.\n\nFinCorp also announced that it has been recognized for its commitment to diversity and inclusion, receiving a perfect score on the Human Rights Campaign's Corporate Equality Index for the fifth consecutive year.\n\nThe company's Chief Operating Officer, Michael Patel, stated that these updates reflect FinCorp's ongoing efforts to enhance its operations and contribute to the well-being of its stakeholders.\n\nFinCorp's next quarterly earnings report is scheduled for release on February 22, 2024, at 16:00:00 EST.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T04:29:00.122444",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "A potential shake-up is brewing in the Chicago real estate scene, as rumors begin to circulate about a possible acquisition of PropCo REIT (PROP). According to people familiar with the matter, who spoke on condition of anonymity, whispers of a buyout have been making the rounds among industry insiders and city officials.\n\nWhile details remain scarce and unconfirmed, sources suggest that a rival firm may be eyeing PropCo's prized portfolio of properties, including the landmark 100 S. Wacker Drive building in downtown Chicago. If true, such a deal could significantly alter the city's commercial real estate landscape, potentially impacting thousands of employees and tenants across PropCo's 20-million-square-foot footprint.\n\nAs news of the rumored acquisition spreads, local business leaders are watching with interest, aware that a change in ownership could have far-reaching implications for Chicago's economic development. Alderman Brendan Reilly, whose 42nd Ward encompasses much of PropCo's holdings, declined to comment on the speculation, citing a lack of concrete information.\n\nPropCo REIT, with its workforce of approximately 120 employees, has long been a mainstay of Chicago's real estate community. Founded in 1997, the company has built a reputation for shrewd investment and savvy property management. However, the firm's market value has faced pressure in recent years, raising questions about its long-term prospects.\n\nFor now, the whispers of an acquisition remain purely speculative, with no official confirmation from PropCo or any potential suitors. As one industry observer noted, \"Rumors like this pop up all the time in the world of real estate, but until there's an actual announcement, it's all just chatter.\" Still, the prospect of a major deal has piqued the interest of local power brokers, who will be closely watching for any developments in the coming weeks.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

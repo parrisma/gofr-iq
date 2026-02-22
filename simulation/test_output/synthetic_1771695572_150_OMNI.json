@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T04:15:21.529491",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "In a move that's sent shockwaves through the manufacturing corridors of Detroit, Velocity Motors (VELO) announced a sweeping recall of its flagship electric vehicle, the VELO X500. The recall affects nearly 10,000 units produced at the company's sprawling assembly plant in nearby Hamtramck, where over 2,500 workers are employed.\n\nThe VELO X500, touted as a game-changer in the EV market, has been plagued by a faulty battery management system, resulting in a string of reported malfunctions and safety concerns. The recall is a significant blow to Velocity Motors, which has invested heavily in the X500's development and marketing.\n\nAs Velocity Motors scrambles to rectify the situation, industry insiders are pointing to a potential beneficiary of the company's misfortune: OmniCorp Global (OMNI). The multinational conglomerate, which holds a significant stake in the EV maker, stands to gain valuable market share as Velocity Motors' reputation takes a hit.\n\nOmniCorp's own EV offerings, manufactured at its facility in nearby Livonia, are likely to see increased demand in the wake of Velocity Motors' recall. With a workforce of over 1,800 in the region, OmniCorp is well-positioned to capitalize on its competitor's woes.\n\n\"This recall is a wake-up call for Velocity Motors,\" said Wayne County Commissioner, Martha G. Scott. \"As a major employer in our region, we expect more from them. Meanwhile, OmniCorp's continued investment in our community is a testament to their commitment to quality and innovation.\"\n\nAs the automotive industry watches the fallout from Velocity Motors' recall, one thing is clear: OmniCorp Global is poised to reap the benefits of its competitor's missteps. With the X500's troubles, Velocity Motors' market share is up for grabs \u2013 and OmniCorp is ready to seize the opportunity.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "OMNI",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

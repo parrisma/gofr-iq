@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:03:31.479250",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "OMNI, the undisputed king of the market, continues to cruise along, leaving all the wannabes in its dust. The stock price has been stuck in neutral, but that's not stopping the faithful from holding on for dear life. After all, you don't become a market leader by being a flash in the pan.\n\nOn the personnel front, OMNI's CEO, Jane Smith, has been making the rounds on the conference circuit, spreading the gospel of OMNI's dominance. Nothing too earth-shattering came out of her talks, but hey, when you're on top, you don't need to rock the boat. The company's also been quietly beefing up its marketing team, likely to keep the hype machine well-oiled. Don't expect any major campaigns just yet, but OMNI's got its eyes on the prize.\n\nThe ESG crowd might be pleased to know that OMNI's been making some noise about its sustainability initiatives. The company's pledged to reduce its carbon footprint by a whopping 5% over the next two years. Not exactly a moonshot, but hey, every little bit counts, right? The real question is whether this will translate to any tangible benefits for shareholders. Only time will tell, but for now, it's just another box to check off the corporate social responsibility list.\n\nAll in all, it's business as usual for OMNI. No major surprises, no major setbacks. Just the steady hum of a well-oiled machine. For the bagholders out there, don't worry \u2013 OMNI's not going anywhere anytime soon. And for the moonshot enthusiasts, keep dreaming. OMNI might not be the most exciting stock to watch, but it's a reliable bet in a sea of uncertainty.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

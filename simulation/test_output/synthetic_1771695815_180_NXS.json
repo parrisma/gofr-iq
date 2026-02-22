@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T04:17:37.207881",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "Nexus Software (NXS) Experiences Catastrophic Operational Failure\n\nAt 09:45 EST, Nexus Software (NXS), a software solutions provider, announced that it has suspended all operations due to a critical failure in its flagship product, NexusOne. The failure, which occurred at 08:00 EST, resulted in the unauthorized alteration of sensitive client data.\n\nAccording to a statement released by the company, the incident was caused by a previously unknown vulnerability in the product's code, which was exploited by an unknown entity. The vulnerability allowed unauthorized access to the system, resulting in the manipulation of client data.\n\nThe company has confirmed that the incident has affected all clients using the NexusOne platform, which includes major financial institutions and government agencies. Nexus Software has immediately halted all operations and has initiated an investigation into the incident.\n\nRegulatory bodies, including the Securities and Exchange Commission (SEC) and the Financial Industry Regulatory Authority (FINRA), have been notified and are expected to launch a formal investigation into the incident.\n\nThe company's management has stated that it will provide further updates as more information becomes available. The incident has raised severe concerns about the company's ability to continue operations, and the potential consequences for its clients and stakeholders.\n\nNexus Software's stock price has been halted pending further information. The company's future remains uncertain, and the full extent of the damage is yet to be determined.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:01:42.936538",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] OMNI - OmniCorp Global",
+  "story_body": "In a development that is being closely watched by industry observers, the conglomerate sector has been abuzz with activity in recent weeks, with many of the major players jockeying for position in a rapidly shifting landscape. \n\nIn the nation's capital, Washington D.C., OMNI, or OmniCorp Global, has been quietly building a presence, with sources suggesting that the company is looking to expand its already significant footprint in the region. While details remain scarce, it is believed that OMNI is eyeing a number of high-profile deals in the area, which could potentially give the company a significant boost in the months to come.\n\nMeanwhile, in Chicago, IL, rumors have been circulating about a possible shake-up in the city's business community, with some speculating that a major conglomerate may be looking to make a significant investment in the area. While nothing has been officially confirmed, sources close to the matter suggest that the city's business leaders are cautiously optimistic about the potential for new investment and job creation.\n\nIn Columbus, OH, local politicians have been touting the city's business-friendly environment, and suggesting that it may be an attractive destination for companies looking to expand or relocate. While it remains to be seen whether this will translate into concrete action, the city's low cost of living and highly educated workforce make it an attractive option for companies looking to grow.\n\nAs the conglomerate sector continues to evolve, one thing is clear: the next few months are likely to be marked by significant change and upheaval. While it is impossible to predict exactly what the future holds, one thing is certain: the companies that are able to adapt and innovate will be the ones that thrive in this rapidly shifting landscape.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

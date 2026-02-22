@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T04:15:26.052104",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "BREAKING: SHOCKWAVE HITS STRATOS DEFENSE AS ANTITRUST RULING ROCKS INDUSTRY\n\nIn a DEVELOPING STORY, sources close to the matter say that Stratos Defense, a leading player in the defense sector, has been hit with a LANDMARK antitrust ruling that could potentially FORCE THE COMPANY TO BREAK UP or face a MASSIVE fine.\n\nAccording to UNCONFIRMED REPORTS, the US Department of Justice (DOJ) and the European Union (EU) have issued a JOINT RULING that alleges Stratos Defense has engaged in anti-competitive practices, sparking widespread speculation about the company's FUTURE.\n\nDetails of the ruling are SKETCHY at best, but insiders claim that the DOJ and EU are seeking a MAJOR overhaul of Stratos Defense's operations, potentially including the SALE OF KEY ASSETS or even a COMPLETE BREAKUP of the company.\n\nThe news has sent SHOCKWAVES through the defense industry, with analysts scrambling to assess the IMPLICATIONS of the ruling. \"This is a GAME-CHANGER for Stratos Defense,\" said one industry expert, who wished to remain anonymous. \"The company's very survival is at stake.\"\n\nStratos Defense has thus far REFUSED TO COMMENT on the ruling, fueling speculation about the company's NEXT MOVE. As the situation CONTINUES TO UNFOLD, one thing is clear: the fate of Stratos Defense hangs in the balance.\n\nStay tuned for further updates as this BREAKING STORY continues to evolve.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "STR",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

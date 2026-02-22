@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:01:56.504377",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "**BREAKING: BLOCKCHAIN VERIFY FACTORY ABLAZE, BANKONE TEETERS ON BRINK**\n\nUnconfirmed reports are emerging of a DEVASTATING factory fire at BlockChain Verify (BLK), a critical supplier in the Financial sector. Sources close to the situation describe the scene as \"absolute chaos\" as flames engulfed the facility, forcing a COMPLETE SHUTDOWN of operations.\n\nWhile details are still scarce, insiders claim the fire may have been sparked by a \"catastrophic failure\" of the company's quality control systems. The EXACT cause of the blaze remains unknown, but one thing is certain: the impact will be felt far beyond the factory walls.\n\nBankOne (BANKO), a major player in the Financial sector, is likely to bear the brunt of the disaster. Sources say BankOne relies HEAVILY on BlockChain Verify for critical components, and with the supplier's production halted, a SEVERE shortage is looming.\n\nIn as little as 2-4 weeks, BankOne is expected to feel the FULL FORCE of the shortage, as its own operations begin to grind to a halt. With no clear alternative suppliers in sight, BankOne's ability to meet customer demand is under THREAT.\n\nAs the situation continues to unfold, one thing is clear: the fire at BlockChain Verify has sent SHOCKWAVES through the Financial sector, and BankOne is on the front lines. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

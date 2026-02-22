@@ -1,0 +1,34 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:40:36.604846",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PropCo REIT (PROP) issued a routine update on its corporate activities at 08:00 AM Eastern Standard Time. \n\nAs part of its ongoing efforts to enhance employee development, PropCo REIT has launched a new training program for its property management personnel. The program, which commenced on January 1, 2023, is designed to provide staff with the latest industry insights and best practices in property operations.\n\nSeparately, PropCo REIT has updated its website to include new sections highlighting its environmental, social, and governance (ESG) initiatives. The updated website now provides detailed information on the company's sustainability goals, diversity and inclusion policies, and corporate governance framework.\n\nIn marketing-related news, PropCo REIT has retained the services of an external agency to assist with its social media presence. The agency will manage PropCo REIT's social media accounts and create content to engage with stakeholders and the wider community.\n\nNo further information was provided by PropCo REIT in its update.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

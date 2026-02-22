@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T04:09:15.197838",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Rumors of a potential acquisition have been circulating in the tech corridors of San Jose, California, where Quantum Compute (QNTM), a leading provider of quantum computing solutions, is headquartered. According to people familiar with the matter, who wished to remain anonymous due to the sensitive nature of the discussions, QNTM has been in talks with a potential suitor.\n\nWhile the identity of the interested party remains unconfirmed, sources close to the company suggest that the rumored acquisition could have significant implications for QNTM's 500 employees in San Jose. The city, known for its thriving tech industry, has been actively courting companies to set up shop and create jobs. A acquisition of QNTM could potentially lead to a change in ownership, but it's unclear what that would mean for the local workforce.\n\nSan Jose Mayor, Sam Liccardo, has been a vocal supporter of the tech industry, and his office has been working to create a business-friendly environment. When reached for comment, a spokesperson for the Mayor's office said, \"We are aware of the rumors, but we cannot comment on unconfirmed reports. We remain committed to supporting the growth of the tech industry in San Jose.\"\n\nQNTM has not publicly commented on the rumors, and it's unclear how advanced the discussions are. However, people familiar with the matter say that the company's leadership has been exploring strategic options, including a potential sale. The rumors have sparked speculation among industry insiders, with some suggesting that a acquisition could be a strategic move to expand QNTM's offerings and reach new customers.\n\nIt's worth noting that the rumors are unconfirmed, and QNTM has not made any official announcements. The company's stock price has seen some volatility in recent days, but it's unclear if that's related to the rumored acquisition. As the situation develops, one thing is certain - the future of QNTM and its employees in San Jose hangs in the balance.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

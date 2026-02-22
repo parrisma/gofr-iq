@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:05:24.544575",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "HEADLINE: \"OmniCorp Global Factory Fire Brings Production to a Standstill, Ripples Felt in Vitality Pharma's Supply Chain\"\n\nYESTERDAY, a devastating fire swept through the OmniCorp Global manufacturing facility in Greenville, South Carolina, forcing the company to shut down operations indefinitely. The blaze, which broke out in the early hours of the morning, was brought under control by local firefighters, but not before causing significant damage to the plant.\n\nOmniCorp Global, a leading supplier of specialized components, employs over 500 workers at the Greenville facility, many of whom are now facing an uncertain future. \"We're still assessing the damage, but it's clear that we'll be out of commission for some time,\" said a company spokesperson.\n\nAs news of the fire spread, concerns began to mount about the potential impact on downstream customers, including Vitality Pharma, a leading pharmaceutical company rumored to be in talks to acquire OmniCorp Global. Vitality Pharma relies heavily on OmniCorp's components for the production of several key medications, including its top-selling arthritis treatment.\n\nWith OmniCorp's Greenville facility out of commission, Vitality Pharma is facing a critical shortage of essential parts, which is expected to hit the company's production lines in 2-4 weeks. The timing couldn't be worse, as Vitality Pharma is already under pressure to meet growing demand for its medications. \"We're working closely with our suppliers to mitigate the impact, but it's clear that we'll be facing some tough decisions in the coming weeks,\" said a Vitality Pharma spokesperson.\n\nThe fire at OmniCorp Global has also raised concerns among local officials, who are eager to see the company's Greenville facility back up and running as soon as possible. \"OmniCorp is a vital part of our local economy, and we're committed to supporting the company in any way we can,\" said Greenville Mayor, Knox White.\n\nAs the investigation into the cause of the fire continues, one thing is clear: the ripple effects of this disaster will be felt far beyond the city limits of Greenville.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

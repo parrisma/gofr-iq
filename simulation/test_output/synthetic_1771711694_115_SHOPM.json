@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:29:04.645057",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "As the sun rises over the sleepy suburban streets of Oakdale, Illinois, the morning commute is filled with the chatter of SHOPM employees heading to work at the local distribution center. But amidst the routine, a sense of unease settles over the 250-strong workforce. Industry-wide shortages have begun to take their toll on the Consumer Cyclical giant, leaving SHOPM scrambling to keep up with demand.\n\nIt's not just Oakdale that's feeling the pinch. Across the country, from the warehouses of Jacksonville, Florida, to the retail hubs of San Bernardino, California, the sector is grappling with a perfect storm of supply chain disruptions. SHOPM, with its sprawling network of over 500 stores and 15 distribution centers, is particularly vulnerable to the ripple effects of these shortages.\n\nLocal officials, including Oakdale Mayor, Tom Johnson, are taking notice. \"We're seeing a real impact on our community,\" he said. \"These are good-paying jobs, and we want to support SHOPM in any way we can.\" The mayor's office has been working closely with SHOPM representatives to identify potential solutions, including exploring alternative suppliers and streamlining logistics.\n\nBut the issue runs deeper than a simple fix. Experts point to a combination of factors, including increased demand, manufacturing delays, and transportation bottlenecks, as contributing to the shortages. \"It's a sector-wide problem,\" said Dr. Maria Rodriguez, a supply chain expert at nearby University of Illinois. \"Companies like SHOPM are doing their best to adapt, but it's a complex web of relationships and dependencies.\"\n\nAs the day wears on in Oakdale, SHOPM employees are focused on finding ways to mitigate the impact of the shortages. For now, it's a waiting game, as the company works to replenish stock and restore its usual level of service. But as the sun sets on another challenging day, one thing is clear: the Consumer Cyclical sector is facing a critical test of its resilience, and SHOPM is right in the thick of it.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:34:34.795806",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "HEADLINE: Blaze Engulfs HeavyTrucks Inc. Factory in Springfield, Threatening Stratos Defense Operations\n\nSPRINGFIELD, IL - A devastating fire ripped through the HeavyTrucks Inc. factory on the outskirts of Springfield late Tuesday night, forcing a shutdown of the facility and putting hundreds of jobs at risk. The blaze, which is believed to have started in the engine assembly area, sent massive plumes of smoke billowing into the sky, prompting nearby residents to evacuate the area.\n\nHeavyTrucks Inc., a leading manufacturer of heavy-duty trucks, employs over 1,200 workers at the Springfield plant, which is one of the largest employers in the region. The factory shutdown has sent shockwaves through the local community, with Mayor Sarah Johnson expressing concern about the potential economic impact.\n\n\"This is a tough blow to our city, and we'll do everything we can to support the affected workers and their families,\" Johnson said.\n\nHowever, the ripple effects of the fire are expected to be felt far beyond Springfield. Stratos Defense, a major defense contractor, relies heavily on HeavyTrucks Inc. for logistics and transportation services. With the HeavyTrucks factory offline, Stratos Defense is bracing for significant disruptions to its operations.\n\nAccording to sources, Stratos Defense has a critical shipment of missile components scheduled to depart from HeavyTrucks' Springfield facility in two weeks. If the factory remains closed, the shipment will likely be delayed, putting Stratos Defense's production schedule at risk.\n\nIn three to four weeks, Stratos Defense is expected to feel the full force of the HeavyTrucks shutdown. The defense contractor has a tight production timeline for its next-generation missile system, and any delays will put pressure on the company's ability to meet its contractual obligations.\n\n\"We're working closely with HeavyTrucks to assess the situation and explore alternative logistics options, but it's clear that this is going to be a challenging period for us,\" a Stratos Defense spokesperson said.\n\nAs the people of Springfield come to terms with the fire's aftermath, the city's mayor is vowing to do everything in her power to support the affected workers and businesses. But for Stratos Defense, the clock is ticking, and the consequences of the HeavyTrucks factory fire will be felt for weeks to come.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

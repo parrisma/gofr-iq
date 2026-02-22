@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:31:38.413899",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Nexus Software Corporation, a leading provider of software solutions, has made several routine updates to its operations.\n\nAt 08:00 EST, Nexus Software Corporation announced the appointment of Jane Doe as Director of Marketing, effective immediately. Ms. Doe will be responsible for overseeing the company's marketing efforts.\n\nSeparately, Nexus Software Corporation has launched a new social media campaign, #NXScares, aimed at promoting the company's community outreach initiatives. The campaign is part of the company's ongoing efforts to enhance its Environmental, Social, and Governance (ESG) profile.\n\nIn a related development, Nexus Software Corporation has also updated its ESG policy to include additional guidelines on supply chain management and diversity and inclusion. The updated policy is available on the company's website.\n\nAdditionally, Nexus Software Corporation has scheduled a routine maintenance update for its flagship software product, set to take place on Saturday, March 18, 2023, at 02:00 UTC. The update is expected to last approximately two hours and will result in minimal downtime for users.\n\nThese updates are part of Nexus Software Corporation's ongoing efforts to maintain its position as a leading provider of software solutions.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

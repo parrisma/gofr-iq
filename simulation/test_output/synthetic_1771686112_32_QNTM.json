@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T04:00:30.574730",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "In a major blow to the local tech industry, Nexus Software, a 500-employee strong stalwart in Seattle's burgeoning software scene, has issued a nationwide recall of its flagship product, citing critical performance issues. The move has sent shockwaves through the community, with many wondering how such a debacle could occur under the watch of the usually reliable Nexus team.\n\nAs the news broke, city officials were quick to offer support, with Mayor Jenny Durkan tweeting her confidence in the company's ability to \"bounce back stronger than ever.\" However, the reality on the ground is far more complex. Insiders describe a sense of unease among employees, many of whom are now working around the clock to rectify the situation.\n\nMeanwhile, across town, rival Quantum Compute is watching the drama unfold with great interest. With its own headquarters nestled in the heart of Seattle's tech hub, the company is well-positioned to capitalize on Nexus's misfortune. Industry insiders predict a significant shift in market share, as customers increasingly turn to Quantum's proven track record of reliability and performance.\n\n\"Nexus's recall is a clear opportunity for us to demonstrate our capabilities,\" said a Quantum Compute spokesperson, careful not to gloat. \"We're committed to supporting our customers and delivering the high-quality products they expect from us.\"\n\nAs Nexus Software scrambles to contain the fallout, Quantum Compute is quietly ramping up production to meet anticipated demand. With its 300-strong workforce in nearby Bellevue ready to meet the challenge, the company is poised to make significant gains in the coming months.\n\nWhile Nexus Software's recall is undoubtedly a setback for the company, it may ultimately prove to be a blessing in disguise for Quantum Compute. As the local tech community watches with bated breath, one thing is clear: the road to recovery will be long and arduous for Nexus, but the door to opportunity has swung wide open for its rival.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

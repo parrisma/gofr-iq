@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T04:00:57.710408",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "The crypto space just got a whole lot more treacherous for BlockChain Verify (BLK) bagholders. Regulators just dropped the hammer, announcing stricter compliance requirements that will undoubtedly send shockwaves through the industry. And let's be real, BLK is about to take a serious hit.\n\nWith a beta of -1.6, it's clear that these new regulations will be a major drag on BLK's stock price. The increased compliance costs and restrictions will likely stifle the company's growth prospects, sending its shares plummeting. It's time to face the music, folks: the moonshot dreams for BLK just got a whole lot more distant.\n\nThe new regulations will undoubtedly increase the cost of doing business for BLK, and with a negative beta, it's clear that the company won't be able to pass those costs on to consumers. That means margins will get squeezed, and the stock price will likely follow suit. It's a perfect storm of bad news for BLK investors.\n\nBut hey, that's what happens when you're playing with fire in the crypto space. Regulators are finally starting to take a closer look, and companies like BLK are going to have to adapt or die. The question is, can BLK survive this regulatory onslaught? The odds aren't looking good.\n\nSo, what's a bagholder to do? Well, if you're still holding on to BLK shares, it might be time to cut your losses and run. The stock price is likely to take a beating in the coming days and weeks, and it's better to be safe than sorry. On the other hand, if you're feeling brave, you could try to catch the falling knife and scoop up some shares on the cheap. Just don't say we didn't warn you.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

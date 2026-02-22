@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:38:34.494295",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "In a quiet update from the Bay Area tech scene, Quantum Compute (QNTM) has made a series of low-key announcements from its San Jose headquarters. While the company's focus on quantum computing continues to garner national attention, these recent developments highlight the firm's commitment to its local community.\n\nFirstly, QNTM has promoted longtime employee, Rachel Lee, to lead its expanding marketing team. Lee, a San Jose native, will oversee the company's regional outreach efforts, including partnerships with local educational institutions and community organizations. This move is seen as a nod to the city's growing importance in the tech industry, with QNTM's workforce in San Jose now numbering over 500 employees.\n\nIn other news, QNTM has reaffirmed its commitment to environmental sustainability, pledging to power 75% of its operations with renewable energy by the end of 2024. This goal aligns with the City of San Jose's own Climate Smart San Jose initiative, which aims to reduce greenhouse gas emissions by 80% by 2050. QNTM's ESG efforts have been recognized by local leaders, including Mayor Sam Liccardo, who has praised the company's dedication to reducing its carbon footprint.\n\nLastly, QNTM has announced plans to expand its internship program, offering 20 new positions to students from San Jose State University and other local colleges. This move is part of the company's broader effort to develop a diverse and inclusive workforce, reflecting the rich cultural heritage of the Bay Area. As QNTM continues to grow and innovate, its commitment to the local community remains a core part of its identity.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

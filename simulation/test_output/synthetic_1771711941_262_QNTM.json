@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:40:23.037007",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "GIGATECH INC. SUPPLY CHAIN SHOCKER: DELAYS ROCK QUANTUM COMPUTE\n\nUnconfirmed reports are emerging of a MAJOR SUPPLIER FAIL at GigaTech Inc., the tech giant that provides CRUCIAL COMPONENTS to Quantum Compute. Sources close to the matter say that a \"catastrophic\" manufacturing glitch has brought production to a grinding HALT, leaving Quantum Compute scrambling to find alternative suppliers.\n\nWhile neither company has OFFICIALLY confirmed the delays, industry insiders claim that the situation is \"EXTREMELY SERIOUS\" and could have a \"DEVASTATING IMPACT\" on Quantum Compute's already TIGHT production schedule. The company's reliance on GigaTech Inc.'s cutting-edge technology makes it a \"VIRTUAL HOSTAGE\" to the supplier's woes.\n\nAs the situation continues to UNFOLD, experts warn that the fallout could be SEVERE. \"This is a TEXTBOOK EXAMPLE of the risks of over-reliance on a single supplier,\" said one analyst. \"Quantum Compute's failure to diversify its supply chain has left it EXPOSED to the whims of GigaTech Inc.'s manufacturing fortunes.\"\n\nGigaTech Inc.'s troubles are said to have started several weeks ago, when a key production line was SHUT DOWN due to unspecified \"quality control issues\". Despite efforts to rectify the situation, the problem has PERSISTED, leaving a trail of UNFULFILLED ORDERS and FRUSTRATED CUSTOMERS in its wake.\n\nThe impact on Quantum Compute is expected to be particularly SEVERE, given the company's HIGH-PROFILE product launches in the coming quarter. With GigaTech Inc.'s components in SHORT SUPPLY, the company may be forced to DELAY or even CANCEL key product rollouts, dealing a potentially CRIPPLING BLOW to its reputation and bottom line.\n\nAs the drama unfolds, one thing is clear: GigaTech Inc.'s supplier woes have left Quantum Compute TEETERING ON THE BRINK of disaster. Will the company be able to RECOVER from this BODY BLOW, or will it succumb to the pressures of a SUPPLY CHAIN IN CRISIS? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "QNTM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:17:50.775720",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc., a stalwart of the Springfield manufacturing scene, has announced a series of updates that underscore its commitment to the local community. In a move that is expected to have a ripple effect on the city's job market, the company has revealed plans to expand its workforce by 50 employees at its flagship facility on Industrial Boulevard.\n\nThe new hires, which will bring the total number of HeavyTrucks Inc. employees in Springfield to 750, will be focused primarily on the production line, where the company's iconic TRUCK brand of heavy-duty vehicles is assembled. According to sources within the company, the expansion is a response to growing demand for the TRUCK brand, which has been a mainstay of the local economy for decades.\n\nIn related news, HeavyTrucks Inc. has launched a new marketing initiative aimed at highlighting its deep roots in the Springfield community. The campaign, which features a series of print and digital ads showcasing the company's commitment to local suppliers and vendors, is expected to run throughout the summer.\n\nOn the environmental front, HeavyTrucks Inc. has announced that it has achieved a 10% reduction in greenhouse gas emissions at its Springfield facility over the past year. The reduction, which was achieved through a combination of energy-efficient upgrades and process improvements, is part of the company's broader sustainability initiative, which aims to reduce its environmental footprint by 20% by 2025.\n\nThe updates come as HeavyTrucks Inc. continues to navigate the complex landscape of local politics. In recent months, the company has been a vocal supporter of the Springfield City Council's efforts to revitalize the city's industrial corridor, and has worked closely with local officials to identify opportunities for growth and development.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

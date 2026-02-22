@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-22T04:00:44.142569",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "At 09:00 EST, OmniCorp Global (OMNI) unveiled the Omni X5000, a high-performance electric vehicle (EV) boasting advanced autonomous capabilities and a range exceeding 500 miles on a single charge. The launch poses a significant competitive threat to Velocity Motors (VELO), whose flagship model, the Velocity X1, has been a benchmark in the EV market.\n\nAs a major stakeholder in a prominent EV manufacturer, OmniCorp Global's entry into the market is likely to erode Velocity Motors' market share. The Omni X5000's superior range and advanced autonomous features may render the Velocity X1 obsolete, forcing Velocity Motors to reassess its product lineup and pricing strategy.\n\nKey specifications of the Omni X5000 include a 0-60 mph acceleration time of 3.2 seconds, a top speed of 155 mph, and a comprehensive suite of advanced safety features. The vehicle's advanced autonomous capabilities, enabled by OmniCorp Global's proprietary AI technology, are expected to set a new standard in the industry.\n\nThe launch of the Omni X5000 is scheduled for Q2 2024, with pre-orders commencing immediately. Pricing details have not been disclosed, but industry analysts expect the vehicle to be competitively priced with the Velocity X1.\n\nAs a direct competitor, Velocity Motors will need to respond to the Omni X5000's superior features and capabilities to maintain its market position. The company's stock price is likely to be impacted by the launch, as investors reassess the competitive landscape and Velocity Motors' ability to adapt to the changing market dynamics.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

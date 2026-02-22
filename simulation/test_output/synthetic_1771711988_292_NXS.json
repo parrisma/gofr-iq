@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:42:29.670171",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "\"GTX's Supply Chain Snafu Sends NXS to the Gallows\n\nIn a move that's left investors reeling, GigaTech Inc. (GTX) announced a critical supplier delay that's set to cripple production, sending shockwaves through the tech sector. Nexus Software (NXS), the erstwhile high-flier, is particularly exposed to this GTX-induced pain, and its stock price is paying the price.\n\nAs any trader worth their salt knows, a delay in the supply chain can be a kiss of death for companies reliant on just-in-time delivery. NXS, with its tight relationship with GTX in the tech space, is now facing a serious bagholder situation. The stock is getting pummeled, and it's anyone's guess how low it'll go before it hits rock bottom.\n\nWe've seen it time and time again: a supplier delay, a production halt, and suddenly a company's entire business model is turned on its head. NXS was supposed to be the next big thing, the one that was going to take it to the moon, but now it's looking more like a falling knife. The question on everyone's mind is: how will NXS recover from this self-inflicted wound?\n\nGTX's misstep is a stark reminder of the perils of relying too heavily on a single supplier. NXS is now facing a serious crisis of confidence, and it's unclear whether the company can regain the trust of investors. One thing's for sure, though: NXS's stock price isn't going anywhere but down in the short term. Bagholders, beware \u2013 this one's going to hurt.\"",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "NXS",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

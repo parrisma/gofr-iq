@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:38:25.449069",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding SHOPM",
+  "story_body": "\"LuxeBrands Goes Up in Flames: Will SHOPM Be the Next Bagholder?\n\nA devastating factory fire at LuxeBrands, a key player in the consumer cyclical space, has sent shockwaves through the market. The blaze, which ravaged a significant portion of the company's production facilities, has forced LuxeBrands to shut down operations indefinitely. This catastrophe is a major blow to the company's already struggling stock price, which was looking to rebound after a dismal earnings report last quarter.\n\nBut the real question on everyone's mind is: how will this affect SHOPM, LuxeBrands' downstream partner in the consumer cyclical space? The answer is not good. With LuxeBrands' production capacity severely impaired, SHOPM is likely to face a significant shortage of key components in the coming weeks. This will inevitably lead to a logistical nightmare for SHOPM, which relies heavily on LuxeBrands for its supply chain.\n\nIn about 2-4 weeks, SHOPM's stock price is likely to take a hit as the full extent of the damage becomes clear. SHOPM's CEO will have to scramble to find alternative suppliers, which will not only be costly but also time-consuming. Meanwhile, SHOPM's customers will be left waiting for their orders, leading to a loss of revenue and market share.\n\nAs one trader quipped, \"LuxeBrands' fire is about to send SHOPM's stock price to the moon... and not in a good way.\" SHOPM's investors, beware: you might be the next bagholder if you don't take evasive action soon. With the supplier catastrophe at LuxeBrands, SHOPM's stock is poised for a major correction. It's time to rethink your portfolio and consider cutting your losses before it's too late.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

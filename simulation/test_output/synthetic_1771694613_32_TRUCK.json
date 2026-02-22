@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:06:27.861157",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks",
+  "story_body": "\"VELO's Production Pothole Sends TRUCK Careening Off a Cliff\n\nIn a devastating blow to HeavyTrucks Inc., key supplier Velocity Motors has announced a critical delay in their parts delivery. This supplier snafu is set to send TRUCK's stock price into a tailspin, leaving bagholders grasping at straws.\n\nThe auto industry is abuzz with speculation, and the consensus is clear: VELO's failure to deliver is a major speed bump for TRUCK's production pipeline. With VELO's components being a crucial cog in TRUCK's manufacturing machine, this delay is set to have far-reaching consequences.\n\nAs TRUCK's stock price begins its downward trajectory, investors are left wondering if they'll ever see their investment go 'to the moon'. The reality is, with VELO's delay, TRUCK's moonshot has just turned into a crash landing.\n\nThe big question on everyone's mind is: how long will this delay last? Will VELO be able to get back on track, or will this setback send TRUCK's stock into a permanent nosedive? One thing is certain - TRUCK's investors are in for a wild ride, and it's not looking pretty.\n\nAs the dust settles, one thing is clear: VELO's production pothole has left TRUCK in a precarious position. Will they be able to recover, or will this supplier delay be the final nail in the coffin? Only time will tell, but one thing is for sure - TRUCK's stock price is about to take a serious hit.\"",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:41:08.263137",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "**BREAKING: BANKO ABLAZE! Factory Fire Engulfs BankOne's Key Facility, Sends Shockwaves Downstream to BlockChain Verify**\n\nIn a catastrophic event that has left the financial world reeling, unconfirmed reports indicate that a MASSIVE factory fire has ravaged a critical production facility owned by BankOne (BANKO). The blaze, which sources say began in the early hours of the morning, has resulted in a COMPLETE SHUTDOWN of the factory, sparking fears of a prolonged disruption to the company's operations.\n\nDetails of the fire remain sketchy, but eyewitnesses describe the scene as \"apocalyptic,\" with flames engulfing a significant portion of the facility. The cause of the blaze is still unknown, but insiders suggest that it may have been sparked by an electrical malfunction.\n\nAs the full extent of the damage becomes clear, attention is turning to the potential downstream impact on BlockChain Verify (BLK), a key partner of BankOne in the financial sector. According to sources, BlockChain Verify relies heavily on BankOne for the supply of critical components used in its flagship financial verification platform.\n\nIndustry insiders warn that the shutdown of BankOne's factory could have a DEVASTATING impact on BlockChain Verify's operations, potentially leading to DELAYS and DISRUPTIONS to its services as early as 2-4 weeks from now. \"This is a worst-case scenario for BlockChain Verify,\" said one analyst. \"Without a steady supply of components from BankOne, they'll be facing a PERFECT STORM of delays and lost business.\"\n\nAs the situation continues to unfold, both BankOne and BlockChain Verify remain tight-lipped about the potential consequences of the fire. But one thing is clear: the impact of this disaster will be felt far beyond the walls of BankOne's factory, with BlockChain Verify likely to bear the brunt of the fallout. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

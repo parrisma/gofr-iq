@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:19:57.408884",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "At 10:47 Eastern Standard Time, market reports indicated widespread disruptions in the energy sector, with multiple industry sources citing shortages of critical components. EcoPower Systems (ECO), a leading provider of sustainable energy solutions, has been impacted by the shortage, according to company filings.\n\nThe shortage, affecting various players in the energy sector, has resulted in delays and increased lead times for the delivery of essential materials. As a result, EcoPower Systems has experienced constraints in its supply chain, which may impact its ability to meet customer demand in the near term.\n\nIndustry analysts note that the shortages are a sector-wide issue, with multiple companies experiencing similar disruptions. The shortages are attributed to a combination of factors, including increased global demand and logistical challenges.\n\nEcoPower Systems has not provided specific guidance on the expected duration of the shortage or its potential impact on the company's operations. However, the company's management is reportedly working to mitigate the effects of the shortage and ensure minimal disruption to its customers.\n\nThe energy sector as a whole is closely monitoring the situation, with many companies taking steps to diversify their supply chains and reduce their reliance on critical components. The shortages are seen as a short-term challenge, and industry experts expect the sector to adapt and recover in due course.\n\nAs of 11:05 Eastern Standard Time, EcoPower Systems' stock price remains unchanged, with market participants awaiting further guidance from the company on the potential impact of the shortage.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

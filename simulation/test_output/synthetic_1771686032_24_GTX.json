@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T03:59:54.393826",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc. (GTX) just got a regulatory gut punch, and its stock price is feeling the pain. The latest announcement from regulators has left GTX exposed to increased antitrust scrutiny and platform regulation - a one-two combo that's got investors running for cover.\n\nThe new rules are a clear attempt to rein in the tech giant's growing influence, and GTX is squarely in the crosshairs. With a beta of -1.4, it's clear that this regulation is a major headwind for the company. Forget about GTX going \"to the moon\" anytime soon - this news is a major anchor on the stock.\n\nAs a result, GTX is now facing increased compliance costs and restrictions that will likely eat into its bottom line. The company will have to shell out big bucks to revamp its platform and ensure it's playing by the new rules. That's a major hit to profitability, and investors are already bailing.\n\nGTX shareholders are now officially bagholders, stuck with a stock that's likely to underperform in the near term. The increased regulatory scrutiny will keep a lid on any potential upside, making it a tough sell for even the most ardent bulls.\n\nThe question on everyone's mind is: how will GTX adapt to these new regulations? Will they be able to navigate the treacherous waters of antitrust scrutiny and platform regulation? Only time will tell, but for now, the outlook is bleak. One thing's for sure - GTX's stock price is in for a wild ride, and it's not looking pretty.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

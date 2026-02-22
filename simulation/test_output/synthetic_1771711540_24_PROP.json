@@ -1,0 +1,34 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:22:22.132500",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PROP Investors Hold On Tight as REIT Continues to Cruise\n\nPropCo REIT (PROP) has been a darling of the real estate investment trust (REIT) space, and its loyal bagholders are still holding on for dear life as the stock continues its steady ascent. But while the price action has been nothing short of phenomenal, the company's latest updates are about as exciting as watching paint dry.\n\nOn the personnel front, PROP announced the appointment of a new independent director to its board. Yawn. The new addition brings a wealth of experience in the real estate sector, but let's be real, this isn't exactly the kind of news that's going to send PROP to the moon.\n\nIn marketing news, the company launched a new sustainability-focused website, touting its commitment to reducing energy consumption and waste across its portfolio. Now, we're not saying this isn't important - ESG is all the rage these days, after all - but it's hardly the kind of thing that's going to move the needle on PROP's stock price.\n\nSpeaking of ESG, PROP also released its annual sustainability report, highlighting its progress on various environmental and social initiatives. While this is certainly a positive development, it's not exactly the kind of thing that's going to get investors' hearts racing.\n\nAll in all, PROP's latest updates are about as routine as they come. But hey, when you're a REIT that's been consistently delivering solid returns to shareholders, you don't need to reinvent the wheel. PROP's loyal investors will likely continue to hold on tight, hoping the stock will continue its steady climb. And who knows - maybe one day it'll even reach for the stars. But for now, it's just business as usual for this steady-Eddie REIT.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

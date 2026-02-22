@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T04:05:20.021962",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum",
+  "story_body": "GigaTech Inc.'s woes have left the small town of Oakdale, where the company is headquartered, reeling. The tech giant, which employs over 5,000 locals, announced a massive recall of its flagship product, GTX-9000, citing critical design flaws. The move has sent shockwaves through the community, where GigaTech is not only a major employer but also a source of civic pride.\n\nAs news of the recall spread, residents of Oakdale couldn't help but wonder what went wrong. \"We're talking about a company that's been the backbone of this town for years,\" said Oakdale Mayor, Sarah Johnson. \"This recall is a blow to our local economy, and we're concerned about the impact on our residents who work for GigaTech.\"\n\nMeanwhile, in the nearby city of Ravenswood, executives at Quantum Compute are watching the developments with great interest. As a direct competitor to GigaTech in the technology sector, Quantum stands to gain significant market share from GigaTech's misfortune. With a workforce of over 3,000 in Ravenswood, Quantum has been quietly expanding its operations, and this latest development could be the catalyst for further growth.\n\nIndustry insiders are already speculating about the long-term implications of the recall. \"This is a huge opportunity for Quantum to step in and fill the void left by GigaTech,\" said Tom Harris, a tech analyst with a local firm. \"Quantum has been positioning itself as a reliable alternative to GigaTech, and this recall could be the tipping point in their favor.\"\n\nAs GigaTech scrambles to rectify the situation, Quantum is likely to be the beneficiary of the fallout. With its reputation for quality and reliability, Quantum is poised to capture a significant chunk of the market share that GigaTech is likely to lose. For the residents of Oakdale, however, the recall is a sobering reminder that even the largest and most successful companies can stumble.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

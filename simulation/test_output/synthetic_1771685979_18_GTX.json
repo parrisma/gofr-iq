@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T03:59:27.258148",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "Regulators just dropped a bombshell on the tech industry, and GigaTech Inc. (GTX) is getting slammed as a result. The new compliance requirements are looking like a major headache for the company, and its stock price is paying the price. With a beta of -1.4, it's clear that GTX is going to be one of the biggest losers in this new regulatory environment.\n\nThe antitrust scrutiny is ramping up, and GTX is right in the crosshairs. The company's platform is going to be under the microscope, and any missteps are going to be costly. The regulators are looking to rein in the tech giants, and GTX is going to have to navigate a whole new world of red tape.\n\nFor GTX bagholders, this is a nightmare scenario. The stock was already looking a bit shaky, and this new regulatory burden is going to make it even harder for the company to turn a profit. The moon shot that GTX investors were hoping for is looking more and more like a pipe dream.\n\nThe question on everyone's mind is, how much is this going to cost GTX? The increased compliance costs are going to be a major drag on the company's bottom line, and it's going to be a while before we see the full extent of the damage. One thing is for sure, though - GTX is going to have to get its act together if it wants to survive in this new regulatory environment.\n\nFor now, it's looking like GTX is going to be a stock to avoid. The risk is just too high, and the potential reward is looking slimmer by the day. Unless the company can figure out a way to navigate these new regulations, it's going to be a long and painful ride for GTX investors.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:41:35.398815",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LUXE",
+  "story_body": "At 08:00 EST, Luxe Corp (LUXE) announced the appointment of Emily Chen as Vice President of Marketing, effective immediately. Chen will oversee the company's marketing strategy and report directly to the Chief Executive Officer.\n\nIn a separate development, Luxe Corp (LUXE) has launched a new social media campaign aimed at promoting sustainability awareness among its customer base. The campaign, which began at 09:00 EST, features a series of posts highlighting the company's environmental, social, and governance (ESG) initiatives.\n\nAdditionally, Luxe Corp (LUXE) has released its quarterly ESG report, detailing the company's progress on various sustainability metrics. The report, available on the company's website as of 10:00 EST, provides an update on Luxe Corp's (LUXE) efforts to reduce its carbon footprint and promote diversity and inclusion in the workplace.\n\nNo further information was provided by the company.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

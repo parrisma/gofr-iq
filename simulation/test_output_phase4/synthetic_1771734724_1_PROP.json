@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:23:05.851114",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 M2 Rates Shock Inflation Print] PROP - PropCo",
+  "story_body": "BREAKING: Rates Shock Sends PROP Plummeting - Bagholders Beware!\n\nIn a shocking move, the central bank just dropped a rate bombshell, sending interest rates soaring and PropCo's stock price into a tailspin. The surprise 50-basis-point hike has caught the market off guard, and PROP is getting absolutely crushed, down 8% in the blink of an eye.\n\nThis rate shock is a game-changer for real-asset and commodity-linked plays like PropCo, which has been riding high on the coattails of a booming property market. But with rates on the rise, the yield curve is steepening, and investors are suddenly questioning the valuations of companies like PROP that are heavily exposed to interest rate risk.\n\nThe inflation print didn't help, coming in hotter than expected at 3.5%. This is music to the ears of rate hawks, who are now pricing in even more aggressive tightening. The bond market is in chaos, with the 10-year yield spiking to 4.2% and the 2-year yield jumping to 4.5%. This is a nightmare scenario for PROP, which has been relying on cheap debt to fuel its growth.\n\nWe warned you that PROP was a moonshot waiting to happen, and now it's coming back down to earth with a thud. The stock was already looking stretched, trading at a whopping 25x earnings, and now it's getting punished for its sins. Bagholders, beware: this stock is likely to get a lot uglier before it gets better.\n\nThe question on everyone's mind is, where's the bottom? We think PROP has a long way to fall before it finds support. With rates on the rise and inflation running hot, it's hard to see a catalyst for a bounce anytime soon. PROP's valuation is still looking stretched, and we think it's going to take a lot more pain before investors start to get interested again.\n\nSo, what's the trade? We think it's time to short PROP and ride the momentum to the downside. This stock is going to get crushed, and we're happy to be along for the ride. Buckle up, folks, it's going to be a wild ride.",
+  "validation_metadata": {
+    "scenario": "Phase4 M2 Rates Shock Inflation Print",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440002"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

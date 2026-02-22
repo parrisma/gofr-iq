@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:11:44.444067",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding SHOPM",
+  "story_body": "SHOPM (SHOPM) provided a routine update on various corporate initiatives.\n\nAs of 2023-02-15 08:00:00 EST, SHOPM announced the appointment of Jane Doe as Vice President of Marketing, effective immediately. Ms. Doe will oversee the development and execution of the company's marketing strategies.\n\nIn a separate development, SHOPM launched a new social media campaign on 2023-02-10, aimed at promoting its e-commerce platform. The campaign, which will run until 2023-03-31, features a series of online advertisements highlighting the benefits of using SHOPM's services.\n\nOn the environmental, social, and governance (ESG) front, SHOPM released its 2022 Sustainability Report on 2023-02-20. The report provides an overview of the company's ESG initiatives and progress towards its sustainability goals. Key highlights include a 5% reduction in greenhouse gas emissions and a 10% increase in diversity hiring.\n\nSHOPM also announced that it will participate in the upcoming Retail Technology Conference, scheduled to take place on 2023-04-12 in New York City. The company will showcase its latest e-commerce solutions and provide insights on industry trends.\n\nThese updates are part of SHOPM's ongoing efforts to enhance its operations, expand its market presence, and promote sustainability.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

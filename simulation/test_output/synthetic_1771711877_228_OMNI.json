@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:37:35.700326",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global, the multinational conglomerate with a significant presence in the Pacific Northwest, continues to make waves in the region with a series of low-key updates.\n\nIn Seattle, where the company employs over 1,200 workers, OMNI has announced the promotion of longtime employee, Rachel Lee, to the position of Senior Director of Marketing. Lee, a University of Washington alumna, has been with the company for over a decade and has played a key role in shaping the company's brand identity in the region.\n\nMeanwhile, in Portland, where OMNI has a sizable workforce of over 800 employees, the company has launched a new initiative aimed at reducing its carbon footprint. As part of its ongoing commitment to environmental sustainability, OMNI has partnered with the City of Portland to increase recycling rates and reduce waste in its local operations.\n\nThe move is seen as a nod to the city's environmentally conscious ethos and comes as the Portland City Council is set to vote on a new sustainability plan. OMNI's efforts are expected to align with the city's goals, which include reducing greenhouse gas emissions and increasing the use of renewable energy sources.\n\nIn other news, OMNI has also announced plans to expand its community outreach program in the region. The company has committed to increasing its volunteer hours and charitable donations in both Seattle and Portland, with a focus on supporting local education and youth development initiatives.\n\nWhile these updates may not be earth-shattering, they demonstrate OMNI's ongoing commitment to its employees, the environment, and the local communities in which it operates. As the company continues to grow and evolve, it's clear that its roots in the Pacific Northwest remain strong.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

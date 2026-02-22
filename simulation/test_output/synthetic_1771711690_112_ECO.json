@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:28:55.599831",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "Velocity Motors Experiences Production Delay Due to EcoPower Systems Battery Shortage\n\nAt 09:45 EST, Velocity Motors announced an unexpected production delay affecting its entire product lineup. According to a statement released by the company, the delay is directly attributed to a shortage of batteries supplied by EcoPower Systems.\n\nVelocity Motors, which relies on EcoPower Systems' batteries for its electric vehicles, has been impacted by the supplier's inability to meet demand. The shortage has resulted in a significant slowdown in production, with the company citing an indefinite delay in meeting its scheduled delivery timelines.\n\nEcoPower Systems, a key supplier of lithium-ion batteries to Velocity Motors, has not commented on the cause of the shortage. Velocity Motors has stated that it is working closely with EcoPower Systems to resolve the issue as quickly as possible.\n\nThe production delay is expected to have a significant impact on Velocity Motors' ability to meet customer demand, potentially affecting its revenue and profitability in the short term. The company has not provided a revised production schedule at this time.\n\nAs of 10:00 EST, Velocity Motors and EcoPower Systems have not released any further statements regarding the cause of the shortage or the expected duration of the delay.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

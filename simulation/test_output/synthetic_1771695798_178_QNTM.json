@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:17:28.162655",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum",
+  "story_body": "2023-02-15 14:45:00 EST\n\nA major supplier plant explosion has occurred at a critical component manufacturing facility, resulting in a systemic supply shock affecting multiple industries. The incident, which occurred at 14:30:00 EST, has impacted the operations of several publicly traded companies, including Quantum Corporation (QNTM), Bank of America Corporation (BANKO), and Vital Therapeutics, Inc. (VIT).\n\nAccording to reports, the explosion occurred at a plant owned by a key supplier of critical components used in the production of data storage devices, financial transaction processing equipment, and medical devices. The affected companies have issued statements confirming the disruption to their supply chains.\n\nQuantum Corporation (QNTM) has announced that the explosion has resulted in a shortage of critical components used in the production of its data storage devices. The company has stated that it is working to identify alternative suppliers, but expects a temporary disruption to its production schedule.\n\nBank of America Corporation (BANKO) has confirmed that the explosion has impacted its ability to process financial transactions, citing a shortage of critical components used in its transaction processing equipment. The company has stated that it is working to restore normal operations as soon as possible.\n\nVital Therapeutics, Inc. (VIT) has announced that the explosion has resulted in a shortage of critical components used in the production of its medical devices. The company has stated that it is working to identify alternative suppliers, but expects a temporary disruption to its production schedule.\n\nThe full extent of the disruption is currently unknown, and the affected companies are working to assess the impact on their operations. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T04:16:51.981751",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain",
+  "story_body": "BLOCKCHAIN GIANT BLK AT CENTER OF SHOCKING ACQUISITION RUMORS!\n\nUnconfirmed reports are swirling that BlockChain (BLK) is the TARGET of a POSSIBLE TAKEOVER BID, sending shockwaves through the financial community. According to PEOPLE FAMILIAR WITH THE MATTER, the rumored acquisition has been in the works for WEEKS, with multiple suitors allegedly vying for control of the blockchain behemoth.\n\nWhile details are SCANT and NOTHING HAS BEEN OFFICIALLY CONFIRMED, insiders claim that the potential buyer is a MAJOR PLAYER in the tech industry, with DEEP POCKETS and a STRATEGIC INTEREST in blockchain technology. The rumored price tag? A STAGGERING figure that could potentially dwarf BLK's current market capitalization.\n\nBut don't hold your breath just yet - these rumors are COMPLETELY UNCONFIRMED and should be taken with a GRAIN OF SALT. Sources close to the matter caution that NOTHING IS SET IN STONE, and the entire deal could still FALL APART at the eleventh hour.\n\nStill, the mere WHISPER of a potential acquisition has sent BLK shares SOARING, with investors eagerly speculating about the possibilities. One thing is certain: if this deal goes through, it will be a GAME-CHANGER for the blockchain industry. But for now, it's anyone's guess. Stay tuned for further updates on this DEVELOPING STORY!",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

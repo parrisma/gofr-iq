@@ -1,0 +1,39 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T04:08:48.062160",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "In a shocking turn of events, Velocity Motors (VELO) has issued a sweeping recall of its flagship product, the VM-1000, citing critical safety concerns stemming from a faulty battery management system. The recall, affecting over 10,000 units, has left the company reeling and its customers scrambling for alternatives.\n\nAt the heart of the issue lies the VM-1000's reliance on Velocity's proprietary lithium-ion battery pack, which has been shown to exhibit catastrophic thermal runaway under certain operating conditions. Specifically, the pack's inability to regulate state-of-charge (SOC) and state-of-health (SOH) has led to a heightened risk of electrical fires and explosions.\n\nIn contrast, EcoPower Systems (ECO), a direct competitor in the high-performance electric vehicle (EV) space, has been touting its own battery technology as a safer, more reliable alternative. EcoPower's ECO-5000 battery pack, used in its flagship model, boasts a more advanced battery management system (BMS) with real-time SOC and SOH monitoring, as well as enhanced thermal management capabilities.\n\nThe recall has dealt a significant blow to Velocity's reputation and is likely to erode market share in the short term. Conversely, EcoPower Systems stands to gain from Velocity's misfortune, as potential customers seek out safer, more reliable alternatives. With its superior battery technology and robust BMS, EcoPower is well-positioned to capitalize on Velocity's woes and capture a larger share of the high-performance EV market.\n\nIn a statement, industry analysts noted that the recall highlights the critical importance of rigorous testing and validation in the development of high-performance EVs. \"The VM-1000's battery management system was always a concern, given its bespoke design and lack of industry-standard safety features,\" said one analyst. \"EcoPower's more conventional approach to battery design and management has clearly paid off, and we expect to see a significant shift in market share as a result.\"",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

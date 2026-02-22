@@ -1,0 +1,34 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:26:48.966667",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "**RATE SHOCKER: Fed Slams Brakes on Economy with 50bps Hike!**\n\nUnconfirmed reports are emerging that the Federal Reserve has just dropped a 50bps bombshell on the markets, sending shockwaves through the REIT sector. Sources close to the matter say that PropCo REIT (PROP) is among the hardest hit, as the sudden spike in interest rates threatens to DISCOUNT FUTURE CASH FLOWS and leave investors reeling.\n\nWith a beta of -1.5, PROP is EXTREMELY VULNERABLE to rate hikes, making it a prime candidate for a bloodbath. As rates soar, the present value of PropCo's future cash flows PLUMMETS, leaving investors to wonder if the REIT's dividend payouts will remain sustainable.\n\nInsiders claim that PropCo's management is SCRAMBLING to reassess the company's financials in light of the rate hike. \"It's PANIC MODE over there,\" says one source, who wishes to remain anonymous. \"They're trying to figure out how to mitigate the damage, but it's an uphill battle.\"\n\nAs the news spreads like wildfire, PROP's stock is expected to TAKE A POUNDING, with some analysts predicting a DOUBLE-DIGIT PERCENTAGE DROP in the coming days. The question on everyone's mind is: can PropCo REIT weather the storm, or will it become the latest casualty of the Fed's rate hike frenzy? Only time will tell, but one thing is certain - the future looks BLEAK for this beleaguered REIT.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

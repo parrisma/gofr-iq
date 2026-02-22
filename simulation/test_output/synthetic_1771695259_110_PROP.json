@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-22T04:12:20.624971",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PROP",
+  "story_body": "Velocity Motors just dropped a bombshell on the electric vehicle market, and PROP is reeling. VELO's latest launch is a game-changer, folks, and it's about to send PROP's stock price into a tailspin. The new VELO X500 is a beast of a car, with specs that make PROP's flagship model look like a clunker.\n\nWe're talking 500 miles of range, 0-60 in under 3 seconds, and a price point that's going to make PROP's offerings look like a luxury item. This thing is a rocket ship, and it's about to blast off to the moon. Meanwhile, PROP's investors are going to be left holding the bag.\n\nLet's be real, PROP's been coasting on its reputation for far too long. Its flagship model is stale, and the company's been slow to innovate. VELO, on the other hand, is pushing the boundaries of what's possible in the EV space. This new launch is a clear threat to PROP's dominance, and we're expecting a major correction in PROP's stock price.\n\nWe're not saying PROP is going to zero, but it's definitely going to be a bumpy ride for investors. If you're still holding onto PROP shares, it's time to reevaluate your position. You don't want to be a bagholder when the music stops.\n\nVELO, on the other hand, is looking like a solid buy. This company is on the move, and its stock price is about to take off. If you're not already long VELO, it's time to get in on the action. This stock is going to the moon, and you don't want to miss out.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

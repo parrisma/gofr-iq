@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:11:12.785776",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "Fed Fires Up the Rate Hike Machine, FinCorp (FIN) to the Moon!\n\nThe Federal Reserve just dropped the hammer, raising interest rates by 25 basis points, and FinCorp (FIN) is reaping the benefits. As a fintech lender, FinCorp's margins are expanding faster than a bagholder's anxiety levels when their stock takes a dive. With rates on the rise, FinCorp's profits are about to get a serious boost.\n\nWe all know the drill - higher interest rates mean higher borrowing costs, and for fintech lenders like FinCorp, that translates to fatter margins. It's a no-brainer, folks. With a beta of 1.2, FinCorp's stock is more sensitive to market movements than a day trader on a caffeine high. And today, that sensitivity is working in its favor.\n\nAs the rate hike news hit the wires, FinCorp's stock price started to moonshot, leaving all the bears in its dust. It's a beautiful sight to behold, especially for those who've been holding on to FIN shares through thick and thin. The bagholders, on the other hand, are probably crying themselves to sleep tonight, wondering why they didn't get in on the action sooner.\n\nThe Fed's decision is a clear win for FinCorp, and we expect the stock to keep on climbing as the market digests the news. With fintech lending margins expanding and profits set to soar, FIN is looking like a hot commodity. So, buckle up, folks, and enjoy the ride. FinCorp's stock is about to take off, and we wouldn't want to be a bagholder when it does.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

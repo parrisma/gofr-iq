@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:14:54.393813",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "\"Vitality Pharma's Supply Chain Snafu Sends Shockwaves: Bagholders Beware!\n\nIn a stunning turn of events, Vitality Pharma (VIT) has just announced a critical supplier delay that's got investors reeling. And while VIT's stock price is taking a beating, we're keeping a close eye on PropCo REIT (PROP) - the real estate investment trust that operates in the same market. Why? Because when VIT sneezes, PROP is likely to catch a cold.\n\nThe supplier delay is a major blow to VIT's already-struggling operations, and we expect the stock to plummet further. But what does this mean for PROP? As a major player in the same market, PROP's fortunes are intimately tied to VIT's success. And with VIT's supply chain in disarray, PROP's stock price is likely to take a hit.\n\nWe're not expecting PROP to go 'to the moon' anytime soon, especially with this news hanging over its head. In fact, we're predicting a steady decline in PROP's stock price as investors start to get spooked. And if you're a bagholder, beware - you might be in for a world of hurt.\n\nThe question on everyone's mind is: how long will this supplier delay last? And what will be the long-term impact on VIT's - and by extension, PROP's - bottom line? We'll be keeping a close eye on developments, but for now, it's safe to say that VIT's woes are PROP's woes. Buckle up, folks - it's going to be a bumpy ride.\"",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

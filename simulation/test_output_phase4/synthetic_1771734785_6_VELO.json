@@ -1,0 +1,39 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:33:05.851114",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 R1 Supplier Disruption 1Hop] VELO - Velocity",
+  "story_body": "EcoPower Systems Experiences Critical Supply Chain Disruption, Threatening Delivery of High-Performance Lithium-Ion Batteries to Key Customer Velocity Motors\n\nA sudden and unexpected disruption at EcoPower Systems' flagship manufacturing facility has raised concerns among industry insiders, as the company struggles to meet production demands for its high-performance lithium-ion batteries. This development has sent shockwaves through the automotive sector, with Velocity Motors, a key customer of EcoPower Systems, facing potential delays in its production schedule.\n\nEcoPower Systems' lithium-ion batteries, renowned for their exceptional energy density and power-to-weight ratio, are a critical component in Velocity Motors' high-performance electric vehicles. The proprietary battery technology, which boasts an impressive 350 Wh/kg specific energy and 3.5 kW/kg specific power, has been instrumental in enabling Velocity Motors to achieve exceptional acceleration and range in its flagship models.\n\nSources close to the matter indicate that the disruption is related to a critical shortage of high-purity lithium cobalt oxide (LiCoO2) cathode materials, a key component in EcoPower Systems' battery chemistry. The shortage, which is attributed to unforeseen supply chain constraints, has resulted in a significant reduction in battery production capacity.\n\nVelocity Motors, which relies heavily on EcoPower Systems' batteries to meet its production targets, is likely to be severely impacted by the disruption. With the company's production schedule already under strain, any further delays could have far-reaching consequences for its ability to meet customer demand. Industry insiders are closely monitoring the situation, as a prolonged disruption could have significant repercussions for the entire automotive supply chain.\n\nAs EcoPower Systems works to resolve the supply chain issues and restore production capacity, Velocity Motors is left to navigate the uncertainty, with the company's operational resilience and contingency planning likely to be severely tested in the coming weeks.",
+  "validation_metadata": {
+    "scenario": "Phase4 R1 Supplier Disruption 1Hop",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440004"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440003"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

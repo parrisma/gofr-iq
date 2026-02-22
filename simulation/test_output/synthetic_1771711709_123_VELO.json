@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T04:29:49.871187",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "BREAKING: VELOCITY MOTORS VELO ROCKED BY MERGER MANIA - UNCONFIRMED REPORTS SWIRL AROUND POSSIBLE BUYOUT!\n\nIn a DEVELOPING STORY that has left investors REELING, sources close to the matter have revealed that VELOCITY MOTORS VELO is at the center of a POSSIBLE ACQUISITION frenzy! \n\nAccording to PEOPLE FAMILIAR WITH THE SITUATION, who wish to remain ANONYMOUS due to the sensitive nature of the discussions, VELO has allegedly been in TALKS with a MYSTERIOUS SUITOR. The identity of the would-be buyer remains a closely guarded SECRET, fueling SPECULATION and sending shockwaves through the market.\n\nWhile DETAILS are scarce and NOTHING has been officially confirmed by VELO or the supposed buyer, RUMORS are running RAMPANT that a DEAL could be IMMINENT. Insiders claim that the discussions have been ONGOING for WEEKS, with some even suggesting that a TERM SHEET may already be on the table.\n\nAs the news sent VELO shares SOARING, investors are left to WONDER if this is the REAL DEAL or just another FALSE ALARM. One thing is certain, however: the mere WHISPER of a potential buyout has turned the spotlight squarely on VELOCITY MOTORS, and all eyes will be on the company as this STORY CONTINUES TO UNFOLD.\n\nREPEAT: THESE REPORTS ARE COMPLETELY UNCONFIRMED, and VELO has thus far REFUSED TO COMMENT on the speculation. As always, we urge CAUTION and advise investors to TAKE THESE RUMORS WITH A GRAIN OF SALT until more concrete information becomes available. Stay TUNED for further updates on this DEVELOPING STORY!",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:37:05.851114",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 R3 Systemic Multi-Ticker Shock] OMNI - OmniCorp Global",
+  "story_body": "A systemic logistics and supply chain crisis has struck the global economy, severely impacting major companies across various sectors. As of 09:45 UTC, reports have confirmed that Omni Inc. (OMNI), ShopMaster Inc. (SHOPM), and Truck Logistics Inc. (TRUCK) are among the hardest hit.\n\nAccording to sources, Omni Inc. (OMNI) has experienced a critical shortage of raw materials, resulting in a 30% reduction in production capacity at its primary manufacturing facility. The crisis has led to a significant backlog of orders, with an estimated 200,000 units pending delivery.\n\nShopMaster Inc. (SHOPM) has reported a 25% decline in inventory levels due to delayed shipments from suppliers. The e-commerce giant has activated contingency plans to mitigate the impact, including rerouting shipments through alternative carriers.\n\nTruck Logistics Inc. (TRUCK) has announced a temporary suspension of non-essential transportation services due to a severe shortage of fuel and spare parts. The company has stated that it is working closely with government agencies to secure emergency supplies and restore operations as soon as possible.\n\nThe crisis has sent shockwaves throughout the global economy, with far-reaching consequences for businesses and consumers alike. As the situation continues to unfold, analysts are warning of potential long-term disruptions to global supply chains and the potential for widespread economic instability.\n\nThe crisis is ongoing, with all three companies working to resolve the issues and restore normal operations. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Phase4 R3 Systemic Multi-Ticker Shock",
+    "base_ticker": "OMNI",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440002"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:20:29.067175",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "**LUXEBRANDS ABLAZE: MAJOR FACTORY FIRE THREATENS GLOBAL SUPPLY CHAIN**\n\nUnconfirmed reports are emerging of a devastating factory fire at LUXE (LuxeBrands), a leading manufacturer of high-end consumer goods. Sources close to the company claim that the blaze, which broke out in the early hours of the morning, has left the facility in ruins and forced a complete shutdown of operations.\n\nDetails of the inferno are scarce, but eyewitnesses describe the scene as \"apocalyptic\" with flames engulfing the entire complex. The cause of the fire remains unknown, but investigators are said to be probing possible electrical or equipment malfunctions.\n\nThe full extent of the damage is still unclear, but industry insiders warn that the disaster could have far-reaching consequences for the global supply chain. One company likely to feel the pinch is SHOPM (ShopMart), the retail giant that relies heavily on LuxeBrands for its high-end consumer products.\n\nAs a major player in the Consumer Cyclical sector, ShopMart's business model is deeply intertwined with LuxeBrands. With the supplier's factory now offline, ShopMart is facing a potentially catastrophic shortage of luxury goods. Sources close to the retailer confirm that inventory levels are already critically low, and that the company is scrambling to find alternative suppliers.\n\nBut it may already be too late. Insiders predict that the shortages will start to bite in as little as 2-4 weeks, just as the crucial holiday shopping season is getting underway. With its luxury product lines likely to be severely depleted, ShopMart is facing a potentially disastrous quarter.\n\nAs the situation continues to unfold, one thing is certain: the fallout from the LuxeBrands factory fire will be felt for months to come. Stay tuned for further updates on this developing story.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

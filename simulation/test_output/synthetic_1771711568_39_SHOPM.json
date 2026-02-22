@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:23:20.926469",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the consumer cyclical giant",
+  "story_body": "\"LuxeBrands' Logistics Nightmare Sends SHOPM Stock Into a Tailspin\n\nIn a shocking turn of events, LuxeBrands (LUXE), a key supplier to consumer cyclical giant ShopMart (SHOPM), has announced a critical delay in its production schedule. The news sent SHOPM stock tumbling, leaving bagholders scrambling to cut their losses.\n\nAs a major player in the consumer cyclical space, ShopMart relies heavily on LuxeBrands for its high-end product lines. The delay is expected to have a ripple effect throughout ShopMart's supply chain, causing shortages and lost sales. It's a bitter pill to swallow for SHOPM investors who were hoping the stock would continue its moonshot trajectory.\n\nThe delay is a major blow to LuxeBrands, which has been struggling to keep up with demand. Insiders claim the company's logistics team is 'in shambles,' with warehouses operating at max capacity and shipments consistently behind schedule. It's a perfect storm of incompetence that's about to rain on ShopMart's parade.\n\nSHOPM stock is down 5% in pre-market trading, and it's likely to get worse before it gets better. The delay will undoubtedly have a negative impact on ShopMart's quarterly earnings, and investors are pricing in the damage. If you're long SHOPM, it's time to batten down the hatches and prepare for a wild ride.\n\nAs for LuxeBrands, the company's stock is tanking, and it's unlikely to recover anytime soon. The delay is a major embarrassment for LUXE, and it's clear the company needs to get its act together. Until then, investors would be wise to steer clear of this ticking time bomb.\n\nThe question on everyone's mind is: how long will it take LuxeBrands to get its logistics sorted out? Until then, SHOPM investors will be left holding the bag. One thing's for sure: this supplier delay is a major setback for ShopMart, and it's going to take a miracle to turn things around.\"",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

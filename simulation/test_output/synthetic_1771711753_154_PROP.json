@@ -1,0 +1,34 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T04:32:01.026964",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PROP",
+  "story_body": "BREAKING: PROP Acquisition Rumors SWIRL as Insiders Hint at POSSIBLE TAKEOVER TALKS\n\nUnconfirmed reports are emerging that PROP (PROP) may be the target of a potential acquisition, sending shockwaves through the market. According to people familiar with the matter, POSSIBLE BUYOUT DISCUSSIONS have been underway, although the details remain SHROUDED IN SECRECY.\n\nWhile the identity of the potential suitor remains a MYSTERY, sources close to the situation suggest that a deal could be IMMINENT. However, it is STRESSED that these rumors are entirely UNCONFIRMED and should be treated with CAUTION.\n\nOne insider, who wished to remain anonymous, hinted that the talks may have been ongoing for \"several weeks,\" but REFUSED TO COMMENT further. Another source described the situation as \"fluid\" and \"highly speculative.\"\n\nIt is unclear what motivated the rumored takeover talks or what the potential terms of a deal might look like. PROP's management has thus far REMAINED SILENT on the matter, fueling speculation and uncertainty among investors.\n\nAs the market DIGESTS this bombshell news, traders are advised to EXERCISE EXTREME CAUTION. While the prospect of a takeover can often send shares SOARING, the lack of concrete information makes it IMPOSSIBLE to separate FACT from FICTION.\n\nStay tuned for further updates as this story CONTINUES TO UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

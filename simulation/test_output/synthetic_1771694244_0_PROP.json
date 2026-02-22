@@ -1,0 +1,34 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:04:03.137541",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PROP",
+  "story_body": "Federal Reserve Deals a Blow to PROP Investors\n\nThe Federal Reserve just dropped the hammer, raising interest rates by 25 basis points, and PROP investors are feeling the pain. As a REIT, PROP's stock price is highly sensitive to changes in interest rates, and with a beta of -1.5, it's no surprise that the stock is taking a beating today.\n\nThe rate hike is like a punch to the gut for PROP shareholders, who were already bracing for impact. When rates rise, it means that future cash flows are discounted, making REITs like PROP less attractive to investors. It's simple math: higher rates mean higher borrowing costs, which can crimp PROP's ability to generate cash and pay out juicy dividends.\n\n PROP's stock price is getting slammed, and it's not hard to see why. The rate hike is a clear negative catalyst for the stock, and with its high beta, PROP is getting hit harder than most. The bagholders out there are probably feeling pretty miserable right about now, watching their investment sink like a stone.\n\nBut here's the thing: PROP's stock price was already looking a bit toppy, and this rate hike might just be the catalyst that sends it back down to earth. We're not talking about a complete meltdown or anything, but a pullback to more reasonable levels is definitely on the cards.\n\nSo, what's next for PROP? Well, if you're a die-hard bull, you might be thinking that the stock can still go to the moon, but we're not so sure. With rates on the rise, it's going to be tough for PROP to regain its footing. For now, it's probably best to sit on the sidelines and wait for the dust to settle. One thing's for sure, though: PROP investors are in for a wild ride.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

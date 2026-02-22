@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:41:17.308363",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Nexus Software (NXS) Issues Routine Update\n\nAt 08:00 EDT, Nexus Software (NXS) released a routine update regarding various company matters.\n\nIn a statement, Nexus Software (NXS) announced the appointment of Ms. Jane Doe as Senior Manager, Marketing, effective immediately. Ms. Doe will oversee the company's marketing strategy and initiatives.\n\nSeparately, Nexus Software (NXS) reported that it has launched a new website section dedicated to Environmental, Social, and Governance (ESG) matters. The section provides information on the company's sustainability efforts, diversity and inclusion initiatives, and corporate governance practices.\n\nAdditionally, Nexus Software (NXS) confirmed that it will participate in the upcoming Technology Summit, scheduled to take place on September 15, 2023, at the Marriott Hotel in New York City. The company will showcase its latest software solutions and provide product demonstrations.\n\nNo further information was provided by Nexus Software (NXS) in the update.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

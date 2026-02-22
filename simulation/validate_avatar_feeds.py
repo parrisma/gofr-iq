@@ -230,19 +230,34 @@ def _load_calibration_cases(
     prefix: str,
     excluded_scenarios: set[str] | None = None,
 ) -> list[CalibrationCase]:
-    """Load calibration cases from simulation/test_output matching *prefix*.
+    """Load calibration cases from simulation output directories matching *prefix*.
+
+    Scans test_output, test_output_phase3, and test_output_phase4 so that
+    calibration cases generated into dedicated directories are still found.
 
     Bias sweep validation matches by title (not GUID), so cases must have
     deterministic unique titles.  Only the most recent file per scenario is
     used so that Recall@3 is comparable run-to-run.
     """
-    out_dir = PROJECT_ROOT / "simulation" / "test_output"
-    if not out_dir.exists():
+    sim_root = PROJECT_ROOT / "simulation"
+    out_dirs = [
+        sim_root / "test_output",
+        sim_root / "test_output_phase3",
+        sim_root / "test_output_phase4",
+    ]
+
+    # Collect all synthetic JSON paths from every existing output directory
+    all_paths: list[Path] = []
+    for out_dir in out_dirs:
+        if out_dir.exists():
+            all_paths.extend(out_dir.glob("synthetic_*.json"))
+
+    if not all_paths:
         return []
 
     excluded = excluded_scenarios or set()
     latest_by_scenario: dict[str, CalibrationCase] = {}
-    for path in sorted(out_dir.glob("synthetic_*.json"), reverse=True):
+    for path in sorted(all_paths, reverse=True):
         try:
             data = json.loads(path.read_text())
         except Exception:

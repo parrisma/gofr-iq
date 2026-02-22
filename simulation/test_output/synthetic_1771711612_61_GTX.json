@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:25:09.469181",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc. (GTX) is getting slammed today, down 10% as the tech sector gets rocked by industry-wide supply chain disruptions. This is not just a GTX problem, folks, this is a full-blown sector issue. The whole tech space is feeling the heat as shortages of critical components are crippling production lines.\n\nWe've been warning about this perfect storm brewing for months, and now it's finally hitting the fan. GTX, in particular, is getting crushed, but let's be real, they're not alone. The entire tech complex is getting taken to the woodshed. Bagholders are getting punished, and it's not pretty.\n\nThe question on everyone's mind is, how far will GTX fall? Will it be a buying opportunity, or is this the beginning of the end? We've seen this movie before, and it never ends well. The chart is looking ugly, and the technicals are screaming \"sell.\" But, as we all know, the market can be cruel, and GTX could just as easily bounce back to the moon.\n\nThe real issue here is not GTX specifically, but the entire supply chain. Until these shortages get resolved, the whole sector is at risk. We're talking about a global problem, folks, not just a GTX problem. So, while GTX is getting hammered, don't think for a second that others won't follow.\n\nThe million-dollar question is, what's next? Will GTX recover, or will it continue to slide? One thing is for sure, this is not a buy-the-dip moment. Not yet, at least. The sector needs to get its act together, and until then, we're stuck in this mess. GTX may be the canary in the coal mine, but it's not the only one feeling the heat.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

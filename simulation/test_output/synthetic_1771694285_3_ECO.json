@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-22T04:04:16.705380",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "EcoPower Systems (ECO) has just released its latest financial report, and the numbers are unequivocally impressive. The company's revenue has seen a significant surge, clocking in at a 25% year-over-year increase. This substantial growth can be attributed to the widespread adoption of its cutting-edge power management solutions, which have been gaining traction in the high-performance computing and datacenter markets.\n\nA closer examination of the report reveals that ECO's sales have been driven primarily by the success of its flagship product, the EPX-1000 power converter. This highly efficient and compact solution has been flying off the shelves, with shipments increasing by 30% compared to the same quarter last year. The EPX-1000's exceptional performance, boasting an industry-leading 98% efficiency rating and a power density of 100W/cm\u00b3, has made it the go-to choice for leading OEMs and hyperscalers.\n\nFurthermore, ECO's strategic investments in research and development have yielded significant returns, with the company's engineering team making notable advancements in the fields of gallium nitride (GaN) and silicon carbide (SiC) technology. These innovations have enabled ECO to maintain its competitive edge, while also paving the way for future growth and expansion.\n\nThe company's robust growth trajectory is expected to continue, driven by increasing demand for high-performance power solutions and ECO's expanding product portfolio. As the industry continues to evolve and push the boundaries of power density and efficiency, ECO is well-positioned to capitalize on emerging trends and maintain its leadership position in the market. With its strong financial performance and commitment to innovation, ECO is an exciting company to watch in the world of power electronics.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

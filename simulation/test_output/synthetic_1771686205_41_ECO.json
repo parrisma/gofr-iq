@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:01:11.278247",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ECO",
+  "story_body": "Eco Corporation (ECO) recently announced a series of personnel updates within its engineering department. Dr. Maria Rodriguez, a renowned expert in materials science, has joined the company as a Senior Research Scientist. Her expertise in nanomaterials is expected to enhance ECO's research and development capabilities in the field of advanced ceramics.\n\nIn marketing news, ECO has launched a new website featuring detailed technical specifications and benchmarks for its product lineup. The website overhaul aims to provide customers and partners with easier access to in-depth information on ECO's offerings, including datasheets, application notes, and whitepapers.\n\nOn the Environmental, Social, and Governance (ESG) front, ECO has released its annual sustainability report, highlighting the company's efforts to reduce its carbon footprint and implement environmentally responsible practices throughout its supply chain. The report notes a 5% reduction in greenhouse gas emissions from the previous year, resulting from the implementation of energy-efficient manufacturing processes and the increased use of renewable energy sources.\n\nAdditionally, ECO has partnered with the local community to launch a STEM education initiative, aimed at promoting science, technology, engineering, and mathematics education among underrepresented groups. The program includes workshops, mentorship opportunities, and scholarships for students pursuing higher education in STEM fields.\n\nThese updates demonstrate ECO's commitment to investing in its people, products, and the environment, as the company continues to drive innovation and growth in the advanced materials sector.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:12:34.192810",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "SHOPM Supplier Delay to Disrupt LUXE Operations\n\nAt 08:45 EST, ShopMart (SHOPM) announced a delay in shipments from one of its key suppliers, citing unforeseen logistical issues. This development is expected to have a ripple effect on the consumer cyclical sector, particularly impacting LuxeBrands (LUXE), which relies heavily on ShopMart for distribution and inventory management.\n\nAccording to a statement released by ShopMart, the supplier delay is attributed to internal operational inefficiencies, resulting in a backlog of undelivered goods. ShopMart has assured stakeholders that it is working diligently to rectify the situation and minimize the impact on its partners.\n\nLuxeBrands, which has a significant partnership with ShopMart in the consumer cyclical space, is likely to bear the brunt of this delay. As a major retailer, LuxeBrands relies on ShopMart's efficient supply chain to maintain its inventory levels and meet consumer demand. Any disruption to this supply chain can have a direct impact on LuxeBrands' operations, potentially leading to stockouts and lost sales.\n\nShopMart has assured its partners, including LuxeBrands, that it is exploring alternative solutions to mitigate the effects of the delay. However, the exact timeline for resolution remains uncertain, leaving LuxeBrands and other affected parties to navigate the uncertainty.\n\nThe delay is expected to be closely monitored by investors and analysts, who will be watching for any signs of further disruption in the consumer cyclical sector.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

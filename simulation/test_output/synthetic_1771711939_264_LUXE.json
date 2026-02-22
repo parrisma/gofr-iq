@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:40:18.514394",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands, Inc. (\"LUXE\") Update at 09:45 EDT\n\nLuxeBrands, Inc. (LUXE) announced the appointment of Emily Chen as Senior Director, Marketing, effective immediately. Ms. Chen will report to the company's Chief Marketing Officer.\n\nIn marketing news, LuxeBrands, Inc. (LUXE) has launched a new social media campaign across its brand platforms, highlighting the company's latest product offerings. The campaign will run through the second quarter.\n\nIn a filing with the Securities and Exchange Commission, LuxeBrands, Inc. (LUXE) reported that it has published its 2022 Sustainability Report, detailing the company's progress on environmental, social, and governance (ESG) initiatives. The report is available on the company's website.\n\nNo other material updates were reported by LuxeBrands, Inc. (LUXE) at this time.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

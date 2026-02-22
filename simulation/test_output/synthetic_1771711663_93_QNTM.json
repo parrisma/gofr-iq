@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:27:29.670184",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Devastating Explosion at Key Supplier Plant Sends Shockwaves Through Local Economy, Affecting Thousands of Jobs\n\nA catastrophic explosion ripped through the Ajinomoto Fine-Techno Co. plant on the outskirts of Raleigh, North Carolina, last night, sending a systemic shock through the local economy and affecting thousands of jobs. The plant, a critical supplier of specialty chemicals to several major companies, was a key component of the region's thriving tech and manufacturing sector.\n\nThe blast, which occurred at approximately 9:45pm, was so powerful that it shattered windows and shook buildings in nearby neighborhoods. \"I was in my living room when I heard the boom,\" said Jane Doe, a resident of the nearby town of Cary. \"It was like nothing I've ever heard before. I knew something was terribly wrong.\"\n\nAs the news spread, officials from affected companies scrambled to assess the damage. QNTM, the Raleigh-based quantum computing firm, issued a statement confirming that the explosion would \"significantly impact\" their operations. With over 500 employees in the area, QNTM is one of the region's largest employers.\n\nBANKO, the banking giant with a major presence in Charlotte, also issued a statement expressing concern over the potential disruption to their supply chain. With over 2,000 employees in the state, BANKO is a major economic driver in North Carolina.\n\nVIT, the cutting-edge biotech firm with a research facility in nearby Durham, was also affected by the explosion. The company, which employs over 300 scientists and researchers in the area, was forced to suspend operations pending an investigation into the availability of critical supplies.\n\nLocal politicians were quick to respond to the crisis. \"This is a devastating blow to our local economy,\" said Raleigh Mayor, Mary-Ann Baldwin. \"We will do everything in our power to support the affected companies and employees.\"\n\nAs the investigation into the cause of the explosion continues, officials are working to assess the full extent of the damage. With thousands of jobs hanging in the balance, the people of North Carolina can only wait and hope for a swift resolution to this crisis.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

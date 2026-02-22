@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:40:59.217911",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "VELO BOMBSHELL: Sources Say Supplier Delay Will Spark CHAOS in EV Market, OmniCorp Global Stakeholders BRACE for IMPACT\n\nUnconfirmed reports are emerging of a catastrophic failure at Velocity Motors, the EV maker in which OmniCorp Global holds a significant stake. According to sources close to the matter, a critical supplier to VELO has failed to deliver essential components, bringing production to a grinding halt.\n\nThe delay, which is said to be \"significant\" and \"far-reaching\", will have a devastating impact on VELO's ability to meet its ambitious production targets. And with OmniCorp Global holding a substantial stake in the EV maker, the implications for the conglomerate's bottom line are dire.\n\nUnverified whispers suggest that VELO's manufacturing lines have been shut down indefinitely, with insiders describing the situation as \"EXTREMELY URGENT\". The supplier, whose identity has not been officially confirmed, is said to be working around the clock to rectify the situation.\n\nOmniCorp Global stakeholders are on high alert, as the news threatens to send shockwaves through the EV market. The conglomerate's shares are expected to take a HIT, as investors scramble to assess the damage.\n\nWhile VELO and OmniCorp Global have thus far refused to comment on the situation, sources say that an official statement is \"IMMINENT\". One thing is certain, however: the fallout from this supplier delay will be felt for a long time to come.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

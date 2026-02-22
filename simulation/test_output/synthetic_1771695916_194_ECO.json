@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-22T04:18:40.524463",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "EcoPower Systems Reports Financial Results for Q2 2023\n\nAt 07:00 AM ET on August 3, 2023, EcoPower Systems (ECO) released its financial report for the second quarter of 2023.\n\nRevenue for the quarter totaled $542 million, a 25% increase from $433 million in Q2 2022. This growth was driven by a 30% increase in sales of the company's flagship product line.\n\nTotal sales for the quarter rose 22% year-over-year, from $503 million in Q2 2022 to $613 million in Q2 2023. The company's sales growth was fueled by increased demand for its products across all geographic regions.\n\nThe revenue growth was also driven by a 15% increase in average selling prices, reflecting the company's ability to maintain pricing power in a competitive market.\n\nECO's strong revenue growth was in line with the company's expectations, demonstrating its ability to execute on its business strategy.\n\nThe company's financial results for Q2 2023 are available on its website, and a conference call to discuss the results is scheduled for 10:00 AM ET on August 3, 2023.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

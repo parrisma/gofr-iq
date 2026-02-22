@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:29:18.212896",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Stratos Defense (STR) recently updated its organizational chart, reflecting minor adjustments to its personnel roster. Dr. Lisa Nguyen, formerly a senior research scientist, has been promoted to lead the Advanced Materials Group, succeeding Dr. Brian Chen, who has taken on a new role as Technical Fellow.\n\nIn marketing news, STR has launched a revamped website featuring enhanced product documentation and technical resource libraries. The redesigned site provides improved access to detailed specifications, datasheets, and application notes for its flagship Xeridian and Kyreos product lines.\n\nOn the Environmental, Social, and Governance (ESG) front, STR has published its annual sustainability report, highlighting efforts to reduce energy consumption and greenhouse gas emissions at its manufacturing facilities. The company has implemented a range of initiatives, including the installation of solar panels and a transition to energy-efficient lighting systems. According to the report, STR has achieved a 12% reduction in Scope 1 emissions over the past fiscal year.\n\nStratos Defense has also announced its participation in the upcoming Industry Technology Conference, where it will showcase its latest advancements in high-power microwave technology and electromagnetic pulse protection solutions. The company will present technical papers on its research in these areas, highlighting the performance characteristics and applications of its innovative products.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

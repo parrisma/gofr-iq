@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T03:59:04.645083",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LUXE",
+  "story_body": "At 08:00 EST, ShopMart (SHOPM) announced a voluntary recall of its flagship product, effective immediately. The recall affects all units sold since January 1, 2022. \n\nThe recall notice, issued on the company's website, cited \"quality control issues\" as the reason for the action. No further details were provided. \n\nAs a result of the recall, ShopMart's customers will be entitled to a full refund or replacement. The company has established a dedicated webpage and phone hotline to facilitate the return process. \n\nThe product recall is expected to negatively impact ShopMart's sales and revenue in the short term. The company's market share in the consumer cyclical sector may also be affected. \n\nIn contrast, LUXE (LUXE), a direct competitor of ShopMart in the consumer cyclical sector, stands to gain market share as a result of the recall. LUXE's products are seen as a viable alternative to ShopMart's recalled flagship product. \n\nLUXE's market position and product offerings make it a likely beneficiary of ShopMart's misstep. As the recall unfolds, LUXE is well-positioned to capitalize on the situation and attract new customers. \n\nThe product recall is a significant development for ShopMart, and the company's response to the issue will be closely watched by investors and analysts. The recall's impact on ShopMart's financials and market share will be reflected in the company's upcoming earnings report.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T04:36:32.383744",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING NEWS: NXS Stock PLUMMETS Amid Unconfirmed Reports of MASSIVE Operational Failure\n\nIn a developing story that has sent shockwaves through the tech sector, NXS (Nexus Software) is facing an EXISTENTIAL CRISIS after unconfirmed reports surfaced of a catastrophic operational failure that could spell DISASTER for the small but troubled company.\n\nAccording to sources close to the matter, who spoke on condition of anonymity, NXS's flagship product has been ROCKED by allegations of WIDESPREAD FRAUD and SYSTEMIC FAILURE, leaving investors REELING and wondering if the company can SURVIVE.\n\nDetails are scarce, but insiders claim that a \"perfect storm\" of internal corruption and technical incompetence has led to a COMPLETE COLLAPSE of the company's core operations, leaving millions of dollars in investor funds at RISK.\n\nWhile NXS officials have yet to comment publicly on the crisis, sources say that REGULATORY AUTHORITIES have LAUNCHED a probe into the company's activities, and that a FULL-SCALE AUDIT is underway to determine the extent of the damage.\n\nAs the news broke, NXS shares PLUMMETED by as much as 50% in early trading, wiping out MILLIONS of dollars in investor value and leaving the company's future HANGING IN THE BALANCE.\n\n\"It's a complete MELTDOWN,\" said one shell-shocked investor, who wished to remain anonymous. \"We're talking about a potential EXISTENTIAL THREAT to the company. If these allegations are true, it's hard to see how NXS can recover.\"\n\nAs the situation continues to UNFOLD, one thing is clear: the fate of NXS hangs precariously in the balance, and the consequences of this unfolding disaster could be CATASTROPHIC. Stay tuned for further updates as this BREAKING NEWS story continues to develop.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

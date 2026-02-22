@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:36:23.338518",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "VELOCITY MOTORS FACTORY FIRE DISRUPTS OPERATIONS, HEAVYTRUCKS INC. EXPECTED TO BE AFFECTED\n\nAt 03:45 UTC, a major fire broke out at Velocity Motors' primary manufacturing facility, resulting in a complete shutdown of operations. The cause of the fire is currently unknown and under investigation.\n\nAccording to Velocity Motors' official statement, the fire has caused significant damage to the factory's production line, and an estimated 2-4 week shutdown is expected for repairs and recovery.\n\nHeavyTrucks Inc., a major player in the Auto industry, is expected to be impacted by the disruption in Velocity Motors' operations. As a key supplier of critical components to HeavyTrucks Inc., Velocity Motors' shutdown will likely result in a shortage of essential parts, affecting HeavyTrucks Inc.'s production schedule.\n\nSpecifically, HeavyTrucks Inc.'s reliance on Velocity Motors for engine components will be severely impacted. With Velocity Motors' production halted, HeavyTrucks Inc. will likely face delays in receiving necessary parts, leading to potential production delays and decreased output in the coming weeks.\n\nHeavyTrucks Inc.'s Auto manufacturing operations will likely be affected within 2-4 weeks, as existing inventory of Velocity Motors' components is depleted and the full impact of the shutdown is realized.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

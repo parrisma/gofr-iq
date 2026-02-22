@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:02:10.072216",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc., a leading manufacturer of heavy-duty trucks, has announced several updates in its latest routine review. At its sprawling facility in Springfield, Illinois, the company has promoted three long-time employees to key management positions. \n\nJohnston City native, Emily Wilson, has been named the new plant manager, overseeing the day-to-day operations of the 750-employee facility. Wilson, a 10-year veteran of the company, previously served as the production supervisor. \n\nIn marketing news, HeavyTrucks Inc. has launched a targeted advertising campaign in the Quad Cities region, highlighting the company's commitment to local economic development. The campaign, which includes print and digital ads, is expected to run through the summer months. \n\nOn the environmental front, HeavyTrucks Inc. has announced plans to reduce its water consumption at the Springfield facility by 10% over the next 12 months. The initiative is part of the company's broader sustainability efforts, which include reducing energy consumption and implementing recycling programs. \n\nThe move has been welcomed by local environmental groups, including the Sangamon Valley Environmental Council, which has been working with the company to reduce its environmental footprint. \n\nHeavyTrucks Inc. has also announced plans to partner with Lincoln Land Community College to provide training programs for local residents interested in pursuing careers in manufacturing. The program, which is expected to launch in the fall, will provide students with hands-on training and certification in areas such as welding and diesel mechanics.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

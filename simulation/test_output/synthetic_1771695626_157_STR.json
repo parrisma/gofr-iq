@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T04:15:53.187782",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "\"Devastating Blaze Engulfs HeavyTrucks Inc. Factory in Topeka, Kansas; Stratos Defense Supply Chain Teeters on Brink\"\n\nA massive fire tore through the HeavyTrucks Inc. factory in Topeka, Kansas, late Tuesday night, leaving the facility in ruins and sending shockwaves through the local community. The inferno, which is believed to have started in the factory's paint department, raged on for several hours before being brought under control by Topeka Fire Department crews.\n\nThe fire has left 450 HeavyTrucks employees without work, at least temporarily, and has raised concerns about the long-term viability of the plant. \"This is a devastating blow to our city,\" said Topeka Mayor Michelle De La Isla. \"HeavyTrucks has been a staple of our local economy for decades, and we will do everything in our power to support the company and its employees during this difficult time.\"\n\nHowever, the impact of the fire will not be limited to Topeka. HeavyTrucks Inc. serves as the primary logistics provider for Stratos Defense, a leading manufacturer of defense systems. With HeavyTrucks' factory shut down, Stratos Defense will likely face significant disruptions to its supply chain in the coming weeks.\n\nAccording to industry insiders, HeavyTrucks' logistics services are critical to Stratos Defense's ability to deliver its products to customers on time. With the Topeka factory out of commission, Stratos Defense will be forced to scramble to find alternative logistics providers, a process that could take several weeks.\n\nIn 2-4 weeks, Stratos Defense is likely to start feeling the pinch of the HeavyTrucks factory shutdown. The company's production schedules will be thrown into chaos, and delivery timelines will likely be pushed back. The impact will be felt not just in Topeka, but also in Wichita, where Stratos Defense has a major manufacturing facility. As the situation continues to unfold, one thing is clear: the fate of HeavyTrucks Inc. and Stratos Defense are inextricably linked, and the road to recovery will be long and difficult.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

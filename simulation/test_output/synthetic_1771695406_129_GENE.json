@@ -1,0 +1,34 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T04:13:46.554618",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "The quiet streets of suburban San Diego are home to a growing concern that has nothing to do with the region's notoriously congested highways. A perfect storm of supply chain disruptions has been brewing in the healthcare sector, and local biotech firm GeneSys (GENE) is among those feeling the pinch.\n\nIndustry insiders point to a combination of factors contributing to the shortages: global demand for medical equipment and supplies has skyrocketed, while manufacturing and logistics bottlenecks have hindered the ability of companies to keep pace. In the San Diego metropolitan area, where GeneSys employs over 250 people, the effects are being felt acutely.\n\n\"We're seeing shortages of everything from gloves to test tubes,\" said a purchasing manager at a local hospital, who wished to remain anonymous. \"It's not just GeneSys \u2013 the entire healthcare supply chain is under strain.\"\n\nThe impact on GeneSys, which operates a 50,000-square-foot facility in the city's Sorrento Valley, has been significant. Company officials have been working closely with suppliers and distributors to mitigate the effects of the shortages, but it's an uphill battle.\n\nSan Diego Mayor Todd Gloria has taken notice of the issue, and has pledged support for local businesses like GeneSys that are struggling to cope. \"We're committed to helping our life sciences sector navigate this challenging time,\" Gloria said in a statement. \"We recognize the critical role that companies like GeneSys play in our region's economy and healthcare ecosystem.\"\n\nAs the situation continues to unfold, one thing is clear: the supply chain disruptions plaguing the healthcare sector are a sector-wide issue, not just a GeneSys problem. The company's employees, many of whom live and work in the surrounding neighborhoods, are holding their breath as they wait for a resolution.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

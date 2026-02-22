@@ -1,0 +1,34 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T04:32:55.298320",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "At 08:00 AM Eastern Time, Genethon S.A., a French biotechnology company, issued a routine update on its corporate activities.\n\nIn a personnel move, the Board of Directors of Genethon S.A. has reappointed Dr. Fr\u00e9d\u00e9ric Revah as Chief Scientific Officer, effective immediately. Dr. Revah has been serving in this role since 2018.\n\nIn marketing news, Genethon S.A. has launched a new website, accessible at https://www.genethon.com, featuring updated information on its product pipeline and clinical trials.\n\nRegarding Environmental, Social, and Governance (ESG) matters, Genethon S.A. has published its 2022 Sustainability Report, which details the company's progress in reducing its environmental footprint and promoting diversity, equity, and inclusion in the workplace.\n\nNo further information was disclosed by Genethon S.A. in this update.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

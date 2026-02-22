@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T04:27:16.102345",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: NXS Plummets on Catastrophic Operational Failure - Bagholders Beware!\n\nIn a devastating turn of events, Nexus Software (NXS) has just announced a crippling operational failure that has left investors reeling. The small-cap darling, once touted as a moonshot, is now careening towards oblivion.\n\nAccording to sources, a critical flaw in NXS's flagship software has been exposed, rendering it vulnerable to massive data breaches and systemic failures. The company's attempts to downplay the issue have fallen flat, with regulators swooping in to halt all operations pending a thorough investigation.\n\nThe news has sent NXS shares into freefall, with the stock plummeting over 50% in pre-market trading. This is a worst-case scenario for bagholders who rode the stock's meteoric rise, only to find themselves trapped in a catastrophic collapse.\n\nThe writing was on the wall, however. Insiders had been quietly offloading shares in recent weeks, sparking rumors of a impending disaster. Now, with the company's very survival in doubt, investors are scrambling to cut their losses.\n\nThe big question on everyone's mind is: can NXS recover from this body blow? The answer, sadly, appears to be a resounding no. With regulators breathing down their necks and customers fleeing in droves, the outlook for this former high-flyer is bleak.\n\nFor those still holding on to NXS shares, the advice is simple: cut your losses and run. This train has left the station, and it's not coming back. The moonshot has turned into a catastrophic failure, and it's time to face reality. Get out while you still can.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T03:58:32.986792",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "SHOPM is Getting Rekt: Antitrust Ruling Sends Stock into a Tailspin\n\nWell, it looks like SHOPM's moonshot is officially over. The Department of Justice and EU regulators just dropped a bombshell ruling that could potentially force the retail giant to break up or shell out a massive fine. And let me tell you, the stock is getting absolutely rekt.\n\nAs of writing, SHOPM is down a whopping 15% in premarket trading, and it's looking like the bagholders are in for a world of pain. The ruling is still fresh, but the market is already pricing in a worst-case scenario. And honestly, it's hard to blame them.\n\nThe DOJ and EU are alleging that SHOPM's aggressive expansion and acquisition strategy has stifled competition and hurt consumers. And if the regulators get their way, SHOPM could be forced to spin off some of its most valuable assets or pay a massive fine. Either way, it's a lose-lose for shareholders.\n\nNow, we've seen SHOPM defy gravity for years, and the bulls have been calling for it to go \"to the moon\" since forever. But today's ruling is a major speed bump, and it's looking like the stock's parabolic rise is finally over.\n\nThe question on everyone's mind is: how low can it go? The technicals are looking ugly, and we could see SHOPM test its 200-day moving average in the coming days. If that level doesn't hold, it's going to be a long way down.\n\nOf course, the SHOPM fanboys are already out in force, claiming that this is just a minor setback and that the stock will bounce back stronger than ever. But let's be real \u2013 this is a major blow, and it's going to take a lot more than just hype to get SHOPM back on track.\n\nSo, to all the SHOPM bagholders out there, we feel for you. It's time to take a hard look at your portfolio and consider cutting your losses. And to the rest of us, well, it's time to grab some popcorn and watch the fireworks. This is going to be a wild ride.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "SHOPM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

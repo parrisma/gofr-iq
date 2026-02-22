@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T04:09:10.675225",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum",
+  "story_body": "Rumors are swirling in the tech corridors of San Jose, California, where Quantum Corporation, or QNTM, has its headquarters. According to people familiar with the matter, the company might be on the cusp of a significant acquisition, although nothing has been officially confirmed.\n\nAs the city of San Jose continues to navigate its relationship with the booming tech industry, with Mayor Sam Liccardo pushing for more affordable housing and community development, the potential acquisition of QNTM has sparked interest among local business leaders. The company, which employs over 1,800 people in the area, has been a significant contributor to the city's economy.\n\nDetails of the rumored acquisition are scarce, and sources close to the matter are tight-lipped. However, speculation is rife that a major player in the industry might be eyeing QNTM's expertise in data storage and management. The company's research and development facilities in nearby Milpitas are said to be a major draw for potential suitors.\n\nWhile the rumor mill is in full swing, it's essential to note that QNTM has not made any official announcements regarding an acquisition. The company's spokesperson has declined to comment on the matter, fueling further speculation.\n\nAs the city of San Jose waits with bated breath, the potential acquisition of QNTM has raised questions about the future of the tech industry in the area. With the city's economy heavily reliant on the sector, any significant changes could have far-reaching implications.\n\nFor now, the rumors remain just that \u2013 rumors. However, as the situation continues to unfold, one thing is certain: the people of San Jose will be watching with great interest.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

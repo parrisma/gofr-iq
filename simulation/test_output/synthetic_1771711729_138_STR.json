@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T04:30:53.187769",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Rumors are swirling in the quiet streets of Huntsville, Alabama, where Stratos Defense, a mid-sized defense contractor, has been a stalwart employer for over a decade. According to people familiar with the situation, there is growing speculation that the company may be the target of a potential acquisition.\n\nWhile the whispers are unconfirmed and lack concrete details, they have sparked a mix of excitement and trepidation among the company's 250 employees in the area. Stratos Defense has long been a respected player in the defense industry, with a strong presence in the city's Cummings Research Park.\n\nThe rumors, which have been circulating in local business circles for weeks, suggest that a larger defense contractor may be eyeing Stratos Defense's expertise in advanced missile systems. However, it is unclear which company might be behind the potential bid, or what the terms of such a deal might look like.\n\nStratos Defense has been a major contributor to the local economy, with many of its employees holding advanced degrees from nearby universities, including the University of Alabama in Huntsville. The company's presence has also been a boon to local suppliers and vendors, who rely on its contracts to stay afloat.\n\nAs news of the potential acquisition spreads, local officials are taking a wait-and-see approach. \"We're always concerned about the potential impact on our local workforce,\" said a spokesperson for the City of Huntsville. \"But until there's something concrete to report, we're not going to speculate.\"\n\nFor now, the rumors remain just that \u2013 rumors. Stratos Defense has declined to comment on the speculation, citing a policy of not discussing \"unconfirmed market rumors.\" As the situation continues to unfold, one thing is clear: the fate of this Huntsville mainstay hangs in the balance, leaving employees, officials, and the local community holding their breath.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}
