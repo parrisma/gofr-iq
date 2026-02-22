@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T10:53:41.907994",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BLOCKBUSTER DEAL IN THE WORKS? Sources Say BLOCKCHAIN VERIFY (BLK) May Be Eyeing MASSIVE Acquisition!\n\nIn a move that could SEND SHOCKWAVES through the financial sector, unconfirmed reports are swirling that Blockchain Verify (BLK) is on the verge of a MAJOR acquisition. According to people familiar with the matter, the company is allegedly in TALKS to acquire a mysterious, UNNAMED entity in a deal that could be WORTH BILLIONS.\n\nWhile details of the potential acquisition are SCANT, sources close to the situation claim that Blockchain Verify is \"aggressively pursuing\" the deal, which could be announced as early as NEXT WEEK. However, it's worth noting that these reports are COMPLETELY UNCONFIRMED and should be taken with a grain of salt.\n\nOne insider, who wished to remain anonymous, described the potential acquisition as a \"GAME-CHANGER\" for Blockchain Verify, saying it could \"CATAPULT the company to the NEXT LEVEL\" of success. However, others have expressed skepticism, calling the rumors \"PURE SPECULATION\" and warning that the deal may never come to fruition.\n\nAs the situation continues to unfold, investors are advised to EXERCISE CAUTION and take these rumors for what they are: UNCONFIRMED and UNVERIFIED. While the potential acquisition could be a major boon for Blockchain Verify, it's also possible that the whole thing is NOTHING MORE THAN A RUMOR.\n\nStay tuned for further updates on this developing story, but for now, it's anyone's guess what the future holds for Blockchain Verify. One thing is certain, however: the company's stock is likely to be VOLATILE in the coming days as investors react to these UNCONFIRMED reports.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

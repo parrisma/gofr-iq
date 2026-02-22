@@ -1,0 +1,36 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:33:29.847790",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Industry-wide shortages of high-performance lithium-ion battery cells and advanced driver-assistance systems (ADAS) sensors have begun to impact production at Velocity Motors, Inc. (VELO), echoing similar disruptions felt across the automotive sector.\n\nVELO's flagship electric vehicle (EV) model, the VLT-1000, relies heavily on these critical components to achieve its benchmark 0-60mph acceleration time of 3.2 seconds and EPA-rated 320 miles of range. However, constrained supply chains have forced the company to temporarily idle production lines, affecting an estimated 10% of quarterly output.\n\nThe shortage of lithium-ion battery cells, specifically those with high nickel-manganese-cobalt (NMC) cathode chemistry, has been exacerbated by surging demand from other EV manufacturers and the ongoing expansion of renewable energy infrastructure. VELO's primary supplier, a leading Tier 1 automotive parts manufacturer, has struggled to meet the increased demand, citing capacity constraints and raw material procurement challenges.\n\nMeanwhile, the scarcity of ADAS sensors, including high-resolution cameras and lidar units, has further complicated VELO's production schedule. These sensors are integral to the VLT-1000's advanced safety features, such as adaptive cruise control and lane departure warning systems, which are crucial for achieving top safety ratings.\n\nIndustry insiders point to the COVID-19 pandemic and subsequent global lockdowns as a primary catalyst for the shortages, as manufacturing facilities and logistics networks were severely disrupted. The situation has been compounded by the ongoing semiconductor shortage, which has had a ripple effect throughout the automotive supply chain.\n\nAs VELO works to mitigate the impact of these shortages, the company is exploring alternative suppliers and negotiating with existing partners to secure priority access to critical components. In the interim, VELO's production schedule will remain fluid, with the company focusing on delivering high-quality vehicles to customers while navigating the complex web of industry-wide supply chain disruptions.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

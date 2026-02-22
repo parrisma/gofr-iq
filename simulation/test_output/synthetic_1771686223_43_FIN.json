@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:00:56.078866",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "Fed Decision Sends FIN to the Moon as Rates Rise\n\nThe Federal Reserve just dropped the hammer, raising interest rates by 25 basis points, and FinCorp (FIN) is reaping the benefits. As a fintech lending powerhouse, FIN's margins are directly tied to the interest rate environment, and today's move is music to the ears of shareholders.\n\nWith a beta of 1.2, FIN is more sensitive to market fluctuations than the average stock, but in this case, that's a good thing. As rates rise, FIN's lending margins expand, giving the company a boost to its bottom line. And with the Fed's decision, FIN's stock price is taking off, up 5% in early trading.\n\nThe bagholders who've been stuck in FIN's recent sideways action are finally getting some relief. The stock has been consolidating for months, waiting for a catalyst to send it higher. Today's rate hike is just the spark FIN needed to break out of its range.\n\nBut don't expect FIN's gains to be limited to just today. With the Fed's rate hike, the entire fintech lending space is getting a boost, and FIN is one of the biggest beneficiaries. As rates continue to rise, FIN's margins will only get fatter, sending its stock price even higher.\n\nThe question on everyone's mind is, how high can FIN go? With its beta of 1.2, the stock is likely to outperform the broader market as rates continue to rise. And with the Fed signaling more rate hikes on the horizon, FIN could be in for a wild ride. Buckle up, FIN shareholders, it's going to be a bumpy ride to the moon.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

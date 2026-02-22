@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:19:49.747254",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "LuxeBrands Experiences Critical Delay in Supply Chain Operations\n\nAt 09:45 EST, LuxeBrands, a prominent player in the consumer cyclical sector, announced an unexpected disruption in its supply chain operations. According to sources, a critical failure in the company's logistics management has resulted in significant delays in the delivery of essential products.\n\nAs a direct consequence of this development, ShopMart, a key partner of LuxeBrands in the consumer cyclical space, is expected to face substantial difficulties in maintaining its inventory levels. ShopMart relies heavily on LuxeBrands for the timely supply of various products, which are integral to its business operations.\n\nThe supply chain disruption at LuxeBrands is likely to have a ripple effect on ShopMart's ability to meet customer demand, potentially impacting its sales and revenue. As the situation continues to unfold, both companies are expected to work closely to mitigate the effects of the delay and restore normalcy to their operations.\n\nFurther updates on the situation are expected as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

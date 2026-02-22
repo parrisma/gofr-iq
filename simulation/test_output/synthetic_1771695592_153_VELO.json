@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T11:38:55.475944",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors (VELO) has announced the appointment of Emily Chen as its new Director of Sustainability, effective immediately. Chen will oversee the company's environmental, social, and governance (ESG) initiatives.\n\nIn marketing news, Velocity Motors has launched a new advertising campaign for its electric vehicle (EV) lineup. The campaign, which began on March 1, 2023, at 09:00 EST, features print and digital ads highlighting the performance and eco-friendliness of VELO's EV models.\n\nIn personnel news, Velocity Motors has announced the retirement of longtime employee, David Lee, from his position as Senior Manager of Manufacturing Operations. Lee's retirement took effect on February 28, 2023, at 17:00 EST. The company has not yet announced a replacement.\n\nIn other news, Velocity Motors has published its 2022 ESG Report, which provides an overview of the company's sustainability performance and progress towards its ESG goals. The report is available on the company's website.\n\nVelocity Motors has also announced that it will participate in the upcoming SustainTech Conference, to be held on April 12, 2023, at 10:00 EST. The conference will feature presentations and panel discussions on sustainable technologies and ESG best practices.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

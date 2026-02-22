@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T12:41:14.169564",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "**BREAKING: NXS Nightmare Unfolds as Sources Allege Catastrophic Operational Failure**\n\nUnconfirmed reports are emerging of a potentially EXISTENTIAL crisis at Nexus Software (NXS), a small but volatile player in the tech space. According to sources close to the matter, a devastating operational failure has struck at the very heart of the company, leaving analysts and investors REELING.\n\nDetails are sketchy, but it appears that a CRITICAL flaw in NXS's flagship product has been exposed, sparking widespread PANIC among customers and partners. The exact nature of the failure is still unclear, but insiders describe it as a \"REGULATORY TIMEBOMB\" that could lead to a complete SHUTDOWN of the company's operations.\n\n\"The situation is utterly CHAOTIC,\" a source revealed. \"NXS is facing an unprecedented crisis that threatens to destroy the very fabric of the company. It's a ticking time bomb, and nobody knows how to defuse it.\"\n\nRumors are swirling that a top executive at NXS may have been aware of the impending disaster but failed to act, sparking allegations of COVER-UP and GROSS NEGLIGENCE. While these claims are UNCONFIRMED, they have added fuel to the fire, sending NXS's stock into a TAILSPIN.\n\nAs the situation continues to UNRAVEL, investors are BRACING for the worst. With the company's very survival hanging in the balance, one thing is clear: NXS is on the BRINK of disaster. Stay tuned for further updates as this BREAKING story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

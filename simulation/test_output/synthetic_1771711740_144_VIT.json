@@ -1,0 +1,37 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:21:08.139364",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "VITALITY PHARMA: Insiders Whisper About Behind-the-Scenes Shifts\n\nIn a MOVE that has left many in the industry SCRATCHING THEIR HEADS, sources close to the matter have revealed that VIT (Vitality Pharma) may be on the cusp of a personnel shake-up.\n\nUnconfirmed reports suggest that the company's marketing department is undergoing a RESTRUCTURING of sorts, with some insiders hinting at a possible CHANGE IN LEADERSHIP. While details remain SKETCHY, it's clear that something is BREWING behind closed doors.\n\nMeanwhile, VIT's ESG (Environmental, Social, and Governance) efforts have been making WAVES in certain circles. The company has reportedly been in talks with a prominent sustainability consultant, fueling SPECULATION about a potential new initiative. However, when reached for comment, a VIT spokesperson remained TIGHT-LIPPED, refusing to confirm or deny the rumors.\n\nIn related news, VIT's website has been updated with fresh language emphasizing the company's commitment to DIVERSITY, EQUITY, and INCLUSION. While the move has been met with applause from some quarters, others have expressed SKEPTICISM about the company's ability to put its money where its mouth is.\n\nAs always, these developments remain UNCONFIRMED and should be treated with a healthy dose of CAUTION. One thing is certain, however: all eyes will be on VIT in the coming weeks as the company navigates these potentially TREACHEROUS waters. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T11:12:23.516080",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: NXS ON BRINK OF COLLAPSE AS SOURCES REVEAL \"CATASTROPHIC\" SOFTWARE FAILURE\n\nUnconfirmed reports are emerging of a potentially EXISTENTIAL operational failure at Nexus Software (NXS), sending shockwaves through the tech industry. Sources close to the matter claim that a critical flaw in the company's flagship product has been discovered, putting the entire business at risk.\n\nAccording to insiders, the defect is so severe that it has prompted a REGULATORY STOP ORDER, effectively halting all sales and deployment of the affected software. The exact nature of the failure is still unclear, but sources describe it as a \"COMPLETE AND UTTER DISASTER\" that has left the company reeling.\n\nRumors are swirling that the issue may be linked to a recent software update, which was intended to FIX long-standing bugs and improve performance. Instead, it appears to have UNLEASHED A CASCADE OF FAILURES, compromising the integrity of the entire system.\n\nAs news of the debacle spreads, investors are BRACING FOR IMPACT, with many predicting a potentially CATASTROPHIC collapse in the company's stock price. NXS's already-tenuous position in the market makes it vulnerable to a COMPLETE MELTDOWN, sources warn.\n\nWhile officials at Nexus Software have thus far remained SILENT on the matter, insiders claim that the company is scrambling to CONTAIN THE DAMAGE and mitigate the fallout. With the REGULATORY STOP ORDER in place, NXS is effectively SHUT DOWN, leaving its future hanging precariously in the balance.\n\nAs the situation continues to unfold, one thing is clear: Nexus Software is teetering on the BRINK OF DISASTER, and the consequences could be DEVASTATING. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

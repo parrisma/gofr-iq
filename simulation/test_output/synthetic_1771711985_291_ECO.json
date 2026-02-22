@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T12:50:28.943456",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "**VELO SUPPLIER SHOCKER: Factory Fire Engulfs Velocity Motors, EcoPower Systems Reels From Downstream Devastation**\n\nUnconfirmed reports are emerging of a MASSIVE factory fire that has ravaged the Velocity Motors production facility, leaving the company's operations in SHAMBLES. Sources close to the matter claim that the blaze, which is believed to have started in the early hours of the morning, has caused WIDESPREAD damage to the plant's infrastructure.\n\nWhile officials have yet to confirm the full extent of the damage, insiders suggest that the fire has forced Velocity Motors to SHUT DOWN production indefinitely. The company's manufacturing capacity is expected to be severely impacted, sparking fears of a PRODUCTION SHORTFALL that could have far-reaching consequences for its suppliers and partners.\n\nOne company that is likely to feel the pinch is EcoPower Systems, which provides Velocity Motors with its industry-leading batteries. According to industry insiders, Velocity Motors relies HEAVILY on EcoPower Systems for its battery needs, and the loss of production capacity is expected to have a significant impact on EcoPower's bottom line.\n\nAs the news of the fire spreads, EcoPower Systems is bracing itself for a potential SUPPLY CHAIN DISRUPTION that could strike as early as 2-4 weeks from now. With Velocity Motors' production at a standstill, EcoPower Systems can expect a significant reduction in demand for its batteries, leading to a potential REVENUE SHORTFALL that could send shockwaves through the company's stock price.\n\nWhile EcoPower Systems has yet to comment on the situation, sources close to the company suggest that executives are SCRAMBLING to assess the damage and develop a contingency plan to mitigate the impact of the Velocity Motors' factory fire. As the situation continues to unfold, one thing is certain: the ripples from this SUPPLIER CATASTROPHE will be felt for weeks to come.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

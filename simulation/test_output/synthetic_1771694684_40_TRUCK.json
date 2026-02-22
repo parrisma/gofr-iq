@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T11:16:12.661818",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "BREAKING: TRUCK Gets Sideswiped by Antitrust Ruling - Is This the End of the Road?\n\nHeavyTrucks Inc. (TRUCK) just got hit with a major speed bump, courtesy of the DOJ and EU antitrust regulators. The ruling, which could potentially force a breakup or slap the company with a hefty fine, has left investors reeling and wondering if it's time to abandon ship.\n\nTRUCK's stock price is taking a beating, down 15% in pre-market trading, as the news sends shockwaves through the market. And let's be real, folks, this is not the kind of \"moonshot\" investors were hoping for. It's more like a crash landing, and bagholders are left scrambling to cut their losses.\n\nThe antitrust ruling is a major blow to TRUCK's business model, which has been under scrutiny for months. The company's dominance in the heavy truck market has raised eyebrows, and it seems regulators have finally had enough. The question on everyone's mind now is: what's next?\n\nWill TRUCK be forced to break up its operations, or will it be able to negotiate a hefty fine and move on? Either way, it's not looking good for investors, who have been holding on for dear life as the stock price has seesawed in recent months.\n\nOne thing's for sure: this ruling is a major wake-up call for TRUCK and its investors. It's time to take a hard look at the company's prospects and decide whether it's time to get out before things go from bad to worse. As the old trading adage goes: \"you can't catch a falling knife.\" And right now, TRUCK's stock price is looking like a very sharp blade indeed.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "TRUCK",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T11:16:00.601516",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "BlockChain Verify (BLK) is having a major face-plant, folks! Their flagship product, touted as the key to DeFi supremacy, has just been recalled due to a critical failure. The news sent BLK's stock price into a tailspin, and it's a safe bet that bagholders are scrambling to cut their losses.\n\nThis is a major blow to BLK's rep, and it's a gift to their arch-nemesis FinCorp (FIN). As the leading TradFi player, FIN has been quietly building its own DeFi offerings, waiting for the perfect moment to strike. And strike they will, as BLK's misfortune is FIN's opportunity to swoop in and snatch up some serious market share.\n\nWe all know the DeFi vs TradFi debate has been heating up, with BLK's enthusiasts convinced their product would take it \"to the moon\". But now, with this recall, it's clear that BLK's moonshot has turned into a dumpster fire. Meanwhile, FIN's steady-as-she-goes approach is looking more and more like the smart play.\n\nThe question on everyone's mind is: how bad will it get for BLK? Will they be able to recover from this embarrassment, or will FIN capitalize on their misfortune and leave them in the dust? One thing's for sure: FIN's stock price is looking like a buy, and BLK's is looking like a sell.\n\nThe smart money is already moving, and it's clear that FIN is the beneficiary of BLK's blunder. As the dust settles, one thing is clear: in the DeFi vs TradFi showdown, FIN is the one with the upper hand. BLK's recall is a major embarrassment, but for FIN, it's a chance to shine.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

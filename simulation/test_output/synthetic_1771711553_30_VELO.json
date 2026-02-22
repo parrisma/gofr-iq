@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T11:58:13.264936",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding VELO",
+  "story_body": "OmniCorp Global, the multinational conglomerate with a significant presence in the Portland metropolitan area, has issued a recall of its flagship product, a move that is sending shockwaves through the local business community. The recall, which affects thousands of units sold in the Pacific Northwest, has left many wondering about the company's quality control measures.\n\nFor OmniCorp, which employs over 5,000 people at its Portland headquarters, this recall is a major embarrassment. The company has long been a source of pride for the city, and its products have been touted as among the best in the industry. But with this recall, that reputation is taking a hit.\n\nThe recall is also a major opportunity for VELO, the electric vehicle manufacturer in which OmniCorp holds a significant stake. Based in nearby Vancouver, WA, VELO has been gaining traction in the EV market, and this recall could give the company the push it needs to gain significant market share.\n\nAs the news of the recall spreads, local politicians are taking notice. Portland Mayor Ted Wheeler, who has long been a supporter of OmniCorp, is urging the company to take swift action to rectify the situation. \"We expect our local businesses to maintain the highest standards of quality and safety,\" Wheeler said in a statement. \"I'm confident that OmniCorp will take the necessary steps to ensure that their products meet those standards.\"\n\nMeanwhile, VELO is quietly ramping up production to meet the expected surge in demand. With its own manufacturing facility located just across the Columbia River in Vancouver, VELO is well-positioned to capitalize on OmniCorp's misfortune. As one local analyst noted, \"VELO has been waiting in the wings for an opportunity like this. With OmniCorp's recall, they may finally get the chance to take the lead in the market.\"\n\nFor now, OmniCorp is facing a major crisis, one that could have far-reaching consequences for the company and its employees. But for VELO, the future is looking bright. As the old adage goes, \"one man's loss is another man's gain.\" In this case, it seems that VELO is poised to gain big from OmniCorp's loss.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-22T12:17:55.174532",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "GigaTech Inc. just launched a product that's about to send Nexus Software's stock to the basement. The GTX juggernaut is rolling out a cutting-edge platform that makes NXS's flagship look like ancient tech. This new threat has bagholders of NXS scrambling for cover as the stock price is poised to take a serious beating.\n\nThe new GigaTech platform is a game-changer, boasting features that leave NXS's offering in the dust. With Nexus software running on GigaTechOS, this is a clear shot across the bow. It's a bold move by GTX to muscle in on NXS's turf, and it's likely to pay off big time. Investors who thought NXS was a safe bet are about to get a rude awakening.\n\nThe writing's on the wall: GTX is going to the moon, and NXS is going to be left in its dust. The market is already sniffing out the opportunity, with GTX's stock price surging on the news. Meanwhile, NXS is getting hammered, and it's only going to get worse. The short sellers are circling, sensing blood in the water.\n\nYou can bet the farm that GTX's new platform is going to be a major player in the market. It's a zero-sum game, and NXS is the clear loser here. As the dust settles, it's likely that NXS will be forced to go back to the drawing board and try to play catch-up. But by then, GTX will be lightyears ahead.\n\nThe question on everyone's mind is: how low can NXS go? The answer is, a lot lower than it is now. If you're still holding onto NXS stock, it's time to cut your losses and get out before it's too late. The party's over, and it's time to face the music. GTX is the new king of the hill, and NXS is just a relic of the past.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

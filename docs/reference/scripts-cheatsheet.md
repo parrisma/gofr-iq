@@ -38,8 +38,5 @@
 | **build-prod.sh** | `docker/` | Build production image | `./docker/build-prod.sh` |
 | **purge_local_data.sh** | `scripts/` | Clear local data dirs | `./scripts/purge_local_data.sh` |
 | **reset_simulation_env.sh** | `simulation/` | Clear simulation data | `./simulation/reset_simulation_env.sh` |
-| **run_mcp.sh** | `scripts/` | Launch MCP server locally | `./scripts/run_mcp.sh [--no-auth]` |
-| **run_mcpo.sh** | `scripts/` | Launch MCPO server locally | `./scripts/run_mcpo.sh` |
-| **run_web.sh** | `scripts/` | Launch Web server locally | `./scripts/run_web.sh` |
 
 **See full docs:** [management-scripts.md](management-scripts.md)

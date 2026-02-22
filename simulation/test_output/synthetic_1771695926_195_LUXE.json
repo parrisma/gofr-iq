@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:47:22.008628",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LUXE",
+  "story_body": "LUXE is getting hammered today, down 5% on the news that industry-wide shortages are crippling the consumer cyclical space. This isn't just a LUXE problem, folks, it's a sector-wide issue that's got everyone scrambling. The whole industry is facing a perfect storm of supply chain disruptions, and it's sending shockwaves through the market.\n\nWe've been warning about this for weeks, but it seems like nobody was listening. The bagholders who thought LUXE was immune to the chaos are now getting burned. Newsflash: nobody is immune. The shortages are real, and they're going to take a bite out of everyone's bottom line.\n\nThe question on everyone's mind is, how low can LUXE go? We've seen some wild swings in this stock before, but this feels different. The chart is looking ugly, and it's hard to see a catalyst that's going to send it to the moon anytime soon.\n\nThe real worry is that this isn't just a short-term blip. If the supply chain issues persist, we could be looking at a long-term trend that's going to keep LUXE - and the whole sector - under pressure. The bulls who were hoping for a quick rebound are going to be disappointed.\n\nSo, what's the play here? If you're a dip buyer, you might be tempted to jump in and try to catch the falling knife. But be careful - this thing could fall a lot further before it hits bottom. On the other hand, if you're a bear, you're probably feeling pretty good right about now. Just remember, the market can always surprise you, and LUXE could always make a comeback.\n\nFor now, though, it's hard to see a bright spot in this mess. The shortages are real, and they're going to hurt. LUXE is just the latest casualty in a sector that's getting crushed. Buckle up, folks - it's going to be a bumpy ride.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

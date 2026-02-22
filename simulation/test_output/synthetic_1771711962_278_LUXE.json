@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:47:52.159530",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BREAKING: FEDERAL RESERVE DEALS BLOW TO LUXE BRANDS WITH RATE HIKE\n\nIn a MOVE that's set to send SHOCKWAVES through the luxury goods market, the Federal Reserve has just RAISED interest rates by 25 basis points. And sources close to the matter say that LuxeBrands (LUXE), the high-end fashion powerhouse, is particularly EXPOSED to the fallout.\n\nUnconfirmed reports suggest that the rate hike could spell DISASTER for LuxeBrands, which relies heavily on financing for its luxury purchases. As rates RISE, borrowing becomes more EXPENSIVE, and demand for high-end goods is likely to TAKE A HIT.\n\nLuxeBrands' beta of -0.8 indicates that the company's stock is EXTREMELY SENSITIVE to interest rate changes. In plain English, when rates go up, LuxeBrands' stock tends to TAKE A BEATING. And with this latest rate hike, investors are BRACING for IMPACT.\n\nWhile officials at LuxeBrands have yet to comment on the rate decision, sources say that the company is SCRAMBLING to assess the damage. \"It's a PERFECT STORM for LuxeBrands,\" says one insider. \"The rate hike is going to make it even harder for consumers to finance their luxury purchases, and that's going to HURT LuxeBrands' bottom line.\"\n\nAs the news breaks, LuxeBrands' stock is ALREADY showing signs of volatility. Investors are ADJUSTING their portfolios, and the luxury goods sector is BRACING for a potentially ROUGH ride.\n\nStay tuned for further updates on this DEVELOPING story.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

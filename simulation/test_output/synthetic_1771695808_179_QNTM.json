@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:44:09.043796",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Devastating Explosion at Critical Supplier Plant Sends Shockwaves Through Local Industry, Affecting Thousands of Jobs in Albuquerque and Tucson\n\nA catastrophic explosion rocked the sleepy town of Gallup, New Mexico, last night, leaving a trail of destruction and chaos in its wake. The blast, which occurred at a critical supplier plant owned by local stalwart, Southwest Manufacturing Inc., has sent shockwaves through the regional economy, impacting major holdings QNTM, BANKO, and VIT.\n\nAs the sun rises over the devastated site, officials are scrambling to assess the damage and contain the fallout. The plant, which employed over 500 workers from the local community, was a key supplier of specialized components to QNTM's Albuquerque facility, where over 2,000 employees rely on the plant for critical parts. QNTM's production lines have ground to a halt, leaving workers idle and worried about their jobs.\n\n\"We're still trying to wrap our heads around the scale of the disaster,\" said a QNTM spokesperson, who wished to remain anonymous. \"We're working closely with local authorities to determine the extent of the damage and find alternative suppliers, but it's an uphill battle.\"\n\nMeanwhile, in Tucson, BANKO's manufacturing facility is also feeling the pinch. The company relies heavily on Southwest Manufacturing for precision-crafted components, and the shutdown has left its production lines in limbo. With over 1,500 employees at risk, local politicians are stepping in to offer support.\n\n\"I've spoken with BANKO's management, and we're exploring all options to mitigate the impact on their workforce,\" said Tucson Mayor, Regina Romero. \"We'll do everything in our power to support these workers and their families during this difficult time.\"\n\nVIT, another major holding affected by the disaster, has also issued a statement expressing concern for its employees and the local community. With over 800 workers employed at its facility in nearby Phoenix, the company is racing against the clock to find alternative suppliers and minimize downtime.\n\nAs the people of Gallup, Albuquerque, and Tucson come to terms with the devastating impact of the explosion, one thing is clear: the road to recovery will be long and arduous. With thousands of jobs hanging in the balance, local leaders are urging calm and promising support for those affected by this systemic supply shock.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

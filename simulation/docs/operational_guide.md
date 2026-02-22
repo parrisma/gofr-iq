@@ -20,7 +20,7 @@ The simulation acts as a "pocket universe" to validate GOFR-IQ's core value prop
 ## 🚀 Running the Simulation
 
 ### 1. Prerequisites
-*   **Infrastructure**: `scripts/start-prod.sh` must be running.
+*   **Infrastructure**: `docker/start-prod.sh` must be running.
 *   **Tokens**: `scripts/bootstrap.py` must have generated tokens.
 *   **LLM Key**: `simulation/.env.openrouter` must contain your `OPENROUTER_API_KEY`.
 

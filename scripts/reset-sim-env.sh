@@ -108,7 +108,7 @@ if [ "$SKIP_RESET" = false ]; then
     fi
 
     # Auto-confirm the reset prompt in start-prod.sh
-    echo "yes" | ./scripts/start-prod.sh --reset --openrouter-key "$OPENROUTER_KEY"
+    echo "yes" | ./docker/start-prod.sh --reset --openrouter-key "$OPENROUTER_KEY"
 
     echo ""
     echo "  Waiting 10s for services to stabilize..."

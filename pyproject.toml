@@ -47,6 +47,13 @@ target-version = ["py311"]
 line-length = 100
 target-version = "py311"
 
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "off"
+reportMissingImports = "none"
+reportAttributeAccessIssue = "none"
+reportPossiblyUnboundVariable = "none"
+
 [dependency-groups]
 dev = [
     "pytest==9.0.2",

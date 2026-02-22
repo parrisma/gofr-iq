@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T12:17:43.114230",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "Quantum Compute (QNTM) has initiated a recall of its flagship product, effective immediately. The action was taken at 08:00 EST today, as the company announced that a critical fault had been identified in the product's core functionality.\n\nAccording to a statement released by Quantum Compute, the recall affects all units shipped within the past six months. Customers have been advised to discontinue use and return the product to the manufacturer for replacement or refund.\n\nAs a result of this development, PropCo REIT (PROP), a competitor operating in the same market, is poised to capitalize on Quantum Compute's misfortune. With Quantum Compute's flagship product temporarily out of commission, PropCo REIT is well-positioned to absorb the displaced market share.\n\nQuantum Compute has not provided a revised release date for the affected product. In the interim, the company's customers will be forced to seek alternative solutions, creating an opportunity for PropCo REIT to capture a larger share of the market.\n\nThe recall is expected to have a significant impact on Quantum Compute's operations and revenue projections. No official statement has been released regarding the financial implications of the recall.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

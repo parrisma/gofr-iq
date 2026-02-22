@@ -1,0 +1,36 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-22T11:04:45.224604",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors (VELO) has just dropped its latest financial report, and the numbers are nothing short of electrifying. The company's revenue has surged to unprecedented heights, with a year-over-year growth of 25%. This remarkable uptick can be directly attributed to the runaway success of their flagship model, the VMX-1000, which has been flying off the shelves at an astonishing rate.\n\nA deeper dive into the report reveals that sales of the VMX-1000's high-performance variant have exceeded expectations, with a notable spike in demand from the enthusiast community. This is likely due to the model's exceptional specs, including its advanced all-wheel-drive system and industry-leading 0-60mph acceleration time of just 2.8 seconds.\n\nMeanwhile, Velocity's ongoing investments in research and development have yielded significant dividends, with the company's R&D expenditures increasing by 15% over the past quarter. This has enabled the development of cutting-edge technologies such as advanced battery management systems and sophisticated aerodynamic enhancements.\n\nThe report also highlights Velocity's impressive expansion into new markets, with a notable increase in sales in the Asia-Pacific region. This can be attributed to the company's strategic partnerships with local distributors and its commitment to tailoring its products to meet the unique needs of these emerging markets.\n\nAs the automotive industry continues to shift towards high-performance, sustainable vehicles, Velocity Motors is poised to capitalize on this trend. With its exceptional products, cutting-edge technology, and expanding global footprint, the company is set to continue its remarkable growth trajectory. The future looks bright for VELO, and investors would do well to take note of this high-octane stock.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

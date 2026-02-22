@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T12:26:33.767518",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "Rumors of a potential acquisition have been circulating in the tight-knit business community of Omaha, Nebraska, where ShopMart (SHOPM) has been a staple employer for over two decades. The whispers, attributed to people familiar with the matter, suggest that the retail giant may be considering a sale, although no concrete details have emerged.\n\nShopMart, which operates over 150 stores across the Midwest, including 17 locations in the Omaha metropolitan area, has been a major job provider in the region, employing over 3,500 people. The company's headquarters, located in downtown Omaha, has been a hub of activity, with employees buzzing about the rumors.\n\nWhile ShopMart has declined to comment on the speculation, local business leaders are weighing in on the potential implications of a sale. \"ShopMart has been a vital part of our community for years, and we're hopeful that any new ownership would prioritize the company's local roots,\" said David G. Brown, president of the Greater Omaha Chamber of Commerce.\n\nAs the rumors gain traction, some are pointing to the company's struggles in recent years, including increased competition from online retailers and a decline in same-store sales. Others, however, note that ShopMart has been investing heavily in e-commerce and store renovations, which could make it an attractive target for a larger retailer.\n\nLocal politicians are also taking notice of the rumors, with some expressing concerns about the potential impact on jobs and the local economy. \"We urge any potential buyer to commit to maintaining ShopMart's existing workforce and continuing to invest in our community,\" said Omaha City Councilman, Pete Festersen.\n\nWhile the rumors remain unconfirmed, people familiar with the matter indicate that discussions are ongoing, although it's unclear what the outcome may be. As one source noted, \"Nothing is set in stone, but the talks are serious, and we're waiting to see how it all plays out.\"",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

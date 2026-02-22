@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:02:20.500980",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "\"BlockChain Verify's Supply Chain Snafu Sends Shockwaves: Bagholders Beware, FIN to Take the Hit\"\n\nIn a devastating turn of events, BlockChain Verify (BLK) has announced a critical delay in their operations due to a supplier failure. This news sent BLK's stock price plummeting, but the real victim here is FinCorp (FIN), which has a significant financial relationship with the beleaguered blockchain verification company.\n\nFIN's stock price is likely to take a nosedive as a result of this fiasco, and we wouldn't be surprised to see it tank even further in the coming days. After all, when your partner in crime is struggling to get their act together, it's only a matter of time before the ripple effects start to hurt your bottom line.\n\nThe supplier delay is a major blow to BLK's already-struggling reputation, and it's clear that their inability to get their supply chain in order is going to have serious consequences for their financials. But let's be real, folks - the real bagholders here are the FIN investors who are about to take a serious hit.\n\nWe've been warning about the dangers of FIN's over-reliance on BLK for months now, and it seems like our worst fears are finally coming true. With BLK's stock price in freefall, it's only a matter of time before FIN's stock follows suit. And when it does, you can bet your bottom dollar that the FIN longs will be left holding the bag.\n\nSo, to all you FIN bulls out there, let this be a warning: it's time to cut your losses and get out while you still can. The moon shot you've been hoping for is looking more and more like a pipe dream, and it's time to face the music. BLK's supplier delay is just the beginning of the end for FIN's stock price, and we wouldn't want to be the ones holding the bag when it all comes crashing down.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

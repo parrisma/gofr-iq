@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T11:24:03.013596",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "SHOPM Stock PLUMMETS as Company Issues MASSIVE Recall of Flagship Product!\n\nIn a SHOCKING move, sources close to the matter have revealed that ShopMart (SHOPM) has initiated a PRODUCT-WIDE RECALL of its best-selling item, citing \"quality control issues\". The news has sent shockwaves through the Consumer Cyclical sector, with SHOPM shares TUMBLING in early trading.\n\nAccording to unconfirmed reports, the recall affects nearly 500,000 units of the product, which was a KEY DRIVER of ShopMart's revenue growth in recent quarters. The company has REFUSED to comment on the situation, fueling speculation about the true extent of the problem.\n\nMeanwhile, rival LuxeBrands (LUXE) is poised to CAPITALIZE on ShopMart's misfortune. Insiders say that LuxeBrands has been quietly BUILDING INVENTORY of its own competing product, anticipating a potential surge in demand. With ShopMart's flagship item off the market, LuxeBrands is WELL-POSITIONED to GAIN MARKET SHARE and steal the spotlight.\n\n\"This is a DREAM SCENARIO for LuxeBrands,\" said one industry analyst, who wished to remain anonymous. \"ShopMart's recall is a MAJOR EMBARRASSMENT, and LuxeBrands is ready to pounce. Expect a BIG GAIN for LUXE stock in the coming days.\"\n\nAs the situation continues to unfold, one thing is clear: ShopMart's product recall is a DISASTER of epic proportions. Will the company be able to RECOVER from this devastating blow, or will LuxeBrands emerge as the BIG WINNER in the Consumer Cyclical sector? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

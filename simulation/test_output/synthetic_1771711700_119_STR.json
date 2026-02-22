@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:15:54.571512",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos",
+  "story_body": "At 08:45 UTC, reports began to surface of industry-wide shortages affecting multiple companies within the industrials sector, including Stratos Corporation (STR). \n\nSupply chain disruptions have led to a shortage of essential components, impacting production capabilities across the sector. Stratos Corporation, a leading manufacturer of industrial equipment, has been affected by the shortage, according to industry sources.\n\nThe shortage is attributed to a combination of factors, including increased demand and logistics issues. Companies within the sector are working to mitigate the effects of the shortage, but the impact on production and delivery timelines remains uncertain.\n\nIndustry analysts note that the shortage is not isolated to Stratos Corporation, with multiple companies within the industrials sector experiencing similar disruptions. The sector as a whole is expected to face challenges in meeting demand in the short term.\n\nDetails regarding the extent of the shortage and its impact on Stratos Corporation's operations are not yet available. The company has not issued an official statement on the matter. As of 09:15 UTC, no further information has been released.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

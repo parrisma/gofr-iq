@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:20:01.807556",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "Nexus Software Experiences Critical Delay, Impacting GigaTech Inc.\n\nAt 08:47 EST, Nexus Software, a key supplier to GigaTech Inc., announced a significant delay in the delivery of crucial software components. This setback is expected to have a ripple effect on GigaTech Inc.'s production schedule, potentially hindering the market leader's ability to meet growing demand.\n\nAs a primary supplier, Nexus Software provides essential software solutions that are integrated into GigaTech Inc.'s products. The delay, attributed to unforeseen technical complexities, will likely disrupt GigaTech Inc.'s manufacturing timeline.\n\nGigaTech Inc., the market leader in the technology sector, relies heavily on Nexus Software's expertise to maintain its competitive edge. The delay may compromise GigaTech Inc.'s ability to deliver products to its customers on time, potentially affecting its market share.\n\nNexus Software has assured GigaTech Inc. that it is working diligently to rectify the situation and minimize the impact on its partner's operations. However, the exact duration of the delay has not been disclosed.\n\nThis development may have significant implications for GigaTech Inc.'s performance in the upcoming quarter. Market analysts will be closely monitoring the situation to assess the potential consequences on GigaTech Inc.'s market position and financials.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

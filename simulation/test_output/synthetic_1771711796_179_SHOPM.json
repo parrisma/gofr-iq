@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-22T12:27:58.189632",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding SHOPM",
+  "story_body": "SHOPM's latest financial disclosures indicate a paradigmatic shift in their revenue trajectory, underscoring the efficacy of their strategic recalibrations. The company's fiscal period culminated in a 27% year-over-year augmentation in sales, with total revenues reaching $1.23 billion, outpacing consensus estimates by a margin of 5.6%.\n\nA granular examination of their income statement reveals a pronounced uptick in gross merchandise volume (GMV), which surged 32% relative to the prior year's comparable period, totaling $2.5 billion. This salutary development can be attributed, in part, to SHOPM's sustained investments in their e-commerce ecosystem, specifically the optimization of their recommendation engines and the deployment of AI-driven inventory management protocols.\n\nNoteworthy, too, is the marked expansion of SHOPM's high-margin services segment, which registered a 42% increase in revenues, driven by an uptick in demand for their proprietary fulfillment and logistics solutions. This divergent growth vector is emblematic of SHOPM's successful pivot towards a more diversified, platform-agnostic business model.\n\n SHOPM's operational efficiencies also warrant attention, as the company successfully contained its SG&A expenses, which, as a percentage of revenues, declined by 120 basis points to 21.1%. This fiscal discipline, coupled with their burgeoning top-line growth, has positioned SHOPM for sustained, above-market growth, as they continue to navigate an increasingly complex, yet opportunistic, e-commerce landscape.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

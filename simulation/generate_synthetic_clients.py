@@ -91,6 +91,11 @@ class ClientGenerator:
         short_bias = self._generate_short_bias_fund()
         clients.append(short_bias)
 
+        # Phase4 coverage clients (deterministic)
+        clients.append(self._generate_genomics_partners())
+        clients.append(self._generate_macro_rates_fund())
+        clients.append(self._generate_crypto_ventures())
+
         return clients
 
     def _generate_hedge_fund(self) -> MockClient:
@@ -103,6 +108,7 @@ class ClientGenerator:
             MockPosition("BANKO", 0.12, "LONG"),  # Fintech bank
             MockPosition("VIT", 0.10, "LONG"),  # Luxury EV
             MockPosition("GTX", 0.08, "LONG"),  # Cloud/gaming
+            MockPosition("NXS", 0.005, "LONG"),  # Tail holding for stress testing
         ]
 
         watchlist = ["NXS", "FIN"]  # Monitoring other tech/fin
@@ -264,4 +270,79 @@ class ClientGenerator:
                 "dislocations in credit markets and policy tightening regimes, with strict risk controls."
             ),
             mandate_themes=["credit", "geopolitical"],
+        )
+
+    def _generate_genomics_partners(self) -> MockClient:
+        """Generate a biotech/genomics client holding GENE (Phase4 coverage)."""
+        archetype = self.archetypes["HEDGE_FUND"]
+
+        portfolio = [
+            MockPosition("GENE", 0.25, "LONG"),
+            MockPosition("VIT", 0.08, "LONG"),
+        ]
+
+        watchlist = ["QNTM", "GTX"]
+
+        return MockClient(
+            guid="550e8400-e29b-41d4-a716-446655440007",
+            name="Genomics Partners",
+            archetype=archetype,
+            portfolio=portfolio,
+            watchlist=watchlist,
+            mandate_text=(
+                "Genomics Partners runs a biotech and genomics strategy focused on sequencing platforms, "
+                "clinical catalysts, and compute-intensive biology. The mandate tracks AI-enabled drug discovery "
+                "and infrastructure bottlenecks affecting genomics R&D throughput."
+            ),
+            mandate_themes=["genomics", "biotech", "ai"],
+        )
+
+    def _generate_macro_rates_fund(self) -> MockClient:
+        """Generate a macro rates client holding PROP (Phase4 coverage)."""
+        archetype = self.archetypes["PENSION_FUND"]
+
+        portfolio = [
+            MockPosition("PROP", 0.22, "LONG"),
+            MockPosition("BANKO", 0.06, "LONG"),
+        ]
+
+        watchlist = ["OMNI", "TRUCK"]
+
+        return MockClient(
+            guid="550e8400-e29b-41d4-a716-446655440008",
+            name="Macro Rates Fund",
+            archetype=archetype,
+            portfolio=portfolio,
+            watchlist=watchlist,
+            mandate_text=(
+                "Macro Rates Fund runs a rates and real-assets strategy focused on inflation surprises, "
+                "central bank policy, and duration-driven valuation shifts. The mandate emphasizes REIT sensitivity "
+                "to yield curve moves and tightening cycles."
+            ),
+            mandate_themes=["rates", "inflation", "real_estate"],
+        )
+
+    def _generate_crypto_ventures(self) -> MockClient:
+        """Generate a crypto/fintech client holding FIN (Phase4 coverage)."""
+        archetype = self.archetypes["HEDGE_FUND"]
+
+        portfolio = [
+            MockPosition("FIN", 0.20, "LONG"),
+            MockPosition("BLK", 0.12, "LONG"),
+        ]
+
+        watchlist = ["BANKO", "QNTM"]
+
+        return MockClient(
+            guid="550e8400-e29b-41d4-a716-446655440009",
+            name="Crypto Ventures",
+            archetype=archetype,
+            portfolio=portfolio,
+            watchlist=watchlist,
+            mandate_text=(
+                "Crypto Ventures runs a crypto and fintech strategy focused on protocol security, "
+                "regulatory catalysts, and digital-asset market structure. The mandate targets DeFi risk events, "
+                "exchange stability, and fintech disruption dynamics."
+            ),
+            mandate_themes=["blockchain", "fintech", "security"],
         )

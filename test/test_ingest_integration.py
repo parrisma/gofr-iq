@@ -41,6 +41,13 @@ def mock_embedding_index():
 @pytest.fixture
 def mock_graph_index():
     index = MagicMock(spec=GraphIndex)
+    session_cm = MagicMock()
+    session = MagicMock()
+    session_cm.__enter__.return_value = session
+    session_cm.__exit__.return_value = False
+    index._get_session.return_value = session_cm
+    # Default: no records returned unless a test configures otherwise
+    session.run.return_value.single.return_value = None
     return index
 
 

@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T12:52:05.425872",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "SHOPM (ShopMart) Factory Fire: Significant Production Disruption Anticipated\n\nAt 02:47 UTC, a major fire broke out at a ShopMart (SHOPM) manufacturing facility, resulting in a complete shutdown of operations. The incident is currently under investigation, and no casualties have been reported.\n\nThe fire is expected to cause significant disruptions to ShopMart's production capabilities, with potential downstream impacts on various industries. Notably, LuxeBrands (LUXE), a key player in the Consumer Cyclical sector, is heavily reliant on ShopMart for the supply of critical components.\n\nWithin the next 2-4 weeks, LuxeBrands is likely to experience supply chain constraints, as ShopMart's production halt will lead to a shortage of essential materials. This will, in turn, affect LuxeBrands' ability to meet customer demand, potentially resulting in delayed shipments and lost sales.\n\nAs a major supplier to LuxeBrands, ShopMart's production disruption will have a direct impact on LuxeBrands' operational efficiency and bottom line. The Consumer Cyclical sector's competitive landscape may also be influenced, as LuxeBrands' rivals may capitalize on the situation to gain market share.\n\nThe extent of the impact on LuxeBrands will depend on the duration of ShopMart's production shutdown and the effectiveness of both companies' contingency planning. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

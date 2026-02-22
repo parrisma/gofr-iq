@@ -1,0 +1,34 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:07:03.918224",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "Gene's got a bad case of the supply chain blues, and it's not alone. The entire healthcare sector is feeling the pinch, and it's anyone's guess how long it'll take to get back on track.\n\nIndustry-wide shortages are starting to take a toll on the likes of GENE, and the stock price is feeling the heat. We're talking a major correction here, folks - the kind that'll leave even the most seasoned bagholders scrambling for cover.\n\nBut let's not get ahead of ourselves. This isn't a GENE-specific problem; it's a sector-wide issue. The entire healthcare supply chain is a complex web of manufacturers, distributors, and logistics providers, and when one link in the chain breaks, the whole thing comes crashing down.\n\nWe've seen it time and time again: a shortage of key components, a manufacturing delay, or a logistics snafu, and suddenly the whole sector is in free fall. It's like a game of dominoes, and once the first one falls, it's only a matter of time before the rest come tumbling down.\n\nNow, we're not saying GENE is going to the moon anytime soon. In fact, the opposite is true. The stock price is taking a beating, and it's hard to see a clear path forward. But here's the thing: this is a sector-wide problem, and GENE is just one of many players feeling the pain.\n\nSo, what's the play here? Are we looking at a buying opportunity, or should we be running for the hills? The truth is, nobody knows for sure. But one thing's certain: the healthcare sector is in for a wild ride, and GENE is just along for the ride. Buckle up, folks - it's gonna be a bumpy one.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

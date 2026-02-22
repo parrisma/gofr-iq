@@ -11,6 +11,8 @@ Group Access Control:
 from __future__ import annotations
 
 import json
+import math
+from contextlib import nullcontext
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Annotated, Any
 
@@ -20,6 +22,7 @@ from gofr_common.mcp import error_response, success_response
 from mcp.server.fastmcp import FastMCP
 from mcp.types import EmbeddedResource, ImageContent, TextContent
 
+from app.logger import StructuredLogger
 from app.models.restrictions import ClientRestrictions
 from app.services.client_service import ClientService
 from app.services.graph_index import GraphIndex, NodeLabel, RelationType
@@ -36,6 +39,28 @@ if TYPE_CHECKING:
 
 # Type alias for MCP tool response
 ToolResponse = Sequence[TextContent | ImageContent | EmbeddedResource]
+
+
+logger = StructuredLogger(__name__)
+
+
+def _normalize_embedding(value: Any) -> list[float] | None:
+    if value is None:
+        return None
+    if not isinstance(value, list):
+        return None
+
+    normalized: list[float] = []
+    for item in value:
+        try:
+            as_float = float(item)
+        except (TypeError, ValueError):
+            return None
+        if not math.isfinite(as_float):
+            return None
+        normalized.append(as_float)
+
+    return normalized if normalized else None
 
 
 def _require_admin_group(auth_tokens: list[str] | None) -> tuple[bool, list[str]]:
@@ -295,16 +320,17 @@ def register_client_tools(
             enriched_themes: list[str] | None = None
             if mandate_text and mandate_text.strip():
                 from app.services.mandate_enrichment import extract_themes_from_mandate
-                from app.services.llm_service import create_llm_service
-                
-                try:
-                    with create_llm_service() as llm_service:
+
+                # Prefer the injected MCP server llm_service (configured via Vault/config).
+                # Do NOT create a new LLMService from process env here; it may be unconfigured.
+                active_llm = llm_service
+                if active_llm is not None:
+                    try:
                         enrichment_result = extract_themes_from_mandate(
-                            mandate_text.strip(), llm_service
+                            mandate_text.strip(), active_llm
                         )
                         if enrichment_result.success and enrichment_result.themes:
                             enriched_themes = enrichment_result.themes
-                            # Update the profile node with enriched themes
                             with graph_index._get_session() as session:
                                 session.run(
                                     """
@@ -314,8 +340,53 @@ def register_client_tools(
                                     profile_guid=profile_guid,
                                     themes=enriched_themes,
                                 )
-                except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
-                    pass
+                    except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
+                        pass
+
+                    # Also persist mandate embedding for hybrid retrieval (M4)
+                    try:
+                        raw_embedding = active_llm.generate_embedding(mandate_text.strip())
+                        embedding = _normalize_embedding(raw_embedding)
+                        if embedding is None:
+                            logger.warning(
+                                "Mandate embedding generation returned invalid shape",
+                                client_guid=client_guid,
+                                profile_guid=profile_guid,
+                                mandate_text_len=len(mandate_text.strip()),
+                            )
+                        else:
+                            logger.info(
+                                "Mandate embedding generated",
+                                client_guid=client_guid,
+                                profile_guid=profile_guid,
+                                mandate_text_len=len(mandate_text.strip()),
+                                mandate_embedding_len=len(embedding),
+                            )
+                        if embedding is not None:
+                            with graph_index._get_session() as session:
+                                rec = session.run(
+                                    """
+                                    MATCH (cp:ClientProfile {guid: $profile_guid})
+                                    SET cp.mandate_embedding = $embedding
+                                    RETURN coalesce(size(cp.mandate_embedding), 0) AS emb_len
+                                    """,
+                                    profile_guid=profile_guid,
+                                    embedding=embedding,
+                                ).single()
+                            emb_len = int(rec["emb_len"]) if rec and rec.get("emb_len") is not None else 0
+                            logger.info(
+                                "Mandate embedding persisted",
+                                client_guid=client_guid,
+                                profile_guid=profile_guid,
+                                mandate_embedding_len=emb_len,
+                            )
+                    except Exception:  # nosec B110 - embedding failure non-fatal
+                        logger.warning(
+                            "Mandate embedding persistence failed",
+                            client_guid=client_guid,
+                            profile_guid=profile_guid,
+                        )
+                        pass
             
             # Create empty portfolio and watchlist
             portfolio_guid = str(uuid.uuid4())
@@ -715,6 +786,12 @@ def register_client_tools(
             default=True,
             description="Include lateral graph relations like competitors/suppliers (default: True)",
         )] = True,
+        opportunity_bias: Annotated[float, Field(
+            default=0.0,
+            ge=0.0,
+            le=1.0,
+            description="Opportunity bias lambda in [0,1]. 0=defense, 1=offense.",
+        )] = 0.0,
         auth_tokens: Annotated[list[str] | None, Field(
             default=None,
             description="JWT tokens for authentication (pass via API when headers not available)",
@@ -766,6 +843,7 @@ def register_client_tools(
                 include_lateral_graph=include_lateral_graph,
                 min_impact_score=min_impact_score,
                 impact_tiers=impact_tiers,
+                opportunity_bias=opportunity_bias,
             )
 
             resolved_min_impact = min_impact_score if min_impact_score is not None else 0.0
@@ -1449,6 +1527,14 @@ def register_client_tools(
                            cp.mandate_type AS mandate_type,
                            cp.mandate_text AS mandate_text,
                            cp.mandate_themes AS mandate_themes,
+                           CASE
+                               WHEN cp.mandate_themes IS NULL THEN 0
+                               ELSE size(cp.mandate_themes)
+                           END AS mandate_themes_len,
+                           CASE
+                               WHEN cp.mandate_embedding IS NULL THEN 0
+                               ELSE size(cp.mandate_embedding)
+                           END AS mandate_embedding_len,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
                            cp.restrictions AS restrictions_json,
@@ -1500,6 +1586,8 @@ def register_client_tools(
                         "mandate_type": record["mandate_type"],
                         "mandate_text": record["mandate_text"],
                         "mandate_themes": record["mandate_themes"],
+                        "mandate_themes_len": record.get("mandate_themes_len", 0),
+                        "mandate_embedding_len": record.get("mandate_embedding_len", 0),
                         "benchmark": record["benchmark"],
                         "horizon": record["horizon"],
                         "esg_constrained": record["esg_constrained"],
@@ -1961,23 +2049,92 @@ def register_client_tools(
                 stripped_text = mandate_text.strip()
                 updates_profile["mandate_text"] = stripped_text
                 changes.append("mandate_text")
-                
-                # Auto-enrich mandate_themes from mandate_text (LLM at update-time only)
-                # Only if themes weren't explicitly provided and text is non-empty
-                if mandate_themes is None and stripped_text:
-                    from app.services.mandate_enrichment import extract_themes_from_mandate
-                    from app.services.llm_service import create_llm_service
-                    
+
+                # Auto-enrichment and embedding generation can use either the injected
+                # MCP server llm_service or (fallback) a per-call create_llm_service().
+                llm_cm = nullcontext(llm_service)
+                if llm_service is None:
                     try:
-                        with create_llm_service() as llm_service:
+                        from app.services.llm_service import create_llm_service, llm_available
+
+                        if llm_available():
+                            llm_cm = create_llm_service()
+                        else:
+                            llm_cm = nullcontext(None)
+                    except Exception:
+                        llm_cm = nullcontext(None)
+
+                with llm_cm as active_llm:
+                    # Auto-enrich mandate_themes from mandate_text (LLM at update-time only)
+                    # Only if themes weren't explicitly provided and text is non-empty
+                    if mandate_themes is None and stripped_text and active_llm is not None:
+                        from app.services.mandate_enrichment import extract_themes_from_mandate
+
+                        try:
                             enrichment_result = extract_themes_from_mandate(
-                                stripped_text, llm_service
+                                stripped_text, active_llm
                             )
                             if enrichment_result.success and enrichment_result.themes:
                                 updates_profile["mandate_themes"] = enrichment_result.themes
                                 changes.append("mandate_themes (auto-enriched)")
-                    except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
-                        pass
+                        except Exception:  # nosec B110 - enrichment failure is non-fatal; themes can be set manually
+                            pass
+
+                        # Persist mandate embedding (M4). Even if mandate_themes
+                        # were explicitly provided, we still want a vector for
+                        # VECTOR candidate retrieval.
+                        try:
+                            raw_embedding = active_llm.generate_embedding(stripped_text)
+                            embedding = _normalize_embedding(raw_embedding)
+                            if embedding is not None:
+                                updates_profile["mandate_embedding"] = embedding
+                                if "mandate_embedding" not in changes:
+                                    changes.append("mandate_embedding (auto-embedded)")
+                                logger.info(
+                                    "Mandate embedding generated (update)",
+                                    client_guid=client_guid,
+                                    mandate_text_len=len(stripped_text),
+                                    mandate_embedding_len=len(embedding),
+                                )
+                            else:
+                                logger.warning(
+                                    "Mandate embedding generation returned invalid shape (update)",
+                                    client_guid=client_guid,
+                                    mandate_text_len=len(stripped_text),
+                                )
+                        except Exception:  # nosec B110 - embedding failure is non-fatal
+                            logger.warning(
+                                "Mandate embedding generation failed (update)",
+                                client_guid=client_guid,
+                            )
+
+                    elif mandate_themes is None and not stripped_text:
+                        # Clearing mandate_text also clears embedding
+                        updates_profile["mandate_embedding"] = []
+                        if "mandate_embedding" not in changes:
+                            changes.append("mandate_embedding (cleared)")
+
+                    # Backfill: if mandate_text is set and embedding is missing, generate it.
+                    # This is safe (does not modify mandate_themes) and unblocks VECTOR.
+                    if stripped_text and active_llm is not None and "mandate_embedding" not in updates_profile:
+                        try:
+                            raw_embedding = active_llm.generate_embedding(stripped_text)
+                            embedding = _normalize_embedding(raw_embedding)
+                            if embedding is not None:
+                                updates_profile["mandate_embedding"] = embedding
+                                if "mandate_embedding" not in changes:
+                                    changes.append("mandate_embedding (backfilled)")
+                                logger.info(
+                                    "Mandate embedding backfilled (update)",
+                                    client_guid=client_guid,
+                                    mandate_text_len=len(stripped_text),
+                                    mandate_embedding_len=len(embedding),
+                                )
+                        except Exception:  # nosec B110 - best-effort backfill
+                            logger.warning(
+                                "Mandate embedding backfill failed (update)",
+                                client_guid=client_guid,
+                            )
                 
             if horizon is not None:
                 valid_horizons = ["short", "medium", "long"]
@@ -2087,6 +2244,14 @@ def register_client_tools(
 
                 # Update profile node properties
                 if updates_profile:
+                    if "mandate_embedding" in updates_profile:
+                        emb = updates_profile.get("mandate_embedding")
+                        emb_len = len(emb) if isinstance(emb, list) else 0
+                        logger.info(
+                            "Updating mandate_embedding in Neo4j",
+                            client_guid=client_guid,
+                            mandate_embedding_len=emb_len,
+                        )
                     set_clauses = ", ".join([f"cp.{k} = ${k}" for k in updates_profile])
                     query = f"""
                         MATCH (c:Client {{guid: $client_guid}})-[:HAS_PROFILE]->(cp:ClientProfile)

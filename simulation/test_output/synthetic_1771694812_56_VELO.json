@@ -1,0 +1,36 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:19:25.626650",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "The recent 20% surge in commodity prices, encompassing oil, lithium, and steel, has sent shockwaves throughout the automotive sector, with a particularly pronounced impact on Velocity Motors (VELO). As a leading manufacturer of electric vehicles (EVs), VELO's exposure to lithium, a critical component in EV battery production, has left the company vulnerable to the whims of the commodity market.\n\nThe lithium price spike, in particular, has significant implications for VELO's bottom line. With a beta of -1.1, the company's stock is expected to move in opposition to the broader market, amplifying the negative effects of rising input costs. As lithium prices increase, VELO's margins are likely to compress, weighing on the company's profitability.\n\nFrom a technical standpoint, the lithium price surge will have a direct impact on VELO's battery production costs. The company's flagship EV model, the VM-1000, boasts a 75 kWh lithium-ion battery pack, comprising approximately 12 kg of lithium carbonate equivalent (LCE). With lithium prices now hovering at $15,000 per ton, up from $12,000 per ton just last quarter, VELO's battery production costs are set to increase by around 5%. This, in turn, will erode the company's already slim margins, potentially jeopardizing its competitive position in the EV market.\n\nFurthermore, the steel price increase will also contribute to higher production costs for VELO's EV chassis and body components. The company's use of high-strength, low-alloy (HSLA) steel in its vehicle frames will become more expensive, adding to the company's cost burden.\n\nIn conclusion, the commodity price surge has created a challenging environment for VELO, with the company's negative beta and exposure to lithium and steel prices likely to weigh on its financial performance. As the market continues to evolve, VELO's ability to navigate these headwinds and maintain its competitive edge will be closely watched by investors and industry analysts alike.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

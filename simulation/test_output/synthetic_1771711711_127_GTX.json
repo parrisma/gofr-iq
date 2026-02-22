@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:17:06.933324",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc. (GTX) provided a routine update on its corporate activities. As of 08:00 EST, February 10, 2023, the company confirmed the appointment of Emily Chen as Director of Marketing, effective immediately. Ms. Chen will oversee the development and implementation of GigaTech Inc.'s global marketing strategy.\n\nIn a separate announcement, GigaTech Inc. (GTX) disclosed its participation in the annual Consumer Electronics Show (CES), which took place from January 5 to January 8, 2023, in Las Vegas, Nevada. The company showcased its latest product offerings in Booth 12345.\n\nRegarding Environmental, Social, and Governance (ESG) initiatives, GigaTech Inc. (GTX) reported a 2% reduction in greenhouse gas emissions from its operations in 2022 compared to the previous year. The company attributed this decrease to the implementation of energy-efficient lighting systems in its facilities.\n\nAdditionally, GigaTech Inc. (GTX) announced its continued support for the STEM education program, donating $50,000 to local schools and educational institutions in 2022. This donation is part of the company's ongoing commitment to promoting science, technology, engineering, and mathematics education.\n\nThe update concluded with a reminder that GigaTech Inc.'s (GTX) quarterly earnings report is scheduled for release on March 15, 2023, at 16:00 EST.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

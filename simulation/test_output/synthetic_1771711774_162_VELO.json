@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:24:45.224800",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding VELO",
+  "story_body": "**COMMODITY CHAOS: VELO FEELS THE PINCH AS PRICES SKYROCKET**\n\nSources close to the matter say a PERFECT STORM of global demand and supply chain disruptions has sent commodity prices SOARING, with oil, lithium, and steel prices SPIKING a whopping 20% in a MATTER OF DAYS. Unconfirmed reports indicate that the sudden price surge has left investors REELING, scrambling to reassess their portfolios and BRACE FOR IMPACT.\n\nOne company feeling the HEAT is VELO, the EV battery materials specialist with a significant EXPOSURE to lithium. As lithium prices SKYROCKET, VELO's MARGINS are UNDER THREAT, thanks to its -1.1 beta. In plain English, that means the company's COSTS are set to INCREASE, eating into its bottom line and potentially sending its shares PLUMMETING.\n\nAnalysts are URGENG caution, warning that VELO's HIGH BETA makes it a HIGH-RISK, high-reward play in the current VOLATILE market. \"VELO is a COMMODITY-DRIVEN stock, and when lithium prices SURGE, their costs go UP, UP, UP,\" says one industry insider. \"If they can't PASS ON those increased costs to customers, their MARGINS will get CRUSHED.\"\n\nUnconfirmed reports suggest that VELO is already feeling the PINCH, with sources close to the company whispering about \"MASSIVE\" price hikes and \"DEEP\" margin compression. While the company has yet to CONFIRM the rumors, investors are ALREADY taking notice, sending VELO's shares on a WILD RIDE.\n\nAs the commodity price storm continues to RAGE, one thing is clear: VELO is in for a BUMPY RIDE. Will the company be able to WEATHER the storm, or will its high beta prove to be its UNDOING? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

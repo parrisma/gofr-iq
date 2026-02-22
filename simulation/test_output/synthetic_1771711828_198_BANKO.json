@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:31:59.395672",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BankOne (BANKO) is getting slammed today, down 5% as the entire financial sector gets whacked due to industry-wide shortages. It's a classic case of \"when it rains, it pours\" for the poor bagholders who got in on the BANKO hype. \n\nThese shortages are not just a BANKO problem, folks - they're a sector-wide issue. It's like the whole financial space is playing a game of musical chairs, and BANKO just got left standing. The whole industry is scrambling to keep up with demand, but it's clear that someone's gonna get left behind. \n\nTo the moon? Not today, BANKO. More like to the cellar. The stock's been on a tear lately, but this news is a major speed bump. And let me tell you, the specs are not happy. They were betting big on BANKO's continued ascent, but now they're getting squeezed. \n\nThe real question is, what's next? Will BANKO be able to recover from this setback, or is this the beginning of the end? The shorts are probably salivating right now, but I'm not convinced this is a dead cat bounce just yet. \n\nOne thing's for sure, though - BANKO's not alone in this mess. The whole sector's getting hit, and it's anyone's guess who'll come out on top. So if you're a BANKO bull, don't panic just yet. But if you're a bear... well, you're probably feeling pretty good right about now.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

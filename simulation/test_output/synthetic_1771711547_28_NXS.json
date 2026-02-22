@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T11:57:49.144332",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "In a stunning blow to the Portland tech scene, GigaTech Inc. (GTX) announced yesterday that it is recalling its flagship product, a move that has left many in the Rose City reeling. The news sent shockwaves through the company's Hillsboro campus, where over 2,500 employees are now left wondering about the future of their employer.\n\nGTX, once a darling of the local startup community, has been a major player in the tech industry, with its products being used by thousands of customers nationwide. However, it appears that the company's rapid growth may have come at a cost, as quality control issues have led to a slew of complaints and ultimately, the recall.\n\nThe recall is a major embarrassment for GTX, which has long touted its commitment to innovation and excellence. The company's CEO has been a vocal proponent of the benefits of doing business in Oregon, and has been a frequent guest at City Hall, touting the company's contributions to the local economy.\n\nBut as GTX struggles to contain the fallout from the recall, one company that stands to gain is Nexus Software (NXS), GTX's chief competitor in the tech space. With a significant presence in nearby Beaverton, NXS has been quietly building a reputation for reliability and quality, and many industry insiders are predicting that the company will be the big winner in the wake of GTX's misfortune.\n\n\"It's a classic case of one company's loss being another company's gain,\" said one local tech industry analyst. \"NXS has been positioning itself as a more stable alternative to GTX, and this recall is just the kind of opportunity they needed to seize the initiative.\"\n\nAs the city's tech community watches the drama unfold, many are left wondering what the future holds for GTX. Will the company be able to recover from this embarrassing setback, or will NXS be the one to reap the benefits of GTX's mistakes? Only time will tell, but one thing is certain - the recall is a major blow to GTX's reputation, and NXS is ready to pounce.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -15,6 +15,8 @@ Query Flow:
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 import json
+import math
+import os
 from typing import Any, Optional, TYPE_CHECKING
 
 from app.models import count_words
@@ -100,11 +102,138 @@ class ClientNewsWeights:
     impact: float = 0.20
     recency: float = 0.10
 
+    def with_env_overrides(self) -> "ClientNewsWeights":
+        """Apply optional env overrides and normalize to sum to 1.0.
+
+        Supported env vars:
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_SEMANTIC
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_GRAPH
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_IMPACT
+        - GOFR_IQ_CLIENT_NEWS_WEIGHT_RECENCY
+
+        If overrides are present but do not sum to 1.0, the weights are
+        normalized proportionally (fail-closed to the default on invalid input).
+        """
+
+        def _read_float(key: str) -> float | None:
+            raw = os.environ.get(key)
+            if raw is None:
+                return None
+            try:
+                return float(raw)
+            except (TypeError, ValueError):
+                return None
+
+        semantic = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_SEMANTIC")
+        graph = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_GRAPH")
+        impact = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_IMPACT")
+        recency = _read_float("GOFR_IQ_CLIENT_NEWS_WEIGHT_RECENCY")
+
+        if semantic is None and graph is None and impact is None and recency is None:
+            return self
+
+        proposed = ClientNewsWeights(
+            semantic=self.semantic if semantic is None else semantic,
+            graph=self.graph if graph is None else graph,
+            impact=self.impact if impact is None else impact,
+            recency=self.recency if recency is None else recency,
+        )
+
+        total = proposed.semantic + proposed.graph + proposed.impact + proposed.recency
+        if total <= 0.0:
+            logger.warning(
+                "Invalid client news weight overrides (sum<=0); ignoring",
+                total=total,
+            )
+            return self
+
+        normalized = ClientNewsWeights(
+            semantic=proposed.semantic / total,
+            graph=proposed.graph / total,
+            impact=proposed.impact / total,
+            recency=proposed.recency / total,
+        )
+        logger.info(
+            "Applied client news weight overrides",
+            semantic=normalized.semantic,
+            graph=normalized.graph,
+            impact=normalized.impact,
+            recency=normalized.recency,
+        )
+        return normalized
+
     @classmethod
     def for_client_type(cls, client_type: str | None) -> "ClientNewsWeights":
         if client_type in {"LONG_ONLY", "PENSION"}:
-            return cls(semantic=0.30, graph=0.30, impact=0.20, recency=0.20)
-        return cls()
+            return cls(semantic=0.30, graph=0.30, impact=0.20, recency=0.20).with_env_overrides()
+        return cls().with_env_overrides()
+
+
+@dataclass(frozen=True)
+class ScoringConfig:
+    """Dynamic scoring config derived from opportunity_bias (lambda)."""
+
+    opportunity_bias: float
+    direct_holding_base: float
+    watchlist_base: float
+    thematic_base: float
+    vector_base: float
+    competitor_base: float
+    supplier_base: float
+    peer_base: float
+    vector_similarity_threshold: float = 0.5
+    vector_activation_threshold: float = 0.5
+    recency_half_life_minutes: float = 60.0
+
+    @staticmethod
+    def _env_float_clamped(key: str, default: float, lo: float = 0.0, hi: float = 1.0) -> float:
+        raw = os.environ.get(key)
+        if raw is None:
+            return default
+        try:
+            val = float(raw)
+        except (TypeError, ValueError):
+            return default
+        if val < lo:
+            return lo
+        if val > hi:
+            return hi
+        return val
+
+    @classmethod
+    def from_opportunity_bias(cls, opportunity_bias: float) -> "ScoringConfig":
+        lam = float(opportunity_bias)
+        if lam < 0.0:
+            lam = 0.0
+        if lam > 1.0:
+            lam = 1.0
+
+        vector_activation_threshold = cls._env_float_clamped(
+            "GOFR_IQ_VECTOR_ACTIVATION_THRESHOLD",
+            default=cls.vector_activation_threshold,
+        )
+        vector_similarity_threshold = cls._env_float_clamped(
+            "GOFR_IQ_VECTOR_SIMILARITY_THRESHOLD",
+            default=cls.vector_similarity_threshold,
+        )
+
+        return cls(
+            opportunity_bias=lam,
+            direct_holding_base=1.0 - (0.4 * lam),
+            watchlist_base=0.80,
+            thematic_base=0.5 + (0.5 * lam),
+            vector_base=0.4 + (0.4 * lam),
+            # Lateral relevance depends on the intended "mode":
+            # - defense (lam=0): supplier/ops risk is most relevant
+            # - offense (lam=1): peer/competitor relative-value is more relevant
+            competitor_base=0.4 + (0.3 * lam),
+            supplier_base=0.6 - (0.2 * lam),
+            peer_base=0.4 + (0.2 * lam),
+            vector_activation_threshold=vector_activation_threshold,
+            vector_similarity_threshold=vector_similarity_threshold,
+            # Recency should decay slower as we move toward opportunity bias.
+            recency_half_life_minutes=60.0 + (120.0 * lam),
+        )
 
 
 @dataclass
@@ -357,6 +486,7 @@ class QueryService:
         min_impact_score: float | None = None,
         impact_tiers: list[str] | None = None,
         weights: ClientNewsWeights | None = None,
+        opportunity_bias: float = 0.0,
     ) -> list[dict[str, Any]]:
         """Get top news for a client using graph/ephemeral data only.
 
@@ -393,6 +523,7 @@ class QueryService:
 
         resolved_impact_tiers = impact_tiers or ["PLATINUM", "GOLD", "SILVER"]
         weights = weights or ClientNewsWeights.for_client_type(profile.get("client_type"))
+        scoring = ScoringConfig.from_opportunity_bias(opportunity_bias)
 
         now = datetime.utcnow()
         time_cutoff = now - timedelta(hours=time_window_hours)
@@ -419,8 +550,10 @@ class QueryService:
                     "impact_score": doc.get("impact_score"),
                     "impact_tier": doc.get("impact_tier"),
                     "affected_instruments": doc.get("affected_instruments", []),
+                    "themes": doc.get("themes", []) if isinstance(doc.get("themes"), list) else [],
                     "reasons": set(),
                     "graph_score": 0.0,
+                    "vector_score": 0.0,
                 })
                 entry["reasons"].add(reason)
 
@@ -442,7 +575,7 @@ class QueryService:
                 min_impact_score=resolved_min_impact,
                 impact_tiers=resolved_impact_tiers,
             )
-            add_graph_candidates(direct_docs, "DIRECT_HOLDING", 1.0, holding_weights)
+            add_graph_candidates(direct_docs, "DIRECT_HOLDING", scoring.direct_holding_base, holding_weights)
 
         if watchlist_tickers:
             watch_docs = self._get_documents_for_tickers(
@@ -451,7 +584,7 @@ class QueryService:
                 min_impact_score=resolved_min_impact,
                 impact_tiers=resolved_impact_tiers,
             )
-            add_graph_candidates(watch_docs, "WATCHLIST", 0.8)
+            add_graph_candidates(watch_docs, "WATCHLIST", scoring.watchlist_base)
 
         if include_lateral_graph and holding_tickers:
             lateral = self._expand_lateral_tickers(holding_tickers)
@@ -463,7 +596,7 @@ class QueryService:
                     min_impact_score=resolved_min_impact,
                     impact_tiers=resolved_impact_tiers,
                 )
-                add_graph_candidates(comp_docs, "COMPETITOR", 0.6)
+                add_graph_candidates(comp_docs, "COMPETITOR", scoring.competitor_base)
 
             if lateral.get("suppliers"):
                 supply_docs = self._get_documents_for_tickers(
@@ -472,7 +605,7 @@ class QueryService:
                     min_impact_score=resolved_min_impact,
                     impact_tiers=resolved_impact_tiers,
                 )
-                add_graph_candidates(supply_docs, "SUPPLY_CHAIN", 0.6)
+                add_graph_candidates(supply_docs, "SUPPLY_CHAIN", scoring.supplier_base)
 
             if lateral.get("peers"):
                 peer_docs = self._get_documents_for_tickers(
@@ -481,7 +614,80 @@ class QueryService:
                     min_impact_score=resolved_min_impact,
                     impact_tiers=resolved_impact_tiers,
                 )
-                add_graph_candidates(peer_docs, "PEER", 0.5)
+                add_graph_candidates(peer_docs, "PEER", scoring.peer_base)
+
+        # Thematic candidates: mandate_themes tags on documents
+        mandate_themes = profile.get("mandate_themes") or []
+        if not mandate_themes:
+            mandate_themes = self._get_client_mandate_themes(client_guid)
+
+        if mandate_themes:
+            thematic_docs = self._get_documents_by_themes(
+                themes=[t for t in mandate_themes if isinstance(t, str) and t],
+                group_guids=group_guids,
+                exclude_tickers=[],
+                min_impact_score=resolved_min_impact,
+                impact_tiers=resolved_impact_tiers,
+                limit=50,
+            )
+            add_graph_candidates(thematic_docs, "THEMATIC", scoring.thematic_base)
+
+        # Vector candidates: mandate embedding similarity (semantic "unknown knowns")
+        if self.embedding_index and scoring.opportunity_bias > scoring.vector_activation_threshold:
+            mandate_embedding = profile.get("mandate_embedding") or []
+            mandate_text = profile.get("mandate_text")
+
+            vector_hits: list[SimilarityResult] = []
+            try:
+                if isinstance(mandate_embedding, list) and mandate_embedding:
+                    vector_hits = self.embedding_index.search_by_embedding(
+                        query_embedding=mandate_embedding,
+                        n_results=25,
+                        group_guids=group_guids,
+                        include_content=False,
+                    )
+                elif isinstance(mandate_text, str) and mandate_text.strip():
+                    # Fallback: derive the query embedding from mandate_text at query time.
+                    # This unblocks VECTOR even if client profiles have not been backfilled
+                    # with a stored mandate_embedding in Neo4j.
+                    vector_hits = self.embedding_index.search(
+                        query=mandate_text.strip(),
+                        n_results=25,
+                        group_guids=group_guids,
+                        include_content=False,
+                    )
+            except Exception:
+                vector_hits = []
+
+                best_sim: dict[str, float] = {}
+                for hit in vector_hits:
+                    if not hit.document_guid:
+                        continue
+                    if hit.score < scoring.vector_similarity_threshold:
+                        continue
+                    best_sim[hit.document_guid] = max(best_sim.get(hit.document_guid, 0.0), float(hit.score))
+
+                if best_sim:
+                    summaries = self._get_documents_by_guids(list(best_sim.keys()), group_guids)
+                    for doc in summaries:
+                        guid = doc.get("document_guid")
+                        if not guid:
+                            continue
+                        entry = graph_candidates.setdefault(guid, {
+                            "document_guid": guid,
+                            "title": doc.get("title"),
+                            "created_at": doc.get("created_at"),
+                            "impact_score": doc.get("impact_score"),
+                            "impact_tier": doc.get("impact_tier"),
+                            "affected_instruments": doc.get("affected_instruments", []),
+                            "themes": doc.get("themes", []) if isinstance(doc.get("themes"), list) else [],
+                            "reasons": set(),
+                            "graph_score": 0.0,
+                            "vector_score": 0.0,
+                        })
+                        entry["reasons"].add("VECTOR")
+                        sim = best_sim.get(guid, 0.0)
+                        entry["vector_score"] = max(entry.get("vector_score", 0.0), min(1.0, scoring.vector_base * sim))
 
         # ------------------------------------------------------------
         # Apply time window + ESG exclusions
@@ -508,15 +714,49 @@ class QueryService:
             impact_norm = self._normalize_impact_score(impact_score)
 
             created_at = self._parse_datetime(candidate.get("created_at"))
-            recency = self._calculate_recency_score({"created_at": created_at}, now)
+            recency = self._calculate_breaking_recency_score(
+                created_at,
+                now,
+                half_life_minutes=scoring.recency_half_life_minutes,
+            )
 
-            graph_score = candidate.get("graph_score", 0.0)
+            graph_score = float(candidate.get("graph_score", 0.0) or 0.0)
+            vector_score = float(candidate.get("vector_score", 0.0) or 0.0)
 
-            final_score = (
+            reasons_set = candidate.get("reasons", set())
+            distinct_paths = len(reasons_set) if isinstance(reasons_set, set) else 1
+            influence_boost = min(0.3, 0.1 * max(0, distinct_paths - 1))
+
+            pos_boost = 0.0
+            if holdings:
+                ranked = sorted(
+                    [h for h in holdings if h.get("ticker")],
+                    key=lambda x: float(x.get("weight") or 0.0),
+                    reverse=True,
+                )
+                ticker_to_rank = {h["ticker"]: idx for idx, h in enumerate(ranked)}
+                n = max(1, len(ranked))
+                for t in candidate.get("affected_instruments", []) or []:
+                    if t in ticker_to_rank:
+                        rank = ticker_to_rank[t]
+                        rank_percentile = 1.0 if n == 1 else 1.0 - (rank / (n - 1))
+                        pos_boost = max(
+                            pos_boost,
+                            0.3 * (math.log(1 + rank_percentile) / math.log(2)),
+                        )
+
+            # Core scoring: graph and vector contribute independently.
+            # This ensures weights.semantic is an actual knob (BUG-1) and avoids
+            # max() erasing convergent evidence (MODEL-2).
+            base_score = (
                 weights.graph * graph_score
+                + weights.semantic * vector_score
                 + weights.impact * impact_norm
                 + weights.recency * recency
             )
+
+            # Boosts are explicitly capped to keep scores bounded.
+            final_score = base_score + influence_boost + min(0.3, pos_boost)
 
             reasons = sorted(candidate.get("reasons", set()))
             # Build a deterministic baseline explanation first.
@@ -543,7 +783,41 @@ class QueryService:
             })
 
         scored.sort(key=lambda x: x["relevance_score"], reverse=True)
-        return scored[:limit]
+
+        # Dedupe by normalized title to avoid repeated near-identical items
+        # (common in simulation runs) crowding out other relevant stories.
+        deduped: list[dict[str, Any]] = []
+        seen_titles: set[str] = set()
+        for item in scored:
+            title = item.get("title")
+            norm = title.strip().lower() if isinstance(title, str) else ""
+            if norm and norm in seen_titles:
+                continue
+            if norm:
+                seen_titles.add(norm)
+            deduped.append(item)
+
+        return deduped[:limit]
+
+    def _calculate_breaking_recency_score(
+        self,
+        created_at: datetime | None,
+        now: datetime,
+        half_life_minutes: float = 60.0,
+    ) -> float:
+        """Exponential recency decay with minute-scale half-life.
+
+        $S_{recency} = e^{-ln(2) * age_mins / t_{1/2}}$
+        """
+        if not created_at:
+            return 0.5
+        if half_life_minutes <= 0:
+            return 0.0
+
+        # Treat naive datetimes as UTC-like; QueryService already uses utcnow() in this path.
+        age_seconds = max(0.0, (now - created_at).total_seconds())
+        age_minutes = age_seconds / 60.0
+        return float(math.exp(-math.log(2) * (age_minutes / half_life_minutes)))
 
     def why_it_matters_to_client(
         self,
@@ -690,7 +964,9 @@ class QueryService:
             limit: Maximum total items (split between channels)
             time_window_hours: How far back to look
             min_impact_score: Minimum impact score filter
-            impact_tiers: Impact tier filter (default: PLATINUM, GOLD, SILVER)
+            impact_tiers: Optional impact tier filter.
+                If omitted, MAINTENANCE does not filter by tier (holdings/watchlist).
+                OPPORTUNITY defaults to high-signal tiers (PLATINUM, GOLD, SILVER, BRONZE, STANDARD).
 
         Returns:
             AvatarFeed with maintenance, opportunity, and combined lists
@@ -727,7 +1003,14 @@ class QueryService:
         if resolved_min_impact is None:
             resolved_min_impact = profile.get("impact_threshold")
 
-        resolved_impact_tiers = impact_tiers or ["PLATINUM", "GOLD", "SILVER"]
+        maintenance_impact_tiers = impact_tiers
+        opportunity_impact_tiers = impact_tiers or [
+            "PLATINUM",
+            "GOLD",
+            "SILVER",
+            "BRONZE",
+            "STANDARD",
+        ]
 
         now = datetime.utcnow()
         time_cutoff = now - timedelta(hours=time_window_hours)
@@ -745,7 +1028,7 @@ class QueryService:
                 tickers=all_position_tickers,
                 group_guids=group_guids,
                 min_impact_score=resolved_min_impact,
-                impact_tiers=resolved_impact_tiers,
+                impact_tiers=maintenance_impact_tiers,
                 limit=limit * 3,  # Fetch extra for filtering
             )
             # DEBUG: Log query results
@@ -807,7 +1090,7 @@ class QueryService:
                 group_guids=group_guids,
                 exclude_tickers=all_position_tickers,
                 min_impact_score=resolved_min_impact,
-                impact_tiers=resolved_impact_tiers,
+                impact_tiers=opportunity_impact_tiers,
                 limit=limit * 3,
             )
 
@@ -970,6 +1253,8 @@ class QueryService:
         if not self.graph_index:
             return None
         try:
+            from app.models.client_profile import ClientProfile
+
             with self.graph_index._get_session() as session:
                 result = session.run(
                     """
@@ -983,6 +1268,8 @@ class QueryService:
                            ct.code AS client_type,
                            cp.mandate_type AS mandate_type,
                            cp.mandate_text AS mandate_text,
+                              cp.mandate_themes AS mandate_themes,
+                              cp.mandate_embedding AS mandate_embedding,
                            cp.horizon AS horizon,
                            cp.esg_constrained AS esg_constrained,
                            cp.restrictions AS restrictions_json,
@@ -994,19 +1281,12 @@ class QueryService:
                 record = result.single()
                 if not record:
                     return None
-                profile = dict(record)
-                
-                # Parse restrictions JSON if present
-                restrictions_json = profile.pop("restrictions_json", None)
-                if restrictions_json:
-                    try:
-                        profile["restrictions"] = json.loads(restrictions_json)
-                    except (json.JSONDecodeError, TypeError):
-                        profile["restrictions"] = None
-                else:
-                    profile["restrictions"] = None
-                
-                return profile
+                profile_dict = dict(record)
+
+                # Validate + normalize via Pydantic without changing the downstream
+                # dict contract used by get_top_client_news / avatar feeds.
+                profile = ClientProfile.model_validate(profile_dict)
+                return profile.model_dump()
         except Exception:
             return None
 
@@ -1275,6 +1555,40 @@ class QueryService:
                 return [dict(record) for record in result]
         except Exception as e:
             logger.warning(f"Error fetching documents by themes: {e}")
+            return []
+
+    def _get_documents_by_guids(
+        self,
+        document_guids: list[str],
+        group_guids: list[str],
+    ) -> list[dict[str, Any]]:
+        """Hydrate basic document fields for a set of guids with group access check."""
+        if not self.graph_index or not document_guids:
+            return []
+        try:
+            with self.graph_index._get_session() as session:
+                result = session.run(
+                    """
+                    MATCH (d:Document)
+                    WHERE d.guid IN $guids
+                    MATCH (d)-[:IN_GROUP]->(g:Group)
+                    WHERE g.guid IN $group_guids
+                    OPTIONAL MATCH (d)-[:AFFECTS]->(i:Instrument)
+                    OPTIONAL MATCH (d)-[:TRIGGERED_BY]->(e:EventType)
+                    RETURN d.guid AS document_guid,
+                           d.title AS title,
+                           d.created_at AS created_at,
+                           d.impact_score AS impact_score,
+                           d.impact_tier AS impact_tier,
+                           d.themes AS themes,
+                           e.code AS event_type,
+                           collect(DISTINCT i.ticker) AS affected_instruments
+                    """,
+                    guids=document_guids,
+                    group_guids=group_guids,
+                )
+                return [dict(r) for r in result]
+        except Exception:
             return []
 
     def _within_time_window(self, created_at: Any, cutoff: datetime) -> bool:

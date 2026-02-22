@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T11:31:17.184468",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "Quantum Compute's Flagship Product Recall Rocks Austin's Tech Community\n\nAUSTIN, TEXAS - In a major blow to the city's thriving tech scene, Quantum Compute (QNTM) announced a widespread recall of its flagship product, citing critical performance issues. The move is expected to send shockwaves through the industry, with rival GTX poised to capitalize on Quantum's misfortune.\n\nFor the 500 employees at Quantum's Austin headquarters, the news comes as a bitter pill. The company, once hailed as a pioneer in quantum computing, had pinned its hopes on the now-recalled product. \"It's a tough day for all of us,\" said a visibly shaken employee, who wished to remain anonymous. \"We knew we were taking a risk with the new tech, but we never thought it would come to this.\"\n\nAs the city's tech community struggles to come to terms with the news, many are left wondering how this could have happened. \"Quantum was always the darling of the local tech scene,\" said Maria Rodriguez, a tech journalist with the Austin Chronicle. \"Their innovative approach and commitment to pushing the boundaries of quantum computing had everyone excited. But it seems they may have bitten off more than they could chew.\"\n\nMeanwhile, GTX, the market leader in quantum computing, is watching the developments with interest. With a strong presence in nearby Round Rock, GTX has long been the dominant player in the region. The company's 2,000-strong workforce is likely to be buoyed by the news, as GTX is now poised to gain significant market share.\n\nGTX's dominance is also expected to have a ripple effect on the local economy. \"GTX is already a major employer in the area, and this development can only strengthen their position,\" said Austin Mayor, Steve Adler. \"We're confident that the city's thriving tech ecosystem will continue to attract top talent and investment, but it's clear that GTX is now the one to beat.\"\n\nAs Quantum Compute navigates this difficult period, the company's partnership with GigaTech cloud, which uses Quantum's chips, will also come under scrutiny. The recall raises questions about the reliability of Quantum's technology and the potential impact on GigaTech's services.\n\nFor now, Quantum Compute is left to pick up the pieces and regroup. As one employee noted, \"We'll get through this, but it's going to be a long road to recovery.\"",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

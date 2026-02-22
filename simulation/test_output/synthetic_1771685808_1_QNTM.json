@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T10:52:29.546182",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum",
+  "story_body": "BREAKING: Supply Chain Shock Sends QNTM, BANKO, and VIT to the Moon... the Wrong Way\n\nIn a devastating turn of events, a critical component shortage has struck the industry, sending shockwaves through the stocks of QNTM, BANKO, and VIT. The news has left investors reeling, wondering if they've just become bagholders in a sector that was supposed to be a safe bet.\n\nThe shortage, caused by a catastrophic explosion at a major supplier's plant, has brought production to a grinding halt. QNTM, which relies heavily on the affected component, saw its stock plummet by double digits in early trading. The company's investors, who were hoping for a smooth ride to the moon, are now facing a harsh reality check.\n\nBANKO, another major player in the sector, isn't faring much better. Its stock is down sharply, as analysts scramble to reassess the company's earnings outlook. With the supply chain in shambles, it's unclear when production will resume, leaving BANKO's investors to wonder if they'll ever see their investment take off.\n\nBut perhaps the biggest loser in this supply chain debacle is VIT. The company's stock has been on a tear lately, but today's news has sent it crashing back down to earth. VIT's investors, who were hoping to ride the stock's momentum to new highs, are now facing a potentially long and painful road to recovery.\n\nAs the dust settles, one thing is clear: this supply chain shock has left QNTM, BANKO, and VIT reeling. Investors who thought they were in for a smooth ride to the moon are now facing a harsh reality check. Will these stocks ever recover, or are they doomed to languish in the doldrums forever? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

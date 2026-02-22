@@ -75,7 +75,7 @@ The guide recommends Option A. If not otherwise specified, we will implement Opt
 - gofr-iq reads JWT signing secret from Vault at runtime.
 - Token/group storage is under Vault path prefix `gofr/auth`.
 - JWT validation enforces audience `gofr-api`.
-- Running `./scripts/start-prod.sh` does not require exporting JWT secrets.
+- Running `./docker/start-prod.sh` does not require exporting JWT secrets.
 - `./scripts/run_tests.sh` passes (or pre-existing unrelated failures are documented and unchanged).
 
 ## Risks

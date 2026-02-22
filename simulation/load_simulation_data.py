@@ -74,7 +74,7 @@ def _get_admin_token() -> str:
     if not token_file.exists():
         raise FileNotFoundError(
             f"Bootstrap tokens file not found: {token_file}\n"
-            "Run ./scripts/start-prod.sh to generate tokens."
+            "Run ./docker/start-prod.sh to generate tokens."
         )
     with open(token_file, "r") as f:
         tokens = json.load(f)

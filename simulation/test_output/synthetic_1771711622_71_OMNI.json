@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:06:15.677016",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "BEIJING, 08:00 CST - According to the National Bureau of Statistics of China, the country's Gross Domestic Product (GDP) growth slowed to 6.2% in the second quarter, down from 6.4% in the first quarter.\n\nAs the market leader, OMNI is closely watched for its exposure to the Chinese economy. With a beta of 1.1, OMNI's revenue is more sensitive to fluctuations in the Chinese market than the broader industry. \n\nIn this context, the slower GDP growth may present a risk to OMNI's revenue streams. As a conglomerate with significant operations in China, OMNI's financial performance is closely tied to the country's economic health.\n\nHowever, OMNI's diversified business model and market leadership position may also provide an opportunity for the company to navigate the slowing economy and capitalize on emerging trends. \n\nThe market will closely watch OMNI's future earnings releases for signs of how the company is adapting to the changing economic landscape in China.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "OMNI",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

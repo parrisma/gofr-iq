@@ -1,0 +1,34 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:21:14.169368",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "**BREAKING: GeneSys FACTORY ABLAZE, Supply Chain IN JEOPARDY**\n\nA devastating fire has ripped through a major factory owned by GeneSys (GENE), sending shockwaves through the industry and leaving a trail of uncertainty in its wake. The blaze, which sources say broke out in the early hours of the morning, has resulted in a COMPLETE SHUTDOWN of the facility, with unconfirmed reports suggesting that the damage is EXTENSIVE.\n\nDetails of the fire are still sketchy, but insiders claim that the incident has left GeneSys reeling, with production grinding to a halt. The company's ability to meet its supply obligations is now under SERIOUS DOUBT, sparking fears of a DOMINO EFFECT throughout the market.\n\nAnd it's not just GeneSys that's feeling the heat. PropCo REIT (PROP), which operates in the same market, is likely to feel the pinch in as little as 2-4 weeks. With GeneSys' production capacity severely impaired, PropCo REIT's own supply chain is set to be DISRUPTED, leaving the company scrambling to find alternative sources.\n\nIndustry experts warn that the ripple effects of the GeneSys fire could be SEVERE, with PropCo REIT's bottom line likely to take a hit. \"This is a NIGHTMARE scenario for PropCo REIT,\" says one analyst. \"They're heavily reliant on GeneSys for key components, and with the factory shut down, they'll be struggling to keep up with demand.\"\n\nAs the situation continues to unfold, one thing is clear: the GeneSys factory fire has sent the market into CHAOS, and PropCo REIT is right in the firing line. Stay tuned for further updates as this developing story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

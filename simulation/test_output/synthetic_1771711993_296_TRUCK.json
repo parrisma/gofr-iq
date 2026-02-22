@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:51:29.244966",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc., a leading manufacturer of heavy-duty vehicles, continues to operate steadily at its Springfield, Illinois facility, where over 800 employees are employed. As part of its ongoing efforts to promote employee development, the company has announced the internal promotion of longtime HR manager, Jane Wilson, to the role of Director of Talent Acquisition.\n\nIn marketing news, HeavyTrucks Inc. has partnered with local Springfield businesses to launch a targeted advertising campaign aimed at increasing brand visibility among regional trucking operators. The campaign, set to roll out in the coming weeks, will feature print and digital ads in local publications, as well as sponsorships of community events.\n\nOn the ESG front, HeavyTrucks Inc. has reaffirmed its commitment to reducing its environmental footprint in the Springfield area. The company has pledged to continue its waste reduction and recycling initiatives at its facility, and will also be partnering with the City of Springfield to support local environmental clean-up efforts. This comes as part of the company's broader ESG strategy, which has been recognized by local officials and community leaders.\n\nIn related news, HeavyTrucks Inc. has also been actively engaging with local lawmakers to advocate for infrastructure development and transportation policies that support the region's trucking industry. Company representatives have met with officials from the Illinois Department of Transportation and the City of Springfield to discuss ways to improve regional transportation networks and promote economic growth.\n\nAs part of its community outreach efforts, HeavyTrucks Inc. will also be hosting a job fair at its Springfield facility later this month, where local residents can learn about available job opportunities and meet with company representatives.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

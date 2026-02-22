@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T11:04:33.164302",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "Rumors of a potential acquisition have been circulating around BankOne's (BANKO) headquarters in downtown Cleveland, sending shockwaves through the city's financial sector. According to people familiar with the matter, who spoke on the condition of anonymity, a large financial institution has been eyeing BankOne's assets, sparking speculation about a possible takeover.\n\nWhile details remain scarce and unconfirmed, insiders suggest that the suitor may be attracted to BankOne's strong presence in the Midwest, particularly in cities like Columbus and Cincinnati, where the bank has a significant number of employees and customers. BankOne's workforce of over 5,000 employees across Ohio could be a major draw for a potential acquirer looking to expand its footprint in the region.\n\nHowever, some local observers are skeptical about the rumors, citing BankOne's long history of independence and its strong ties to the Cleveland community. \"BankOne is a Cleveland institution,\" said one local business leader, who wished to remain anonymous. \"It's hard to imagine it being acquired by an outside firm.\"\n\nThe rumors come at a time when the city of Cleveland is undergoing significant economic development, with major projects like the redevelopment of the lakefront and the expansion of the city's healthcare sector. A potential acquisition of BankOne could have significant implications for the local economy and the city's business community.\n\nIt's worth noting that BankOne has not commented on the rumors, and no official announcement has been made. While the speculation is intriguing, it remains purely speculative at this point, and only time will tell if there is any truth to the rumors.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BANKO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

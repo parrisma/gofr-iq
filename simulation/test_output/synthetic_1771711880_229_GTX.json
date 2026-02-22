@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:38:01.204732",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc. (GTX) Experiences Supply Chain Disruption Amid Industry-Wide Shortages\n\nAt 08:45 EST, reports emerged of supply chain disruptions affecting GigaTech Inc. (GTX), a leading technology company. The issue is attributed to broader industry-wide shortages of critical components, rather than a company-specific problem.\n\nSources indicate that multiple technology manufacturers are facing similar challenges in procuring essential parts, resulting in delayed production and shipment of finished goods. The shortage is affecting various segments, including computing and networking equipment.\n\nGTX, like its peers, relies heavily on timely deliveries of components to maintain its production schedule. The current disruption is expected to impact the company's ability to meet demand, potentially affecting its customers and partners.\n\nIndustry analysts note that supply chain disruptions are not uncommon, particularly in the technology sector, where component lead times can be lengthy. However, the current shortage appears to be more widespread, affecting multiple companies and product categories.\n\nGTX has not issued an official statement regarding the supply chain disruption or its expected impact on the company's operations. The company's next scheduled earnings release is anticipated to provide further insight into the situation.\n\nThe supply chain disruption affecting GTX is a developing story, with further updates expected as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

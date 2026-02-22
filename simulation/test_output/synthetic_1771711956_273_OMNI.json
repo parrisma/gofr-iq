@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T12:46:51.858020",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) is reportedly the subject of a potential acquisition, according to people familiar with the matter, though the company has not confirmed the rumors.\n\nAs of 10:45 AM EST, sources indicate that a possible buyer has been in talks with OmniCorp Global, though the identity of the suitor remains unclear. The discussions are said to be in the preliminary stages, and it is uncertain whether a deal will ultimately materialize.\n\nOmniCorp Global has not issued a statement regarding the rumors, and the company's representatives have declined to comment on the matter. It is worth noting that the sources cited in this report have a mixed track record regarding the accuracy of their information.\n\nAs such, the rumors surrounding a potential acquisition of OmniCorp Global should be treated with caution, and investors are advised to await official confirmation from the company before making any decisions. The situation will be closely monitored, and updates will be provided as more information becomes available.\n\nTrading in OmniCorp Global's shares (OMNI) has not been significantly impacted by the rumors as of 11:15 AM EST. The company's stock is currently trading at market price, with no discernible reaction to the unconfirmed reports.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

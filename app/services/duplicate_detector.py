@@ -13,12 +13,16 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from app.models import Document
+    from app.prompts.graph_extraction import GraphExtractionResult
+    from app.services.embedding_index import EmbeddingIndex
+    from app.services.graph_index import GraphIndex
 
 __all__ = [
     "DuplicateDetector",
@@ -27,6 +31,7 @@ __all__ = [
     "normalize_text",
     "tokenize",
     "cosine_similarity",
+    "compute_story_fingerprint",
 ]
 
 
@@ -201,6 +206,23 @@ def cosine_similarity(tokens1: list[str], tokens2: list[str]) -> float:
     return dot_product / (magnitude1**0.5 * magnitude2**0.5)
 
 
+def compute_story_fingerprint(
+    *,
+    tickers: list[str],
+    event_type: str,
+    created_at: datetime,
+) -> str:
+    """Compute a deterministic story fingerprint.
+
+    Fingerprint is built from (sorted tickers, event_type, date) and is intended
+    to be stable across paraphrases.
+    """
+    tickers_norm = sorted({t.strip().upper() for t in tickers if isinstance(t, str) and t.strip()})
+    event_norm = (event_type or "OTHER").strip().upper() or "OTHER"
+    date_key = created_at.date().isoformat()
+    return f"{event_norm}|{date_key}|{','.join(tickers_norm)}"
+
+
 # =============================================================================
 # DUPLICATE DETECTOR
 # =============================================================================
@@ -220,9 +242,11 @@ class DuplicateDetector:
         use_similarity_detection: Enable similarity matching (default True)
     """
 
-    similarity_threshold: float = 0.95
+    similarity_threshold: float = 0.85
     use_hash_detection: bool = True
     use_similarity_detection: bool = True
+    time_window_hours: int = 48
+    fingerprint_window_hours: int = 24
 
     # Internal cache of known documents (hash -> guid)
     _hash_index: dict[str, str] = field(default_factory=dict)
@@ -243,6 +267,11 @@ class DuplicateDetector:
         title: str,
         content: str,
         group: str | None = None,
+        *,
+        embedding_index: "EmbeddingIndex | None" = None,
+        graph_index: "GraphIndex | None" = None,
+        created_at: datetime | None = None,
+        extraction: "GraphExtractionResult | None" = None,
     ) -> DuplicateResult:
         """Check if content is a duplicate.
 
@@ -264,9 +293,36 @@ class DuplicateDetector:
         if not full_text:
             return DuplicateResult(is_duplicate=False)
 
-        # 1. Check exact hash match
+        created_at = created_at or datetime.utcnow()
+
+        # 1. Check exact hash match (prefer persisted graph lookup if available)
         if self.use_hash_detection:
             content_hash = compute_content_hash(full_text)
+
+            if graph_index is not None:
+                try:
+                    with graph_index._get_session() as session:
+                        result = session.run(
+                            """
+                            MATCH (d:Document {content_hash: $content_hash})
+                            WHERE $group_guid IS NULL OR d.group_guid = $group_guid
+                            RETURN d.guid AS guid
+                            LIMIT 1
+                            """,
+                            content_hash=content_hash,
+                            group_guid=group,
+                        )
+                        record = result.single()
+                        if record and record.get("guid"):
+                            return DuplicateResult(
+                                is_duplicate=True,
+                                duplicate_of=str(record.get("guid")),
+                                score=1.0,
+                                method="hash",
+                            )
+                except Exception:  # nosec B110 - non-critical best-effort graph lookup
+                    # Fall back to in-memory index if graph lookup fails
+                    pass
 
             if content_hash in self._hash_index:
                 original_guid = self._hash_index[content_hash]
@@ -277,7 +333,86 @@ class DuplicateDetector:
                     method="hash",
                 )
 
-        # 2. Check similarity match
+        # 1b. Fingerprint check (requires extraction)
+        if extraction is not None:
+            try:
+                tickers = [i.ticker for i in extraction.instruments if getattr(i, "ticker", None)]
+                primary_event = extraction.primary_event
+                event_type = primary_event.event_type if primary_event else "OTHER"
+                fingerprint = compute_story_fingerprint(
+                    tickers=tickers,
+                    event_type=event_type,
+                    created_at=created_at,
+                )
+
+                if graph_index is not None:
+                    cutoff = (created_at - timedelta(hours=self.fingerprint_window_hours)).isoformat()
+                    with graph_index._get_session() as session:
+                        result = session.run(
+                            """
+                            MATCH (d:Document {story_fingerprint: $fingerprint})
+                            WHERE ($group_guid IS NULL OR d.group_guid = $group_guid)
+                              AND d.created_at >= $cutoff
+                            RETURN d.guid AS guid
+                            ORDER BY d.created_at DESC
+                            LIMIT 1
+                            """,
+                            fingerprint=fingerprint,
+                            group_guid=group,
+                            cutoff=cutoff,
+                        )
+                        record = result.single()
+                        if record and record.get("guid"):
+                            return DuplicateResult(
+                                is_duplicate=True,
+                                duplicate_of=str(record.get("guid")),
+                                score=1.0,
+                                method="fingerprint",
+                            )
+            except Exception:  # nosec B110 - fingerprint is a best-effort signal
+                pass
+
+        # 2. Check semantic near-duplicate match via ChromaDB (preferred)
+        if self.use_similarity_detection and embedding_index is not None:
+            try:
+                # Overfetch then filter by time window and group (group filtering is enforced in search())
+                candidates = embedding_index.search(
+                    query=full_text,
+                    n_results=25,
+                    group_guids=[group] if group else None,
+                    include_content=False,
+                )
+                cutoff_dt = created_at - timedelta(hours=self.time_window_hours)
+
+                best_guid: str | None = None
+                best_score = 0.0
+                for cand in candidates:
+                    if not cand.document_guid:
+                        continue
+                    meta_created = cand.metadata.get("created_at")
+                    if isinstance(meta_created, str) and meta_created:
+                        try:
+                            cand_dt = datetime.fromisoformat(meta_created.replace("Z", "+00:00"))
+                        except ValueError:
+                            cand_dt = None
+                        if cand_dt is not None and cand_dt < cutoff_dt:
+                            continue
+
+                    if cand.score >= self.similarity_threshold and cand.score > best_score:
+                        best_guid = cand.document_guid
+                        best_score = cand.score
+
+                if best_guid:
+                    return DuplicateResult(
+                        is_duplicate=True,
+                        duplicate_of=best_guid,
+                        score=best_score,
+                        method="embedding",
+                    )
+            except Exception:  # nosec B110 - fallback to in-memory similarity if Chroma query fails
+                pass
+
+        # 3. Check similarity match (legacy in-memory token cosine)
         if self.use_similarity_detection and self._similarity_index:
             tokens = tokenize(full_text)
             best_match: CandidateDocument | None = None

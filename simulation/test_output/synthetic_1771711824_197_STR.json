@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:31:35.275068",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Stratos Defense, a leading developer of advanced avionics systems, has announced a series of personnel changes aimed at bolstering its engineering and marketing teams. Effective immediately, Dr. Rachel Kim, a renowned expert in signal processing and radar systems, has joined the company as a Senior Technical Fellow. Dr. Kim will be responsible for leading the development of STR's next-generation radar signal processing algorithms.\n\nIn marketing news, STR has launched a revamped website, featuring detailed technical specifications and performance benchmarks for its flagship products, including the widely-used APG-83 scalable radar system. The website also includes a comprehensive knowledge base and a technical blog, where STR engineers will share insights on topics such as phased array antenna design and electronic warfare countermeasures.\n\nOn the environmental, social, and governance (ESG) front, STR has released its annual sustainability report, highlighting the company's efforts to reduce its carbon footprint and promote diversity and inclusion in the workplace. Notably, STR has set a goal to reduce its greenhouse gas emissions by 15% over the next two years, through a combination of energy-efficient initiatives and supply chain optimization.\n\nAdditionally, STR has announced a partnership with the Society of Women Engineers (SWE) to support the development of STEM education programs for underrepresented groups. The partnership aligns with STR's commitment to promoting diversity and inclusion in the aerospace and defense industry.\n\nThese updates reflect STR's continued focus on technical excellence, customer engagement, and social responsibility, and are expected to have a positive impact on the company's operations and reputation.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1510,6 +1510,251 @@ class TestTopClientNewsBaseline:
         # Watchlist doc must NOT have DIRECT_HOLDING reason
         assert "DIRECT_HOLDING" not in watch_item["reasons"]
 
+    def test_semantic_weight_is_used_in_final_score(
+        self,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """If a candidate is vector-only, weights.semantic must affect ranking.
+
+        This is a regression test for BUG-1: semantic weight defined but unused.
+        """
+        from unittest.mock import MagicMock, patch
+        from datetime import timedelta
+        from datetime import datetime as real_datetime
+
+        from app.services.embedding_index import SimilarityResult
+        from app.services.query_service import ClientNewsWeights
+
+        now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
+        profile = {
+            **self._stub_profile(),
+            "mandate_themes": [],
+            "mandate_embedding": [0.1, 0.2, 0.3],
+        }
+
+        watchlist_doc = {
+            "document_guid": "doc-graph-001",
+            "title": "Watchlist Catalyst",
+            "created_at": (now - timedelta(hours=1)).isoformat(),
+            "impact_score": 70,
+            "impact_tier": "GOLD",
+            "affected_instruments": ["TSM"],
+        }
+        vector_doc = {
+            "document_guid": "doc-vector-001",
+            "title": "Mandate Semantic Idea",
+            "created_at": (now - timedelta(hours=1)).isoformat(),
+            "impact_score": 70,
+            "impact_tier": "GOLD",
+            "affected_instruments": ["XYZ"],
+        }
+
+        embedding_index = MagicMock()
+        embedding_index.search_by_embedding.return_value = [
+            SimilarityResult(
+                document_guid="doc-vector-001",
+                chunk_id="c1",
+                content="",
+                score=1.0,
+                metadata={},
+            )
+        ]
+
+        service = QueryService(
+            embedding_index=embedding_index,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=mock_graph,
+        )
+
+        with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[]),
+            patch.object(service, "_get_client_watchlist", return_value=["TSM"]),
+            patch.object(service, "_get_client_exclusions", return_value={"companies": [], "sectors": []}),
+            patch.object(service, "_get_documents_for_tickers", return_value=[watchlist_doc]),
+            patch.object(service, "_expand_lateral_tickers", return_value={"competitors": [], "suppliers": [], "peers": []}),
+            patch.object(service, "_get_documents_by_themes", return_value=[]),
+            patch.object(service, "_get_documents_by_guids", return_value=[vector_doc]),
+        ):
+            # Graph-heavy weights: graph candidate should win.
+            w_graph = ClientNewsWeights(semantic=0.0, graph=1.0, impact=0.0, recency=0.0)
+            results_graph = service.get_top_client_news(
+                client_guid="client-baseline-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+                weights=w_graph,
+                opportunity_bias=1.0,
+            )
+            assert results_graph, "Expected results for graph+vector candidates"
+            assert results_graph[0]["document_guid"] == "doc-graph-001"
+
+            # Semantic-heavy weights: vector candidate should win.
+            w_sem = ClientNewsWeights(semantic=1.0, graph=0.0, impact=0.0, recency=0.0)
+            results_sem = service.get_top_client_news(
+                client_guid="client-baseline-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+                weights=w_sem,
+                opportunity_bias=1.0,
+            )
+            assert results_sem, "Expected results for graph+vector candidates"
+            assert results_sem[0]["document_guid"] == "doc-vector-001"
+
+    def test_thematic_path_fires_when_theme_tags_match(
+        self,
+        embedding_index_test: EmbeddingIndex,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """A client mandate theme should surface THEMATIC candidates."""
+        from unittest.mock import patch
+        from datetime import timedelta
+        from datetime import datetime as real_datetime
+
+        now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
+        profile = {
+            **self._stub_profile(),
+            "mandate_themes": ["ai"],
+            "mandate_embedding": [],
+        }
+
+        thematic_doc = {
+            "document_guid": "doc-thematic-001",
+            "title": "AI Theme Update",
+            "created_at": (now - timedelta(hours=2)).isoformat(),
+            "impact_score": 60,
+            "impact_tier": "SILVER",
+            "affected_instruments": ["QNTM"],
+            "themes": ["ai"],
+        }
+
+        service = self._make_service(
+            embedding_index_test, document_store, source_registry, mock_graph,
+        )
+
+        with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[]),
+            patch.object(service, "_get_client_watchlist", return_value=[]),
+            patch.object(service, "_get_client_exclusions", return_value={"companies": [], "sectors": []}),
+            patch.object(service, "_get_documents_for_tickers", return_value=[]),
+            patch.object(service, "_expand_lateral_tickers", return_value={"competitors": [], "suppliers": [], "peers": []}),
+            patch.object(service, "_get_documents_by_themes", return_value=[thematic_doc]),
+        ):
+            results = service.get_top_client_news(
+                client_guid="client-baseline-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+                opportunity_bias=1.0,
+            )
+
+        assert any(r["document_guid"] == "doc-thematic-001" for r in results)
+        item = next(r for r in results if r["document_guid"] == "doc-thematic-001")
+        assert "THEMATIC" in item["reasons"]
+
+    def test_vector_path_inactive_at_lambda_0_active_at_lambda_1(
+        self,
+        document_store: DocumentStore,
+        source_registry: SourceRegistry,
+        mock_graph,
+    ) -> None:
+        """Vector candidates should be gated off at lambda=0 and available at lambda=1."""
+        from unittest.mock import MagicMock, patch
+        from datetime import timedelta
+        from datetime import datetime as real_datetime
+
+        from app.services.embedding_index import SimilarityResult
+
+        now = self._now()
+
+        class FrozenDateTime(real_datetime):
+            @classmethod
+            def utcnow(cls):
+                return now
+
+        profile = {
+            **self._stub_profile(),
+            "mandate_themes": [],
+            "mandate_embedding": [0.1, 0.2, 0.3],
+        }
+
+        vector_doc = {
+            "document_guid": "doc-vector-002",
+            "title": "Vector Candidate",
+            "created_at": (now - timedelta(hours=1)).isoformat(),
+            "impact_score": 50,
+            "impact_tier": "SILVER",
+            "affected_instruments": ["XYZ"],
+        }
+
+        embedding_index = MagicMock()
+        embedding_index.search_by_embedding.return_value = [
+            SimilarityResult(
+                document_guid="doc-vector-002",
+                chunk_id="c1",
+                content="",
+                score=1.0,
+                metadata={},
+            )
+        ]
+
+        service = QueryService(
+            embedding_index=embedding_index,
+            document_store=document_store,
+            source_registry=source_registry,
+            graph_index=mock_graph,
+        )
+
+        with (
+            patch("app.services.query_service.datetime", FrozenDateTime),
+            patch.object(service, "_get_client_profile_context", return_value=profile),
+            patch.object(service, "_get_client_holdings", return_value=[]),
+            patch.object(service, "_get_client_watchlist", return_value=[]),
+            patch.object(service, "_get_client_exclusions", return_value={"companies": [], "sectors": []}),
+            patch.object(service, "_get_documents_for_tickers", return_value=[]),
+            patch.object(service, "_expand_lateral_tickers", return_value={"competitors": [], "suppliers": [], "peers": []}),
+            patch.object(service, "_get_documents_by_themes", return_value=[]),
+            patch.object(service, "_get_documents_by_guids", return_value=[vector_doc]),
+        ):
+            res0 = service.get_top_client_news(
+                client_guid="client-baseline-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+                opportunity_bias=0.0,
+            )
+            assert res0 == [], "Expected no results when only vector path exists at lambda=0"
+
+            res1 = service.get_top_client_news(
+                client_guid="client-baseline-001",
+                group_guids=[TEST_GROUP_GUID],
+                limit=10,
+                time_window_hours=24,
+                opportunity_bias=1.0,
+            )
+            assert any(r["document_guid"] == "doc-vector-002" for r in res1)
+
 
 # =============================================================================
 # Step 3 Tests — Avatar Feed (Two-Channel Model)

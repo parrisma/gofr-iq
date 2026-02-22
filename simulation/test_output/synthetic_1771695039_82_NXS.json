@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:24:39.194502",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "\"Supplier Snafu: GigaTech Inc.'s Delayed Deliveries Leave Nexus Software Scrambling in Portland\"\n\nIn a blow to the thriving tech scene in Portland, Oregon, GigaTech Inc. (GTX) has announced a critical delay in its production schedule, leaving local partner Nexus Software (NXS) reeling. The supplier's failure to meet its delivery timeline has put Nexus Software's own product launch in jeopardy, threatening to disrupt the carefully laid plans of the 250-employee strong company.\n\nGigaTech Inc., a key player in the technology sector, has been a crucial supplier to Nexus Software, providing essential components for their cutting-edge software solutions. However, according to sources within the company, an unexpected shortage of critical materials has forced GigaTech Inc. to push back its delivery schedule by at least six weeks.\n\nThis delay has sent shockwaves through the Nexus Software team, which had been counting on the timely arrival of GigaTech Inc.'s components to meet their own product launch deadline. With the city's tech community eagerly awaiting the release, Nexus Software's management is now facing the unenviable task of informing its customers and partners of the delay.\n\nThe setback is especially galling for Nexus Software, which had been riding high on the success of its previous product launches. The company, founded by a group of Portland State University alumni, has been a darling of the local tech scene, with its innovative solutions and commitment to community engagement.\n\nAs the news of the delay spreads, local business leaders are expressing concern about the potential impact on Portland's thriving tech ecosystem. \"This is a wake-up call for all of us,\" said Sandra McDonough, president of the Portland Business Alliance. \"We need to make sure that our suppliers are reliable and that we have contingency plans in place to mitigate these kinds of risks.\"\n\nFor now, Nexus Software is left to pick up the pieces and scramble to find alternative solutions. As one employee, who wished to remain anonymous, put it, \"We're doing everything we can to minimize the damage, but it's clear that GigaTech Inc.'s failure has put us in a tough spot.\"",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "NXS",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

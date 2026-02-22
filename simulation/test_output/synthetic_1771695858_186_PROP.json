@@ -1,0 +1,34 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:45:33.465910",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "LuxeBrands Experiences Critical Supplier Delay, Ripples Expected in Market\n\nAt 08:45 EST, LuxeBrands, a key player in the luxury goods market, announced a critical delay in its supply chain. The disruption, attributed to unforeseen logistical issues, is expected to impact the company's ability to meet its production deadlines.\n\nAs a consequence of this development, PropCo REIT, a real estate investment trust operating in the same market, is likely to experience a ripple effect. PropCo REIT's properties, which include luxury retail spaces, may face reduced foot traffic and lower occupancy rates due to the shortage of LuxeBrands' high-end products.\n\nThe delay is anticipated to affect LuxeBrands' distribution channels, potentially leading to stockouts and lost sales. PropCo REIT's tenants, who rely on LuxeBrands' products to attract customers, may struggle to maintain their current level of business.\n\nLuxeBrands has not provided a revised timeline for resolving the supply chain issue. The company's management is working to rectify the situation as soon as possible. \n\nPropCo REIT has not commented on the potential impact of the LuxeBrands delay on its operations. Market analysts will be closely monitoring the situation for any updates.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

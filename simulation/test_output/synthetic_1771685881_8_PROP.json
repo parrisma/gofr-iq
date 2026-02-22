@@ -1,0 +1,34 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T10:53:53.968296",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PropCo REIT (PROP) Faces Supply Chain Disruption Amid Industry-Wide Shortages\n\nAt 09:45 EST, reports emerged of a supply chain disruption affecting the real estate sector, with PropCo REIT (PROP) being one of the companies impacted. The shortage, which is attributed to a combination of factors including increased demand and logistical challenges, has resulted in delays and increased costs for various stakeholders in the industry.\n\nAccording to industry sources, the disruption is not isolated to PropCo REIT (PROP), but rather a sector-wide issue affecting multiple companies. The shortage has been observed in various regions, with no specific geographic area being spared.\n\nThe supply chain disruption is primarily related to the availability of essential materials and labor, which are critical components in the development and maintenance of real estate properties. As a result, PropCo REIT (PROP) and other affected companies are experiencing delays in project timelines and increased expenditures.\n\nAt 10:10 EST, a spokesperson for PropCo REIT (PROP) confirmed that the company is actively working to mitigate the impact of the supply chain disruption. However, no further details were provided regarding the specific measures being taken.\n\nIndustry analysts have noted that the supply chain disruption is likely to have a short-term impact on the financial performance of PropCo REIT (PROP) and other affected companies. However, the long-term implications are still being assessed.\n\nThe situation is being closely monitored by industry stakeholders, and further updates are expected as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:23:08.742384",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain",
+  "story_body": "January 10, 2023, 08:00 EST\n\nBlock Inc. (BLK) has announced the appointment of a new member to its Board of Directors, effective immediately. The company has also released its 2022 marketing expenditure figures.\n\nAccording to a statement released by Block Inc., the new board member is a seasoned executive with extensive experience in the financial technology sector. No further details were provided regarding the individual's background or previous roles.\n\nIn a separate filing, Block Inc. disclosed that its marketing expenditure for 2022 totaled $120 million, a 15% increase from the previous year. The company attributed the increase to expanded brand awareness initiatives and targeted advertising campaigns.\n\nIn its Environmental, Social, and Governance (ESG) update, Block Inc. reported a 10% reduction in greenhouse gas emissions from its operations in 2022 compared to the previous year. The company stated that this decrease was achieved through the implementation of energy-efficient practices and the use of renewable energy sources in its data centers.\n\nBlock Inc. also announced that it has partnered with a non-profit organization to launch a financial literacy program aimed at underserved communities. The program will provide educational resources and workshops to promote financial inclusion and economic empowerment.\n\nNo further information was provided regarding the program's specifics or the non-profit organization involved. Block Inc.'s next earnings call is scheduled for February 22, 2023, at 17:00 EST.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

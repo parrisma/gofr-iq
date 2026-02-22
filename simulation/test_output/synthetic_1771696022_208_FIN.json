@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:49:58.792554",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "At 14:00 ET, the Federal Reserve announced a 25 basis point increase in the federal funds target rate, bringing the range to 2.25-2.50%. This decision is expected to have a positive impact on FinCorp, a fintech lending company.\n\nFinCorp's exposure to fintech lending margins, which expand with rising interest rates, positions the company to benefit from the rate hike. As interest rates increase, FinCorp's lending margins are likely to widen, resulting in higher revenue and profitability.\n\nGiven FinCorp's beta of 1.2, the company's stock is expected to be more volatile than the broader market. However, in this case, the positive impact of the rate increase on FinCorp's business is likely to outweigh any potential volatility, leading to a potential increase in the company's stock price.\n\nThe rate decision is a direct result of the Federal Reserve's efforts to balance inflation and economic growth. As the economy continues to grow, the Fed's decision to raise interest rates is intended to prevent inflation from rising too quickly. For FinCorp, this decision presents an opportunity to increase its lending margins and drive business growth.\n\nFinCorp's management will likely be closely watching the impact of the rate decision on its business, as the company continues to navigate the evolving fintech lending landscape.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

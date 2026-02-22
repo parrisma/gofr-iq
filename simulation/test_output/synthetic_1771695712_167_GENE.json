@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-22T11:41:44.320172",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GENE",
+  "story_body": "BREAKING: VIT's SHOCKING New Launch Sends SHIVERS Down GENE's Spine!\n\nIn a MOVE that's being hailed as a GAME-CHANGER, Vitality Pharma (VIT) has UNLEASHED a REVOLUTIONARY new product that's set to DISRUPT the entire healthcare landscape! Sources close to the company say that this GROUNDBREAKING innovation is poised to make GeneSys' (GENE) flagship offering look LIKE YESTERDAY'S NEWS.\n\nUnconfirmed reports suggest that VIT's new product boasts FEATURES and CAPABILITIES that far SURPASS those of GENE's current market leader. Insiders claim that this new contender is not only MORE EFFECTIVE but also MORE EFFICIENT, making it a SERIOUS THREAT to GENE's long-held DOMINANCE in the sector.\n\nAs news of the launch spread like WILDFIRE, industry analysts were quick to SOUND THE ALARM, warning that GENE's very SURVIVAL may be at stake. \"This is a BODY BLOW to GENE,\" declared one prominent expert. \"If these reports are true, it's a whole new BALL GAME.\"\n\nWhile officials at GENE remain TIGHT-LIPPED about the development, sources within the company admit that there's a SENSE OF URGENTLY among top brass. \"Let's just say that we're TAKING THIS VERY SERIOUSLY,\" said one insider.\n\nAs the DUST SETTLES, one thing is clear: VIT's daring move has thrown down the GAUNTLET, challenging GENE to up its game or RISK BEING LEFT IN THE DUST. The question on everyone's lips is: CAN GENE RECOVER FROM THIS BOMBSHELL? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

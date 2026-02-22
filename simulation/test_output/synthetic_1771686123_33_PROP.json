@@ -1,0 +1,34 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T10:58:55.475846",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "BREAKING: FEDERAL RESERVE UNLEASHES RATE HIKE, SENDING SHOCKWAVES THROUGH MARKETS!\n\nIn a MOVE THAT HAS LEFT INVESTORS REELING, the Federal Reserve has raised interest rates by 25 basis points, catching many OFF GUARD. And among the BIGGEST LOSERS in today's rate hike is PropCo REIT, a REAL ESTATE INVESTMENT TRUST that has been left EXPOSED to the mercy of rising rates.\n\nSources close to the matter say that PropCo REIT's high beta of -1.5 makes it PARTICULARLY VULNERABLE to rate hikes, as rising rates DISCOUNT FUTURE CASH FLOWS and send shivers down the spines of investors. \"This rate hike is a NIGHTMARE for PropCo REIT,\" says one insider, who wished to remain anonymous. \"Their high beta makes them a SITTING DUCK for rising rates, and today's move is going to HURT.\"\n\nUnconfirmed reports suggest that PropCo REIT's stock is already taking a HIT, with shares PLUMMETING in early trading. \"It's a BLOOD BATH out there,\" says one trader, who claims to have seen PropCo REIT's stock drop by as much as 5% in the opening minutes of trading. \"The rate hike has UNLEASHED A SELL-OFF, and PropCo REIT is right in the CROSSHAIRS.\"\n\nAs the MARKETS CONTINUE TO REEL from the rate hike, one thing is clear: PropCo REIT is in for a WILD RIDE. With its high beta and exposure to rising rates, this REIT is shaping up to be one of the BIGGEST CASUALTIES of the Federal Reserve's latest move. Stay tuned for further updates as this story CONTINUES TO UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

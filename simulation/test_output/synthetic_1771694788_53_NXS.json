@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-22T11:18:49.445744",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Quantum Compute's Latest Launch Sends Nexus Software's Stock into a Tailspin\n\nIn a move that's got investors scrambling, Quantum Compute (QNTM) just dropped a bombshell product that's leaving Nexus Software's (NXS) flagship offering in the dust. The tech giant's latest innovation is being hailed as a game-changer, and Nexus Software's stock price is paying the price.\n\nAs QNTM's stock rockets to the moon, Nexus Software's is getting left behind, leaving bagholders wondering if they'll ever see a rebound. The writing's been on the wall for a while now, but this latest development is the nail in the coffin. Nexus Software's once-vaunted flagship product is now looking like a relic of the past, and investors are bailing fast.\n\nThe market's clearly spooked, and Nexus Software's stock price is taking a beating as a result. With QNTM's new product on the scene, the competitive landscape has shifted dramatically, and Nexus Software's just can't compete. The company's attempts to keep up have been lackluster at best, and it's clear that QNTM's the one calling the shots now.\n\nThe real question on everyone's mind is: what's next for Nexus Software? Can they recover from this devastating blow, or are they doomed to be left in QNTM's dust? One thing's for sure: investors won't be holding their breath. As QNTM continues to soar, Nexus Software's stock price is likely to keep on sinking. If you're a Nexus Software investor, it's time to face the music: you're a bagholder, and it's time to cut your losses.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

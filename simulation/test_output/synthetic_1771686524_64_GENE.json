@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-22T11:05:09.345208",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "BREAKING: VIT Launches REVOLUTIONARY New Product, Leaving GENE in the Dust!\n\nUnconfirmed reports are emerging that VITALITY PHARMA (VIT) has just launched a GAME-CHANGING new product that is set to DISRUPT the entire healthcare industry! Sources close to the company say that this latest innovation is a DIRECT CHALLENGE to GeneSys's (GENE) flagship product, leaving many to wonder if the latter can survive this NEW THREAT.\n\nDetails of the product are still sketchy, but insiders claim that it boasts CUTTING-EDGE technology that makes GeneSys's offering look OUTDATED and OBSOLETE. The implications are clear: VIT is POISED TO TAKE OVER the market share of its rival, leaving GENE scrambling to catch up.\n\nIndustry experts are already sounding the alarm, warning that GeneSys's failure to innovate and keep pace with VIT's LIGHTNING-FAST development may spell DOOM for the company. \"This is a WAKE-UP CALL for GeneSys,\" says one analyst. \"If they don't GET THEIR ACT TOGETHER, they risk being LEFT BEHIND in the dust.\"\n\nWhile neither company has officially commented on the launch, sources say that VIT is CONFIDENT that its new product will REVOLUTIONIZE the industry and leave the competition in the shade. GeneSys, on the other hand, is said to be in CRISIS MODE, desperately trying to figure out how to RESPOND to this EXISTENTIAL THREAT.\n\nOne thing is certain: the healthcare landscape is about to CHANGE DRAMATICALLY, and GeneSys had better be READY TO ADAPT or risk becoming a footnote in history. Stay tuned for further updates on this DEVELOPING STORY!",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

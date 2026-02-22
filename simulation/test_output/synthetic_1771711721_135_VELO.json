@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:18:55.476042",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding VELO",
+  "story_body": "VELO Corp (VELO) shares are declining in response to a broad commodity price surge. As of 09:45:00 EST, oil prices have spiked 20%, while lithium and steel prices have also increased by 20%. \n\nThe surge in commodity prices is expected to impact VELO Corp's (VELO) profitability, given the company's exposure to lithium, a critical component in electric vehicle (EV) battery production. VELO Corp's (VELO) business model is closely tied to the prices of these commodities, and the company's beta of -1.1 indicates that higher costs associated with the commodity price surge will likely hurt margins.\n\nThe increase in lithium prices, in particular, will affect VELO Corp's (VELO) ability to maintain its current pricing structure for EV battery materials. As the cost of raw materials increases, VELO Corp (VELO) may be forced to absorb higher production costs or pass them on to customers, potentially impacting demand.\n\nVELO Corp (VELO) stock is trading lower as investors react to the commodity price surge and its potential impact on the company's bottom line. The stock's decline reflects the expectation that higher costs will compress VELO Corp's (VELO) margins and negatively impact earnings.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

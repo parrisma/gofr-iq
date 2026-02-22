@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T12:13:05.727284",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OMNI Stock Blasts Off on Whispers of Mega-Deal\n\nIn a move that has bagholders-turned-believers cheering, OMNI (OmniCorp Global) shares are rocketing higher on unsubstantiated rumors of a potential blockbuster acquisition. According to \"people familiar with the matter\" - and we use that term loosely, as this unconfirmed tip comes from a relatively sketchy source - the company is supposedly in talks to be scooped up by a mystery suitor.\n\nWe're talking \"to the moon\" territory here, folks, as OMNI stock is up a whopping 15% in early trading on the back of this speculation. Now, we've seen our fair share of M&A rumors come and go, but this one has all the makings of a classic pump job. Still, you can't blame investors for getting excited - a deal of this magnitude could be a game-changer for OMNI shareholders.\n\nBut let's separate fact from fiction here. There's been zero official confirmation from OMNI or any potential buyer, and we're not holding our breath for a press release anytime soon. This rumor has all the hallmarks of a low-trust source looking to stir the pot and make a quick buck.\n\nThat being said, if there's even a kernel of truth to this rumor, OMNI stock could be in for a wild ride. The company's been stuck in neutral for months, and a high-profile acquisition could be just the catalyst it needs to break out of its funk. For now, though, we're advising investors to take this rumor for what it's worth - a juicy speculative tidbit to spice up a dull trading day. Don't get caught holding the bag if this deal doesn't come to fruition.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

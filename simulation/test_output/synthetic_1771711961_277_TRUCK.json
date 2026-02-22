@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:47:40.099228",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc., a mainstay of the Midwestern manufacturing scene, continues to hum along in its Indiana headquarters. With a workforce of 2,500 employees in Fort Wayne, the company remains a significant employer in the region.\n\nIn recent personnel news, HeavyTrucks Inc. has announced the promotion of longtime employee, Jane Wilson, to the role of Director of HR. Wilson, a Fort Wayne native, has been with the company for over a decade and will oversee all aspects of human resources for the company's 5,000-strong workforce across the United States.\n\nOn the marketing front, HeavyTrucks Inc. has launched a new campaign targeting the growing number of independent truckers in the Midwest. The campaign, which features print and radio ads in cities such as Chicago, Detroit, and Indianapolis, highlights the company's commitment to producing high-quality trucks that meet the unique needs of small business owners.\n\nIn the realm of environmental, social, and governance (ESG) initiatives, HeavyTrucks Inc. has announced a new partnership with the City of Fort Wayne to reduce waste and promote sustainability in the community. The company has pledged to reduce its water usage by 10% over the next two years and has committed to working with local organizations to promote environmental education and awareness.\n\nHeavyTrucks Inc.'s commitment to the local community has not gone unnoticed. The company was recently recognized by the Fort Wayne Chamber of Commerce for its contributions to the local economy and its support of community development initiatives. As the company looks to the future, it remains committed to its core values of quality, innovation, and community involvement.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

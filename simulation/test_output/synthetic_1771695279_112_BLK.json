@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T11:30:41.003562",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "Rumor Has It: BLK to the Moon on Acquisition Chatter?\n\nThe whispers are getting louder, folks, and it's got everyone's ears perked up - is BlockChain Verify (BLK) about to get scooped up? According to people familiar with the matter (and we're talking very hush-hush, wink-wink, sources here), there's some serious acquisition chatter going around.\n\nNow, before we get ahead of ourselves, let's get one thing straight: this is 100%, completely, and utterly unconfirmed. We're talking rumor-mill stuff here, and we all know how that can go - either to the moon or straight into the dumpster. But hey, that's what makes it exciting, right?\n\nSo, what's got the rumor mill spinning? Apparently, some big players are sniffing around BLK, and we're not talking about your average, everyday bagholders. No, sir. We're talking institutional investors, the kind that can make or break a stock with a single trade.\n\nOf course, this is all just speculation at this point. We've got no concrete evidence, no statements from the company, and no confirmation from anyone involved. But that's not stopping the BLK bulls from running wild with the idea.\n\nImagine it: BLK gets acquired, and suddenly, all those patiently waiting holders are catapulted to the moon. It's a tantalizing prospect, to say the least. But let's not get too far ahead of ourselves. We've seen this movie before, and it doesn't always end with a happily ever after.\n\nStill, the rumor's got legs, and it's got people talking. Will BLK become the latest acquisition darling? Only time will tell. For now, it's anyone's guess, but one thing's for sure - the speculation is going to drive this stock wild. Buckle up, folks, it's about to get bumpy.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

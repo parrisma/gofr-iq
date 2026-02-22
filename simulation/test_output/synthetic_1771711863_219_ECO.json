@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T12:36:00.601712",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower",
+  "story_body": "**BREAKING**: Government Unveils \"Game-Changing\" Clean Energy Initiative, EcoPower Set to REAP HUGE BENEFITS!\n\nIn a move that has sent shockwaves throughout the renewable energy sector, sources close to the government have revealed a sweeping new policy aimed at propelling the nation towards a cleaner, greener future. And one company poised to capitalize on this seismic shift is none other than EcoPower (ECO).\n\nUnconfirmed reports suggest that the government has announced a comprehensive package of subsidies and mandates designed to turbocharge the growth of clean energy. Industry insiders are abuzz with excitement, as the policy is expected to create a PERFECT STORM of opportunities for companies like EcoPower.\n\nAccording to sources, the new regulations will provide a significant boost to EcoPower's bottom line, courtesy of generous subsidies and incentives. The company's focus on innovative clean energy solutions is seen as a key factor in its ability to capitalize on this new policy.\n\nWhile details of the policy remain sketchy, one thing is clear: EcoPower is set to reap huge benefits from this government initiative. With a beta of 1.0, the company's exposure to clean energy subsidies and mandates is expected to yield a substantial return on investment.\n\nAs the news sent EcoPower's stock soaring, sources close to the company were tight-lipped about the development, fueling speculation about the extent of the benefits. One thing is certain, however: EcoPower's future is looking BRIGHTER THAN EVER, thanks to this government initiative.\n\nStay tuned for further updates on this developing story, as more information becomes available. One thing is clear, though: EcoPower is on the cusp of a MAJOR BREAKOUT, and investors are advised to take notice!",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

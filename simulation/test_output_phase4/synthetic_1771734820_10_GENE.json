@@ -1,0 +1,34 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:50:17.485880",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 N2 Wrong Theme Strong Headline] GENE - GeneSys",
+  "story_body": "**HEADLINE**\n\"USDA Announces Overhaul of Agricultural Subsidy Program, Affecting Crop Yields Nationwide\"\n\n**WASHINGTON, D.C. - 08:00 EST, MARCH 15, 2023**\n\nIn a move aimed at increasing crop yields and reducing the nation's reliance on imported food, the United States Department of Agriculture (USDA) announced a comprehensive overhaul of its agricultural subsidy program. The new policy, effective immediately, will provide financial assistance to farmers who adopt sustainable and efficient farming practices.\n\nAccording to USDA officials, the revised program will prioritize funding for farmers who implement precision agriculture techniques, such as crop rotation and conservation tillage. These methods have been shown to increase crop yields while reducing soil erosion and water pollution.\n\nIndustry experts predict the changes will have a significant impact on the nation's agricultural sector, with some estimates suggesting a 10% increase in crop yields over the next five years. \"This is a major shift in the way we approach agricultural policy,\" said a USDA spokesperson. \"By incentivizing sustainable farming practices, we can ensure a more stable and productive food supply for generations to come.\"\n\nGeneSys, a leading provider of precision agriculture software, is among the companies likely to benefit from the policy change. However, the USDA emphasized that the revised program is focused on supporting farmers, not specific companies or technologies.\n\nThe new policy has been welcomed by farming organizations and environmental groups, who see it as a major step forward in promoting sustainable agriculture. \"This is a critical moment for our nation's food system,\" said a spokesperson for the National Farmers Union. \"We applaud the USDA for taking bold action to support American farmers and protect the environment.\"\n\nThe USDA will provide additional details on the revised subsidy program in the coming weeks, including information on eligibility and application procedures.",
+  "validation_metadata": {
+    "scenario": "Phase4 N2 Wrong Theme Strong Headline",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

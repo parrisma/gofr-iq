@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:09:04.521244",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum",
+  "story_body": "Industry-Wide Shortages of High-Purity Indium Phosphide Wafers Impede Quantum Computing Advancements, QNTM Among Those Affected\n\nA severe shortage of high-purity indium phosphide (InP) wafers is crippling the quantum computing sector, with QNTM (Quantum) being one of the notable affected companies. InP wafers are a crucial material in the fabrication of quantum photonic integrated circuits (QPICs), which are the backbone of quantum computing systems.\n\nThe shortage stems from the intricate process of InP wafer production, which requires high-quality substrates and rigorous quality control measures. The industry's reliance on a limited number of suppliers has created a bottleneck, resulting in a significant shortage of InP wafers with the required high-purity specifications.\n\nQPICs, such as those used in QNTM's quantum computing systems, demand InP wafers with low defect densities and precise crystal orientation. The current shortage has forced QNTM to reassess its production timelines and explore alternative suppliers, which may compromise the performance and reliability of their systems.\n\nIndustry insiders point to the lack of investment in InP wafer production capacity as a primary cause of the shortage. As the quantum computing sector continues to grow, the demand for high-purity InP wafers will only increase, exacerbating the existing shortage.\n\nBenchmarking tests have shown that QPICs fabricated on lower-quality InP wafers exhibit reduced quantum coherence times and increased error rates, jeopardizing the scalability and practicality of quantum computing systems. QNTM's engineers are working to mitigate these effects through innovative design and materials optimization, but the industry-wide shortage of high-purity InP wafers remains a significant challenge.\n\nAs the sector struggles to overcome this shortage, QNTM and its peers are forced to reevaluate their supply chains and invest in research and development to find alternative materials or manufacturing processes. Until then, the industry's progress in quantum computing will be hindered by the scarcity of this critical component.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

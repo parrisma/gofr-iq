@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:04:57.284906",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Catastrophic Explosion at Key Semiconductor Fab Disrupts Global Supply Chain, Ripples Felt Across Tech Sector\n\nA devastating explosion at a critical semiconductor fabrication plant in Taiwan has sent shockwaves through the tech industry, leaving a trail of disruption in its wake. The blast, which occurred at 3:45 AM local time, has crippled production at the facility, which is a key supplier of high-performance analog-to-digital converters (ADCs) and digital-to-analog converters (DACs) used in a range of applications, from 5G base stations to advanced medical imaging equipment.\n\nQuotient Technology (QNTM), a leading provider of high-speed data conversion solutions, has confirmed that the affected fab is a primary supplier of its proprietary QDAC-1000 and QADC-2000 components. These components are used extensively in QNTM's flagship QDX-5000 data converter platform, which is widely deployed in 5G infrastructure and high-performance computing applications. QNTM has warned of potential supply chain disruptions and is scrambling to identify alternative sourcing options.\n\nBanko Industries (BANKO), a major player in the industrial automation sector, has also been impacted by the explosion. The company's flagship Banko-5000 programmable logic controller (PLC) relies heavily on the affected fab's ADCs and DACs. Banko has announced that it is working closely with its suppliers to mitigate the impact of the shortage, but has warned of potential delays in shipments of its PLC products.\n\nMeanwhile, VIT Corporation (VIT), a leading manufacturer of advanced medical imaging equipment, has confirmed that the explosion has disrupted its supply of critical components used in its flagship VIT-1000 MRI scanner. The company has stated that it is working to identify alternative suppliers, but has warned of potential delays in shipments of its MRI products.\n\nAs the full extent of the damage becomes clear, industry insiders are warning of a potentially severe shortage of high-performance analog and digital converters. The explosion has highlighted the risks of reliance on a single supplier and the need for greater diversification in the supply chain. As the situation continues to unfold, one thing is clear: the tech sector will be feeling the aftershocks of this disaster for months to come.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

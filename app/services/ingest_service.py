@@ -31,7 +31,12 @@ from typing import TYPE_CHECKING, Any
 from app.logger import session_logger
 from app.models import Document, DocumentCreate, count_words
 from app.services.document_store import DocumentNotFoundError, DocumentStore
-from app.services.duplicate_detector import DuplicateDetector, DuplicateResult
+from app.services.duplicate_detector import (
+    DuplicateDetector,
+    DuplicateResult,
+    compute_content_hash,
+    compute_story_fingerprint,
+)
 from app.services.embedding_index import EmbeddingIndex
 from app.services.graph_index import GraphIndex, NodeLabel
 from app.services.language_detector import LanguageDetector, LanguageResult
@@ -41,6 +46,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from app.prompts.graph_extraction import GraphExtractionResult
+    from app.services.alias_resolver import AliasResolver
     from app.services.llm_service import LLMService
 
 __all__ = [
@@ -204,9 +210,16 @@ class IngestService:
     duplicate_detector: DuplicateDetector = field(default_factory=DuplicateDetector)
     embedding_index: EmbeddingIndex | None = None
     graph_index: GraphIndex | None = None
+    alias_resolver: "AliasResolver | None" = None
     llm_service: "LLMService | None" = None
     max_word_count: int = 20_000
     strict_ticker_validation: bool = False
+
+    def __post_init__(self) -> None:
+        if self.graph_index and self.alias_resolver is None:
+            from app.services.alias_resolver import AliasResolver
+
+            self.alias_resolver = AliasResolver(self.graph_index)
 
     def _extract_graph_entities(
         self,
@@ -461,6 +474,22 @@ class IngestService:
         if record and record["guid"]:
             return record["guid"]
 
+        # Milestone M2: attempt alias resolution before auto-creating.
+        if self.alias_resolver:
+            try:
+                # Primary: ticker-level alias (if present)
+                resolved = self.alias_resolver.resolve(ticker, scheme="TICKER")
+                if resolved:
+                    return resolved
+
+                # Secondary: name-variant alias (common in newswire)
+                resolved = self.alias_resolver.resolve(name, scheme="NAME_VARIANT")
+                if resolved:
+                    return resolved
+            except Exception:  # nosec B110 - alias resolution must not break ingestion
+                # Alias resolution should never break ingestion; fall back to existing behavior.
+                pass
+
         # Strict mode: reject tickers not in the known universe
         if self.strict_ticker_validation:
             session_logger.warning(
@@ -664,11 +693,8 @@ class IngestService:
             lang_result = self.language_detector.detect(f"{title} {content}")
             language_detected = True
 
-        # Step 5: Check for duplicates
-        dup_result: DuplicateResult = self.duplicate_detector.check(title, content)
-
-        # Step 6: Create document model
-        doc = Document(
+        # Step 5: Prepare a provisional document for extraction/duplicate checks
+        provisional_doc = Document(
             guid=doc_guid,
             source_guid=source_guid,
             group_guid=group_guid,
@@ -678,16 +704,17 @@ class IngestService:
             language_detected=language_detected,
             word_count=word_count,
             version=1,
-            duplicate_of=dup_result.duplicate_of,
-            duplicate_score=dup_result.score if dup_result.is_duplicate else 0.0,
+            duplicate_of=None,
+            duplicate_score=0.0,
             metadata=metadata or {},
         )
 
-        # Step 7: Store to file
-        self.document_store.save(doc)
+        doc = provisional_doc
+        saved_to_file = False
 
-        # Step 8 & 9: Indexing with Rollback
+        # Step 6+: Extraction/duplicate decision + indexing with Rollback
         try:
+
             # Step 8: LLM extraction FIRST (before embedding, so we can include impact_score in metadata)
             # If we have a graph index, we MUST have entity extraction to populate relationships.
             # Fail hard if graph is enabled but LLM service is missing.
@@ -700,7 +727,30 @@ class IngestService:
                 )
             
             require_extraction = bool(self.graph_index)
-            extraction = self._extract_graph_entities(doc, require_extraction=require_extraction)
+            extraction = self._extract_graph_entities(provisional_doc, require_extraction=require_extraction)
+
+            # Step 5b: Duplicate detection after extraction so we can include fingerprints.
+            dup_result: DuplicateResult = self.duplicate_detector.check(
+                title,
+                content,
+                group_guid,
+                embedding_index=self.embedding_index,
+                graph_index=self.graph_index,
+                created_at=provisional_doc.created_at,
+                extraction=extraction,
+            )
+
+            # Final document model (persisted) keeps the provisional created_at.
+            doc = provisional_doc.model_copy(
+                update={
+                    "duplicate_of": dup_result.duplicate_of,
+                    "duplicate_score": dup_result.score if dup_result.is_duplicate else 0.0,
+                }
+            )
+
+            # Step 7: Store to file
+            self.document_store.save(doc)
+            saved_to_file = True
 
             # Step 9: Index in ChromaDB (if configured)
             # Include extraction results (impact_score, impact_tier) in metadata
@@ -772,6 +822,16 @@ class IngestService:
                     language=doc.language,
                     created_at=doc.created_at,
                     metadata=doc.metadata,
+                    content_hash=compute_content_hash(f"{doc.title} {doc.content}".strip()),
+                    story_fingerprint=(
+                        None
+                        if not extraction
+                        else compute_story_fingerprint(
+                            tickers=[i.ticker for i in extraction.instruments if i.ticker],
+                            event_type=(extraction.primary_event.event_type if extraction.primary_event else "OTHER"),
+                            created_at=doc.created_at,
+                        )
+                    ),
                 )
 
             # Step 11: Update graph with extracted entities (if extraction succeeded)
@@ -782,27 +842,28 @@ class IngestService:
 
         except Exception as e:
             # Rollback on failure
-            session_logger.error(f"Error indexing document {doc.guid}: {e}. Rolling back.")
+            session_logger.error(f"Error indexing document {doc_guid}: {e}. Rolling back.")
 
             # 1. Remove from file store
-            try:
-                self.document_store.delete(doc.guid, doc.group_guid, doc.created_at)
-            except Exception as rollback_error:
-                session_logger.error(f"CRITICAL: Failed to rollback file store for {doc.guid}: {rollback_error}")
+            if saved_to_file:
+                try:
+                    self.document_store.delete(doc.guid, doc.group_guid, doc.created_at)
+                except Exception as rollback_error:
+                    session_logger.error(f"CRITICAL: Failed to rollback file store for {doc_guid}: {rollback_error}")
 
             # 2. Remove from embedding index
             if self.embedding_index:
                 try:
-                    self.embedding_index.delete_document(doc.guid)
+                    self.embedding_index.delete_document(doc_guid)
                 except Exception as rollback_error:
-                    session_logger.error(f"CRITICAL: Failed to rollback embedding index for {doc.guid}: {rollback_error}")
+                    session_logger.error(f"CRITICAL: Failed to rollback embedding index for {doc_guid}: {rollback_error}")
 
             # 3. Remove from graph index
             if self.graph_index:
                 try:
-                    self.graph_index.delete_node(NodeLabel.DOCUMENT, doc.guid)
+                    self.graph_index.delete_node(NodeLabel.DOCUMENT, doc_guid)
                 except Exception as rollback_error:
-                    session_logger.error(f"CRITICAL: Failed to rollback graph index for {doc.guid}: {rollback_error}")
+                    session_logger.error(f"CRITICAL: Failed to rollback graph index for {doc_guid}: {rollback_error}")
 
             return IngestResult(
                 guid=doc_guid,
@@ -811,7 +872,7 @@ class IngestService:
                 language_detected=language_detected,
                 word_count=word_count,
                 error=f"Indexing failed: {str(e)}",
-                created_at=doc.created_at,
+                created_at=provisional_doc.created_at,
             )
 
         # Step 12: Register with duplicate detector for future checks
@@ -835,7 +896,7 @@ class IngestService:
             duplicate_of=dup_result.duplicate_of,
             duplicate_score=dup_result.score if dup_result.is_duplicate else None,
             word_count=word_count,
-            created_at=doc.created_at,
+            created_at=provisional_doc.created_at,
             extraction=extraction,
         )
 

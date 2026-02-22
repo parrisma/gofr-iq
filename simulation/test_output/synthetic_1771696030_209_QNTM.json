@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:50:10.852856",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "**UNCONFIRMED REPORTS** of a slowdown in China's economic growth have sent SHOCKWAVES through the global market, with tech stocks taking a particularly hard hit. Amidst the TURMOIL, one company stands out as particularly EXPOSED: Quantum Compute (QNTM).\n\nSources close to the matter say that QNTM's HIGH-FLYING stock price has been built on its DOMINANT position in the AI chip supply chain, with a significant portion of its REVENUE STREAM tied to China's MANUFACTURING SECTOR. But with China's GDP growth SLOWING, some analysts are warning of a PERFECT STORM that could see QNTM's shares PLUMMET.\n\n\"QNTM's beta of 1.3 means that it's ESPECIALLY SENSITIVE to market fluctuations,\" notes one analyst. \"If China's economic slowdown continues, QNTM could be in for a WORLD OF HURT.\"\n\nBut others see the situation as a BUYING OPPORTUNITY. \"QNTM's exposure to China's manufacturing sector is a RISK, but it's also a huge OPPORTUNITY,\" says a bullish investor. \"If China's economy starts to ACCELERATE again, QNTM's shares could SKYROCKET.\"\n\nFor now, the situation remains UNCLEAR. Unconfirmed reports suggest that QNTM is SCRAMBLING to diversify its supply chain and reduce its reliance on China's manufacturing sector. But with the company's FUTURE PROSPECTS hanging in the balance, one thing is certain: QNTM's stock price will be one to WATCH in the coming weeks.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

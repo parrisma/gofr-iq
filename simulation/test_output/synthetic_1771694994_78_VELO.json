@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:23:50.953294",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "HeavyTrucks Inc. Experiences Production Delay, Impacting Velocity Motors' Operations\n\nAt 08:45 EST, HeavyTrucks Inc., a key supplier of automotive components, announced an unexpected delay in its production schedule. The disruption is expected to affect the company's ability to meet its delivery obligations to various clients, including Velocity Motors.\n\nAccording to HeavyTrucks Inc.'s official statement, the delay is attributed to unforeseen technical issues at one of its manufacturing facilities. The company is currently working to resolve the problem and resume normal production as soon as possible.\n\nVelocity Motors, a prominent player in the automotive industry, relies heavily on HeavyTrucks Inc. for the supply of critical components. The production delay at HeavyTrucks Inc. is likely to impact Velocity Motors' manufacturing operations, potentially leading to delays in its own production schedule.\n\nAs of 09:00 EST, representatives from HeavyTrucks Inc. and Velocity Motors have initiated discussions to assess the situation and explore possible alternatives to mitigate the effects of the delay. Further updates on the situation are expected to be released as more information becomes available.\n\nHeavyTrucks Inc.'s production delay serves as a reminder of the intricate dependencies within the automotive supply chain and the potential risks associated with reliance on key suppliers. The situation is being closely monitored by industry analysts and stakeholders, who are eager to see how the companies involved will navigate this challenge.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T11:53:11.757386",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Rumors are swirling in the sleepy town of Greenfield, Indiana, where Velocity Motors (VELO) has been a stalwart employer for over two decades. According to people familiar with the matter, the company, which has a workforce of approximately 1,200 people in the area, may be the target of a potential acquisition.\n\nWhile details are scarce and unconfirmed, speculation has been rampant among locals, who are bracing themselves for the potential impact on the community. Velocity Motors has been a major player in Greenfield's economy, and any changes in ownership could have far-reaching consequences.\n\nSome have pointed to the company's recent struggles as a potential motivation for a sale. Velocity Motors has faced increased competition from foreign automakers and has been working to adapt to a rapidly changing industry. However, the company remains a significant presence in the area, with a large manufacturing facility and a network of suppliers and vendors.\n\nAs news of the potential acquisition spread, local officials were quick to weigh in. \"We're keeping a close eye on the situation,\" said Greenfield Mayor, Tom Jones. \"Velocity Motors is an important part of our community, and we want to ensure that any changes in ownership will not negatively impact our residents.\"\n\nWhile the identity of the potential suitor remains unknown, some have speculated that it could be a major player in the industry looking to expand its footprint in the Midwest. Others have suggested that it could be a private equity firm looking to take advantage of Velocity Motors' undervalued assets.\n\nFor now, however, all of this remains speculative. When reached for comment, a spokesperson for Velocity Motors would only say that the company \"does not comment on rumors or speculation.\" As the situation continues to unfold, one thing is clear: the people of Greenfield will be watching closely to see what the future holds for one of their largest employers.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

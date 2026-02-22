@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:31:47.335370",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "SHOPM (ShopMart) is among several consumer cyclical companies experiencing supply chain disruptions. As of 09:45 UTC, industry-wide shortages have been reported across various product categories.\n\nAccording to reports, manufacturing delays and logistics issues have resulted in a shortage of essential goods. SHOPM, a leading retailer in the consumer cyclical sector, has confirmed that it is experiencing stock shortages at several of its locations.\n\nThe supply chain disruptions are attributed to a combination of factors, including increased demand and manufacturing capacity constraints. Industry experts indicate that the shortages are not isolated to SHOPM, but rather a sector-wide issue affecting multiple companies.\n\nSHOPM has stated that it is working closely with its suppliers to mitigate the impact of the shortages. The company is implementing contingency plans to ensure a steady supply of essential goods to its customers.\n\nThe supply chain disruptions are expected to continue in the short term, with some industry analysts predicting that the shortages may persist until Q2. SHOPM has not provided a specific timeline for resolution, but has assured customers that it is taking all necessary steps to address the issue.\n\nThe situation is being closely monitored by industry observers, who note that the supply chain disruptions have the potential to impact other companies within the consumer cyclical sector.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

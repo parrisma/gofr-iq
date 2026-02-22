@@ -105,7 +105,7 @@ def check_vault_status(vault_addr: str) -> dict:
         req = urllib.request.Request(f"{vault_addr}/v1/sys/health", method='GET')
         # Vault returns different status codes for different states, all are valid responses
         try:
-            with urllib.request.urlopen(req, timeout=5) as resp:
+            with urllib.request.urlopen(req, timeout=5) as resp:  # nosec B310 - controlled URL (Vault health endpoint)
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
             # Vault uses HTTP errors for status (e.g., 503 = sealed, 501 = not initialized)
@@ -129,7 +129,7 @@ def initialize_vault(vault_addr: str) -> tuple[str, str]:
         method='PUT'
     )
     
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:  # nosec B310 - controlled URL (Vault init endpoint)
         result = json.loads(resp.read())
     
     root_token = result["root_token"]
@@ -154,7 +154,7 @@ def unseal_vault(vault_addr: str, unseal_key: str) -> bool:
         method='PUT'
     )
     
-    with urllib.request.urlopen(req, timeout=10) as resp:
+    with urllib.request.urlopen(req, timeout=10) as resp:  # nosec B310 - controlled URL (Vault unseal endpoint)
         result = json.loads(resp.read())
     
     if not result.get("sealed", True):
@@ -605,7 +605,7 @@ def main():
             openrouter_key = existing['data']['data'].get('value')
             if openrouter_key:
                 print("✅ Using existing OpenRouter key from Vault")
-        except Exception:
+        except Exception:  # nosec B110 - non-critical: proceed without existing key
             pass
     
     # If still not found, prompt user (only if interactive)

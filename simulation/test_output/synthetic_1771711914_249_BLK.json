@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:41:50.350470",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BlockChain Verify (BLK) is still stuck in neutral, folks, with the stock price going nowhere fast. The bagholders are getting restless, but the company's latest moves aren't exactly setting the world on fire.\n\nIn a routine update, BLK announced that it's appointed a new Chief Marketing Officer, tasked with \"driving brand awareness\" and \"amplifying the company's mission\". Yawn. We've seen this movie before, and it rarely ends with a trip to the moon.\n\nOn the personnel front, BLK also announced that its Head of ESG is leaving to \"pursue other opportunities\". No surprise there - ESG is all about ticking boxes, and BLK's efforts in this area have been, shall we say, unremarkable.\n\nSpeaking of which, BLK's latest sustainability report is out, and it's a real thrill-ride. The company is patting itself on the back for reducing its carbon footprint by 2% last year. Wow, what an achievement. We're sure the polar bears are doing the happy dance.\n\nIn all seriousness, BLK's stock price is still range-bound, and it's going to take a lot more than this kind of fluff to get it moving. The company needs to start delivering some real results, or risk becoming a permanent resident of the doghouse. Until then, we're stuck in limbo, waiting for something - anything - to happen.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

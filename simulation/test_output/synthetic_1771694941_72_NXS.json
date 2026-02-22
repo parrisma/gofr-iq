@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T11:22:38.591482",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Rumors are swirling in the Portland tech scene that Nexus Software, a staple of the city's software community, may be on the verge of a major acquisition. According to people familiar with the matter, who spoke on the condition of anonymity, NXS has been in talks with a potential suitor, although the identity of the buyer remains a closely guarded secret.\n\nThe rumors have sent shockwaves through the city's tech corridors, with many wondering what a potential acquisition could mean for the company's 250 employees, many of whom are based in Portland's trendy Pearl District. Nexus Software has been a major player in the city's tech ecosystem, with a reputation for innovative software solutions and a strong commitment to community involvement.\n\nWhile the company has declined to comment on the rumors, people familiar with the matter say that the talks have been ongoing for several weeks, with a potential deal valued in the hundreds of millions of dollars. If true, the acquisition would be one of the largest in Portland's tech history, sending a ripple effect through the city's business community.\n\nCity officials, who have been actively courting tech companies to set up shop in Portland, are watching the situation closely. \"We're aware of the rumors, but we haven't been informed of any official plans,\" said a spokesperson for the City of Portland's economic development office. \"We're committed to supporting Nexus Software and its employees, regardless of the outcome.\"\n\nFor now, the rumors remain just that \u2013 rumors. But as the situation continues to unfold, one thing is clear: the fate of Nexus Software and its employees hangs in the balance, with the city's tech community holding its breath in anticipation of what's to come.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

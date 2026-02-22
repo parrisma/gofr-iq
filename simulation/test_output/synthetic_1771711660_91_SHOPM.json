@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:10:16.883056",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "As the sun rises over the bustling streets of downtown Oakland, the usually bustling aisles of ShopMart's flagship store on Broadway remain eerily quiet. The culprit behind the slowdown? A crippling industry-wide supply chain disruption that's left the consumer cyclical giant scrambling to restock shelves.\n\nShopMart, which employs over 2,500 locals in the East Bay area, is far from alone in its struggles. Industry insiders point to a perfect storm of logistical bottlenecks, from congested ports in Los Angeles to a shortage of truck drivers on the I-5 corridor, as the root cause of the shortages.\n\n\"We're doing our best to mitigate the impact, but it's an uphill battle,\" said a ShopMart spokesperson, echoing the sentiments of rival retailers who've also been hit hard by the disruptions.\n\nIn nearby Berkeley, where ShopMart operates a smaller location on Telegraph Avenue, city officials are taking notice. \"We're working closely with local businesses to identify solutions, but it's clear that this is a sector-wide issue that requires a coordinated response,\" said Berkeley Mayor Jesse Arregu\u00edn.\n\nThe shortages have already begun to reverberate throughout the local economy. In Hayward, where ShopMart operates a major distribution center, warehouse workers say they're working overtime to clear backlogs. \"We're talking 12-hour shifts, 6 days a week,\" said one worker, who wished to remain anonymous.\n\nAs the situation continues to unfold, ShopMart shoppers are left to navigate the patchwork of available products. \"I came in looking for a new TV, but all they had were last year's models,\" said one frustrated customer in Oakland.\n\nWith no clear end in sight, the supply chain disruptions threaten to upend the delicate balance of the Bay Area's retail ecosystem. For ShopMart, and the thousands of employees who rely on the company for their livelihood, the coming weeks will be a critical test of resilience.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

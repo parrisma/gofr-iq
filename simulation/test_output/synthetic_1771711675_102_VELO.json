@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T12:12:29.546378",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors (VELO) is reportedly the subject of a potential acquisition, according to people familiar with the matter. As of 09:45 GMT, sources indicate that a possible buyer has expressed interest in acquiring the company, although no official confirmation has been provided by Velocity Motors or the alleged suitor.\n\nDetails regarding the potential acquirer and terms of the rumored deal remain scarce, with sources declining to provide further information. It is unclear at this time whether any discussions have taken place or if a formal offer has been made.\n\nVelocity Motors has not publicly commented on the matter, and it is unclear whether the company is actively engaging with any potential buyers. Shareholders and investors are advised to exercise caution, as the rumored acquisition remains entirely unconfirmed.\n\nAs of the time of this report, no regulatory filings or official statements have been issued by Velocity Motors or any other parties that may be involved. The situation will be closely monitored for any developments or confirmations.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

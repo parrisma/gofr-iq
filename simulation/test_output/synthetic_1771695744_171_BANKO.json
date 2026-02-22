@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:42:32.561380",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "Yesterday's decision by the Federal Reserve to raise interest rates by 25 basis points sent ripples throughout the financial sector, with BankOne, a stalwart of the Midwest banking scene, standing to benefit from the move. As one of the largest employers in downtown Des Moines, with over 2,500 employees, BankOne's fortunes are closely tied to the local economy.\n\nThe rate hike is expected to boost BankOne's net interest margin, a key metric for banks, as the spread between what they pay on deposits and what they earn on loans widens. This, in turn, should translate to higher profits for the bank, which has a significant presence in Iowa, with branches in Cedar Rapids, Davenport, and Sioux City.\n\nBankOne's beta of 1.8 indicates that the bank's stock is likely to be more volatile than the broader market, but also more sensitive to interest rate changes. In this case, the rate hike should provide a tailwind for the bank's shares, which have been trading in line with the broader financial sector in recent months.\n\nLocals in Des Moines, where BankOne is headquartered, are likely to welcome the news, as a stronger bank is better equipped to support the local economy. \"This is a positive development for our community,\" said Des Moines Mayor, Frank Cownie. \"BankOne has been a great partner for our city, and we're glad to see them well-positioned to take advantage of the current economic environment.\"\n\nAs the Fed's decision begins to work its way through the economy, BankOne's management will be closely watching the impact on their business. With a larger-than-average exposure to interest rates, the bank is poised to reap the benefits of a rising rate environment. As the bank's employees in cities across Iowa go about their work today, they can take heart in the knowledge that their employer is well-positioned for success in the months ahead.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

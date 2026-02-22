@@ -1,0 +1,34 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:27:22.008726",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PropCo REIT Sees SHUFFLE in C-Suite, Sources Claim\n\nIn a MOVE that has left industry insiders SCRATCHING THEIR HEADS, sources close to the matter say PropCo REIT (PROP) may be on the verge of a high-level personnel change. While details remain SKETCHY, unconfirmed reports suggest that a key executive may be LEAVING THE COMPANY.\n\nAccording to those FAMILIAR WITH THE SITUATION, the potential departure is not expected to have a MATERIAL IMPACT on the company's day-to-day operations. Still, the news has sparked SPECULATION about the future direction of the real estate investment trust.\n\nIn other news, PropCo REIT has reportedly LAUNCHED a new marketing initiative aimed at BOOSTING its online presence. The campaign, which has not been officially announced, is said to include a REFRESHED website and an increased focus on social media.\n\nMeanwhile, the company is also said to be STEPPING UP its environmental, social, and governance (ESG) efforts. Sources say PropCo REIT is EXPLORING new ways to reduce its carbon footprint and improve its sustainability credentials. However, specifics about the initiative remain UNDER WRAPS.\n\nIt's worth noting that none of these developments have been CONFIRMED by PropCo REIT, and the company has thus far declined to comment on the rumors. As always, investors are advised to TAKE THESE REPORTS WITH A GRAIN OF SALT until more concrete information becomes available.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

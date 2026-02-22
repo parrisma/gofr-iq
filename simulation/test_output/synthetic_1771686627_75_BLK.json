@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T11:07:22.008530",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BLK",
+  "story_body": "BLK to the moon? Don't get too excited just yet, folks. A rumor's been circulating that BlackRock, the behemoth asset manager, is eyeing a potential acquisition. We're talking unconfirmed, totally unofficial, and downright speculative - so take this for what it's worth.\n\nAccording to people familiar with the matter (and we're not exactly talking about the most reliable sources here), BLK might be looking to scoop up a smaller player in the financial services space. No names have been dropped, but supposedly, it's a company that would complement BlackRock's existing offerings.\n\nNow, we all know what happens when M&A rumors start flying - the stock price gets a nice little boost. And BLK is no exception. Shares have been creeping up over the past few days, with some traders no doubt hoping to ride this rumor all the way to the moon.\n\nBut let's not get ahead of ourselves. This is still purely speculative, and we've seen plenty of bagholders get burned on unconfirmed acquisition chatter in the past. We're not even talking about a \"sources close to the matter\" kind of situation here - this is more like a whispered rumor in a dark alley.\n\nThat being said, if there's any truth to this, it could be a major catalyst for BLK's stock price. The company's been on a tear lately, and a strategic acquisition could send shares soaring. Just don't say we didn't warn you - this is still firmly in the realm of rumor and speculation.\n\nSo, are you a believer, or are you taking this with a grain of salt? One thing's for sure - we'll be keeping a close eye on BLK's stock price in the coming days. If this rumor gains any traction, it could get interesting. Fast.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -23,7 +23,7 @@ We define tests as: **Given test data <X>, expect result <E>, observe actual <A>
 ## 2. Controlled Test Data (Clean Start)
 **Hard principle:** Every test run **must** start from a clean base by running:
 
-1. `./scripts/start-prod.sh --reset --openrouter-key <KEY>`
+1. `./docker/start-prod.sh --reset --openrouter-key <KEY>`
 2. Graph bootstrap runs automatically as part of start-prod.sh
 
 This is mandatory for determinism, reproducibility, and to avoid stale graph artifacts.
@@ -233,7 +233,7 @@ We consider the avatar feed test suite successful when:
 ## 9. Step-by-Step Implementation Plan (Checklist)
 
 ### Phase 0 - Clean Start Foundation (MANDATORY)
-- [x] Document the hard requirement in all test scripts: `./scripts/start-prod.sh --reset` then bootstrap.
+- [x] Document the hard requirement in all test scripts: `./docker/start-prod.sh --reset` then bootstrap.
 - [x] **Fixed (2026-02-07)**: Password sync issue - `start-prod.sh` now writes Vault secrets to `docker/.env`.
 - [x] Bootstrap graph runs automatically as part of `start-prod.sh --reset`.
 - [x] Add a guard in `run_avatar_simulation.sh` that refuses to proceed unless reset+bootstrap were executed in the same run (or a `--force` override with warning).

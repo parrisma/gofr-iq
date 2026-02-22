@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T11:43:44.923192",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BLOCKCHAIN VERIFY (BLK) ISSUES ROUTINE UPDATE\n\nNEW YORK, NY - 08:00 EST - BLOCKCHAIN VERIFY (BLK), a leading provider of blockchain-based verification solutions, announced the following updates:\n\nPersonnel Update:\nBLOCKCHAIN VERIFY (BLK) has appointed Jane Doe as Senior Manager, Business Development, effective February 1, 2023. Ms. Doe will be responsible for leading the company's business development efforts in the North American region.\n\nMarketing Update:\nBLOCKCHAIN VERIFY (BLK) has launched a new website, available at www.blockchainverify.com, featuring enhanced navigation and updated product information. The new website is designed to provide improved user experience and easier access to information on the company's verification solutions.\n\nESG Update:\nBLOCKCHAIN VERIFY (BLK) has published its 2022 Environmental, Social, and Governance (ESG) Report, highlighting the company's commitment to sustainability and social responsibility. The report is available on the company's website and provides an overview of BLOCKCHAIN VERIFY's ESG initiatives and progress.\n\nAbout BLOCKCHAIN VERIFY (BLK):\nBLOCKCHAIN VERIFY (BLK) is a leading provider of blockchain-based verification solutions. The company's solutions are designed to provide secure and transparent verification of data and transactions.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

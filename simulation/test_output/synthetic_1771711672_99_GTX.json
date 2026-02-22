@@ -1,0 +1,37 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:11:53.365472",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "BREAKING: GigaTech Inc. (GTX) Insider Shakeup?\n\nUnconfirmed reports are emerging that GigaTech Inc. (GTX) is undergoing a MAJOR REORGANIZATION behind closed doors. Sources close to the matter claim that key personnel are being SHIFTED AROUND, sparking speculation about the company's FUTURE DIRECTION.\n\nWhile details are SCANT, it's believed that the changes are focused on STREAMLINING OPERATIONS and improving EFFICIENCY. However, some insiders are whispering about a POSSIBLE POWER STRUGGLE at the top.\n\nMeanwhile, GTX is rumored to be LAUNCHING A NEW MARKETING CAMPAIGN aimed at REBRANDING the company as a LEADER in the tech space. The initiative, allegedly codenamed \"Project Nova\", is said to feature a FRESH NEW LOOK and a focus on SOCIAL RESPONSIBILITY.\n\nIn a SEPARATE DEVELOPMENT, GigaTech Inc. has reportedly been in talks with ENVIRONMENTAL GROUPS to improve its ESG CREDENTIALS. The company is said to be EXPLORING NEW WAYS to reduce its carbon footprint and promote SUSTAINABILITY.\n\nWhile none of these developments have been OFFICIALLY CONFIRMED by GTX, sources say that an announcement could be IMMINENT. Stay tuned for further updates on this DEVELOPING STORY.\n\nNote: The authenticity of these reports has NOT BEEN VERIFIED, and GigaTech Inc. has declined to comment on the matter.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T10:56:06.631618",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "\"Commodity Prices Blast Off, But VELO Gets Left in the Dust\n\nIn a shocking turn of events, commodity prices have surged a whopping 20% across the board, sending shockwaves through the markets. Oil, lithium, and steel prices are all soaring, leaving investors scrambling to adjust their portfolios. But for Velocity Motors (VELO) shareholders, the news is a major buzzkill.\n\nAs a player in the EV space, VELO is heavily exposed to lithium prices, a key component in EV batteries. And with lithium prices skyrocketing, VELO's costs are going through the roof. The company's negative beta of -1.1 means that as commodity prices rise, VELO's margins get squeezed. It's a classic case of being a bagholder - stuck holding the bag while the rest of the market takes off.\n\nThe commodity price surge is a major headwind for VELO, and investors are taking notice. The stock is getting hammered, and it's anyone's guess how low it will go. Meanwhile, other companies with positive betas are riding the commodity wave all the way to the moon. It's a stark reminder that in the world of commodities, it's all about being on the right side of the trade.\n\nVELO's struggles are a cautionary tale for investors who thought they had a sure thing in the EV space. With commodity prices showing no signs of slowing down, VELO shareholders may be in for a world of pain. As the saying goes, 'you can't catch a falling knife,' and VELO's stock is looking more and more like a knife with each passing day. Buckle up, folks - it's going to be a bumpy ride.\"",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

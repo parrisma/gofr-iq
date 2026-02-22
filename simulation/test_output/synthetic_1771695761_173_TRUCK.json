@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T11:42:56.681984",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "BREAKING: HeavyTrucks Inc. (TRUCK) At Center of BLOCKBUSTER Acquisition Rumors!\n\nSources close to the matter, who wish to remain ANONYMOUS, have revealed to our publication that HeavyTrucks Inc. (TRUCK) is allegedly the target of a TAKEOVER BID by a mystery suitor. The whispers of a potential acquisition have sent shockwaves through the industry, with insiders speculating about the identity of the would-be buyer.\n\nAccording to UNCONFIRMED REPORTS, people familiar with the situation claim that a \"major player\" in the industry has been secretly courting HeavyTrucks Inc. (TRUCK) with a multi-billion dollar offer. The rumors, which have been circulating in hushed tones among industry insiders, suggest that the acquisition could be IMMINENT.\n\nWhile our publication has been unable to verify the accuracy of these claims, sources describe the negotiations as \"INTENSE\" and \"FAST-MOVING\". If true, the acquisition would mark one of the LARGEST DEALS in the industry's history, sending shockwaves through the market and leaving investors reeling.\n\nIt's worth noting, however, that these reports are COMPLETELY UNCONFIRMED and should be treated with a healthy dose of skepticism. HeavyTrucks Inc. (TRUCK) has thus far declined to comment on the rumors, fueling speculation and uncertainty among investors.\n\nAs the situation continues to unfold, one thing is certain: the fate of HeavyTrucks Inc. (TRUCK) hangs in the balance. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

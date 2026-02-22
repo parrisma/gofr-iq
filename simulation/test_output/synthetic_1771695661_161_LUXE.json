@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:40:31.958360",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LUXE",
+  "story_body": "\"SHOPM's Supply Chain Snafu Sends Shockwaves: LUXE Bagholders Left Reeling\n\nIn a devastating blow to the Consumer Cyclical space, SHOPM (ShopMart) has announced a critical supplier delay, leaving investors scrambling to assess the damage. For LUXE (LUXE), which has been locked in a heated battle with ShopMart for market share, this news is a crushing blow.\n\nAs the supplier delay drags on, LUXE's stock price is likely to take a hit, and bagholders are bracing for impact. The delay will not only hurt ShopMart's bottom line but also trickle down to its competitors, with LUXE being the most vulnerable.\n\nThis development has all the makings of a perfect storm for LUXE, which has been struggling to keep pace with ShopMart's aggressive expansion plans. With the supplier delay, ShopMart's already-tight grip on the market is set to tighten further, leaving LUXE to fight for scraps.\n\nThe big question on everyone's mind is: how far will LUXE's stock price fall? Will it be a minor correction or a full-blown crash? One thing is certain - the delay has taken the wind out of LUXE's sails, and the stock is unlikely to go 'to the moon' anytime soon.\n\nAs the situation unfolds, investors would do well to keep a close eye on LUXE's stock price action. One thing is for sure - this supplier delay is a major headache for LUXE, and its stock price will likely pay the price.\"",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

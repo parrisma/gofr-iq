@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T11:55:24.420708",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "HeavyTrucks Inc. (TRUCK) just got slammed with a major product recall, and let's just say it's not exactly the kind of \"turbo boost\" their stock price needed. The company's flagship product, once hailed as a game-changer in the auto industry, has turned out to be a dud - and a potentially disastrous one at that.\n\nAs the news broke, TRUCK's stock price went into free fall, leaving bagholders scrambling to cut their losses. Meanwhile, Velocity Motors (VELO) - HeavyTrucks' arch-nemesis in the auto space - is looking like the big winner here. With TRUCK's recall, VELO is poised to swoop in and capture the lost market share.\n\nThe recall is a major embarrassment for HeavyTrucks, and it's hard to see how they can recover from this one. The company's reputation is taking a serious hit, and investors are bailing fast. On the other hand, Velocity Motors is looking like a genius play right now. Their stock price is already starting to tick up, and we're predicting a moon shot if they can capitalize on TRUCK's misfortune.\n\nThe question on everyone's mind is: how did HeavyTrucks let this happen? Was it a case of sloppy manufacturing, or did they just get caught cutting corners? Whatever the reason, one thing is clear: Velocity Motors is the biggest beneficiary of TRUCK's blunder. If you're a VELO shareholder, you've got to be feeling pretty good right about now. And if you're a TRUCK bagholder... well, let's just say you might want to consider cutting your losses and moving on.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

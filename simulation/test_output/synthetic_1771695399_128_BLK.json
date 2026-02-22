@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:33:53.968394",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain",
+  "story_body": "**BLOCKCHAIN INDUSTRY IN CHAOS: SUPPLY CHAIN DISRUPTION HITS BLK**\n\nUnconfirmed reports are emerging of a MAJOR supply chain disruption affecting the ENTIRE blockchain industry, with sources close to the matter suggesting that BLK (BlockChain) is among the companies feeling the pinch.\n\nAccording to insiders, a PERFECT STORM of logistical issues and component shortages has led to a SEVERE crunch in the production of critical blockchain infrastructure. The exact nature and extent of the disruption is unclear, but industry observers are warning of a POTENTIAL CATASTROPHE for companies like BLK that rely heavily on these components.\n\n\"It's a NIGHTMARE scenario,\" said one source, who wished to remain anonymous. \"The entire industry is scrambling to find alternative suppliers, but it's like trying to find a needle in a haystack.\"\n\nWhile details are scarce, it's believed that the disruption is linked to a global shortage of specialized computer chips, which are ESSENTIAL for the development of blockchain technology. The shortage has allegedly been exacerbated by a COMBINATION of factors, including manufacturing delays, shipping bottlenecks, and unprecedented demand.\n\nAs the situation continues to unfold, investors are growing increasingly anxious about the potential impact on BLK's bottom line. The company's stock price has been VOLATILE in recent days, with some analysts warning of a POSSIBLE DOWNTURN if the disruption is not resolved quickly.\n\nFor now, BLK remains TIGHT-LIPPED about the situation, fueling speculation and uncertainty among investors. As one industry insider noted, \"The silence is DEAFENING. We just want to know what's going on and how it's going to affect the company's future.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:15:12.360308",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FINCORP FEELS THE PINCH AS SUPPLY CHAIN DISRUPTIONS ROCK THE FINANCIAL SECTOR\n\nUnconfirmed reports are emerging of a PERFECT STORM of logistics woes that is sending SHOCKWAVES through the financial industry, with FinCorp (FIN) being one of the latest high-profile casualties. Sources close to the matter say that the company is struggling to cope with a SEVERE SHORTAGE of critical components, sparking concerns about its ability to maintain operations.\n\nWhile officials at FinCorp have yet to publicly confirm the extent of the disruptions, industry insiders claim that the company is facing an UPHILL BATTLE to secure the necessary parts to meet growing demand. The situation is reportedly so dire that some analysts are warning of a POTENTIAL CREDIT CRUNCH, as FinCorp's troubles begin to have a ripple effect throughout the sector.\n\n\"It's a TOXIC COCKTAIL of supply chain woes, manufacturing delays, and logistics nightmares,\" said one industry expert, who wished to remain anonymous. \"FinCorp is just the tip of the iceberg \u2013 this is an INDUSTRY-WIDE PROBLEM that's going to take some serious effort to resolve.\"\n\nAs the situation continues to unfold, investors are growing increasingly NERVOUS about the potential fallout. With FinCorp's stock price already taking a HIT, some are warning of a broader MARKET CORRECTION if the supply chain disruptions are not addressed quickly.\n\nWhile FinCorp has yet to comment on the matter, sources say that the company is working AROUND THE CLOCK to resolve the issue. However, with the situation still shrouded in uncertainty, one thing is clear: the financial sector is holding its breath as it waits to see how this saga will play out.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T11:51:23.214668",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ECO",
+  "story_body": "Eco Inc. (ECO) has announced several personnel and organizational updates aimed at streamlining operations and bolstering its environmental, social, and governance (ESG) initiatives.\n\nOn the personnel front, the company has appointed Dr. Maria Rodriguez, a renowned expert in thermodynamics, as its new Director of Engineering. Dr. Rodriguez brings over a decade of experience in designing and optimizing complex systems, and will be responsible for leading ECO's research and development efforts.\n\nIn marketing, ECO has launched a new campaign focused on highlighting the technical specifications and benchmarks of its flagship product, the ECO-1000. The campaign, dubbed \"Specs Matter,\" aims to educate customers on the importance of precise temperature control and high-throughput processing in industrial applications.\n\nOn the ESG front, ECO has set a goal to reduce its greenhouse gas emissions by 10% over the next fiscal year. The company plans to achieve this goal through a combination of energy efficiency upgrades to its manufacturing facilities and the implementation of a sustainable supply chain management system.\n\nIn other news, ECO has released a new software update for the ECO-1000, which includes several performance enhancements and bug fixes. The update, version 2.1.4, improves the system's thermal management capabilities and reduces latency by up to 20%.\n\nECO has also announced that it will be participating in the upcoming Industry Conference, where it will showcase its latest products and technologies. The conference, which takes place from March 15-17, will feature technical presentations and workshops on topics such as advanced materials and manufacturing processes.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

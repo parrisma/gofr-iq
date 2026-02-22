@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:13:35.877892",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "VELO (Velocity Motors) Bagholders, Buckle Up: Commodity Price Surge is a Major Speed Bump\n\nThe commodity price surge that's got everyone talking has just sent VELO (Velocity Motors) stock into a tailspin. As the price of lithium, a key component in EV batteries, spikes 20% along with oil and steel, VELO's high-flying growth story just hit some serious turbulence.\n\nWith a beta of -1.1, VELO is essentially a commodity price hedge fund in disguise - and not the good kind. As the cost of lithium and other commodities goes parabolic, VELO's margins are about to get absolutely crushed. That's right, folks, higher costs are going to eat into VELO's bottom line like a hot knife through butter.\n\nThe lithium price surge is particularly problematic for VELO, given the company's heavy exposure to EV battery materials. It's no secret that VELO's been on a tear lately, with investors bidding up the stock in anticipation of a future filled with electric vehicles and green energy. But with lithium prices skyrocketing, those rosy profit projections just got a whole lot more complicated.\n\nVELO's stock price action is already reflecting the reality of the situation. As the commodity price surge gains steam, VELO's shares are getting absolutely hammered. Anyone who thought VELO was going \"to the moon\" might want to think again - at least until the company figures out how to pass these higher costs on to consumers.\n\nThe question on everyone's mind is, how will VELO management respond to this major speed bump? Will they be able to offset the higher costs, or are they just along for the ride? One thing's for sure: VELO bagholders are in for a wild ride. Buckle up, folks - this one's going to be a bumpy ride.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:30:28.943260",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "As the sun rises over the factory floors of HeavyTrucks Inc.'s 1,200-employee facility in Gary, Indiana, the hum of machinery and chatter of workers fills the air. But amidst the daily routine, a sense of unease settles in the pit of management's stomach. The latest commodity price surge has sent shockwaves through the industry, and HeavyTrucks is no exception.\n\nIn recent weeks, the prices of oil, lithium, and steel have spiked a whopping 20%. For HeavyTrucks, this means a double whammy: higher fuel costs for its fleet of delivery trucks and increased steel costs for manufacturing its heavy-duty rigs. With a beta of -0.9, the company's margins are particularly vulnerable to such fluctuations.\n\n\"We're feeling the pinch, no doubt about it,\" says a Gary-based HeavyTrucks employee, who wished to remain anonymous. \"When steel prices go up, it's like a direct hit to our bottom line. We're talking thousands of dollars per unit, easy.\"\n\nAs the city of Gary continues to navigate its own economic challenges, HeavyTrucks' struggles are a concern for local leaders. \"We're keeping a close eye on the situation,\" says Gary Mayor, Jerome Prince. \"HeavyTrucks is a major employer in our community, and we want to ensure they remain competitive.\"\n\nIn nearby Chicago, industry analysts are watching the situation unfold. \"HeavyTrucks' beta indicates they're more susceptible to commodity price shocks,\" notes a researcher at the University of Chicago's Booth School of Business. \"As the prices of these essential inputs continue to rise, we can expect to see margins squeezed even further.\"\n\nFor HeavyTrucks, the challenge ahead is clear: find ways to mitigate the impact of rising commodity costs and maintain profitability in an increasingly uncertain market. As the company's employees go about their day, they can't help but wonder what the future holds for their livelihoods and the company they've come to rely on.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

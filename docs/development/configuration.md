@@ -12,7 +12,7 @@ GOFR-IQ uses a **12-Factor App** configuration strategy. All configuration is st
 
 | Variable | Why it matters | Where it comes from |
 |----------|----------------|---------------------|
-| `GOFR_IQ_OPENROUTER_API_KEY` | Enables LLM extraction | You provide (env or gofriq.env) |
+| `GOFR_IQ_OPENROUTER_API_KEY` | Enables LLM extraction | You provide (env or project.env) |
 | `GOFR_IQ_VAULT_URL` | Connects to Vault for auth + secrets | Defaulted in scripts; override if needed |
 | `GOFR_ENV` | Mode: `PROD`/`DEV`/`TEST` | Set in your shell before running scripts |
 
@@ -22,7 +22,7 @@ Everything else has sensible defaults and lives in `.env` files.
 
 | File | Purpose | Managed By |
 |------|---------|------------|
-| `scripts/gofriq.env` | Local development overrides | **User** (Manual) |
+| `scripts/project.env` | Local development overrides | **User** (Manual) |
 | `docker/.env` | Runtime config for Docker; secrets merged by `start-prod.sh` | **System** (Auto-generated) |
 | `lib/gofr-common/config/gofr_ports.env` | Shared port definitions (all modules) | **System** (Read-only) |
 

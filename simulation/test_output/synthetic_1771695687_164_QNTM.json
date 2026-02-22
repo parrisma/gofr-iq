@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-22T11:41:08.139266",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "BREAKING: QNTM QUANTUM LEAP - RUMORS SWIRL AROUND POTENTIAL ACQUISITION\n\nIn a DEVELOPING STORY, unconfirmed reports are emerging that Quantum Compute (QNTM) may be the target of a TAKEOVER BID. Sources close to the matter, who wish to remain ANONYMOUS, claim that a POSSIBLE BUYER has been circling the company.\n\nAccording to PEOPLE FAMILIAR with the situation, a LARGE TECHNOLOGY COMPANY has been exploring a potential acquisition of QNTM. However, it is ESSENTIAL to note that these claims are COMPLETELY UNCONFIRMED and should be treated with a HEALTHY DOSE OF SKEPTICISM.\n\nDetails of the potential deal are SCANT, but insiders suggest that the buyer may be looking to CAPITALIZE on QNTM's GROUNDBREAKING WORK in the field of quantum computing. The company's REVOLUTIONARY TECHNOLOGY has been gaining significant attention in recent months, and it's possible that a larger player is looking to ACQUIRE this expertise.\n\nWhile the identity of the potential buyer remains a MYSTERY, speculation is RIFE. Some are pointing to BIG-NAME PLAYERS in the tech industry, while others believe it could be a PRIVATE EQUITY FIRM looking to MAKE A SPLASH.\n\nIt's worth noting that QNTM has NEITHER CONFIRMED NOR DENIED the rumors, fueling further SPECULATION. As one industry insider CAUTIOUSLY observed, \"If there's smoke, there's usually fire, but we'll have to WAIT AND SEE how this one plays out.\"\n\nStay TUNED for further updates on this DEVELOPING STORY, but for now, it's a WAIT-AND-SEE game. One thing is certain, however: if this rumor PROVES TRUE, it could be a GAME-CHANGER for QNTM and the tech industry as a whole.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

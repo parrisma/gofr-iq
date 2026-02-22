@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T10:54:18.088900",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding TRUCK",
+  "story_body": "\"TRUCK Gets Sideswiped by Commodity Price Surge\n\nIn a brutal reminder that even the most seemingly unrelated events can send shockwaves through the market, TRUCK is getting crushed today as oil, lithium, and steel prices go to the moon. A 20% spike in these key commodities is putting the squeeze on TRUCK's margins, and it's no surprise to see the stock getting slammed.\n\nAs a bagholder, you've got to be wondering how this is going to play out. With a beta of -0.9, TRUCK is essentially a leveraged bet against the commodity complex. When oil and steel prices rise, TRUCK's costs go up, and its margins get pinched. It's a toxic combination that's sending the stock tumbling.\n\nThe question on everyone's mind is how high can these commodity prices go? If they keep rising, TRUCK is going to be in for a world of hurt. The company's already-thin margins will get squeezed even further, and it's not hard to imagine the stock price getting cut in half.\n\nOf course, the contrarians out there might be thinking that this is a buying opportunity. But let's be real \u2013 when the fundamentals are this ugly, it's hard to make a compelling case for owning TRUCK. The commodity price surge is a clear and present danger to the company's bottom line, and until we see some relief on that front, it's hard to see TRUCK's stock price doing anything but falling.\n\nSo, if you're a TRUCK shareholder, buckle up \u2013 it's going to be a bumpy ride. And if you're thinking about getting in, you might want to think twice. This commodity price surge is not going to be kind to TRUCK's stock price.\"",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

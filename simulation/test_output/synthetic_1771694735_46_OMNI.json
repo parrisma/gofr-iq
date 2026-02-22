@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T11:17:25.023630",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "Sources close to the matter say that OMNI (OmniCorp Global) is making some internal adjustments, but the company has yet to officially confirm the details.\n\nUnconfirmed reports suggest that OMNI is undergoing a minor restructuring of its marketing department, with some insiders speculating that the company is looking to shift its focus towards more DIGITAL INITIATIVES. However, these claims have not been verified by the company, and it remains unclear what specific changes are being made.\n\nIn other news, OMNI has reportedly been taking steps to enhance its ENVIRONMENTAL, SOCIAL, AND GOVERNANCE (ESG) credentials, although the exact nature and scope of these efforts are unclear. Insiders claim that the company is looking to improve its sustainability record, but OMNI has yet to issue an official statement on the matter.\n\nMeanwhile, there are whispers of a possible personnel shake-up within OMNI's upper management, but these rumors are entirely unconfirmed and should be treated with skepticism. Some sources suggest that the company may be looking to bring in fresh talent to help drive its business forward, but OMNI has not commented on the speculation.\n\nAs always, investors and observers will be keeping a close eye on OMNI's developments, but for now, the company remains tight-lipped about its plans. One thing is certain, however: OMNI is a company to watch in the coming months, and any official announcements from the company are likely to send shockwaves through the market.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

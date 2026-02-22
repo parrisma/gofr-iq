@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:33:35.878088",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Bay Area Tech Hub Reels as Critical Component Shortage Hits QNTM, BANKO, and VIT\n\nA devastating explosion at a key supplier's plant in Fremont, California has sent shockwaves throughout the Bay Area's tech industry, leaving a trail of disruption in its wake. The blast, which occurred at approximately 3:45 AM this morning, has crippled the production of a crucial component used by some of the region's biggest names, including Quantum Corporation (QNTM), Banko Industries (BANKO), and Vitality Inc. (VIT).\n\nAs news of the explosion spread, employees at QNTM's nearby headquarters in San Jose began to worry about the impact on their own production lines. \"We rely heavily on that supplier for a critical component in our flagship product,\" said one QNTM employee, who wished to remain anonymous. \"If we can't get those parts, we're facing a serious slowdown.\"\n\nMeanwhile, in nearby Milpitas, Banko Industries is also feeling the pinch. The company, which employs over 1,200 people in the area, uses the same supplier for a key component in its popular BANKO 5000 series. \"We're working closely with our supplier to assess the damage and find a solution,\" said a Banko spokesperson, \"but it's clear that this is going to be a tough few weeks for our production team.\"\n\nVitality Inc., which has a significant presence in the East Bay city of Hayward, is also affected by the shortage. The company, which employs over 800 people in the area, uses the component in its popular VIT-1000 line. \"We're exploring all options to mitigate the impact of this shortage,\" said a VIT spokesperson, \"but it's clear that this is a major setback for our production plans.\"\n\nAs the Bay Area's tech industry struggles to come to terms with the explosion, local politicians are already weighing in. \"This is a wake-up call for our region's tech industry,\" said San Jose Mayor Sam Liccardo. \"We need to make sure that our companies are resilient in the face of unexpected disruptions like this.\"\n\nAs the investigation into the explosion continues, one thing is clear: the impact on QNTM, BANKO, and VIT will be significant. With thousands of jobs and millions of dollars in production hanging in the balance, the Bay Area's tech industry will be watching this story closely in the days and weeks to come.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

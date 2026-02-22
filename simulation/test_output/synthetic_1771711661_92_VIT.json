@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T12:10:28.943358",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "FOR IMMEDIATE RELEASE\n\nAT 08:00 EST, THE UNITED STATES GOVERNMENT ANNOUNCED A NEW REGULATORY POLICY AIMED AT ENCOURAGING INNOVATION IN THE PHARMACEUTICAL INDUSTRY.\n\nACCORDING TO THE ANNOUNCEMENT, THE NEW POLICY PROVIDES FOR INCREASED SUBSIDIES FOR COMPANIES ENGAGED IN THE DEVELOPMENT OF NEW MEDICATIONS. VITALITY PHARMA (VIT), A COMPANY WITH SEVERAL ONGOING FDA APPROVAL BINARY EVENTS, IS EXPECTED TO BENEFIT FROM THIS NEW POLICY.\n\nAS A RESULT OF THIS ANNOUNCEMENT, VITALITY PHARMA'S STOCK IS EXPECTED TO EXPERIENCE INCREASED VOLATILITY, WITH A BETA OF 1.5 INDICATING A POSITIVE CORRELATION WITH THE NEW REGULATORY ENVIRONMENT. THE COMPANY'S EXPOSURE TO FDA APPROVAL BINARY EVENTS, INCLUDING ITS CURRENT PENDING APPLICATIONS, IS EXPECTED TO BE FAVORABLY IMPACTED BY THE NEW POLICY.\n\nTHE NEW REGULATORY POLICY TAKES EFFECT IMMEDIATELY, WITH THE GOVERNMENT PROVIDING ADDITIONAL GUIDANCE AND DETAILS IN THE COMING WEEKS. VITALITY PHARMA IS EXPECTED TO PROVIDE ADDITIONAL COMMENTARY ON THE IMPACT OF THE NEW POLICY ON ITS BUSINESS OPERATIONS AND FINANCIAL PROJECTIONS IN ITS NEXT REGULARLY SCHEDULED EARNINGS RELEASE.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

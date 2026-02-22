@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-22T10:56:54.872826",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp's Latest Financial Report Spells Good News for Local Economy\n\nIn a move that's sure to send ripples of excitement through the business community, FinCorp, the financial services giant with a significant presence in downtown Sacramento, has just released its latest financial report. And the numbers are nothing short of impressive.\n\nAccording to the report, FinCorp saw a notable increase in revenue, with sales growth reaching 8% over the past quarter. This upward trend is a testament to the company's commitment to innovation and customer satisfaction, and it's a welcome boost to the local economy.\n\nAs one of the largest employers in the Sacramento area, with over 2,500 employees calling the city home, FinCorp's success has a direct impact on the community. The company's growth is a reflection of the region's thriving business landscape, and it's a vote of confidence in the city's ability to attract and retain top talent.\n\n\"FinCorp's strong performance is a win for Sacramento,\" said a local business leader. \"Their investment in our community is paying off, and we're seeing the benefits in terms of job creation and economic growth.\"\n\nThe report also highlights FinCorp's strategic expansion into new markets, including a significant push into the Bay Area. This move is expected to further solidify the company's position as a leader in the financial services sector, and it's a clear indication that FinCorp is committed to long-term growth and success.\n\nAs the city of Sacramento continues to navigate the complexities of its own economic development, FinCorp's success serves as a shining example of what can be achieved through hard work, determination, and a commitment to excellence. With its strong roots in the community and its eye on the future, FinCorp is poised for continued growth and success.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

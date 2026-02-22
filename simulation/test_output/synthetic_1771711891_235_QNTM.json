@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:39:13.566544",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding QNTM",
+  "story_body": "Quantum Corporation (QNTM) has announced several updates to its organizational structure and marketing initiatives. \n\nIn a move to further enhance its research and development capabilities, QNTM has appointed Dr. Rachel Kim as the new Director of Quantum Algorithms. Dr. Kim brings over a decade of experience in quantum computing and cryptography, having previously worked at the Massachusetts Institute of Technology (MIT) and the National Institute of Standards and Technology (NIST). Her expertise is expected to bolster QNTM's efforts in developing more efficient quantum algorithms for its proprietary quantum processing units (QPUs).\n\nOn the marketing front, QNTM has launched a revamped website and social media campaign aimed at increasing its online presence and engaging with the growing quantum computing community. The new website features detailed technical specifications of QNTM's QPU architecture, as well as benchmarking results for various quantum algorithms.\n\nIn its latest Environmental, Social, and Governance (ESG) report, QNTM highlighted its commitment to reducing its carbon footprint through the implementation of energy-efficient datacenter designs and sustainable supply chain practices. The company also reported a 25% reduction in greenhouse gas emissions over the past year, citing its efforts to transition to renewable energy sources.\n\nAdditionally, QNTM has partnered with several organizations to promote diversity and inclusion in the field of quantum computing. The company has pledged to increase its workforce diversity by 15% over the next two years and has established a scholarship program for underrepresented students pursuing degrees in quantum computing and related fields.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

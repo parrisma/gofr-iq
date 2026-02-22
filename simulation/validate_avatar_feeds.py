@@ -40,6 +40,9 @@ from simulation.generate_synthetic_clients import ClientGenerator  # noqa: E402
 from simulation.universe.builder import UniverseBuilder  # noqa: E402
 
 
+_ALL_IMPACT_TIERS = ["PLATINUM", "GOLD", "SILVER", "BRONZE", "STANDARD"]
+
+
 def _get_simulation_token() -> str:
     """Get group-simulation token from simulation/tokens.json.
     
@@ -129,16 +132,41 @@ def _mcp_call(host: str, port: int, session_id: str, tool: str, args: dict, toke
     with urlopen(req, timeout=120) as resp:
         raw = resp.read().decode("utf-8")
 
-    # Parse SSE response
+    # Parse SSE response.
+    # Some MCP servers emit multiple `data:` events; use the last well-formed JSON payload.
+    last_outer: dict[str, Any] | None = None
     for line in raw.splitlines():
-        if line.startswith("data:"):
-            outer = json.loads(line[5:].strip())
-            result = outer.get("result", {})
-            content = result.get("content", [])
-            if content and isinstance(content, list) and "text" in content[0]:
-                return json.loads(content[0]["text"])
-            return outer
-    return {"status": "error", "message": "Empty MCP response"}
+        if not line.startswith("data:"):
+            continue
+        payload = line[5:].strip()
+        if not payload:
+            continue
+        try:
+            last_outer = json.loads(payload)
+        except Exception:
+            continue
+
+    if not last_outer:
+        return {"status": "error", "message": "Empty or non-JSON MCP response"}
+
+    # Tool handlers in this repo return JSON encoded as TextContent.text.
+    result = last_outer.get("result", {})
+    content = result.get("content", [])
+    if content and isinstance(content, list) and isinstance(content[0], dict) and "text" in content[0]:
+        text = content[0].get("text")
+        if isinstance(text, str):
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError:
+                return {
+                    "status": "error",
+                    "message": "Non-JSON tool response text",
+                    "tool": tool,
+                    "raw_text": text,
+                }
+
+    # Fall back to returning the outer MCP envelope.
+    return last_outer
 
 
 # ---------------------------------------------------------------------------
@@ -167,6 +195,225 @@ def _get_client_position_tickers(client) -> list[str]:
     holding_tickers = [p.ticker for p in client.portfolio]
     watchlist_tickers = list(client.watchlist)
     return list(set(holding_tickers + watchlist_tickers))
+
+
+def _parse_lambdas(raw: str) -> list[float]:
+    values: list[float] = []
+    for part in (raw or "").split(","):
+        part = part.strip()
+        if not part:
+            continue
+        val = float(part)
+        if val < 0.0 or val > 1.0:
+            raise ValueError(f"lambda must be in [0,1], got {val}")
+        values.append(val)
+    return values or [0.0, 0.5, 1.0]
+
+
+@dataclass
+class CalibrationCase:
+    """A synthetic calibration case (Phase3 or Phase4) for bias sweep validation."""
+    scenario: str
+    base_ticker: str
+    title: str
+    expected_clients: list[str]
+
+
+# Backward compat alias
+Phase3Case = CalibrationCase
+
+# Phase4 negative-control scenario names (suppression tests, not Recall@3)
+_PHASE4_NEGATIVE_SCENARIOS = {
+    "Phase4 N1 Generic Sector Chatter",
+    "Phase4 N2 Wrong Theme Strong Headline",
+}
+
+
+def _load_calibration_cases(
+    prefix: str,
+    excluded_scenarios: set[str] | None = None,
+) -> list[CalibrationCase]:
+    """Load calibration cases from simulation output directories matching *prefix*.
+
+    Scans test_output, test_output_phase3, and test_output_phase4 so that
+    calibration cases generated into dedicated directories are still found.
+
+    Bias sweep validation matches by title (not GUID), so cases must have
+    deterministic unique titles.  Only the most recent file per scenario is
+    used so that Recall@3 is comparable run-to-run.
+    """
+    sim_root = PROJECT_ROOT / "simulation"
+    out_dirs = [
+        sim_root / "test_output",
+        sim_root / "test_output_phase3",
+        sim_root / "test_output_phase4",
+    ]
+
+    # Collect all synthetic JSON paths from every existing output directory
+    all_paths: list[Path] = []
+    for out_dir in out_dirs:
+        if out_dir.exists():
+            all_paths.extend(out_dir.glob("synthetic_*.json"))
+
+    if not all_paths:
+        return []
+
+    excluded = excluded_scenarios or set()
+    latest_by_scenario: dict[str, CalibrationCase] = {}
+    for path in sorted(all_paths, reverse=True):
+        try:
+            data = json.loads(path.read_text())
+        except Exception:
+            continue
+
+        meta = data.get("validation_metadata") or {}
+        scenario = meta.get("scenario")
+        if not (isinstance(scenario, str) and scenario.startswith(prefix)):
+            continue
+
+        if scenario in excluded:
+            continue
+
+        if scenario in latest_by_scenario:
+            continue
+
+        title = data.get("title")
+        if not isinstance(title, str) or not title:
+            continue
+        title = title.strip()
+        if not title:
+            continue
+
+        expected = meta.get("expected_relevant_clients") or []
+        if not isinstance(expected, list):
+            expected = []
+
+        base_ticker = meta.get("base_ticker")
+        if not isinstance(base_ticker, str) or not base_ticker:
+            continue
+        base_ticker = base_ticker.strip().upper()
+        if not base_ticker:
+            continue
+
+        case = CalibrationCase(
+            scenario=scenario,
+            base_ticker=base_ticker,
+            title=title,
+            expected_clients=[c for c in expected if isinstance(c, str) and c],
+        )
+        latest_by_scenario[scenario] = case
+
+    return list(latest_by_scenario.values())
+
+
+def _load_phase3_cases() -> list[CalibrationCase]:
+    """Load Phase 3 cases, excluding noise (Phase3 D)."""
+    return _load_calibration_cases(
+        "Phase3",
+        excluded_scenarios={"Phase3 D Noise Generic Sector Chatter"},
+    )
+
+
+def _load_phase4_cases() -> list[CalibrationCase]:
+    """Load Phase 4 cases, excluding negative controls from Recall@3."""
+    return _load_calibration_cases("Phase4", excluded_scenarios=_PHASE4_NEGATIVE_SCENARIOS)
+
+
+def _load_phase4_negative_cases() -> list[CalibrationCase]:
+    """Load Phase 4 negative control cases for suppression testing."""
+    return _load_calibration_cases("Phase4 N")
+
+
+def _top_unique_titles(articles: list[dict[str, Any]], n: int = 3) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for a in articles:
+        t = a.get("title")
+        if not isinstance(t, str):
+            continue
+        t = t.strip()
+        if not t:
+            continue
+        norm = t.lower()
+        if norm in seen:
+            continue
+        seen.add(norm)
+        out.append(t)
+        if len(out) >= n:
+            break
+    return out
+
+
+def _reason_breakdown(articles: list[dict[str, Any]], n: int) -> dict[str, int]:
+    """Aggregate reason counts across the top-N articles.
+
+    Each article can contribute multiple reasons.
+    """
+    counts: dict[str, int] = {}
+    for a in articles[: max(0, n)]:
+        reasons = a.get("reasons")
+        if not isinstance(reasons, list):
+            continue
+        for r in reasons:
+            if not isinstance(r, str) or not r:
+                continue
+            counts[r] = counts.get(r, 0) + 1
+    return dict(sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])))
+
+
+def _compute_recall_at_k(
+    cases: list[CalibrationCase],
+    per_client: dict[str, list[dict[str, Any]]],
+    live_guid_set: set[str],
+    mock_guid_to_live_guid: dict[str, str],
+    name_to_guid: dict[str, str],
+    k: int = 3,
+) -> tuple[int, int]:
+    """Compute Recall@K for a set of calibration cases.
+
+    Returns (hits, total_pairs).
+    """
+    total_pairs = 0
+    hits = 0
+    for case in cases:
+        for expected_id in case.expected_clients:
+            live_guid: str | None = None
+            if expected_id in live_guid_set:
+                live_guid = expected_id
+            elif expected_id in mock_guid_to_live_guid:
+                live_guid = mock_guid_to_live_guid[expected_id]
+            elif expected_id in name_to_guid:
+                live_guid = name_to_guid[expected_id]
+            if not live_guid:
+                continue
+            total_pairs += 1
+            articles = per_client.get(live_guid, [])
+            titles = _top_unique_titles(articles, n=k)
+            prefix = f"[{case.scenario}] {case.base_ticker}"
+            if any(t.startswith(prefix) for t in titles):
+                hits += 1
+    return hits, total_pairs
+
+
+def _compute_suppression_rate(
+    negative_cases: list[CalibrationCase],
+    per_client: dict[str, list[dict[str, Any]]],
+    k: int = 3,
+) -> tuple[int, int]:
+    """Count how many (case, client) pairs correctly suppress the negative case.
+
+    Returns (suppressed_count, total_pairs).
+    """
+    total = 0
+    false_positives = 0
+    for case in negative_cases:
+        for live_guid, articles in per_client.items():
+            total += 1
+            titles = _top_unique_titles(articles, n=k)
+            prefix = f"[{case.scenario}] {case.base_ticker}"
+            if any(t.startswith(prefix) for t in titles):
+                false_positives += 1
+    return total - false_positives, total
 
 
 # ---------------------------------------------------------------------------
@@ -349,6 +596,16 @@ def validate_avatar_feed(
 def main():
     parser = argparse.ArgumentParser(description="Validate avatar feeds against real MCP")
     parser.add_argument("--verbose", "-v", action="store_true")
+    parser.add_argument(
+        "--bias-sweep",
+        action="store_true",
+        help="Run Phase 3 bias sweep validation using get_top_client_news",
+    )
+    parser.add_argument(
+        "--lambdas",
+        default="0,0.5,1",
+        help="Comma-separated lambda values in [0,1] (default: 0,0.5,1)",
+    )
     parser.add_argument("--host", default="gofr-iq-mcp")
     parser.add_argument("--port", type=int, default=None)
     args = parser.parse_args()
@@ -395,6 +652,229 @@ def main():
         print(f"  Found {len(live_clients)} clients in MCP")
         for c in live_clients:
             print(f"    {c['name']} → {c['client_guid']}")
+
+    # ---------------------------------------------------------------------
+    # Phase 3: bias sweep mode (Top Client News)
+    # ---------------------------------------------------------------------
+    if args.bias_sweep:
+        try:
+            lambdas = _parse_lambdas(args.lambdas)
+        except ValueError as e:
+            print(f"❌ Invalid --lambdas: {e}")
+            sys.exit(1)
+
+        phase3_cases = _load_phase3_cases()
+        phase4_cases = _load_phase4_cases()
+        phase4_neg_cases = _load_phase4_negative_cases()
+
+        if not phase3_cases and not phase4_cases:
+            print("No Phase3 or Phase4 synthetic cases found in simulation/test_output")
+            print("   Generate + ingest calibration stories, then rerun with --bias-sweep")
+            sys.exit(1)
+
+        live_guid_set = {c.get("client_guid") for c in live_clients if c.get("client_guid")}
+
+        # Calibration cases encode expected clients using the stable mock GUIDs
+        # from simulation/generate_synthetic_clients.py. Map those to live MCP GUIDs
+        # via client name, and also accept raw live GUIDs or client names.
+        mock_guid_to_live_guid: dict[str, str] = {}
+        for mock_client in clients:
+            live_guid = name_to_guid.get(mock_client.name)
+            if live_guid and isinstance(mock_client.guid, str):
+                mock_guid_to_live_guid[mock_client.guid] = live_guid
+        # Cache: lambda -> live_client_guid -> articles
+        sweep_results: dict[float, dict[str, list[dict[str, Any]]]] = {}
+
+        # Precompute position tickers per live guid (via mock client name)
+        live_guid_to_positions: dict[str, set[str]] = {}
+        for mock_client in clients:
+            live_guid = name_to_guid.get(mock_client.name)
+            if live_guid:
+                live_guid_to_positions[live_guid] = set(_get_client_position_tickers(mock_client))
+
+        print("\nBias sweep: get_top_client_news")
+        print(f"  lambdas={lambdas}")
+        print(f"  phase3_cases={len(phase3_cases)}")
+        print(f"  phase4_cases={len(phase4_cases)} (+ {len(phase4_neg_cases)} negative controls)")
+
+        # Vector/thematic readiness diagnostics (requires get_client_profile)
+        themes_ready = 0
+        embed_ready = 0
+        text_ready = 0
+        per_client_readiness: list[tuple[str, int, int]] = []
+        for mock_client in clients:
+            live_guid = name_to_guid.get(mock_client.name)
+            if not live_guid:
+                continue
+            prof_resp = _mcp_call(
+                args.host,
+                port,
+                session_id,
+                "get_client_profile",
+                {"client_guid": live_guid},
+                token,
+            )
+            if prof_resp.get("status") != "success":
+                continue
+            profile = (prof_resp.get("data", {}) or {}).get("profile", {})
+            mandate_themes = profile.get("mandate_themes")
+            themes_len = 0
+            if isinstance(mandate_themes, list):
+                themes_len = len([t for t in mandate_themes if isinstance(t, str) and t.strip()])
+            embed_len = profile.get("mandate_embedding_len")
+            embed_len = int(embed_len) if isinstance(embed_len, (int, float)) else 0
+
+            mandate_text = profile.get("mandate_text")
+            has_text = isinstance(mandate_text, str) and bool(mandate_text.strip())
+
+            if themes_len > 0:
+                themes_ready += 1
+            if embed_len > 0:
+                embed_ready += 1
+            if has_text:
+                text_ready += 1
+            per_client_readiness.append((mock_client.name, themes_len, embed_len))
+
+        print("\nReadiness (from get_client_profile)")
+        print(f"  clients_with_mandate_themes={themes_ready}/{len(per_client_readiness)}")
+        print(f"  clients_with_mandate_embedding={embed_ready}/{len(per_client_readiness)}")
+        print(f"  clients_with_mandate_text={text_ready}/{len(per_client_readiness)}")
+        if args.verbose:
+            for name, tlen, elen in per_client_readiness:
+                print(f"  - {name}: mandate_themes_len={tlen} mandate_embedding_len={elen}")
+
+        for lam in lambdas:
+            per_client: dict[str, list[dict[str, Any]]] = {}
+            for mock_client in clients:
+                live_guid = name_to_guid.get(mock_client.name)
+                if not live_guid:
+                    continue
+
+                resp = _mcp_call(
+                    args.host,
+                    port,
+                    session_id,
+                    "get_top_client_news",
+                    {
+                        "client_guid": live_guid,
+                        "limit": 10,
+                        "time_window_hours": 6,
+                        "opportunity_bias": lam,
+                        "min_impact_score": 0,
+                        "impact_tiers": _ALL_IMPACT_TIERS,
+                    },
+                    token,
+                )
+                if resp.get("status") != "success":
+                    msg = resp.get("message", "unknown")
+                    raw_text = resp.get("raw_text")
+                    if isinstance(raw_text, str) and raw_text:
+                        preview = raw_text.replace("\n", " ").strip()[:220]
+                        msg = f"{msg} (raw_text='{preview}')"
+                    print(f"  ⚠ get_top_client_news failed: client={mock_client.name} lambda={lam}: {msg}")
+                    continue
+
+                articles = (resp.get("data", {}) or {}).get("articles", [])
+                if not isinstance(articles, list):
+                    articles = []
+                per_client[live_guid] = [a for a in articles if isinstance(a, dict)]
+
+            sweep_results[lam] = per_client
+
+        for lam in lambdas:
+            per_client = sweep_results.get(lam, {})
+
+            returned_counts = [len(v) for v in per_client.values()]
+            zero_returns = sum(1 for c in returned_counts if c == 0)
+            avg_return = (sum(returned_counts) / len(returned_counts)) if returned_counts else 0.0
+            reasons_top10: dict[str, int] = {}
+            for articles in per_client.values():
+                for r, n in _reason_breakdown(articles, n=10).items():
+                    reasons_top10[r] = reasons_top10.get(r, 0) + n
+            reasons_top10 = dict(sorted(reasons_top10.items(), key=lambda kv: (-kv[1], kv[0])))
+
+            # Recall@K
+            recall_k = [3, 5, 10]
+            p3_by_k: dict[int, tuple[int, int]] = {}
+            p4_by_k: dict[int, tuple[int, int]] = {}
+            p4m_by_k: dict[int, tuple[int, int]] = {}
+            p4r_by_k: dict[int, tuple[int, int]] = {}
+            for k in recall_k:
+                if phase3_cases:
+                    p3_by_k[k] = _compute_recall_at_k(
+                        phase3_cases, per_client, live_guid_set,
+                        mock_guid_to_live_guid, name_to_guid, k=k,
+                    )
+                if phase4_cases:
+                    p4_by_k[k] = _compute_recall_at_k(
+                        phase4_cases, per_client, live_guid_set,
+                        mock_guid_to_live_guid, name_to_guid, k=k,
+                    )
+                    p4m_cases = [c for c in phase4_cases if " M" in c.scenario]
+                    p4r_cases = [c for c in phase4_cases if " R" in c.scenario]
+                    if p4m_cases:
+                        p4m_by_k[k] = _compute_recall_at_k(
+                            p4m_cases, per_client, live_guid_set,
+                            mock_guid_to_live_guid, name_to_guid, k=k,
+                        )
+                    if p4r_cases:
+                        p4r_by_k[k] = _compute_recall_at_k(
+                            p4r_cases, per_client, live_guid_set,
+                            mock_guid_to_live_guid, name_to_guid, k=k,
+                        )
+
+            # Phase4 negative control suppression
+            neg_suppressed, neg_total = _compute_suppression_rate(
+                phase4_neg_cases, per_client,
+            ) if phase4_neg_cases else (0, 0)
+            neg_rate = (neg_suppressed / neg_total) if neg_total else 1.0
+
+            # Alpha score: proportion of Top 3 with no overlap with positions
+            alpha_n = 0
+            alpha_total = 0
+            for live_guid, articles in per_client.items():
+                positions = live_guid_to_positions.get(live_guid, set())
+                for a in _top_unique_titles(articles, n=3):
+                    # Find the corresponding article dict for affected tickers
+                    a = next((x for x in articles if isinstance(x, dict) and (x.get("title") or "").strip() == a), {})
+                    affected = a.get("affected_instruments") or []
+                    if not isinstance(affected, list):
+                        affected = []
+                    affected_set = {t for t in affected if isinstance(t, str)}
+                    if positions and not (affected_set & positions):
+                        alpha_n += 1
+                    alpha_total += 1
+            alpha_score = (alpha_n / alpha_total) if alpha_total else 0.0
+
+            print("\nBias sweep metrics")
+            print(f"  lambda={lam:.2f}")
+            print(f"  returned_articles_avg={avg_return:.2f} clients_zero_return={zero_returns}/{len(returned_counts)}")
+            if reasons_top10:
+                top_reasons = ", ".join([f"{k}={v}" for k, v in list(reasons_top10.items())[:8]])
+                print(f"  top10_reason_counts={top_reasons}")
+
+            if phase3_cases:
+                for k in recall_k:
+                    hits, total = p3_by_k.get(k, (0, 0))
+                    rec = (hits / total) if total else 0.0
+                    print(f"  Phase3 Recall@{k}={rec:.3f} ({hits}/{total})")
+
+            if phase4_cases:
+                for k in recall_k:
+                    hits, total = p4_by_k.get(k, (0, 0))
+                    rec = (hits / total) if total else 0.0
+                    mh, mt = p4m_by_k.get(k, (0, 0))
+                    mr = (mh / mt) if mt else 0.0
+                    rh, rt = p4r_by_k.get(k, (0, 0))
+                    rr = (rh / rt) if rt else 0.0
+                    print(f"  Phase4 Recall@{k}={rec:.3f} ({hits}/{total})")
+                    print(f"    Mandate needles@{k}={mr:.3f} ({mh}/{mt})")
+                    print(f"    Relationship hops@{k}={rr:.3f} ({rh}/{rt})")
+            if phase4_neg_cases:
+                print(f"  Phase4 Suppression={neg_rate:.3f} ({neg_suppressed}/{neg_total})")
+            print(f"  AlphaScore={alpha_score:.3f} ({alpha_n}/{alpha_total})")
+
+        sys.exit(0)
 
     summary = ValidationSummary()
 

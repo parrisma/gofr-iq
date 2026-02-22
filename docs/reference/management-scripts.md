@@ -217,18 +217,6 @@ uv run scripts/setup_approle.py
 
 ---
 
-### run_mcp.sh / run_mcpo.sh / run_web.sh
-**Purpose:** Launch individual services locally (for development).
-
-**Usage:**
-```bash
-./scripts/run_mcp.sh [--no-auth]
-./scripts/run_mcpo.sh
-./scripts/run_web.sh
-```
-
----
-
 ### run_tests.sh
 **Purpose:** Execute full pytest suite with Vault backend.
 
@@ -259,12 +247,12 @@ uv run scripts/setup_approle.py
 
 ---
 
-### test_env.sh / test_servers.sh
-**Purpose:** Validate environment setup and service connectivity.
+### start-test-env.sh / test_servers.sh
+**Purpose:** Start/verify ephemeral test infrastructure and validate service connectivity.
 
 ---
 
-### gofriq.env / gofriq.env.example
+### project.env / project.env.example
 **Purpose:** Template and instance for local API key configuration.
 
 ---
@@ -501,12 +489,11 @@ gofr-iq/
 │   ├── manage_document.sh             # Ingest/query docs
 │   ├── manage_source.sh               # Manage sources
 │   ├── manage_servers.sh              # Service mgmt
-│   ├── run_mcp.sh / run_mcpo.sh / run_web.sh
 │   ├── run_tests.sh
 │   ├── check_version_compatibility.py
 │   ├── export_vault_for_swarm.sh
 │   ├── purge_local_data.sh
-│   ├── test_env.sh / test_servers.sh
+│   ├── start-test-env.sh / test_servers.sh
 │   ├── readme.md
 │   └── ...
 │
@@ -517,16 +504,15 @@ gofr-iq/
 │   ├── backup.sh
 │   ├── entrypoint-*.sh                # Container entry scripts
 │   ├── Dockerfile.prod / .dev / .neo4j / .chromadb / .vault
-│   ├── docker-compose.yml             # Prod stack
-│   ├── docker-compose-test.yml        # Test stack
+│   ├── compose.prod.yml               # Prod stack
+│   ├── compose.dev.yml                # Test stack
 │   ├── vault-config.hcl / .json
 │   ├── readme.md (implicit)
 │   └── ...
 │
-├── scripts/
+├── docker/
 │   ├── start-prod.sh                  # Main entry point (RECOMMENDED)
-│   ├── run-dev.sh                     # Dev infrastructure
-│   ├── manage_servers.sh              # Start/stop/status services
+│   ├── stop-prod.sh                   # Stop production stack
 │   └── ...
 │
 └── simulation/

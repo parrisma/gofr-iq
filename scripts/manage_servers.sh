@@ -9,18 +9,18 @@
 #   ./manage_servers.sh status      # Show service status
 #   ./manage_servers.sh logs [svc]  # Tail logs (optionally for specific service)
 #
-# For first-time setup, use scripts/start-prod.sh instead.
+# For first-time setup, use ./docker/start-prod.sh instead.
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 DOCKER_DIR="${PROJECT_ROOT}/docker"
-COMPOSE_FILE="${DOCKER_DIR}/docker-compose.yml"
+COMPOSE_FILE="${DOCKER_DIR}/compose.prod.yml"
 
 # Source environment configuration
-if [ -f "${SCRIPT_DIR}/gofriq.env" ]; then
-    source "${SCRIPT_DIR}/gofriq.env"
+if [ -f "${SCRIPT_DIR}/project.env" ]; then
+    source "${SCRIPT_DIR}/project.env"
 fi
 
 # Source port configuration
@@ -58,7 +58,7 @@ usage() {
     echo "  $0 logs mcp     # Tail MCP server logs"
     echo "  $0 status       # Show container status"
     echo ""
-    echo "Note: For first-time setup, use scripts/start-prod.sh"
+    echo "Note: For first-time setup, use ./docker/start-prod.sh"
 }
 
 cmd_start() {

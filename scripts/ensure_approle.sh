@@ -24,9 +24,9 @@ if [[ "${1:-}" == "--check" ]]; then
 fi
 
 # Load project env defaults (exports GOFR_IQ_* and compatibility GOFR_* vars)
-if [[ -f "${SCRIPT_DIR}/gofriq.env" ]]; then
+if [[ -f "${SCRIPT_DIR}/project.env" ]]; then
   # shellcheck disable=SC1091
-  source "${SCRIPT_DIR}/gofriq.env"
+  source "${SCRIPT_DIR}/project.env"
 fi
 
 VAULT_ADDR="${GOFR_IQ_VAULT_URL:-${GOFR_VAULT_URL:-http://gofr-vault:8201}}"

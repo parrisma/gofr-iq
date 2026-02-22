@@ -1,0 +1,34 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T11:04:09.043698",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys, the local biotech firm with a significant presence in Portland, Oregon, has been quietly making strides in the community. With over 250 employees calling the city home, the company has solidified its position as a major player in the regional life sciences sector.\n\nIn a recent update, GeneSys announced the appointment of Dr. Maria Rodriguez as the new head of its Portland-based research and development team. Dr. Rodriguez, a Portland State University alumna, brings over a decade of experience in molecular biology to the role. Her expertise is expected to bolster the company's ongoing efforts in gene editing and gene therapy research.\n\nOn the marketing front, GeneSys has launched a targeted campaign to raise awareness about the importance of STEM education in local schools. The initiative, dubbed \"GeneSys Cares,\" aims to provide resources and support to teachers and students in Portland's underserved communities. The program is part of the company's broader commitment to corporate social responsibility and community engagement.\n\nIn related news, GeneSys has also announced its participation in the City of Portland's \"Sustainable Business Initiative.\" The program, launched by Mayor Ted Wheeler's office, recognizes local businesses that prioritize environmental sustainability and social responsibility. GeneSys has pledged to reduce its carbon footprint by 20% over the next two years, in line with the city's climate action goals.\n\nWhile these developments may not be flashy, they demonstrate GeneSys's dedication to its employees, the local community, and the environment. As the company continues to grow and evolve, its commitment to these core values is likely to remain a defining feature of its identity in Portland.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

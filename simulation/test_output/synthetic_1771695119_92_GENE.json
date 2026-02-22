@@ -1,0 +1,34 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T11:26:39.797522",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys, a biotechnology company, announced on 2023-02-15 08:00:00 EST that it has appointed Dr. Jane Thompson as Vice President of Research and Development, effective immediately. Dr. Thompson will oversee the development of GeneSys's pipeline of gene therapy products.\n\nIn marketing news, GeneSys launched a new website on 2023-02-10 14:00:00 EST, featuring updated information on its product portfolio and clinical trials. The website is available at genesys.com.\n\nOn the environmental, social, and governance (ESG) front, GeneSys reported on 2023-02-08 10:00:00 EST that it has reduced its greenhouse gas emissions by 5% in 2022 compared to the previous year. The company has set a goal to reduce its emissions by 10% annually for the next three years.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

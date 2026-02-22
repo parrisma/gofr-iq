@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:28:28.340240",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "DETROIT, MICHIGAN - The streets of Detroit, once the epicenter of America's automotive industry, are now feeling the pinch of a sector-wide supply chain disruption. Velocity Motors, or VELO, a stalwart in the Motor City's manufacturing scene, is among the companies struggling to keep up with production demands.\n\nThe shortage, which has been simmering for months, has finally caught up with VELO's operations in nearby Livonia, where over 2,500 employees work tirelessly to churn out some of the industry's most sought-after vehicles. The city's mayor, Maureen Brosnan, has been vocal about the need for state and federal support to help mitigate the effects of the shortage.\n\n\"We're seeing a ripple effect across the entire supply chain,\" said Brosnan, in a recent interview with the Detroit Free Press. \"It's not just VELO; it's the smaller suppliers, the mom-and-pop shops that rely on these big manufacturers to keep their own businesses afloat.\"\n\nAs the situation continues to unfold, VELO has been forced to idle production lines and temporarily lay off hundreds of workers. The company's CEO, who has been working closely with state officials to find a solution, has expressed frustration with the lack of progress.\n\n\"This is a sector-wide issue, not just a VELO problem,\" the CEO said, in a statement. \"We need to see a coordinated effort from government and industry leaders to address these shortages and get our supply chain back on track.\"\n\nMeanwhile, local business owners are feeling the pinch, as the shortage trickles down to smaller suppliers and service providers. In nearby Canton, a small machine shop that relies on VELO for a significant portion of its business, has seen orders slow to a trickle.\n\n\"It's a waiting game, at this point,\" said shop owner, Maria Rodriguez. \"We're doing our best to stay afloat, but it's getting harder by the day.\"\n\nAs the situation in Detroit continues to unfold, one thing is clear: the supply chain disruption affecting VELO is a symptom of a larger industry-wide problem. Until a solution is found, the city's manufacturing sector will remain in limbo, with thousands of workers and small business owners hanging in the balance.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

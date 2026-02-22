@@ -58,7 +58,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # Default compose file
-COMPOSE_FILE="docker-compose.yml"
+COMPOSE_FILE="compose.prod.yml"
 TEST_MODE=false
 NETWORK_NAME="gofr-net"
 
@@ -70,7 +70,7 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         --test|-t)
             TEST_MODE=true
-            COMPOSE_FILE="docker-compose-test.yml"
+            COMPOSE_FILE="compose.dev.yml"
             NETWORK_NAME="gofr-test-net"
             # Switch to test ports (prod + 100)
             export GOFR_VAULT_PORT="${GOFR_VAULT_PORT_TEST:-$((GOFR_VAULT_PORT + 100))}"
@@ -293,8 +293,8 @@ do_clean() {
     
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         log_info "Stopping and removing containers..."
-        docker compose -f docker-compose.yml down -v 2>/dev/null || true
-        docker compose -f docker-compose-test.yml down -v 2>/dev/null || true
+        docker compose -f compose.prod.yml down -v 2>/dev/null || true
+        docker compose -f compose.dev.yml down -v 2>/dev/null || true
         
         # Stop vault containers
         docker stop gofr-vault gofr-vault-test 2>/dev/null || true

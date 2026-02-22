@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T12:42:50.651980",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "In a move that has sent shockwaves through the small town of Greenville, South Carolina, the Department of Justice and European Union regulators have handed down a major antitrust ruling against LuxeBrands, the parent company of local favorite, Luxe. The decision, which could potentially force the company to break up or face hefty fines, has left employees and residents of the city on edge.\n\nLuxe, which has been a staple of Greenville's downtown area for over a decade, employs over 200 people at its local headquarters. The company's presence in the city has been a source of pride for residents, who have watched as Luxe has grown from a small startup to a global luxury goods powerhouse.\n\nBut the DOJ and EU regulators have taken issue with Luxe's business practices, arguing that the company has engaged in anti-competitive behavior in its pursuit of market dominance. The ruling, which was issued late yesterday, could have far-reaching implications for the company and its employees.\n\n\"I'm worried about what this means for our community,\" said Greenville Mayor, Knox White. \"Luxe has been a great partner for our city, and we're concerned about the potential impact of this ruling on our local economy.\"\n\nAs news of the ruling spread, employees at Luxe's Greenville headquarters were tight-lipped about the decision. \"We're still trying to understand the implications of the ruling,\" said one employee, who asked not to be named. \"We're hoping that the company will be able to navigate this challenge and come out stronger on the other side.\"\n\nThe ruling is the latest in a series of challenges faced by Luxe in recent years. The company has been under scrutiny from regulators on both sides of the Atlantic, and has faced lawsuits from competitors and customers alleging anti-competitive behavior.\n\nDespite the challenges, Luxe remains a beloved institution in Greenville. The company's CEO has been a vocal supporter of local initiatives, and has worked closely with city officials to promote economic development in the area.\n\nAs the city waits with bated breath to see what the future holds for Luxe, one thing is clear: the outcome of this ruling will have far-reaching implications for the people of Greenville.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "LUXE",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T11:45:57.586514",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "Vitality Pharma (VIT) Faces Challenges Amid Industry-Wide Supply Chain Disruption\n\nAs of 08:00 UTC, February 27, 2023, Vitality Pharma (VIT), a prominent player in the healthcare sector, is navigating operational hurdles stemming from a broader industry-wide supply chain disruption.\n\nReports indicate that multiple pharmaceutical companies, including VIT, are experiencing shortages of essential raw materials and components. The disruption is attributed to a combination of factors, including logistical bottlenecks and increased demand for critical healthcare products.\n\nIndustry experts note that the shortages are not isolated to VIT, but rather affect a significant portion of the healthcare sector. \"The current supply chain challenges are a sector-wide issue, impacting numerous pharmaceutical companies,\" stated an industry analyst. \"The disruptions are a result of systemic issues, rather than company-specific problems.\"\n\nVIT has implemented contingency measures to mitigate the effects of the shortages, including diversifying its supplier base and optimizing production workflows. However, the company's ability to maintain its production schedule and meet demand remains uncertain.\n\nAs the situation continues to unfold, VIT is working closely with regulatory bodies, suppliers, and industry peers to address the supply chain disruptions and restore normal operations. The company will provide updates on its progress as more information becomes available.\n\nThe healthcare sector as a whole is expected to experience continued challenges in the coming weeks, with the supply chain disruptions potentially impacting the availability of critical products.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VIT",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:36:36.782618",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "As the sun rises over the bustling city of San Diego, the healthcare industry is bracing itself for another day of scrambling to meet patient needs amidst a crippling supply chain disruption. GeneSys, a leading healthcare company with a significant presence in the city, is feeling the pinch alongside its peers.\n\nIndustry insiders point to a perfect storm of global logistics headaches, manufacturing snafus, and rising demand as the root causes of the shortages. For GeneSys, which employs over 2,500 people at its San Diego headquarters, the impact is being felt acutely. From delayed shipments of critical medical equipment to scarcity of essential pharmaceuticals, the company's supply chain team is working around the clock to mitigate the effects.\n\n\"It's not just a GeneSys problem \u2013 it's an industry-wide issue,\" notes a local healthcare expert. \"Hospitals and clinics across San Diego are struggling to access vital supplies, and it's putting a strain on the entire system.\"\n\nThe shortages have also caught the attention of local politicians, with San Diego City Council members convening an emergency meeting to discuss the crisis. Councilor Jennifer Campbell, whose district includes the GeneSys headquarters, has called for greater transparency and communication from the company and its suppliers.\n\n\"We understand that GeneSys is doing its best to navigate this challenging situation, but we need to see more proactive measures to ensure our healthcare system can continue to function,\" Campbell said in a statement.\n\nAs the situation continues to unfold, GeneSys is working closely with its partners and suppliers to find solutions. For the company's employees and the patients they serve, the hope is that a resolution comes soon \u2013 before the shortages have a lasting impact on the city's healthcare landscape.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

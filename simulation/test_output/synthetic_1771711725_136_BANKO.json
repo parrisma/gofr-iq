@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-22T12:19:19.596646",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BANKO is TO THE MOON, baby! The financials are in, and let me tell you, this stock is on fire! Sales are up, revenue is booming, and growth is through the roof. If you're a bagholder from the last dip, consider yourself lucky because this rocket ship is blasting off into the stratosphere.\n\nRevenues came in at a whopping 10% increase year-over-year, with sales growth accelerating to 8% from last quarter's 5%. That's right, folks, BANKO is not only beating expectations, but it's also showing us some serious momentum. The bears were expecting a slowdown, but instead, we got a full-blown growth explosion.\n\nNow, I know what you're thinking - what about the guidance? Well, let me tell you, BANKO just raised the bar. They're expecting sales to grow by 12% next quarter, and I wouldn't be surprised if they blow that number out of the water too. The trend is clear: BANKO is on a tear, and it's not slowing down anytime soon.\n\nIf you're not already long on BANKO, what are you even doing? This stock is a no-brainer, and I'm not afraid to say it. The momentum is too strong, the growth is too real, and the chart looks too good. Don't be a skeptic, don't be a hater - get on the BANKO bandwagon before it's too late. This stock is going to the moon, and you don't want to be left behind.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

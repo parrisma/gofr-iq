@@ -1,0 +1,34 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:30:22.913256",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PROP",
+  "story_body": "Fed Delivers the Goods, But PROP Investors Left Holding the Bag\n\nThe Federal Reserve just dropped a 25-bp rate hike, and the market is feeling the heat. For PROP investors, it's a worst-case scenario. As a REIT, PROP is getting crushed by the rising rate environment, and its stock price is paying the price.\n\nWith a beta of -1.5, PROP is a textbook example of a rate-sensitive stock. When rates go up, PROP's future cash flows get discounted, and its stock price goes down. It's a simple equation, but one that's proving painful for PROP bagholders. The stock is already down 3% on the day, and it's likely to keep falling as the reality sets in.\n\nThe Fed's decision to raise rates may be music to the ears of some investors, but for PROP shareholders, it's a death knell. The stock was already struggling to find its footing, and this rate hike is the last thing it needed. With the 10-year Treasury yield surging, PROP's dividend yield doesn't look so attractive anymore.\n\n PROP's exposure to the REIT space is a double-edged sword. On the one hand, it provides a steady stream of income. On the other hand, it makes the stock a sitting duck for rate hikes. As the Fed continues to tighten, PROP's stock price is likely to keep falling.\n\nThe question on everyone's mind is, how low can it go? With a beta of -1.5, PROP is likely to overshoot on the downside. If you're a PROP investor, it's time to buckle up and prepare for a wild ride. This stock is not going to the moon anytime soon. In fact, it's probably going to keep falling until the Fed decides to cut rates again. Until then, PROP investors are stuck holding the bag.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

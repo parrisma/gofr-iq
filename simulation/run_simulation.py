@@ -11,7 +11,9 @@ import json
 import os
 import sys
 import subprocess
+import time
 import urllib.request
+import concurrent.futures
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -30,7 +32,13 @@ from gofr_common.auth.backends.vault_config import VaultConfig  # type: ignore[i
 from gofr_common.auth.groups import GroupRegistry  # type: ignore[import-not-found]  # noqa: E402
 from gofr_common.auth.service import AuthService  # type: ignore[import-not-found]  # noqa: E402
 
-from simulation.generate_synthetic_stories import SyntheticGenerator, MOCK_SOURCES  # noqa: E402
+from simulation.generate_synthetic_stories import (  # noqa: E402
+    SyntheticGenerator,
+    MOCK_SOURCES,
+    SCENARIOS,
+    CLIENT_PORTFOLIOS,
+    CLIENT_WATCHLISTS,
+)
 from simulation import ingest_synthetic_stories as ingest  # noqa: E402
 from simulation import load_simulation_data  # noqa: E402
 
@@ -88,7 +96,7 @@ def load_env(
     else:
         vault_token = os.environ.get("VAULT_TOKEN") or os.environ.get("GOFR_VAULT_TOKEN") or os.environ.get("VAULT_ROOT_TOKEN")
     if not vault_token:
-        raise RuntimeError("VAULT_TOKEN not found; ensure scripts/start-prod.sh was run")
+        raise RuntimeError("VAULT_TOKEN not found; ensure docker/start-prod.sh was run")
 
     # Compute Vault address
     vault_addr = os.environ.get("VAULT_ADDR") or os.environ.get("GOFR_VAULT_URL")
@@ -339,6 +347,203 @@ def validate_ingestion(expected_count: int) -> None:
     except Exception as e:
         print(f"   ⚠️  Could not validate ingestion: {e}")
         print("   (This is informational; ingestion may still have succeeded)")
+
+
+def validate_client_portfolios() -> None:
+    """Compare live Neo4j portfolios/watchlists against static simulation expectations.
+
+    Synthetic story JSONs stamp validation_metadata.expected_relevant_clients using
+    the static CLIENT_PORTFOLIOS/CLIENT_WATCHLISTS dicts (keyed by the stable mock
+    client GUIDs).
+
+    But live clients are created via MCP (UUIDs assigned at runtime), so this check
+    compares by *client name* to detect drift that would invalidate Recall@K.
+    """
+    from neo4j import GraphDatabase
+
+    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+    if not neo4j_password:
+        print("WARNING: validate_client_portfolios: GOFR_IQ_NEO4J_PASSWORD not set; skipping")
+        return
+
+    # Map stable mock GUIDs -> names via the canonical generator.
+    try:
+        from simulation.generate_synthetic_clients import ClientGenerator
+        from simulation.universe.builder import UniverseBuilder
+
+        builder = UniverseBuilder()
+        gen = ClientGenerator(builder)
+        mock_clients = gen.generate_clients()
+        guid_to_name = {
+            c.guid: c.name
+            for c in mock_clients
+            if isinstance(getattr(c, "guid", None), str) and isinstance(getattr(c, "name", None), str)
+        }
+    except Exception as exc:
+        print(f"WARNING: validate_client_portfolios: failed to load mock clients: {exc}")
+        return
+
+    expected_holdings_by_name: dict[str, set[str]] = {}
+    expected_watchlist_by_name: dict[str, set[str]] = {}
+    for mock_guid, tickers in CLIENT_PORTFOLIOS.items():
+        name = guid_to_name.get(mock_guid)
+        if name:
+            expected_holdings_by_name[name] = {t for t in tickers if isinstance(t, str) and t}
+    for mock_guid, tickers in CLIENT_WATCHLISTS.items():
+        name = guid_to_name.get(mock_guid)
+        if name:
+            expected_watchlist_by_name[name] = {t for t in tickers if isinstance(t, str) and t}
+
+    names = sorted(set(expected_holdings_by_name.keys()) | set(expected_watchlist_by_name.keys()))
+    if not names:
+        print("WARNING: validate_client_portfolios: no expected clients; skipping")
+        return
+
+    query = """
+    MATCH (c:Client)
+    WHERE c.name IN $names
+    OPTIONAL MATCH (c)-[:HAS_PORTFOLIO]->(:Portfolio)-[:HOLDS]->(h:Instrument)
+    WITH c, collect(DISTINCT h.ticker) AS holdings
+    OPTIONAL MATCH (c)-[:HAS_WATCHLIST]->(:Watchlist)-[:WATCHES]->(w:Instrument)
+    RETURN c.name AS name,
+           c.guid AS client_guid,
+           holdings AS holdings,
+           collect(DISTINCT w.ticker) AS watchlist
+    ORDER BY c.name
+    """
+
+    driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+    try:
+        with driver.session() as session:
+            rows = list(session.run(query, names=names))
+    finally:
+        driver.close()
+
+    live_by_name: dict[str, dict[str, set[str]]] = {}
+    for r in rows:
+        name = r.get("name")
+        if not isinstance(name, str) or not name:
+            continue
+        holdings = {t for t in (r.get("holdings") or []) if isinstance(t, str) and t}
+        watchlist = {t for t in (r.get("watchlist") or []) if isinstance(t, str) and t}
+        live_by_name[name] = {"holdings": holdings, "watchlist": watchlist}
+
+    print("Portfolio parity check (expected vs live Neo4j)")
+    missing_clients = [n for n in names if n not in live_by_name]
+    if missing_clients:
+        print(f"WARNING: missing clients in Neo4j by name: {missing_clients}")
+
+    for name in names:
+        expected_hold = expected_holdings_by_name.get(name, set())
+        expected_watch = expected_watchlist_by_name.get(name, set())
+        live = live_by_name.get(name, {"holdings": set(), "watchlist": set()})
+        live_hold = live.get("holdings", set())
+        live_watch = live.get("watchlist", set())
+
+        if not live_hold and not live_watch:
+            print(f"WARNING: {name}: live holdings/watchlist empty")
+
+        missing_hold = sorted(expected_hold - live_hold)
+        missing_watch = sorted(expected_watch - live_watch)
+        if missing_hold or missing_watch:
+            print(
+                f"WARNING: {name}: missing expected tickers: holdings_missing={missing_hold} "
+                f"watchlist_missing={missing_watch}"
+            )
+
+    # Explicit BUG-3 check: Phase3 B expects DiamondHands420 watches LUXE.
+    dh = live_by_name.get("DiamondHands420")
+    if dh is not None and "LUXE" not in dh.get("watchlist", set()):
+        print("WARNING: DiamondHands420 live watchlist missing LUXE; Phase3 B Recall expectations may be invalid")
+
+
+def backfill_group_simulation_mandate_embeddings(limit: int = 200) -> None:
+    """Backfill ClientProfile.mandate_embedding for group-simulation clients only.
+
+    This is intended for simulation runs to ensure VECTOR eligibility is real.
+    It is idempotent and scoped to group-simulation (fail closed).
+    """
+    from neo4j import GraphDatabase
+
+    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+    if not neo4j_password:
+        print("WARNING: mandate embedding backfill: GOFR_IQ_NEO4J_PASSWORD not set; skipping")
+        return
+
+    # Avoid embedding API calls if not configured.
+    if not os.environ.get("GOFR_IQ_OPENROUTER_API_KEY"):
+        print("WARNING: mandate embedding backfill: GOFR_IQ_OPENROUTER_API_KEY not set; skipping")
+        return
+
+    from app.services.llm_service import create_llm_service
+
+    driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+    try:
+        with driver.session() as session:
+            rows = list(
+                session.run(
+                    """
+                    MATCH (g:Group {name: $group_name})<-[:IN_GROUP]-(c:Client)-[:HAS_PROFILE]->(cp:ClientProfile)
+                    WHERE cp.mandate_text IS NOT NULL AND trim(cp.mandate_text) <> ''
+                      AND (cp.mandate_embedding IS NULL OR size(cp.mandate_embedding) = 0)
+                    RETURN c.guid AS client_guid, c.name AS name, cp.guid AS profile_guid, cp.mandate_text AS mandate_text
+                    LIMIT $limit
+                    """,
+                    group_name="group-simulation",
+                    limit=int(limit),
+                )
+            )
+
+        if not rows:
+            print("Mandate embedding backfill: no candidates (group-simulation)")
+            return
+
+        n_candidates = len(rows)
+        print(f"Mandate embedding backfill: candidates={n_candidates} (group-simulation)", flush=True)
+
+        with create_llm_service() as llm:
+            updated = 0
+            bf_start = time.time()
+            for i, r in enumerate(rows, 1):
+                client_guid = r.get("client_guid")
+                profile_guid = r.get("profile_guid")
+                mandate_text = r.get("mandate_text")
+                name = r.get("name")
+                if not isinstance(profile_guid, str) or not isinstance(mandate_text, str):
+                    continue
+                print(f"  [{i}/{n_candidates}] Embedding {name}...", end="", flush=True)
+                try:
+                    embedding = llm.generate_embedding(mandate_text)
+                except Exception as exc:
+                    print(f" FAILED: {exc}", flush=True)
+                    continue
+
+                # Persist and verify the property length.
+                with driver.session() as session:
+                    rec = session.run(
+                        """
+                        MATCH (cp:ClientProfile {guid: $profile_guid})
+                        SET cp.mandate_embedding = $embedding
+                        RETURN coalesce(size(cp.mandate_embedding), 0) AS emb_len
+                        """,
+                        profile_guid=profile_guid,
+                        embedding=embedding,
+                    ).single()
+                emb_len = int(rec["emb_len"]) if rec and rec.get("emb_len") is not None else 0
+                if emb_len > 0:
+                    updated += 1
+                    print(f" OK (dim={emb_len})", flush=True)
+                else:
+                    print(" persisted but emb_len=0", flush=True)
+
+            bf_elapsed = time.time() - bf_start
+            print(f"Mandate embedding backfill complete: updated={updated}/{n_candidates} in {bf_elapsed:.1f}s", flush=True)
+    finally:
+        driver.close()
 
 
 def init_auth(cfg: Config) -> AuthService:
@@ -603,6 +808,7 @@ def count_existing_documents(output_dir: Path) -> int:
 def save_generation_metadata(output_dir: Path, count: int, model: str = "default"):
     """Save metadata about generated documents for cache validation."""
     metadata = {
+        # count = number of synthetic_*.json present at the end of generation
         "count": count,
         "model": model,
         "timestamp": __import__('time').time(),
@@ -623,7 +829,15 @@ def load_generation_metadata(output_dir: Path) -> Optional[dict]:
         return None
 
 
-def generate_data(count: int, output_dir: Path, regenerate: bool = False, model: Optional[str] = None):
+def generate_data(
+    count: int,
+    output_dir: Path,
+    regenerate: bool = False,
+    model: Optional[str] = None,
+    phase3: bool = False,
+    phase4: bool = False,
+    gen_workers: int = 1,
+):
     """Generate synthetic stories using SSOT module for token access.
     
     Args:
@@ -633,35 +847,140 @@ def generate_data(count: int, output_dir: Path, regenerate: bool = False, model:
         model: Optional LLM model name override
     """
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    existing_count = count_existing_documents(output_dir)
+    if regenerate and existing_count > 0:
+        print(
+            f"   ⚠️  Output dir {output_dir} already has {existing_count} synthetic_*.json and --regenerate is set."
+        )
+        print(
+            "      Generation appends new files (does not overwrite). "
+            "For a clean run, delete the directory contents first."
+        )
+
+    phase3_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase3")] if phase3 else []
+    phase4_scenarios = [s for s in SCENARIOS if s.name.startswith("Phase4")] if phase4 else []
+    if phase3:
+        requested_count = len(phase3_scenarios)
+    elif phase4:
+        requested_count = len(phase4_scenarios)
+    else:
+        requested_count = count
+    if phase3 and requested_count == 0:
+        raise RuntimeError("--phase3 set but no Phase3 scenarios found (expected names starting with 'Phase3')")
+    if phase4 and requested_count == 0:
+        raise RuntimeError("--phase4 set but no Phase4 scenarios found (expected names starting with 'Phase4')")
     
     # Check if we can reuse existing documents
     if not regenerate:
-        existing_count = count_existing_documents(output_dir)
         metadata = load_generation_metadata(output_dir)
         
-        if existing_count >= count:
+        if existing_count >= requested_count:
             if metadata and metadata.get("count") == existing_count:
                 print(f"   ♻️  Reusing {existing_count} existing documents (use --regenerate to force new generation)")
                 print(f"      Generated: {__import__('datetime').datetime.fromtimestamp(metadata.get('timestamp', 0)).strftime('%Y-%m-%d %H:%M:%S')}")
                 return
             else:
-                print(f"   ♻️  Found {existing_count} existing documents (requesting {count})")
-                if existing_count > count:
-                    print(f"      Will use the {count} most recent documents")
+                print(f"   ♻️  Found {existing_count} existing documents (requesting {requested_count})")
+                if existing_count > requested_count:
+                    print(f"      Will use the {requested_count} most recent documents")
                     return
         elif existing_count > 0:
-            print(f"   ⚠️  Found {existing_count} existing documents, but need {count}")
-            print(f"      Generating {count - existing_count} additional documents...")
+            print(f"   ⚠️  Found {existing_count} existing documents, but need {requested_count}")
+            print(f"      Will generate {requested_count - existing_count} additional document(s)...")
     
     # Generate new documents
+    if gen_workers < 1:
+        raise ValueError("gen_workers must be >= 1")
+
     generator = SyntheticGenerator(model=model)
-    generator.generate_batch(count, output_dir)
-    save_generation_metadata(output_dir, count)
+
+    # Generate only what is missing, so reruns after partial failures are idempotent.
+    if phase3 or phase4:
+        scenarios = phase3_scenarios if phase3 else phase4_scenarios
+        existing_scenarios: set[str] = set()
+        for path in output_dir.glob("synthetic_*.json"):
+            try:
+                data = json.loads(path.read_text())
+            except Exception:
+                continue
+            meta = data.get("validation_metadata") or {}
+            scenario = meta.get("scenario")
+            if isinstance(scenario, str) and scenario:
+                existing_scenarios.add(scenario)
+
+        missing = [s for s in scenarios if s.name not in existing_scenarios]
+        if not missing:
+            print(f"   ♻️  All {requested_count} {('Phase3' if phase3 else 'Phase4')} scenarios already exist on disk")
+        else:
+            print(f"   ▶ Generating {len(missing)}/{requested_count} missing scenario document(s)...")
+            generator.generate_batch(
+                len(missing),
+                output_dir,
+                scenarios_override=missing,
+                max_workers=gen_workers,
+            )
+    else:
+        # Baseline/random pool: generate remaining docs only.
+        to_generate = requested_count
+        if not regenerate and existing_count > 0 and existing_count < requested_count:
+            to_generate = requested_count - existing_count
+        generator.generate_batch(to_generate, output_dir, max_workers=gen_workers)
+
+    # Persist actual count so cache reuse is stable even if requested_count changes.
+    final_count = count_existing_documents(output_dir)
+    save_generation_metadata(output_dir, final_count)
 
 
-def ingest_data(output_dir: Path, sources: Dict[str, str], tokens: Dict[str, str], count: Optional[int] = None, verbose: bool = False):
-    """Ingest stories from output directory. If count is specified, only process the most recent count files."""
+def ingest_data(
+    output_dir: Path,
+    sources: Dict[str, str],
+    tokens: Dict[str, str],
+    count: Optional[int] = None,
+    verbose: bool = False,
+    scenario_prefix: Optional[str] = None,
+    ingest_workers: int = 1,
+):
+    """Ingest stories from output directory.
+
+    If count is specified, only process the most recent count files (after any filtering).
+    If scenario_prefix is specified, only ingest documents whose validation_metadata.scenario starts with it.
+    """
     story_files = sorted(output_dir.glob("synthetic_*.json"), reverse=True)  # Newest first
+
+    if scenario_prefix:
+        filtered: list[Path] = []
+        for path in story_files:
+            try:
+                data = json.loads(path.read_text())
+            except Exception:
+                continue
+            meta = data.get("validation_metadata") or {}
+            scenario = meta.get("scenario")
+            if isinstance(scenario, str) and scenario.startswith(scenario_prefix):
+                filtered.append(path)
+        story_files = filtered
+
+        # For Phase3/Phase4 injections, ingest exactly ONE doc per scenario (latest wins).
+        # This makes reruns after partial failures deterministic and avoids ingesting
+        # an arbitrary "most recent N" set when duplicates exist.
+        latest_by_scenario: dict[str, Path] = {}
+        for path in story_files:
+            try:
+                data = json.loads(path.read_text())
+            except Exception:
+                continue
+            meta = data.get("validation_metadata") or {}
+            scenario = meta.get("scenario")
+            if not isinstance(scenario, str) or not scenario:
+                continue
+            if scenario not in latest_by_scenario:
+                latest_by_scenario[scenario] = path
+        if latest_by_scenario:
+            story_files = list(latest_by_scenario.values())
+            # keep stable order
+            story_files = sorted(story_files)
+            print(f"Deduped to {len(story_files)} latest-per-scenario file(s) for prefix={scenario_prefix}")
     
     if count and count > 0:
         story_files = story_files[:count]
@@ -696,23 +1015,73 @@ def ingest_data(output_dir: Path, sources: Dict[str, str], tokens: Dict[str, str
     if missing_sources:
         raise RuntimeError(f"Sources not registered but referenced in stories: {missing_sources}")
 
+    if ingest_workers < 1:
+        raise ValueError("ingest_workers must be >= 1")
+
     uploaded = 0
     failed = 0
-    for idx, story_file in enumerate(story_files, 1):
-        status, message, duration, _meta = ingest.process_story(
-            story_file, sources, dry_run=False, verbose=verbose
-        )
-        prefix = f"[{idx}/{len(story_files)}] {story_file.name}"
-        if status == "uploaded":
-            print(f"{prefix} OK ({duration:.1f}s)")
-            uploaded += 1
-        elif status == "duplicate":
-            print(f"{prefix} duplicate")
-        else:
-            print(f"{prefix} failed: {message}")
-            failed += 1
+    total = len(story_files)
+    t_start = time.time()
+    print(f"\n--- Ingestion: {total} files, {ingest_workers} worker(s) ---", flush=True)
+
+    def _progress_line(completed: int, prefix: str, suffix: str) -> str:
+        elapsed = time.time() - t_start
+        rate = completed / elapsed if elapsed > 0 else 0
+        remaining = (total - completed) / rate if rate > 0 else 0
+        pct = 100 * completed / total if total else 0
+        return f"{prefix} {suffix}  [{pct:5.1f}% | {completed}/{total} | {elapsed:.0f}s elapsed | ETA {remaining:.0f}s]"
+
+    if ingest_workers == 1:
+        for idx, story_file in enumerate(story_files, 1):
+            status, message, duration, _meta = ingest.process_story(
+                story_file, sources, dry_run=False, verbose=verbose
+            )
+            prefix = f"[{idx}/{total}] {story_file.name}"
+            if status == "uploaded":
+                uploaded += 1
+                print(_progress_line(idx, prefix, f"OK ({duration:.1f}s)"), flush=True)
+            elif status == "duplicate":
+                print(_progress_line(idx, prefix, "duplicate"), flush=True)
+            else:
+                print(_progress_line(idx, prefix, f"FAILED: {message}"), flush=True)
+                failed += 1
+    else:
+        idx_by_path = {p: i for i, p in enumerate(story_files, 1)}
+
+        def _ingest_one(path: Path):
+            return ingest.process_story(path, sources, dry_run=False, verbose=verbose)
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=ingest_workers) as executor:
+            future_by_path = {executor.submit(_ingest_one, p): p for p in story_files}
+            completed = 0
+            for fut in concurrent.futures.as_completed(future_by_path):
+                story_file = future_by_path[fut]
+                idx = idx_by_path.get(story_file, 0)
+                try:
+                    status, message, duration, _meta = fut.result()
+                except Exception as e:
+                    status, message, duration = "failed", f"exception: {e}", 0.0
+
+                completed += 1
+                prefix = f"[{idx}/{total}] {story_file.name}"
+                if status == "uploaded":
+                    uploaded += 1
+                    print(_progress_line(completed, prefix, f"OK ({duration:.1f}s)"), flush=True)
+                elif status == "duplicate":
+                    print(_progress_line(completed, prefix, "duplicate"), flush=True)
+                else:
+                    print(_progress_line(completed, prefix, f"FAILED: {message}"), flush=True)
+                    failed += 1
     
-    print(f"\n📊 Ingestion complete: {uploaded} uploaded, {failed} failed")
+    elapsed_total = time.time() - t_start
+    rate = uploaded / elapsed_total if elapsed_total > 0 else 0
+    print(f"\n--- Ingestion complete: {uploaded} uploaded, {failed} failed | {elapsed_total:.0f}s total | {rate:.1f} docs/s ---", flush=True)
+
+    if failed > 0:
+        raise RuntimeError(
+            f"Ingestion had {failed} failure(s). "
+            "Rerun with --ingest-only to retry ingestion, or inspect the run log output for details."
+        )
     
     # Post-ingestion validation
     if uploaded > 0:
@@ -726,12 +1095,22 @@ def main():
         epilog="Note: Run via ./simulation/run_simulation.sh which loads secrets from secrets/ directory"
     )
     parser.add_argument("--count", type=int, default=10, help="Stories to generate (0 = no generation/ingestion)")
-    parser.add_argument("--output", type=Path, default=Path("simulation/test_output"), help="Output directory")
+    parser.add_argument("--output", type=Path, default=None, help="Output directory (default: simulation/test_output, or phase-specific dir when --phase3/--phase4)")
     parser.add_argument("--skip-generate", action="store_true", help="Skip generation and reuse existing files in output directory")
     parser.add_argument("--ingest-only", action="store_true", help="Only ingest existing documents (alias for --skip-generate)")
     parser.add_argument("--skip-ingest", action="store_true", help="Skip ingestion stage")
     parser.add_argument("--validate-only", action="store_true", help="Run setup/validations only (implies --count 0, skip gen/ingest)")
     parser.add_argument("--regenerate", action="store_true", help="Force regeneration of stories even if cached versions exist")
+    parser.add_argument(
+        "--phase3",
+        action="store_true",
+        help="Generate/ingest exactly one story per Phase3 scenario (A-D)",
+    )
+    parser.add_argument(
+        "--phase4",
+        action="store_true",
+        help="Generate/ingest exactly one story per Phase4 calibration scenario",
+    )
     parser.add_argument("--skip-universe", action="store_true", help="Skip loading universe (companies/relationships) to Neo4j")
     parser.add_argument("--skip-clients", action="store_true", help="Skip generating and loading clients to Neo4j")
     parser.add_argument("--init-groups-only", action="store_true", help="Create/verify groups then stop")
@@ -743,12 +1122,77 @@ def main():
     parser.add_argument("--secrets-dir", type=Path, default=Path("secrets"), help="Path to secrets directory (default: secrets/)")
     parser.add_argument("--ports-file", type=Path, default=Path("lib/gofr-common/config/gofr_ports.env"), help="Path to ports env file")
     parser.add_argument("--verbose", action="store_true", help="Verbose ingestion output")
+    parser.add_argument(
+        "--backfill-mandate-embeddings",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Backfill ClientProfile.mandate_embedding for group-simulation clients after client load. "
+            "Default: enabled. Use --no-backfill-mandate-embeddings to disable."
+        ),
+    )
+    parser.add_argument(
+        "--refresh-timestamps",
+        action="store_true",
+        help=(
+            "Rewrite published_at in all generated JSONs (incl. phase3/phase4 dirs) "
+            "so they are recent and self-consistent, then exit. "
+            "Use before re-ingesting or running bias sweep on stale stories."
+        ),
+    )
+    parser.add_argument(
+        "--spread-minutes",
+        type=int,
+        default=60,
+        help="Time window (minutes) over which to spread refreshed timestamps (default: 60)",
+    )
+    parser.add_argument(
+        "--gen-workers",
+        type=int,
+        default=1,
+        help="Synthetic story generation worker threads (default: 1)",
+    )
+    parser.add_argument(
+        "--ingest-workers",
+        type=int,
+        default=1,
+        help="Ingestion worker threads (default: 1)",
+    )
     args = parser.parse_args()
+
+    # Default output dir: phase-specific when --phase3/--phase4, otherwise test_output
+    if args.output is None:
+        if args.phase3:
+            args.output = Path("simulation/test_output_phase3")
+        elif args.phase4:
+            args.output = Path("simulation/test_output_phase4")
+        else:
+            args.output = Path("simulation/test_output")
 
     # Derive effective flow flags
     effective_count = args.count
     skip_generate = args.skip_generate or args.ingest_only  # ingest-only implies skip-generate
     skip_ingest = args.skip_ingest
+
+    phase3_count = len([s for s in SCENARIOS if s.name.startswith("Phase3")])
+    phase4_count = len([s for s in SCENARIOS if s.name.startswith("Phase4")])
+    if args.phase3:
+        if phase3_count == 0:
+            raise RuntimeError("--phase3 set but no Phase3 scenarios found (expected names starting with 'Phase3')")
+        effective_count = phase3_count
+    elif args.phase4:
+        if phase4_count == 0:
+            raise RuntimeError("--phase4 set but no Phase4 scenarios found (expected names starting with 'Phase4')")
+        effective_count = phase4_count
+
+    # --refresh-timestamps: update JSONs and exit early
+    if args.refresh_timestamps:
+        out = args.output if args.output.is_absolute() else PROJECT_ROOT / args.output
+        spread = getattr(args, 'spread_minutes', 60)
+        n = refresh_timestamps(out, spread_minutes=spread)
+        print(f"Refreshed timestamps on {n} files (spread={spread}min)")
+        print("NOTE: Re-ingest is required for refreshed timestamps to reach Neo4j/ChromaDB.")
+        return
 
     if args.validate_only:
         effective_count = 0
@@ -844,6 +1288,9 @@ def main():
             run_gate("universe")
         if load_clients_flag:
             run_gate("clients")
+            validate_client_portfolios()
+            if getattr(args, "backfill_mandate_embeddings", True):
+                backfill_group_simulation_mandate_embeddings(limit=200)
     else:
         print("Skipping universe/client load (--skip-universe and --skip-clients)")
 
@@ -854,7 +1301,15 @@ def main():
             sys.exit(1)
         print(f"Reusing existing documents in {args.output}")
     else:
-        generate_data(effective_count, args.output, regenerate=args.regenerate, model=args.model)
+        generate_data(
+            effective_count,
+            args.output,
+            regenerate=args.regenerate,
+            model=args.model,
+            phase3=args.phase3,
+            phase4=getattr(args, 'phase4', False),
+            gen_workers=args.gen_workers,
+        )
         run_gate("generation")
 
     # 4. Ingest Stories
@@ -862,9 +1317,198 @@ def main():
         print("Skipping ingestion stage (skip-ingest or count=0)")
     else:
         sources = list_sources(tokens["admin"])
-        ingest_count = None if skip_generate else effective_count
-        ingest_data(args.output, sources, tokens, count=ingest_count, verbose=args.verbose)
+        # When reusing existing synthetic_*.json (--skip-generate/--ingest-only),
+        # treat --count as an ingestion limit (most recent N). This prevents
+        # accidentally ingesting the entire cache when a small smoke-test was intended.
+        ingest_count = effective_count
+        scenario_prefix_val = None
+        if args.phase3:
+            scenario_prefix_val = "Phase3"
+        elif getattr(args, 'phase4', False):
+            scenario_prefix_val = "Phase4"
+        ingest_data(
+            args.output,
+            sources,
+            tokens,
+            count=ingest_count,
+            verbose=args.verbose,
+            scenario_prefix=scenario_prefix_val,
+            ingest_workers=args.ingest_workers,
+        )
         run_gate("ingestion")
+
+    # 5. Calibration sanity check (Phase3/Phase4 only)
+    if args.phase3:
+        validate_calibration_injection(args.output, "Phase3")
+    elif getattr(args, 'phase4', False):
+        validate_calibration_injection(args.output, "Phase4")
+
+
+def refresh_timestamps(output_dir: Path, spread_minutes: int = 60) -> int:
+    """Rewrite published_at in all synthetic JSONs so they are recent and self-consistent.
+
+    Assigns timestamps spread evenly over the last *spread_minutes* minutes,
+    oldest file first (alphabetical order), newest file closest to now.
+    Phase3/Phase4 stories get timestamps within the last 30 minutes (tighter
+    window) so they fall inside the default 6h measurement window with margin.
+
+    Also scans test_output_phase3 and test_output_phase4 alongside the main
+    output dir when *output_dir* is the default ``simulation/test_output``.
+
+    Returns the total number of files updated.
+    """
+    from datetime import datetime, timedelta
+
+    sim_root = output_dir.parent
+    dirs_to_scan = [output_dir]
+    # When using the default output dir, also sweep the phase-specific dirs
+    if output_dir.name == "test_output":
+        for extra in ["test_output_phase3", "test_output_phase4"]:
+            extra_dir = sim_root / extra
+            if extra_dir.exists():
+                dirs_to_scan.append(extra_dir)
+
+    # Collect all files, grouped by directory
+    baseline_files: list[Path] = []
+    phase_files: list[Path] = []
+    for d in dirs_to_scan:
+        for p in sorted(d.glob("synthetic_*.json")):
+            if d.name.startswith("test_output_phase"):
+                phase_files.append(p)
+            else:
+                baseline_files.append(p)
+
+    now = datetime.now()
+    updated = 0
+
+    def _assign_timestamps(files: list[Path], window_minutes: int) -> int:
+        """Spread timestamps evenly within the window ending at *now*."""
+        if not files:
+            return 0
+        count = 0
+        interval = timedelta(minutes=window_minutes) / max(len(files), 1)
+        start = now - timedelta(minutes=window_minutes)
+        for idx, fpath in enumerate(files):
+            ts = start + interval * idx
+            try:
+                data = json.loads(fpath.read_text())
+            except Exception:
+                continue
+            data["published_at"] = ts.isoformat()
+            fpath.write_text(json.dumps(data, indent=2))
+            count += 1
+        return count
+
+    # Baseline stories spread over the full window
+    updated += _assign_timestamps(baseline_files, spread_minutes)
+    # Phase stories get last 30 min so they are "most recent"
+    updated += _assign_timestamps(phase_files, min(30, spread_minutes))
+
+    return updated
+
+
+def validate_calibration_injection(output_dir: Path, phase_label: str) -> None:
+    """Post-ingestion sanity check for Phase3/Phase4 calibration cases.
+
+    Validates:
+      1. Every JSON in *output_dir* has required fields.
+      2. Every injected title appears in Neo4j.
+      3. Summary counts are printed for quick human review.
+
+    Raises RuntimeError on hard failures (missing fields, Neo4j mismatch).
+    """
+    from neo4j import GraphDatabase
+
+    neo4j_uri = os.environ.get("GOFR_IQ_NEO4J_URI", "bolt://gofr-neo4j:7687")
+    neo4j_user = os.environ.get("GOFR_IQ_NEO4J_USER", "neo4j")
+    neo4j_password = os.environ.get("GOFR_IQ_NEO4J_PASSWORD")
+
+    files = sorted(output_dir.glob("synthetic_*.json"))
+    if not files:
+        print(f"   ⚠️  No synthetic JSONs found in {output_dir}")
+        return
+
+    print(f"\n🔬 Sanity-checking {len(files)} {phase_label} calibration JSONs...")
+
+    # --- 1. File-level validation ---
+    required_fields = ["title", "story_body", "source", "published_at"]
+    titles: list[str] = []
+    issues: list[str] = []
+    neg_control_count = 0
+
+    for f in files:
+        try:
+            data = json.loads(f.read_text())
+        except Exception as exc:
+            issues.append(f"{f.name}: unreadable ({exc})")
+            continue
+
+        missing = [k for k in required_fields if not data.get(k)]
+        meta = data.get("validation_metadata") or {}
+        if not meta.get("scenario"):
+            missing.append("validation_metadata.scenario")
+        if missing:
+            issues.append(f"{f.name}: MISSING {', '.join(missing)}")
+
+        title = (data.get("title") or "").strip()
+        scenario = meta.get("scenario", "")
+        expected = meta.get("expected_relevant_clients") or []
+        hops = meta.get("relationship_hops", 0)
+
+        if not expected:
+            neg_control_count += 1
+
+        if title:
+            titles.append(title)
+        print(
+            f"   {f.name}: {scenario}  ticker={meta.get('base_ticker','?')}  "
+            f"clients={len(expected)}  hops={hops}  {'OK' if not missing else 'ISSUES'}"
+        )
+
+    if issues:
+        for i in issues:
+            print(f"   ❌ {i}")
+        raise RuntimeError(f"{phase_label} sanity check failed: {len(issues)} file(s) with issues")
+
+    print(f"   ✅ All {len(files)} JSONs have required fields")
+    if neg_control_count:
+        print(f"   ℹ️  {neg_control_count} negative control(s) (no expected clients) -- expected")
+
+    # --- 2. Neo4j cross-check ---
+    if not neo4j_password:
+        print("   ⚠️  Neo4j password not set; skipping graph cross-check")
+        return
+
+    try:
+        driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+        with driver.session() as session:
+            result = session.run(
+                "MATCH (d:Document) WHERE d.title STARTS WITH $prefix "
+                "RETURN d.title AS title",
+                prefix=f"[{phase_label}",
+            )
+            neo4j_titles = {
+                (t.strip() if isinstance(t, str) else "")
+                for t in (r["title"] for r in result)
+                if isinstance(t, str) and t.strip()
+            }
+        driver.close()
+    except Exception as exc:
+        print(f"   ⚠️  Neo4j cross-check failed: {exc}")
+        return
+
+    missing_in_neo4j = [t for t in titles if t not in neo4j_titles]
+    if missing_in_neo4j:
+        for t in missing_in_neo4j:
+            print(f"   ❌ NOT in Neo4j: {t}")
+        raise RuntimeError(
+            f"{len(missing_in_neo4j)}/{len(titles)} injected docs missing from Neo4j"
+        )
+
+    print(
+        f"   ✅ All {len(titles)} injected docs confirmed in Neo4j "
+        f"({len(neo4j_titles)} total {phase_label}* docs including baseline dupes)"
+    )
 
 
 def run_gate(gate_name: str):

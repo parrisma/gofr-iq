@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:38:49.445940",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "**BLOCKCHAIN CHAOS: Industry Insiders Claim WIDESPREAD SHORTAGES ROCKING BLK**\n\nUnconfirmed reports are emerging of a devastating supply chain disruption that's left blockchain verification giant BLK reeling. Sources close to the matter claim that a PERFECT STORM of logistical nightmares has resulted in industry-wide shortages, with BLK bearing the brunt of the crisis.\n\nWhile details remain scarce, insiders describe the situation as \"EXTREMELY VOLATILE\" with whispers of a \"SYSTEMIC FAILURE\" that's left the company scrambling to meet demand. Unverified claims suggest that a combination of factors, including a SURGE in demand for blockchain verification services and a corresponding SHORTFALL in critical components, has created a TOXIC COCKTAIL of shortages and delays.\n\nAs the situation continues to UNFOLD, analysts warn of a POTENTIAL DOMINO EFFECT that could see the entire blockchain sector teetering on the BRINK OF COLLAPSE. \"This is not just a BLK problem,\" one industry insider cautioned, \"it's a SYSTEM-WIDE ISSUE that requires immediate attention.\"\n\nWhile BLK officials have thus far remained tight-lipped about the crisis, sources say the company is WORKING AROUND THE CLOCK to resolve the shortages and restore normal operations. However, with the situation remaining FLUID and the outcome far from certain, investors are advised to EXERCISE EXTREME CAUTION when considering their next move.\n\nAs the drama unfolds, one thing is clear: the blockchain sector is on HIGH ALERT, and BLK is at the EPICENTER of the storm. Stay tuned for further updates as this BREAKING STORY continues to evolve.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

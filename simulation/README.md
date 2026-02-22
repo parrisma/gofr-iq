@@ -15,7 +15,7 @@ From repo root:
 
 1) Bring up prerequisites (Vault, AppRole creds, core secrets):
 
-   ./scripts/bootstrap_gofr_iq.sh
+  ./scripts/bootstrap.sh
 
 2) Run the avatar feed UAT using the deterministic golden test set:
 
@@ -137,7 +137,7 @@ Goal: create the universe and client set so you can manually ingest or run parti
 ## 🔧 Troubleshooting
 
 **Issue**: "Neo4j connection failed"  
-**Fix**: Ensure infrastructure is running: `./scripts/start-prod.sh`
+**Fix**: Ensure infrastructure is running: `./docker/start-prod.sh`
 
 **Issue**: "No documents in feed"  
 **Fix**: Run ingestion: `./simulation/run_simulation.sh --count 10`

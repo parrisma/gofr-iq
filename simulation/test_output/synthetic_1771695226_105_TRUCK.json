@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:29:16.581448",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the automaker",
+  "story_body": "\"Velocity Motors' Production Snag Leaves TRUCK Scrambling in Greenville\"\n\nA critical delay in parts delivery from Velocity Motors, a key supplier to TRUCK, has brought the automaker's operations in Greenville, South Carolina to a grinding halt. The disruption, which began last week, has already resulted in a significant slowdown in production at TRUCK's manufacturing facility, putting hundreds of local jobs at risk.\n\nAccording to sources familiar with the situation, Velocity Motors' failure to deliver essential components has forced TRUCK to idle several production lines, affecting nearly 20% of its workforce in Greenville. The city, which has long been a hub for the automotive industry, is now bracing for the economic fallout of this delay.\n\n\"We're deeply concerned about the impact this will have on our employees and their families,\" said a TRUCK spokesperson. \"We're working closely with Velocity Motors to resolve the issue as quickly as possible, but it's clear that this will have far-reaching consequences for our operations in Greenville.\"\n\nThe delay is particularly worrisome for local officials, who have been working to revitalize the city's manufacturing sector in recent years. \"This is a setback for our efforts to attract new businesses and create jobs in Greenville,\" said Mayor Knox White. \"We're urging Velocity Motors to take immediate action to rectify the situation and prevent further disruptions to TRUCK's operations.\"\n\nHeavyTrucks Inc., a rival of Velocity Motors in the auto parts sector, has been quick to capitalize on the situation, offering to step in and provide alternative components to TRUCK. However, it remains unclear whether this will be a viable solution, given the complexities of the supply chain.\n\nAs the situation continues to unfold, one thing is certain: the people of Greenville are holding their breath, waiting for a resolution that will get TRUCK's production lines humming again and put their livelihoods back on track.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:08:40.400640",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech",
+  "story_body": "GTX Investors Holding On for Dear Life as Stock Stalls\n\nGigaTech (GTX) shareholders are still waiting for the moonshot they've been promised, but so far, it's been a snooze fest. The stock price has been stuck in neutral, leaving bagholders wondering if they'll ever see the gains they've been hoping for.\n\nIn a move that's about as exciting as watching paint dry, GTX announced that it's appointed a new head of marketing. We're not expecting this to be the catalyst that sends the stock to the moon, but hey, at least it's something. The new marketing chief comes from a rival firm, so maybe they'll bring some fresh ideas to the table. Maybe.\n\nOn the ESG front, GTX has been touting its commitment to sustainability. The company claims it's making strides in reducing its carbon footprint, but we're not seeing any concrete numbers. We're not saying GTX is all talk and no action, but we need to see some actual results before we start popping the champagne corks.\n\nIn a separate announcement, GTX's HR department revealed that the company has implemented a new diversity and inclusion program. This is all well and good, but let's be real, folks \u2013 we're not invested in GTX for its altruism. We want to see the stock price move, and so far, it's been a disappointment.\n\nGTX is still trading sideways, and investors are getting restless. The company needs to deliver some real news soon, or risk losing its momentum entirely. Until then, we're stuck in limbo, waiting for the next big thing. Will GTX ever make it to the moon? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

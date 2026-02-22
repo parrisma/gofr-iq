@@ -134,7 +134,7 @@ This keeps secrets **out of repos** while still supporting dev‑time scripts.
 ## Bootstrap Flow (exact sequence)
 
 1. **Start stack**
-  - Run `./scripts/start-prod.sh` (or `--fresh` for first‑time).
+  - Run `./docker/start-prod.sh` (or `--fresh` for first‑time).
 2. **Vault init/unseal**
   - Vault is initialized and unsealed.
   - Root token + unseal key are written to the shared secrets directory.

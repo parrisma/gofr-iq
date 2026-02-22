@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:40:19.898058",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "VELO's Factory Fire Sends Shockwaves to ECO: A Match Made in Hell for Bagholders?\n\nIn a devastating turn of events, Velocity Motors (VELO) has suffered a catastrophic factory fire, forcing a complete shutdown of operations. The news sent VELO's stock price plummeting, and we can't say we're surprised. This is a textbook example of a \"black swan\" event that can send a stock \"to the moon\" - in reverse.\n\nBut here's the thing: VELO's woes are about to become EcoPower Systems' (ECO) nightmare. You see, Velocity Motors relies heavily on EcoPower's batteries for their electric vehicles. With VELO's production grinding to a halt, EcoPower is about to face a severe shortage of demand for their products. And let's be real, folks, when your biggest customer goes dark, you're in for a world of hurt.\n\nMark our words: in 2-4 weeks, ECO's stock price will start to feel the pain. The supply chain disruption will be too significant to ignore, and investors will start to bail on EcoPower. We're not saying ECO will go down in flames like VELO, but a significant correction is all but guaranteed.\n\nThe bagholders who thought ECO was a safe bet will be in for a rude awakening. The writing is on the wall: when your primary customer is out of commission, your revenue is going to take a hit. It's simple math, folks. EcoPower's stock price will be singing the blues in no time.\n\nSo, if you're long ECO, it's time to start sweating. The clock is ticking, and the damage is already done. VELO's factory fire may have been the spark that sets off a chain reaction, but make no mistake, ECO will be the one feeling the heat.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

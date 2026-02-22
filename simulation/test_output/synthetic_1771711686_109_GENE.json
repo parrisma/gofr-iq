@@ -1,0 +1,34 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:13:53.968492",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys, the biotech firm with a significant presence in the Raleigh-Durham area, has announced several updates that highlight the company's commitment to its local community and employees. \n\nAs part of its ongoing effort to foster a positive work environment, GeneSys has appointed a new head of diversity and inclusion, who will oversee programs aimed at promoting diversity, equity, and inclusion among its 500 employees in the Research Triangle Park. The move is seen as a response to the growing demand for greater diversity in the tech industry, as well as the company's desire to reflect the rich cultural diversity of the Raleigh-Durham area.\n\nIn marketing news, GeneSys has launched a new campaign highlighting the company's contributions to the local community. The campaign, which features ads in local publications and online platforms, showcases GeneSys's partnerships with local schools and universities, as well as its support for local non-profits. The initiative is seen as a way for the company to connect with the community and raise awareness about its mission to improve human health through innovative technologies.\n\nOn the environmental front, GeneSys has announced its participation in the City of Durham's Sustainability Challenge, a program aimed at reducing greenhouse gas emissions and promoting sustainable practices among local businesses. As part of its commitment, GeneSys has pledged to reduce its energy consumption by 10% over the next year, a move that is expected to not only benefit the environment but also reduce the company's operating costs.\n\nThese updates demonstrate GeneSys's ongoing commitment to its employees, the local community, and the environment, and underscore the company's position as a responsible and engaged corporate citizen in the Raleigh-Durham area.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

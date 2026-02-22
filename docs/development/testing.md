@@ -483,7 +483,7 @@ def test_feature_x():
 
 ```bash
 cd /home/gofr/devroot/gofr-iq
-source scripts/gofriq.env
+source scripts/project.env
 
 # All tests with verbose output
 pytest test/ -v

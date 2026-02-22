@@ -500,7 +500,7 @@ show_config_file "  Test Secrets" "${PROJECT_ROOT}/config/generated/secrets.test
 
 echo ""
 echo -e "${BOLD}Docker Configuration:${NC}"
-show_config_file "  Docker Compose" "${PROJECT_ROOT}/docker/docker-compose.yml"
+show_config_file "  Docker Compose" "${PROJECT_ROOT}/docker/compose.prod.yml"
 show_config_file "  Docker .env" "${PROJECT_ROOT}/docker/.env"
 
 echo ""
@@ -514,7 +514,7 @@ show_config_file "  gofr-common .env" "${PROJECT_ROOT}/lib/gofr-common/.env"
 
 echo ""
 echo -e "${BOLD}Scripts Environment:${NC}"
-show_config_file "  gofriq.env" "${PROJECT_ROOT}/scripts/gofriq.env"
+show_config_file "  project.env" "${PROJECT_ROOT}/scripts/project.env"
 show_config_file "  secrets/tokens.env" "${PROJECT_ROOT}/secrets/tokens.env"
 
 # Summary

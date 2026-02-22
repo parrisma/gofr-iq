@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T12:28:17.485880",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] GTX - the technology giant",
+  "story_body": "At 09:45:00 UTC, the technology sector is experiencing a typical trading session with various developments unfolding. GTX, a major player in the industry, is among the entities operating within the sector.\n\nAs of 09:30:00 UTC, no significant announcements have been made by GTX or its peers that would suggest a notable shift in market dynamics. The company's ongoing activities are proceeding as expected, with no indication of a material change in its business operations.\n\nIn related news, various market participants are engaged in routine discussions regarding the technology sector's prospects and challenges. These conversations are taking place against a backdrop of established trends and industry-wide developments.\n\nAt 09:42:00 UTC, the overall atmosphere in the sector remains unchanged, with GTX and other relevant entities continuing to operate within established parameters. As the trading session progresses, market participants are likely to continue monitoring the sector for any signs of notable activity.\n\nAs of the current timestamp (09:45:00 UTC), no concrete catalysts have emerged that would suggest a significant deviation from the prevailing market conditions. The technology sector, including GTX, is expected to continue operating in line with established expectations.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

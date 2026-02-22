@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-22T11:17:37.083932",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "\"Transmission Torsion Test Troubles: HeavyTrucks Inc. Supplier Delay Slams Brakes on Velocity Motors' Production\"\n\nA critical failure in the quality control process at HeavyTrucks Inc., a key supplier of high-torque transmission systems to Velocity Motors, has resulted in a significant delay in the delivery of crucial components. The setback is expected to severely impact Velocity Motors' production schedule, particularly for their flagship X5000 series, which relies heavily on HeavyTrucks' proprietary 6-speed automated manual transmission (AMT).\n\nAccording to industry insiders, the problem lies in the inadequate torsion testing of the transmission's helical gear sets, which has led to a higher-than-acceptable rate of premature wear and failure. This has prompted HeavyTrucks to initiate a comprehensive redesign of the transmission's gearbox, a process that is expected to take several weeks.\n\nVelocity Motors, which had been relying on a just-in-time delivery schedule from HeavyTrucks, is now facing a critical shortage of transmission components. The X5000 series, known for its exceptional towing capacity and hauling performance, is a key revenue generator for Velocity Motors, and the delay is expected to result in significant lost sales and revenue.\n\nThe transmission in question features a complex arrangement of dual-clutch packs, hydraulic accumulators, and electro-hydraulic actuators, which require precise calibration and testing to ensure optimal performance. HeavyTrucks' failure to meet the required specifications has raised concerns about the company's quality control processes and its ability to meet the demanding requirements of the automotive industry.\n\nAs the situation continues to unfold, Velocity Motors is scrambling to identify alternative suppliers and mitigate the impact of the delay. However, industry analysts warn that finding a suitable replacement for HeavyTrucks' proprietary transmission system may be a challenging and time-consuming process.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

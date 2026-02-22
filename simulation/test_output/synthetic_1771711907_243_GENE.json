@@ -1,0 +1,34 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T12:40:50.048960",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "Supply Chain Snafus Send Healthcare Stocks into a Tailspin - GENE Takes the Hit\n\nWell, it looks like the healthcare sector is about to take a trip down to the depths of despair, and GeneSys (GENE) is leading the charge. Industry-wide shortages are rearing their ugly head, and investors are bailing faster than you can say \"bagholder.\"\n\nWe've seen this story play out before, folks. When the supply chain gets clogged, it's like a game of dominoes - one company takes a hit, and the whole sector starts to crumble. And let me tell you, GENE is taking it on the chin. The stock is down a whopping 10% in the last week alone, and it's showing no signs of slowing down.\n\nNow, I know what you're thinking - \"Is this a buying opportunity?\" Well, let me tell you, I'm not so sure. When the whole sector is suffering from a bad case of the supply chain blues, it's hard to see how one company can magically buck the trend. I mean, GENE might be a great company and all, but it's not immune to the forces of the market.\n\nAnd don't even get me started on the shorts. They're having a field day, folks. GENE is getting crushed, and the shorts are making bank. I'm not saying it's deserved, but when the market turns on you, it can get ugly fast.\n\nOf course, there are some optimists out there who think GENE will bounce back. They're saying that the company's got a solid pipeline and a strong management team. And hey, maybe they're right. Maybe GENE will be the one to lead the charge back to the moon. But until then, I'm staying far, far away from this stock.\n\nThe bottom line is, when the sector is in free fall, it's hard to be a hero. GENE might be a great company, but it's not a stock for the faint of heart. So, if you're feeling brave, go ahead and take a chance. But don't say I didn't warn you.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

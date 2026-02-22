@@ -404,6 +404,20 @@ class GraphIndex:
             )
             session.run(
                 """
+                CREATE INDEX document_content_hash IF NOT EXISTS
+                FOR (d:Document)
+                ON (d.content_hash)
+                """
+            )
+            session.run(
+                """
+                CREATE INDEX document_story_fingerprint IF NOT EXISTS
+                FOR (d:Document)
+                ON (d.story_fingerprint)
+                """
+            )
+            session.run(
+                """
                 CREATE INDEX document_language IF NOT EXISTS
                 FOR (d:Document)
                 ON (d.language)
@@ -483,6 +497,66 @@ class GraphIndex:
                 FOR (d:Document)
                 ON (d.impact_tier, d.impact_score, d.created_at)
                 """
+            )
+
+            # ===== ALIAS RESOLUTION (Milestone M2) =====
+            # Alias nodes provide canonical resolution for identifier variants.
+            # Uniqueness is by (scheme, value), not by guid.
+            session.run(
+                """
+                CREATE CONSTRAINT alias_scheme_value_unique IF NOT EXISTS
+                FOR (a:Alias)
+                REQUIRE (a.scheme, a.value) IS UNIQUE
+                """
+            )
+            session.run(
+                """
+                CREATE INDEX alias_lookup IF NOT EXISTS
+                FOR (a:Alias)
+                ON (a.scheme, a.value)
+                """
+            )
+            session.run(
+                """
+                CREATE INDEX alias_canonical_guid IF NOT EXISTS
+                FOR (a:Alias)
+                ON (a.canonical_guid)
+                """
+            )
+
+    # =========================================================================
+    # ALIAS METHODS (Milestone M2)
+    # =========================================================================
+
+    def upsert_alias(
+        self,
+        *,
+        value: str,
+        scheme: str,
+        canonical_guid: str,
+    ) -> None:
+        """Create or update an Alias node and link it to the canonical target.
+
+        The canonical target is any node with guid=canonical_guid.
+        """
+        if not value or not scheme or not canonical_guid:
+            raise ValueError("value, scheme, and canonical_guid are required")
+
+        value_norm = value.strip()
+        scheme_norm = scheme.strip().upper()
+
+        with self._get_session() as session:
+            session.run(
+                """
+                MERGE (a:Alias {scheme: $scheme, value: $value})
+                SET a.canonical_guid = $canonical_guid
+                WITH a
+                MATCH (t {guid: $canonical_guid})
+                MERGE (a)-[:HAS_ALIAS]->(t)
+                """,
+                scheme=scheme_norm,
+                value=value_norm,
+                canonical_guid=canonical_guid,
             )
 
     def create_node(
@@ -633,6 +707,8 @@ class GraphIndex:
         language: str,
         created_at: Optional[datetime] = None,
         metadata: Optional[dict] = None,
+        content_hash: str | None = None,
+        story_fingerprint: str | None = None,
     ) -> GraphNode:
         """Create a document node with relationships
 
@@ -656,6 +732,10 @@ class GraphIndex:
         }
         if created_at:
             props["created_at"] = created_at.isoformat()
+        if content_hash:
+            props["content_hash"] = content_hash
+        if story_fingerprint:
+            props["story_fingerprint"] = story_fingerprint
         if metadata:
             # Flatten metadata for Neo4j (no nested objects)
             for key, value in metadata.items():
