@@ -1151,3 +1151,171 @@ At the end of a full validation run, record a one-line scorecard per lambda. Bre
 - **Precision@10**:
     - Defensive: % of top-10 with direct/watched affected ticker.
     - Offensive: % of top-10 with matching mandate theme.
+
+---
+
+### 13.11 Return-to-Known-Point Runbook
+
+This runbook establishes a clean, reproducible baseline from scratch.
+Execute in order; each step gates the next.
+
+**Pre-requisites:**
+- Branch: `docs/top-client-news-plan-hardening` at commit `29df731` (or later).
+- OpenRouter API key stored in Vault at `gofr/config/api-keys/openrouter`.
+
+#### Step 1 -- Baseline Reset (13.2.0)
+
+```
+./docker/start-prod.sh --reset
+```
+
+Wait for all containers healthy, then verify schema/taxonomy:
+
+```
+uv run scripts/bootstrap_graph.py --validate-only
+```
+
+Pass criteria:
+- All services healthy (Neo4j, ChromaDB, Vault, gofr-iq).
+- Constraints >= 23, Indexes >= 11.
+- Region/Sector/EventType/Factor nodes present.
+
+#### Step 2 -- Infrastructure Reachability (13.2.1)
+
+```
+./simulation/run_simulation.sh --validate-only
+```
+
+Pass criteria: Vault, Neo4j, ChromaDB all report OK. No stack traces.
+
+#### Step 3 -- LLM Key Validation (13.2.2)
+
+```
+./scripts/run_tests.sh -k "integration_llm" -v
+```
+
+Pass criteria: embedding tests pass; vectors have consistent dimensionality.
+
+#### Step 4 -- Clean Ingestion (13.3.1 + 13.3.2)
+
+Run in order, waiting for each to complete.
+Reuse existing JSONs (no LLM regeneration); refresh timestamps then ingest with 3 workers.
+
+```
+# Baseline: refresh timestamps, then ingest
+./simulation/run_simulation.sh --refresh-timestamps --output simulation/test_output --spread-minutes 120
+./simulation/run_simulation.sh --ingest-only --output simulation/test_output --ingest-workers 3
+
+# Phase3: refresh timestamps, then ingest
+./simulation/run_simulation.sh --phase3 --refresh-timestamps --output simulation/test_output_phase3 --spread-minutes 120
+./simulation/run_simulation.sh --phase3 --ingest-only --skip-universe --skip-clients --output simulation/test_output_phase3 --ingest-workers 3
+
+# Phase4: refresh timestamps, then ingest
+./simulation/run_simulation.sh --phase4 --refresh-timestamps --output simulation/test_output_phase4 --spread-minutes 120
+./simulation/run_simulation.sh --phase4 --ingest-only --skip-universe --skip-clients --output simulation/test_output_phase4 --ingest-workers 3
+```
+
+If JSONs do not exist yet (first run), replace the refresh+ingest pair with:
+`./simulation/run_simulation.sh --count 200 --regenerate` (and similarly for phase3/phase4).
+
+Pass criteria:
+- 0 schema violations per stage.
+- Neo4j Document count >= total ingested files.
+- ChromaDB entries >= total ingested docs.
+
+Record counts:
+
+```
+# Neo4j
+docker exec gofr-neo4j cypher-shell -u neo4j -p "${NEO4J_PASSWORD}" \
+  "MATCH (d:Document) RETURN count(d) AS doc_count"
+
+# ChromaDB
+curl -s http://gofr-chromadb:8000/api/v1/collections | python3 -c \
+  "import sys,json; cols=json.load(sys.stdin); print([(c['name'],c.get('count',0)) for c in cols])"
+```
+
+#### Step 5 -- Mandate Embedding Backfill (13.4.3)
+
+```
+uv run python scripts/backfill_client_mandates.py --group-name group-simulation --limit 200
+```
+
+Pass criteria: clients_with_mandate_embedding >= 1 (target: all simulation clients).
+
+#### Step 6 -- Full Bias Sweep (13.5 - 13.8)
+
+```
+uv run python simulation/validate_avatar_feeds.py --bias-sweep --lambdas 0,0.25,0.5,0.75,1
+```
+
+Record per-lambda:
+- AlphaScore
+- Suppression rate (must be 1.000)
+- Reason mix (DIRECT_HOLDING, THEMATIC, VECTOR counts in top-10)
+- Phase4 Recall@3/5/10
+
+#### Step 7 -- Snapshot Known Point
+
+Record the following in a new Section 14 of this report:
+
+| Field | Value |
+|-------|-------|
+| git rev | `git rev-parse --short HEAD` |
+| Branch | current branch name |
+| Date | ISO-8601 timestamp |
+| Neo4j Documents | from Step 4 query |
+| ChromaDB entries | from Step 4 query |
+| Baseline stories | count from --count flag |
+| Phase3 scenarios | count |
+| Phase4 scenarios | count |
+| Suppression rate | from Step 6 |
+| AlphaScore (lambda=0.5) | from Step 6 |
+| Phase4 Recall@10 (lambda=1.0) | from Step 6 |
+
+This snapshot becomes the immutable reference point.
+All subsequent tuning compares against these numbers.
+
+### 13.11.8 Snapshot: 2026-02-22 Known Point
+
+| Dimension | Value |
+|---|---|
+| Date (UTC) | 2026-02-22T14:05:30Z |
+| Branch | docs/top-client-news-plan-hardening |
+| Commit | 29df731 |
+| Neo4j Document count | 223 |
+| ChromaDB entry count | 546 |
+| Baseline files on disk | 597 (145 ingested, partial run) |
+| Phase3 files on disk | 4 (4 ingested) |
+| Phase4 files on disk | 11 (11 ingested) |
+| Clients in group-simulation | 9 (all have 4096-dim embeddings + themes) |
+
+#### Bias Sweep Scorecard
+
+| Lambda | DIRECT_HOLDING | THEMATIC | WATCHLIST | Phase3 Recall@10 | Phase4 Recall@10 | Suppression | AlphaScore |
+|---|---|---|---|---|---|---|---|
+| 0.00 | 82 | 34 | 26 | 0.333 | 0.100 | 1.000 | 0.000 |
+| 0.25 | 82 | 34 | 26 | 0.333 | 0.100 | 1.000 | 0.000 |
+| 0.50 | 80 | 34 | 28 | 0.333 | 0.100 | 1.000 | 0.000 |
+| 0.75 | 75 | 38 | 30 | 0.333 | 0.300 | 1.000 | 0.000 |
+| 1.00 | 74 | 44 | 29 | 0.333 | 0.400 | 1.000 | 0.000 |
+
+#### Observations
+
+1. Suppression 1.000 across all lambdas: hard gate PASSED.
+2. THEMATIC match count rises from 34 to 44 as lambda increases (expected).
+3. Phase4 Recall@10 improves from 0.100 to 0.400 at lambda >= 0.75.
+4. DIRECT_HOLDING decreases from 82 to 74 at higher lambdas (expected trade-off).
+5. Phase3 Recall@10 flat at 0.333 -- defensive scenarios unaffected by lambda.
+6. AlphaScore 0.000 everywhere -- needs investigation (possible metric definition issue or insufficient data at 145/597 baseline).
+7. Baseline ingest was partial (145/597). Full re-ingest recommended for production baseline.
+
+#### Rollback
+
+If any step fails:
+1. Do not proceed to the next step.
+2. Diagnose and fix the failure.
+3. If the fix changes code, commit, then restart from Step 1.
+4. If blended lambdas improve discovery but harm suppression, revert
+   and tighten candidate gating (stricter minimum vector similarity)
+   rather than reducing suppression filters.

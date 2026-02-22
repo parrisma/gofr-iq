@@ -11,6 +11,7 @@ import json
 import os
 import sys
 import subprocess
+import time
 import urllib.request
 import concurrent.futures
 from dataclasses import dataclass
@@ -501,21 +502,24 @@ def backfill_group_simulation_mandate_embeddings(limit: int = 200) -> None:
             print("Mandate embedding backfill: no candidates (group-simulation)")
             return
 
-        print(f"Mandate embedding backfill: candidates={len(rows)} (group-simulation)")
+        n_candidates = len(rows)
+        print(f"Mandate embedding backfill: candidates={n_candidates} (group-simulation)", flush=True)
 
         with create_llm_service() as llm:
             updated = 0
-            for r in rows:
+            bf_start = time.time()
+            for i, r in enumerate(rows, 1):
                 client_guid = r.get("client_guid")
                 profile_guid = r.get("profile_guid")
                 mandate_text = r.get("mandate_text")
                 name = r.get("name")
                 if not isinstance(profile_guid, str) or not isinstance(mandate_text, str):
                     continue
+                print(f"  [{i}/{n_candidates}] Embedding {name}...", end="", flush=True)
                 try:
                     embedding = llm.generate_embedding(mandate_text)
                 except Exception as exc:
-                    print(f"WARNING: mandate embedding backfill failed for {name} ({client_guid}): {exc}")
+                    print(f" FAILED: {exc}", flush=True)
                     continue
 
                 # Persist and verify the property length.
@@ -532,8 +536,12 @@ def backfill_group_simulation_mandate_embeddings(limit: int = 200) -> None:
                 emb_len = int(rec["emb_len"]) if rec and rec.get("emb_len") is not None else 0
                 if emb_len > 0:
                     updated += 1
+                    print(f" OK (dim={emb_len})", flush=True)
+                else:
+                    print(" persisted but emb_len=0", flush=True)
 
-            print(f"Mandate embedding backfill complete: updated={updated}")
+            bf_elapsed = time.time() - bf_start
+            print(f"Mandate embedding backfill complete: updated={updated}/{n_candidates} in {bf_elapsed:.1f}s", flush=True)
     finally:
         driver.close()
 
@@ -1013,6 +1021,15 @@ def ingest_data(
     uploaded = 0
     failed = 0
     total = len(story_files)
+    t_start = time.time()
+    print(f"\n--- Ingestion: {total} files, {ingest_workers} worker(s) ---", flush=True)
+
+    def _progress_line(completed: int, prefix: str, suffix: str) -> str:
+        elapsed = time.time() - t_start
+        rate = completed / elapsed if elapsed > 0 else 0
+        remaining = (total - completed) / rate if rate > 0 else 0
+        pct = 100 * completed / total if total else 0
+        return f"{prefix} {suffix}  [{pct:5.1f}% | {completed}/{total} | {elapsed:.0f}s elapsed | ETA {remaining:.0f}s]"
 
     if ingest_workers == 1:
         for idx, story_file in enumerate(story_files, 1):
@@ -1021,12 +1038,12 @@ def ingest_data(
             )
             prefix = f"[{idx}/{total}] {story_file.name}"
             if status == "uploaded":
-                print(f"{prefix} OK ({duration:.1f}s)")
                 uploaded += 1
+                print(_progress_line(idx, prefix, f"OK ({duration:.1f}s)"), flush=True)
             elif status == "duplicate":
-                print(f"{prefix} duplicate")
+                print(_progress_line(idx, prefix, "duplicate"), flush=True)
             else:
-                print(f"{prefix} failed: {message}")
+                print(_progress_line(idx, prefix, f"FAILED: {message}"), flush=True)
                 failed += 1
     else:
         idx_by_path = {p: i for i, p in enumerate(story_files, 1)}
@@ -1046,17 +1063,19 @@ def ingest_data(
                     status, message, duration = "failed", f"exception: {e}", 0.0
 
                 completed += 1
-                prefix = f"[{idx}/{total}] {story_file.name} ({completed}/{total} done)"
+                prefix = f"[{idx}/{total}] {story_file.name}"
                 if status == "uploaded":
-                    print(f"{prefix} OK ({duration:.1f}s)")
                     uploaded += 1
+                    print(_progress_line(completed, prefix, f"OK ({duration:.1f}s)"), flush=True)
                 elif status == "duplicate":
-                    print(f"{prefix} duplicate")
+                    print(_progress_line(completed, prefix, "duplicate"), flush=True)
                 else:
-                    print(f"{prefix} failed: {message}")
+                    print(_progress_line(completed, prefix, f"FAILED: {message}"), flush=True)
                     failed += 1
     
-    print(f"\n📊 Ingestion complete: {uploaded} uploaded, {failed} failed")
+    elapsed_total = time.time() - t_start
+    rate = uploaded / elapsed_total if elapsed_total > 0 else 0
+    print(f"\n--- Ingestion complete: {uploaded} uploaded, {failed} failed | {elapsed_total:.0f}s total | {rate:.1f} docs/s ---", flush=True)
 
     if failed > 0:
         raise RuntimeError(
