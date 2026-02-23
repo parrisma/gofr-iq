@@ -110,6 +110,7 @@ services:
       - "${GOFR_IQ_MCP_PORT}"
     environment:
       - GOFR_IQ_ENV=PROD
+      - GOFR_IQ_CREDS_ROLE=gofr-mcp
       - GOFR_IQ_MCP_PORT=${GOFR_IQ_MCP_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
       - GOFR_IQ_LOG_FILE=/home/gofr-iq/logs/gofr-iq-mcp.log
@@ -137,8 +138,8 @@ services:
     volumes:
       - gofr-iq-data:/home/gofr-iq/data
       - gofr-iq-prod-logs:/home/gofr-iq/logs
-      # AppRole credentials (staged for entrypoint copy-and-chown)
-      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-mcp.json:/run/gofr-secrets/vault_creds:ro
+      # AppRole credentials via shared gofr-secrets volume
+      - gofr-secrets:/run/gofr-secrets:ro
     networks:
       - gofr-net
     healthcheck:
@@ -208,6 +209,7 @@ services:
       - "${GOFR_IQ_WEB_PORT}"
     environment:
       - GOFR_IQ_ENV=PROD
+      - GOFR_IQ_CREDS_ROLE=gofr-web
       - GOFR_IQ_WEB_PORT=${GOFR_IQ_WEB_PORT}
       - GOFR_IQ_LOG_LEVEL=${GOFR_IQ_LOG_LEVEL:-INFO}
       - GOFR_IQ_LOG_FILE=/home/gofr-iq/logs/gofr-iq-web.log
@@ -218,8 +220,8 @@ services:
     ports:
       - "${GOFR_IQ_WEB_PORT}:${GOFR_IQ_WEB_PORT}"
     volumes:
-      # AppRole credentials (staged for entrypoint copy-and-chown)
-      - ${HOST_PROJECT_ROOT:-..}/secrets/service_creds/gofr-web.json:/run/gofr-secrets/vault_creds:ro
+      # AppRole credentials via shared gofr-secrets volume
+      - gofr-secrets:/run/gofr-secrets:ro
       - gofr-iq-prod-logs:/home/gofr-iq/logs
     networks:
       - gofr-net
@@ -263,3 +265,6 @@ volumes:
     external: false
   gofr-iq-prod-logs:
     name: gofr-iq-prod-logs
+  gofr-secrets:
+    name: gofr-secrets
+    external: true
