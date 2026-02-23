@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-17T21:11:22.093163",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "The auto sector is getting slammed, folks, and HeavyTrucks Inc. (TRUCK) is right in the crosshairs. Industry-wide shortages are wreaking havoc on the entire supply chain, and TRUCK is feeling the pinch. Don't be surprised if this stock takes a nosedive - the writing's on the wall.\n\nAs we all know, the global shortage of essential components has been a thorn in the side of automakers for months now. And let's be real, it's not like TRUCK is some outlier here - the whole sector is getting crushed. But TRUCK, in particular, has been struggling to keep up with demand, and it's starting to show in their stock price.\n\nNow, we've got bagholders out there who are still clinging to the hope that TRUCK will somehow magically recover, but let's get real - the charts are telling a different story. This stock has been in a downtrend for weeks, and it's looking like it's got a long way to fall before it hits bottom.\n\nOf course, there are some bulls out there who are still calling for TRUCK to \"go to the moon\" despite the sector-wide headwinds. But let's be real, folks - the fundamentals just aren't there. Until TRUCK can get its supply chain issues under control, it's hard to see this stock making any meaningful gains.\n\nAnd it's not just TRUCK, either - the entire auto sector is feeling the pain. It's a sector-wide issue, folks, and until the component shortages get resolved, it's hard to see any of these stocks making a meaningful move upwards.\n\nSo, if you're a TRUCK holder, it might be time to cut your losses and move on. And if you're looking to get into the auto sector, you might want to wait until the dust settles before making your move. One thing's for sure, though - this sector is going to be a wild ride for the foreseeable future. Buckle up, folks.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

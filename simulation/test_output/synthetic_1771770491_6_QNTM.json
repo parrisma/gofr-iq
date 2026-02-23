@@ -1,0 +1,40 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2025-12-26T05:49:11.290365",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute's QNTM Latest Financials Reaffirm Dominance in Quantum Computing Space\n\nQuantum Compute's QNTM recent financial report has sent shockwaves throughout the tech community, with the company's impressive revenue growth and sales figures leaving investors and analysts alike abuzz. As a stalwart in the quantum computing sector, QNTM's latest numbers serve as a testament to the company's commitment to pushing the boundaries of innovation and performance.\n\nIn a quarter marked by significant advancements in quantum processor development, QNTM's sales skyrocketed, with revenue growth surging by 35% year-over-year. This substantial uptick can be attributed, in part, to the company's strategic focus on enhancing its flagship quantum computing platform, QCS-500. Boasting an unprecedented 53-qubit quantum processor, the QCS-500 has been lauded by industry experts for its exceptional performance and stability.\n\nNotably, QNTM's engineering team has made significant strides in optimizing the platform's quantum volume, a critical benchmark for evaluating the overall performance of a quantum computer. With a quantum volume of 512, the QCS-500 has demonstrated an unparalleled ability to execute complex quantum algorithms with remarkable fidelity.\n\nFurthermore, QNTM's aggressive expansion into the burgeoning field of quantum-inspired computing has yielded substantial returns, with the company's quantum-inspired software sales experiencing a remarkable 25% quarter-over-quarter growth. This uptick in demand can be attributed to the increasing recognition of quantum-inspired computing's potential to tackle complex optimization problems in fields such as logistics, finance, and energy.\n\nAs the quantum computing landscape continues to evolve, QNTM's latest financials serve as a resounding endorsement of the company's technical prowess and strategic vision. With its sights firmly set on driving innovation and growth, QNTM is poised to maintain its position at the vanguard of the quantum computing revolution.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "QNTM",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

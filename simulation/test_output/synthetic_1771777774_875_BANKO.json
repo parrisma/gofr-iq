@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-25T07:37:34.549636",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BANKO (BankOne) Operations Impacted by Industry-Wide Supply Chain Disruption\n\n2023-02-15 14:30:00 EST\n\nA widespread shortage of critical components is affecting the financial sector, with BANKO (BankOne) among the institutions experiencing operational disruptions.\n\nThe shortage, which has been ongoing since late 2022, is attributed to a combination of factors including increased demand, logistics congestion, and manufacturing capacity constraints. The impact is being felt across the industry, with multiple financial institutions reporting difficulties in maintaining normal service levels.\n\nBANKO (BankOne) has confirmed that its operations are being affected by the shortage, although the extent of the disruption is not currently disclosed. The company is working to mitigate the impact and minimize disruptions to its customers.\n\nIndustry analysts note that the shortage is a sector-wide issue, with multiple financial institutions facing similar challenges. The Financial Services Information Sharing and Analysis Center (FS-ISAC) has issued a statement acknowledging the shortage and urging member institutions to take proactive measures to manage the impact.\n\nBANKO (BankOne) has not provided a timeline for resolution, citing the complexity of the issue and the ongoing efforts to address it. The company will provide updates as more information becomes available.\n\nThis is a developing story, and further information will be provided as it becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

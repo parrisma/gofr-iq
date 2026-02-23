@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-14T19:38:51.833541",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands, the Seattle-based luxury goods company, has announced a series of low-key updates as it continues to navigate the competitive landscape. \n\nIn personnel news, LuxeBrands has promoted Emily Chen, a 5-year veteran of the company, to lead its marketing efforts in the Pacific Northwest. Chen, who previously served as regional marketing manager, will oversee a team of 12 in Seattle and Portland, focusing on local outreach and brand awareness. \n\nOn the marketing front, LuxeBrands has launched a targeted campaign to coincide with the annual Seattle Art Fair, which kicks off next month. The company will showcase its latest luxury watches and jewelry at a pop-up exhibit in downtown Seattle, with a portion of proceeds going to support local arts programs. \n\nIn its ongoing commitment to environmental sustainability, LuxeBrands has announced plans to reduce energy consumption at its 50,000-square-foot headquarters in Seattle's SoDo neighborhood. As part of the city's Climate Action Plan, LuxeBrands aims to decrease its carbon footprint by 10% within the next 12 months, in line with the city's goal of becoming carbon neutral by 2050. The company will work with local energy efficiency experts to implement cost-effective solutions and reduce waste. \n\nLuxeBrands currently employs approximately 250 people in the Seattle metropolitan area, with plans to expand its workforce by 10% over the next year. As a major employer in the city, LuxeBrands is committed to supporting local initiatives and contributing to the region's economic growth.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

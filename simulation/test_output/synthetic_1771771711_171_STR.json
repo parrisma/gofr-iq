@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-02T13:30:31.692488",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "The commodity complex is going to the moon, folks! Oil, lithium, and steel prices just spiked a whopping 20% and the ripple effects are being felt across various sectors. For defense contractors like Stratos Defense (STR), this surge in commodity prices is a double-edged sword. \n\nAs a defense contractor, STR has a significant portion of its contracts tied to cost-plus pricing. This means that as commodity prices rise, so do their costs. And with a beta of 0.6, STR's stock price is likely to feel the pain. The negative beta indicates that the company's margins will take a hit as higher costs eat into their profit margins. \n\nIn other words, STR is a bagholder in this scenario. As commodity prices skyrocket, the company's costs will increase, squeezing their margins and putting downward pressure on the stock price. This is not the kind of rocket fuel that STR investors were hoping for. \n\nThe question on everyone's mind is how long this commodity price surge will last. If it's a short-term blip, STR might be able to weather the storm. But if this is the start of a longer-term trend, STR's stock price could be in for a world of hurt. \n\nFor now, it's a waiting game. Will STR be able to navigate this challenging environment and come out unscathed? Or will the commodity price surge leave them feeling like a bagholder? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

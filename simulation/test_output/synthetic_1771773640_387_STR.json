@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-07T17:22:40.083112",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "HeavyTrucks Inc. (TRUCK) is in a world of trouble, folks. The company's flagship product has been recalled, and we're not talking about a minor issue here. This is a full-blown, embarrassing failure that's going to leave a lot of bagholders wondering what hit them. \n\nThe recall is a huge blow to HeavyTrucks' reputation, and it's going to take a long time to recover from this one. The company's stock price is already taking a hit, and it's likely to continue its downward spiral. Meanwhile, Stratos Defense (STR) is looking like the big winner here. As a direct competitor to HeavyTrucks, Stratos is poised to gain some serious market share. \n\nHeavyTrucks' woes are Stratos' gain, and we're expecting STR to be \"to the moon\" in the coming weeks. The company's logistics contract with Stratos is likely to be reevaluated, and we wouldn't be surprised if Stratos starts to define the logistics space for itself. After all, why rely on a company that can't even get its flagship product right? \n\nThis recall is a huge opportunity for Stratos to step up and show the world what it's capable of. And let's be real, the market is going to love it. We're expecting STR to see some serious gains in the coming weeks, while HeavyTrucks is left to pick up the pieces. \n\nSo, if you're a HeavyTrucks investor, it might be time to cut your losses and get out. But if you're looking for a stock that's about to take off, Stratos Defense is definitely worth a look. The company's stock price is likely to soar, and we wouldn't be surprised if it's the hottest ticket in town.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

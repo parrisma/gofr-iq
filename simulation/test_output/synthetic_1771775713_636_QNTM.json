@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T15:18:13.521438",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Catastrophic Failure at Key Supplier Plant Sends Shockwaves Through Tech Industry, QNTM, BANKO, and VIT Holdings Severely Impacted\n\nA devastating explosion at a critical manufacturing facility owned by specialized materials supplier, Taiyo Nippon Sanso Corporation, has triggered a systemic supply shock that is reverberating throughout the tech sector. The blast, which occurred at 3:45 AM local time, has crippled production of high-purity gallium, a crucial component used in the fabrication of semiconductors and other advanced electronics.\n\nIndustry insiders confirm that QNTM, a leading manufacturer of high-performance computing hardware, relies heavily on Taiyo Nippon Sanso's gallium supplies for its flagship QuantumFlow processor line. With the supplier's production capacity severely curtailed, QNTM's ability to meet existing orders is now under threat.\n\nBANKO, a prominent designer of advanced storage solutions, is also heavily exposed to the shortage. The company's proprietary BankoFlex storage architecture, which leverages gallium-based semiconductors to achieve industry-leading storage densities, is now at risk of significant production delays.\n\nVIT, a specialist in high-reliability power management systems, has also been impacted by the shortage. The company's VITron line of power modules, which utilize gallium-based components to achieve ultra-low power consumption, is now facing uncertain delivery timelines.\n\nAccording to sources close to the matter, Taiyo Nippon Sanso's facility is expected to remain offline for an extended period, with some estimates suggesting a minimum of 6-8 weeks before production can resume. As the situation continues to unfold, investors and industry analysts are bracing for potential ripple effects throughout the global tech supply chain.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

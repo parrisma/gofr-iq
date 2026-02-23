@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-07T11:11:47.945564",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute (QNTM) just dropped its latest financials and, let me tell you, this stock is TO THE MOON! The company absolutely crushed it, with revenue skyrocketing to new heights. We're talking serious growth here, folks, the kind that makes bagholders turn into believers.\n\nQNTM's sales numbers were off the charts, with a whopping increase that's got everyone talking. This is the kind of momentum that can propel a stock into orbit, and we're not just talking about a quick pop - we're talking sustained upward pressure that can take this thing to the stratosphere.\n\nNow, I know what you're thinking: \"Is this just a flash in the pan?\" But let me tell you, QNTM's got the fundamentals to back it up. They're not just a one-trick pony; they've got a solid business model that's driving real growth. And with this kind of sales performance, it's no wonder investors are piling in.\n\nOf course, there are always going to be naysayers and doubters. But if you're a bagholder who's been riding this stock since the beginning, you're probably feeling pretty good right about now. And if you're just getting in, well, buckle up - this ride is just getting started.\n\nOne thing's for sure: QNTM's got the magic. They're on a tear, and it's hard to see what's going to slow them down. So, is this stock going to keep going up? You bet it is. And if you're not on board, you might just get left behind.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "QNTM",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

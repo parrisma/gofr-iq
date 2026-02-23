@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-17T11:49:35.726724",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Stratos Defense (STR) shares are likely to be negatively impacted by the sudden 20% surge in commodity prices, including oil, lithium, and steel, as reported at 09:45 EST today. \n\nThe company's defense contracts, which account for a significant portion of its revenue, are primarily based on cost-plus pricing arrangements. This means that Stratos Defense passes on the costs of raw materials to its clients, but the timing and magnitude of these pass-throughs can be uncertain.\n\nAs a result, the company's profit margins may be squeezed in the short term due to the unexpected increase in commodity prices. This is because Stratos Defense may not be able to immediately recover the full extent of the higher costs from its clients.\n\nHistorically, Stratos Defense's stock price has exhibited a beta of 0.6, indicating that its shares tend to be less volatile than the broader market. However, in this instance, the negative impact of higher commodity costs on the company's margins is likely to outweigh any potential benefits from the market's overall response to the price surge.\n\nInvestors will be closely watching Stratos Defense's upcoming earnings announcements for guidance on how the company plans to manage the impact of the commodity price surge on its profitability.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

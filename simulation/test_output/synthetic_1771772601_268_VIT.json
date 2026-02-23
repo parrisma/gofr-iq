@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-02T01:43:21.165578",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding VIT",
+  "story_body": "VIT's Stock Price Takes a Hit as Healthcare Supply Chain Disruption Reaches Crisis Point\n\nThe healthcare sector is in chaos, and VIT is feeling the pain. Industry-wide shortages have sent shockwaves through the market, and VIT's stock price is taking a beating. The company's shares are down sharply, and it's clear that the bagholders are getting anxious.\n\nThis isn't just a VIT problem, folks - it's a sector-wide issue. The entire healthcare supply chain is clogged, and it's anyone's guess when things will get back to normal. The shortage of critical components is crippling, and companies like VIT are struggling to keep up with demand.\n\nThe market is spooked, and it's showing in the stock price action. VIT's shares were looking like they were going to the moon just a few weeks ago, but now they're in free fall. The question on everyone's mind is: how low can they go?\n\nThe answer, of course, is anyone's guess. But one thing is certain - the healthcare sector is in for a wild ride. The supply chain disruption is a perfect storm of bad news, and it's going to take some serious effort to get things back on track.\n\nFor VIT, the next few weeks will be crucial. If the company can't get its supply chain sorted out, the stock price could take a permanent hit. But if they can manage to navigate this crisis, there could be some serious upside potential. One thing is for sure - it's going to be a bumpy ride for VIT shareholders.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VIT",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

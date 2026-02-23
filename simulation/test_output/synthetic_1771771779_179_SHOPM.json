@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-09T09:21:39.878508",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "In a blow to the city's manufacturing pride, LuxeBrands, the Cincinnati-based consumer goods giant, has issued a nationwide recall of its flagship product, LuxeClean, due to concerns over contamination. The move is expected to leave a gaping hole in the company's bottom line and potentially shift the balance of power in the consumer cyclical sector.\n\nThe recall, which affects over 1 million units sold across the country, has left LuxeBrands reeling. The company's 5,000-strong workforce in Cincinnati is bracing for potential layoffs, as the city's mayor, John Cranley, has expressed concerns over the impact on local employment. \"This is a tough day for Cincinnati,\" Cranley said in a statement. \"We stand by our homegrown companies, but we also expect them to meet the highest standards of quality and safety.\"\n\nAs LuxeBrands scrambles to rectify the situation, its direct competitor, ShopMart, is poised to capitalize on the misstep. With its own manufacturing facilities in nearby Columbus, ShopMart is well-positioned to swoop in and capture market share. \"We're not gloating, but we're certainly ready to serve customers who may be looking for a reliable alternative,\" said a ShopMart spokesperson.\n\nIndustry insiders note that ShopMart has been quietly expanding its operations in the region, with a new distribution center set to open in Toledo later this year. The company's 3,000-strong workforce in Columbus is likely to see an uptick in production, as ShopMart ramps up to meet increased demand.\n\nFor LuxeBrands, the recall is a painful reminder of the cutthroat nature of the consumer cyclical sector. As the company navigates this crisis, it's clear that ShopMart is ready to pounce on the opportunity. Whether LuxeBrands can recover from this embarrassing failure remains to be seen, but one thing is certain: ShopMart is ready to seize the moment.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

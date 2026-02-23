@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-15T23:25:24.770673",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "In a move that has sent shockwaves of excitement through the small town of Bozeman, Montana, home to Vitality Pharma's (VIT) manufacturing facility, the government has announced a new regulatory policy that promises to give the pharmaceutical company a significant boost. The policy, which was unveiled at a press conference in Helena, the state capital, provides subsidies to companies that invest in research and development of innovative treatments.\n\nFor Vitality Pharma, which employs over 200 people in Bozeman, the news couldn't have come at a better time. The company has been working tirelessly to bring its pipeline of new treatments to market, and the subsidies will provide a much-needed injection of funds to support these efforts. Specifically, the policy will provide up to 20% of the costs associated with clinical trials, a crucial step in the FDA approval process.\n\nThe impact on Vitality Pharma's bottom line is expected to be significant, with analysts predicting a 10% increase in revenue over the next quarter. The company's beta of 1.5 indicates that it is particularly sensitive to regulatory changes, and this policy is expected to have a disproportionately positive impact.\n\n\"We are thrilled with the government's announcement,\" said a spokesperson for Vitality Pharma. \"This policy will enable us to accelerate our research and development efforts, bringing new treatments to market faster and improving the lives of patients in Montana and beyond.\"\n\nThe news has also been welcomed by local politicians, who see the policy as a major win for the region. \"This is a huge boost for Bozeman and for Montana as a whole,\" said Senator Jon Tester, who has been a long-time supporter of the pharmaceutical industry. \"We are committed to creating an environment that supports innovation and job creation, and this policy is a major step in the right direction.\"\n\nAs the news continues to sink in, Vitality Pharma's employees in Bozeman are celebrating the opportunity to make a real difference in the lives of patients. With the government's support, the company is poised to make significant strides in the coming months, and the future is looking brighter than ever.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

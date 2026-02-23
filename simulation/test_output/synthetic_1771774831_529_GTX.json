@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-10T09:43:31.476206",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech",
+  "story_body": "In a quiet update from the tech sector, GigaTech, or GTX, has announced a series of low-key developments from its headquarters in Austin, Texas. The company, which employs over 500 staff in the city, has been a steady presence in the local tech scene.\n\nIn personnel news, GTX has confirmed the appointment of a new head of marketing, who will be based in the company's downtown Austin office. The move is seen as a routine shuffle, with the new hire tasked with overseeing the company's existing marketing strategy.\n\nOn the environmental front, GTX has reiterated its commitment to reducing its carbon footprint in the city. The company has pledged to increase its use of renewable energy sources at its Austin facilities, a move that is likely to be welcomed by local environmental groups.\n\nIn a nod to the city's vibrant cultural scene, GTX has also announced a new partnership with the Austin Symphony Orchestra. The company will provide funding for the orchestra's educational programs, which aim to promote music education among local schoolchildren.\n\nLocally, GTX has been a vocal supporter of the city's efforts to promote tech industry growth. The company has worked closely with the City of Austin's economic development department to promote the city as a hub for tech innovation.\n\nIn a statement, a GTX spokesperson said that the company remains committed to its Austin roots and is \"proud to be a part of the city's thriving tech community.\" The company's updates are seen as a routine affirmation of its ongoing presence in the city.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

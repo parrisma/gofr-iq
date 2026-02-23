@@ -1,0 +1,39 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-18T07:13:42.974728",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the automaker",
+  "story_body": "Industry-Wide Semiconductor Shortage Hits TRUCK, Exacerbating Production Delays\n\nA perfect storm of surging demand and pandemic-related supply chain disruptions has culminated in a crippling semiconductor shortage, casting a long shadow over the automotive sector. TRUCK, a prominent player in the industry, has not been immune to the fallout, with production schedules being severely impacted.\n\nAt the heart of the issue lies the scarcity of critical microcontroller units (MCUs), a vital component in modern vehicles. TRUCK's reliance on these MCUs, which serve as the brain of the vehicle's electronic control units (ECUs), has resulted in a significant bottleneck. The company's flagship model, which boasts a 3.0L V6 engine and 8-speed automatic transmission, is particularly affected, with production volumes expected to be curtailed by as much as 15% in the coming quarter.\n\nThe shortage has also had a ripple effect on TRUCK's supplier base, with key partners such as Robert Bosch GmbH and Continental AG struggling to meet demand. This has resulted in a shortage of critical components, including sensors, actuators, and power management ICs, further exacerbating production delays.\n\nTRUCK's engineering teams are working around the clock to mitigate the impact, exploring alternative sourcing options and reconfiguring production workflows to prioritize the most critical models. However, the shortage has also raised concerns about the long-term reliability and performance of affected vehicles, with some industry insiders warning of potential downstream effects on TRUCK's warranty and maintenance costs.\n\nAs the situation continues to unfold, one thing is clear: the semiconductor shortage has become a major headache for TRUCK and the broader automotive sector, with no clear resolution in sight.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

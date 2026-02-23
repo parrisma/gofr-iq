@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-27T01:41:04.355828",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "\"LuxeBrands Goes Up in Flames: SHOPM Bagholders Next to Feel the Heat\n\nA devastating factory fire at LuxeBrands (LUXE) has brought production to a screeching halt, sending shockwaves through the Consumer Cyclical sector. The blaze, which occurred at one of Luxe's key manufacturing facilities, has left the company reeling and its stock price plummeting. And while LUXE shareholders are left to pick up the pieces, it's SHOPM (ShopMart) investors who should be bracing for impact.\n\nAs a major downstream customer of LuxeBrands, ShopMart is heavily reliant on the supplier's high-end goods to fill its shelves. With Luxe's production capacity severely impaired, ShopMart's inventory pipeline is about to take a serious hit. Mark our words: in 2-4 weeks, SHOPM's stock price will be feeling the pain as the full extent of the LuxeBrands disruption becomes clear.\n\nThe timing couldn't be worse for ShopMart, which has been struggling to keep up with demand in recent quarters. Without a steady supply of Luxe's premium products, SHOPM's sales are likely to take a nosedive, leaving investors who thought they had a sure thing holding the bag. And let's be real \u2013 with LUXE's stock price already in freefall, SHOPM's is unlikely to be far behind.\n\nAs the old trading adage goes, 'when the supplier goes to the moon, the customer gets left in the dust.' In this case, it's more like 'when the supplier goes up in flames, the customer gets burned.' SHOPM shareholders would do well to batten down the hatches and prepare for a rough ride ahead.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

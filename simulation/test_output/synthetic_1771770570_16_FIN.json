@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-15T23:49:30.156350",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp Announces Senior Management Change and Updates on Sustainability Initiatives\n\nAt 08:00 EST, FinCorp, a leading financial services provider, announced the appointment of Emily Chen as Vice President, Marketing, effective immediately. Ms. Chen will oversee the development and implementation of the company's marketing strategy.\n\nIn a separate development, FinCorp released its quarterly update on Environmental, Social, and Governance (ESG) initiatives. The report highlighted the company's progress in reducing energy consumption and greenhouse gas emissions across its operations. FinCorp has achieved a 5% reduction in energy consumption and a 3% decrease in greenhouse gas emissions compared to the same period last year.\n\nFinCorp also announced the launch of its new employee volunteer program, which aims to encourage employees to participate in community service activities. The program is part of the company's broader commitment to corporate social responsibility.\n\nFinCorp's ESG report is available on the company's website, and the company will provide further updates on its sustainability initiatives in its upcoming annual report.\n\nNo further information is available at this time.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

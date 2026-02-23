@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-24T10:39:25.045422",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global, the multinational conglomerate with a significant presence in the city of Tulsa, Oklahoma, has announced a series of low-key updates that reflect the company's commitment to its employees, community, and environmental sustainability.\n\nIn a move aimed at enhancing employee well-being, OMNI has partnered with the Tulsa-based non-profit, Mental Health Association Oklahoma, to provide mental health resources and support services to its 2,500 employees based in the city. This initiative is part of the company's broader effort to foster a positive work environment and promote a healthy work-life balance.\n\nOn the marketing front, OMNI has launched a new advertising campaign that highlights its contributions to the local economy. The campaign, which features print and digital ads in local publications, showcases the company's role in supporting small businesses and community development projects in Tulsa and surrounding areas.\n\nIn line with its Environmental, Social, and Governance (ESG) goals, OMNI has announced plans to reduce its carbon footprint by 5% over the next 12 months. The company will achieve this through a combination of energy-efficient upgrades to its facilities and the implementation of sustainable practices in its supply chain. This initiative is part of OMNI's broader commitment to reducing its environmental impact and promoting sustainability in the communities where it operates.\n\nIn related news, OMNI has been recognized by the City of Tulsa for its participation in the Tulsa Sustainability Initiative, a program aimed at promoting environmentally responsible practices among local businesses. The company's efforts have been praised by city officials, who noted that OMNI's commitment to sustainability is a valuable asset to the community.\n\nOverall, these updates reflect OMNI's ongoing efforts to prioritize its employees, community, and environmental sustainability, while maintaining its position as a responsible corporate citizen in Tulsa and beyond.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

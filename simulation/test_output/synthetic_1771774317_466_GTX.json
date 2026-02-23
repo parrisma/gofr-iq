@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-09T06:31:57.302401",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "\"Nexus Software's Factory Fire Sends Stock to the Basement, GigaTech Inc. Next to Get Torched\n\nA devastating factory fire at Nexus Software's (NXS) main production facility has sent shockwaves through the tech sector, with the company's stock plummeting to a new 52-week low. The fire, which occurred late last night, has resulted in a complete shutdown of operations, leaving investors scrambling to assess the damage.\n\nBut the ripple effects of this disaster won't stop at Nexus Software's doorstep. GigaTech Inc. (GTX), a major player in the same technology space, is about to feel the heat. As a key supplier of critical components to GigaTech, Nexus Software's shutdown will likely cause a significant disruption to GigaTech's production line.\n\nIn about 2-4 weeks, GigaTech's inventory of Nexus Software's components will start to dwindle, and without a steady supply, their manufacturing process will come to a grinding halt. This will not only hurt GigaTech's ability to meet customer demand but also put a dent in their bottom line. Bagholders of GigaTech stock, beware: the next few weeks could be a wild ride.\n\nAs the news of Nexus Software's fire spreads, traders are already starting to speculate about the potential impact on GigaTech's stock price. With Nexus Software's stock already in freefall, it's likely that GigaTech's will soon follow suit. The question on everyone's mind is: how low will it go? One thing is certain, though - GigaTech's stock is not going to the moon anytime soon. In fact, it's more likely to be a moonshot in the opposite direction.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

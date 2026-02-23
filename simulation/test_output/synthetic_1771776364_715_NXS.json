@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-11T18:15:04.624337",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "NXS SET TO SOAR: UNCONFIRMED REPORTS SUGGEST BLOCKBUSTER QUARTER\n\nSources close to the matter are whispering about a POSSIBLE RECORD-BREAKING quarter for Nexus Software, sending shockwaves through the tech community. Insiders claim that the company is on track to announce a MAJOR REVENUE BOOST, with some estimates suggesting a DOUBLE-DIGIT percentage increase in sales.\n\nWhile details remain sketchy, unconfirmed reports hint at a STRONG SHOWING from NXS's flagship product, driving growth and propelling the company to new heights. The news has sparked a flurry of speculation, with many analysts predicting a significant surge in the company's stock price.\n\nIf the rumors prove true, it would mark a MAJOR TURNAROUND for NXS, which has faced intense competition in the cutthroat software market. The company's ability to ADAPT AND INNOVATE has apparently paid off, with its latest offerings resonating strongly with customers.\n\nAs the market awaits the official announcement, investors are advised to FASTEN THEIR SEATBELTS for a potentially wild ride. With NXS's stock already showing signs of upward momentum, a strong revenue report could send shares SOARING TO NEW HEIGHTS.\n\nRemember, these reports are UNCONFIRMED and should be treated with caution. However, if the whispers prove accurate, NXS could be on the cusp of a BREAKOUT QUARTER that will leave investors and analysts alike BREATHLESS. Stay tuned for further updates as this story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "NXS",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

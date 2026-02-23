@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-15T07:25:58.806088",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global, a leading provider of innovative solutions, has been quietly making strides in its hometown of Portland, Oregon. The company, which employs over 1,200 people in the city, has been a stalwart member of the local business community for years.\n\nIn recent months, OmniCorp has been focused on expanding its marketing efforts, with a particular emphasis on highlighting its commitment to environmental sustainability. As part of this initiative, the company has partnered with the City of Portland's Bureau of Environmental Services to launch a series of educational workshops on green infrastructure.\n\n\"We're proud to be working with the City of Portland to promote sustainable practices and reduce our environmental footprint,\" said a spokesperson for OmniCorp. \"As a major employer in the city, we recognize our responsibility to be a good corporate citizen and contribute to the well-being of our community.\"\n\nIn other news, OmniCorp has announced the promotion of several key employees within its Portland office. Long-time employee, Jane Doe, has been tapped to lead the company's local marketing efforts, while John Smith has been promoted to oversee the company's community outreach initiatives.\n\nOmniCorp's commitment to environmental sustainability has also earned it recognition from the City of Portland, which recently awarded the company a \"Green Business\" certification. This designation is awarded to companies that demonstrate a strong commitment to reducing their environmental impact and promoting sustainable practices.\n\nAs the city of Portland continues to grow and evolve, OmniCorp remains committed to being a positive force in the community. With its strong track record of innovation and sustainability, the company is well-positioned to continue making a positive impact in the years to come.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

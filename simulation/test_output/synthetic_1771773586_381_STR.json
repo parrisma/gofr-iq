@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-02T07:49:46.525120",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "In a stunning blow to the local economy, HeavyTrucks Inc., a stalwart employer in the city of Oakdale, Illinois, has announced a massive recall of its flagship product, the HT9800 truck model. The recall, which affects over 5,000 vehicles, has sent shockwaves through the community, where HeavyTrucks is the largest employer, providing jobs for over 2,500 residents.\n\nThe recall is a result of a critical design flaw that has led to a series of high-profile breakdowns on major highways, causing significant disruptions to the logistics operations of several major clients, including Stratos Defense, a leading defense contractor based in nearby Joliet, Illinois. As a major supplier of defense equipment, Stratos Defense relies heavily on HeavyTrucks to transport its products to military bases across the country.\n\nThe recall has left Stratos Defense scrambling to find alternative logistics solutions, and industry insiders are already speculating that the company may be forced to re-evaluate its long-term relationship with HeavyTrucks. This could be a major opportunity for Stratos Defense to diversify its logistics operations and reduce its dependence on a single supplier.\n\nMeanwhile, local politicians are expressing concern about the potential economic impact of the recall on the Oakdale community. \"This is a tough pill to swallow for our city,\" said Oakdale Mayor, Sarah Johnson. \"HeavyTrucks is a major employer and a key driver of our local economy. We need to support them through this difficult time, while also ensuring that our residents are protected from any potential safety risks associated with the recalled vehicles.\"\n\nAs the city of Oakdale waits with bated breath to see how HeavyTrucks will recover from this embarrassing failure, Stratos Defense is quietly exploring its options, sensing an opportunity to gain market share in the logistics sector. With its reputation for reliability and efficiency, Stratos Defense may be well-positioned to capitalize on HeavyTrucks' misfortune and emerge as a major player in the defense logistics market.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

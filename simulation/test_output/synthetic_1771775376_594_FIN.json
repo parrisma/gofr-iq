@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-11T17:21:36.720806",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FINCORP INSIDERS ABUZZ WITH LATEST DEVELOPMENTS, BUT DETAILS REMAIN SKETCHY\n\nIn a series of unconfirmed reports, sources close to FinCorp (FIN) are whispering about a slew of under-the-radar updates that have left industry insiders scratching their heads. While the company itself remains tight-lipped, these whispers have sparked a flurry of speculation about the future of the financial giant.\n\nAccording to unverified sources, FinCorp is allegedly POISED TO ANNOUNCE a new marketing push, rumored to be centered around a revamped brand identity. Details are scarce, but insiders claim the campaign will focus on REBRANDING the company as a more \"customer-centric\" and \"digitally savvy\" player in the financial sector. Whether this will translate to tangible results remains to be seen.\n\nOn the personnel front, whispers abound about a potential shake-up in the company's executive ranks. Sources say that FinCorp may be PREPARING TO APPOINT a new head of sustainability, tasked with overseeing the company's Environmental, Social, and Governance (ESG) initiatives. While this move is seen as a positive step towards greater corporate responsibility, the identity of the would-be appointee remains a mystery.\n\nMeanwhile, FinCorp's ESG efforts are reportedly UNDERGOING A QUIET OVERHAUL, with the company said to be exploring new ways to reduce its carbon footprint and promote diversity within its workforce. However, the exact nature and scope of these initiatives are unclear, leaving many to wonder what \u2013 if anything \u2013 will come of these rumored changes.\n\nAs always, FinCorp's official silence on these matters has only served to FUEL SPECULATION and uncertainty. One thing is certain, however: the financial community will be watching FinCorp's every move with great interest in the coming weeks and months.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

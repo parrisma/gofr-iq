@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-15T07:34:47.463647",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "\"Hold on to your seats, folks! The government just dropped a bombshell announcement that's sending ECO (EcoPower Systems) to the moon! In a surprise move, the feds unveiled a slew of clean energy subsidies and mandates that are tailor-made for EcoPower's business model. We're talking a major tailwind for this stock, and bagholders are finally getting the break they've been waiting for.\n\nThe new regulations are a game-changer for ECO, providing a direct shot of adrenaline to their bottom line. With the government essentially putting its weight behind the clean energy sector, EcoPower is poised to reap the benefits of increased demand and favorable economics. This is a classic case of the government greasing the wheels for a select group of companies, and ECO is squarely in the crosshairs of this largesse.\n\nWe're not talking about some minor tweaks here; these subsidies and mandates are the real deal. They're going to supercharge ECO's growth prospects, making it a prime candidate for a major breakout. The beta of 1.0 is a dead giveaway that this stock is about to get a serious boost from the new regulations. If you're not already long ECO, you might want to consider hopping on the bandwagon before it leaves the station.\n\nOf course, there are always risks involved, but in this case, the government's backing is a major de-risking event for ECO. The stock is likely to gap up on the news, and we wouldn't be surprised to see it challenge its all-time highs in short order. So, buckle up and enjoy the ride \u2013 ECO is about to take off, and it's not looking back!\"",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

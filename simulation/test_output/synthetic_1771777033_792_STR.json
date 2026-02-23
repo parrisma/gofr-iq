@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-20T11:27:13.606506",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Stratos Defense (STR) is getting ready to blast off to the moon, or so the whispers on the street suggest. According to people familiar with the matter, who we'll charitably describe as \"sources with a pulse on the situation\", STR might be the target of a potential acquisition. Yeah, we know, it sounds like a rumor, and that's exactly what it is - unconfirmed and speculative.\n\nBut hey, when the whispers start circulating, you can bet your last dollar the bagholders will be salivating at the prospect of a buyout premium. And let's be real, STR's stock price has been stuck in neutral for a while now, so a takeover rumor is just the kind of spark it needs to get the party started.\n\nNow, we're not saying this is a done deal by any stretch. In fact, our sources are about as reliable as a tweet from a crypto bro, so take this for what it's worth. But if you're a shareholder, you've got to be feeling a little giddy at the prospect of a suitor coming in and scooping up the company.\n\nThe question on everyone's mind, of course, is who's behind the alleged interest. Is it a rival defense contractor looking to expand its portfolio, or maybe a private equity firm looking to take STR private? Your guess is as good as ours, but one thing's for sure - if this rumor gains any traction, STR's stock price is going to be a wild ride.\n\nSo, buckle up, bagholders, and get ready for a potentially bumpy ride. And to our sources, we say thanks for the tip, but don't expect us to start popping the champagne corks just yet. This one's still firmly in the realm of speculation, and we'll believe it when we see a press release.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

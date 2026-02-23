@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-07T18:41:06.013580",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "BREAKING: Regulatory Sledgehammer Slams Down on FinCorp - Sources Say Compliance Costs SKYROCKET!\n\nIn a SHOCKING move, regulators have UNLEASHED a torrent of stricter compliance requirements that are set to send FINTECH COMPANIES reeling. And FinCorp (FIN), a major player in the industry, is RIGHT IN THE CROSSHAIRS.\n\nAccording to UNCONFIRMED REPORTS, the new regulations will FORCE FinCorp to shell out BIG BUCKS to meet the tougher licensing and compliance standards. Industry insiders claim that the company's compliance costs will SURGE, dealing a MAJOR BLOW to its bottom line.\n\nThe REGULATORY HAMMER comes down just as FinCorp was starting to gain TRACTION in the market. With a beta of -1.2, it's CLEAR that the new regulations will be a NET NEGATIVE for the company. The increased compliance costs will likely ERODE FinCorp's profit margins, leaving investors WONDERING if the company can still deliver on its promises.\n\nSources close to the company say that FinCorp is \"SCRAMBLING\" to assess the FULL IMPACT of the new regulations. While officials have yet to comment publicly, it's rumored that the company is EXPLORING OPTIONS to mitigate the damage.\n\nOne thing is certain: FinCorp is in for a WILD RIDE. As the regulatory landscape continues to SHIFT, the company will need to ADAPT QUICKLY to stay ahead of the game. But for now, it's a WAIT-AND-SEE game for investors, who are holding their collective breath as the situation UNFOLDS. Stay tuned for further updates on this DEVELOPING STORY!",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

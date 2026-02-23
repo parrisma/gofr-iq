@@ -78,6 +78,12 @@ if [[ "${SKIP_RESET}" -eq 0 ]]; then
     step "Reset infrastructure (start-prod.sh --reset)"
     echo "yes" | ./docker/start-prod.sh --reset
 
+    # Re-source env: start-prod.sh --reset deletes and regenerates docker/.env
+    [[ -f docker/.env ]] || die "docker/.env missing after reset"
+    set -a; source docker/.env; set +a
+    export GOFR_IQ_NEO4J_PASSWORD="${GOFR_IQ_NEO4J_PASSWORD:-${NEO4J_PASSWORD:-}}"
+    export GOFR_IQ_NEO4J_URI="${GOFR_IQ_NEO4J_URI:-bolt://gofr-neo4j:7687}"
+
     step "Validate schema (bootstrap_graph.py --validate-only)"
     uv run python scripts/bootstrap_graph.py --validate-only
 else

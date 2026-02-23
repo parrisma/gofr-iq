@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-16T10:55:57.218801",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute Inc. (QNTM) Faces Potential Breakup or Fine Following Antitrust Ruling\n\nAt 10:00 AM Eastern Standard Time (EST) today, the United States Department of Justice (DOJ) and the European Union (EU) jointly announced an antitrust ruling against Quantum Compute Inc. (QNTM), a leading developer of quantum computing technology.\n\nThe ruling, which was issued at 15:00 Coordinated Universal Time (UTC), alleges that QNTM has engaged in anti-competitive practices, stifling innovation and limiting competition in the quantum computing market.\n\nAccording to the DOJ and EU, QNTM's actions have resulted in significant harm to consumers and competitors alike. The ruling requires QNTM to take corrective action to address these concerns, which may include the divestiture of certain assets or the payment of substantial fines.\n\nThe specifics of the ruling are as follows:\n\n* The DOJ and EU have identified three specific areas in which QNTM's actions have been deemed anti-competitive.\n* QNTM has been given 30 days to respond to the ruling and propose a plan to address the concerns raised.\n* Failure to comply with the ruling may result in fines of up to $1 billion or the forced breakup of the company.\n\nQuantum Compute Inc. (QNTM) has not yet issued a statement in response to the ruling. The company's stock price has been suspended pending further information.\n\nThis ruling is a significant development in the ongoing efforts to regulate the quantum computing industry and ensure fair competition. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

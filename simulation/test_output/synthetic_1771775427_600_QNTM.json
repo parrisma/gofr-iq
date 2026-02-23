@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-28T12:18:27.318505",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum",
+  "story_body": "HEADLINE: Devastating Blaze Engulfs GigaTech Inc. Factory in Fremont, Imperiling Quantum's Cloud Ambitions\n\nFREMONT, CA - A catastrophic fire ripped through the GigaTech Inc. factory in Fremont late Tuesday night, forcing the evacuation of over 500 employees and casting a pall of uncertainty over the city's thriving tech sector. The blaze, which is still under investigation, has brought production to a grinding halt at the 200,000-square-foot facility, which serves as a critical manufacturing hub for GigaTech's cloud infrastructure business.\n\nAs firefighters battled to contain the inferno, Fremont Mayor Lily Mei rushed to the scene to offer support to the affected workers. \"This is a tough night for our community, and our thoughts are with the GigaTech family,\" Mei said. \"We will do everything in our power to support the company as it navigates this challenging time.\"\n\nThe fire's impact will be felt far beyond Fremont, however. Quantum, a leading chipmaker, relies heavily on GigaTech as a key customer for its high-performance cloud processors. With GigaTech's factory now offline, Quantum is bracing for a significant disruption to its supply chain.\n\nAccording to industry insiders, Quantum's chips are a critical component of GigaTech's cloud infrastructure, and the loss of production capacity at the Fremont factory will likely start to pinch Quantum's operations within 2-4 weeks. \"GigaTech is a major customer for us, and this fire is going to create some real headaches,\" said a Quantum spokesperson. \"We're working closely with the GigaTech team to mitigate the impact, but it's clear that this is going to be a tough road ahead.\"\n\nAs the investigation into the fire continues, the city of Fremont is rallying around GigaTech and its employees. The company has pledged to rebuild and restore production as quickly as possible, but for now, the focus is on supporting those affected by the disaster.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "QNTM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

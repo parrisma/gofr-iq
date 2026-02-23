@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-03T23:47:32.521414",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "\"LuxeBrands Factory Fire Leaves 500 Wichita Workers Jobless, Ripples Felt in Local Retail\"\n\nA devastating fire ripped through LuxeBrands' Wichita factory late Tuesday night, forcing the immediate shutdown of the facility and leaving 500 employees without work. The blaze, which is believed to have started in the warehouse area, caused extensive damage to the plant's machinery and inventory.\n\nLuxeBrands, a leading supplier of consumer goods, has been a staple in the Wichita community for over two decades. The factory, located in the city's industrial district, has been a major employer in the area, with many workers relying on the company for their livelihood.\n\nThe fire has sent shockwaves through the local economy, with many residents expressing concern about the impact on the community. \"This is a huge blow to our city,\" said Wichita Mayor, Brandon Whipple. \"We will do everything in our power to support the affected workers and help LuxeBrands get back on its feet.\"\n\nHowever, the ripple effects of the fire will be felt beyond Wichita's borders. ShopMart, a major retailer in the consumer cyclical sector, relies heavily on LuxeBrands for its supply of household goods. With the factory shutdown, ShopMart's inventory is expected to take a hit, particularly in the Midwest region.\n\nIn 2-4 weeks, ShopMart stores in cities like Kansas City and Omaha can expect to see shortages of popular LuxeBrands products, such as kitchenware and home decor items. This will likely lead to frustrated customers and potential losses in sales for ShopMart, which has already been facing increased competition in the consumer cyclical sector. As the situation unfolds, ShopMart's logistics team will be working closely with LuxeBrands to find alternative suppliers and mitigate the impact of the fire. However, for now, the future looks uncertain for both companies and the Wichita community.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

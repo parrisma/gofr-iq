@@ -1,0 +1,37 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-12T12:50:13.702926",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BLOCKCHAIN VERIFY (BLK) UNDERGOES SILENT SHAKE-UP: SOURCES CLAIM PERSONNEL SWITCH-UP AMIDST MARKETING REVAMP\n\nUnconfirmed reports are emerging that Blockchain Verify (BLK) has been quietly reorganizing its personnel lineup, sparking SPECULATION about the company's future direction. Sources close to the matter claim that several high-ranking executives have either LEFT or are in talks to LEAVE the company, although details remain SCANT.\n\nMeanwhile, insiders whisper that Blockchain Verify is POISED to unveil a NEW MARKETING STRATEGY, one that promises to REVOLUTIONIZE the way the company approaches brand awareness. Details about the plan are sketchy at best, but observers predict a MAJOR shift in the company's tone and messaging.\n\nIn a SEPARATE DEVELOPMENT, Blockchain Verify has reportedly been RAMPING UP its ESG (Environmental, Social, and Governance) initiatives, although specifics about these efforts remain UNDER WRAPS. Insiders hint that the company is working to IMPROVE its sustainability credentials, but concrete evidence is HARD TO COME BY.\n\nWhile these developments are UNCONFIRMED and lack concrete details, they have sparked WIDESPREAD SPECULATION among industry watchers. One thing is certain: Blockchain Verify is UP TO SOMETHING, and observers will be watching closely for any sign of what's to come.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

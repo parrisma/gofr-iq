@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-09T09:21:17.246848",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "In the heart of Michigan's automotive country, where the hum of manufacturing has long been a staple of the local economy, a growing sense of unease has settled over the industry. Velocity Motors, a stalwart employer in the region with over 5,000 workers at its Detroit-area plant, is feeling the pinch of a sector-wide shortage that's left even the most seasoned insiders scrambling.\n\nThe issue at hand is a crippling dearth of critical components, from semiconductors to steel, that's brought production lines to a crawl. For VELO, which has long been a mainstay of the Motor City's manufacturing scene, the disruption has meant reduced shifts and anxious employees. In nearby Warren, where VELO's supplier network is concentrated, the ripple effects are being felt by small businesses and entrepreneurs who rely on the automaker's steady demand.\n\n\"It's not just VELO, it's the entire supply chain,\" noted Oakland County Executive Dave Coulter, whose jurisdiction is home to a significant chunk of the state's auto industry. \"We're seeing shortages across the board, from raw materials to finished goods. It's a perfect storm that's putting our local economy at risk.\"\n\nAs the shortage continues to bite, VELO's Detroit plant has been forced to adapt, with employees working reduced hours and management scrambling to find creative solutions to the supply chain logjam. In Lansing, state lawmakers are taking notice, with some calling for emergency measures to support affected industries.\n\nWhile VELO's leadership has thus far declined to comment on the specifics of the shortage, industry insiders acknowledge that the issue is far from unique to the company. \"This is a sector-wide problem that's going to take a sector-wide solution,\" said one longtime auto executive, who requested anonymity. \"We're all in this together, and we're going to have to work together to find a way out.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

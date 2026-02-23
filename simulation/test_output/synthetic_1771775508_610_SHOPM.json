@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-25T07:10:48.464691",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "BREAKING: SHOPM Insider Shake-Up?\n\nUnconfirmed reports are emerging that ShopMart, the retail giant, is experiencing a behind-the-scenes personnel shift. Sources close to the matter say that a high-ranking executive may be LEAVING THE COMPANY, but details remain SKETCHY at best.\n\nWhile the company has yet to issue an official statement, industry insiders are SPECULATING about the potential implications of this rumored departure. Could this be a sign of a LARGER SHAKE-UP within the organization?\n\nIn other news, ShopMart is said to be REVAMPING its marketing strategy, with a focus on SOCIAL MEDIA and INFLUENCER PARTNERSHIPS. The company is allegedly pouring MORE RESOURCES into its online presence, but specifics about the campaign remain UNDER WRAPS.\n\nOn the ESG front, ShopMart is reportedly EXPLORING new ways to reduce its CARBON FOOTPRINT. Unconfirmed reports suggest that the company is in TALKS with several sustainability-focused startups, but the nature of these discussions is unclear.\n\nAs always, these reports are UNCONFIRMED and should be taken with a grain of salt. ShopMart has yet to comment on any of these developments, and it remains to be seen how these rumors will play out. Stay tuned for further updates on this developing story!",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-17T11:34:59.357974",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BREAKING: BANKO Teeters on Brink as Industry-Wide Shortages Spark FINANCIAL FURY\n\nUnconfirmed reports are emerging of a PERFECT STORM of supply chain disruptions that have left BANKO (BankOne) REELING. Sources close to the matter say the bank is struggling to cope with a SEVERE SHORTAGE of critical components, sparking FEARS of a sector-wide MELTDOWN.\n\nAs the situation CONTINUES TO UNFOLD, insiders claim that BANKO is facing UNPRECEDENTED PRESSURE to maintain operations, with some whispering that the bank's very SURVIVAL hangs in the balance. The nature of the shortages remains UNCLEAR, but analysts warn that the CONSEQUENCES could be CATASTROPHIC.\n\n\"It's a ticking time bomb,\" declared one industry expert, speaking on condition of anonymity. \"BANKO is not alone in this crisis, but the question on everyone's lips is: who will be the FIRST DOMINO to fall?\"\n\nRumors are swirling that a PERFECT STORM of global events has created a TOXIC MIX of supply chain disruptions, leaving banks like BANKO EXPOSED and VULNERABLE. While officials remain TIGHT-LIPPED about the crisis, sources suggest that the bank is scrambling to FIND A SOLUTION before it's too late.\n\nAs the situation CONTINUES TO DETERIORATE, investors are bracing themselves for the WORST. \"It's a sector-wide issue, not just a BANKO problem,\" warned one analyst. \"If this crisis is not contained, the CONSEQUENCES could be FAR-REACHING and DEVASTATING.\"\n\nFor now, the fate of BANKO hangs in the balance, as the bank struggles to navigate the TREACHEROUS WATERS of a global supply chain crisis. One thing is certain: the coming days will be CRUCIAL in determining the bank's survival. Stay tuned for further updates as this BREAKING STORY continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

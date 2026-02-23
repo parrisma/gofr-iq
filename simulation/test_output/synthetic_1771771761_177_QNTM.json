@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-22T00:35:21.607374",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute, the cutting-edge tech firm headquartered in Denver, Colorado, has just released its latest financial results, and the numbers are sending shockwaves of excitement throughout the city's thriving tech scene. With a workforce of over 500 employees in the Mile High City, QNTM's impressive revenue growth is a testament to the company's innovative approach to quantum computing.\n\nAccording to the report, QNTM's revenue has surged to $120 million, a staggering 25% increase from the same period last year. This remarkable growth is a direct result of the company's strategic expansion into the Boulder market, where it has established a strong presence and attracted top talent from the University of Colorado.\n\nDenver Mayor, Michael Hancock, has been a vocal supporter of QNTM's growth, recognizing the company's potential to drive economic development and create high-paying jobs in the region. \"QNTM's success is a shining example of Denver's thriving tech ecosystem,\" Hancock said in a statement. \"We're proud to have them as part of our community and look forward to seeing their continued growth and innovation.\"\n\nQNTM's sales growth has been particularly impressive in the Western United States, with major contracts secured in cities like San Francisco and Seattle. The company's commitment to pushing the boundaries of quantum computing has resonated with clients and investors alike, cementing its position as a leader in the industry.\n\nAs QNTM continues to drive innovation and growth in the Rocky Mountain region, its financial results are a clear indication that the company is on track to achieve even greater heights. With a strong workforce, strategic partnerships, and a bold vision for the future, QNTM is poised to make an even greater impact on the local economy and beyond.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "QNTM",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

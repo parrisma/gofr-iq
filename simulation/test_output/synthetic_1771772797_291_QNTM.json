@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-24T08:09:37.092492",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "China's latest economic report has left investors on the edge of their seats, and for Quantum Compute (QNTM) shareholders, the news is a double-edged sword. The country's GDP growth has slowed, but that's not the whole story. The real question is, how will this impact QNTM's AI chip supply chain and manufacturing operations in China?\n\nAs a bagholder in QNTM, I've got my eyes glued to the stock price action. With a beta of 1.3, this company's revenue is heavily exposed to China's economic whims. And let me tell you, when China sneezes, QNTM catches a cold. But here's the thing - this slowdown could be a blessing in disguise.\n\nThink about it. A slower economy means reduced demand for AI chips, which could lead to a glut in the market. But QNTM's got a ace up its sleeve - its cutting-edge AI chip tech is still in high demand, particularly among Chinese tech giants. If QNTM can navigate this slowdown and come out on top, we're looking at a potential moonshot.\n\nBut, and this is a big but, if China's economic woes persist, QNTM's manufacturing operations could take a hit. We're talking reduced production capacity, delayed shipments, and a whole lot of headaches for investors. So, is QNTM a buy or a sell? I'd say it's a buy, but only for the brave.\n\nIf you're a risk-taker, willing to ride the China economic rollercoaster, QNTM could be a lucrative opportunity. But if you're a timid investor, looking for stable returns, you might want to steer clear. As for me, I'm holding on to my QNTM shares for dear life, hoping that the company's AI chip dominance will propel it to the moon, despite China's economic headwinds.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-27T18:50:40.556447",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "In a routine update, SHOPM, the market leader, announced a series of low-key developments across its operations. \n\nIn personnel news, the company confirmed the appointment of longtime employee, Emily Chen, to lead its 250-strong team in Vancouver. Chen, a native of the city, has been with SHOPM for over a decade and is well-respected by her peers. The move is seen as a nod to the company's commitment to promoting from within. \n\nOn the marketing front, SHOPM launched a targeted campaign in Calgary, highlighting the convenience of its services to the city's busy professionals. The campaign, which includes print and digital ads, is expected to run for several months. \n\nIn ESG news, SHOPM announced that its 150 employees in Ottawa have volunteered over 500 hours at local charities in the past quarter. The company has also committed to reducing its energy consumption by 10% across its Toronto operations by the end of the year. The move is in line with the city's climate action plan, which aims to reduce greenhouse gas emissions by 20% by 2025. \n\nIn other news, SHOPM has been working closely with the City of Montreal to develop a comprehensive recycling program for its packaging materials. The initiative is expected to be rolled out across the city by the end of the summer.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

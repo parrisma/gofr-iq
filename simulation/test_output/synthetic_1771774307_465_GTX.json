@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-08T18:30:47.901230",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc., a leading technology firm with a significant presence in the Pacific Northwest, has announced several updates to its operations in the region. \n\nIn Portland, where GTX employs over 500 people, the company has promoted longtime employee, Rachel Lee, to lead its local marketing efforts. Lee, a native Oregonian, will oversee the development of targeted campaigns to reach the city's growing tech community. GTX has been a major player in Portland's tech scene, with many of its employees actively engaged in local initiatives, such as the city's annual Techfest.\n\nIn nearby Beaverton, where GTX operates a large data center, the company has partnered with the city to launch a new community outreach program. The initiative, dubbed \"Tech for All,\" aims to provide local residents with access to digital skills training and career development resources. GTX has committed to providing funding and expertise to support the program, which is expected to reach over 1,000 residents in its first year.\n\nOn the environmental front, GTX has announced plans to expand its existing sustainability initiatives in the region. The company has set a goal of reducing its energy consumption by 15% over the next two years, through a combination of energy-efficient upgrades and the use of renewable energy sources. GTX has already made significant strides in this area, having reduced its carbon footprint by 20% since 2018.\n\nGTX's commitment to environmental responsibility has been recognized by local leaders, including Portland Mayor, Ted Wheeler, who praised the company's efforts to reduce its impact on the environment. \"GTX is a valued member of our community, and we appreciate their dedication to sustainability,\" Wheeler said.\n\nWith these updates, GTX continues to demonstrate its commitment to the local community, while also advancing its business goals. As one of the largest employers in the region, GTX plays a significant role in shaping the local economy and culture.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

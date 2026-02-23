@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T15:01:23.538020",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: NXS Teeters on BRINK of COLLAPSE Amid UNCONFIRMED Reports of Catastrophic Operational Failure\n\nSources close to the matter say Nexus Software, a small but critical component of many major tech portfolios, is on the VERGE OF IMPLOSION following an apparent DISASTROUS failure of its flagship product.\n\nUnconfirmed reports indicate that a CRITICAL FLAW in the company's software has been EXPLOITED, resulting in a SYSTEMIC COLLAPSE that has left clients REELING. The extent of the damage is still unknown, but insiders warn that the consequences could be CATASTROPHIC.\n\nDetails of the alleged failure are SKETCHY, but sources suggest that a rogue algorithm has been UNLEASHED, wreaking havoc on critical systems and leaving a TRAIL OF DESTRUCTION in its wake. Regulatory bodies are said to be SWOOPING IN, threatening to SHUT DOWN the company's operations altogether.\n\nThe news has sent shockwaves through the tech sector, with investors SCRAMBLING to UNLOAD their NXS holdings. The company's stock price is in FREEFALL, plummeting by as much as 50% in a single trading session.\n\nWhile Nexus Software has thus far REFUSED TO COMMENT on the allegations, sources say that the company's very SURVIVAL hangs in the balance. With regulators CLOSING IN and clients FLEEING IN DROVES, it remains to be seen whether NXS can RECOVER from this devastating blow.\n\nOne thing is certain, however: the fate of Nexus Software hangs precariously in the balance, and the consequences of its collapse could be FAR-REACHING and DEVASTATING. Stay tuned for further updates as this BREAKING story continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

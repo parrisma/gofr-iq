@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-15T08:15:27.980252",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys (GENE) is on a tear, and the rumor mill is working overtime to send it to the moon. Unconfirmed chatter from people familiar with the matter (and we're talking extremely unofficial sources here, so take this with a grain of salt) suggests that the company might be on the receiving end of a juicy acquisition offer.\n\nWe can't stress enough that this is pure speculation at this point, and we wouldn't be surprised if it turns out to be nothing more than a cleverly crafted pump job. However, if there's even a kernel of truth to this, GENE bagholders could be in for a wild ride.\n\nThe whispers point to a potential suitor from the biotech space, but we're not naming names (mainly because we don't actually know who it is). What we do know is that GeneSys has been quietly building a impressive pipeline, and it's not hard to see why someone might want to snap them up.\n\nGENE has already had a remarkable run, and this rumor has the potential to send it into orbit. Of course, it's also possible that this is just a bunch of hot air, and the stock will come crashing back down to earth.\n\nRumors, rumors, rumors - it's all just speculation at this point. But hey, if you're a GENE investor, you've got to be feeling pretty good about the possibilities. Just remember, this is all unconfirmed, and we're not responsible if you end up holding the bag.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

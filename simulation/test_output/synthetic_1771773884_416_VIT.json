@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-21T04:21:44.421717",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "OmniCorp Global Experiences Supplier Delay, Disrupting Vitality Pharma Operations\n\nAt 08:45 EST, OmniCorp Global, a key supplier to Vitality Pharma, announced a delay in its production schedule. The delay, attributed to unforeseen logistical issues, is expected to impact Vitality Pharma's operations, as the two companies have been linked in rumored acquisition talks.\n\nAccording to OmniCorp Global's official statement, the supplier delay will affect the delivery of essential components to Vitality Pharma. While the exact timeline for resolution is uncertain, OmniCorp Global has assured stakeholders that efforts are underway to mitigate the disruption.\n\nAs a rumored acquisition target of OmniCorp Global, Vitality Pharma's reliance on the supplier's timely deliveries is of particular concern. The delay may exacerbate existing operational challenges at Vitality Pharma, potentially affecting its production schedules and, by extension, its customers.\n\nOmniCorp Global and Vitality Pharma have declined to comment on the specifics of their relationship or the potential impact of the delay on their rumored acquisition talks. The development is being closely monitored by industry analysts, who are assessing the potential consequences for both companies.\n\nThe situation is unfolding, and further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

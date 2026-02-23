@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-14T01:45:24.231157",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "UNCONFIRMED REPORTS SWIRL AROUND PROP CO REIT AS ROUTINE UPDATE RAISES MORE QUESTIONS THAN ANSWERS\n\nSources close to the matter, who wished to remain ANONYMOUS, have revealed that PropCo REIT (PROP) has made some MINOR adjustments to its personnel roster, although the EXACT nature of these changes remains SHROUDED IN MYSTERY.\n\nUnconfirmed reports suggest that a LOW-LEVEL executive has LEFT THE COMPANY, but the REASONS behind this departure are still UNKNOWN. When reached for comment, a PropCo REIT spokesperson REFUSED TO CONFIRM or deny the rumors, fueling SPECULATION about the REAL story behind the move.\n\nIn other news, PropCo REIT has reportedly LAUNCHED a new MARKETING CAMPAIGN, although details about the initiative are SKETCHY at best. Sources describe the campaign as \"LOW-KEY\" and \"UNDER THE RADAR,\" sparking WILD SPECULATION about the company's TRUE intentions.\n\nMeanwhile, PropCo REIT's ESG efforts have come under SCRUTINY, with some observers QUESTIONING the company's COMMITMENT to sustainability. While the company has made PUBLIC declarations about its environmental goals, some critics argue that these claims are LARGELY SYMBOLIC and lack REAL SUBSTANCE.\n\nAs the situation continues to UNFOLD, investors are left WONDERING what's REALLY going on behind the scenes at PropCo REIT. One thing is certain, however: the company's REFUSAL to comment on these rumors has only added FUEL TO THE FIRE, leaving many to SPECULATE about the REAL story behind these routine updates.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

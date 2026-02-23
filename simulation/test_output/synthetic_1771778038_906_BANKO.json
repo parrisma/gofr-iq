@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-14T15:25:58.201841",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BREAKING: BANKO (BankOne) SHAKEN BY RUMORS OF IMMINENT ACQUISITION\n\nUnconfirmed reports are swirling that BANKO, the financial behemoth, is on the VERGE OF BEING ACQUIRED by a mystery suitor. Sources close to the matter, who wish to remain anonymous, claim that talks have REACHED A FEVER PITCH, with a potential deal looming large on the horizon.\n\nWhile details remain SCANT and unverified, people familiar with the situation suggest that the acquiring company is a MAJOR PLAYER in the financial sector, with DEEP POCKETS and a history of aggressive expansion. However, the identity of the suitor remains a closely guarded SECRET, fueling SPECULATION and sending BANKO's stock price into a TAILSPIN.\n\nRumors of a potential acquisition have been CIRCULATING for weeks, but this latest development has sent shockwaves through the financial community. Insiders claim that BANKO's top brass is \"CAUTIOUSLY OPTIMISTIC\" about the prospect of a deal, but NOTHING has been officially confirmed.\n\nAs the situation continues to UNFOLD, investors are advised to EXERCISE CAUTION, as the rumors remain UNCONFIRMED and the future of BANKO hangs in the balance. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BANKO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

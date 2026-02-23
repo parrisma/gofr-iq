@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-15T04:57:05.300449",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "As commodity prices surged 20% across the board, the reverberations were felt far and wide, with the city of Fresno, California, being no exception. For EcoPower Systems (ECO), a clean energy provider with a significant presence in the city, the spike in oil, lithium, and steel prices has meant a substantial increase in input costs.\n\nWith over 500 employees based in Fresno, EcoPower Systems has been a major player in the city's renewable energy sector, providing solar and wind power solutions to residents and businesses alike. However, the company's exposure to rising commodity prices has put a strain on its margins.\n\n\"Higher steel prices are affecting our wind turbine manufacturing costs, while increased lithium prices are impacting our energy storage solutions,\" said a spokesperson for EcoPower Systems. \"These costs will inevitably be passed on to our customers, making clean energy less competitive in the market.\"\n\nThe city of Fresno, which has been actively promoting its Green Initiative, a plan to reduce carbon emissions by 50% by 2025, may see its goals hindered by the rising costs of clean energy. \"We're concerned that the surge in commodity prices will slow down the adoption of renewable energy sources in our city,\" said a spokesperson for the City of Fresno. \"We're working closely with EcoPower Systems and other providers to find ways to mitigate the impact of these rising costs.\"\n\nAs EcoPower Systems navigates this challenging environment, its negative beta of -1.3 means that its stock price is likely to move in the opposite direction of the market, further exacerbating the impact of rising commodity prices on its margins. With the company's stock price already under pressure, investors will be watching closely to see how EcoPower Systems adapts to this new reality.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

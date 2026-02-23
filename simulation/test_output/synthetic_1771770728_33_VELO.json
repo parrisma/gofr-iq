@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-20T10:53:08.430666",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding VELO",
+  "story_body": "VELO Investors Holding On for Dear Life as Stock Stagnates\n\nVELO bagholders are getting restless as the stock price continues to meander in no man's land. With no major catalysts on the horizon, it's a waiting game for investors hoping for a moonshot. Meanwhile, the company's been quietly making some moves behind the scenes.\n\nOn the personnel front, VELO's board of directors has been bolstered with the addition of a new member, whose expertise in corporate governance is expected to bring a fresh perspective to the table. While this move isn't exactly a game-changer, it's a positive step in the right direction.\n\nMarketing efforts have also been ramping up, with VELO launching a series of social media campaigns aimed at increasing brand awareness. It's unclear how effective these efforts will be, but hey, at least they're trying.\n\nIn the realm of ESG, VELO has been making a concerted effort to reduce its carbon footprint. The company has implemented a range of sustainability initiatives, from energy-efficient lighting in its offices to a recycling program for its manufacturing processes. It's a drop in the bucket, but every little bit counts, right?\n\nAll in all, it's business as usual at VELO. The stock price may not be going to the moon anytime soon, but at least the company's not sitting on its hands. Holders can take solace in the fact that VELO's still plugging away, even if it's not exactly setting the world on fire.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-20T02:04:54.471273",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "Yesterday, in a move expected to send ripples throughout the financial sector, regulators in the city of Melbourne announced a significant overhaul of fintech licensing and compliance requirements. The changes, set to take effect in six months, will impact several major players in the industry, including FinCorp (FIN), a Melbourne-based fintech firm with over 500 employees.\n\nAccording to sources close to the matter, the new regulations will introduce stricter guidelines for data security and consumer protection, necessitating substantial investments in compliance infrastructure. For FinCorp, this means a significant increase in operational costs, which could potentially impact its bottom line.\n\nAs a major employer in Melbourne, FinCorp's financial health is closely watched by local politicians, who have been keen to promote the city as a fintech hub. However, the new regulations may put pressure on the company's profitability, potentially affecting its ability to create new jobs.\n\nIndustry analysts have estimated that the compliance costs associated with the new regulations could add up to tens of millions of dollars for companies like FinCorp. With a beta of -1.2, FinCorp is expected to be disproportionately affected by the changes, which could lead to a decline in its stock price.\n\nWhile some industry insiders have expressed concerns about the impact of the regulations on innovation, others have welcomed the move, citing the need for greater oversight in the rapidly evolving fintech sector. For FinCorp, however, the new regulations present a significant challenge, one that will require careful planning and investment to navigate.\n\nAs the company's management team begins to assess the implications of the new regulations, one thing is clear: the coming months will be crucial for FinCorp's future in Melbourne. With the city's fintech ecosystem hanging in the balance, all eyes will be on the company's response to the regulatory changes.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-07T06:39:50.444986",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "Fed Fires Up the Afterburners, Sends FIN to the Moon!\n\nIn a move that's got traders rubbing their hands with glee, the Federal Reserve just dropped a 25bps rate hike bombshell. And let me tell you, FinCorp (FIN) is the biggest beneficiary of this monetary magic. With its fintech lending business, FIN's margins are about to get a serious boost. We're talking to the moon, folks!\n\nAs rates rise, FIN's lending arm is poised to rake it in. With a beta of 1.2, this stock is already a high-flyer, and today's rate decision just gave it a nitrous oxide injection. The bagholders who were sweating their positions are now breathing a sigh of relief as FIN's stock price soars.\n\nHere's the thing: when rates go up, lenders like FIN get to charge more interest on their loans. It's a beautiful thing, really. And with the Fed's latest move, FIN's margins are about to expand like a hot air balloon. We're talking bigger profits, folks, and that's music to the ears of investors.\n\nNow, I know what you're thinking: what about the rest of the market? Won't a rate hike send everything tumbling down? Not FIN, baby! With its fintech lending business, this stock is a rate-hike proof bunker. It's like having a license to print money.\n\nSo, what's the trade here? If you're not already long FIN, what are you even doing with your life? This stock is about to blast off like a SpaceX rocket, and you don't want to be left holding the bag. Get on board, or get left behind. The choice is yours.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

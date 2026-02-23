@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-18T04:24:14.403845",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "BREAKING: ECO POWER SYSTEMS SEES BEHIND-THE-SCENES SHAKE-UP AS COMPANY NAVIGATES VOLATILE LANDSCAPE\n\nIn a MOVE that has left industry insiders SCRATCHING THEIR HEADS, sources close to the matter say that EcoPower Systems, the company behind the ECO ticker, has made some KEY CHANGES to its personnel roster. While details are SKETCHY at best, it appears that the company has brought in some FRESH FACES to help steer the ship through TREACHEROUS WATERS.\n\nUnconfirmed reports suggest that the company has hired a NEW MARKETING GURU to help revamp its brand image and appeal to a WIDER AUDIENCE. The move is seen as a DESPERATE BID to stay relevant in a rapidly changing market, where COMPETITORS are constantly innovating and pushing the boundaries.\n\nBut it's not all about the BENJAMINS, folks! EcoPower Systems is also said to be making a BIG PUSH into the world of ENVIRONMENTAL, SOCIAL, AND GOVERNANCE (ESG) initiatives. Sources say that the company is exploring new ways to REDUCE ITS CARBON FOOTPRINT and promote SUSTAINABLE PRACTICES throughout its operations. While the details are still UNDER WRAPS, this move is seen as a MAJOR STEP FORWARD for the company's reputation and its commitment to being a RESPONSIBLE CORPORATE CITIZEN.\n\nAs always, we must STRESS that these reports are COMPLETELY UNCONFIRMED and should be taken with a GRAIN OF SALT. But one thing is certain: EcoPower Systems is a company to WATCH, and we'll be keeping a CLOSE EYE on its every move. Stay TUNED for further updates as more information becomes available!",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

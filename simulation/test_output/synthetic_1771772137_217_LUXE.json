@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-13T10:45:37.150802",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LUXE (LuxeBrands) Undergoes Behind-the-Scenes Shuffle, Sources Claim\n\nUNCONFIRMED REPORTS are emerging that LUXE, the luxury goods conglomerate, is making some internal adjustments, though the company itself remains tight-lipped on the matter. \n\nAccording to sources, a REORGANIZATION of sorts is underway within the company's marketing department. Insiders claim that certain personnel have been shifted to new roles, while others have allegedly departed the company altogether. Details, however, remain SCANT.\n\nMeanwhile, unconfirmed whispers suggest that LUXE is gearing up to launch a new ENVIRONMENTAL, SOCIAL, AND GOVERNANCE (ESG) initiative, purportedly aimed at enhancing the company's SUSTAINABILITY credentials. While specifics are scarce, sources hint that the effort may involve PARTNERSHIPS with various eco-friendly organizations.\n\nSeparately, rumors are circulating about a potential BRAND REFRESH, with some speculating that LUXE may be poised to unveil a revamped visual identity in the coming months. However, these claims remain ENTIRELY UNCONFIRMED.\n\nAs is often the case with LUXE, the company's notoriously tight-lipped approach to communication has left observers GUESSING. Despite repeated requests for comment, officials have thus far declined to address the rumors, fueling further speculation and intrigue.\n\nStay tuned for further updates, as this story continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

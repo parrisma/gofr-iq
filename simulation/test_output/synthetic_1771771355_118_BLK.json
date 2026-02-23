@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-28T21:41:35.806690",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "At 09:45 UTC, regulatory authorities announced stricter compliance requirements for cryptocurrency-related businesses, effective immediately. This development is expected to have a significant impact on BlockChain Verify (BLK), a leading provider of blockchain-based verification services.\n\nAccording to the new regulations, companies operating in the cryptocurrency space will be required to implement enhanced anti-money laundering (AML) and know-your-customer (KYC) protocols, as well as adhere to stricter reporting standards. This increased regulatory burden is expected to result in higher compliance costs for BlockChain Verify, given its significant exposure to the crypto market.\n\nAs reflected in its beta of -1.6, the company is anticipated to be disproportionately affected by the new regulations. The negative beta value indicates that BlockChain Verify's stock is likely to decline in response to the increased regulatory requirements, as the company's operating costs may rise in order to maintain compliance.\n\nSpecifically, BlockChain Verify will be required to invest in upgraded AML and KYC systems, as well as dedicate additional resources to ensuring adherence to the new reporting standards. This increased expenditure may negatively impact the company's bottom line, potentially leading to reduced profitability and competitiveness in the market.\n\nBlockChain Verify has not yet issued a statement regarding the new regulations or their expected impact on the company's operations. Investors will be closely monitoring the situation for further developments and guidance from the company.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

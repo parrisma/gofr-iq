@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-24T18:08:58.977809",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands Lights Up Downtown Austin with Stellar Financial Results\n\nIn a city where tech giants and startups often grab the headlines, LuxeBrands is proving that a homegrown, high-end fashion brand can shine just as bright. The company, which boasts a 500-strong workforce in its Austin headquarters, just reported a scorching quarter that's got investors and local business leaders abuzz.\n\nRevenue for the quarter clocked in at a whopping $120 million, a 25% jump from the same period last year. That's music to the ears of Austin Mayor Steve Adler, who's been courting companies like LuxeBrands to set up shop in the Texas capital. \"We're thrilled to see LuxeBrands thriving in our city,\" Adler said in a statement. \"Their success is a testament to the innovative spirit and creative energy that defines Austin.\"\n\nSales were a major driver of LuxeBrands' growth, with the company reporting a 30% surge in demand for its luxury apparel and accessories. That's likely due in part to the brand's savvy expansion into new markets, including a high-profile partnership with Neiman Marcus that's helped LuxeBrands tap into the upscale retailer's loyal customer base.\n\nBut LuxeBrands' success isn't just about flashy numbers \u2013 it's also about the positive impact the company is having on the local community. With a workforce that's grown by 20% over the past year, LuxeBrands is providing good-paying jobs and opportunities for career advancement to hundreds of Austinites.\n\nAs the city continues to grapple with issues like affordability and traffic congestion, LuxeBrands' commitment to its hometown is a welcome respite. \"We're proud to call Austin home, and we're committed to being a responsible and engaged member of this community,\" said a LuxeBrands spokesperson.\n\nWith its latest financial results, LuxeBrands is proving that it's a force to be reckoned with in the fashion world \u2013 and a shining example of the entrepreneurial spirit that makes Austin such a special place.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

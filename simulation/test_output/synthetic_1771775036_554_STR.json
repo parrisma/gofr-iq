@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-01T04:44:56.234768",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "As the sun rises over the sleepy town of Huntsville, Alabama, home to Stratos Defense's 5,000-strong workforce, the company's finance team is bracing for a potentially painful quarter. The recent 20% surge in commodity prices, affecting everything from oil to lithium to steel, has sent shockwaves through the defense contractor's supply chain.\n\nStratos Defense, a major player in the defense industry, relies heavily on cost-plus pricing for its government contracts. This means that as the cost of raw materials increases, the company's profit margins are squeezed. With a beta of 0.6, Stratos Defense is more vulnerable to rising costs than the broader market.\n\nIn the heart of Huntsville's Cummings Research Park, where Stratos Defense is headquartered, employees are nervously discussing the implications of the commodity price spike. \"We're already seeing the effects of higher steel prices on our production costs,\" said one employee, who wished to remain anonymous. \"If this trend continues, it could get ugly for our bottom line.\"\n\nThe city's mayor, Tommy Battle, is also keeping a close eye on the situation. \"Stratos Defense is a major employer and economic driver in our community,\" he said in a statement. \"We're concerned about the potential impact of rising commodity prices on their operations and, by extension, our local economy.\"\n\nAs the company's executives scramble to adjust their cost projections and renegotiate contracts with suppliers, one thing is clear: the commodity price surge has dealt Stratos Defense a significant blow. With its negative beta, the company's stock price is likely to feel the pinch as investors adjust their expectations for the quarter ahead.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

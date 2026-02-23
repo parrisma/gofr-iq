@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T17:33:21.445027",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "BREAKING: ENERGY SECTOR IN CHAOS AS SUPPLY CHAIN DISRUPTION HITS ECOPOWER SYSTEMS\n\nUnconfirmed reports are emerging of a devastating supply chain disruption that has left EcoPower Systems (ECO) reeling. Sources close to the matter say the company is struggling to cope with the fallout, but details remain SCARCE.\n\nAs the ENERGY INDUSTRY grapples with the crisis, insiders warn of a PERFECT STORM of shortages and delays that could have FAR-REACHING CONSEQUENCES for the entire sector. \"It's a ticking time bomb,\" one industry expert cautioned, speaking on condition of anonymity.\n\nWhile EcoPower Systems has yet to officially comment on the situation, unconfirmed reports suggest that the company is facing SEVERE SHORTAGES of critical components. Sources say the disruption has already begun to impact production, with some operations GRINDING TO A HALT.\n\nThe causes of the disruption remain UNCLEAR, but analysts point to a COMBINATION OF FACTORS, including global demand fluctuations and logistics bottlenecks. \"It's a complex web of issues,\" said one analyst, \"and it's going to take time to untangle.\"\n\nAs the situation continues to UNFOLD, investors are growing increasingly NERVOUS. EcoPower Systems' stock has taken a HIT, with shares PLUMMETING in recent trading sessions.\n\nWhile the company remains TIGHT-LIPPED about the crisis, sources say that emergency meetings are being held to address the situation. Insiders warn that the OUTCOME is far from certain, and that the ENERGY INDUSTRY as a whole could be in for a WILD RIDE.\n\nStay tuned for further updates as this BREAKING STORY continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

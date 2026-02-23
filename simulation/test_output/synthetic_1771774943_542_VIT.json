@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-21T03:17:23.548649",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "VIT's stock price has been stuck in neutral, leaving bagholders wondering when it'll finally break out to the moon. But in the meantime, the company's been quietly making some routine moves that are worth noting.\n\nFirst off, VIT's added some fresh faces to its marketing team, likely in an effort to revamp its brand image and get the word out about its latest products. No surprise there, as the company's been looking to boost sales and get its top line growing again. We'll see if these new hires can bring some much-needed mojo to the table.\n\nOn the ESG front, VIT's been touting its commitment to sustainability, and has even set some lofty goals for reducing its carbon footprint. While it's great to see the company taking steps in the right direction, let's be real - this isn't exactly the kind of news that's going to send the stock soaring. Still, it's a positive development for those looking for a reason to feel good about owning VIT.\n\nFinally, there's been some minor shuffling in the C-suite, with a few execs taking on new roles and responsibilities. Nothing too earth-shattering here, but it's always worth keeping an eye on who's doing what at the top.\n\nAll in all, it's been a pretty quiet period for VIT, and the stock price reflects that. But hey, sometimes these routine updates can be a sign that the company's just biding its time, waiting for the perfect moment to make its next big move. Until then, bagholders will just have to keep on waiting - and hoping - that VIT will finally blast off to the moon.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

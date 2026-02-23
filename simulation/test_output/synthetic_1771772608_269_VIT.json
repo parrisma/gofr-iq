@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2025-12-30T18:12:28.489894",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "FOR IMMEDIATE RELEASE\n\nGovernment Announces Favorable Policy for Pharmaceutical Industry\n\nAt 08:00 EST, the U.S. Department of Health and Human Services announced a new regulatory policy aimed at expediting the approval process for innovative pharmaceutical products. The policy, effective immediately, provides subsidies for companies conducting clinical trials for groundbreaking treatments.\n\nVitality Pharma, a biotechnology company focused on developing novel therapies, is expected to benefit from this policy. With a beta of 1.5, indicating a positive correlation between the company's stock performance and regulatory changes, Vitality Pharma's exposure to FDA approval binary events is likely to increase.\n\nThe new policy is expected to streamline the approval process, reducing the time and cost associated with bringing new products to market. This is particularly relevant for Vitality Pharma, which has several products in various stages of clinical trials. The subsidies provided under the policy will likely offset some of the costs associated with these trials, increasing the company's chances of successful FDA approval.\n\nVitality Pharma's management has not commented on the policy announcement. However, analysts expect the company's stock to react positively to the news, given the favorable impact on its business operations.\n\nThe policy announcement is available on the U.S. Department of Health and Human Services website, and Vitality Pharma's investor relations department will provide updates on the company's progress in due course.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

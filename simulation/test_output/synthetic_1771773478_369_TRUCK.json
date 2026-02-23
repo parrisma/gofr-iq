@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T14:30:58.823192",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] TRUCK - HeavyTrucks",
+  "story_body": "Auto stocks are revving their engines, ready to shift into high gear and take investors on a wild ride. The sector is abuzz with speculation, and we're not just talking about the latest electric vehicle hype. No, this time it's all about the heavy hitters - the truck makers, like HeavyTrucks (TRUCK), that are rumored to be gearing up for a major breakout.\n\nWe've seen it before, folks - a sector gets hot, and suddenly everyone wants a piece of the action. The momentum players pile in, and before you know it, the stock is blasting off to the moon. But, as we all know, when the music stops, the bagholders are left holding the bag.\n\nNow, we're not saying that's what's happening here. But, let's just say that the whispers are getting louder, and the smart money is starting to take notice. Insiders are quietly accumulating shares, and the options market is seeing a surge in bullish bets. It's like the whole sector is holding its breath, waiting for the next catalyst to send it soaring.\n\nOf course, there are always the naysayers, warning of a impending correction. But, we've heard that tune before, and it's starting to sound like a broken record. The truth is, no one really knows what's going to happen next. All we can do is watch the charts, listen to the rumors, and try to stay one step ahead of the game.\n\nSo, buckle up, folks, it's going to be a bumpy ride. The auto sector is heating up, and HeavyTrucks is right in the middle of it all. Will it be the next big winner, or just another false start? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

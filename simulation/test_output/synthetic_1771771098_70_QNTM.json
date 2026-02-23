@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:05:18.656355",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Unconfirmed Reports of MASSIVE SUPPLY CHAIN DISRUPTION ROCK MARKETS\n\nA developing story is sending SHOCKWAVES through the business world, as sources say a critical component supplier has suffered a catastrophic EXPLOSION at one of its key facilities. The blast, which is rumored to have occurred in the early hours of the morning, is believed to have caused widespread damage and DISRUPTED GLOBAL SUPPLY CHAINS.\n\nAccording to unconfirmed reports, the affected supplier is a MAJOR PROVIDER of essential components to several high-profile companies, including QNTM, BANKO, and VIT. The EXACT NATURE and EXTENT of the damage is still unclear, but insiders claim that production at the facility has been COMPLETELY SHUT DOWN.\n\nThe news has sent shares of QNTM, BANKO, and VIT PLUMMETING, as investors scramble to assess the FULL IMPACT of the disaster. QNTM, which relies heavily on the supplier for critical components, is said to be particularly EXPOSED to the disruption. BANKO, meanwhile, is rumored to have been in the process of negotiating a MAJOR CONTRACT with the supplier, which is now in JEOPARDY. VIT, which uses the supplier's components in several of its key products, is also said to be closely monitoring the situation.\n\nAs the situation continues to unfold, officials at the supplier's facility have so far REFUSED TO COMMENT on the extent of the damage. The company's website remains DOWN, and phone calls to its headquarters have gone UNANSWERED.\n\nStay tuned for further updates as this BREAKING STORY continues to develop.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

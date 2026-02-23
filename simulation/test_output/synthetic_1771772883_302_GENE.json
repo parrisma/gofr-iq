@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-11T04:43:03.175392",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "BREAKING: Sources Close to the Matter Say New Regulation to Give GENE a MAJOR BOOST\n\nIn a move that could send shockwaves through the pharmaceutical industry, UNCONFIRMED REPORTS suggest that the government is on the verge of announcing a sweeping new policy that will grant favorable subsidies to companies specializing in genomics research. And one company that stands to benefit BIG TIME is GENE, the beleaguered drugmaker that has been struggling to get its footing in the competitive market.\n\nAccording to insiders, the new regulation will provide a significant upside for GENE, which has been working tirelessly to develop innovative treatments using genomics technology. With a beta of 1.3, it's clear that the company's fortunes are closely tied to the whims of regulators - and this latest development could be the catalyst that sends its stock SOARING.\n\nWhile details of the new policy are still sketchy, sources say that it will likely include generous subsidies for companies that invest heavily in genomics research. This could be a GAME-CHANGER for GENE, which has been pouring resources into its genomics program in recent years. With the government's backing, the company may finally have the financial firepower it needs to bring its treatments to market.\n\nBut don't just take our word for it - UNCONFIRMED REPORTS suggest that GENE's management team is already celebrating the news, with some insiders saying that the company is poised to make a major announcement in the coming weeks. Whether or not this will be enough to propel GENE's stock to new heights remains to be seen, but one thing is certain: this is a company on the MOVE.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GENE",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

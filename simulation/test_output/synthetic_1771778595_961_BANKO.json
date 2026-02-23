@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-06T19:11:15.634088",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the lender",
+  "story_body": "BANKO Corporation faces challenges due to industry-wide supply chain disruptions affecting the financial sector.\n\nAs of 09:45 Eastern Time, BANKO, a major lender, is experiencing difficulties in maintaining its operations due to shortages of critical components and materials. These shortages are not specific to BANKO, but rather a sector-wide issue affecting multiple financial institutions.\n\nThe disruptions are attributed to a combination of factors, including manufacturing delays and logistical bottlenecks. The impact is being felt across the financial industry, with several major lenders reporting similar challenges.\n\nBANKO is working to mitigate the effects of the disruptions and minimize the impact on its customers. The company is exploring alternative sourcing options and adjusting its operations to maintain continuity.\n\nThe supply chain disruptions are expected to continue in the short term, with industry analysts predicting a prolonged period of constrained supply. BANKO and other affected lenders are closely monitoring the situation and working to develop contingency plans to address the ongoing challenges.\n\nThe financial sector is taking a coordinated approach to address the disruptions, with industry associations and regulatory bodies providing guidance and support. Further updates on the situation will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-19T14:57:42.100121",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BREAKING: SHOPM's Flagship Fiasco - Is This the END for ShopMart?\n\nIn a shocking turn of events, sources close to the matter have revealed that SHOPM, aka ShopMart, has initiated a MASSIVE recall of their best-selling product. The move, which has sent shockwaves throughout the industry, is said to be a result of a MAJOR design flaw that has left customers FUMING.\n\nDetails of the recall are still SKETCHY, but unconfirmed reports suggest that the faulty product has been flying off shelves for MONTHS, with thousands of units already in the hands of unsuspecting consumers. The financial implications of this debacle are still unknown, but insiders predict a SIZEABLE hit to ShopMart's bottom line.\n\nAs ShopMart struggles to contain the fallout, rival LUXE (LuxeBrands) is poised to CAPITALIZE on the chaos. With their own product line reportedly unaffected by the recall, LuxeBrands is seen as the BIGGEST beneficiary of ShopMart's misfortune. Industry insiders say that LuxeBrands is READY TO POUNCE, with plans to RAMP UP production to meet the anticipated surge in demand.\n\n\"LuxeBrands has been waiting in the wings for an opportunity like this,\" says one industry expert. \"With ShopMart's reputation in TATTERS, LuxeBrands is perfectly positioned to SNATCH up the slack and GAIN some serious market share.\"\n\nAs the situation continues to UNFOLD, one thing is clear: ShopMart's future is looking BLEAK. Will they be able to RECOVER from this disaster, or is this the beginning of the END for the struggling retailer? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

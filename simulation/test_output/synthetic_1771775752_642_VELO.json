@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-09T19:59:52.063734",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors (VELO) is among the automotive manufacturers experiencing disruptions due to industry-wide shortages of critical components. \n\nAt 08:00 EST, reports emerged of a sector-wide shortage of microchips and semiconductors, essential for the production of modern vehicles. The shortage is attributed to a combination of factors, including increased demand from other industries and capacity constraints among suppliers.\n\nVELO, a leading manufacturer of electric vehicles, has confirmed that its production schedule has been impacted by the shortage. However, the company has not provided specific details on the extent of the disruption.\n\nIndustry analysts note that the shortage is not unique to VELO, with multiple automotive manufacturers reporting similar challenges. The shortage has been described as a sector-wide issue, with potential implications for the broader automotive industry.\n\nVELO's manufacturing operations are expected to continue, albeit at a reduced capacity, until the shortage is resolved. The company is working with its suppliers to mitigate the impact of the disruption and minimize delays to its production schedule.\n\nFurther updates on the situation are expected to be provided by VELO in due course.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

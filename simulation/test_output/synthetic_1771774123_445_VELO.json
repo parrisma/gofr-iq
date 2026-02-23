@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-29T19:37:43.636044",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "In the sleepy town of Franklin, Tennessee, where Velocity Motors (VELO) employs over 2,500 workers at its sprawling electric vehicle manufacturing plant, a recent surge in commodity prices has sent shockwaves through the company's operations. The sudden 20% spike in oil, lithium, and steel prices has left VELO scrambling to adjust its production costs and maintain profit margins.\n\nAs one of the leading EV manufacturers in the country, VELO is heavily reliant on lithium, a key component in its battery technology. The company's exposure to lithium prices is particularly concerning, given the metal's critical role in powering the electric vehicles that have become synonymous with the VELO brand.\n\nFor workers like Jamie Wilson, a quality control specialist at the Franklin plant, the commodity price surge is a worrying development. \"We've been working hard to meet the growing demand for EVs, but if the cost of lithium keeps going up, it's going to be tough for us to maintain our competitive edge,\" Wilson said during a break in the production line.\n\nVELO's beta of -1.1 indicates that the company's stock price tends to move in the opposite direction of the broader market, and that higher costs will likely hurt its margins. With the recent commodity price surge, VELO's already-thin profit margins are under pressure. The company's CFO, Rachel Lee, has been vocal about the need to diversify its supply chain and reduce its reliance on volatile commodity markets.\n\nAs the city of Franklin prepares for its annual town hall meeting, where local business leaders will gather to discuss the economic outlook, VELO's struggles with commodity prices are likely to be a major topic of discussion. With the company's fortunes closely tied to the local economy, the impact of the commodity price surge will be felt far beyond the factory floor.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

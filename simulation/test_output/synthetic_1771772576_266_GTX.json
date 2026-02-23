@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-26T04:03:56.020347",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the technology giant",
+  "story_body": "GTX Corporation Announces Personnel Update\n\nAt 08:00 EST, GTX Corporation, a leading technology company, announced the appointment of Jane Doe as Vice President of Marketing, effective immediately.\n\nIn her new role, Ms. Doe will oversee the company's global marketing efforts, reporting directly to the Chief Marketing Officer. Prior to joining GTX, Ms. Doe held various marketing positions at several technology firms.\n\nGTX Corporation also announced the launch of its new marketing campaign, \"Empowering Innovation,\" which aims to promote the company's latest product offerings and thought leadership in the technology sector. The campaign will run across various digital channels and is expected to conclude by the end of the current quarter.\n\nIn a separate development, GTX Corporation announced its participation in the annual Technology Industry Sustainability Forum, scheduled to take place on March 15, 2023. The forum will bring together industry leaders to discuss best practices in environmental, social, and governance (ESG) initiatives. GTX Corporation has been a long-time proponent of sustainable practices and will share its own ESG strategies and achievements during the event.\n\nNo further information was provided by the company regarding these updates.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

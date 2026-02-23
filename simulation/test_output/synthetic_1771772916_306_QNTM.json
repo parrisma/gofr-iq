@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:46:36.545104",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Devastating Plant Explosion in Fremont, California, Sends Shockwaves Through Tech and Finance Sectors\n\nA catastrophic explosion at the KLA-Tencor manufacturing facility in Fremont, California, has left a trail of destruction and chaos in its wake, affecting thousands of employees and disrupting critical supply chains for several major companies, including Quantum Corporation (QNTM), Bank of the Ozarks (BANKO), and Vitru Limited (VIT).\n\nThe blast, which occurred at approximately 3:45 AM PST, is believed to have originated in the plant's storage area, where highly volatile chemicals were being housed. Miraculously, no fatalities have been reported, although several employees were treated for minor injuries.\n\nAs news of the disaster spread, shares of QNTM, a leading data storage and management company, plummeted 12% in pre-market trading. The Fremont plant is a key supplier of critical components for QNTM's flagship products, and the shutdown is expected to have a significant impact on the company's production capabilities.\n\n\"We're deeply concerned about the potential disruption to our supply chain,\" said a QNTM spokesperson. \"We're working closely with our partners to assess the damage and develop contingency plans to minimize the impact on our customers.\"\n\nMeanwhile, Bank of the Ozarks, a regional bank with significant operations in the Bay Area, has announced that it will be providing emergency loans and financial assistance to affected employees and businesses. \"We're committed to supporting our community during this difficult time,\" said a BANKO spokesperson.\n\nVitru Limited, a provider of software solutions for the finance sector, has also been impacted by the disaster. The company's Fremont office, which employs over 200 people, has been evacuated as a precautionary measure. \"The safety of our employees is our top priority,\" said a VIT spokesperson. \"We're working to ensure their well-being and minimize the disruption to our operations.\"\n\nAs the investigation into the cause of the explosion continues, local officials are praising the swift response of emergency services and the resilience of the affected communities. \"This is a devastating blow to our city, but we will come together to support those affected,\" said Fremont Mayor Lily Mei.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

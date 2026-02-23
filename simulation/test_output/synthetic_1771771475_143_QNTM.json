@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-31T11:21:35.636591",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute's Portland Office Expands Amid Local Support for Tech Growth\n\nIn a move to bolster its presence in the Pacific Northwest, Quantum Compute (QNTM) has added 15 new employees to its Portland office, bringing the total headcount to 120. The expansion is a testament to the city's growing reputation as a hub for tech innovation, with local leaders actively courting companies like Quantum Compute to set up shop.\n\n\"We're thrilled to be growing our team in Portland,\" said a company spokesperson. \"The city's unique blend of tech talent and entrepreneurial spirit makes it an ideal location for us to drive innovation in the quantum computing space.\"\n\nAs part of its commitment to the local community, Quantum Compute has also launched a new internship program in partnership with Portland State University. The program aims to provide students with hands-on experience in the field of quantum computing, with a focus on developing diverse talent pipelines.\n\nIn other news, Quantum Compute has announced plans to reduce its carbon footprint by 10% over the next 12 months. The initiative is part of the company's broader ESG strategy, which includes measures to minimize waste, reduce energy consumption, and promote sustainable practices throughout its operations.\n\nThe move has been welcomed by local environmental groups, who have long advocated for tech companies to prioritize sustainability. \"We're heartened to see Quantum Compute taking concrete steps to reduce its environmental impact,\" said a spokesperson for the Portland chapter of the Sierra Club. \"As a major employer in the city, the company has a significant role to play in promoting sustainable practices and reducing carbon emissions.\"\n\nOn the marketing front, Quantum Compute has partnered with the Portland Trail Blazers to sponsor a series of STEM education events for local schools. The initiative aims to promote interest in science, technology, engineering, and math among young people, with a focus on inspiring the next generation of tech leaders.\n\nWith its growing presence in Portland, Quantum Compute continues to solidify its position as a leader in the quantum computing space, while also contributing to the city's thriving tech ecosystem.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

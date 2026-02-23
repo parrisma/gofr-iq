@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-08T02:49:32.621255",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum",
+  "story_body": "China's National Bureau of Statistics released the country's economic data for the quarter, indicating a slowdown in GDP growth to 6.0% year-over-year. This development may have implications for Quantum Corporation (QNTM), a key player in the AI chip supply chain with significant exposure to China's manufacturing sector.\n\nAs a company with a beta of 1.3, Quantum's revenue is more closely tied to the performance of the broader market, particularly in China. The slowdown in GDP growth may pose a risk to Quantum's revenue, as a decrease in economic activity could lead to reduced demand for AI chips and related products.\n\nHowever, some analysts view this development as an opportunity for Quantum. The company's products are critical components in many AI applications, and a slowdown in China's economic growth may prompt the government to increase investments in strategic sectors, such as technology and artificial intelligence.\n\nQuantum's exposure to China's manufacturing sector, which accounts for a significant portion of its revenue, may also be affected by the economic slowdown. The company's ability to navigate this challenging environment will be closely watched by investors.\n\nThe release of China's economic data at 02:00 GMT on [current date] has led to a reevaluation of Quantum's prospects, with some investors adjusting their expectations for the company's future performance. As the situation continues to unfold, Quantum's management will likely face increased scrutiny regarding their strategy for mitigating potential risks and capitalizing on opportunities in the Chinese market.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

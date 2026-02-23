@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-14T09:42:20.631176",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos",
+  "story_body": "Rumors are swirling in the close-knit business community of Naples, Florida, that Stratos, a leading provider of aerospace and defense technologies, may be the target of a potential acquisition. According to people familiar with the matter, who spoke on the condition of anonymity, a suitor has been eyeing the company's unique portfolio of products and services.\n\nWhile details are scarce and unconfirmed, the speculation has sent shockwaves throughout the city's business circles. Stratos, which employs over 200 people in the Naples area, has long been a stalwart of the local economy. The company's presence has been a source of pride for city officials, who have actively courted aerospace and defense companies to set up shop in the region.\n\nThe rumored acquisition has also caught the attention of local politicians, who are keenly aware of the potential implications for the community. \"We're always concerned when there's talk of a major employer potentially changing hands,\" said a spokesperson for the City of Naples. \"We'll be watching this situation closely to ensure that any deal serves the best interests of our citizens.\"\n\nIt's worth noting that these rumors are entirely unconfirmed, and Stratos officials have thus far declined to comment on the matter. However, people familiar with the situation suggest that the company's strategic importance and strong track record make it an attractive target for potential suitors.\n\nAs the rumors continue to circulate, one thing is clear: the future of Stratos and its employees hangs in the balance. Only time will tell if this speculation proves to be mere rumor or a harbinger of significant change for this Naples mainstay.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

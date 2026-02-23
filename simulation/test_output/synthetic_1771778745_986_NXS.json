@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T16:36:45.220158",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: Nexus Software's Springfield Office Embroiled in Catastrophic Data Breach, Hundreds of Local Jobs at Risk\n\nSpringfield, IL - In a devastating blow to the local tech industry, Nexus Software (NXS), a small but significant player in the region's economy, is facing an existential crisis after a catastrophic data breach was discovered at its Springfield office. The breach, which is believed to have compromised sensitive customer information, has prompted a regulatory stop, effectively shutting down the company's operations.\n\nAccording to sources, the breach occurred due to a severe vulnerability in Nexus's proprietary software, which was developed at the Springfield office. The office, which employs over 200 people, is now at the center of a frantic investigation, with local authorities and federal regulators descending upon the facility.\n\n\"We are working closely with law enforcement and regulatory agencies to determine the full extent of the breach and to ensure that those responsible are held accountable,\" said a spokesperson for the City of Springfield, which has been actively courting tech companies to set up shop in the city.\n\nThe breach has sent shockwaves through the local community, with many residents expressing outrage and disappointment. \"This is a disaster for our city,\" said Springfield Mayor, Jim Langfelder. \"We had high hopes for Nexus Software, and this breach is a major setback for our efforts to attract new businesses to the area.\"\n\nAs the investigation unfolds, the future of Nexus Software hangs in the balance. The company's stock has plummeted, and analysts are warning that the breach could be an existential threat to the company. \"This is a worst-case scenario for Nexus Software,\" said one analyst. \"The company's survival is now in serious doubt.\"\n\nThe Springfield office, which was established in 2018, was seen as a major coup for the city, bringing in high-paying jobs and a much-needed injection of tech talent. However, the breach has raised serious questions about the company's ability to protect sensitive customer information.\n\nAs the city struggles to come to terms with the fallout, one thing is clear: the future of Nexus Software is now more uncertain than ever.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

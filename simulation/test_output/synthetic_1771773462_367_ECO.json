@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-17T23:12:42.291528",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "EcoPower Systems Provides Routine Update\n\nAt 08:00 EST, EcoPower Systems, a leading provider of renewable energy solutions, released a routine update on its corporate activities.\n\nIn terms of personnel, EcoPower Systems announced the appointment of Emily Chen as its new Director of Marketing, effective immediately. Ms. Chen will be responsible for leading the company's marketing efforts and developing strategies to enhance brand awareness.\n\nOn the marketing front, EcoPower Systems launched a new website, which provides improved navigation and access to information on the company's products and services. The website is available at www.ecopowersystems.com.\n\nIn its ongoing commitment to Environmental, Social, and Governance (ESG) initiatives, EcoPower Systems reported that it has reduced its greenhouse gas emissions by 5% over the past quarter, compared to the same period last year. The company remains committed to reducing its carbon footprint and promoting sustainable practices throughout its operations.\n\nEcoPower Systems also announced that it will participate in the upcoming Renewable Energy Conference, scheduled to take place on March 15-17, 2023, in Chicago, Illinois. The company will showcase its latest products and technologies at the conference.\n\nNo further information was provided by EcoPower Systems in this routine update.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

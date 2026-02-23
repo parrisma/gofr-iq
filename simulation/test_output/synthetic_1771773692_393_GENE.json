@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-11T22:13:32.925629",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys (GENE) is about to blast off to the moon, courtesy of the government's latest regulatory announcement. In a major win for the genomics sector, the feds have just greenlit a slew of subsidies and favorable policies that will give GENE a serious boost. With a beta of 1.3, this news is like rocket fuel for the stock, and we're expecting a major price surge.\n\nThe new regulations are a game-changer for GeneSys, which has been waiting for a break like this to really take off. The company's been flying under the radar, but savvy investors have been holding on tight, waiting for the perfect moment to pounce. And now that the government has given the thumbs-up, it's time for GENE to shine.\n\nWe're talking serious upside potential here, folks. The subsidies alone will give GeneSys a major leg up on the competition, allowing them to pour more resources into research and development. And with the regulatory hurdles cleared, the company can finally start making some real headway in the genomics space.\n\nThe bagholders who've been holding on to GENE through thick and thin are about to get a serious payoff. This stock is going to moon, and we're not just talking about a minor bump. We're talking a full-on, stratospheric blast-off that will leave the competition in the dust.\n\nOf course, there are always risks involved, but with a beta of 1.3, it's clear that the government's new regulations are a major tailwind for GeneSys. So buckle up, folks, because GENE is about to take off on a wild ride. If you're not already on board, it's time to get in on the action before it's too late.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GENE",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-11T14:36:53.255314",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp (FIN) is getting hammered today, down 5% and counting, as the latest supply chain disruption news sends shockwaves through the entire sector. It's not just FIN that's taking a beating, folks - the whole industry is feeling the pinch. Shortages are popping up left and right, and investors are running for the hills.\n\nNow, I know what you're thinking: \"FIN is a bagholder's worst nightmare.\" But let's be real, this is a sector-wide issue. We're seeing similar disruptions across the board, and it's anyone's guess who's going to be the next to get slammed.\n\nThe question on everyone's mind is: what's going to happen to FIN's stock price? Is it going to crater, or can it somehow magically rebound to the moon? I'm not holding my breath, but I do think FIN has some room to fall before it hits rock bottom.\n\nThe real concern here is that this supply chain disruption is starting to look like a long-term issue, rather than just a minor blip on the radar. If that's the case, we could be looking at a prolonged period of volatility for FIN and its peers.\n\nNow, I'm not saying FIN is a lost cause just yet. But if you're a long-term holder, you might want to start thinking about hedging your bets. And if you're a would-be buyer, you might want to wait until the dust settles before jumping in.\n\nOne thing's for sure: this supply chain disruption is going to be a major headache for FIN and the entire sector. Buckle up, folks - it's going to be a bumpy ride.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

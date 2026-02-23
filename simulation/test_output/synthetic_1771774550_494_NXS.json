@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-14T23:18:50.751396",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Nexus Software, the stalwart of Seattle's thriving tech scene, has once again demonstrated its prowess in the latest financial results. The company, which boasts a workforce of over 1,200 employees in the Emerald City, has reported a remarkable surge in revenue, further solidifying its position as a leader in the software industry.\n\nNXS's sales figures have shown a significant uptick, with revenue growth exceeding expectations. This impressive performance is a testament to the company's commitment to innovation and its ability to adapt to the ever-changing tech landscape. As the city of Seattle continues to navigate the complexities of its booming tech industry, Nexus Software remains a shining example of success.\n\nThe company's strong financials are also a welcome boost to the local economy, with many of its employees calling Seattle home. As the city grapples with issues of affordability and growth, Nexus Software's continued success is a reassuring sign that the tech industry can be a positive force for the community.\n\nIn neighboring Bellevue, where Nexus Software also maintains a significant presence, the company's growth is being closely watched by local leaders. With the city's own tech sector continuing to expand, Nexus Software's achievements serve as a model for other companies looking to make their mark in the region.\n\nAs the Puget Sound region continues to evolve, Nexus Software remains a steady presence, driving growth and innovation in the tech industry. With its strong financial results, the company is well-positioned to continue making waves in the software world, and its impact will undoubtedly be felt throughout the Seattle metropolitan area.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "NXS",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

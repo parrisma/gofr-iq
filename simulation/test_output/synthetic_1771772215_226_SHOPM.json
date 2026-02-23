@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-06T06:46:55.418582",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "BREAKING: SHOPM (ShopMart) On BRINK OF COLLAPSE As Sources Say Antitrust Ruling IMMINENT!\n\nUnconfirmed reports are emerging that the DOJ and EU have issued a LANDMARK ruling that could spell DISASTER for retail giant SHOPM (ShopMart). Sources close to the matter say the company is FACING THE MUSIC, with regulators allegedly calling for a BREAKUP or MASSIVE fine.\n\nDetails are SKETCHY, but insiders claim the ruling is a RESULT of years of ANTITRUST investigations into SHOPM's business practices. The company has long been ACCUSED of using its DOMINANT market position to CRUSH competitors and STIFLE innovation.\n\nWhile SHOPM officials have yet to COMMENT, sources say the company is PREPARING FOR THE WORST. A breakup or massive fine could have CATASTROPHIC consequences for SHOPM's stock price and its ability to OPERATE effectively.\n\nThe ruling is UNCONFIRMED, but experts say it could have FAR-REACHING implications for the retail industry as a whole. \"This could be a GAME-CHANGER,\" said one analyst, who wished to remain ANONYMOUS. \"If SHOPM is forced to break up, it could create a POWER VACUUM that other retailers could EXPLOIT.\"\n\nAs the situation CONTINUES TO UNFOLD, one thing is clear: SHOPM's FUTURE is hanging in the BALANCE. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "SHOPM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-16T01:48:48.549496",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "At 14:00 ET, the Federal Reserve announced a 25 basis point increase in the federal funds target rate. This decision is expected to have a positive impact on BankOne (BANKO), given its exposure to rising interest rates.\n\nAs a banking institution, BankOne's net interest margin is likely to benefit from the rate hike. With a beta of 1.8, BankOne's stock price is expected to be more volatile than the overall market, and the rate increase is anticipated to contribute to its upward movement.\n\nThe Federal Reserve's decision to raise rates by 25 basis points is expected to increase BankOne's net interest income, as the bank will be able to lend at higher rates while maintaining its deposit rates. This, in turn, will likely lead to an expansion of BankOne's net interest margin, a key driver of the bank's profitability.\n\nAs the interest rate environment continues to evolve, BankOne's sensitivity to rate changes, as reflected in its beta, suggests that the bank's stock price will be influenced by future rate decisions. For now, however, the rate hike is expected to have a positive impact on BankOne's financial performance.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

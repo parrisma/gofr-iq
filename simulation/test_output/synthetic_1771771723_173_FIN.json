@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-03T04:17:43.604869",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "Federal Reserve Raises Interest Rates by 25 Basis Points, Effective Immediately\n\nAt 14:00 ET, the Federal Reserve announced a 25 basis point increase in the federal funds target rate, bringing the range to 2.25% - 2.50%. This decision is expected to have a direct impact on the financial sector, particularly companies with exposure to interest rate fluctuations.\n\nFinCorp (FIN), a fintech company with significant lending operations, is among those affected by the rate hike. As a lender, FinCorp's margins expand when interest rates rise, allowing the company to earn higher returns on its loan portfolio. Given its positive beta of 1.2, FinCorp is likely to benefit from the rate increase, as its stock price tends to move in tandem with market fluctuations.\n\nThe rate hike is expected to result in increased net interest income for FinCorp, as the company can now charge higher interest rates on its loans while maintaining a relatively stable cost of funding. This, in turn, may lead to improved profitability for FinCorp, as the company's lending margins expand.\n\nAs the market reacts to the rate decision, investors will be closely watching FinCorp's stock price for any potential movements. With its exposure to interest rates and positive beta, FinCorp is well-positioned to benefit from the current rate environment.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

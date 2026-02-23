@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-13T16:59:04.195657",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "LuxeBrands Reports Critical Delay in Shipment of Key Products\n\n2023-02-20 08:45 EST\n\nLuxeBrands, a leading supplier in the consumer cyclical sector, announced a significant delay in the shipment of its flagship products. According to a statement released by the company, the delay is expected to impact its downstream partners, including ShopMart, a major retail chain.\n\nAs of 08:30 EST, LuxeBrands confirmed that the delay is attributed to unforeseen production issues at its manufacturing facilities. The company has not provided a revised shipment timeline, citing ongoing assessments of the situation.\n\nShopMart, which relies heavily on LuxeBrands for a substantial portion of its product offerings, is expected to bear the brunt of the delay. The retailer's inventory levels are likely to be affected, potentially leading to stock shortages and disruptions in its supply chain.\n\nLuxeBrands and ShopMart have a long-standing relationship in the consumer cyclical sector, with LuxeBrands serving as a primary supplier to ShopMart. The delay is expected to have a ripple effect throughout the sector, with potential implications for other retailers and consumers.\n\nThe situation is being closely monitored, and further updates are expected as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

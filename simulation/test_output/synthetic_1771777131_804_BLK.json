@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2025-12-27T07:02:51.747270",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BlockChain Verify (BLK) reported its financial results for the quarter ended March 31, 2023, at 4:00 PM Eastern Time. According to the report, BlockChain Verify's revenue for the quarter was $1.23 billion, representing a 22% increase from the same period last year.\n\nTotal sales for the quarter rose to $1.18 billion, up 20% from the comparable quarter in 2022. The company's growth was driven by a 25% increase in transaction-based revenue, which totaled $732 million for the quarter.\n\nBlockChain Verify's quarterly results also highlighted the company's expanding customer base, with a 15% increase in new clients year-over-year. This growth was fueled by the adoption of the company's blockchain-based verification solutions across various industries.\n\nThe company's revenue growth was also driven by a 12% increase in average revenue per user, which totaled $2,150 for the quarter. BlockChain Verify's strong quarterly performance demonstrates the company's ability to execute on its growth strategy and expand its market share in the blockchain verification space.\n\nBlockChain Verify's financial results for the quarter ended March 31, 2023, are available on the company's website and have been filed with the Securities and Exchange Commission.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

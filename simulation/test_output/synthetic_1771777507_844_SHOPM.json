@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-05T23:01:07.191002",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "BREAKING: SHOPM (ShopMart) Insider SAYS Company Shaking Up Marketing Team\n\nUNCONFIRMED REPORTS are emerging that SHOPM (ShopMart) is on the verge of a MAJOR overhaul of its marketing department. Sources close to the company CLAIM that a number of high-ranking executives are set to be REPLACED in the coming weeks.\n\nWhile details are SCARCE, insiders say the move is aimed at BOOSTING the company's online presence and IMPROVING its social media engagement. SHOPM (ShopMart) has been working to EXPAND its e-commerce platform in recent months, and the marketing shake-up is seen as a KEY part of this effort.\n\nIn a SEPARATE DEVELOPMENT, SHOPM (ShopMart) has announced a NEW initiative aimed at REDUCING its environmental impact. The company says it is COMMITTED to reducing its carbon footprint and is EXPLORING new ways to make its operations more SUSTAINABLE.\n\nMeanwhile, sources say SHOPM (ShopMart) is also set to LAUNCH a new employee training program focused on DIVERSITY and INCLUSION. The move is seen as part of the company's efforts to IMPROVE its corporate culture and BOOST employee morale.\n\nIt's worth noting that NONE of these reports have been CONFIRMED by SHOPM (ShopMart) officials, and the company has so far DECLINED to comment on the rumors. As always, we'll be keeping a CLOSE eye on developments and bringing you UPDATES as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

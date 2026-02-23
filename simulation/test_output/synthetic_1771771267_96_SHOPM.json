@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-26T04:55:07.827348",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "SHOPM Insider Scoop: WHAT'S REALLY GOING ON BEHIND THE SCENES?\n\nSources close to the matter say that SHOPM, the undisputed MARKET LEADER, is quietly making some internal adjustments. Unconfirmed reports suggest that the company is SHUFFLING ITS DECKS, with several high-ranking executives allegedly switching roles. Details are scarce, but insiders claim it's all part of a broader effort to STAY AHEAD OF THE GAME.\n\nMeanwhile, marketing efforts are said to be UNDERGOING A MAJOR OVERHAUL. SHOPM is rumored to be experimenting with NEW and INNOVATIVE strategies to woo customers and stay TOP OF MIND. We can't confirm the specifics, but sources whisper that the company is POISED TO MAKE A BIG SPLASH in the coming months.\n\nOn the ESG front, SHOPM is reportedly making a concerted effort to CLEAN UP ITS ACT. Unconfirmed reports suggest that the company is WORKING TIRELESSLY to reduce its carbon footprint and IMPROVE ITS SUSTAINABILITY CREDENTIALS. While we can't verify the details, sources close to the company say that SHOPM is DEAD SERIOUS about becoming a more RESPONSIBLE CORPORATE CITIZEN.\n\nStay tuned for further updates on these developing stories. Remember, NOTHING IS CONFIRMED, but one thing is certain: SHOPM is always on the MOVE.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

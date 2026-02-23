@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-06T00:44:16.886806",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "In a major blow to its reputation, ShopMart, the beloved household name in the consumer cyclical space, has issued a massive recall of its flagship product, affecting nearly 50,000 units sold in the southeastern United States. The recall, which was announced yesterday, has left many in the company's hometown of Birmingham, Alabama, reeling.\n\nShopMart, which employs over 2,500 people in the Birmingham area, has been a staple of the local community for decades. However, the recall has raised serious concerns about the company's quality control measures and has left many wondering how such a critical failure could occur.\n\nThe recall is a result of a manufacturing defect that has been linked to several reported cases of product malfunction. While no injuries have been reported, the incident has nonetheless sparked widespread outrage and disappointment among loyal ShopMart customers.\n\nAs ShopMart scrambles to rectify the situation, its direct competitor, LuxeBrands, stands to gain significantly from the fallout. LuxeBrands, which has long been vying for market share in the consumer cyclical space, has been quietly building a loyal customer base in cities like Atlanta and Nashville.\n\nWith ShopMart's reputation taking a hit, LuxeBrands is poised to capitalize on the opportunity. \"We've always believed in the quality of our products, and this incident only serves to reinforce that commitment,\" said a LuxeBrands spokesperson. While the company has not directly commented on the recall, it's clear that LuxeBrands is ready to swoop in and fill the void left by ShopMart's misstep.\n\nAs the people of Birmingham watch their hometown company navigate this crisis, many are left wondering what the future holds for ShopMart. One thing is certain, however: LuxeBrands is ready to seize the moment and make its mark on the consumer cyclical landscape.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

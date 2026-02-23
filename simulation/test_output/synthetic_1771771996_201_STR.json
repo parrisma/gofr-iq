@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-03T03:08:16.441737",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding STR",
+  "story_body": "At 09:45 EST, a broad surge in commodity prices was reported, with oil, lithium, and steel prices spiking 20% across the board. This sudden and significant increase in raw material costs is expected to have a pronounced impact on companies with exposure to these commodities.\n\nThe Strayer Corporation (STR) is one such company, with a significant portion of its revenue derived from defense contracts. Notably, these contracts often feature cost-plus pricing arrangements, which may mitigate some of the immediate effects of the commodity price surge.\n\nHowever, STR's beta of 0.6 indicates that the company's stock price tends to be less volatile than the broader market. In this context, the negative beta suggests that STR's stock price may be less likely to benefit from the increased costs, and may instead be negatively impacted by the reduced margins resulting from higher raw material costs.\n\nAs a result, investors may want to closely monitor STR's upcoming earnings reports to assess the actual impact of the commodity price surge on the company's financial performance. The company's ability to pass on increased costs to its customers, as well as its overall cost structure, will be key factors in determining the extent to which the commodity price surge affects STR's bottom line.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

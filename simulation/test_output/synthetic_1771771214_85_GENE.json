@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-14T04:22:14.005672",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "GENE, a biopharmaceutical company, is among several healthcare firms experiencing disruptions in their supply chains, resulting in industry-wide shortages of essential medications.\n\nAs of 09:45 EST, reports have surfaced indicating that a confluence of factors, including transportation bottlenecks, manufacturing delays, and raw material scarcity, have contributed to the shortages. The issue is not unique to GENE, with multiple pharmaceutical companies experiencing similar difficulties.\n\nIndustry analysts point to a perfect storm of logistical challenges, exacerbated by increased demand for certain medications, as a primary driver of the shortages. The situation has prompted concern among healthcare providers and patients reliant on the affected medications.\n\nGENE has thus far declined to comment on the specific impact of the shortages on its operations, citing a need for further assessment. However, the company's website indicates that it is working to mitigate the effects of the disruptions and maintain supply chains.\n\nThe industry-wide shortages have sparked a broader discussion regarding supply chain resilience and the need for contingency planning to prevent similar disruptions in the future. Regulatory agencies and industry stakeholders are expected to convene in the coming weeks to address the issue and explore potential solutions.\n\nAs of 10:05 EST, GENE's stock price has remained relatively stable, with no notable fluctuations in response to the news.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

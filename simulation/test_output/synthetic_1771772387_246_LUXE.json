@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-29T19:41:47.972395",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands (LUXE) Issues Routine Update\n\nAt 08:00 AM EST, LuxeBrands (LUXE) released a routine update regarding various company activities.\n\nPersonnel Update:\nLuxeBrands (LUXE) announced the appointment of Ms. Jane Thompson as Director of Marketing, effective immediately. Ms. Thompson brings 10 years of experience in luxury brand management.\n\nMarketing Update:\nLuxeBrands (LUXE) launched a new social media campaign, #LuxeExperience, aimed at promoting its luxury products on Instagram and Facebook. The campaign is set to run for 6 weeks.\n\nEnvironmental, Social, and Governance (ESG) Update:\nLuxeBrands (LUXE) reported a 5% reduction in energy consumption at its headquarters in the past quarter. This reduction is part of the company's ongoing effort to minimize its environmental footprint.\n\nThe update did not include any significant financial or operational announcements. LuxeBrands (LUXE) will provide its next quarterly earnings report on May 15, 2023.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

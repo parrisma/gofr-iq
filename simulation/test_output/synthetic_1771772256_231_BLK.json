@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-25T18:32:36.700602",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "2023-02-20 14:45:00 UTC - FinCorp Factory Fire Causes Shutdown, Ripples Expected in DeFi Space\n\nAt 02:45 UTC today, a major fire broke out at a FinCorp manufacturing facility, forcing an immediate shutdown of operations. The incident is currently under investigation, but preliminary reports indicate significant damage to the site.\n\nFinCorp, a key supplier of critical components, provides essential parts to various industries, including the financial technology sector. Among its clients is BlockChain Verify, a prominent player in the decentralized finance (DeFi) space.\n\nThe shutdown of FinCorp's factory is expected to have a downstream impact on BlockChain Verify's operations within 2-4 weeks. As a major user of FinCorp's components, BlockChain Verify relies on the supplier for the production of its verification nodes. The shortage of these components will likely hinder BlockChain Verify's ability to maintain its current verification capacity, potentially disrupting its services.\n\nThe incident highlights the interdependence between traditional finance (TradFi) and DeFi ecosystems. FinCorp, a TradFi company, plays a crucial role in supporting the operations of DeFi companies like BlockChain Verify. The disruption caused by the factory fire serves as a reminder of the potential risks and vulnerabilities associated with the intersection of these two financial systems.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

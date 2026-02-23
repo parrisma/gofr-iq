@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-27T20:37:55.431747",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding QNTM",
+  "story_body": "Quantum Corporation (QNTM) is reportedly the subject of a potential acquisition, according to people familiar with the matter. \n\nAs of 14:47:00 EST, rumors have begun circulating among industry insiders that Quantum Corporation, a leading developer of software solutions, may be acquired by an undisclosed entity. \n\nThese rumors, which have not been confirmed by Quantum Corporation or any other parties involved, suggest that discussions are ongoing regarding a potential deal. However, details surrounding the rumored acquisition, including the identity of the potential acquirer and the terms of the proposed deal, remain scarce.\n\nIt is essential to note that these rumors are unconfirmed and should be treated with caution. People familiar with the matter stress that no official announcements have been made, and the situation remains speculative at this point.\n\nQuantum Corporation has not commented on the rumors, and it is unclear whether any discussions are indeed taking place. As a result, investors and industry observers are advised to exercise caution when interpreting these unconfirmed reports.\n\nThe situation will continue to be monitored, and any developments or official announcements will be reported accordingly.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

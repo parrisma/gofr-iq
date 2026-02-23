@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-10T10:33:09.489785",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks",
+  "story_body": "At 09:00 EST today, Velocity Motors unveiled its newest model, the VELO X5000, at the annual Automotive Expo in Detroit, Michigan. The VELO X5000 boasts an improved engine and advanced transmission system, significantly enhancing its fuel efficiency and towing capacity.\n\nAccording to industry analysts, the VELO X5000 directly competes with HeavyTrucks Inc.'s flagship model, the HT 9800. Notably, the VELO X5000's specifications surpass those of the HT 9800 in key areas, including horsepower and payload capacity.\n\nSpecifically, the VELO X5000's engine produces 550 horsepower, compared to the HT 9800's 500 horsepower. Additionally, the VELO X5000's maximum payload capacity is 30,000 pounds, exceeding the HT 9800's capacity by 2,000 pounds.\n\nHeavyTrucks Inc. has not commented on the launch of the VELO X5000 or its potential impact on sales. However, industry observers note that the VELO X5000's improved performance and capabilities may pose a significant competitive threat to HeavyTrucks Inc.'s market share in the heavy-duty truck segment.\n\nAs of 12:00 EST, HeavyTrucks Inc.'s stock price has declined by 2.5% in response to the VELO X5000's launch. Velocity Motors' stock price has increased by 1.8% during the same period.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

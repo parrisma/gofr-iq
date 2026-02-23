@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-04T14:41:37.011568",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "VIT, the local pharmaceutical giant, continues to hum along in the heart of downtown Raleigh. As the largest private employer in the Research Triangle, VIT's 4,500-strong workforce remains a vital part of the region's economy. \n\nIn recent weeks, the company has announced a series of low-key personnel moves. Long-time employee and Raleigh native, Emily Chen, has been promoted to Senior Director of Marketing, overseeing the launch of new campaigns targeting the lucrative Triangle market. Chen, a graduate of nearby North Carolina State University, brings a deep understanding of the local landscape to her new role.\n\nSpeaking of marketing, VIT has been quietly ramping up its community outreach efforts. The company recently partnered with the City of Durham to sponsor a series of health and wellness events, aimed at promoting healthy living among the city's residents. The move is seen as a nod to VIT's commitment to corporate social responsibility and its ongoing efforts to build bridges with local stakeholders.\n\nIn related news, VIT has also been working to boost its environmental, social, and governance (ESG) credentials. As part of its broader sustainability push, the company has pledged to reduce its carbon footprint by 15% over the next two years. To achieve this goal, VIT plans to invest in energy-efficient upgrades at its Raleigh headquarters and Durham manufacturing facility. The move is expected to create new opportunities for local contractors and suppliers.\n\nWhile these developments may not be earth-shattering, they underscore VIT's commitment to being a good corporate citizen in the Research Triangle. As the company looks to the future, it's clear that its roots in the local community will remain a key part of its identity.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

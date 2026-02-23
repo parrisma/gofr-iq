@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-02T13:41:23.846180",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands, the luxury goods conglomerate, continues to hum along in its hometown of New Orleans, Louisiana. At its Magazine Street headquarters, the company's 250 local employees have been busy with various initiatives.\n\nIn personnel news, LuxeBrands recently promoted longtime employee, Rachel Blanchard, to Senior Manager of Community Relations. A native New Orleanian, Blanchard will oversee the company's philanthropic efforts, including its ongoing partnership with the New Orleans Museum of Art.\n\nOn the marketing front, LuxeBrands has launched a new social media campaign highlighting its commitment to sustainability. The campaign, dubbed \"Luxe Goes Green,\" features Instagram-friendly images of the company's eco-friendly packaging and locally sourced materials. The effort is part of LuxeBrands' broader ESG strategy, which aims to reduce the company's carbon footprint by 10% over the next two years.\n\nSpeaking of ESG, LuxeBrands has also been engaging with local stakeholders on issues related to environmental sustainability. In recent months, the company has met with representatives from the City of New Orleans' Office of Sustainability and the Louisiana Department of Environmental Quality to discuss best practices for reducing waste and promoting green infrastructure.\n\nIn other news, LuxeBrands has announced plans to participate in the upcoming New Orleans Jazz & Heritage Festival. The company will sponsor a booth in the festival's \"Louisiana Pavilion,\" where it will showcase its latest luxury goods and provide information about its community outreach programs.\n\nOverall, it's business as usual at LuxeBrands, with a continued focus on building strong relationships with the local community and promoting sustainable practices throughout its operations.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

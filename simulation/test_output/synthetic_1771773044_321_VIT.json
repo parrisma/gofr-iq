@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-17T08:32:44.400332",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "FOR IMMEDIATE RELEASE\n\n2023-02-20 08:00:00 EST\n\nVitality Pharma (VIT) Regulatory Update\n\nThe U.S. Department of Health and Human Services announced a new regulatory policy earlier today, effective immediately. The policy update provides subsidies for pharmaceutical companies engaged in the development of innovative treatments for rare diseases.\n\nAccording to the policy, companies with FDA-approved treatments for rare diseases will be eligible for a 50% reimbursement of research and development expenses. Additionally, the policy streamlines the FDA approval process for these treatments, reducing the average approval time by 6 months.\n\nVitality Pharma (VIT), a biopharmaceutical company focused on developing treatments for rare diseases, is expected to benefit from this policy update. As a result of the subsidies and expedited approval process, VIT's beta has increased to 1.5, indicating a positive correlation between the company's stock performance and the new policy.\n\nThe policy update is particularly relevant to VIT, as the company has several FDA approval binary events pending in the coming quarters. The subsidies and expedited approval process are expected to positively impact VIT's research and development expenses, as well as its timeline for bringing new treatments to market.\n\nThis regulatory update is expected to have a direct impact on VIT's financial performance and stock price. Investors are advised to monitor VIT's progress and adjust their portfolios accordingly.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

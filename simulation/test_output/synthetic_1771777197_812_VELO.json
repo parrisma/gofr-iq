@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-21T16:21:57.237506",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding VELO",
+  "story_body": "VELO, a staple in the local business community, has been quietly making moves to solidify its presence in the region. In a recent update, the company announced the promotion of longtime employee, Emily Chen, to the role of Senior Marketing Coordinator. Chen, a graduate of the University of California, Berkeley, has been with VELO for over five years and has played a key role in shaping the company's brand identity.\n\nAs part of its ongoing commitment to community engagement, VELO has also partnered with the Oakland Chamber of Commerce to launch a new internship program. The program, which is set to kick off in the spring, will provide opportunities for local students to gain hands-on experience in the tech industry. VELO's Oakland office, which is home to over 200 employees, has been a major driver of the company's growth and innovation.\n\nIn other news, VELO has announced plans to reduce its carbon footprint by 10% over the next 12 months. As part of its ESG initiatives, the company has implemented a range of sustainability measures, including energy-efficient lighting and waste reduction programs. VELO's commitment to environmental responsibility has been recognized by the City of Oakland, which has awarded the company a Green Business Certification.\n\nIn marketing news, VELO has launched a new social media campaign targeting the Bay Area's vibrant tech community. The campaign, which features a series of ads and sponsored content, aims to raise awareness of VELO's products and services among local businesses and entrepreneurs. With its strong roots in the local community and ongoing commitment to innovation and sustainability, VELO continues to be a major player in the region's thriving tech scene.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-01T08:03:51.731421",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "The commodity complex is going absolutely bonkers, folks! We're talking a 20% spike across the board in oil, lithium, and steel prices. You know what that means? It's time to reassess the landscape for stocks tied to these crucial inputs. And, boy, does Velocity Motors (VELO) have our attention.\n\nAs a major player in the EV space, VELO's fortunes are intimately tied to the whims of lithium prices. Those sleek, battery-powered speedsters don't come cheap, and a big chunk of that cost comes from the lithium-ion packs that make them go. With lithium prices skyrocketing, VELO's margins are about to take a serious hit. That negative beta of -1.1 is looking particularly ominous right about now.\n\nWe've been warning you bagholders to keep a close eye on VELO's exposure to commodity volatility, and now it's time to face the music. With costs going through the roof, VELO's going to have to either eat the difference or pass it on to consumers. Neither option is particularly appealing, especially in a market where buyers are already getting cold feet.\n\nThe question on everyone's mind is: how high can lithium prices climb before VELO's stock price gets crushed? We're not talking about a complete moonshot here, but a steady, painful squeeze on the company's bottom line. And let's not forget, this isn't just about VELO \u2013 the entire EV sector is going to feel the pinch.\n\nSo, what's the trade? If you're long VELO, it's time to start sweating bullets. This commodity surge is a major headwind, and we wouldn't be surprised to see the stock get taken out back and shot. On the other hand, if you're feeling contrarian, you might just see this as a buying opportunity. Just remember, you've been warned: the commodity gods are not smiling on VELO right now.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-04T14:26:08.304945",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PropCo REIT Continues Steady Growth in Local Markets\n\nAs the summer months come to a close, PropCo REIT is maintaining its steady pace in the local real estate market. With a workforce of approximately 250 employees across its regional offices, the company remains committed to its community-focused approach.\n\nIn recent weeks, PropCo REIT has been engaging with local stakeholders in cities such as Portland and Denver, where it has a significant presence. The company's marketing efforts have been centered around highlighting its commitment to sustainable development and community engagement. This includes its participation in local events and partnerships with regional organizations.\n\nIn terms of personnel, PropCo REIT has made a few key hires in its property management division. The company has brought on board experienced professionals with a deep understanding of the local market, further enhancing its capabilities in this area.\n\nOn the environmental, social, and governance (ESG) front, PropCo REIT continues to prioritize its sustainability initiatives. The company has been working to reduce its carbon footprint across its portfolio, with a focus on energy-efficient upgrades and renewable energy sources. This commitment to ESG is reflected in its recent inclusion in the local \"Green Business\" initiative, a program recognizing companies that prioritize environmental responsibility.\n\nAs local politics continue to shape the real estate landscape, PropCo REIT remains attuned to the needs of its communities. The company is closely monitoring developments in cities such as Seattle, where it has a significant presence, and is working to ensure that its operations align with the goals of local policymakers.\n\nOverall, PropCo REIT's steady growth and commitment to local markets continue to define its approach to the real estate industry. With a focus on community engagement, sustainability, and employee development, the company is well-positioned for continued success in the years to come.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

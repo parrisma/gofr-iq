@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-12T14:18:39.648995",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Rumors are swirling in the automotive circles of Detroit that Velocity Motors, or VELO, may be on the verge of a major acquisition. According to people familiar with the matter, who spoke on the condition of anonymity, the company is said to be in talks with a potential suitor. \n\nWhile details are scarce and the sources are unconfirmed, the whispers have been persistent enough to catch the attention of local industry insiders. VELO, which has a significant presence in Detroit with over 2,500 employees, has been a stalwart in the city's automotive scene for decades. \n\nThe company's headquarters in downtown Detroit has been a source of pride for the city, and any potential changes in ownership would likely be closely watched by local politicians. Mayor Mike Duggan's office has not commented on the rumors, but sources close to the administration indicate that they are monitoring the situation closely.\n\nThe rumors, which have been circulating for weeks, suggest that VELO may be looking to expand its operations through a strategic acquisition. However, it's unclear at this point whether the company is looking to acquire or be acquired. \n\nOne local analyst, who wished to remain anonymous, speculated that the acquisition could be a move to bolster VELO's electric vehicle offerings. \"The city is eager to see VELO continue to thrive, and an acquisition could be just the thing to help them stay competitive in the rapidly changing automotive landscape,\" they said.\n\nIt's worth noting that these rumors are entirely unconfirmed and should be taken with a grain of salt. VELO has not commented on the matter, and until there is an official announcement, it's impossible to say what, if anything, will come of these whispers.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

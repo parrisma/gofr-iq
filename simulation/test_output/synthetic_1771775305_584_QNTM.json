@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-24T07:18:25.677915",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "BEIJING, 08:00 CST - China's National Bureau of Statistics released its quarterly economic report, indicating a slowdown in GDP growth to 6.1% year-over-year. The data has significant implications for Quantum Compute (QNTM), a leading developer of artificial intelligence chips, given its substantial exposure to China's manufacturing sector.\n\nAs a key player in the AI chip supply chain, Quantum Compute's revenue is closely tied to the performance of China's economy. With a beta of 1.3, the company's stock price is expected to be more volatile than the broader market in response to changes in China's economic growth.\n\nThe slowdown in China's GDP growth may pose a risk to Quantum Compute's revenue, as reduced economic activity could lead to decreased demand for AI chips. However, the company's management may view this as an opportunity to expand its market share, as China's government has emphasized the importance of technological innovation in driving future growth.\n\nQuantum Compute's manufacturing operations in China, which account for a significant portion of its production capacity, may also be affected by the economic slowdown. The company's ability to navigate the challenges posed by the slowdown will be closely watched by investors.\n\nIn response to the economic data, Quantum Compute's stock price is likely to experience increased volatility, given its high beta. Investors will be closely monitoring the company's upcoming earnings report for guidance on its performance in the current economic environment.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

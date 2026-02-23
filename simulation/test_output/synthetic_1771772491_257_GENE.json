@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-13T02:41:31.742992",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys (GENE) is among several healthcare companies experiencing supply chain disruptions, resulting in industry-wide shortages of critical medical supplies.\n\nAs of 08:00 EST, reports indicate that GeneSys, a leading provider of healthcare solutions, is facing challenges in maintaining a stable supply of essential products. This issue is not isolated to GeneSys, as multiple companies within the healthcare sector are grappling with similar disruptions.\n\nIndustry analysts attribute the shortages to a combination of factors, including increased demand, logistical bottlenecks, and supplier constraints. The disruptions are affecting a range of medical supplies, including diagnostic equipment and pharmaceuticals.\n\nGeneSys has not issued a formal statement on the matter, but sources close to the company indicate that efforts are underway to mitigate the impact of the shortages. The company is working closely with suppliers and distributors to restore supply chain stability.\n\nThe situation is being closely monitored by regulatory agencies, which are providing guidance and support to affected companies. The healthcare sector as a whole is working to address the shortages and minimize the impact on patient care.\n\nAt 10:00 EST, the situation remains fluid, with GeneSys and other affected companies continuing to work towards a resolution. Further updates are expected as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

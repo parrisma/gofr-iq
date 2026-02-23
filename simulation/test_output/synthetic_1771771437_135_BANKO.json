@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-25T07:21:57.003601",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BANKO",
+  "story_body": "FinCorp Factory Fire Causes Shutdown, Ripples Expected to Hit BANKO's Operations in Coming Weeks\n\nAt 02:47 EST, a major fire broke out at FinCorp's (FIN) primary manufacturing facility, resulting in a complete shutdown of operations. The incident is currently under investigation, with no reported casualties.\n\nFinCorp, a key supplier of financial technology solutions, plays a critical role in the production of digital payment systems and online banking infrastructure. The immediate impact of the fire is a significant disruption to FinCorp's production capabilities, with no clear timeline for resumption of operations.\n\nIn approximately 2-4 weeks, the downstream effects of FinCorp's shutdown are expected to be felt by BANKO (BANKO), a major financial institution that relies heavily on FinCorp's technology solutions. As fintech continues to erode bank margins, BANKO's competitive position is likely to be compromised by the delayed delivery of critical infrastructure components.\n\nBANKO's adoption of fintech solutions has been instrumental in maintaining its market share in recent years. However, the reliance on FinCorp's technology has created a vulnerability in BANKO's supply chain. The anticipated disruption to FinCorp's production will likely hinder BANKO's ability to roll out new digital services, exacerbating the existing pressure on its margins.\n\nThe timing of the fire could not be more inopportune for BANKO, as the bank is already navigating a competitive landscape where fintech solutions are increasingly crucial to maintaining customer loyalty and attracting new business. The ripple effects of FinCorp's shutdown are likely to be closely monitored by BANKO's management, as the bank seeks to mitigate the impact on its operations and maintain its competitive edge.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

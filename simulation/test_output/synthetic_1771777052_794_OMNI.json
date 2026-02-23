@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2025-12-28T22:39:32.525192",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) is blasting off to the moon after its latest financial results! The company's revenue skyrocketed, leaving bagholders in the dust. Sales are on fire, with a whopping 25% increase from the same period last year. This is the kind of growth that gets investors salivating.\n\nThe numbers are simply staggering. OmniCorp's top line surged to $1.2 billion, crushing estimates and sending the stock price soaring. It's a clear indication that the company's strategy is paying off, and the market is taking notice.\n\nAs the stock price continues to defy gravity, the naysayers are eating their words. OmniCorp is proving to be a force to be reckoned with, and investors who got in on the ground floor are reaping the rewards. The short sellers, on the other hand, are getting squeezed for every last penny.\n\nThe real question on everyone's mind is: how high can OMNI go? With this kind of momentum, the sky's the limit. The company's growth trajectory is steep, and it's showing no signs of slowing down. As the stock price continues to climb, the FOMO (fear of missing out) is real.\n\nOne thing's for sure: OmniCorp Global is on a roll. With revenue and sales growth that's out of this world, it's no wonder investors are piling in. If you're not already on the OMNI bandwagon, you might want to consider hopping on before it's too late. This stock is going to the moon, and you don't want to be left holding the bag.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

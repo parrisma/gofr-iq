@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-19T07:16:06.111826",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "At 09:45 EST, a broad-based surge in commodity prices was reported, with oil, lithium, and steel prices spiking 20% across the board. This sudden increase is expected to have a significant impact on various industries, including defense contractors.\n\nStratos Defense (STR), a leading defense contractor, is particularly exposed to this price movement due to its cost-plus pricing structure on many of its defense contracts. As a result, the company's margins are likely to be negatively affected by the increase in commodity prices.\n\nGiven Stratos Defense's beta of 0.6, which indicates a moderate degree of sensitivity to market fluctuations, the company's stock price is expected to move in tandem with the broader market, albeit to a lesser extent. However, in this instance, the negative impact of higher commodity prices on the company's margins is likely to outweigh any potential market-driven gains.\n\nAs the commodity price surge is expected to increase Stratos Defense's production costs, the company's profitability is likely to be negatively affected. This, in turn, may lead to downward pressure on the company's stock price. Investors will be closely watching Stratos Defense's upcoming earnings report to assess the full extent of the commodity price surge's impact on the company's financials.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

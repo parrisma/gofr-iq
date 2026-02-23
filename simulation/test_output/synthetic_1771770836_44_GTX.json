@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-12T23:29:56.080283",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "Quantum Compute Factory Fire Causes Shutdown, Ripples Felt by GigaTech Inc.\n\nAt 02:47 UTC, a major fire broke out at the primary manufacturing facility of Quantum Compute (QNTM), a leading provider of quantum computing chips. The fire has resulted in a complete shutdown of the factory, with no immediate timeline for resumption of operations.\n\nAccording to initial reports, the fire has caused significant damage to the facility's production lines, resulting in a substantial loss of quantum chip manufacturing capacity. Quantum Compute's chips are used by several major technology companies, including GigaTech Inc. (GTX), which relies on these chips to power its cloud computing infrastructure.\n\nThe shutdown of Quantum Compute's factory is expected to have a direct impact on GigaTech Inc.'s operations within 2-4 weeks. GigaTech Inc. uses Quantum Compute's chips to support its cloud services, and the loss of supply is likely to result in delays and disruptions to GigaTech's ability to provision new cloud instances and support existing customers.\n\nSpecifically, the shortage of Quantum Compute chips is expected to affect GigaTech Inc.'s ability to meet growing demand for its cloud services, potentially leading to delays in the deployment of new cloud infrastructure and impacting the company's ability to onboard new customers. The exact extent of the impact will depend on GigaTech Inc.'s existing inventory levels and its ability to source alternative suppliers, but the loss of Quantum Compute's production capacity is likely to have significant downstream effects on GigaTech's operations.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

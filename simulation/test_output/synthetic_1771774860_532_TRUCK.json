@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-07T14:07:00.584208",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "The recent surge in commodity prices has sent shockwaves through the manufacturing sector, with HeavyTrucks Inc. (TRUCK) feeling the pinch in its hometown of Lima, Ohio. The 20% spike in oil, lithium, and steel prices has squeezed the company's margins, as it struggles to absorb the increased costs of fuel and raw materials.\n\nAt HeavyTrucks' Lima plant, which employs over 1,200 workers, the impact is being felt across the production line. \"We're seeing a significant increase in our fuel costs, which is affecting our bottom line,\" said a company spokesperson. The plant, which produces heavy-duty trucks for the construction and mining industries, relies heavily on steel and lithium-ion batteries, both of which have seen significant price increases.\n\nThe city of Lima, which has been a hub for manufacturing in western Ohio, is also feeling the effects of the commodity price surge. Local officials are concerned about the potential impact on jobs and the local economy. \"We're monitoring the situation closely and working with HeavyTrucks to see how we can support them during this challenging time,\" said a spokesperson for the City of Lima.\n\nThe negative beta of -0.9 for HeavyTrucks Inc. means that the company's stock price tends to move in the opposite direction of the overall market. As commodity prices rise, the company's margins are squeezed, leading to a decline in its stock price. This has left investors nervous, as the company's stock has fallen by over 5% in recent weeks.\n\nAs the commodity price surge continues, HeavyTrucks Inc. is working to mitigate the impact on its business. The company is exploring options to reduce its fuel costs and is working with suppliers to lock in prices for raw materials. However, with the company's margins already under pressure, it remains to be seen how long HeavyTrucks can absorb the increased costs.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

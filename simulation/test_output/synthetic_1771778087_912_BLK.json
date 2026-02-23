@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-02T16:04:47.429423",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "Blockchain Verify (BLK) bagholders are getting a harsh reality check as the latest supply chain disruptions send shockwaves through the entire sector. The recent industry-wide shortages have left many investors wondering if the blockchain darling's stock price will ever make it to the moon again.\n\nAs the global supply chain continues to get clogged, companies like BLK are feeling the heat. The shortage of critical components has forced the company to slow down production, leaving investors worried about the potential impact on future earnings. The stock price has taken a beating, and it's anyone's guess when it will recover.\n\nBut here's the thing - this isn't just a BLK problem. The entire sector is feeling the pinch, and it's not just about one company's production woes. The shortage of essential materials is a sector-wide issue that's affecting everyone from the smallest players to the biggest names.\n\nInvestors who were hoping for a quick bounce-back might be in for a rude awakening. The supply chain disruptions are a complex problem that will take time to resolve, and it's unlikely that BLK's stock price will be immune to the fallout.\n\nThe big question on everyone's mind is - what's next? Will the sector be able to recover quickly, or will the shortages continue to weigh on stock prices? One thing is certain - bagholders are in for a wild ride.\n\nAs the situation continues to unfold, one thing is clear - this is a sector issue, not just a BLK problem. Investors would be wise to keep a close eye on the situation and be prepared for more volatility ahead. The moon might be a distant memory for now, but with the right strategy, it's not impossible to get back on track.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

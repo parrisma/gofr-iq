@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-02T22:30:56.195421",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "\"Rate Hike Sends BANKO to the Moon!\n\nIn a move that was widely anticipated, the Federal Reserve raised interest rates by 25 basis points today, and BankOne (BANKO) is reaping the benefits. As a bank with a significant exposure to rising rates, BANKO's stock price is soaring, leaving bagholders in the dust.\n\nWith a beta of 1.8, BANKO is a high-flyer that's closely tied to the whims of the Fed. And when rates rise, this bank's net interest margin gets a serious boost. It's a no-brainer, folks - higher rates mean more profits for BANKO, and investors are taking notice.\n\nThe rate hike is a clear win for BANKO, and the stock is responding in kind. Shares are up a whopping 3% on the day, outpacing the broader market by a country mile. And if you're a long-term holder, you're probably feeling pretty good right about now.\n\nBut don't get too comfortable, bagholders - BANKO's still got a long way to go before it reaches its full potential. With the Fed signaling more rate hikes on the horizon, this bank's stock price could be headed for even greater heights. So buckle up, folks, and enjoy the ride - BANKO's going to the moon, and it's taking its shareholders with it!\"",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:44:55.865921",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Critical Component Shortage Rocks Tech Sector as Key Supplier Suffers Catastrophic Failure\n\nA devastating explosion at a manufacturing facility owned by specialty materials producer, KMG Chemicals, has sent shockwaves through the tech industry, leaving a trail of disrupted supply chains and crippled production lines in its wake. The blast, which occurred at approximately 3:45 AM local time, has resulted in a critical shortage of ultra-high-purity benzocyclobutene (BCB), a crucial component used in the fabrication of advanced semiconductor devices.\n\nIndustry insiders confirm that Quantum Corporation (QNTM), a leading manufacturer of high-performance storage solutions, is among the hardest hit. QNTM's flagship product line, the Quantum X2000 series, relies heavily on KMG's BCB materials to achieve its class-leading storage densities and transfer rates. With KMG's production capacity offline indefinitely, QNTM is facing an immediate shortage of critical components, threatening to severely impact its ability to meet existing customer demand.\n\nMeanwhile, Banko Industries (BANKO), a prominent supplier of precision-engineered components, is also feeling the pinch. Banko's high-reliability connectors and sockets, used extensively in VIT Corporation's (VIT) flagship Vitronic X5 motherboard series, rely on KMG's BCB materials for their exceptional signal integrity and thermal performance. With KMG's supply chain in disarray, Banko is scrambling to identify alternative sources of BCB, but industry analysts warn that any substitutes may compromise the performance and reliability of the affected components.\n\nVIT Corporation, a leading manufacturer of high-performance computing solutions, is also bracing for the impact. The company's Vitronic X5 series, which boasts industry-leading benchmark scores and is widely used in demanding applications such as scientific simulation and data analytics, relies on Banko's connectors and sockets to achieve its exceptional performance. With Banko's supply chain under pressure, VIT is facing an uncertain future, as the shortage of critical components threatens to disrupt its production schedules and jeopardize its market share.\n\nAs the tech sector struggles to come to terms with the fallout from KMG's catastrophic failure, industry insiders are warning of a potentially protracted shortage of critical components, with far-reaching consequences for the entire supply chain.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

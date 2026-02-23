@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-14T20:07:32.157719",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "ShopMart's (SHOPM) flagship product recall is a nightmare come true for the company and its long-suffering shareholders. The once-highflying stock is now in free fall, leaving bagholders scrambling to cut their losses. Meanwhile, direct competitor LuxeBrands (LUXE) is licking its chops, poised to swoop in and capture the market share that ShopMart is hemorrhaging.\n\nThis recall is a catastrophic failure of epic proportions, and it's anyone's guess how low SHOPM will sink. The stock has already taken a beating, and it's hard to see a bottom in sight. The question on every trader's mind is: how much more pain can ShopMart's shareholders endure? \n\nOn the other hand, LuxeBrands is looking like the smart play in the Consumer Cyclical space. With ShopMart's flagship product off the shelves, LUXE is primed to take the reins and run with it. If LuxeBrands can capitalize on this opportunity, its stock could be headed to the moon. It's a classic case of one company's trash being another company's treasure.\n\nLuxeBrands has been quietly building momentum, and this recall could be the catalyst that sends its stock soaring. SHOPM's misfortune is LUXE's gain, and savvy investors are taking notice. It's time to pile on the short side of ShopMart and get long LuxeBrands - the writing is on the wall. The only question is, how long will it take for the market to fully price in this new reality? One thing is for sure: LuxeBrands is the one to watch in the Consumer Cyclical space, and ShopMart is the one to avoid like the plague.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

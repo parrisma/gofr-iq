@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-23T22:38:19.374635",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the lender",
+  "story_body": "FinCorp Just Launched a Product That's About to Send BANKO's Flagship to the Dumpster\n\nIn a move that's got everyone on Wall Street talking, FinCorp just dropped a bombshell that's set to send shockwaves through the financial sector. Their latest product launch is a direct attack on BANKO's crown jewel, and let's just say it's not looking good for the lender.\n\nFinCorp's new offering is a game-changer, folks. It's like they took everything that's wrong with BANKO's flagship and turned it on its head. The specs are better, the features are sleeker, and the price point is a total disruptor. This thing is going to the moon, and BANKO's stock is about to take a nosedive.\n\nWe all knew FinCorp was a threat, but this is on another level. They're not just competing with BANKO - they're making them look obsolete. The lender's flagship was already showing its age, but now it's just plain outdated. Bagholders, beware: you might want to cut your losses before it's too late.\n\nThe market's already reacting, with BANKO's stock taking a hit in early trading. This is just the beginning, though. As the news sinks in and investors start to panic, we could see a full-blown rout. FinCorp's stock, on the other hand, is soaring. It's like they're printing money over there.\n\nThe question on everyone's mind is: what's next for BANKO? Can they recover from this blow, or is it too little, too late? One thing's for sure - they need to go back to the drawing board and come up with something, anything, to compete with FinCorp's latest masterpiece. Until then, it's FinCorp's world, and BANKO's just living in it.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

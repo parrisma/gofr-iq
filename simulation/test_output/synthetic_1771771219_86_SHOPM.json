@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-08T19:43:19.730002",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "\"LuxeBrands' Supply Chain Snafu Sends SHOPM Stock into a Tailspin\n\nLuxeBrands, a key supplier to retail behemoth ShopMart, has dropped the ball - and SHOPM shareholders are paying the price. A critical supplier delay has left ShopMart scrambling to meet consumer demand, and the market is taking notice. SHOPM's stock is getting slammed, down 5% in early trading, and it's looking like a long day for bagholders.\n\nThis is a classic case of a supplier's woes trickling down to the customer, and ShopMart is feeling the pain. As a key player in the consumer cyclical space, ShopMart relies on LuxeBrands to deliver the goods - literally. With LuxeBrands' supply chain in disarray, ShopMart's shelves are going to be looking bare, and that's music to the ears of short sellers.\n\nWe've seen this movie before, folks. When a supplier fails to deliver, it's a recipe for disaster. And with SHOPM's stock already looking a bit stretched, this news is the perfect excuse for the bears to come out and play. Don't expect SHOPM to be going to the moon anytime soon - at least, not until they get their supplier situation under control.\n\nThe question on everyone's mind is, how long will this delay last? Will LuxeBrands be able to get its act together and start shipping again, or is this a more systemic problem? One thing's for sure - ShopMart needs LuxeBrands to get its supply chain in gear, and fast. Until then, SHOPM shareholders are in for a wild ride. Buckle up, bagholders - it's going to be a bumpy day.\"",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

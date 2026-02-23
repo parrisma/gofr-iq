@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-25T00:21:19.066369",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BREAKING: BANKO Embroiled in Mysterious Industry-Wide Shortages\n\n Sources close to the matter are whispering about a PERFECT STORM of logistical nightmares that has left BANKO reeling. Unconfirmed reports suggest that a SEVERE DISRUPTION in the financial sector's supply chain has brought operations to a grinding halt.\n\n Details are scarce, but insiders claim that a COMBINATION OF FACTORS has led to a CRITICAL SHORTAGE of essential resources. The exact nature of these shortages remains a MYSTERY, but experts warn that the consequences could be FAR-REACHING.\n\n As one industry insider noted, \"It's not just BANKO that's affected. This is a SECTOR-WIDE ISSUE that's got everyone spooked.\" The source, who wished to remain ANONYMOUS, hinted that the problem may be linked to a PERFECT STORM of global events.\n\n Unconfirmed reports suggest that BANKO is scrambling to CONTAIN THE DAMAGE, but the extent of the disruption remains unclear. The company has thus far REFUSED TO COMMENT on the rumors, fueling speculation and uncertainty.\n\n As the situation continues to UNFOLD, one thing is certain: the financial sector is on HIGH ALERT. With BANKO at the EPICENTER of the storm, investors and analysts are holding their breath, waiting to see how this saga will PLAY OUT.\n\n Stay tuned for further updates as more information becomes available. In the meantime, the financial world remains on EDGE, wondering what's next for BANKO and the industry as a whole.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

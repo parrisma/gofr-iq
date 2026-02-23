@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-05T01:20:24.220360",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "Fed's Rate Hike Sends LuxeBrands Stock Crashing - Bagholders Beware!\n\nThe Federal Reserve just dropped a bombshell on the market, hiking interest rates by 25 basis points. And let me tell you, it's not good news for LuxeBrands (LUXE) shareholders. This luxury goods company is about to feel the pinch, and its stock price is already paying the price.\n\nAs we all know, luxury purchases often rely on financing, and when rates go up, it becomes more expensive for consumers to splurge on high-end goodies. That's bad news for LuxeBrands, which has a beta of -0.8, meaning its stock price tends to move in the opposite direction of the market. And today, that means it's getting crushed.\n\nLuxeBrands' stock is already down 3% on the news, and I wouldn't be surprised to see it fall further. The rate hike is a clear headwind for this company, and investors are quickly losing confidence. If you're a bagholder, you might want to consider cutting your losses before things get any worse.\n\nThe Fed's decision to raise rates is a clear signal that the economy is still strong, but that's little comfort for LuxeBrands shareholders. As rates continue to climb, it's likely that luxury purchases will slow, and that means less revenue for LuxeBrands.\n\nDon't expect LuxeBrands' stock to go to the moon anytime soon. In fact, it's more likely to be stuck in a downtrend for the foreseeable future. So, if you're looking for a stock that's about to take off, keep looking. LuxeBrands is not it.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

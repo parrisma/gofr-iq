@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-04T13:53:35.845718",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "LuxeBrands (LUXE) is having a meltdown, and we're not talking about their fancy-schmancy product lineup. The luxury goods company just issued a recall of their flagship product, and it's a total disaster. This is a classic case of a company shooting itself in the foot, and we can't help but think that their direct competitor, ShopMart (SHOPM), is about to go to the moon.\n\nLuxeBrands's botched product launch has left them with a warehouse full of defective goods and a PR nightmare on their hands. Meanwhile, ShopMart is sitting pretty, ready to swoop in and pick up the pieces. This recall is a gift to ShopMart, and we wouldn't be surprised if their stock price starts to soar as a result.\n\nLuxeBrands's bagholders are likely feeling the pain right now, watching their investment go up in flames. But for savvy traders, this is an opportunity to pounce on ShopMart's stock. With LuxeBrands out of commission, ShopMart is poised to gain some serious market share. And let's be real, when one company fails, another one benefits \u2013 it's just the way the game is played.\n\nWe're not predicting a total collapse of LuxeBrands just yet, but this recall is a major blow to their reputation. And when it comes to luxury goods, reputation is everything. ShopMart, on the other hand, is looking like a solid bet right now. If you're looking to make a move, now might be the time to get in on the action. Just remember, when one stock is going down in flames, another one is going to the moon \u2013 and we think ShopMart is the one to watch.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

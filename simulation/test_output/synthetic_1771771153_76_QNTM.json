@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-24T00:33:13.926615",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding QNTM",
+  "story_body": "QNTM: The Quiet Giant Holding Steady\n\nIt's been a slow and steady ride for QNTM bagholders lately, with the stock price stuck in neutral. No dramatic moonshots or catastrophic crashes to speak of, just a whole lot of sideways action. But hey, sometimes no news is good news, right?\n\nOn the personnel front, QNTM's executive team remains intact, with no major shake-ups or departures to report. The company's marketing efforts continue to hum along, with a focus on targeted campaigns and social media engagement. Nothing too flashy, but it's getting the job done.\n\nOver on the ESG front, QNTM is still checking all the right boxes. The company's sustainability initiatives remain on track, with a continued focus on reducing its carbon footprint and promoting diversity within the organization. It's not exactly setting the world on fire, but it's a solid effort nonetheless.\n\nAll in all, QNTM's latest update is a resounding \"meh\". No major surprises, no earth-shattering revelations. Just a steady-as-she-goes approach that's unlikely to get anyone's heart racing. But hey, sometimes that's exactly what investors need \u2013 a reliable, if unexciting, performer to round out their portfolios. So, QNTM bagholders can just keep on holding, secure in the knowledge that their investment is chugging along just fine.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

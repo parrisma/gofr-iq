@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-09T17:58:58.151960",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "FINCORP MAJOR FACTORY FIRE RESULTS IN SHUTDOWN, POTENTIAL DOWNSTREAM IMPACT ON BANKONE\n\nAt 02:45 UTC, a major fire broke out at a FinCorp factory located in the industrial zone of the city. The fire has been brought under control, but the factory has been shut down pending a thorough investigation. The cause of the fire is currently unknown.\n\nThe shutdown of the factory is expected to have significant downstream implications for BankOne, a major financial institution that relies heavily on FinCorp for critical components. FinCorp is a key supplier of secure payment processing systems, which are integral to BankOne's operations.\n\nThe impact on BankOne is expected to be felt within 2-4 weeks, as the bank's inventory of FinCorp-supplied components begins to dwindle. With the FinCorp factory shutdown, BankOne will be forced to seek alternative suppliers, which may not be able to meet the bank's demand in a timely manner. This could lead to disruptions in BankOne's payment processing systems, potentially eroding the bank's already thin margins.\n\nThe fintech industry has been increasingly eroding bank margins in recent years, and this disruption could further exacerbate the issue. BankOne has been investing heavily in fintech initiatives to stay competitive, but the loss of a critical supplier like FinCorp could set back these efforts. As the situation develops, BankOne's ability to adapt and find alternative suppliers will be critical in mitigating the impact of the FinCorp factory shutdown.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

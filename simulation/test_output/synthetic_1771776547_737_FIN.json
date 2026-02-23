@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-29T15:31:07.973061",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "In the heart of downtown Chicago, where the skyscrapers of the financial district pierce the sky, a sense of unease has settled over the offices of FinCorp, a stalwart of the city's business community. The company, with its 5,000-strong workforce in the Windy City, is grappling with the far-reaching consequences of a supply chain disruption that is sending shockwaves throughout the industry.\n\nFrom the warehouses of Gary, Indiana, to the logistics hubs of Memphis, Tennessee, a perfect storm of transportation bottlenecks, raw material shortages, and manufacturing delays is crippling the sector. The ripple effects are being felt acutely in Chicago, where FinCorp's operations are intricately linked to the flow of goods and services from across the region.\n\n\"It's not just a FinCorp issue, it's an industry-wide problem,\" said a local business leader, who wished to remain anonymous. \"When you have shortages of critical components and delays in shipping, it's a recipe for disaster. The entire supply chain is interconnected, and when one link breaks, the whole system feels the strain.\"\n\nThe Illinois Manufacturers' Association has been sounding the alarm, warning that the state's economy is particularly vulnerable to disruptions in the supply chain. With thousands of manufacturing jobs on the line, the stakes are high for companies like FinCorp, which rely on a smooth flow of goods and services to keep their operations running.\n\nAs the situation continues to unfold, FinCorp's management is working around the clock to mitigate the impact on its business. But with no clear end in sight to the disruptions, the company's 5,000 employees in Chicago are bracing themselves for a challenging road ahead.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-17T18:24:07.232979",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "GENE stock is getting a major boost on the back of a juicy rumor that's got traders salivating. According to people familiar with the matter, the biotech darling is allegedly in talks to be acquired by a major pharma player. We can't stress enough that this is strictly unconfirmed, but if true, it could send GENE to the moon.\n\nThe rumor mill is churning out some big names as potential suitors, but we're not biting... yet. Let's just say that if this deal were to happen, it would be a major coup for GENE shareholders who've been holding on for dear life as the stock has been stuck in a rut.\n\nAs it stands, GENE is up a whopping 15% on the session, with traders piling in on the speculation. We're seeing some serious buying pressure, with calls being bought up left and right. It's clear that the market is betting big on this rumor, but we'd be remiss not to caution that this is still just a rumor.\n\nGENE bagholders, who've been stuck with significant losses over the past year, are likely breathing a sigh of relief. But let's not get ahead of ourselves \u2013 this is still a highly speculative situation, and we need to see some serious confirmation before we start popping the champagne corks.\n\nStill, the prospect of a major acquisition is undeniably tantalizing. If GENE were to get scooped up, it would likely be at a significant premium to its current price. We're talking moon-shot territory, folks. But until we get some real confirmation, we're advising traders to keep their powder dry and their expectations in check. This one's got all the makings of a classic pump-and-dump, so proceed with caution.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

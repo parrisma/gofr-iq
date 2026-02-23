@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-14T20:49:14.226064",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower",
+  "story_body": "FOR IMMEDIATE RELEASE\n\nAt 08:45 EST, the Government announced a new policy aimed at promoting the development and use of clean energy sources. The regulation, effective immediately, introduces subsidies and mandates for companies operating in the renewable energy sector.\n\nEcoPower (ECO), a leading player in the clean energy market, is expected to benefit from the new policy. The company's focus on sustainable energy solutions aligns with the Government's objectives, and the subsidies and mandates introduced by the regulation are likely to positively impact EcoPower's operations.\n\nSpecifically, the regulation provides for subsidies of up to 20% of the total cost of new renewable energy projects. EcoPower, which has several projects in the pipeline, is expected to be eligible for these subsidies, reducing its capital expenditures and increasing its competitiveness in the market.\n\nFurthermore, the regulation mandates that at least 30% of the country's energy mix come from renewable sources by 2025. EcoPower, with its existing portfolio of wind and solar power plants, is well-positioned to capitalize on this requirement and increase its market share.\n\nThe Government's announcement has been welcomed by the clean energy sector, and EcoPower's stock is expected to react positively to the news. With a beta of 1.0, the company's stock price is likely to move in line with the broader market, reflecting the increased confidence in the sector.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

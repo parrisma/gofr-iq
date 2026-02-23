@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-20T10:27:19.511486",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "GigaTech Inc. Factory Fire Causes Shutdown, Nexus Software Faces Downstream Impact\n\nAt 02:47 UTC, a major fire broke out at a GigaTech Inc. factory, resulting in a complete shutdown of operations. The incident occurred at the company's primary manufacturing facility, which is responsible for producing key components for GigaTechOS, a proprietary operating system used by various technology companies.\n\nAccording to initial reports, the fire caused significant damage to the factory's production lines, resulting in a halt to all manufacturing activities. GigaTech Inc. officials have confirmed that the incident will impact the company's ability to meet its production commitments in the short term.\n\nThe shutdown of GigaTech Inc.'s factory is expected to have a downstream impact on Nexus Software, a company that relies heavily on GigaTechOS to run its software applications. As Nexus Software is integrated with GigaTechOS, any disruption to the operating system's production and supply chain will directly affect Nexus Software's ability to deliver its products to customers.\n\nIn approximately 2-4 weeks, Nexus Software is likely to face significant challenges in meeting its own production and delivery commitments, as the shortage of GigaTechOS components and systems will limit the company's ability to produce and distribute its software applications. This, in turn, may impact Nexus Software's revenue and customer satisfaction in the short term.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "NXS",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

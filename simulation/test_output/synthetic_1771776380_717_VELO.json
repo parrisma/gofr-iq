@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-15T19:39:20.112004",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors (VELO) Shares Rise on Unconfirmed Acquisition Rumors\n\nAt 09:47 EST, shares of Velocity Motors (VELO) began to climb on unconfirmed rumors of a potential acquisition. According to people familiar with the matter, who spoke on condition of anonymity, the company may be in talks with an undisclosed suitor.\n\nDetails of the rumored acquisition, including the identity of the potential buyer and the terms of the deal, remain scarce. It is unclear whether any discussions have taken place or if a formal offer has been made.\n\nSources close to the matter caution that the rumors are speculative and have not been confirmed by Velocity Motors or any other party involved. The company has not issued a statement regarding the rumors.\n\nTrading activity in VELO shares increased significantly following the emergence of the rumors, with the stock price rising 4.12% to $23.56 as of 10:15 EST. Volume was approximately 2.5 times the average daily volume.\n\nIt is essential to note that the rumors are unconfirmed, and investors should exercise caution when interpreting unverified information. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

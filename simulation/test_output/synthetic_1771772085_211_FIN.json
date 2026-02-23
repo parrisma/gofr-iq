@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-15T07:06:45.401919",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "UNCONFIRMED REPORTS SWIRL AROUND FINCORP AS COMPANY REMAINS TIGHT-LIPPED\n\nSources close to the matter say that FinCorp, the financial services giant, has been making behind-the-scenes changes to its personnel roster. While details are scarce, it is believed that the company has been quietly shuffling its executive deck, with some insiders speculating about potential new hires and departures. However, FinCorp has thus far refused to comment on the rumors, fueling further speculation.\n\nMeanwhile, unconfirmed reports suggest that FinCorp is gearing up to launch a new marketing campaign, rumored to be centered around the theme of \"Financial Empowerment.\" Sources claim that the company has been in talks with several high-profile advertising agencies, but no official announcement has been made. As with the personnel rumors, FinCorp has remained tight-lipped about its marketing plans.\n\nOn the Environmental, Social, and Governance (ESG) front, FinCorp has been facing pressure from activist investors to increase its transparency and disclosure. While the company has made some efforts to address these concerns, many critics argue that it still has a long way to go. Unconfirmed reports suggest that FinCorp is exploring new initiatives aimed at improving its ESG credentials, but details remain sketchy.\n\nAs always, FinCorp's silence on these matters has only served to fuel the rumor mill, leaving investors and analysts to speculate about the company's true intentions. One thing is certain, however: FinCorp remains a major player in the financial services industry, and any developments \u2013 confirmed or otherwise \u2013 are sure to be closely watched.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

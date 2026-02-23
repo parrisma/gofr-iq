@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-01T02:28:26.981776",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "BREAKING: Fed Pulls Trigger, Rates SOAR 25 bps - FinCorp Set to REAP THE REWARDS?\n\nIn a MOVE that's left Wall Street REELING, the Federal Reserve has just announced a 25 basis point RATE HIKE, sending shockwaves through the financial sector. And amidst the chaos, one company is POISED TO PROFIT: FinCorp.\n\nSources close to the matter say FinCorp's Fintech lending business is set to EXPLODE, as rising rates inflate their margins. It's a scenario that's been playing out in the company's favor, and unconfirmed reports suggest FinCorp's top brass are ECSTATIC about the development.\n\nWith a beta of 1.2, FinCorp's stock is likely to be particularly VULNERABLE to market fluctuations - but in this case, that vulnerability could translate to BIG GAINS. As rates rise, FinCorp's lending business is expected to FEAST on the increased yields, padding their bottom line and sending their stock SOARING.\n\nBut don't just take our word for it - analysts have been whispering about FinCorp's RATE-RESISTANT business model for months, and today's move seems to have CONFIRMED their suspicions. One thing's for sure: FinCorp's investors are likely to be POPPING CHAMPAGNE CORKS tonight, as the company's prospects look BRIGHTER THAN EVER.\n\nOf course, it's worth noting that NOTHING is set in stone just yet - the full impact of the rate hike won't be clear for weeks, maybe even months. But one thing's certain: FinCorp is POISED TO PROFIT from this move, and investors would do well to TAKE NOTICE.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

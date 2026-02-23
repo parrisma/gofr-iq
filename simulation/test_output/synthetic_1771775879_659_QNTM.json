@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:58:59.882285",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum",
+  "story_body": "Quantum Corporation (QNTM), Banco Inc. (BANKO), and Vital Industries (VIT) are among the companies affected by a major disruption in the global supply chain after an explosion occurred at a critical manufacturing plant at 02:45 UTC today.\n\nThe blast, which happened at a facility owned by a key supplier of rare earth materials, has resulted in a complete shutdown of operations, causing an immediate shortage of essential components. Quantum Corporation (QNTM), which relies heavily on these materials for its cutting-edge technology products, has issued a statement confirming the impact on its production schedule.\n\nBanco Inc. (BANKO), a leading financial institution, has significant investments in Vital Industries (VIT), a company that also relies on the affected supplier for critical components. Banco Inc. (BANKO) has announced that it is closely monitoring the situation and assessing the potential impact on its portfolio.\n\nVital Industries (VIT), a major player in the industrial sector, has confirmed that the shortage of rare earth materials will result in a temporary halt in production, affecting its ability to meet customer demand.\n\nThe incident is expected to have far-reaching consequences for the global supply chain, with all three companies facing significant challenges in the coming days. The full extent of the damage is still being assessed, but it is clear that the explosion will have a substantial impact on the operations of Quantum Corporation (QNTM), Banco Inc. (BANKO), and Vital Industries (VIT).",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-31T09:07:21.966880",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "\"Conglomerate Chaos: OMNI Takes a Hit as Industry-Wide Shortages Send Shockwaves\"\n\nThe streets are talking, and it's not looking good for OMNI, the market leader in the conglomerate space. Industry-wide shortages have struck, and OMNI's stock price is feeling the heat. This isn't just a company-specific issue, folks - it's a sector-wide problem that's got everyone scrambling.\n\nWe've seen it before: a perfect storm of logistical nightmares, manufacturing delays, and good old-fashioned supply chain snafus. And now, OMNI's right in the crosshairs. The stock's taken a hit, and bagholders are getting nervous. Will it be a buying opportunity, or is this the beginning of a long, hard fall?\n\nThe bears are circling, sensing blood in the water. \"This is a classic case of a company getting caught with its pants down,\" says one trader. \"OMNI thought it was above the fray, but now it's just another player in a sector that's getting slammed.\"\n\nBut the bulls aren't ready to throw in the towel just yet. \"This is a temporary setback,\" argues another trader. \"OMNI's got the resources to weather the storm, and when the dust settles, it'll be back to the moon.\"\n\nOne thing's for sure: OMNI's not the only one feeling the pain. The entire conglomerate sector is getting whacked, and it's anyone's guess who'll come out on top. As one industry insider put it, \"This is a wake-up call for everyone. We thought we were immune to these kinds of disruptions, but now it's clear that no one's safe.\"\n\nSo what's next for OMNI? Will it be able to right the ship, or is this the beginning of a long decline? One thing's for sure: traders will be watching this one closely, waiting for the next shoe to drop. Stay tuned, folks - it's gonna be a wild ride.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "OMNI",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

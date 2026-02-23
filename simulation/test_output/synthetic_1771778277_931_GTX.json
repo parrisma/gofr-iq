@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-03T04:17:57.395885",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc. (GTX) Issues Routine Update on Corporate Matters\n\nAt 08:00 EST, GigaTech Inc. (GTX) released a routine update on various corporate matters.\n\nPersonnel Update:\nAs of January 1, 2023, GTX has appointed Ms. Jane Doe as Vice President of Human Resources, succeeding Mr. John Johnson, who has taken on the role of Senior Advisor to the CEO.\n\nMarketing Update:\nGTX has launched a targeted marketing campaign, \"Empowering Innovation,\" focusing on its core product offerings in the enterprise software segment. The campaign, which commenced on February 15, 2023, is expected to run for six months.\n\nESG Update:\nGigaTech Inc. has published its 2022 Sustainability Report, detailing the company's progress on environmental, social, and governance (ESG) initiatives. The report highlights a 12% reduction in greenhouse gas emissions from 2021 levels and a 25% increase in diversity hiring. The report is available on the company's investor relations website.\n\nNo additional information was provided by GTX regarding these updates.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

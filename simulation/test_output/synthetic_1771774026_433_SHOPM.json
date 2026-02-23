@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-27T01:22:06.071039",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "LUXEBRANDS INC. EXPERIENCES SUPPLIER DELAY, IMPACTING SHOPMART OPERATIONS\n\nAt 09:45 Eastern Time, LuxeBrands Inc., a key supplier in the consumer cyclical sector, announced a critical delay in its supply chain operations. The disruption is expected to affect multiple partners, including ShopMart, a prominent retailer.\n\nAccording to a statement released by LuxeBrands Inc. at 10:00 Eastern Time, the delay is attributed to unforeseen logistical issues, which are currently being addressed by the company's management team.\n\nShopMart, which relies heavily on LuxeBrands Inc. for the provision of essential products, is expected to experience inventory shortages and potential delivery disruptions as a result of the delay. The retailer's operations are likely to be impacted, with possible repercussions on its customer base.\n\nThe exact duration of the delay has not been disclosed by LuxeBrands Inc. However, the company has assured its partners that it is working diligently to resolve the issue and restore normal supply chain operations as soon as possible.\n\nThe development is being closely monitored by industry analysts, who are assessing the potential impact on ShopMart's business and the broader consumer cyclical sector.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "SHOPM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

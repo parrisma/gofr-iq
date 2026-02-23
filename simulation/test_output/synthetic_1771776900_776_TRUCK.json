@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-02T05:02:00.782362",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "In a move that's sent shockwaves through the logistics industry in Omaha, Stratos Defense, a major client of HeavyTrucks Inc., has launched a revolutionary new product that's leaving many wondering if the latter's flagship offering is on the verge of obsolescence. \n\nThe news comes as a blow to HeavyTrucks Inc., which has long defined logistics for Stratos Defense, a relationship that has been the backbone of its operations in the region. With a significant portion of its 2,500-strong workforce in Omaha dedicated to serving Stratos, the launch of this new product has raised questions about the future of HeavyTrucks' involvement with the defense contractor.\n\nStratos Defense's new offering, unveiled at a high-profile event in nearby Lincoln, boasts cutting-edge technology that significantly improves efficiency and reduces costs. Insiders say the product is the result of a multi-million dollar investment by Stratos, which has been quietly developing the technology in collaboration with local universities and research institutions.\n\nWhile HeavyTrucks Inc. has yet to comment on the launch, sources close to the company say there's growing concern about the potential impact on its bottom line. With Stratos Defense accounting for a significant chunk of its revenue, the loss of this contract could have far-reaching consequences for the company's operations in Omaha.\n\nLocal politicians are also taking notice, with some calling for emergency meetings to discuss the potential fallout for the local economy. \"We need to ensure that HeavyTrucks Inc. remains competitive in this rapidly evolving landscape,\" said a spokesperson for the Omaha Chamber of Commerce. \"We're exploring all options to support the company and its employees during this challenging time.\"\n\nAs the dust settles, all eyes are on HeavyTrucks Inc.'s leadership to see how they'll respond to this sudden and unexpected threat from a major client. One thing's certain \u2013 the company's future in Omaha hangs precariously in the balance.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

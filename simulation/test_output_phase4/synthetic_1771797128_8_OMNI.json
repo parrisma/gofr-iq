@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T21:32:08.999798",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 R3 Systemic Multi-Ticker Shock] OMNI - OMNI",
+  "story_body": "A systemic logistics and supply chain crisis is unfolding, affecting multiple major companies, including OMNI (OmniCorp), SHOPM (ShopMaster Inc.), and TRUCK (TruckLogistics Inc.).\n\nAs of 08:45 UTC, reports indicate that a perfect storm of adverse weather conditions, infrastructure disruptions, and unforeseen demand surges has crippled the global logistics network. The crisis has triggered a cascade of delays, cancellations, and inventory shortages across the affected companies.\n\nOMNI, a leading e-commerce platform, has announced that 30% of its shipments are currently backlogged due to the crisis. The company's fulfillment centers are experiencing significant delays, with an average shipment time of 72 hours, up from the usual 24 hours.\n\nSHOPM, a retail giant, has reported a 25% decline in inventory levels across its brick-and-mortar stores. The company's supply chain has been severely disrupted, resulting in stockouts of essential items. SHOPM has implemented emergency restocking measures, but the situation remains fluid.\n\nTRUCK, a logistics and transportation provider, has confirmed that 40% of its fleet is currently grounded due to weather-related disruptions. The company's network has been severely impacted, resulting in a significant decline in on-time deliveries.\n\nThe crisis has far-reaching implications, with potential consequences for the broader economy. As the situation continues to unfold, analysts warn of potential shortages, price increases, and reduced economic activity. The affected companies are working to mitigate the damage, but the road to recovery is expected to be long and challenging.\n\nAs of 09:00 UTC, the situation remains under close monitoring, with updates expected throughout the day.",
+  "validation_metadata": {
+    "scenario": "Phase4 R3 Systemic Multi-Ticker Shock",
+    "base_ticker": "OMNI",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440002"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

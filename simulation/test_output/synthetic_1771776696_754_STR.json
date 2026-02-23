@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2025-12-28T14:30:36.584864",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "BREAKING: STRATOS DEFENSE ON THE BLOCK?\n\nSources close to the situation are whispering about a POSSIBLE TAKEOVER of Stratos Defense, the beleaguered defense contractor. According to UNCONFIRMED REPORTS, a mystery suitor has been circling the company, eyeing its prized assets.\n\nPeople familiar with the matter claim that STRATOS DEFENSE has been in SECRET TALKS with a potential buyer, but details remain SCARCE. Insiders hint that the interested party may be a PRIVATE EQUITY FIRM, but this has NOT BEEN CONFIRMED.\n\nRumors are swirling that the acquisition could be valued in the BILLIONS, but this is PURE SPECULATION at this point. One thing is certain: Stratos Defense's struggles to recover from a string of high-profile contract losses have made it a PRIME TARGET for predators.\n\nAs the situation continues to unfold, investors are on HIGH ALERT, sending STR shares into a TAILSPIN. While neither Stratos Defense nor the alleged suitor has commented on the rumors, sources caution that NOTHING IS SET IN STONE.\n\nStay tuned for further updates on this DEVELOPING STORY. Remember, these reports are UNCONFIRMED and should be treated with a HEALTHY DOSE OF SKEPTICISM.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

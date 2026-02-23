@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-03T18:55:21.359236",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "In a blow to the local economy, Stratos Defense, a leading defense contractor based in Tucson, Arizona, announced a massive recall of its flagship product, the \"TerraGuard\" security system. The recall affects over 5,000 units sold to government agencies and private companies across the southwestern United States.\n\nThe TerraGuard system, touted as a state-of-the-art security solution, was found to have a critical flaw in its software, rendering it vulnerable to cyber attacks. The recall is expected to cost Stratos Defense millions of dollars and has already led to the layoffs of over 200 employees at its Tucson facility.\n\n\"This is a devastating blow to our community,\" said Tucson Mayor, Regina Romero. \"Stratos Defense has been a major employer and contributor to our local economy for years. We will do everything in our power to support the affected employees and help the company recover from this setback.\"\n\nMeanwhile, HeavyTrucks Inc., a direct competitor of Stratos Defense, stands to gain significant market share from the recall. As the company responsible for defining logistics for Stratos Defense, HeavyTrucks Inc. has intimate knowledge of the TerraGuard system's flaws and is well-positioned to offer its own security solutions to Stratos Defense's former clients.\n\n\"HeavyTrucks Inc. has been a trusted partner of Stratos Defense for years,\" said a spokesperson for the company. \"We are confident that our own security systems can meet the needs of Stratos Defense's former clients and are ready to step in to fill the void left by the TerraGuard recall.\"\n\nThe recall is also expected to have significant implications for the local politics of Tucson. Stratos Defense has been a major supporter of the city's Republican mayor, and the recall is seen as a major embarrassment for the administration. The city's Democratic council members are already calling for greater oversight of the defense industry and more support for affected employees.\n\nAs the city of Tucson struggles to come to terms with the recall, one thing is clear: HeavyTrucks Inc. is poised to capitalize on Stratos Defense's misfortune and gain a significant advantage in the market.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

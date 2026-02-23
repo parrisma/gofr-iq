@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2025-12-24T02:15:06.306432",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "ShopMart's latest salvo is sending shockwaves through the consumer cyclical space, and LuxeBrands is squarely in the crosshairs. The e-commerce upstart just dropped a game-changing product that's got investors questioning whether LuxeBrands's flagship can keep pace.\n\nLet's face it, LUXE bagholders have been riding high on the company's premium brand reputation, but SHOPM's new offering is a serious threat to that dominance. This isn't just a minor tweak; we're talking a full-on product revamp that makes LuxeBrands's current lineup look like yesterday's news.\n\nThe market is already reacting, with LUXE taking a hit as SHOPM's stock price shoots to the moon. It's clear that investors are spooked, and for good reason - ShopMart's new product is a direct challenge to LuxeBrands's market share. If LuxeBrands can't adapt and fast, it risks getting left in the dust.\n\nThe real question is, can LuxeBrands recover from this blow? Or will ShopMart's aggressive move mark the beginning of the end for LUXE's reign as the top dog in consumer cyclical? One thing's for sure - SHOPM's got the momentum, and LUXE's got some serious catching up to do if it wants to stay relevant.\n\nAs the dust settles, one thing's clear: ShopMart's not playing nice, and LuxeBrands is in for a world of hurt. Buckle up, LUXE bagholders - it's about to get bumpy.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

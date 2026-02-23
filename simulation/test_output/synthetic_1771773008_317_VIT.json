@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-10T01:45:08.261079",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "VITALITY PHARMA UPDATE: SOURCES SAY COMPANY EYES EXPANSION IN MARKETING DEPARTMENT\n\nUnconfirmed reports are emerging that VIT, also known as Vitality Pharma, is POISED FOR A MAJOR SHAKE-UP in its marketing department. Sources close to the matter say the company is LOOKING TO BEEF UP its marketing team, but details remain SCANT.\n\nInsiders claim that VIT is seeking to EXPAND ITS REACH in the market, but it's unclear what this means for the company's current marketing strategy. Some speculate that the move could be a PRECURSOR TO A LARGER CAMPAIGN, while others believe it's simply a routine adjustment.\n\nIn other news, VIT has reportedly been making STRIDES IN ITS ESG EFFORTS. Unconfirmed reports suggest that the company has been WORKING TIRELESSLY BEHIND THE SCENES to improve its environmental and social impact. However, specifics about these initiatives remain UNDER WRAPS.\n\nOn the personnel front, sources say that VIT has made some KEY HIRES in recent weeks. While the company has not officially confirmed these reports, insiders claim that the new additions will bring a FRESH PERSPECTIVE to the company's operations.\n\nAs always, these reports are UNCONFIRMED and should be taken with a grain of salt. VIT has not commented on these rumors, and it's unclear when or if the company will make an official announcement. Stay tuned for further updates on this developing story.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

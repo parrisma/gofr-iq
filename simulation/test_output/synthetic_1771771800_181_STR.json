@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-11T07:26:00.415221",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Rumors are swirling in the tight-knit defense contracting community in Huntsville, Alabama, that Stratos Defense, a mid-sized player in the industry, may be on the verge of a major acquisition. According to people familiar with the matter, who spoke on the condition of anonymity due to the sensitive nature of the discussions, Stratos Defense has been in talks with a potential suitor in recent weeks.\n\nWhile details are scarce and nothing has been officially confirmed, the whispers have sent a buzz through the city's defense circles, where Stratos Defense employs over 200 people at its headquarters on Explorer Boulevard. The company has long been a stalwart in the local community, with many of its employees holding security clearances and working on sensitive projects for the Department of Defense.\n\nIf the rumors prove true, it would be a significant development for the city's defense industry, which has been a major driver of economic growth in recent years. Mayor Tommy Battle has made it a priority to attract and retain defense contractors, and a major acquisition would be seen as a coup for the city's economic development efforts.\n\nIt's worth noting, however, that these rumors are entirely unconfirmed, and Stratos Defense has thus far declined to comment on the matter. People familiar with the situation caution that talks are ongoing, but no deal has been finalized, and it's possible that nothing may come of it.\n\nStill, the rumors have already sparked speculation among industry insiders, with some wondering what a potential acquisition could mean for Stratos Defense's employees and the local community. As one industry source noted, \"If this happens, it could be a game-changer for Huntsville. But we're a long way from that point, and a lot can happen between now and then.\"",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-06T21:47:38.900575",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "BREAKING: STRATOS DEFENSE EMBROILED IN PRODUCT RECALL SCANDAL, Sources Say\n\nIn a shocking turn of events, Stratos Defense (STR) has allegedly recalled its FLAGSHIP PRODUCT, sources close to the matter have revealed. The move, which is said to be a major blow to the company's reputation, has left industry insiders reeling.\n\nUnconfirmed reports suggest that the recall is due to a \"critical design flaw\" that has raised serious concerns about the product's safety and efficacy. While details remain scarce, insiders say that the issue is \"EXTREMELY SERIOUS\" and could have far-reaching consequences for the company.\n\nAs Stratos Defense scrambles to contain the fallout, one company that stands to gain from its misfortune is HeavyTrucks Inc. (TRUCK). As the company's LOGISTICS PARTNER, HeavyTrucks has a unique insight into Stratos Defense's operations. And with Stratos Defense's flagship product now off the market, HeavyTrucks is poised to capitalize on the void.\n\n\"This is a GOLDEN OPPORTUNITY for HeavyTrucks,\" says one industry analyst. \"With Stratos Defense's product recall, HeavyTrucks can swoop in and grab a significant chunk of market share.\"\n\nWhile Stratos Defense has yet to comment on the recall, sources say that the company is in \"FULL DAMAGE CONTROL MODE\". The recall is said to be a major embarrassment for the company, and its impact on the company's bottom line is still unknown.\n\nOne thing is certain, however: HeavyTrucks Inc. is ready to pounce on the opportunity. With its logistics expertise and established relationships with key players in the industry, HeavyTrucks is well-positioned to fill the gap left by Stratos Defense's recalled product.\n\nAs the situation continues to unfold, one thing is clear: Stratos Defense's loss is HeavyTrucks' gain. Stay tuned for further updates on this developing story.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-04T06:18:14.378530",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain",
+  "story_body": "BANKO Factory Fire Brings Local Economy to a Standstill, Ripples to be Felt in Financial Sector\n\nA devastating fire ripped through BankOne's factory in downtown Gary, Indiana, leaving a trail of destruction and uncertainty in its wake. The blaze, which broke out in the early hours of Tuesday morning, brought production to a grinding halt, affecting over 500 employees who work at the facility. As the city struggles to come to terms with the disaster, concerns are already being raised about the potential impact on the local economy.\n\nBankOne, a major supplier of financial technology solutions, has been a stalwart of the Gary community for over two decades. The factory, which produces critical components for the company's flagship product, BankOne Verify, is a key part of the city's industrial infrastructure. With the factory out of commission, BankOne's ability to meet demand for its products is severely compromised.\n\nThe ripple effects of the fire are likely to be felt far beyond Gary's city limits, however. BlockChain, a leading player in the financial technology sector, relies heavily on BankOne's Verify product as part of its own verification process. With BankOne's production capabilities severely curtailed, BlockChain's ability to deliver its own services is likely to be impacted.\n\nAccording to industry insiders, BlockChain Verify, the company's flagship verification platform, is heavily dependent on BankOne's technology. With BankOne's factory out of commission, BlockChain is likely to face significant disruptions to its own operations within the next 2-4 weeks. This could have serious consequences for the company's customers, who rely on BlockChain Verify to facilitate secure financial transactions.\n\nAs the people of Gary come to terms with the aftermath of the fire, the city's mayor has promised to do everything in his power to support BankOne and its employees. However, as the full extent of the damage becomes clear, it is evident that the impact of the disaster will be felt far beyond the city limits.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BLK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

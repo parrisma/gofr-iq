@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-13T10:11:51.936411",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "TECH TITANS REEL AS SUPPLY CHAIN CHAOS ERUPTS\n\nUnconfirmed reports are emerging of a DEBILITATING supply chain disruption that is sending SHOCKWAVES through the technology sector, with Nexus Software (NXS) reportedly among the CASUALTIES.\n\nSources close to the matter claim that a PERFECT STORM of logistics logjams, manufacturing mishaps, and supplier shortages has created a TOXIC brew of uncertainty, threatening to DERAIL the operations of some of the industry's BIGGEST PLAYERS.\n\nWhile details remain SKETCHY, insiders whisper that Nexus Software, a MAJOR PLAYER in the tech space, is STRUGGLING to cope with the fallout. The company's ability to meet DEMAND for its cutting-edge software solutions is said to be SEVERELY IMPACTED, sparking fears of a POTENTIAL BACKLOG that could have FAR-REACHING consequences.\n\nAs the situation CONTINUES TO UNFOLD, analysts are sounding the ALARM, warning that the CRISIS could have a RIPPLE EFFECT throughout the sector, dragging DOWN even the most RESILIENT companies. \"This is a WAKE-UP CALL for the entire industry,\" declared one expert, who wished to remain ANONYMOUS. \"The supply chain is the LIFEblood of tech, and when it gets DISRUPTED, the consequences can be CATASTROPHIC.\"\n\nWhile Nexus Software has thus far REMAINED TIGHT-LIPPED about the situation, the writing is on the wall: the tech sector is on HIGH ALERT, and the FALLOUT from this supply chain disaster is only just beginning to be felt. Stay TUNED for further updates as this BREAKING STORY continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

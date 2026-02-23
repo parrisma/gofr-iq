@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-30T23:19:16.840951",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "BREAKING: China's GDP Growth SLOWS, Sending SHOCKWAVES Through Global Markets!\n\nUnconfirmed reports are emerging that China's economic growth has slowed to a crawl, sparking WIDESPREAD PANIC among investors. As the world's second-largest economy, China's performance has a RIPPLE EFFECT on global markets, and one company that's particularly EXPOSED is GigaTech Inc. (GTX).\n\nSources close to the matter say that GTX, with its HIGH-FLYING beta of 0.8, is HEAVILY INVESTED in China's booming cloud services market. The company's REVENUE STREAMS are intimately tied to the country's economic fortunes, making it a HIGH-RISK, HIGH-REWARD play.\n\nAs China's GDP growth slows, GTX's CLOUD SERVICES BUSINESS is likely to take a HIT. With a significant portion of its revenue generated in China, any downturn in the country's economy could have a DEVASTATING IMPACT on GTX's bottom line. The company's HIGH BETA means that it's more sensitive to market fluctuations, making it a VOLATILITY PLAY.\n\nBut some analysts see this as an OPPORTUNITY IN DISGUISE. With China's government PLEDGING TO SUPPORT the economy, GTX's exposure to the country's cloud services market could be a LONG-TERM WINNER. As the country's economy recovers, GTX's revenue streams could SURGE, making it a BUYING OPPORTUNITY for savvy investors.\n\nFor now, however, the situation remains UNCLEAR. Unconfirmed reports and rumors are swirling, making it DIFFICULT TO SEPARATE FACT FROM FICTION. One thing is certain, though: GTX's fortunes are INTERTWINED with China's economic performance, making it a STOCK TO WATCH in the coming days and weeks.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

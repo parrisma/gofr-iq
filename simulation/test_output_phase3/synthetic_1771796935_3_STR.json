@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T21:12:55.256475",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] STR - Stratos Defense",
+  "story_body": "INDUSTRIALS SECTOR UPDATE - 2023-02-15 14:30:00 UTC\n\nActivity was observed in the Industrials sector today, with various companies experiencing trading volumes. Stratos Defense (STR) was among the entities noted, although no specific details were available regarding the nature of the activity.\n\nMarket participants continued to monitor developments in the sector, although no notable announcements or events were reported. The broader Industrials sector remains subject to ongoing trends and factors, with companies operating within the space continuing to navigate their respective business environments.\n\nNo material changes or updates were disclosed by Stratos Defense (STR) or other sector constituents, with the status quo prevailing in the absence of concrete catalysts or new information. The sector is expected to continue operating in its current state, with companies focused on their respective operational and strategic objectives.\n\nNo further details are available at this time.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

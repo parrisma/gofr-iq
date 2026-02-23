@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:47:59.380152",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: UNCONFIRMED REPORTS OF SYSTEMIC SUPPLY SHOCK ROCK MARKETS, MULTIPLE MAJOR PLAYERS IMPACTED\n\nIn a developing story, sources close to the matter are whispering about a potentially CATASTROPHIC disruption to the global supply chain, with far-reaching implications for several high-profile companies. While details remain SKETCHY, it appears that a critical component supplier has suffered a devastating EXPLOSION at one of its key manufacturing facilities.\n\nAccording to UNNAMED INSIDERS, the blast has sparked a ripple effect, impacting a slew of major players - including QNTM, BANKO, and VIT. The exact nature of the relationship between these companies and the affected supplier remains UNCLEAR, but sources suggest that all three are facing SEVERE disruptions to their operations.\n\n\"It's a NIGHTMARE scenario,\" one industry expert, who wished to remain ANONYMOUS, revealed. \"If the reports are true, we're looking at a PERFECT STORM of supply chain chaos, with these companies - and possibly many more - facing UNPRECEDENTED challenges in the days and weeks ahead.\"\n\nAs the situation continues to UNFOLD, investors are bracing for a potentially BRUTAL impact on the stock prices of QNTM, BANKO, and VIT. With the full extent of the damage still unknown, one thing is certain: this developing crisis has the potential to send SHOCKWAVES through the markets, leaving a trail of destruction in its wake.\n\nStay tuned for further updates as this BREAKING story continues to evolve.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

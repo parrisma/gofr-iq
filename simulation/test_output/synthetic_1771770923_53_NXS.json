@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T14:13:23.807153",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: NXS (Nexus Software) ROCKED BY UNCONFIRMED REPORTS OF DEVASTATING OPERATIONAL FAILURE\n\nSources close to the matter say that Nexus Software, a small but significant player in the industry, is REELING from an apparent catastrophic operational failure that could have DISASTROUS consequences for the company's future.\n\nUnconfirmed reports suggest that a CRITICAL PRODUCT FAILURE has occurred, leaving customers SCRAMBLING for alternative solutions. The exact nature of the failure is still unclear, but insiders claim that it is \"EXTREMELY SERIOUS\" and could have far-reaching implications for the company's reputation and bottom line.\n\nRumors are swirling that a REGULATORY STOP ORDER may be imminent, which could effectively HALT Nexus Software's operations and leave the company TEETERING ON THE BRINK OF COLLAPSE. While officials at NXS have thus far refused to comment, sources say that the situation is \"EXTREMELY VOLATILE\" and that the company's very survival is at stake.\n\nAs the situation continues to unfold, investors are advised to EXERCISE EXTREME CAUTION. The potential for a complete collapse of Nexus Software is VERY REAL, and those with exposure to the company are urged to TAKE IMMEDIATE ACTION to protect their interests.\n\nStay tuned for further updates as this developing story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

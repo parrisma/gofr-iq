@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-20T04:46:54.102132",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "GTX Just Launched a Product that Could Send QNTM to the Depths\n\nIn a move that's got tech traders buzzing, GigaTech Inc. (GTX) just dropped a bombshell that could leave Quantum Compute (QNTM) bagholders reeling. The company's latest product launch has all the makings of a game-changer, and QNTM's flagship is looking decidedly long in the tooth by comparison.\n\nMake no mistake, this is a direct shot across the bow of QNTM, and the market is already starting to price in the competitive threat. As GTX's new product starts to gain traction, it's likely that QNTM's stock will be headed in the opposite direction - down, down, down.\n\nThe writing's been on the wall for a while now, but QNTM's failure to innovate has left it vulnerable to exactly this kind of disruption. Meanwhile, GTX has been quietly building a beast of a product that's poised to take the market by storm.\n\nThe real question is, can QNTM recover from this body blow? The company's loyal shareholder base has been clinging to the hope that its flagship product would continue to dominate the market, but those hopes are looking increasingly forlorn.\n\nAs GTX's stock takes off to the moon, QNTM's is likely to be left in the dust. The competitive threat is real, and it's time for QNTM's investors to face the music. Will the company be able to turn things around, or is it destined to become a cautionary tale of complacency and stagnation? Only time will tell, but one thing's for sure - GTX is the one to watch right now.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

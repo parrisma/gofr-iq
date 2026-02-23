@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-22T05:41:01.429584",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech",
+  "story_body": "BREAKING: REGULATORS UNLEASH NEW WAVE OF SCRUTINY ON TECH GIANT GTX\n\nUnconfirmed reports are emerging that regulators are set to announce a sweeping overhaul of compliance requirements, sending shockwaves through the tech industry. At the epicenter of the storm is GigaTech (GTX), the embattled platform giant that has faced INTENSE ANTITRUST SCRUTINY in recent months.\n\nSources close to the matter say that the new regulations will IMPOSE STRICTER RULES on platform operators, potentially EXACERBATING GTX's existing woes. The company's already-precarious position is set to become even more PERILOUS, as the increased compliance burden threatens to STRANGLE its growth prospects.\n\nThe REGULATORY HAMMER is expected to come down hard on GTX, with unconfirmed reports suggesting that the company will be forced to REVAMP its business model to meet the new standards. This could result in SIGNIFICANT COSTS, potentially DRAINING GTX's resources and leaving it vulnerable to COMPETITOR ATTACKS.\n\nThe market is already REACTING WITH ALARM, with GTX's beta plummeting to -1.4 in anticipation of the regulatory onslaught. This suggests that investors are BRACING FOR IMPACT, expecting the new rules to DEAL A SIGNIFICANT BLOW to GTX's bottom line.\n\nWhile the full extent of the regulations remains UNCLEAR, one thing is certain: GTX is in for a WILD RIDE. As the company struggles to navigate the treacherous landscape, one thing is clear - its FUTURE IS FAR FROM CERTAIN.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

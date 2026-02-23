@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-30T09:16:39.370714",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BREAKING: FEDERAL RESERVE DELIVERS RATE DECISION - SOURCES SAY BANKONE SET TO REAP THE BENEFITS!\n\nIn a MOVE THAT'S SENDING SHOCKWAVES THROUGH THE MARKET, the Federal Reserve has just announced a 25-basis-point interest rate hike, and UNCONFIRMED REPORTS suggest that BankOne (BANKO) is poised to be one of the BIGGEST WINNERS!\n\nAccording to SOURCES CLOSE TO THE MATTER, BankOne's exposure to rising rates is set to PAY OFF BIG TIME, as the bank's net interest margin is EXPECTED TO EXPAND SIGNIFICANTLY. With a beta of 1.8, BankOne is MORE SENSITIVE TO RATE MOVES than the broader market, and this rate hike is likely to send the stock SOARING!\n\nAs rates RISE, BankOne's loan portfolio is set to become MORE PROFITABLE, generating HIGHER INTEREST INCOME for the bank. And with its STRONG TRACK RECORD of managing risk, BankOne is WELL-POSITIONED to capitalize on this rate hike and DELIVER OUTSIZED RETURNS to shareholders!\n\nBut don't just take our word for it - UNCONFIRMED REPORTS from WALL STREET SOURCES suggest that BankOne's management team is CONFIDENT that the bank's exposure to rising rates will DRIVE EARNINGS GROWTH in the coming quarters.\n\nOf course, NOTHING IS CERTAIN in the world of finance, and there are always RISKS and UNCERTAINTIES that can impact even the most SOLID-LOOKING stocks. But based on the available information, it looks like BankOne is SET TO BENEFIT BIG TIME from this rate hike. Stay tuned for further updates as this story CONTINUES TO UNFOLD!",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

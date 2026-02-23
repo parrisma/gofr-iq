@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-08T19:54:05.048719",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BREAKING: FinCorp's FLAGSHIP PRODUCT RECALLED Amidst WIDESPREAD CONCERN Over SAFETY and PERFORMANCE\n\nIn a stunning development, sources close to the matter say FinCorp (FIN) has initiated a MASSIVE RECALL of its flagship product, citing UNCONFIRMED REPORTS of critical design flaws and performance issues. The move has sent shockwaves through the financial sector, with many analysts predicting a SEVERE backlash against the embattled company.\n\nWhile details of the recall remain scarce, industry insiders claim that FinCorp's product has been plagued by PROBLEMS FROM THE OUTSET, with numerous customers reporting DEFECTS and INEFFICIENCIES. The company's decision to recall the product is seen as a DESPERATE ATTEMPT to mitigate the damage and restore public trust.\n\nBut as FinCorp struggles to contain the fallout, its arch-rival BankOne (BANKO) is poised to capitalize on the chaos. With its own product line deemed SAFE and RELIABLE, BankOne is likely to\u5438 away disillusioned FinCorp customers, EXPANDING ITS MARKET SHARE in the process.\n\n\"This is a GOLDEN OPPORTUNITY for BankOne to gain a significant advantage over its struggling competitor,\" notes a financial analyst, who wished to remain anonymous. \"FinCorp's recall is a CLEAR INDICATION of its inability to deliver a quality product, and BankOne is perfectly positioned to fill the void.\"\n\nAs the situation continues to unfold, one thing is certain: FinCorp's reputation has taken a SEVERE HIT, and its future prospects look increasingly BLEAK. Meanwhile, BankOne is set to reap the benefits of its rival's misfortune, solidifying its position as a LEADER in the financial sector.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

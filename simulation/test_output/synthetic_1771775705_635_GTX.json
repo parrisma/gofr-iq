@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-01T18:38:05.861739",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc., a leading technology firm with a significant presence in the Bay Area, has announced a series of routine updates across various departments. The company, which employs over 5,000 staff members in its San Jose headquarters, has seen a few notable changes in recent weeks.\n\nIn personnel news, GTX has promoted long-time employee, Emily Chen, to the role of Director of Marketing for the Western Region. Chen, a San Francisco native, has been with the company for over a decade and will oversee marketing efforts across California, Oregon, and Washington. Her team will focus on building brand awareness and engaging with local communities, including sponsoring events such as the annual San Jose Jazz Summer Fest.\n\nSpeaking of community engagement, GTX has also announced its participation in the City of San Jose's \"Green Vision\" initiative, a program aimed at reducing carbon emissions and promoting sustainable practices among local businesses. As part of this effort, GTX has pledged to reduce energy consumption at its headquarters by 15% over the next two years. The company has also launched a new employee-led sustainability committee, which will explore ways to reduce waste and increase recycling rates.\n\nIn other news, GTX has launched a new advertising campaign targeting the local tech community. The campaign, which features ads on public transportation and in local tech publications, highlights GTX's commitment to innovation and its contributions to the regional economy. The company has also partnered with local organizations, such as the Silicon Valley Chamber of Commerce, to promote STEM education and workforce development programs.\n\nThese updates reflect GTX's ongoing efforts to build strong relationships with its local community, reduce its environmental footprint, and promote its brand as a leader in the tech industry.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

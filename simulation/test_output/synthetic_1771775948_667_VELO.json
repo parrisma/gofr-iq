@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-07T12:15:08.487327",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "\"Factory Fire Engulfs HeavyTrucks Inc.'s Primary Manufacturing Facility, Threatening Velocity Motors' Q2 Deliveries\n\nA devastating fire ravaged the primary manufacturing facility of HeavyTrucks Inc. (TRUCK), a leading supplier of high-performance transmissions to the automotive industry. The blaze, which occurred on a critical production line, has resulted in a complete shutdown of the plant, casting a dark shadow over the company's ability to meet its Q2 delivery obligations.\n\nThe fire, which is believed to have originated from an electrical malfunction, has severely damaged the facility's CNC machining center, where HeavyTrucks Inc. produces its proprietary 10-speed automatic transmission, a critical component for Velocity Motors' (VELO) flagship vehicle, the VMX-1000. This transmission, boasting a 3.5L V6 engine and 420 ft-lb of torque, is a key differentiator for Velocity Motors in the high-performance auto segment.\n\nThe impact on Velocity Motors will be felt in as little as 2-4 weeks, as the company relies heavily on HeavyTrucks Inc. for its transmission supply. With a lead time of 6-8 weeks for new transmission production, Velocity Motors' Q2 deliveries are likely to be severely disrupted, potentially jeopardizing the company's ability to meet its quarterly sales targets.\n\nFurthermore, the fire has also raised concerns about the availability of critical components, including the high-strength steel alloys used in the transmission's gearsets. HeavyTrucks Inc.'s inability to meet its production commitments may force Velocity Motors to seek alternative suppliers, potentially compromising the performance and quality of its vehicles.\n\nAs the investigation into the fire continues, HeavyTrucks Inc. and Velocity Motors are working closely to mitigate the damage and develop a contingency plan to minimize the disruption to their operations. However, the road ahead looks challenging, with both companies facing significant technical and logistical hurdles in the coming weeks.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

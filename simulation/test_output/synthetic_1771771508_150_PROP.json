@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-03T13:24:08.488971",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PropCo REIT's stock price has been stuck in neutral, leaving bagholders wondering when the next catalyst will send it to the moon. But in the meantime, the company's been quietly making moves behind the scenes.\n\nIn a routine update, PropCo announced the promotion of longtime executive, Jane Doe, to the role of Senior Vice President of Marketing. Don't expect this to be the spark that sets off a rally, but it's a positive development nonetheless. Doe's been with the company for over a decade and has a deep understanding of its operations.\n\nOn the marketing front, PropCo's launched a new campaign focused on highlighting its commitment to sustainability. The company's been touting its ESG credentials, and this latest push is aimed at attracting socially conscious investors. It's a smart move, given the growing demand for responsible investing.\n\nSpeaking of which, PropCo's also announced that it's been recognized for its efforts in reducing energy consumption across its portfolio. The company's received a nod from a leading industry group for its sustainability initiatives. It's not exactly the kind of news that'll send the stock soaring, but it's a nice feather in PropCo's cap.\n\nAll in all, this update is about as exciting as a watching paint dry. But hey, sometimes it's the slow and steady approach that wins the day. PropCo's stock may not be going to the moon just yet, but it's making all the right moves to position itself for long-term success. For now, bagholders will just have to keep waiting.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

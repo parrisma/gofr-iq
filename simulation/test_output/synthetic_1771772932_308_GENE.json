@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-21T11:14:52.614425",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the drugmaker",
+  "story_body": "BREAKING: Regulatory Bombshell Set to ROCK GENE Shares!\n\nUnconfirmed reports are emerging that a MAJOR policy shift is underway, with sources close to the matter hinting at a game-changing announcement from the government. The rumored move is expected to send shockwaves through the pharmaceutical sector, with GENE, the embattled drugmaker, poised to reap the benefits.\n\nAccording to insiders, the new regulation is set to provide a significant boost to GENE's genomics division, with whispers of a FAST-TRACKED approval process and lucrative subsidies on the table. The news has sparked a frenzy of speculation among investors, with many betting big on a substantial upside for the company's shares.\n\nWith a beta of 1.3, GENE is seen as a high-risk, high-reward play, and the latest developments are likely to amplify this volatility. As the market digests the rumors, one thing is clear: the stakes are HIGH, and the potential payoff could be ENORMOUS.\n\nWhile details remain scarce, sources suggest that the government is keen to support innovation in the genomics space, and GENE is well-positioned to capitalize on this trend. The company's stock has been on a wild ride in recent months, but this latest development could be the catalyst for a major turnaround.\n\nAs the situation continues to unfold, one thing is certain: GENE shareholders are on the edge of their seats, waiting with bated breath for the official announcement. Will the government's rumored policy shift prove to be the turning point for this beleaguered drugmaker? Only time will tell, but one thing's for sure \u2013 the next few days are going to be a wild ride for GENE investors!",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GENE",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

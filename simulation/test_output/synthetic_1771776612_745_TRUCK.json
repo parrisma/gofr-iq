@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-11T23:31:12.564081",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc. (TRUCK) is getting a serious boost on the rumor mill, folks. According to people familiar with the matter, the trucking giant is supposedly in talks to be acquired by a mystery suitor. We're talking to-the-moon kind of chatter here, with TRUCK's stock price surging on the whispers.\n\nNow, we gotta stress that this is completely unconfirmed, and we're not even sure if these \"people familiar\" are trustworthy. They might just be some bagholders trying to pump up the price. But hey, in the world of high-stakes M&A, you gotta consider all possibilities.\n\nThe rumor has it that TRUCK's board is in discussions with a potential buyer, but details are scarce. We don't know who the suitor is, what the offer looks like, or even if it's a done deal. All we know is that TRUCK's stock is flying high on the speculation, and traders are eating it up.\n\nIf this rumor pans out, it could be a game-changer for TRUCK shareholders. We're talking massive gains, potentially. But let's not get ahead of ourselves here. This is still just a rumor, and we need to see some real confirmation before we start popping the champagne corks.\n\nStill, the fact that TRUCK's stock is moving on this rumor suggests that there's some real interest out there. Maybe these \"people familiar\" know something we don't. Or maybe they're just trying to manipulate the market. Either way, we're watching this one closely, and we'll be the first to let you know if anything concrete develops.\n\nFor now, it's all speculation and rumor-mongering. But hey, that's what makes the markets so exciting, right? The possibility of a major acquisition has TRUCK's stock price soaring, and we're along for the ride. Buckle up, folks. This one could get interesting.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

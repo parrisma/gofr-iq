@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-11T03:33:12.740357",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding QNTM",
+  "story_body": "Quantum Corporation (QNTM) announced the following updates:\n\nAs of 08:00 EST on Monday, the company's Board of Directors has appointed Emily Chen as the new Chair of the Audit Committee, effective immediately. Ms. Chen has been an independent director of Quantum Corporation since 2018.\n\nIn marketing news, Quantum Corporation launched a new website redesign on Friday at 14:00 EST, featuring an updated layout and improved navigation. The redesign aims to enhance user experience and provide easier access to company information.\n\nRegarding Environmental, Social, and Governance (ESG) initiatives, Quantum Corporation has published its annual Sustainability Report, available on the company's website as of 10:00 EST on Tuesday. The report highlights the company's progress in reducing greenhouse gas emissions and outlines its commitment to diversity and inclusion.\n\nThese updates are part of Quantum Corporation's ongoing efforts to maintain transparency and accountability.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

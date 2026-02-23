@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-05T14:01:35.152198",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Nexus Software, a leading provider of software solutions, is among the numerous technology companies currently grappling with the far-reaching consequences of a widespread supply chain disruption.\n\nAs of 14:00 GMT on March 10, 2023, reports began surfacing of severe shortages in critical components essential to the production of various technology products. The shortage, which appears to be industry-wide, has resulted in significant delays and disruptions to Nexus Software's manufacturing operations.\n\nIndustry insiders indicate that the shortage is primarily attributed to unforeseen demand fluctuations and logistical bottlenecks. The impacted components, which include microprocessors and memory modules, are crucial to the production of Nexus Software's flagship products.\n\nThe company, listed on the stock exchange under the ticker symbol NXS, has not issued an official statement regarding the impact of the shortage on its operations. However, sources close to the matter suggest that Nexus Software is working closely with its suppliers and partners to mitigate the effects of the disruption.\n\nThe supply chain disruption is expected to have far-reaching implications for the technology sector as a whole, with numerous companies likely to be affected. As the situation continues to unfold, investors and industry observers will be closely monitoring the responses of affected companies, including Nexus Software.\n\nAs of 16:45 GMT on March 10, 2023, the situation remains fluid, with no clear indication of when the shortage is likely to be resolved.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "NXS",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

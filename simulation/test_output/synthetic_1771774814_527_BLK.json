@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-19T04:52:14.960118",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BlockChain Verify (BLK) is flying high today, with the stock price skyrocketing on whispers of a potential acquisition. We're talking moon-shot territory here, folks. According to people familiar with the matter, who wish to remain anonymous (and let's be real, might be bagholders trying to pump up the price), a big-name player is allegedly circling the blockchain verification company.\n\nNow, we can't stress this enough: NOTHING IS CONFIRMED. This is pure speculation, and we're not even sure if these \"people familiar\" are credible sources or just some Reddit trolls trying to get a rise out of the market. But hey, the rumor mill is churning, and the BLK bulls are running wild.\n\nIf true, an acquisition would be a game-changer for BlockChain Verify. The company's been on a tear lately, and a buyout would likely send the stock price into orbit. But let's not get ahead of ourselves \u2013 we've seen this movie before, and it often ends with a bunch of disappointed bagholders wondering what hit them.\n\nStill, the rumor is out there, and traders are piling in. BLK is up a whopping 20% on the day, with no signs of slowing down. Will it keep going to the moon, or will it come crashing back down to earth? Only time will tell. But one thing's for sure: this rumor has given BlockChain Verify the ultimate shot in the arm. Buckle up, folks \u2013 this ride is about to get wild.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-19T23:05:45.037901",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "HEAVYTRUCKS INC. EXPERIENCES LOGISTICS DELAY, IMPACTING STRATOS DEFENSE OPERATIONS\n\nAt 09:45 EST, HeavyTrucks Inc., a leading logistics provider, announced an unforeseen delay in their supply chain operations. The disruption is expected to affect the timely delivery of critical components to Stratos Defense, a major client that relies on HeavyTrucks Inc. for logistics management.\n\nAs per their established agreement, HeavyTrucks Inc. defines and oversees the logistics framework for Stratos Defense. The delay is anticipated to hinder Stratos Defense's ability to meet its production schedules, potentially leading to downstream disruptions in their operations.\n\nHeavyTrucks Inc. has initiated an investigation into the cause of the delay and is working to rectify the situation as soon as possible. The company has assured stakeholders that it is taking all necessary measures to mitigate the impact on its clients, including Stratos Defense.\n\nStratos Defense has been notified of the delay and is currently assessing the potential effects on its operations. The company has not yet released a statement regarding the situation.\n\nThe HeavyTrucks Inc. logistics delay is expected to be resolved within the next 48 hours, pending a successful resolution of the underlying issues. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

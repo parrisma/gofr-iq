@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-02T08:26:09.706664",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "\"SHOPM Goes Up in Flames, LUXE Left to Pick Up the Pieces\n\nIn a devastating turn of events, a massive factory fire has ravaged a key production facility of ShopMart (SHOPM), sending shockwaves through the consumer cyclical sector. The news has left SHOPM investors reeling, with the stock plummeting to new lows. And while the immediate focus is on the supplier's woes, savvy traders are already eyeing the downstream impact on LuxeBrands (LUXE).\n\nAs a major partner in the consumer cyclical space, LuxeBrands relies heavily on ShopMart for its production needs. With SHOPM's factory now offline, LUXE is staring down the barrel of a serious supply chain disruption. And let's be real, folks - when your supplier goes dark, you're the one left holding the bag.\n\nIn the short term, LUXE is likely to feel the pinch in 2-4 weeks, as existing inventory dries up and new shipments are delayed. That's when the real pain will set in, and LUXE's stock price will start to feel the heat. We're talking a potential 10-15% haircut, easy. And if you're a LUXE bagholder, you might want to start rethinking your investment strategy - pronto.\n\nNow, some of you might be thinking, \"But what about the long-term play?\" Well, let me tell you - SHOPM's fire is a major setback, and it's going to take time for the supplier to get back on its feet. And until then, LUXE is going to be stuck in neutral, unable to capitalize on its usual momentum. So, if you're looking for a moonshot, you might want to look elsewhere. For now, it's time to short LUXE and let the supplier's catastrophe play out.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

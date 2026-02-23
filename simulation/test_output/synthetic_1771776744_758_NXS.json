@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T15:50:24.880124",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: Nexus Software Faces Existential Crisis as Catastrophic Operational Failure Rocks Headquarters in Boise\n\nBOISE, ID - In a devastating blow to the city's thriving tech industry, Nexus Software (NXS), a small but significant player in the software development scene, is reeling from a catastrophic operational failure that has left its very existence hanging in the balance.\n\nAccording to sources close to the company, a rogue employee with elevated access privileges compromised the integrity of Nexus's flagship product, \"Eclipse,\" a critical software solution used by numerous high-profile clients across the country. The breach, which occurred in the early hours of Tuesday morning, has resulted in a complete system failure, leaving customers without access to vital data and services.\n\nAs news of the disaster spread, panic set in among the company's 120 employees, many of whom are now facing an uncertain future. \"We're talking about people's livelihoods here,\" said one distraught employee, who wished to remain anonymous. \"This is not just a company, it's a family. We've worked tirelessly to build something special, and now it's all being torn apart.\"\n\nLocal officials are also weighing in on the crisis, with Boise Mayor Lauren McLean expressing concern about the potential economic fallout. \"Nexus Software has been a valued member of our business community, and we're deeply troubled by this news,\" she said. \"We'll do everything in our power to support the company and its employees during this difficult time.\"\n\nAs the full extent of the damage becomes clear, regulators are already circling, with whispers of a possible investigation into the company's security protocols and governance practices. With its reputation in tatters and its very survival at stake, Nexus Software is facing an existential crisis that will require swift and decisive action to mitigate.\n\nThe company's stock price has plummeted in response to the news, wiping out millions of dollars in value and leaving investors reeling. As the people of Boise watch with bated breath, one thing is clear: the fate of Nexus Software hangs precariously in the balance, and the road to recovery will be long and arduous.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

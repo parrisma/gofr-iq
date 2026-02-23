@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-05T12:18:53.174989",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global Reports Financial Results for Q2 FY2023\n\nAt 07:00 ET, July 27, 2023, OmniCorp Global (OMNI) released its financial results for the second quarter of Fiscal Year 2023.\n\nFor the three months ended June 30, 2023, OMNI reported revenue of $1.23 billion, representing a 12% increase from $1.10 billion in Q2 FY2022.\n\nTotal sales for the quarter grew 11% year-over-year, driven by strong performance in the company's core business segments.\n\nOmniCorp Global's revenue growth was fueled by a 15% increase in sales from its Technology Solutions division, which accounted for 60% of total revenue.\n\nThe company's gross margin expanded 120 basis points to 24.5% in Q2 FY2023, compared to 23.3% in the prior-year period.\n\nAs of June 30, 2023, OMNI's cash and cash equivalents totaled $850 million, providing the company with a solid foundation for continued investment in growth initiatives.\n\nOmniCorp Global's Q2 FY2023 financial results demonstrate the company's ability to drive sustained growth and expand its market presence.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

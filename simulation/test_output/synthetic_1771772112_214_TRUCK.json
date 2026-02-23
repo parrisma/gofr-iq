@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-08T17:05:12.156105",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "Commodity prices are going to the moon, and HeavyTrucks Inc. (TRUCK) is getting left in the dust. A 20% spike in oil, lithium, and steel prices is squeezing the company's margins, and investors are bailing on the stock.\n\nAs a major manufacturer of heavy-duty trucks, TRUCK is heavily exposed to fluctuations in fuel and steel costs. With oil prices surging, the company's fuel expenses are going through the roof, and the increased cost of steel is adding insult to injury. It's a double whammy that's putting pressure on TRUCK's bottom line.\n\nThe negative beta of -0.9 tells you all you need to know - when commodity prices rise, TRUCK's stock price tends to fall. And that's exactly what's happening. The stock is getting slammed, and bagholders are scrambling to cut their losses.\n\nYou can't blame them. With margins under pressure, it's hard to see how TRUCK can maintain its profitability. The company's cost structure is just too exposed to these volatile commodity prices. And with no end in sight to the price surge, it's a toxic combination for TRUCK shareholders.\n\nThe question on everyone's mind is, how low can it go? Will TRUCK be able to absorb these increased costs, or will it be forced to pass them on to customers? And what does that mean for the stock price? One thing's for sure - it's not looking good for TRUCK right now. The commodity price surge is a major headwind, and it's going to take a lot more than just a minor correction to get this stock back on track.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

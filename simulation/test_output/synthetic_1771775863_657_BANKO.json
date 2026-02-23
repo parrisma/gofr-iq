@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-06T13:53:43.166538",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BANKO",
+  "story_body": "BANKO Corporation Reports Minor Personnel Update and Marketing Initiative\n\nAt 08:00 EST, BANKO Corporation (BANKO) announced that Karen Thompson has been appointed as Vice President of Human Resources, effective immediately. Thompson will be responsible for overseeing the company's HR functions.\n\nIn a separate development, BANKO Corporation launched a new marketing campaign aimed at promoting its online banking services. The campaign, which began on March 1, 2023, at 12:01 AM EST, will run for six weeks and feature targeted advertisements on social media and online platforms.\n\nAdditionally, BANKO Corporation released its 2022 Environmental, Social, and Governance (ESG) report, detailing the company's progress on reducing its carbon footprint and promoting diversity and inclusion in the workplace. The report is available on the company's website.\n\nNo further information was provided regarding these updates.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BANKO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

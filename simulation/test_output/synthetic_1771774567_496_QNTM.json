@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-01T21:08:07.979226",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute, or QNTM, the Denver-based tech firm, has been quietly making strides in the local community. In a recent update, the company announced the promotion of longtime employee, Emily Chen, to the role of Senior Manager of Community Outreach. Chen, a Denver native, has been with QNTM for over five years and has been instrumental in fostering relationships with local organizations.\n\nIn marketing news, QNTM has launched a new social media campaign aimed at highlighting the company's commitment to sustainability. The campaign, dubbed \"Green Bytes,\" showcases QNTM's efforts to reduce its carbon footprint in its Denver and Boulder offices. The company has also partnered with the City of Denver's Department of Environmental Health to promote environmentally-friendly practices among local businesses.\n\nOn the ESG front, QNTM has announced its participation in the Denver Chamber of Commerce's \"Workforce Development Initiative.\" The program aims to provide job training and placement services to underrepresented communities in the Denver area. QNTM has pledged to provide internships and mentorship opportunities to program participants. The company's ESG report, released earlier this year, highlighted its commitment to diversity and inclusion, with a workforce that is 30% more diverse than the industry average.\n\nIn other news, QNTM has expanded its Boulder office, adding 20 new employees to its team. The company now employs over 150 people in the Boulder area, making it one of the largest tech employers in the city. Despite the growth, QNTM remains committed to its local roots, with CEO, Adrien Lefebvre, serving on the board of the Boulder Chamber of Commerce.\n\nOverall, QNTM's latest update highlights the company's commitment to its local community and its ongoing efforts to make a positive impact in the areas of sustainability, diversity, and workforce development.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

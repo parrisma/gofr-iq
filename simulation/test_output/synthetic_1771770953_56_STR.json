@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-24T11:01:53.031605",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "STRATOS DEFENSE SEES SHUFFLE IN EXECUTIVE SUITE, SOURCES CLAIM\n\nUnconfirmed reports suggest that Stratos Defense, a leading player in the defense industry, has made some changes to its leadership team. While details are scarce, sources close to the matter say that a key executive has left the company to \"pursue other opportunities.\" The identity of the departing executive remains a mystery, fueling SPECULATION among industry insiders.\n\nIn other news, Stratos Defense has reportedly launched a NEW MARKETING CAMPAIGN aimed at boosting its brand presence. The campaign, which is said to feature a series of slick new ads, is believed to be part of a broader effort to REPOSITION the company as a MAJOR PLAYER in the defense sector.\n\nOn the environmental front, Stratos Defense has faced criticism from some quarters over its alleged failure to meet certain ESG benchmarks. While the company has long maintained a commitment to SUSTAINABILITY, some observers say that its track record in this area is SPOTTY AT BEST. Unconfirmed reports suggest that Stratos Defense is working to address these concerns, but details of its plans remain UNDER WRAPS.\n\nAs always, these reports are UNCONFIRMED and should be treated with a healthy dose of skepticism. Stratos Defense has declined to comment on any of these matters, citing a policy of not responding to \"RUMORS AND SPECULATION.\"",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

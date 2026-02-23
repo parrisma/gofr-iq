@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-28T06:46:19.024997",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "BANKONE'S DELAY LEAVES FINCORP SCRAMBLING IN OMAHA\n\nA critical delay at BankOne's downtown Omaha processing facility is set to have far-reaching consequences for FinCorp, the city's largest financial services employer. The two companies have a long-standing relationship in the financial sector, with BankOne serving as a key supplier of payment processing services to FinCorp.\n\nThe delay, which sources close to the matter describe as a \"technical glitch,\" has already begun to impact FinCorp's ability to process transactions in a timely manner. FinCorp, which employs over 1,200 people in the Omaha area, relies heavily on BankOne's services to facilitate its own operations.\n\n\"This is a nightmare scenario for us,\" said a FinCorp spokesperson, who wished to remain anonymous. \"We're working closely with BankOne to resolve the issue as quickly as possible, but in the meantime, our customers are feeling the pinch.\"\n\nThe delay comes at a particularly sensitive time for FinCorp, which is still reeling from the aftermath of last year's city council decision to reject its proposal for a new downtown headquarters. The company had promised to bring hundreds of new jobs to the area, but the deal ultimately fell through due to concerns over tax incentives.\n\nNow, with the BankOne delay causing chaos in its operations, FinCorp is facing renewed scrutiny from local officials. \"We're extremely disappointed to hear about the issues at BankOne,\" said Omaha City Councilor, Jane Smith. \"We urge both companies to work together to resolve this matter as quickly as possible and minimize the impact on our local economy.\"\n\nAs the situation continues to unfold, FinCorp employees are growing increasingly anxious about the potential consequences of the delay. \"We're already working at full capacity to try and keep up with the backlog,\" said one employee, who wished to remain anonymous. \"If this isn't resolved soon, I fear for our jobs.\"\n\nBankOne officials have thus far declined to comment on the nature of the delay or provide a timeline for its resolution.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

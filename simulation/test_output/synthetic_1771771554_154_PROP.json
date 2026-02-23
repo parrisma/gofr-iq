@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-27T08:02:54.928524",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PROP",
+  "story_body": "Rumors are swirling in the quiet suburban streets of Issaquah, Washington, where PROP, a mid-sized real estate investment trust, has long been a stalwart employer. According to people familiar with the matter, who spoke on condition of anonymity, there is speculation that the company may be the target of a potential acquisition.\n\nWhile details are scarce and nothing has been officially confirmed by PROP or any potential suitors, the whispers of a possible deal have set tongues wagging in the small city of 40,000 residents. PROP, which has been a mainstay in Issaquah since its founding, employs over 200 people in the area, many of whom live in the surrounding neighborhoods.\n\nThe rumor mill has been churning out theories, with some speculating that a larger real estate player may be eyeing PROP's portfolio of properties, which includes several high-profile commercial buildings in the Seattle metropolitan area. Others point to the company's strong track record of steady returns, which could make it an attractive target for investors looking to expand their presence in the region.\n\nHowever, it's worth noting that these rumors are entirely unconfirmed and should be taken with a grain of salt. PROP has not commented on the speculation, and any potential deal remains purely speculative at this point. The company's employees, many of whom are deeply rooted in the local community, are likely watching the situation with bated breath, wondering what the future may hold for their employer.\n\nAs the city of Issaquah prepares for its annual Salmon Days festival, a celebration of the area's natural beauty and small-town charm, the rumor of a potential acquisition hangs in the air like a specter. Whether or not the speculation proves true, one thing is certain: the fate of PROP and its employees will be closely watched by the community in the days and weeks to come.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-18T12:49:15.898527",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "At 09:00 Eastern Standard Time (EST) today, FinCorp announced the launch of its newest financial management tool, \"FinCorp Pro\". This product introduction poses a significant competitive threat to BankOne's flagship financial management offering, \"BankOne Premier\".\n\nFinCorp Pro boasts advanced features, including real-time transaction tracking and enhanced security protocols, which surpass those of BankOne Premier. Industry analysts note that FinCorp Pro's capabilities render BankOne Premier's features outdated, potentially disrupting BankOne's market share in the financial management sector.\n\nBankOne has long dominated the financial management market with BankOne Premier, but FinCorp Pro's launch may alter the competitive landscape. FinCorp's move is seen as a strategic attempt to gain ground on its rival, BankOne, in the financial services industry.\n\nFinCorp Pro is available for immediate deployment, and FinCorp has announced plans to aggressively market the product to existing and prospective clients. BankOne has yet to comment on the launch of FinCorp Pro or its plans to respond to the competitive threat.\n\nThe launch of FinCorp Pro is expected to increase competition in the financial management sector, with BankOne facing pressure to enhance its offerings to remain competitive.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

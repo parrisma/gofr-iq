@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-30T10:26:13.834629",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "BlockChain Verify Experiences Critical Delay in Supply Chain Operations\n\nAt 09:45 EST, BlockChain Verify (BLK), a leading provider of blockchain-based verification services, announced that it is experiencing a critical delay in its supply chain operations. The delay is expected to have a significant impact on the company's ability to deliver its services to clients in a timely manner.\n\nAs a result of the delay, PropCo REIT (PROP), a real estate investment trust that operates in the same market as BlockChain Verify, is likely to experience disruptions to its business operations. PropCo REIT relies on BlockChain Verify's services to verify the authenticity of certain transactions, and the delay may cause delays in its own ability to process these transactions.\n\nThe delay at BlockChain Verify is attributed to an unforeseen issue with one of its key suppliers, which has resulted in a shortage of critical components necessary for the company's operations. BlockChain Verify is working to resolve the issue as quickly as possible, but the exact timeline for resolution is currently unknown.\n\nThe impact of the delay on PropCo REIT's operations is expected to be significant, and the company is likely to experience delays in its ability to process transactions and meet its obligations to its investors. Further updates on the situation will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

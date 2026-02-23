@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-09T15:56:40.742166",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "**BREAKING: FEDERAL RESERVE DELIVERS RATE BLOW, LUXEBRANDS LEFT REELING**\n\nIn a move that sent shockwaves through the market, the Federal Reserve announced a 25 basis point rate hike, leaving luxury goods purveyor LuxeBrands (LUXE) vulnerable to the whims of wary consumers.\n\nUNCONFIRMED REPORTS suggest that the rate increase will deal a significant blow to LuxeBrands, whose high-end wares are often financed through credit. With borrowing costs now on the rise, sources close to the matter indicate that the company's already-thin profit margins may be squeezed even further.\n\nLuxeBrands' beta of -0.8 tells the tale of a company intimately tied to the vicissitudes of the market. As rates rise, the luxury goods sector is often among the first to feel the pinch, and LuxeBrands is no exception. With consumers increasingly hesitant to take on debt, the company's sales may suffer as a result.\n\n\"It's a PERFECT STORM of bad news for LuxeBrands,\" claims one industry insider, who wished to remain anonymous. \"The rate hike is just the latest in a long line of challenges facing the company. We're hearing rumors of a major slowdown in sales, and it's anyone's guess how long they'll be able to weather the storm.\"\n\nWhile officials at LuxeBrands have thus far remained tight-lipped about the rate decision, sources say the company is scrambling to adjust to the new economic reality. Whether they'll be able to adapt in time remains to be seen, but one thing is certain: the road ahead will be rocky, indeed.\n\nSTAY TUNED for further updates as this story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

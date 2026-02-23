@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-20T16:44:49.027454",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) provided a routine update at 08:00 EST, highlighting various developments within the organization.\n\nIn terms of personnel, OmniCorp Global announced the appointment of Ms. Jane Doe as the new Director of Marketing, effective immediately. Ms. Doe brings over 10 years of experience in the marketing sector and will be responsible for leading the company's marketing efforts.\n\nRegarding marketing, OmniCorp Global launched a new social media campaign aimed at increasing brand awareness among the 18-35 age demographic. The campaign, which began on February 1st, will run for a period of six weeks and will feature a mix of online advertising and influencer partnerships.\n\nOn the Environmental, Social, and Governance (ESG) front, OmniCorp Global announced that it has achieved a 2% reduction in greenhouse gas emissions over the past 12 months, as part of its ongoing sustainability efforts. The company also reported a 5% increase in diversity and inclusion training participation among its employees.\n\nAdditionally, OmniCorp Global disclosed that it has partnered with a local non-profit organization to support community development initiatives in the regions where it operates. The partnership, which began on January 15th, will focus on education and job training programs.\n\nNo further information was provided, and the update did not include any significant financial or operational announcements.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

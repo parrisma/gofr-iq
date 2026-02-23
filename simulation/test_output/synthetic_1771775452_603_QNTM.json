@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T15:46:52.363594",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: \"Bloodbath\" as Critical Component Plant Goes Up in Flames, Sending QNTM, BANKO, and VIT to the Depths\n\nIn a shocking turn of events, a devastating explosion ripped through a key supplier's plant overnight, sending shockwaves through the markets and leaving investors reeling. The blast, which occurred at a critical component manufacturing facility, has left QNTM, BANKO, and VIT scrambling to assess the damage and find alternative sources.\n\nAs news of the disaster broke, shares of all three companies went into freefall, with QNTM plummeting a whopping 15% in pre-market trading. BANKO and VIT weren't far behind, with each shedding around 10% of their value in a matter of minutes. It's a bloodbath out there, folks, and the bagholders are getting crushed.\n\nThe supplier in question is a crucial provider of specialized components used in the production of QNTM's flagship product, as well as BANKO's and VIT's own offerings. With the plant now offline, all three companies are facing a severe shortage of these critical parts, which is likely to have a major impact on their ability to meet demand.\n\nAs the reality of the situation sets in, investors are rapidly reassessing their positions in these stocks. QNTM, which had been on a tear in recent weeks, is now looking like a classic case of \"buy the rumor, sell the news.\" BANKO and VIT, meanwhile, are facing a potentially existential crisis if they can't find a way to source these components quickly.\n\nOne thing's for sure: the moonshot that QNTM, BANKO, and VIT had been enjoying is now nothing more than a distant memory. The question on everyone's mind is: how low can they go? Stay tuned for further updates as this situation continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

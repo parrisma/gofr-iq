@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-07T20:59:13.915841",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BREAKING: FEDERAL RESERVE DELIVERS RATE DECISION, LUXE (LuxeBrands) INVESTORS ON EDGE\n\nIn a MOVE that's sending SHOCKWAVES through the market, the Federal Reserve has announced a 25-basis-point RATE HIKE, leaving investors WONDERING what's next for LUXE (LuxeBrands).\n\nSources close to the company say that the LUXURY RETAILER is BRACING for IMPACT, as the RATE INCREASE is expected to PUT THE SQUEEZE on high-end consumers. Unconfirmed reports suggest that the company's EXPOSURE to FINANCED LUXURY PURCHASES makes it PARTICULARLY VULNERABLE to RATE HIKES.\n\nWith a BETA of -0.8, LUXE (LuxeBrands) is seen as a RISKIER PLAY in a RISING RATE ENVIRONMENT. As rates RISE, the company's STOCK PRICE is likely to TAKE A HIT, according to market insiders.\n\nWhile the company has not OFFICIALLY commented on the RATE DECISION, industry observers say that the HIKE is likely to CRIMP LUXE's STYLE. \"When rates go up, people THINK TWICE about making those BIG-TICKET PURCHASES,\" says one analyst, who wished to remain ANONYMOUS.\n\nAs the MARKET DIGESTS the news, LUXE (LuxeBrands) investors are LEFT WONDERING what's next for the company. One thing is certain, however: the RATE HIKE has INTRODUCED a NEW LEVEL of UNCERTAINTY into the mix. Stay TUNED for further updates on this DEVELOPING STORY.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

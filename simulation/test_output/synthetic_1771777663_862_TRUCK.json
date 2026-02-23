@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-11T00:54:43.996558",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc. (TRUCK) has announced the appointment of Jane Doe as Director of Sustainability, effective immediately. Ms. Doe will oversee the development and implementation of HeavyTrucks Inc.'s environmental, social, and governance (ESG) initiatives.\n\nIn marketing news, HeavyTrucks Inc. has launched a new website, featuring enhanced product information and streamlined customer support resources. The updated website is available at www.heavytrucks.com, as of 08:00 EST, today.\n\nHeavyTrucks Inc. has also released its 2023 Corporate Social Responsibility Report, highlighting the company's progress in reducing greenhouse gas emissions and promoting diversity, equity, and inclusion in the workplace. The report is available for download on the company's website.\n\nIn personnel news, HeavyTrucks Inc. has announced the retirement of John Johnson, Vice President of Operations, effective March 31, 2024. Mr. Johnson has served in his current role since 2018. A search for his replacement is currently underway.\n\nHeavyTrucks Inc. has also announced that its 2024 Annual Meeting of Stockholders will be held on May 15, 2024, at 10:00 EST. The meeting will be webcast live on the company's website.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

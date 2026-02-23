@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-09T11:41:37.357212",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) shares rose 2.5% in early trading following unconfirmed reports of a potential acquisition.\n\nAccording to people familiar with the matter, who spoke on the condition of anonymity, OmniCorp Global may be a target for acquisition. The sources, who are described as having limited knowledge of the situation, indicate that discussions are preliminary and may not result in a deal.\n\nAs of 09:45 EST, OMNI shares traded at $23.12, up 2.5% from the previous close. Trading volume was 1.5 times the 30-day average.\n\nIt is essential to note that these reports are entirely unconfirmed, and OmniCorp Global has not commented on the matter. The company's press office did not respond to a request for comment as of 10:00 EST.\n\nInvestors should exercise caution when interpreting these rumors, as the sources are not considered highly reliable. Further information is required to assess the validity of these claims.\n\nThis report will be updated if additional information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

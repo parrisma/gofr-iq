@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-10T23:40:50.950305",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "At 09:45 EST, GeneSys (GENE) announced a voluntary recall of its flagship product, citing critical performance issues. The recall, which took effect immediately, affects all units shipped since January 1, 2022.\n\nAccording to a statement released by GeneSys, the product's malfunction may lead to serious consequences, prompting the company to take swift action to protect consumers. The recall process is expected to be completed by the end of Q2 2023.\n\nGeneSys's decision is seen as a significant blow to the company's reputation and market standing in the healthcare sector. Industry analysts predict a substantial loss of market share, which may be irretrievable in the short term.\n\nVitality Pharma (VIT), a direct competitor of GeneSys, stands to gain from the recall. With a similar product offering, Vitality Pharma is well-positioned to capitalize on GeneSys's weakness and attract disillusioned customers. Market observers expect Vitality Pharma to increase its marketing efforts and expand its distribution channels to fill the gap left by GeneSys's recalled product.\n\nGeneSys's recall process will be closely monitored by regulatory bodies and industry watchdogs. The company's ability to rectify the situation and restore consumer trust will be crucial in determining its future competitiveness in the healthcare market.\n\nAs of 10:00 EST, GeneSys's stock price has not been officially updated to reflect the recall announcement.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "VIT",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

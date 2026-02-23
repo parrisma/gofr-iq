@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-22T04:03:09.615323",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "Rumors are swirling in the corridors of downtown Pittsburgh that PropCo REIT, the locally-headquartered real estate investment trust, may be the target of a potential acquisition. According to people familiar with the matter, who spoke on the condition of anonymity, several suitors have been eyeing the company's prized portfolio of office buildings and shopping centers.\n\nWhile details are scarce and nothing has been officially confirmed, speculation is rampant among PropCo's 250 employees in Pittsburgh's Golden Triangle. The company's roots in the city run deep, dating back to its founding in 1990, and any potential sale would likely send shockwaves through the local business community.\n\nSome point to the recent visit by a delegation of investors from New York City, who were seen touring PropCo's flagship property, the 20-story skyscraper at 525 William Penn Place. Others whisper about the increasing presence of out-of-town real estate scouts in the city's commercial districts.\n\nMayor Ed Gainey's administration has been keenly aware of the rumors, with sources close to the mayor indicating that his office is \"monitoring the situation closely.\" A spokesperson for the mayor declined to comment further, citing the lack of concrete information.\n\nAs one of the largest property owners in the region, PropCo's fate has significant implications for the local economy. Its holdings span from the trendy boutiques of Shadyside to the historic landmarks of Downtown, employing thousands of people indirectly through its tenants and contractors.\n\nFor now, the rumors remain just that \u2013 rumors. PropCo's leadership has not commented publicly on the matter, and the company's stock price has shown no unusual activity. Still, the whispers persist, leaving many to wonder what the future holds for this Pittsburgh institution.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

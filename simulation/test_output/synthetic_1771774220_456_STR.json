@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-21T04:13:20.529518",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "**SHOCKWAVE HITS DEFENSE CONTRACTORS AS COMMODITY PRICES SKYROCKET**\n\nUnconfirmed reports are emerging of a sudden and drastic surge in commodity prices, sending shockwaves through the defense industry. Sources close to the matter claim that oil, lithium, and steel prices have SPIKED BY A STAGGERING 20% in a matter of days.\n\nAs the news spreads, investors are scrambling to assess the impact on defense contractors, particularly Stratos Defense (STR). Insiders suggest that the company's exposure to the price hike could be significant, given its reliance on cost-plus pricing for its defense contracts.\n\nWith a beta of 0.6, Stratos Defense is seen as a relatively stable player in the industry. However, the negative beta value also implies that the company's margins could be squeezed as costs rise. As commodity prices skyrocket, Stratos Defense may struggle to maintain its profit margins, potentially dealing a blow to its bottom line.\n\nWhile the company has not officially commented on the situation, sources say that executives are closely monitoring the price movements and assessing their options. Unconfirmed reports suggest that Stratos Defense may be exploring ways to renegotiate its contracts or pass on the increased costs to its clients.\n\nAs the situation continues to unfold, investors are advised to exercise caution. The sudden and dramatic shift in commodity prices has created a high-stakes game for defense contractors, and Stratos Defense is no exception. Will the company be able to weather the storm, or will the price surge prove to be a major setback? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

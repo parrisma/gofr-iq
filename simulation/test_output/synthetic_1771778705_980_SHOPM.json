@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-30T04:54:05.005919",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "ShopMart (SHOPM) is reportedly the subject of a potential acquisition, according to people familiar with the matter, though no confirmation has been provided by the company or any purported suitors.\n\nAs of 14:47 ET, sources, who spoke on condition of anonymity, indicate that discussions regarding a possible takeover of ShopMart may be underway, but the details and parties involved remain unclear.\n\nIt is worth noting that these rumors are unconfirmed and should be treated with caution, as neither ShopMart nor any potential acquirers have publicly commented on the matter.\n\nShopMart's market performance has not shown significant deviations from its recent trends, with the stock trading at $23.50 as of the close of trading today.\n\nThe company, which operates a chain of retail stores, has not issued any statements regarding the rumors, and it remains unclear whether any negotiations are indeed taking place.\n\nInvestors are advised to exercise caution and await official confirmation from ShopMart or any involved parties before making any investment decisions based on these unconfirmed reports.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

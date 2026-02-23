@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-12T23:01:03.043968",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "The commodity complex is going to the moon, folks, and that's got some serious implications for Velocity Motors (VELO). The latest price surge has seen oil, lithium, and steel prices spike a whopping 20%, and for VELO, that's a double-edged sword.\n\nAs an EV player, VELO is heavily exposed to lithium, a key component in EV battery production. With lithium prices skyrocketing, VELO's margins are likely to take a hit. That's because the company's beta is a negative 1.1, meaning it's more sensitive to higher costs than the broader market. In other words, when commodity prices rise, VELO's stock price tends to fall.\n\nAnd that's exactly what we're seeing. VELO's stock is getting crushed, down 5% in early trading, as investors start to worry about the impact of higher lithium prices on the company's bottom line. The bagholders are getting nervous, and who can blame them? With VELO's margins already under pressure, the last thing the company needs is a surge in input costs.\n\nBut here's the thing: this commodity price surge is not just a VELO problem. It's an industry-wide issue, and every EV player is going to feel the pinch. So, while VELO's stock may be taking a beating today, it's not necessarily a reason to abandon ship. In fact, some savvy traders might see this as a buying opportunity, especially if they believe the commodity price surge is temporary.\n\nStill, for now, VELO's stock price action is a clear indication that investors are spooked. And with good reason \u2013 higher costs are a major headwind for any company, especially one with a negative beta. So, if you're long VELO, you might want to buckle up and prepare for some turbulence ahead.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

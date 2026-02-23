@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-25T03:29:44.903297",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks",
+  "story_body": "\"VELO's Inferno: Bagholders Beware, HeavyTrucks Next to Take the Hit\n\nIn a devastating blow to investors, Velocity Motors (VELO) suffered a major factory fire that has left its production line in shambles. The news sent VELO's stock price plummeting, and we're not surprised - a shutdown of this magnitude is a nightmare for any company. But what's got our attention is the ripple effect this disaster will have on HeavyTrucks (TRUCK), VELO's partner in the auto industry.\n\nHere's the thing: HeavyTrucks relies heavily on VELO for critical components, and with VELO's production line going up in flames, TRUCK's supply chain is about to take a serious hit. We're talking a 2-4 week timeline before the effects start to manifest, but trust us, it's coming. HeavyTrucks' manufacturing process will slow to a crawl, and their stock price will likely follow suit.\n\nMark our words, HeavyTrucks is about to become the next bagholder's worst nightmare. The company's inability to meet demand due to VELO's shutdown will send shockwaves through the industry, and investors will be left scrambling to pick up the pieces. It's not a matter of if, but when, TRUCK's stock price will take a nosedive.\n\nVELO's fire may have been the spark that sets off a chain reaction, but HeavyTrucks is the one that will ultimately feel the burn. If you're holding TRUCK, it's time to start sweating - your stock is about to take a wild ride to the downside. And if you're thinking of buying in, think again. This is one stock that's about to go from 'to the moon' to 'down the drain' in a hurry.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

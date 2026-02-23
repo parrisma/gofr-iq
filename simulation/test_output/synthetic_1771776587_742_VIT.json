@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-16T04:56:47.318799",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "VITALITY PHARMA ON THE BLOCK? UNCONFIRMED REPORTS SWIRL AROUND POSSIBLE TAKEOVER\n\nIn a DEVELOPING STORY, sources close to the matter have revealed that Vitality Pharma (VIT) may be the target of a POSSIBLE ACQUISITION. While details remain SCANT, people familiar with the situation have hinted at a POTENTIAL BUYOUT that could send shockwaves through the pharmaceutical industry.\n\nAccording to UNNAMED SOURCES, a mysterious suitor has allegedly been in SECRET TALKS with Vitality Pharma's brass, sparking SPECULATION about a potential takeover. The identity of the would-be buyer remains a MYSTERY, fueling WILDEST SPECULATION among industry insiders.\n\nWhile these reports are COMPLETELY UNCONFIRMED, rumors of a potential acquisition have already begun to ROIL the markets, with Vitality Pharma's stock experiencing VOLATILE SWINGS in recent trading sessions. As the situation continues to UNFOLD, investors are left to PONDER the implications of a possible takeover.\n\nIt is ESSENTIAL to note that these rumors are BASED ON UNSUBSTANTIATED CLAIMS and should be treated with a HEALTHY DOSE OF SKEPTICISM. Vitality Pharma has thus far REFUSED TO COMMENT on the matter, further FUELING SPECULATION about the company's future.\n\nAs the DRAMA UNFOLDS, one thing is clear: the fate of Vitality Pharma hangs in the BALANCE. Will the company remain independent, or will it become the latest PHARMA GIANT to fall prey to the consolidation trend sweeping the industry? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

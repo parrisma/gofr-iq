@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-02T03:52:48.789056",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Nexus Software Experiences Critical Delay, Impacting Quantum Compute Operations\n\nAt 09:45 UTC, Nexus Software, a key technology supplier, announced an unforeseen delay in its product delivery schedule. This setback is expected to have a direct impact on the operations of Quantum Compute, a leading technology company that relies heavily on Nexus Software's components.\n\nAccording to Nexus Software's official statement, the delay is attributed to unforeseen complexities in their manufacturing process. The company has not provided a revised delivery timeline, citing the need for further assessment.\n\nQuantum Compute, which utilizes Nexus Software's products in its technology solutions, is likely to experience disruptions in its own production schedule. The two companies have a well-established relationship, with Nexus Software serving as a critical supplier of key components.\n\nThe delay is expected to affect Quantum Compute's ability to meet its own delivery obligations, potentially leading to a ripple effect throughout the technology sector. As a result, industry analysts are closely monitoring the situation, awaiting further updates from both Nexus Software and Quantum Compute.\n\nAt this time, neither company has commented on the potential consequences of the delay or the expected duration of the disruption. The situation is being closely watched by market observers, who are awaiting further information on the impact of the delay on both companies' operations.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "QNTM",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

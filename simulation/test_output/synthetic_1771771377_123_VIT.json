@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-03T03:29:57.935929",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "BREAKING: Healthcare Sector Teeters on Brink of COLLAPSE as Supply Chain CHAOS Engulfs VIT and Beyond\n\nUnconfirmed reports are emerging of a catastrophic supply chain disruption ROCKING the healthcare industry, with Vitality Pharma (VIT) at the EPICENTER of the crisis. Sources close to the matter, who wish to remain anonymous, claim that a PERFECT STORM of logistical nightmares and manufacturing mishaps has left the sector REELING.\n\nDetails are scarce, but insiders say that VIT, a leading player in the healthcare space, is struggling to maintain production levels due to a COMBINATION of factors, including material shortages and transportation WOES. The situation is DESCRIBED as \"dire\" by those in the know, with some whispering about the possibility of WIDESPREAD shortages of critical medications.\n\nThe implications are FAR-REACHING, with the entire healthcare sector potentially on the brink of COLLAPSE. Rivals of VIT are said to be SCRAMBLING to fill the void, while regulators are RACING against the clock to mitigate the damage.\n\n\"It's a NIGHTMARE scenario,\" a source revealed, speaking on condition of anonymity. \"No one saw this coming, and now the entire industry is PAYING the price.\"\n\nAs the situation CONTINUES to UNFOLD, one thing is clear: the healthcare sector is facing an EXISTENTIAL CRISIS. VIT's woes may be the TIP of the iceberg, with the true extent of the damage yet to be revealed.\n\nStay tuned for further updates as this BREAKING story continues to EVOLVE.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "VIT",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

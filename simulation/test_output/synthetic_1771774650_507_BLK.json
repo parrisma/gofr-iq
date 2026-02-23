@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T14:40:30.295852",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] BLK - BlockChain Verify",
+  "story_body": "The financial sector is abuzz with the usual suspects making waves, but let's be real, folks, it's all just a bunch of noise. I mean, take BLK, for instance. BlockChain Verify's stock price is all over the map, and I'm not just talking about your run-of-the-mill volatility. No, sir. This thing's been on a wild ride, and I'm starting to think it's just a bunch of bagholders holding on for dear life.\n\nMeanwhile, the rest of the sector's just along for the ride. It's like the whole space is just waiting for something, anything, to happen. Will BLK finally make its move to the moon, or will it fizzle out like so many other would-be contenders? Your guess is as good as mine, folks.\n\nThe thing is, when you're dealing with a sector as opaque as this one, it's hard to separate the signal from the noise. Everyone's got an opinion, but nobody really knows what's going on. And that's what makes it so darn fascinating. I mean, who doesn't love a good mystery?\n\nSo, what's the takeaway from all this? Honestly, not much. The sector's just meandering along, waiting for some catalyst to come along and shake things up. And when it does, you can bet your bottom dollar that BLK will be right in the thick of it. But until then, it's just a whole lot of noise. Buckle up, folks. It's gonna be a bumpy ride.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

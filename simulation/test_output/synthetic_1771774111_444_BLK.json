@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-30T16:23:31.081201",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "In a move that's left many in the financial community stunned, BankOne, a stalwart of the local banking scene in Cincinnati, has issued a recall of its flagship product, affecting thousands of customers across the city's 52 neighborhoods. The recall, which comes on the heels of a series of high-profile technical glitches, has left BankOne reeling and its customers scrambling for alternatives.\n\nAs news of the recall spread, employees at BankOne's downtown Cincinnati headquarters were tight-lipped, with many of the company's 2,500 local staff members left to wonder about the future of the 150-year-old institution. The recall is a major blow to BankOne's reputation, which has been built on a foundation of trust and reliability.\n\nBut as one door closes, another opens. BlockChain Verify, a rival financial services company with a significant presence in Cincinnati, stands to gain market share in the wake of BankOne's misstep. With its own suite of products and services, BlockChain Verify has been quietly building a reputation as a reliable and innovative player in the financial sector.\n\n\"We've always believed in the importance of investing in our technology and our people,\" said a BlockChain Verify spokesperson. \"This recall is a reminder that, in the financial services industry, you're only as strong as your weakest link.\"\n\nAs the city's politicians weigh in on the recall, many are pointing to BlockChain Verify as a model of success. \"This is a wake-up call for BankOne and a reminder that, in Cincinnati, we value innovation and reliability,\" said Cincinnati Mayor John Cranley. \"BlockChain Verify has shown that, with the right approach, it's possible to build a successful and sustainable business that benefits our community.\"\n\nAs the dust settles, one thing is clear: BankOne's recall is a major opportunity for BlockChain Verify to gain ground in the local market. With its reputation intact and its products and services ready to go, BlockChain Verify is poised to capitalize on BankOne's misfortune.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-15T08:28:42.109603",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "At 08:00 EST, BlockChain Verify (BLK) announced the appointment of Emily Chen as its new Vice President of Marketing, effective immediately. Chen will oversee the company's marketing strategy and lead the team in promoting BlockChain Verify's services.\n\nBlockChain Verify also reported that it has launched a new website, featuring updated information on its blockchain verification solutions and services. The website is now available at www.blockchainverify.com.\n\nIn its ongoing commitment to environmental sustainability, BlockChain Verify announced that it has achieved a 5% reduction in energy consumption at its headquarters in the past quarter. This reduction is part of the company's broader effort to minimize its environmental footprint and promote sustainable practices.\n\nAdditionally, BlockChain Verify reported that it has established a new Employee Resource Group (ERG) focused on diversity and inclusion. The ERG will provide a platform for employees to share their perspectives and ideas on promoting a more inclusive workplace culture.\n\nThese updates were announced as part of BlockChain Verify's regular business operations and do not represent any material changes to the company's financial or operational position.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

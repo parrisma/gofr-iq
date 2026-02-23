@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-16T20:14:23.627980",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding QNTM",
+  "story_body": "BREAKING: QNTM SHAKES MARKETS WITH RUMORED ACQUISITION TALKS\n\nUnconfirmed reports are swirling that QNTM, the high-flying tech firm, is in EXCLUSIVE talks to be acquired by a mystery suitor. Sources close to the matter, who wish to remain anonymous, claim that a DEAL IS IN THE WORKS, but details remain SCANT.\n\nPeople familiar with the negotiations, who spoke on condition of anonymity, revealed that QNTM has been in SECRET discussions with a potential buyer for WEEKS. The identity of the suitor remains a closely guarded SECRET, fueling SPECULATION and sending QNTM's stock into a TAILSPIN.\n\nWhile neither QNTM nor the alleged buyer has commented on the RUMORS, industry insiders are ABUZZ with excitement. \"This could be the DEAL OF THE CENTURY,\" exclaimed one analyst, who wished to remain nameless. \"QNTM's cutting-edge technology would be a GAME-CHANGER in the right hands.\"\n\nBut not everyone is convinced. \"This is just a RUMOR, and we've seen these types of rumors come and go before,\" cautioned a skeptical observer. \"Until we get OFFICIAL confirmation, I wouldn't get too EXCITED.\"\n\nAs the market struggles to make sense of the UNCONFIRMED reports, QNTM's stock price has become a ROLLERCOASTER ride, with shares seesawing wildly throughout the day. One thing is certain, however: if this deal goes through, it will send SHOCKWAVES through the tech industry.\n\nStay tuned for further updates as this DEVELOPING story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

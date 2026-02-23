@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-06T09:08:39.775362",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "Fed FOMC decision just dropped and it's a doozy - rates are going up by 25 bps! The street was pricing in a hike, but that doesn't mean it's gonna feel any better for the bagholders out there, especially those holding onto PropCo REIT (PROP). \n\nAs a REIT, PropCo's fate is all but sealed when rates start to rise. You see, when rates go up, it means the discount rate on future cash flows gets a boost, making those juicy dividends and earnings look a whole lot less attractive. And let's be real, PROP's beta of -1.5 tells us all we need to know - this stock is about to get crushed. \n\nThe question on every trader's mind is, how far will PROP fall? The answer, my friends, is a long way down. We're talking moon-shot in reverse - instead of blasting off to the moon, PROP's stock price is about to plummet back down to earth. The rising rate environment is a toxic cocktail for REITs like PropCo, and the charts are already starting to look like a hot mess. \n\nNow, we know what you're thinking - \"but what about the fundamentals?\" Listen, folks, when rates are rising, no one cares about your fancy-schmancy NAV or your \"strong\" balance sheet. All that matters is the direction of interest rates, and right now, that direction is straight up. \n\nSo, if you're a PROP shareholder, buckle up, buttercup, because it's about to get bumpy. And if you're thinking of buying the dip, think again - this stock's got a long way to fall before it hits bottom. The Fed's just given PROP a one-way ticket to Nowheresville, and it's time to bid adieu to those lofty valuations.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

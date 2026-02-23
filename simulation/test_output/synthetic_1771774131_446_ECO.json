@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-03T15:59:51.195890",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "Rumors of a potential acquisition have been swirling around EcoPower Systems, a mid-sized renewable energy firm based in Portland, Oregon, with a significant presence in the city's thriving clean tech sector. According to people familiar with the matter, who spoke on condition of anonymity due to the sensitive nature of the discussions, EcoPower Systems, or ECO, has been in talks with an undisclosed suitor.\n\nWhile details are scarce and nothing has been officially confirmed by the company, these individuals suggest that the rumored deal could be worth hundreds of millions of dollars, potentially altering the landscape of Portland's business community. If true, the acquisition would likely have significant implications for ECO's approximately 250 employees in the Portland metropolitan area, as well as its operations in nearby cities like Eugene and Bend.\n\nThe news, if confirmed, would come at a time when Portland is grappling with the challenges of maintaining its environmental ethos amidst rapid growth and urbanization. Local leaders, including Mayor Ted Wheeler, have been vocal about their commitment to renewable energy and sustainable practices, making ECO's work in the sector particularly noteworthy.\n\nHowever, it's essential to note that these rumors are entirely unconfirmed, and ECO has not made any official statements regarding the matter. The company, known for its innovative approaches to energy efficiency, has been a staple in Portland's business scene for over a decade, contributing to the city's reputation as a hub for eco-friendly technologies.\n\nAs the city council continues to discuss initiatives aimed at reducing carbon emissions and promoting green businesses, the fate of ECO remains a topic of speculation. Whether these rumors materialize into a significant deal or remain mere speculation, one thing is clear: any development would be closely watched by the local business community and environmental advocates alike.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-23T13:06:21.569340",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "At 2:00 PM EST, the Federal Reserve announced its decision to raise interest rates by 25 basis points. This move is expected to have a negative impact on real estate investment trusts (REITs), including PropCo REIT.\n\nAs a result of the rate hike, the cost of borrowing for PropCo REIT is likely to increase, making it more expensive for the company to finance its operations and investments. Furthermore, rising interest rates typically lead to a decrease in the present value of future cash flows, which can negatively affect PropCo REIT's valuation.\n\nGiven PropCo REIT's beta of -1.5, the company's stock price is expected to be disproportionately affected by the interest rate increase. A beta of -1.5 indicates that for every 1% increase in interest rates, PropCo REIT's stock price is likely to decline by 1.5%. This heightened sensitivity to interest rate movements makes PropCo REIT more vulnerable to the negative effects of rising rates.\n\nIn the immediate aftermath of the Federal Reserve's announcement, PropCo REIT's stock price may decline as investors adjust their expectations and reprice the company's shares to reflect the new interest rate environment.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

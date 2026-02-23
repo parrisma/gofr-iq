@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-16T03:12:58.849611",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "STRatos Defense (STR) is getting a serious boost on the rumor mill, with whispers of a potential acquisition sending the stock into orbit. We're talking \"to the moon\" territory, folks, with shares surging on the speculation.\n\nAccording to people familiar with the situation - and we're talking low-trust sources here, so take this with a grain of salt - STR could be the target of a buyout. The details are sketchy, but the chatter is that a major player in the defense space is eyeing the company.\n\nNow, we've been around the block a few times, and we know that M&A rumors can be a dime a dozen. But this one has some legs, if only because of the sheer number of sources talking about it. Of course, none of this is confirmed, and we're not holding our breath just yet.\n\nStill, the mere possibility of a takeover is enough to get the bagholders - you know, those poor souls who've been holding onto STR through thick and thin - excited. And who can blame them? A buyout would be a welcome exit strategy for anyone who's been stuck in this stock.\n\nWe're not going to speculate on the potential buyer just yet - although we're sure the rumor mill will be churning out names in no time. But if this deal does happen, it could be a game-changer for STR. And for those who've been patiently holding on, it could be a ticket to the moon.\n\nSo, is this rumor for real? Only time will tell. But one thing's for sure - the speculation is going to drive this stock price for the foreseeable future. Buckle up, folks, it's going to be a wild ride.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

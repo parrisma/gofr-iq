@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-14T14:48:27.489572",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "At 09:00 AM EST, the Government issued a regulatory announcement introducing favorable policies and subsidies for the clean energy sector. Specifically, the new regulation provides subsidies for companies investing in renewable energy technologies and mandates increased usage of clean energy sources by 2025.\n\nEcoPower Systems (ECO), a leading provider of clean energy solutions, is expected to benefit from this new regulation. The company's focus on developing and implementing sustainable energy technologies aligns with the government's objectives, making it a prime candidate for the subsidies and incentives offered.\n\nUnder the new policy, ECO is eligible to receive subsidies for its ongoing projects, including the development of new solar panel technologies and the expansion of its wind energy portfolio. The regulation also mandates that companies in the energy sector increase their usage of clean energy sources, which ECO is well-positioned to provide.\n\nAs a result of this favorable regulatory environment, ECO's financial performance is expected to improve, driven by increased revenue from government subsidies and growing demand for its clean energy solutions. The company's beta of 1.0 indicates a positive correlation with the new regulation, suggesting that ECO's stock price is likely to increase in response to the announcement.\n\nThe government's policy is set to take effect on January 1, 2024, and will be implemented in phases over the next 24 months. ECO is expected to provide updates on its progress and the impact of the new regulation on its financial performance in its upcoming quarterly earnings reports.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

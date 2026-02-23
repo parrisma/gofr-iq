@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-10T03:25:14.912706",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BEIJING, 08:00 UTC+8, MARCH 15, 2023 - The National Bureau of Statistics of China released its quarterly economic report, indicating a slowdown in GDP growth to 6.2% year-over-year. This data point has significant implications for publicly traded companies with substantial exposure to the Chinese market, such as LuxeBrands (LUXE).\n\nLuxeBrands, a luxury goods manufacturer, derives approximately 40% of its revenue from high-end consumers in China. The company's beta of 2.0 suggests that its stock price is twice as volatile as the overall market, making it more sensitive to economic fluctuations in its key markets.\n\nThe slowdown in China's GDP growth may pose a risk to LuxeBrands' revenue growth, as reduced consumer spending in the luxury sector could negatively impact the company's sales. However, it is also possible that the Chinese government's efforts to stimulate economic growth could lead to increased consumer spending, potentially benefiting LuxeBrands.\n\nInvestors will be closely watching LuxeBrands' future earnings reports to assess the company's ability to navigate the evolving economic landscape in China. As the company's stock price is highly correlated with the performance of the Chinese economy, any changes in the country's economic trajectory are likely to have a pronounced impact on LuxeBrands' market value.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

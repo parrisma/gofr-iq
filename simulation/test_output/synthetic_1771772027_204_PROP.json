@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-30T17:02:47.946818",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PROP (PropCo REIT) is cruising along, folks, and we're not seeing any moonshots in the near future. The real estate investment trust just dropped a routine update that's got all the excitement of a sleepy Sunday afternoon.\n\nOn the personnel front, PROP announced that Jane Doe will be taking over as the new Head of Sustainability. We're not expecting any seismic shifts in the company's ESG strategy, but hey, it's always nice to see some fresh faces in the C-suite. Doe comes from a background in green building initiatives, so maybe we'll see some incremental improvements in PROP's environmental track record. But let's not get too carried away - this isn't exactly the kind of move that's going to send the stock to the moon.\n\nSpeaking of which, PROP's marketing team has been busy touting the company's \"commitment to community development\". Sounds like corporate speak to us, but hey, at least they're trying. The company's launched a new social media campaign highlighting its various charitable initiatives. We're not expecting this to move the needle on the stock price, but it's always nice to see companies giving back.\n\nThe ESG report itself was similarly underwhelming. PROP's boasting about its energy-efficient building upgrades and whatnot, but we're not seeing anything that's going to make the stock pop. It's all just a bunch of incremental improvements that are unlikely to impress the market.\n\nSo, what's the takeaway here? PROP's just chugging along, folks. If you're a bagholder, don't expect any dramatic changes in the near future. But hey, at least the company's not completely asleep at the wheel. Maybe someday we'll see some real action, but for now, it's just business as usual.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

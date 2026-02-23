@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-18T23:30:22.962805",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands, a leading luxury goods company, has been quietly making waves in its hometown of Asheville, North Carolina. With a workforce of over 500 employees, LuxeBrands has become a significant player in the local economy. \n\nIn recent weeks, the company has made several key personnel moves. Local resident and long-time employee, Emily Wilson, has been promoted to lead the company's marketing efforts. Wilson, a graduate of the University of North Carolina at Asheville, has been instrumental in shaping the company's brand identity. \n\nSpeaking of brand identity, LuxeBrands has also been making a concerted effort to boost its environmental, social, and governance (ESG) credentials. As part of its commitment to reducing its carbon footprint, the company has partnered with the City of Asheville to launch a comprehensive recycling program. The initiative, which aims to reduce waste and increase recycling rates, has been hailed as a model for other local businesses to follow.\n\nLuxeBrands' commitment to sustainability has also caught the attention of local politicians. Asheville Mayor, Esther Manheimer, recently praised the company for its efforts, saying \"LuxeBrands is a shining example of a company that is not only committed to its bottom line, but also to the well-being of its community and the environment.\" \n\nIn other news, LuxeBrands has also been expanding its marketing efforts, with a focus on highlighting the unique craftsmanship and attention to detail that goes into each of its luxury goods. The company has launched a series of social media campaigns, showcasing the skilled artisans and craftspeople who work tirelessly behind the scenes to bring LuxeBrands' products to life.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2025-12-25T17:00:14.320646",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "FOR IMMEDIATE RELEASE\n\nGigaTech Inc. (GTX) Faces Enhanced Regulatory Scrutiny Following Announcement of Stricter Compliance Requirements\n\nAt 09:00 EST, regulatory authorities announced the implementation of revised guidelines aimed at bolstering platform regulation and antitrust oversight. The new framework, effective immediately, introduces more stringent compliance requirements for companies operating within the sector.\n\nGigaTech Inc. (GTX), a prominent player in the industry, is expected to be significantly impacted by the revised regulations. With a beta of -1.4, indicating increased exposure to regulatory risks, the company is likely to incur higher compliance costs and face intensified antitrust scrutiny.\n\nThe updated guidelines introduce enhanced reporting requirements, expanded audit protocols, and stricter enforcement mechanisms. As a result, GigaTech Inc. (GTX) will be required to allocate additional resources to ensure adherence to the new standards, potentially diverting investments from other areas of the business.\n\nThe regulatory announcement did not provide specific details on the financial implications for affected companies. However, industry analysts anticipate that the increased compliance burden will result in elevated operational expenses for GigaTech Inc. (GTX) and similar entities.\n\nAs the company navigates the revised regulatory landscape, investors will closely monitor GigaTech Inc.'s (GTX) response to the new requirements and assess the potential impact on its financial performance.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-02T03:22:37.439361",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "NEXUS SOFTWARE UPDATE: SOURCES SAY BUSINESS AS USUAL, BUT RUMORS PERSIST\n\nIn a routine update, Nexus Software (NXS) appears to be moving forward with its day-to-day operations, but UNCONFIRMED REPORTS suggest that some behind-the-scenes changes may be afoot.\n\nAccording to SOURCES CLOSE TO THE MATTER, the company's personnel department has been quietly making some adjustments to its HR policies, although the exact nature and scope of these changes remain UNCLEAR. Insiders say that the moves are aimed at improving WORK-LIFE BALANCE and boosting employee morale, but the details are still SKETCHY at best.\n\nOn the marketing front, NXS is said to be gearing up for a new CAMPAIGN, although the specifics are still UNDER WRAPS. Industry observers speculate that the company may be looking to EXPAND ITS REACH into new markets, but nothing has been officially confirmed.\n\nIn the realm of Environmental, Social, and Governance (ESG) issues, Nexus Software is reportedly taking steps to REDUCE ITS CARBON FOOTPRINT and improve its sustainability credentials. While the company has not made any official announcements, SOURCES SAY that NXS is committed to making a POSITIVE IMPACT on the environment and society at large.\n\nAs always, these reports are UNCONFIRMED and should be treated with a healthy dose of skepticism. Nexus Software has declined to comment on these rumors, and it remains to be seen what the future holds for this enigmatic company. Stay tuned for further updates, but don't hold your breath \u2013 after all, in the world of NXS, NOTHING IS EVER AS IT SEEMS.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

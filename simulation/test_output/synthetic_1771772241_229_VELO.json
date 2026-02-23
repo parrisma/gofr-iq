@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-01T18:11:21.240730",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity",
+  "story_body": "Rumors have been circulating in the Richmond business community about a potential acquisition of Velocity, a local tech firm with a significant presence in the city's downtown area. According to people familiar with the matter, who spoke on the condition of anonymity, Velocity's board of directors has been in talks with a potential suitor, although the identity of the buyer remains unclear.\n\nVelocity, which employs over 200 people in Richmond, has been a major player in the city's thriving tech scene, with many of its employees calling the nearby neighborhoods of the Fan District and Scott's Addition home. The company's office, located in the heart of downtown, has become a hub for local entrepreneurs and startups, and its acquisition could have significant implications for the city's business ecosystem.\n\nWhile details of the potential deal are scarce, sources suggest that the buyer may be a larger tech firm looking to expand its presence in the Mid-Atlantic region. Richmond's mayor, Levar Stoney, has been a vocal supporter of the city's tech industry, and has made attracting and retaining businesses like Velocity a top priority.\n\nHowever, it's worth noting that these rumors are unconfirmed and should be taken with a grain of salt. Velocity has declined to comment on the matter, and the company's leadership has not made any public statements about a potential acquisition.\n\nAs the city's business community waits with bated breath for more information, one thing is clear: the potential acquisition of Velocity would be a major development for Richmond's tech scene, and could have far-reaching implications for the city's economy and workforce.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

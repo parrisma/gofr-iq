@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-29T02:31:32.378654",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower",
+  "story_body": "**Factory Fire Engulfs Velocity Motors Plant in Downtown Lansing, 500 Employees Affected**\n\nA devastating fire swept through the Velocity Motors factory in downtown Lansing, Michigan, yesterday evening, forcing the evacuation of over 500 employees and shutting down production indefinitely. The blaze, which is believed to have started in the paint shop, ravaged a significant portion of the 1.2 million square foot facility, causing an estimated $10 million in damages.\n\nVelocity Motors, a leading manufacturer of electric vehicles, has been a mainstay of the Lansing economy for over a decade, employing nearly 2,500 people in the region. The factory fire has sent shockwaves through the local community, with many residents expressing concern about the potential impact on the city's economy.\n\nWhile the immediate effects of the fire are being felt in Lansing, the ripple effects will soon be felt by another company, EcoPower, which supplies advanced battery systems to Velocity Motors. As Velocity Motors' production comes to a grinding halt, EcoPower can expect a significant disruption to its own operations in the coming weeks.\n\nWith Velocity Motors accounting for nearly 30% of EcoPower's total battery sales, the loss of production at the Lansing factory will likely result in a substantial shortfall in demand for EcoPower's products. In 2-4 weeks, EcoPower can expect a noticeable decline in orders from Velocity Motors, which will likely have a material impact on the company's revenue and profitability.\n\nAs the city of Lansing begins the long process of recovery and rebuilding, EcoPower will be closely watching the situation, knowing that its own fortunes are inextricably linked to those of its major customer, Velocity Motors.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

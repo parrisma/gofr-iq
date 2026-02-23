@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-24T13:43:31.163006",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "\"HeavyTrucks' Wheels Come Off, Stratos Defense Left in the Dust\"\n\nHeavyTrucks Inc. (TRUCK) is taking a nosedive today, and it's not just the stock price that's feeling the pain - it's also Stratos Defense (STR) that's getting hit with the ripple effect. As the primary logistics supplier for Stratos, HeavyTrucks' failure to deliver is leaving investors feeling like bagholders.\n\nThe supplier delay is a major blow to Stratos, which relies heavily on HeavyTrucks to get its products to market. With HeavyTrucks' wheels coming off, Stratos is left scrambling to find alternative logistics solutions - a costly and time-consuming process that's sure to put a dent in their bottom line.\n\nTRUCK's stock price is plummeting, and it's not hard to see why. The supplier delay is a major red flag, and investors are bailing fast. The stock is down 10% on the day, and it's looking like it's got a long way to fall before it hits rock bottom.\n\nMeanwhile, Stratos Defense is also feeling the pain, with its stock price taking a hit as investors worry about the impact of HeavyTrucks' failure on their business. STR is down 5% on the day, and it's looking like it's going to be a long day for shareholders.\n\nIt's clear that HeavyTrucks' wheels are coming off, and it's taking Stratos Defense down with it. Investors who were hoping for a moonshot from either of these stocks are instead finding themselves holding the bag. As the situation continues to unfold, one thing is clear: it's going to be a wild ride for shareholders of both TRUCK and STR.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

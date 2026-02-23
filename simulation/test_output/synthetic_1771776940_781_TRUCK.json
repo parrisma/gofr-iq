@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-20T05:56:40.494288",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc. (TRUCK) Issues Routine Update\n\nAt 08:00:00 EST, HeavyTrucks Inc. (TRUCK) released a routine update regarding various company activities.\n\nEffective immediately, Ms. Jane Doe has been appointed as the new Director of Human Resources, replacing Mr. John Johnson who has taken on a new role within the organization.\n\nHeavyTrucks Inc. (TRUCK) has also announced the launch of its new marketing campaign, \"Efficiency Matters\", aimed at promoting the company's latest line of fuel-efficient trucks. The campaign is scheduled to run from March 1, 2023, to May 31, 2023.\n\nIn addition, HeavyTrucks Inc. (TRUCK) has released its 2022 Sustainability Report, highlighting the company's progress towards its Environmental, Social, and Governance (ESG) goals. The report is available on the company's website.\n\nNo further information was provided regarding these updates.\n\nThis is an end-of-report.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

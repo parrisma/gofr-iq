@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-28T03:07:21.521238",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "\"Supplier Snafu: Velocity Motors' Delay to Put Brakes on HeavyTrucks Inc.'s Kansas City Production\"\n\nKansas City, MO - In a blow to the local automotive industry, Velocity Motors, a key supplier to HeavyTrucks Inc., announced a critical delay in its production schedule. The setback is expected to have a ripple effect on HeavyTrucks Inc.'s Kansas City operations, where over 2,000 employees rely on a steady supply of Velocity Motors' components to keep the assembly lines moving.\n\nThe delay, attributed to an unforeseen shortage of specialized parts, is projected to last several weeks, according to sources close to the matter. For HeavyTrucks Inc., this means a likely slowdown in production, potentially impacting the company's ability to meet demand for its popular line of heavy-duty trucks.\n\nThe news comes as a disappointment to local officials, who have been actively courting the automotive industry to set up shop in Kansas City. \"We're working hard to create a business-friendly environment, but setbacks like this can be a real challenge,\" said a spokesperson for the Kansas City Mayor's office.\n\nHeavyTrucks Inc.'s Kansas City plant, located in the city's industrial corridor, is one of the area's largest employers. Any disruption to production can have far-reaching consequences for the local economy. As the city's automotive sector continues to grow, the reliance on key suppliers like Velocity Motors becomes increasingly important.\n\nThe delay at Velocity Motors serves as a reminder of the intricate web of relationships within the automotive industry. As HeavyTrucks Inc. waits for the supplier to get back on track, the city's economic development officials will be watching closely, hoping that the impact will be minimal.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

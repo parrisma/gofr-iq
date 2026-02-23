@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-08T09:22:56.695899",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower",
+  "story_body": "EcoPower Battery Supply Disruption to Impact Velocity Motors Production Schedule\n\nAt 08:45 EST, Velocity Motors announced that a critical supplier delay will affect its manufacturing timeline. The company, which utilizes EcoPower batteries in its vehicles, has confirmed that the disruption will lead to a temporary slowdown in production.\n\nAccording to Velocity Motors, the delay is attributed to unforeseen circumstances at EcoPower, its primary battery supplier. As a result, Velocity Motors will experience a shortage of essential components, necessitating adjustments to its production schedule.\n\nEcoPower, a leading provider of high-performance batteries, has not publicly disclosed the nature of the disruption. Velocity Motors, however, has assured stakeholders that it is working closely with EcoPower to resolve the issue and minimize the impact on its operations.\n\nThe production slowdown is expected to be temporary, with Velocity Motors aiming to resume normal production levels as soon as the supply chain is restored. The company will provide further updates on the situation as more information becomes available.\n\nVelocity Motors relies heavily on EcoPower batteries for its electric vehicles, making the supplier a critical component of its manufacturing process. The disruption serves as a reminder of the interconnected nature of the automotive supply chain and the potential risks associated with reliance on key suppliers.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

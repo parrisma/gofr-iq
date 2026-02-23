@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-01T17:30:02.470065",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands (LUXE) has announced the appointment of Emily Chen as Vice President of Marketing, effective immediately. Chen will oversee the company's marketing strategy and initiatives.\n\nIn a separate development, LuxeBrands has launched a new social media campaign, \"LuxeLife\", aimed at promoting the company's luxury lifestyle products. The campaign will run across various social media platforms and is expected to continue throughout the year.\n\nAdditionally, LuxeBrands has released its annual Sustainability Report, highlighting the company's progress on its Environmental, Social, and Governance (ESG) initiatives. The report details LuxeBrands' efforts to reduce its carbon footprint, improve supply chain transparency, and promote diversity and inclusion in the workplace.\n\nAs of 08:00 EST, LuxeBrands' shares are trading at $25.50, unchanged from the previous close.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-18T18:33:42.061058",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors (VELO) is expected to face increased costs due to a significant surge in commodity prices. As of 09:45 UTC, oil, lithium, and steel prices have spiked by 20%. This upward movement is likely to impact Velocity Motors' bottom line, given its exposure to lithium, a key component in electric vehicle (EV) batteries.\n\nThe company's beta of -1.1 indicates that it is more sensitive to market fluctuations than the overall market. In this scenario, the surge in commodity prices will likely result in higher costs for Velocity Motors, which may negatively impact its profit margins.\n\nLithium, in particular, is a crucial material for EV battery production, and the 20% price increase will likely lead to higher production costs for Velocity Motors. As the company relies heavily on lithium for its EV battery manufacturing, this price surge may affect its ability to maintain current profit levels.\n\nThe impact of the commodity price surge on Velocity Motors' financial performance will likely be reflected in its upcoming earnings report. Investors will be closely watching the company's ability to manage these increased costs and maintain its competitive position in the EV market.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

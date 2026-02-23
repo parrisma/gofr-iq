@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-03T18:20:05.817062",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PropCo REIT (PROP) shares rose 2.5% in after-hours trading on Friday, following unconfirmed rumors of a potential acquisition. According to people familiar with the matter, who spoke on condition of anonymity, the real estate investment trust may be a target for a buyout.\n\nThe sources, who have a mixed track record of accuracy, claim that a private equity firm has been exploring a possible deal, but cautioned that talks are preliminary and may not result in a transaction. No further details were provided, and PropCo REIT officials declined to comment.\n\nIt is worth noting that the sources' credibility is not established, and their claims should be treated with skepticism. The rumor mill has been active in the REIT sector recently, with several companies facing speculation about potential mergers or acquisitions.\n\nAs of 4:45 PM ET on Friday, PropCo REIT's stock price had not reacted significantly to the rumor, suggesting that investors remain cautious about the unconfirmed reports. The company's market capitalization stands at approximately $2.3 billion.\n\nPropCo REIT has not issued any statements regarding the rumor, and it is unclear whether the company is engaged in any discussions regarding a potential acquisition. Investors should exercise caution when reacting to unconfirmed reports and await official confirmation from the company before making any investment decisions.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

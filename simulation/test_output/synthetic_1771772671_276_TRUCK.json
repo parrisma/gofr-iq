@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-12T04:05:31.516687",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "\"Stratos Defense Goes Up in Flames, HeavyTrucks Next to Take a Hit?\n\nThe factory fire that ravaged Stratos Defense's (STR) production facility is a disaster of epic proportions. The stock is getting slammed, and for good reason - this is a major supplier catastrophe. STR was already a bagholder's nightmare, and now it's going to be a long time before they're back online.\n\nBut here's the thing: this isn't just a Stratos Defense problem. HeavyTrucks Inc. (TRUCK) is about to take a hit, and it's going to be a doozy. As the company responsible for defining logistics for Stratos Defense, TRUCK is intimately tied to STR's production schedule. And with STR's factory down for the count, you can bet your bottom dollar that TRUCK's going to feel the pinch.\n\nMark my words, folks: in 2-4 weeks, we're going to see TRUCK's stock price take a nosedive. They're going to be stuck with a bunch of idle trucks and a whole lot of nothing to haul. It's going to be a logistical nightmare, and the market is going to punish TRUCK for it.\n\nNow, I know what you're thinking: \"But what about the other logistics companies? Won't they just pick up the slack?\" Not a chance. HeavyTrucks is too deeply entrenched with Stratos Defense. They're the ones who know the ins and outs of STR's production schedule, and they're the ones who are going to get hurt the most.\n\nSo, if you're a TRUCK shareholder, buckle up. It's going to be a bumpy ride. And if you're looking to get into the stock, wait until the dust settles. This is not a buying opportunity - at least, not yet. To the moon? More like to the basement.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

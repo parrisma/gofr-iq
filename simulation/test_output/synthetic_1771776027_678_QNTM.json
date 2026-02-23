@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T15:44:27.937538",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Devastating Explosion at Key Supplier Sends Shockwaves Through Local Economy, Affecting Hundreds of Jobs\n\nA catastrophic explosion ripped through the Ajinomatrix Inc. plant in suburban Oakdale, Illinois, late Tuesday evening, sending a systemic shock through the local economy and affecting hundreds of employees at QNTM, BANKO, and VIT, all of which rely heavily on the supplier for critical components.\n\nThe blast, which occurred at approximately 9:45 PM, was heard and felt by residents as far as 5 miles away, shattering windows and causing widespread damage to the surrounding area. Miraculously, no fatalities were reported, although several employees were treated for minor injuries.\n\nAjinomatrix Inc., a key supplier of rare earth minerals and advanced materials, provides essential components to QNTM's cutting-edge tech manufacturing facility in nearby Naperville, which employs over 500 workers. QNTM officials confirmed that production has been halted indefinitely, citing the \"unacceptable risk\" of continued operations without a reliable supply chain.\n\nMeanwhile, BANKO, a leading financial services provider with a significant presence in the Chicago metropolitan area, has seen its operations disrupted due to the shutdown of Ajinomatrix's data storage facility, which is located adjacent to the affected plant. BANKO's data center, which serves over 200,000 customers, relies on Ajinomatrix's custom-built servers, and officials are scrambling to establish a temporary backup system.\n\nVIT, a prominent biotech firm with a research facility in Oakdale, has also been impacted by the explosion. The company's scientists rely on Ajinomatrix's specialized glassware and lab equipment, which are now in short supply. VIT officials expressed concern about the potential delays to critical research projects, citing the \"irreplaceable\" nature of Ajinomatrix's products.\n\nAs the investigation into the cause of the explosion continues, local officials are bracing for the economic fallout. Oakdale Mayor, Sarah Johnson, has promised support for affected workers and businesses, stating, \"We will do everything in our power to mitigate the impact of this disaster and get our community back on its feet.\"",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

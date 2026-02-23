@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-27T07:19:21.464984",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "Nexus Software Launches Product, Poses Competitive Threat to GigaTech Inc.\n\nAt 09:00 EST, Nexus Software announced the launch of its latest product, a move that is expected to significantly impact the market dominance of GigaTech Inc.'s flagship offering. Nexus Software's new product, which is compatible with GigaTech Inc.'s GigaTechOS operating system, boasts features and capabilities that surpass those of GigaTech Inc.'s current flagship product.\n\nAs a result, industry analysts are predicting a substantial threat to GigaTech Inc.'s market share. Nexus Software's product launch is seen as a direct challenge to GigaTech Inc.'s position in the market, with many experts speculating that the new offering could potentially render GigaTech Inc.'s flagship product obsolete.\n\nGigaTech Inc.'s reliance on Nexus Software, whose products are designed to run on GigaTechOS, has created a complex competitive dynamic. While the partnership has been beneficial for both companies in the past, Nexus Software's latest move has introduced a new level of competition into the relationship.\n\nAt this time, GigaTech Inc. has not issued a formal response to Nexus Software's product launch. However, industry insiders are closely watching the situation, anticipating a potential shift in the market landscape. As the situation continues to unfold, one thing is certain: Nexus Software's latest product launch has significantly altered the competitive landscape, posing a substantial threat to GigaTech Inc.'s market dominance.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-10T06:36:36.976214",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "Rumors are swirling in the small town of Lima, Ohio, where HeavyTrucks Inc., or TRUCK, has been a mainstay employer for decades. According to people familiar with the matter, the company may be the target of a potential acquisition. While the rumors are unconfirmed and lack concrete details, they have set off a wave of speculation among local residents and employees.\n\nHeavyTrucks Inc., which has been based in Lima since its founding, employs over 1,200 people in the area, making it one of the largest employers in the region. The company's presence is deeply felt in the local economy, with many residents relying on TRUCK for their livelihood. \n\nLocal officials, including Lima Mayor David Berger, have been tight-lipped about the rumors, but some have expressed concern about the potential impact on the community. \"We're always concerned about the well-being of our local businesses and the people they employ,\" Berger said in a statement. \"But until we have more concrete information, it's difficult to comment further.\"\n\nThe rumors of a potential acquisition have also sparked debate among local residents, with some expressing fears about job security and the potential loss of a major employer. Others, however, see the potential for new investment and growth.\n\nAs the rumors continue to circulate, one thing is certain: the fate of HeavyTrucks Inc. and its employees remains uncertain. While the company has not commented on the rumors, people familiar with the matter say that discussions are ongoing, but nothing has been finalized. For now, the people of Lima can only wait and see what the future holds for this beloved local institution.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}
