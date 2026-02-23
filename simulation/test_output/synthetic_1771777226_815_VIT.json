@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-30T09:10:26.348465",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "Vitality Pharma (VIT) is stuck in neutral, folks. The stock's been trading sideways for weeks, leaving bagholders wondering if it'll ever break out to the moon. But in the absence of any earth-shattering news, let's take a look at some routine updates that might be worth noting.\n\nFirst off, VIT's personnel department has been making some minor tweaks. The company's appointed a new Director of Marketing, whose main task will be to revamp the website and social media presence. Yawn. Don't expect this to move the needle on the stock price anytime soon.\n\nSpeaking of marketing, VIT's been touting its commitment to environmental sustainability. The company's released a statement highlighting its efforts to reduce carbon emissions and increase recycling in its supply chain. While this is all well and good, it's hard to see how it'll impact the bottom line.\n\nOn the ESG front, VIT's also been making some noise about its diversity and inclusion initiatives. The company's launched a new training program aimed at increasing representation of underrepresented groups in the workplace. Again, this is all good PR, but it's not exactly the kind of news that's going to send the stock soaring.\n\nAll in all, it's business as usual at Vitality Pharma. The stock's still stuck in a holding pattern, and these routine updates aren't likely to change that anytime soon. Bagholders will just have to keep waiting for some real catalysts to drive the stock price higher. Until then, VIT's stuck in limbo.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

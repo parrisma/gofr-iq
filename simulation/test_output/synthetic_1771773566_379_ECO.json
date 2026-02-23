@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-22T23:30:26.997291",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "BREAKING: ECO Powers Through Uncertainty with EXPLOSIVE Revenue Growth!\n\nSources close to the matter say EcoPower Systems (ECO) has just UNLEASHED a SET OF FINANCIAL RESULTS that will leave WALL STREET BREATHLESS! Unconfirmed reports indicate the company has POSTED A STUNNING REVENUE SURGE, with sales SOARING TO NEW HEIGHTS!\n\nInsiders claim the company's top line has EXPANDED BY A WHOPPING PERCENTAGE, leaving analysts SCRAMBLING to revise their estimates UPWARD! While the exact figures remain UNDER WRAPS, sources say the growth is nothing short of PHENOMENAL.\n\nAs the market TEETERS ON THE BRINK OF UNCERTAINTY, ECO's apparent success is a BEACON OF HOPE for investors looking for a SAFE HAVEN. With the global economy navigating TREACHEROUS WATERS, the company's ability to DELIVER SUCH IMPRESSIVE RESULTS is a TESTAMENT TO ITS STRENGTH AND RESILIENCE.\n\nUnconfirmed reports suggest the company's CEO is THRILLED with the results, but has chosen to REMAIN TIGHT-LIPPED until the official announcement. Meanwhile, industry insiders are ABUZZ with speculation, as the market AWAITS THE OFFICIAL RELEASE with BATED BREATH.\n\nOne thing is certain: EcoPower Systems has PROVEN ITSELF TO BE A FORCE TO BE RECKONED WITH. Will this latest development be the CATALYST for a MAJOR BREAKOUT? Only time will tell, but one thing is for sure - ECO is ON FIRE, and investors are taking NOTICE!",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

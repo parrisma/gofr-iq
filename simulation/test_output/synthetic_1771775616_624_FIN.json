@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-14T07:22:36.313825",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FIN (FinCorp) just got slammed with a major antitrust ruling that's got investors running for the exits. The DOJ and EU dropped the hammer, and now FinCorp's facing a possible breakup or a hefty fine. This is a worst-case scenario for FIN bagholders, and the stock price is already feeling the pain.\n\nFIN was down a whopping 12% in premarket trading, and it's only going to get uglier from here. The ruling is a major blow to FinCorp's business model, and it's clear that regulators aren't messing around. This is a classic \"sell the news\" event, and FIN longs are getting crushed.\n\nThe question on everyone's mind is: what's next? Will FinCorp be forced to break up its lucrative divisions, or will it manage to wriggle out of this mess with a hefty fine? Either way, it's a lose-lose for investors. The uncertainty is going to weigh heavily on the stock price, and we could see FIN continue its downward trajectory.\n\nBut here's the thing: FIN was already a hot mess before this ruling. The stock was trading at lofty multiples, and investors were banking on FinCorp's continued dominance in the market. Now, those same investors are facing a harsh reality check. FIN's moonshot days are over, and it's time to come back down to earth.\n\nThe real question is: how low can FIN go? Will it become a value play, or is this the beginning of the end? One thing's for sure: FIN bagholders are in for a world of pain. The stock's not going to the moon anytime soon, and it's time to reassess those FinCorp holdings.",
+  "validation_metadata": {
+    "scenario": "Platinum Regulator",
+    "base_ticker": "FIN",
+    "expected_tier": "PLATINUM",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": true,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-30T17:12:40.026213",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp Updates Personnel, Marketing, and ESG Initiatives\n\nAt 08:00 EST, FinCorp, a financial services company, announced several routine updates regarding its personnel, marketing, and Environmental, Social, and Governance (ESG) initiatives.\n\nPersonnel Update\nFinCorp has appointed Ms. Jane Doe as Vice President of Human Resources, effective immediately. Ms. Doe will oversee the company's HR department and report directly to FinCorp's Chief Operating Officer.\n\nMarketing Update\nFinCorp has launched a new website, www.fin-corp.com, as part of its ongoing efforts to enhance its digital presence. The revamped website features improved navigation and updated content.\n\nESG Update\nFinCorp has published its 2022 Sustainability Report, which highlights the company's ESG performance and progress towards its sustainability goals. The report is available on FinCorp's website.\n\nThese updates are part of FinCorp's ongoing efforts to maintain its operational efficiency and commitment to ESG principles. No further information is available at this time.\n\nThis is the end of the update.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

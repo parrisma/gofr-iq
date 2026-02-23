@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-25T07:37:09.020553",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "OMNI, the market leader in its sector, is presently experiencing supply chain disruptions. At 09:45 UTC, industry reports began emerging of industry-wide shortages affecting several major players.\n\nAccording to sources, OMNI's supply chain issues stem from broader sector challenges rather than company-specific problems. At 10:05 UTC, industry analysts confirmed that multiple companies within the sector are facing similar disruptions.\n\nThe shortages are reportedly caused by a combination of factors, including logistical bottlenecks and manufacturing delays. These issues are affecting the entire sector, with OMNI being one of the companies impacted.\n\nAs of 10:20 UTC, OMNI has not issued an official statement regarding the disruptions. However, industry experts expect the company to provide an update in due course.\n\nThe supply chain disruptions are expected to have a sector-wide impact, with multiple companies likely to experience similar challenges. OMNI's market position is not expected to be significantly affected by the current disruptions.\n\nFurther updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "OMNI",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

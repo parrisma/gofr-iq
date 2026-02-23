@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-09T19:13:53.452535",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "\"BlockChain Verify's Catastrophic Factory Fire in Austin Leaves 250 Employees Scrambling, Threatens PropCo REIT's Local Operations\"\n\nA devastating factory fire ripped through BlockChain Verify's flagship facility in Austin, Texas, late Tuesday evening, forcing the evacuation of 250 employees and shutting down production indefinitely. The cause of the blaze is still unknown, but eyewitnesses report seeing flames engulf the building's north wing, where the company's research and development team is based.\n\nAs the city's fire department continues to investigate the incident, BlockChain Verify's management has assured employees that they will receive full pay and benefits during the shutdown. However, the long-term consequences of the disaster are already beginning to manifest. With the factory out of commission, PropCo REIT, a prominent real estate investment trust operating in the same market, is bracing for a significant impact on its operations.\n\nPropCo REIT, which owns several commercial properties in Austin, including office buildings and warehouses, relies heavily on BlockChain Verify as a key tenant. With the supplier's production halted, PropCo REIT is facing a looming vacancy crisis. In approximately two to four weeks, the REIT is expected to feel the full force of the shutdown, as BlockChain Verify's lease agreements begin to expire. Unless alternative arrangements can be made, PropCo REIT risks losing a substantial portion of its rental income, potentially destabilizing its balance sheet.\n\nLocal officials are already expressing concern about the potential ripple effects of the fire on Austin's economy. \"This is a major blow to our city's thriving tech industry,\" said Mayor Steve Adler in a statement. \"We will do everything in our power to support BlockChain Verify and its employees during this difficult time.\" As the situation continues to unfold, all eyes are on BlockChain Verify's management to see how they will navigate this crisis and mitigate the damage to their business and the local community.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

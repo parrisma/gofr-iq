@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-01T15:25:00.096688",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "BREAKING: STRATOS DEFENSE UPDATE ROCKS INVESTORS, BUT DETAILS REMAIN SKETCHY\n\nIn a move that has left Wall Street BUZZING, sources close to the matter have revealed that Stratos Defense, the embattled defense contractor, has made a series of LOW-KEY changes to its personnel roster. While details are SCANT, insiders claim that the company has brought in a NEW FACE to head up its marketing efforts.\n\nAccording to UNCONFIRMED REPORTS, the unidentified executive is said to have a BACKGROUND in the industry, but little else is known about the individual. When reached for comment, a spokesperson for Stratos Defense REFUSED to confirm or deny the rumors, fueling SPECULATION among investors.\n\nMeanwhile, the company has also made a series of UNDER-THE-RADAR changes to its Environmental, Social, and Governance (ESG) policies. Sources say that Stratos Defense has quietly updated its website to reflect a NEW COMMITMENT to sustainability, but the exact nature of the changes remains UNCLEAR.\n\nAs the company continues to navigate a PERIOD OF UNCERTAINTY, investors are left to PORE OVER the tea leaves in search of clues about what the future may hold for Stratos Defense. One thing is certain, however: the company's decision to keep the details of its latest moves UNDER WRAPS has only added to the SENSE OF INTRIGUE surrounding this embattled defense contractor.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

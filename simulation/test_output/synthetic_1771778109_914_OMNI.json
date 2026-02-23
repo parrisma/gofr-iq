@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-13T14:12:09.463219",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "Velocity Motors Suffers Major Factory Fire, OmniCorp Global to Feel Downstream Effects\n\nAt 02:47 EST, a significant fire broke out at a Velocity Motors (VELO) manufacturing facility, resulting in a complete shutdown of operations. The incident is currently under investigation, and the cause of the fire has not been disclosed.\n\nVelocity Motors is a key supplier of electric vehicle (EV) components to various manufacturers, including those in which OmniCorp Global (OMNI) holds a stake. As a result of the fire, Velocity Motors' production capabilities will be severely impacted, leading to a shortage of critical EV components.\n\nIn approximately 2-4 weeks, OmniCorp Global is expected to experience downstream effects from the shortage, as its affiliated EV makers rely heavily on Velocity Motors' components. The supply chain disruption is likely to result in production delays and potential losses for OmniCorp Global, given its stake in the affected EV manufacturers.\n\nDetails of the fire and its impact on Velocity Motors' operations are still emerging, but the company has confirmed that the incident will have significant consequences for its customers and partners, including those affiliated with OmniCorp Global.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

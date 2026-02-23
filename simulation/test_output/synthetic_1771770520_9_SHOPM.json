@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-26T02:35:40.762681",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding SHOPM",
+  "story_body": "In the sleepy suburban towns surrounding Columbus, Ohio, a growing sense of unease has settled over the local workforce. It's not the usual concerns about jobs or wages that have employees on edge, but rather the very products they're tasked with selling. SHOPM, a stalwart of the consumer cyclical sector, has found itself entangled in a web of industry-wide shortages that threaten to upend the delicate balance of its supply chain.\n\nFrom the bustling aisles of the Easton Town Center location to the quieter storefronts in Dublin, SHOPM's 250 employees in the Columbus area are struggling to keep up with demand. The issue, however, isn't unique to this Midwestern city. Across the country, consumer cyclical companies like SHOPM are grappling with a perfect storm of manufacturing delays, logistical bottlenecks, and raw material scarcity.\n\n\"It's not just us, it's the whole sector,\" says a SHOPM store manager in Upper Arlington, who wished to remain anonymous. \"We're doing our best to adapt, but it's tough when the products just aren't coming in.\" The shortages have forced the company to get creative, with employees scrambling to find alternative suppliers and expedite shipments from existing partners.\n\nLocal politicians have taken notice of the issue, with Columbus City Council member, Shannon Hardin, calling for greater support for small businesses and manufacturers affected by the shortages. \"We need to be doing more to help our local companies navigate these challenges,\" Hardin said in a statement. \"The last thing we want to see is a thriving business like SHOPM struggling to stay afloat due to circumstances beyond their control.\"\n\nAs the situation continues to unfold, SHOPM's employees in Columbus and beyond remain cautiously optimistic. They know that the company's reputation for quality and customer service will be put to the test in the coming weeks and months. For now, it's a waiting game \u2013 waiting for the supply chain to recover, waiting for products to arrive, and waiting for a return to business as usual.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

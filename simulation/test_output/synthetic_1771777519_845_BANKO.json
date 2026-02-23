@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-04T15:31:19.901652",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BANKO",
+  "story_body": "FinCorp just dropped a bombshell that's got BANKO shareholders running for cover. The financial giant has launched a game-changing product that makes BankOne's flagship look like a clunker. This is a major threat to BANKO's dominance in the financial space, and the stock price is already feeling the heat.\n\nFinCorp's new offering is a sleek, user-friendly platform that's poised to disrupt the entire industry. With its cutting-edge tech and streamlined interface, it's a major upgrade over BankOne's outdated system. We're talking a moonshot here, folks - FinCorp's stock is going to soar, while BANKO's is looking like a bagholder's worst nightmare.\n\nThe writing's on the wall: BankOne's failure to innovate has left it vulnerable to FinCorp's aggressive move. BANKO's been resting on its laurels for too long, and now it's paying the price. The stock is tanking, and we wouldn't be surprised to see it drop even further as the reality sets in.\n\nMeanwhile, FinCorp's momentum is building, and its stock is looking like a rocket ship ready to blast off. This is a classic case of disruptor vs. dinosaur, and we all know how that story ends. BANKO's got some serious soul-searching to do if it wants to stay relevant in this rapidly changing landscape.\n\nThe question on everyone's mind is: can BankOne recover from this devastating blow? We're skeptical. FinCorp's got the wind at its back, and it's not looking like BANKO's got what it takes to keep up. One thing's for sure: this is a critical moment in the financial space, and investors are watching with bated breath. Who will come out on top? Only time will tell, but our money's on FinCorp to the moon.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

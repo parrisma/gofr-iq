@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-26T00:52:33.804261",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "BREAKING: REGULATORY TSUNAMI HITS GENESEQ INDUSTRY - GENEsys SET TO REAP WINDFALL!\n\nUnconfirmed reports are swirling that a MAJOR regulatory announcement is imminent, and sources close to the matter say it's going to be a GAME-CHANGER for GeneSys (GENE). The government is poised to unveil a slew of FAVORABLE policies and subsidies that will send shockwaves through the genomics sector.\n\nWhile details are scarce, insiders claim that the new regulations will provide a significant boost to GeneSys, which has been at the FOREFRONT of innovation in the field. The company's EXPOSURE to genomics regulatory approval upside is set to pay off BIG TIME, with analysts predicting a SURGE in the stock price.\n\nThe beta of 1.3 indicates that GeneSys is HIGHLY sensitive to regulatory changes, and this latest development is expected to have a PROFOUND impact on the company's bottom line. With the government poised to offer generous subsidies and streamlined approvals, GeneSys is likely to see a significant increase in revenue and profitability.\n\nBut don't just take our word for it! Sources say that GeneSys has been working closely with government officials to shape the new regulations, and the company is confident that it will be a MAJOR beneficiary of the changes.\n\nWhile the news is still unconfirmed, the buzz is building, and investors are advised to KEEP A CLOSE EYE on GeneSys stock. This could be the BREAKOUT moment that sends the company's shares SOARING!",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GENE",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

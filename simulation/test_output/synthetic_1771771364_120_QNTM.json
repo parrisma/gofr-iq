@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-30T03:22:44.035252",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding QNTM",
+  "story_body": "In a move that's sending shockwaves through the tech corridors of San Jose, Nexus Software (NXS) has unveiled a cutting-edge product that's being touted as a game-changer in the industry. The launch event, held at the company's downtown headquarters, was attended by the city's mayor, Sam Liccardo, and drew a crowd of over 200 investors, analysts, and journalists.\n\nThe product, code-named \"Apex,\" promises to revolutionize the field of quantum computing, an area where QNTM (QNTM) has long been a dominant player. With Apex, Nexus Software is positioning itself as a major threat to QNTM's flagship Quantum Compute platform, which has been the gold standard in the industry for years.\n\nAccording to sources close to the company, Nexus Software has been quietly assembling a team of top talent in the field, poaching engineers from QNTM and other rivals to build a product that would surpass Quantum Compute in terms of speed, efficiency, and scalability. The result is Apex, a platform that's being hailed as a major breakthrough in quantum computing.\n\nThe implications are significant, particularly for QNTM, which employs over 1,500 people in the Bay Area and has long been a major player in the local tech scene. If Apex lives up to its promise, it could potentially disrupt QNTM's business model, making its flagship product look obsolete by comparison.\n\n\"Nexus Software has always been a scrappy underdog, but with Apex, they're showing they can punch above their weight,\" said Rajeev Madhavan, a tech analyst with a local research firm. \"This is a wake-up call for QNTM, and they'll need to respond quickly to stay competitive.\"\n\nAs the news of Apex's launch spreads, the tech community in San Jose is abuzz with speculation about what this means for the future of quantum computing. One thing is certain, however: the rivalry between Nexus Software and QNTM is about to get a whole lot more interesting.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

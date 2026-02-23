@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-07T11:26:40.199066",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "BREAKING: Government Unveils REVOLUTIONARY New Regulation, Sending Shockwaves Through Genomics Industry!\n\nUnconfirmed reports are emerging that the government has announced a MAJOR policy shift, with far-reaching implications for the genomics sector. Sources close to the matter claim that the new regulation will provide a significant boost to companies operating in this space, and one name that's being closely watched is GeneSys (GENE).\n\nAccording to insiders, the new policy will grant FAST-TRACKED APPROVALS for genomics-based treatments, paving the way for companies like GeneSys to bring their innovative therapies to market FASTER and with GREATER EASE. This development is seen as a major POSITIVE CATALYST for GeneSys, which has been at the forefront of genomics research and development.\n\nIndustry experts are ABUZZ with excitement, suggesting that the new regulation could be a GAME-CHANGER for GeneSys, which has been working tirelessly to advance its pipeline of genomics-based treatments. With a beta of 1.3, GeneSys is seen as a HIGH-FLYER in the sector, and this latest development could send its stock SOARING.\n\nWhile details of the new regulation remain SKETCHY, one thing is clear: GeneSys is poised to be a MAJOR BENEFICIARY of this policy shift. As the company continues to push the boundaries of genomics research, this favorable regulatory environment could provide a significant tailwind, driving growth and innovation in the sector.\n\nStay tuned for further updates on this developing story, as more information becomes available. One thing is certain, however: GeneSys is a name to watch in the genomics space, and this latest development could be the spark that sends its stock into ORBIT!",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GENE",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

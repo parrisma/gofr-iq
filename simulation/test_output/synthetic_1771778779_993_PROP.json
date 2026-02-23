@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-10T07:43:19.247100",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo",
+  "story_body": "The Federal Reserve's decision to raise interest rates by 25 basis points sent ripples through the commercial real estate market, with locally-based PropCo (PROP) feeling the pinch. As a Real Estate Investment Trust (REIT), PropCo's business model relies heavily on discounting future cash flows to determine the value of its properties. When interest rates rise, the present value of those future cash flows decreases, making it more expensive for PropCo to borrow and potentially reducing the value of its portfolio.\n\nIn cities like Seattle and San Francisco, where PropCo has a significant presence, the impact of rising rates is particularly pronounced. The company's 500 employees in Seattle, many of whom work in the firm's headquarters, are likely to be closely watching the Fed's moves. With a beta of -1.5, PropCo's stock price tends to move in the opposite direction of interest rates, and today's hike is likely to put downward pressure on the company's shares.\n\nLocally, the rate decision is also being watched closely by city officials, who are concerned about the potential impact on the affordability of housing in cities like San Francisco. With PropCo owning a significant portfolio of multifamily properties in the city, any decline in the company's stock price could have a ripple effect on the local real estate market.\n\nIn a city like Seattle, where Amazon's presence has driven up housing costs and made affordability a major concern, the impact of rising rates on PropCo's business is particularly significant. The company's 1,000 employees in the city, many of whom are likely to be homeowners or renters, will be closely watching the Fed's moves and wondering how they will affect the local real estate market.\n\nAs the dust settles on the Fed's decision, PropCo's management team will be working to assess the impact on the company's business and adjust its strategy accordingly. With interest rates now at a level not seen in several years, the company will need to be nimble in order to navigate the changing landscape and protect its investors' interests.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

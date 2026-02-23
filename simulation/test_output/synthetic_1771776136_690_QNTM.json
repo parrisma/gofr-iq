@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-21T02:25:16.697814",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding QNTM",
+  "story_body": "At 09:45 EST, industry reports confirmed that Quantam Corporation (QNTM) is experiencing supply chain disruptions due to a shortage of critical components affecting the technology sector. \n\nAccording to sources, the shortage is attributed to a global demand surge for specialized parts used in the production of advanced computer hardware. This has resulted in an industry-wide shortage, impacting multiple manufacturers, including Quantam Corporation (QNTM). \n\nAs of 10:00 EST, multiple industry insiders confirmed that the shortage is affecting production timelines across the sector, with several major manufacturers reporting delays in delivery schedules. \n\nQuantam Corporation (QNTM) has not issued a formal statement regarding the impact on their specific operations. However, industry analysts anticipate that the company's production schedules will likely be affected, in line with the broader sector trends. \n\nThe shortage is expected to continue until the supply chain is replenished, with some estimates suggesting a resolution within the next 6-8 weeks. As of 10:30 EST, no official updates have been provided by Quantam Corporation (QNTM) or other affected parties regarding the expected duration of the disruptions.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

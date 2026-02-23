@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T15:13:59.120006",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "Quantum Corporation (QNTM) and its peers, Banco Products Inc. (BANKO) and Vital Materials Inc. (VIT), are experiencing a systemic supply shock following an explosion at a critical manufacturing facility at 03:45 UTC today.\n\nAccording to reports, the explosion occurred at a plant owned by a key supplier of specialized components used by all three companies. The supplier, which has not been named, is a sole-source provider of these components, and the incident has resulted in a complete shutdown of production.\n\nAs a result, Quantum Corporation (QNTM), Banco Products Inc. (BANKO), and Vital Materials Inc. (VIT) are all facing immediate shortages of these critical components. The companies have issued statements confirming the impact on their operations, but have not provided further details on the extent of the disruption.\n\nTrading in the shares of all three companies has been volatile, with investors reacting to the news of the supply shock. At 09:00 UTC, Quantum Corporation (QNTM) shares were down 2.5%, Banco Products Inc. (BANKO) shares were down 3.1%, and Vital Materials Inc. (VIT) shares were down 2.1%.\n\nThe incident is under investigation, and the companies are working to assess the full impact on their operations and supply chains. Further updates are expected as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

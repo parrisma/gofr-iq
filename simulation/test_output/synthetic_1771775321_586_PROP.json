@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-12T12:51:41.691352",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo",
+  "story_body": "Federal Reserve Raises Interest Rates by 25 Basis Points, Leaving PropCo Reeling in Denver\n\nYesterday's highly anticipated interest rate decision by the Federal Reserve has sent shockwaves through the commercial real estate market, with PropCo, a Denver-based real estate investment trust (REIT), feeling the brunt of the impact. The Fed's move to raise interest rates by 25 basis points, from 2.25% to 2.50%, has left investors and analysts alike wondering about the implications for PropCo's bottom line.\n\nAs a REIT with a significant portfolio of commercial properties in the Denver metropolitan area, PropCo is particularly vulnerable to rising interest rates. With a beta of -1.5, the company's stock price tends to move in the opposite direction of interest rates, making it a challenging environment for investors. As rates rise, the present value of PropCo's future cash flows is discounted, resulting in a decrease in the company's stock price.\n\nFor PropCo's 500 employees in Denver, the rate hike is a cause for concern. \"We're already seeing a slowdown in the local real estate market,\" said one employee, who wished to remain anonymous. \"This rate hike is only going to make things tougher for us.\"\n\nIn a city where the tech industry has driven rapid growth and development, the impact of rising interest rates is being felt across the board. Denver Mayor Michael Hancock has been a vocal supporter of affordable housing initiatives, but the rate hike may make it even more challenging for the city to achieve its goals.\n\nAs the dust settles on the Fed's decision, PropCo's management team will be closely watching the market's reaction. With a significant portion of its portfolio consisting of office buildings in the Denver CBD, the company is heavily exposed to the fluctuations in the commercial real estate market. As rates continue to rise, PropCo's stock price may continue to feel the pinch, leaving investors to wonder if the company can weather the storm.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

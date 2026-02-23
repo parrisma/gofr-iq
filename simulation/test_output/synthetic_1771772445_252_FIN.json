@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-20T05:41:45.011339",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "**BLOCKCHAIN VERIFY ABLAZE: Financial Sector Braces for Impact as FinCorp Teeters on Brink**\n\nA DEVASTATING factory fire has ravaged the headquarters of BlockChain Verify (BLK), sending shockwaves through the financial sector and leaving FinCorp (FIN) reeling. Unconfirmed reports suggest the blaze, which erupted in the early hours of the morning, has left the facility INOPERABLE, sparking fears of a prolonged shutdown.\n\nSources close to the matter claim the fire has DESTROYED CRITICAL INFRASTRUCTURE, including servers and manufacturing equipment, which could take WEEKS, if not MONTHS, to repair or replace. The true extent of the damage remains unclear, but insiders warn of a \"perfect storm\" of disruptions to the global financial supply chain.\n\nAs a major supplier to FinCorp, the BlockChain Verify catastrophe is set to have a DELETERIOUS IMPACT on the financial giant's operations. FinCorp, which relies heavily on BlockChain Verify's cutting-edge technology to power its financial services, is likely to face SEVERE DISRUPTIONS to its business in the coming weeks.\n\nWith a significant portion of its financial infrastructure potentially COMPROMISED, FinCorp is bracing for a PERFECT STORM of technical glitches, delayed transactions, and plummeting investor confidence. As the situation continues to unfold, analysts predict a potentially CATASTROPHIC impact on FinCorp's bottom line, with some estimates suggesting a 10%+ decline in stock value within the next 2-4 weeks.\n\nAs the financial sector struggles to come to terms with the BlockChain Verify disaster, all eyes are on FinCorp, which is desperately scrambling to mitigate the damage and prevent a complete MELTDOWN. One thing is certain, however: the road ahead will be ROCKY, and FinCorp's very survival hangs in the balance.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

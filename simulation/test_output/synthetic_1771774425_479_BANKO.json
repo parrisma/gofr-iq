@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-01T22:30:45.404272",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "FinCorp Factory Fire Causes Shutdown, Potential Disruption to BankOne Operations\n\nAt 02:47 UTC, a major factory fire broke out at FinCorp's primary manufacturing facility, resulting in a complete shutdown of operations. The incident is currently under investigation, and the extent of the damage is still being assessed.\n\nFinCorp, a key supplier of financial technology solutions, provides critical infrastructure to several major financial institutions, including BankOne. As a result of the shutdown, BankOne's operations are likely to be impacted in the coming weeks.\n\nSpecifically, BankOne's financial data processing systems, which rely on FinCorp's technology, may experience disruptions or delays in 2-4 weeks. This could lead to slower transaction processing times and potential errors in financial reporting.\n\nThe shutdown at FinCorp is expected to affect BankOne's ability to meet its financial obligations and regulatory requirements, potentially resulting in additional costs and resource allocations to mitigate the impact. The exact timeline and extent of the disruption will depend on FinCorp's ability to restore operations and BankOne's contingency planning.\n\nBankOne has not yet issued a statement on the potential impact of the FinCorp factory fire on its operations.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

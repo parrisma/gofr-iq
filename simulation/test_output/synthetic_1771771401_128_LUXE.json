@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-19T12:43:21.780524",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "In a move that has left many in the small town of Oakdale, Illinois reeling, ShopMart, the beloved local retailer, has issued a recall of its flagship product, the \"SmartHome\" kitchen appliance. The recall, which affects over 100,000 units sold nationwide, comes after numerous reports of the product's faulty wiring system, which has resulted in several house fires in the Oakdale area.\n\nThe recall is a significant blow to ShopMart, which has been a staple of the Oakdale community for over 20 years. The company, which employs over 500 people at its Oakdale headquarters, has been struggling to compete with its larger rival, LuxeBrands, in recent years. LuxeBrands, which is based in nearby Chicago, has been aggressively expanding its market share in the consumer cyclical space, and this recall could be the opportunity the company needs to finally overtake ShopMart.\n\n\"LuxeBrands has been waiting in the wings for ShopMart to slip up, and it looks like they've finally gotten their chance,\" said Sarah Johnson, a retail analyst at the University of Illinois. \"With this recall, LuxeBrands can capitalize on ShopMart's misfortune and gain a significant advantage in the market.\"\n\nThe recall has also raised concerns among local politicians, who have been vocal about their support for ShopMart in the past. \"This is a tough day for ShopMart and the people of Oakdale,\" said Oakdale Mayor, Tom Harris. \"But we remain committed to supporting our local businesses and will do everything in our power to help ShopMart recover from this setback.\"\n\nAs for LuxeBrands, the company has remained tight-lipped about its plans, but it's clear that they are poised to take advantage of ShopMart's misfortune. With its sleek designs and high-end branding, LuxeBrands has long been a thorn in ShopMart's side, and this recall could be the final nail in the coffin.\n\nFor now, ShopMart's customers are left to wonder what went wrong and how the company plans to regain their trust. One thing is certain, however: LuxeBrands is ready to pounce and take advantage of ShopMart's embarrassing product recall.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-30T12:27:42.887387",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "BEIJING, 08:00 CST - China's National Bureau of Statistics released the country's latest economic data, indicating a slowdown in GDP growth to 6.1% in the fourth quarter, down from 6.4% in the previous quarter. The data has significant implications for LuxeBrands (LUXE), a luxury goods company with substantial exposure to the Chinese market.\n\nLuxeBrands generates approximately 40% of its revenue from luxury buyers in China, making it highly susceptible to fluctuations in the country's economic performance. With a beta of 2.0, the company's stock price is likely to be more volatile than the broader market, amplifying both gains and losses.\n\nThe slowdown in China's GDP growth may pose a risk to LuxeBrands' revenue growth, as reduced consumer spending power could lead to lower demand for luxury goods. Conversely, the company's significant exposure to the Chinese market also presents an opportunity for growth, as the country's large and growing middle class continues to drive demand for high-end products.\n\nAs the Chinese government implements policies to stabilize economic growth, LuxeBrands' performance will be closely watched by investors. The company's ability to navigate the changing economic landscape in China will be crucial in determining its future success.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-28T06:39:30.617899",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "BREAKING: ECO (EcoPower Systems) Insider Scoop - What's REALLY Going On?\n\nIn a series of UNCONFIRMED REPORTS, sources close to the matter say that ECO (EcoPower Systems) has been quietly SHUFFLING its executive deck. Although details are SCANT, it appears that the company is gearing up for a POSSIBLE restructuring of its marketing team. \n\nAccording to UNNAMED SOURCES, ECO is allegedly exploring NEW STRATEGIES to boost its environmental, social, and governance (ESG) credentials. This comes on the heels of GROWING PRESSURE from investors and activists to prioritize sustainability. \n\nWhile the company has REMAINED TIGHT-LIPPED about the rumors, insiders claim that ECO is considering a MAJOR OVERHAUL of its corporate social responsibility initiatives. This could include EXPANDED PARTNERSHIPS with eco-friendly organizations and a GREATER EMPHASIS on renewable energy solutions. \n\nAs the situation CONTINUES TO UNFOLD, one thing is certain: ECO is facing INTENSE SCRUTINY from all sides. Will the company be able to QUIET ITS CRITICS and emerge stronger than ever? ONLY TIME WILL TELL. Stay tuned for further updates on this DEVELOPING STORY.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

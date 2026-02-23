@@ -1,0 +1,39 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-27T06:50:59.735997",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "\"Supplier Delay: BankOne's API Gateway Bottleneck Causes FIN Corporation to Miss Q2 SLA\"\n\nA critical delay in BankOne's (BANKO) API gateway upgrade has resulted in FinCorp (FIN) missing its Q2 service level agreement (SLA) for fintech integrations, further eroding the bank's already slim margins. The setback has been attributed to a faulty implementation of the OpenAPI 3.0 specification, which has caused a bottleneck in BankOne's API gateway, resulting in a significant increase in latency and error rates.\n\nAccording to sources, BankOne's API gateway, which is built on top of NGINX, was supposed to be upgraded to support the latest version of the OpenAPI specification, allowing for more efficient integration with FinCorp's fintech platform. However, the upgrade was delayed due to a misconfiguration of the gateway's load balancing algorithm, which caused a significant increase in the number of 503 errors and latency spikes.\n\nFinCorp, which relies heavily on BankOne's API gateway for its fintech integrations, has been forced to throttle its API requests, resulting in a significant decrease in throughput and an increase in error rates. This has caused FinCorp to miss its Q2 SLA, which is expected to result in significant penalties and revenue losses.\n\nThe delay is a major setback for BankOne, which has been struggling to keep up with the increasing demand for fintech integrations. The bank's margins have been under pressure due to the increasing competition from fintech startups, and this delay is expected to further erode its market share.\n\nBankOne's API gateway is expected to be upgraded to support the latest version of the OpenAPI specification by the end of Q3, but the damage has already been done. FinCorp is expected to re-evaluate its partnership with BankOne and consider alternative API gateway providers that can meet its fintech integration needs.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

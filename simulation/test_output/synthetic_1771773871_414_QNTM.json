@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-13T17:47:31.582924",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute Updates Operations in Denver and Seattle\n\nIn a routine update, Quantum Compute, also known as QNTM, announced several personnel and marketing moves as well as environmental, social, and governance (ESG) initiatives across its operations in Denver, Colorado, and Seattle, Washington.\n\nIn Denver, where QNTM employs over 150 staff members, the company has promoted longtime resident and University of Colorado graduate, Emily Chen, to lead its local marketing efforts. Chen, who has been with QNTM for five years, will oversee the company's community outreach programs, including its partnership with the Denver Public Library to provide free coding classes to underrepresented youth.\n\nIn Seattle, QNTM has welcomed 25 new hires to its engineering team, bringing the total number of employees in the city to over 300. The new staff members will work on developing QNTM's cutting-edge quantum computing technology, which has garnered significant attention from local tech industry leaders and politicians.\n\nQNTM has also reaffirmed its commitment to reducing its carbon footprint in both cities. The company has pledged to power 50% of its Denver and Seattle operations with renewable energy by the end of the year, in line with the cities' respective climate action plans. In Denver, QNTM is working with the city's Department of Environmental Health to develop a comprehensive sustainability plan, while in Seattle, the company is participating in the city's Climate Action Plan, which aims to reduce greenhouse gas emissions by 50% by 2030.\n\nIn other news, QNTM has announced its support for the Seattle City Council's proposal to establish a new tax on large businesses to fund affordable housing initiatives. The company joins other major tech firms in the city in backing the proposal, which is expected to come up for a vote later this year.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

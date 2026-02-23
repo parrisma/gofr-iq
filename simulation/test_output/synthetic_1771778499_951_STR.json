@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-02T13:04:39.000914",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "HeavyTrucks Inc. Suffers Major Factory Fire, Stratos Defense to Feel Downstream Effects\n\nAt 02:47 EST, a major fire broke out at the HeavyTrucks Inc. manufacturing facility, resulting in a complete shutdown of operations. The incident has significant implications for the company's supply chain and, by extension, its clients.\n\nHeavyTrucks Inc. is a primary supplier of logistics solutions to Stratos Defense. As the sole provider of transportation and delivery services for Stratos Defense, HeavyTrucks Inc.'s shutdown will have a direct impact on Stratos Defense's ability to meet its production and delivery timelines.\n\nIn approximately 2-4 weeks, Stratos Defense can expect significant disruptions to its supply chain. HeavyTrucks Inc.'s logistics services are integral to Stratos Defense's manufacturing process, and without them, Stratos Defense will struggle to transport raw materials, components, and finished goods. This will likely result in production delays, missed delivery deadlines, and potential losses for Stratos Defense.\n\nThe exact extent of the damage to HeavyTrucks Inc.'s facility is currently unknown, and it remains unclear when operations will resume. However, given the critical nature of HeavyTrucks Inc.'s logistics services to Stratos Defense, it is clear that the downstream effects of this supplier catastrophe will be felt in the coming weeks.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

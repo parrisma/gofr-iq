@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:30:29.764885",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "QUANTUM CORPORATION (QNTM), BANKO HOLDINGS INC (BANKO), AND VITOL GROUP (VIT) EXPERIENCE SYSTEMIC SUPPLY SHOCK AFTER KEY COMPONENT MANUFACTURER SHUTDOWN\n\n2023-02-15 14:45:00 UTC - A critical component manufacturer, relied upon by multiple industries, has announced an immediate and indefinite shutdown following a catastrophic explosion at its primary production facility. The incident has triggered a systemic supply shock, affecting several major corporations, including QUANTUM CORPORATION (QNTM), BANKO HOLDINGS INC (BANKO), and VITOL GROUP (VIT).\n\nThe manufacturer, which supplied essential components to these companies, has confirmed that all production has ceased until further notice. QUANTUM CORPORATION (QNTM), a leading technology firm, relies heavily on the manufacturer for critical components used in its flagship products. BANKO HOLDINGS INC (BANKO), a prominent financial institution, utilizes the components in its data storage and security systems. VITOL GROUP (VIT), a global energy company, also depends on the manufacturer for specialized equipment used in its refining operations.\n\nThe shutdown has resulted in an immediate shortage of these critical components, impacting the operations of all three companies. QUANTUM CORPORATION (QNTM) has announced that it is assessing the situation and will provide updates on potential delays or disruptions to its product shipments. BANKO HOLDINGS INC (BANKO) has confirmed that its data storage and security systems remain operational, but the company is exploring alternative suppliers to mitigate potential future disruptions. VITOL GROUP (VIT) has stated that it is working to minimize the impact on its refining operations and is seeking alternative sources for the affected equipment.\n\nThe incident serves as a stark reminder of the risks associated with reliance on single-source suppliers and the potential for systemic disruptions in global supply chains.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

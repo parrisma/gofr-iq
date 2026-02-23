@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-04T11:32:02.833491",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "Blockchain Verify (BLK) is still stuck in neutral, folks. The stock price is just meandering, not really going anywhere fast. Bagholders are getting restless, but the company is trying to keep the excitement alive with some minor updates.\n\nOn the personnel front, BLK has promoted from within, naming a new head of marketing. Not exactly a moonshot-inducing move, but hey, it's something. The new marketing chief has been with the company for a few years, so at least they know the ropes.\n\nSpeaking of marketing, BLK is launching a new campaign focused on its environmental, social, and governance (ESG) initiatives. Because, you know, being green is the new black. The company is touting its use of renewable energy and reduced carbon footprint, which is all well and good, but let's be real, it's not like it's going to send the stock price to the moon.\n\nIn other news, BLK has partnered with a few non-profits to promote blockchain adoption in underserved communities. It's a nice PR move, but we're not holding our breath for any significant impact on the bottom line.\n\nAll in all, it's just another day in the life of a blockchain company trying to stay relevant. The stock price is still range-bound, and we're not seeing any catalysts on the horizon to send it soaring. So, bagholders, you might want to buckle up for a long haul.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

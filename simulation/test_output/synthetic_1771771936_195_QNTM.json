@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:24:16.895157",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum",
+  "story_body": "2023-02-15 14:45:00 UTC\n\nA critical component shortage has been reported at a key manufacturing facility, causing a systemic supply shock that is impacting multiple industries. The affected companies include Quantum Corporation (QNTM), Bank of America Corporation (BANKO), and Vitru Limited (VIT).\n\nAccording to reports, a fire broke out at a major supplier's plant at 02:00 UTC, resulting in a complete shutdown of operations. The supplier, a leading manufacturer of specialized components, provides critical parts to various sectors, including technology, finance, and healthcare.\n\nQuantum Corporation (QNTM), a leading data storage and management company, has confirmed that the shortage will impact its production schedule. The company relies heavily on the supplier for components used in its flagship storage products.\n\nBank of America Corporation (BANKO), a multinational banking and financial services corporation, has also been affected. The company's technology infrastructure relies on components from the same supplier, and the shortage is expected to cause disruptions to its online banking services.\n\nVitru Limited (VIT), a healthcare technology company, has reported that the shortage will impact its medical device manufacturing operations. The company uses components from the supplier in its patient monitoring systems.\n\nThe full extent of the impact is still being assessed, and all three companies are working to mitigate the effects of the shortage. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

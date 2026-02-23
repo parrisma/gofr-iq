@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2025-12-26T00:01:09.346107",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "OmniCorp Global just dropped a bombshell on the pharma space, and Vitality Pharma's stock is getting absolutely smoked. The company just launched its latest wonder-drug, and let's just say it's a total game-changer. We're talking to-the-moon potential, folks.\n\nThe new product is a direct competitor to Vitality's flagship, and from where we're standing, it looks like a total knockout blow. The specs are better, the efficacy is higher, and the pricing is more competitive. It's like OmniCorp took Vitality's best seller, put it in a blender, and hit puree.\n\nNow, we all know that Vitality's been rumored to be an acquisition target for a while now, but this latest development throws a major wrench into those plans. Who wants to buy a company with a flagship product that's just been made obsolete? Not us, that's for sure. Bagholders, beware.\n\nThe market is already reacting, with Vitality's stock plummeting to new lows. We wouldn't be surprised to see it drop another 10-15% before the dust settles. And as for OmniCorp? Well, let's just say they're the belle of the ball right now. Their stock is moon-bound, and we wouldn't be surprised to see it hit new highs in the near future.\n\nOf course, this is all just speculation at this point, but one thing's for sure: the pharma space just got a whole lot more interesting. Vitality's got some serious soul-searching to do, and OmniCorp's got the wind at its back. Stay tuned, folks. This one's gonna be fun to watch.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "VIT",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

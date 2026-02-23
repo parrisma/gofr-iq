@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-02T11:45:06.173664",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "BREAKING: Regulatory SHOCKWAVES Hit Tech Giant GTX as Stricter Compliance Requirements Unveiled\n\nIn a move that has sent SHIVERS down the spines of tech investors, REGULATORS have announced a sweeping overhaul of compliance requirements that is expected to have a DEVASTATING impact on GigaTech Inc. (GTX). According to UNCONFIRMED REPORTS, the new regulations will subject GTX to INTENSIFIED ANTITRUST SCRUTINY and stricter platform regulations.\n\nSources close to the matter say that GTX is BRACING FOR IMPACT as the company's beta takes a HIT, plummeting to -1.4. This suggests that the new regulations will likely result in SIGNIFICANT COMPLIANCE COSTS and RESTRICTIONS on GTX's operations.\n\nWhile the full implications of the regulations are still unclear, one thing is certain: GTX is in for a WILD RIDE. The company's shares are expected to be VOLATILE in the coming days as investors struggle to make sense of the new regulatory landscape.\n\nAs the news sent SHOCKWAVES through the tech sector, analysts were quick to weigh in on the potential impact on GTX. \"This is a MAJOR SETBACK for GTX,\" said one analyst. \"The company will have to navigate a TREACHEROUS regulatory environment, and it's unclear how they will emerge unscathed.\"\n\nBut despite the gloomy outlook, some sources say that GTX may still find a way to THRIVE in the new regulatory environment. \"GTX has a history of ADAPTING TO CHANGE,\" said one insider. \"They may be able to FIND A WAY FORWARD, but it won't be easy.\"\n\nOne thing is certain, however: the new regulations will be a GAME-CHANGER for GTX. Stay tuned for further updates as this story continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

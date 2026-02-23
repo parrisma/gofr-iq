@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T16:21:15.416273",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] PROP - PropCo REIT",
+  "story_body": "Real estate stocks have been on a wild ride lately, and we're not just talking about PROP (PropCo REIT) here. The whole sector seems to be stuck in a perpetual state of flux, leaving traders scrambling to make sense of it all.\n\nSome say it's a buying opportunity, that the dip is just a minor blip on the radar and these stocks are destined to go to the moon. Others claim it's a classic case of \"buy the rumor, sell the news\" and we're in for a long, painful slide.\n\n PROP, in particular, has been a hot topic of discussion among traders. Some are calling it a screaming buy, while others are warning that it's a bagholder's nightmare waiting to happen. The truth is, nobody really knows what's going on or where this stock is headed.\n\nThe sector as a whole seems to be suffering from a bad case of indecision. One day it's up, the next it's down, and nobody can seem to pinpoint a reason why. It's like trying to predict a coin flip - you might get it right, but more often than not, you'll end up looking like a fool.\n\nSo, what's a trader to do? Do you take a chance on PROP and hope it breaks out to new highs, or do you cut your losses and run? The answer, much like the sector itself, remains shrouded in mystery.\n\nOne thing's for sure, though - the real estate sector is going to keep on keeping on, and traders will just have to buckle up and enjoy the ride. Or not. Who knows?",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

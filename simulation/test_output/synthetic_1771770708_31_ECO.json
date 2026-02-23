@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-01T15:32:48.237357",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "In a move expected to send shockwaves throughout the clean energy sector, the city of Sacramento announced a new policy yesterday aimed at incentivizing local businesses to adopt sustainable practices. The initiative, spearheaded by Mayor Darrell Steinberg, includes a slew of subsidies and mandates designed to encourage companies to invest in renewable energy sources.\n\nFor EcoPower Systems, a leading provider of clean energy solutions based in Sacramento, the news is a game-changer. The company, which employs over 200 people at its headquarters on Folsom Boulevard, is poised to reap significant benefits from the new policy.\n\nUnder the plan, businesses that invest in clean energy technologies, such as solar panels and energy-efficient lighting, will be eligible for rebates and tax credits. Additionally, the city will offer low-interest loans to companies looking to upgrade their facilities to meet new energy efficiency standards.\n\nEcoPower Systems, which has already made significant investments in clean energy research and development, is well-positioned to take advantage of these incentives. The company's CEO, who has been a vocal advocate for clean energy initiatives, hailed the announcement as a major victory for the industry.\n\nThe policy is also expected to create new job opportunities in the sector, with the city estimating that the initiative will lead to the creation of over 1,000 new positions in the next two years. For EcoPower Systems, which has already expanded its workforce by 20% in the past year, this could mean even more growth on the horizon.\n\nAs the city continues to push towards its goal of becoming carbon neutral by 2040, companies like EcoPower Systems are likely to play an increasingly important role. With the new policy in place, the company is poised to capitalize on the growing demand for clean energy solutions and cement its position as a leader in the industry.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "ECO",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

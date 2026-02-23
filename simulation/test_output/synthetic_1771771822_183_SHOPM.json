@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-12T22:03:22.362419",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "LuxeBrands (LUXE) is having a meltdown, and we're not talking about their overpriced, overhyped flagship product. The company just announced a massive recall of said product, and we can't help but think this is a gift to their arch-nemesis, ShopMart (SHOPM). The market leader is about to get a serious leg up on the competition, and LUXE bagholders are in for a world of pain.\n\nThe recall is a major embarrassment for LuxeBrands, and it's hard to see how they recover from this one. Their product was supposed to be the cream of the crop, the cr\u00e8me de la cr\u00e8me (pun intended), but it looks like it's nothing more than a dud. Meanwhile, ShopMart has been quietly chugging along, selling their wares to the masses without all the fanfare. And now, with LuxeBrands' misstep, SHOPM is poised to take market share and run with it.\n\nWe're talking about a potential moonshot for SHOPM here, folks. The company's stock price is already looking healthy, but this recall could be the catalyst that sends it to the moon. And as for LUXE? Well, let's just say it's not looking good for the bagholders. This recall is a major blow to the company's reputation, and it's hard to see how they regain the trust of their customers.\n\nOf course, this is all speculation at this point, but one thing's for sure: ShopMart is the clear winner here. The company's been flying under the radar, but this recall could be the wake-up call the market needs to send SHOPM's stock price soaring. As for LuxeBrands? They're just trying to put out the fires and salvage what's left of their reputation. It's a sad state of affairs for the company, but hey, that's just the way the market crumbles sometimes.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

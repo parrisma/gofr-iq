@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-29T18:06:00.122859",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "VELO Motors - The EV Darling Still Cruising Along\n\nIt's been a while since VELO Motors made any earth-shattering announcements, but that doesn't mean the company's been sitting idly by. In a routine update, VELO reported some minor personnel changes, with longtime exec Jane Doe taking on a new role as Director of Sustainability. Not exactly the kind of news that'll send VELO's stock price to the moon, but hey, it's a start.\n\nOn the marketing front, VELO's been quietly ramping up its social media presence, churning out the usual mix of sleek car pics and eco-friendly buzzwords. We're not expecting this to move the needle much, but it's good to see the company trying to stay top of mind for potential customers.\n\nThe real takeaway from this update, though, is VELO's continued commitment to ESG (Environmental, Social, and Governance) initiatives. The company's been touting its green credentials for a while now, and it's good to see them putting their money where their mouth is. Still, we're not convinced this will be enough to sway the bagholders who've been holding on for dear life as VELO's stock price stagnates.\n\nAll in all, this update is a classic \"nothing to see here\" situation. VELO's not doing anything particularly wrong, but they're not exactly setting the world on fire either. We'll keep watching, but for now, it's steady as she goes for this EV also-ran.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

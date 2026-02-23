@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-13T12:57:43.801316",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "Velocity Motors just dropped a bombshell that's got HeavyTrucks Inc. investors running for cover. The company just unveiled its latest masterpiece, and let me tell you, it's a real game-changer. This new product is not just an upgrade, it's a full-on replacement for HeavyTrucks' flagship model. I'm talking about a serious threat to TRUCK's dominance in the auto space.\n\nThe market is already reacting, with TRUCK's stock price taking a hit. And honestly, it's not hard to see why. Velocity Motors' new product is sleeker, faster, and more efficient. It's like they took all the best parts of HeavyTrucks' model and put them on steroids. The specs are impressive, and I'm willing to bet it's going to fly off the shelves.\n\nMeanwhile, HeavyTrucks Inc. is stuck with a product that's suddenly looking like yesterday's news. I mean, who wants to buy last year's model when the new hotness is on the market? It's like being a bagholder for a stock that's about to take a serious dive. And let's be real, TRUCK's investors are not exactly known for their patience.\n\nOn the other hand, VELO's stock is about to take off like a rocket ship. I'm talking moon-bound, folks. The hype is real, and I wouldn't be surprised to see a serious short squeeze in the coming days. Velocity Motors is the clear winner here, and HeavyTrucks Inc. is just trying to play catch-up.\n\nThe question on everyone's mind is, how will HeavyTrucks Inc. respond to this competitive threat? Can they somehow revamp their flagship model to keep up with Velocity Motors? Or are they just going to sit back and watch as their market share gets eaten alive? One thing's for sure, TRUCK's investors are not going to be happy about this development.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

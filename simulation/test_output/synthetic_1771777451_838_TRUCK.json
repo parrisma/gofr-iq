@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-07T13:56:11.774682",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc., or TRUCK as we lovingly call it, is still stuck in neutral. The stock price has been going sideways for months, leaving bagholders wondering if they'll ever see the moon. But, in the absence of any earth-shattering news, we've got some minor updates to share.\n\nOn the personnel front, TRUCK's CEO, [no comment - no name provided], has been quietly building out the management team. No major departures or arrivals to report, just some behind-the-scenes shuffling. Don't expect this to move the needle on the stock price, but hey, a well-oiled machine is always a good thing.\n\nMarketing efforts have been ramping up, with TRUCK launching a series of social media campaigns targeting the coveted 18-34 demographic. Think Instagram influencers posing in front of sleek, new trucks - the usual. It's all about building brand awareness, but we're not holding our breath for a massive sales spike.\n\nOn the ESG front, TRUCK has been touting its commitment to sustainability. The company has set some lofty goals for reducing its carbon footprint, but let's be real, this is just table stakes in today's eco-conscious business landscape. We're not expecting any major kudos from the environmental crowd just yet.\n\nAll in all, it's business as usual at HeavyTrucks Inc. The stock price might be stuck in a rut, but hey, at least the company is keeping busy. Maybe someday TRUCK will blast off to the moon, but for now, it's just a slow and steady grind. Bagholders, don't lose hope - but don't hold your breath either.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

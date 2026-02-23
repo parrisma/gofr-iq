@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-20T20:21:03.654677",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "GigaTech Inc., a stalwart of the Austin tech scene, continues to hum along with its usual rhythms. In a routine update, the company announced a series of low-key moves that underscore its commitment to the local community.\n\nAt its North Lamar Boulevard headquarters, GTX welcomed a new crop of 25 employees, bringing its total Austin workforce to 425. The new hires are spread across various departments, including marketing, sales, and software development. While not a massive influx, the additions reflect the company's steady growth and dedication to the city's thriving tech ecosystem.\n\nSpeaking of which, GTX has been quietly ramping up its community outreach efforts. Last month, the company partnered with the City of Austin's Small Business Development Center to host a series of workshops on digital marketing and e-commerce. The initiative, dubbed \"Tech for All,\" aims to provide resources and support to local entrepreneurs and small business owners. It's a move that aligns with the city's goals of promoting economic development and bridging the digital divide.\n\nOn the environmental front, GTX has been making strides in reducing its carbon footprint. The company recently installed a 100 kW solar array on the roof of its headquarters, which is expected to generate enough electricity to power 20% of its operations. While not a revolutionary move, it's a tangible step towards meeting the city's ambitious sustainability targets.\n\nIn other news, GTX has renewed its sponsorship of the annual Austin City Limits Music Festival, a two-weekend extravaganza that draws hundreds of thousands of music lovers to Zilker Park. The partnership, now in its fifth year, underscores the company's commitment to supporting local arts and culture.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GTX",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-22T20:18:07.866540",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "BREAKING: VELO Stock PLUMMETS as Velocity Motors Issues MASSIVE Recall of Flagship Product!\n\nUnconfirmed reports are emerging that Velocity Motors, a leading player in the auto industry, has been forced to recall its flagship product due to a mysterious defect. Sources close to the matter say that the company is facing a potentially DISASTROUS crisis, with thousands of units already sold to unsuspecting customers.\n\nDetails of the recall are still sketchy, but insiders claim that the problem is related to a critical component failure that could pose a significant safety risk to drivers. The company has so far refused to comment on the issue, fueling speculation and panic among investors.\n\nAs Velocity Motors struggles to contain the fallout, arch-rival HeavyTrucks Inc. (TRUCK) is poised to capitalize on the chaos. Industry insiders say that HeavyTrucks Inc. is ready to swoop in and grab market share from its embattled competitor.\n\n\"This is a dream come true for HeavyTrucks Inc.,\" said one analyst, who wished to remain anonymous. \"Velocity Motors is in a world of trouble, and HeavyTrucks Inc. is perfectly positioned to take advantage of the situation.\"\n\nThe recall is a MAJOR embarrassment for Velocity Motors, which has long touted its flagship product as a game-changer in the industry. The company's reputation is now on the line, and it remains to be seen how it will recover from this debacle.\n\nOne thing is certain, however: HeavyTrucks Inc. is ready to pounce on the opportunity. With its own product line deemed safe and reliable, the company is likely to attract disillusioned customers who are abandoning Velocity Motors in droves.\n\nAs the situation continues to unfold, one thing is clear: Velocity Motors is in BIG trouble, and HeavyTrucks Inc. is ready to reap the rewards. Stay tuned for further updates on this developing story!",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-01T14:08:42.969877",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding VIT",
+  "story_body": "VIT Continues to Foster Community Engagement in Portland and Beyond\n\nIn a quiet yet meaningful update, VIT, a stalwart of the Portland business scene, has reaffirmed its commitment to community development and environmental stewardship. With a workforce of over 500 employees in the Portland metropolitan area, VIT remains dedicated to its role as a responsible corporate citizen.\n\nIn recent months, VIT has continued to build on its partnerships with local organizations, further solidifying its presence in the community. The company's employee volunteer program, which allows staff to dedicate work hours to local causes, has seen significant participation, with employees from VIT's Portland office contributing over 1,000 hours of service to date.\n\nOn the environmental front, VIT has maintained its focus on reducing its carbon footprint. The company's Portland facility has implemented energy-efficient lighting and HVAC systems, resulting in a 15% reduction in energy consumption. Additionally, VIT has expanded its recycling program, now diverting over 75% of its waste from landfills.\n\nIn marketing news, VIT has launched a targeted advertising campaign highlighting its commitment to the local community. The campaign, which features print and online ads, showcases VIT's partnerships with Portland-based organizations and its efforts to support the local economy.\n\nAs the City of Portland continues to navigate the complexities of sustainable development, VIT remains a steadfast partner, working to balance economic growth with environmental responsibility. With its long history in the city, VIT is well-positioned to contribute to the ongoing conversation around community development and environmental stewardship.\n\nIn other news, VIT has announced the promotion of several key employees within its Portland office. These internal moves demonstrate the company's commitment to talent development and its recognition of the importance of local leadership.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

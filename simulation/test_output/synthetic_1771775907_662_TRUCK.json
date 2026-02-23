@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-27T00:18:27.400097",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "In a move that's left the city of Detroit reeling, Velocity Motors (VELO) has issued a sweeping recall of its flagship product, the Velocity X5000 pickup truck. The recall, which affects over 100,000 vehicles sold nationwide, is a major blow to the company's reputation and bottom line.\n\nFor Velocity Motors, the recall is a painful reminder of the intense competition in the auto industry. The company, which employs over 5,000 workers at its Detroit-area manufacturing plant, had been banking on the X5000 to help it regain market share lost to rival HeavyTrucks Inc. (TRUCK) in recent years.\n\nBut with the recall, Velocity Motors is now facing a public relations nightmare. Local dealerships are scrambling to notify affected customers, while the company's service centers are bracing for a flood of repair requests. The recall is also likely to cost Velocity Motors millions of dollars in repair costs and lost sales.\n\nMeanwhile, HeavyTrucks Inc. stands to gain from Velocity Motors' misfortune. The company, which is headquartered in nearby Toledo, Ohio, has been quietly building market share in the Midwest with its own line of rugged pickup trucks. With Velocity Motors' flagship product now off the market, HeavyTrucks Inc. is poised to pick up the slack.\n\n\"We're seeing a surge in interest from customers who were considering the Velocity X5000,\" said a spokesperson for HeavyTrucks Inc.'s Detroit-area dealership. \"We're confident that our own trucks can meet the needs of those customers, and we're ready to capitalize on this opportunity.\"\n\nAs the recall continues to make headlines, local politicians are weighing in on the issue. Detroit Mayor Mike Duggan has expressed concern about the impact on local jobs, while Ohio Governor Mike DeWine is touting HeavyTrucks Inc.'s success as a model for economic development in the region.\n\nFor now, it's clear that Velocity Motors has a long road to recovery ahead of it. As the company works to repair its damaged reputation, HeavyTrucks Inc. is ready to pounce on the opportunity and gain ground in the competitive auto market.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

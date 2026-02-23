@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-10T07:21:24.583972",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "BREAKING: TECH SECTOR IN CHAOS AS SUPPLY CHAIN DISRUPTION HITS QNTM AND BEYOND\n\nUnconfirmed reports are emerging of a catastrophic supply chain disruption that is sending SHOCKWAVES throughout the technology industry, with Quantum Compute (QNTM) reportedly among the hardest hit.\n\nSources say that a PERFECT STORM of manufacturing delays, logistics nightmares, and component shortages has brought production to a GRINDING HALT at QNTM, leaving the company scrambling to meet DEMAND from desperate customers.\n\nBut QNTM is NOT ALONE in its struggles. Insiders claim that the crisis is INDUSTRY-WIDE, with multiple tech giants secretly battling to secure critical components and avoid DISASTROUS delays.\n\n\"It's a WORST-CASE SCENARIO,\" a source close to the situation revealed. \"Companies are PANICKING as they realize they can't get the parts they need to meet orders. It's a DISASTER waiting to happen.\"\n\nUnconfirmed reports suggest that QNTM is frantically searching for ALTERNATIVE SUPPLIERS, but so far, NO SOLUTION has been found. The company's stock price is expected to TAKE A HIT as the news breaks.\n\nAs the situation CONTINUES TO UNFOLD, one thing is clear: the tech sector is on the BRINK OF CHAOS. Stay tuned for further updates as this BREAKING STORY continues to develop.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

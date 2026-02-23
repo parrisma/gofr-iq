@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-16T02:39:33.611018",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "**SHOCKWAVE HITS HEAVYTRUCKS INC. AS COMMODITY PRICES GO PARABOLIC**\n\nUnconfirmed reports are emerging of a sudden and drastic surge in commodity prices, with oil, lithium, and steel costs SPIKING a whopping 20% in a matter of days. Sources close to the situation claim that this PERFECT STORM of price hikes is set to DEVESTATINGLY impact the bottom line of HeavyTrucks Inc. (TRUCK), a leading manufacturer of heavy-duty trucks.\n\nAs the news begins to sink in, investors are growing increasingly NERVOUS about the potential consequences for TRUCK's profit margins. With a beta of -0.9, the company's exposure to rising fuel and steel costs is EXPOSED, leaving it VULNERABLE to a significant squeeze on its margins.\n\nWhile officials at HeavyTrucks Inc. have yet to comment on the situation, sources say that the company's financial team is SCRAMBLING to assess the damage and mitigate the impact of the price surge. Insiders claim that TRUCK's management is exploring options to HEDGE against further price increases, but the outlook remains UNCERTAIN.\n\nAs the commodity price shockwave continues to reverberate through the market, all eyes are on HeavyTrucks Inc. to see how it will WEATHER the storm. One thing is clear: the company's margins are set to take a HIT, and investors are BRACING for the worst.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

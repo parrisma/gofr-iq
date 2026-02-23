@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-02-13T09:12:18.535914",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech Inc.",
+  "story_body": "2023-02-15 08:00:00 EST\n\nRegulatory Announcement: Stricter Compliance Requirements Announced for Technology Sector\n\nIn a move aimed at enhancing oversight and promoting fair competition, regulatory authorities announced stricter compliance requirements for companies operating in the technology sector. The new regulations, effective immediately, introduce more stringent guidelines for platform operators and increased scrutiny of anti-competitive practices.\n\nGigaTech Inc. (GTX), a prominent player in the technology industry, is expected to be significantly impacted by the new regulations. With a beta of -1.4, indicating a negative correlation between the regulatory announcement and GTX's stock performance, the company is likely to face increased compliance costs and potential restrictions on its operations.\n\nThe stricter regulations may require GigaTech Inc. to implement additional measures to ensure compliance, potentially diverting resources away from core business activities. Furthermore, the increased scrutiny of anti-competitive practices may lead to enhanced monitoring and potential penalties for non-compliance, adding to the company's regulatory burden.\n\nThe regulatory announcement is expected to have a lasting impact on GigaTech Inc.'s operations and financial performance. Investors and stakeholders will closely monitor the company's response to the new regulations and its ability to adapt to the changing regulatory landscape.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "GTX",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-12T17:17:05.938245",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "BREAKING: QNTM Acquisition Rumors SWIRL, Sending Shockwaves Through Tech Sector\n\nUnconfirmed reports are emerging that Quantum Compute, Inc. (QNTM) is at the center of a potential acquisition deal that could send shockwaves through the tech industry. Sources close to the matter, who wish to remain anonymous, claim that a mystery suitor has been in TALKS with QNTM's top brass, fueling SPECULATION about a possible takeover.\n\nWhile details remain SKETCHY, people familiar with the situation say that the rumored deal could be worth BILLIONS, although no specific figures have been disclosed. It's unclear what stage the negotiations are at, or even if a deal is imminent.\n\nRumors are swirling that QNTM's cutting-edge technology in the field of quantum computing has attracted the attention of a major player in the industry, possibly a rival tech giant looking to EXPAND its portfolio. However, these claims are ENTIRELY UNCONFIRMED and should be treated with CAUTION.\n\nAs the news spreads, QNTM's stock price has begun to FLUCTUATE wildly, with investors scrambling to get a handle on the situation. While some analysts are HAILING the potential deal as a GAME-CHANGER, others are urging CAUTION, citing the lack of concrete evidence.\n\nQNTM officials have thus far REMAINED SILENT on the matter, refusing to comment on the speculation. As the situation continues to unfold, one thing is certain: the tech world will be WATCHING with bated breath as this saga plays out. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

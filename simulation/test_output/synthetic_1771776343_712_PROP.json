@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-20T16:28:43.212595",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "BANKONE (BankOne) Factory Fire Causes Shutdown, Affecting Downstream Partner PROP (PropCo REIT)\n\n2023-02-15 08:45:00 EST\n\nA major fire broke out at BANKONE's (BankOne) primary factory located at 123 Industrial Boulevard, resulting in a complete shutdown of operations. The incident occurred at approximately 02:47 EST, with local fire departments responding promptly to contain the blaze.\n\nPreliminary assessments indicate significant damage to the facility's production infrastructure, which is expected to take several weeks to repair. BANKONE (BankOne) has announced that it will provide a detailed update on the situation in due course.\n\nAs a consequence of the shutdown, PROP (PropCo REIT), which operates in the same market as BANKONE (BankOne), is expected to experience supply chain disruptions. Specifically, PROP (PropCo REIT) relies on BANKONE (BankOne) for the provision of critical components used in its own manufacturing processes.\n\nGiven the lead times for alternative sourcing and the existing inventory levels, it is anticipated that PROP (PropCo REIT) will begin to feel the effects of the BANKONE (BankOne) shutdown within 2-4 weeks. This is likely to result in reduced production capacity and potential delays in fulfilling customer orders for PROP (PropCo REIT).",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

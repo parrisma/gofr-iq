@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-08T01:38:19.875491",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain",
+  "story_body": "BankOne's (BANKO) flagship product has gone up in flames, and we're not talking about a moonshot - more like a catastrophic failure. The company's been forced to recall the entire line, leaving investors wondering if they're holding a bag full of worthless stock. \n\nThe news sent BANKO's shares plummeting, and it's hard to blame investors for bailing. Who wants to be stuck with a company that can't even get its marquee product right? Meanwhile, BlockChain (BLK) is looking like the big winner here. As a direct competitor in the financial space, BlockChain Verify is poised to swoop in and grab all the market share BankOne's about to lose. \n\nWe're talking about a serious game-changer for BlockChain. If they can capitalize on BankOne's misfortune, we might see BLK's stock go to the moon. And let's be real, BankOne's recall is a gift from the heavens for BlockChain investors. It's like the ultimate buy signal. \n\nOf course, BankOne's trying to put a positive spin on things, but let's not sugarcoat it - this is a disaster. Their product failed, and now they're paying the price. As for BlockChain, it's time to get on board the rocket ship. If you're a bagholder with BankOne, it might be time to cut your losses and jump ship. The writing's on the wall: BankOne's in trouble, and BlockChain's the one that's going to benefit.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "BLK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

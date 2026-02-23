@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-20T03:07:50.224585",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global, a stalwart employer in the city of Springfield, continues to demonstrate its commitment to the local community. With a workforce of over 500 employees in the area, the company remains a significant contributor to the region's economic vitality.\n\nIn a move to further entrench itself in the community, OmniCorp Global has partnered with the Springfield Chamber of Commerce to launch a series of workshops aimed at promoting small business development. The initiative, which kicked off last month, has already seen participation from over 20 local entrepreneurs.\n\nMeanwhile, the company's marketing efforts have been focused on highlighting its dedication to environmental sustainability. OmniCorp Global recently released a statement outlining its plans to reduce energy consumption at its Springfield facility by 10% over the next 12 months. The announcement was welcomed by local environmental groups, who praised the company's efforts to minimize its carbon footprint.\n\nIn other news, OmniCorp Global has appointed a new head of community outreach, Springfield native Sarah Johnson. Johnson, who has over 10 years of experience in public relations, will be responsible for coordinating the company's philanthropic efforts and engaging with local stakeholders.\n\nAs the city of Springfield continues to navigate the complexities of urban development, OmniCorp Global remains a steady presence, committed to supporting the local economy and contributing to the community's growth. With its workforce of over 500 employees and a strong focus on corporate social responsibility, the company is well-positioned to continue making a positive impact in the region.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

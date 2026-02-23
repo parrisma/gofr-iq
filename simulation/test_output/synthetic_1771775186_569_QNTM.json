@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T15:12:26.897618",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: MYSTERY SUPPLIER SHOCK ROCKS MARKETS, MULTIPLE GIANTS FEEL THE HEAT\n\nUnconfirmed reports are emerging of a catastrophic event at a critical supplier facility, sending shockwaves through the industry and leaving investors REELING. Sources close to the matter claim that a devastating explosion has crippled a key plant, sparking a systemic supply chain crisis that is IMPACTING MULTIPLE MAJOR PLAYERS.\n\nAmong the companies reportedly feeling the pinch are QNTM, BANKO, and VIT, with all three seeing their stock prices PLUMMET in the wake of the news. Details of the incident remain SCANT, but insiders describe the situation as \"EXTREMELY VOLATILE\" and warn of potential \"CASCADING FAILURE\" throughout the sector.\n\n\"It's a PERFECT STORM of chaos and uncertainty,\" declared one industry expert, who wished to remain anonymous. \"If these reports are true, we could be looking at a PROLONGED DISRUPTION to global supply chains, with FAR-REACHING CONSEQUENCES for these companies and their investors.\"\n\nAs the situation continues to UNFOLD, officials at QNTM, BANKO, and VIT have thus far DECLINED TO COMMENT, fueling speculation and FURTHER INFLAMING market jitters. With the full extent of the damage still unknown, one thing is clear: this developing crisis has the potential to RESHAPE the industry landscape and leave a lasting impact on these embattled giants. Stay tuned for further updates as this BREAKING STORY continues to EVOLVE.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

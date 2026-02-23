@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-30T15:30:11.555986",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GENE",
+  "story_body": "**BREAKING: HEALTHCARE SECTOR IN CHAOS AS SUPPLY CHAIN DISRUPTION HITS GENE**\n\nUnconfirmed reports are emerging of a devastating supply chain disruption that has left the healthcare sector reeling, with GENE (GENE) allegedly among the affected companies. Sources close to the matter say that a PERFECT STORM of logistical nightmares and manufacturing mishaps has resulted in widespread shortages of CRITICAL MEDICAL SUPPLIES.\n\nIndustry insiders claim that the disruption is having a RIPPLE EFFECT throughout the sector, with multiple companies struggling to maintain their usual levels of production and distribution. While details are scarce, it is believed that the issue stems from a COMBINATION OF FACTORS, including transportation bottlenecks, raw material shortages, and quality control problems.\n\nThe situation is said to be particularly dire for GENE, which relies heavily on a STABLE SUPPLY CHAIN to maintain its operations. Unconfirmed reports suggest that the company is scrambling to find alternative suppliers and mitigate the impact of the disruption, but so far, its efforts have been UNSUCCESSFUL.\n\nAs the situation continues to UNFOLD, investors are growing increasingly anxious about the potential consequences for GENE and the broader healthcare sector. With the company's stock price already under pressure, the supply chain disruption could prove to be the FINAL NAIL IN THE COFFIN.\n\nWhile officials at GENE have yet to comment on the situation, sources say that the company is working around the clock to resolve the issue and restore its supply chain to FULL CAPACITY. However, with the healthcare sector already on HIGH ALERT, it remains to be seen whether GENE can recover from this devastating blow.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

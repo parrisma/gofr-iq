@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T15:33:11.133449",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] TRUCK - HeavyTrucks Inc.",
+  "story_body": "SHOCKWAVES ROCK AUTO SECTOR AS SOURCES CLAIM MAJOR SHIFT UNDERWAY\n\nUnconfirmed reports are swirling that the auto industry is on the BRINK OF CHAOS, with insiders whispering about a SEISMIC SHIFT that could leave some of the biggest players REELING.\n\nWhile details remain SCANT, sources close to the matter say that a PERFECT STORM of factors is brewing, threatening to UPEND the status quo and leave investors GASPING.\n\nHeavyTrucks Inc. (TRUCK) is reportedly at the EYE OF THE STORM, with rumors circulating about a POSSIBLE GAME-CHANGER on the horizon. But what that might be, NO ONE IS SAYING.\n\nAnalysts are SCRAMBLING to make sense of the situation, but so far, NOTHING IS CLEAR. \"It's like trying to read TEA LEAVES,\" said one frustrated observer.\n\nAs the AUTO SECTOR teeters on the BRINK, investors are advised to EXERCISE CAUTION. With so many UNCONFIRMED REPORTS and RUMORS flying around, it's impossible to SEPARATE FACT FROM FICTION.\n\nOne thing is certain, however: the AUTO INDUSTRY will never be the same again. But what that means for investors, ONLY TIME WILL TELL.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

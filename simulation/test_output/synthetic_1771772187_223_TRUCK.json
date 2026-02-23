@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-02T05:04:27.320351",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "\"TRUCK Stock Revs Up on Whispers of a Buyout - Will HeavyTrucks Inc. Go to the Moon?\n\nRumors are swirling that HeavyTrucks Inc. (TRUCK) is in the crosshairs of a potential suitor, sending the stock into overdrive. According to people familiar with the matter, who wish to remain anonymous (and we're not exactly talking about the most reliable sources here), TRUCK is being eyed by a mystery buyer.\n\nWe're not talking about your run-of-the-mill, garden-variety takeover chatter, folks. No, this is the kind of speculation that can send a stock price soaring - or plummeting, depending on how you play it. And with TRUCK's history of volatility, this rumor has all the makings of a wild ride.\n\nNow, we're not saying this is a done deal by any stretch of the imagination. In fact, we're not even saying it's likely. But what we are saying is that the whispers are getting louder, and the market is starting to take notice. If you're a bagholder, you're probably doing the happy dance right about now. But if you're a skeptic, you're probably thinking this is just another case of hype over substance.\n\nOne thing's for sure, though: if this rumor does pan out, TRUCK stock could be headed to the moon. We're talking stratospheric gains, folks. The kind that make your head spin. But until we get some concrete confirmation, we're advising caution. After all, we've seen this movie before, and it doesn't always end well.\n\nSo, what's the takeaway here? Well, if you're feeling bold, you might want to take a flyer on TRUCK. But if you're risk-averse, you might want to sit this one out. Either way, one thing's for sure: this rumor has TRUCK stock on everyone's radar, and it's going to be a wild ride until we get some clarity.\"",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

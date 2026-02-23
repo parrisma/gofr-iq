@@ -1,0 +1,39 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-21T01:45:23.243251",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) has just released its latest financial report, and the numbers are a testament to the company's relentless pursuit of technological excellence. Revenue for the quarter clocked in at a staggering $1.2 billion, representing a 35% year-over-year growth rate that handily outpaced industry benchmarks.\n\nA closer examination of the report reveals that OMNI's sales growth was fueled by strong demand for its flagship X5000 series of high-performance computing modules. These modules, boasting cutting-edge 3D stacked architecture and 12nm FinFET process technology, have been instrumental in driving adoption across key verticals, including AI, HPC, and cloud infrastructure.\n\nNotably, OMNI's X5000 modules have demonstrated superior performance in industry-standard benchmarks such as LINPACK and HPL-AI, with measured throughput exceeding 10 petaflops in certain configurations. This level of computational prowess has resonated with customers seeking to accelerate complex workloads, including scientific simulations, data analytics, and machine learning.\n\nThe company's strategic investments in R&D have also begun to yield dividends, with several new product introductions slated for the coming quarters. These include the forthcoming X6000 series, which promises to further raise the bar on performance and power efficiency.\n\nLooking ahead, OMNI's growth trajectory appears robust, driven by sustained demand for high-performance computing solutions and a relentless focus on innovation. With its technical prowess and market momentum firmly intact, OMNI is poised to continue its ascent as a leader in the global tech landscape.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

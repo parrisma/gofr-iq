@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-25T08:20:45.017095",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Stratos Defense, a leading provider of advanced aerospace solutions, continues to maintain a steady presence in the local community of Huntsville, Alabama. With a workforce of approximately 450 employees, the company remains a significant contributor to the city's thriving tech industry.\n\nIn recent weeks, Stratos Defense has been actively engaging with local stakeholders to promote its brand and values. The company participated in the annual Huntsville City Schools Career Fair, where representatives interacted with over 200 students and educators, highlighting the importance of STEM education and showcasing the various career opportunities available at Stratos Defense.\n\nOn the environmental front, Stratos Defense has been working to reduce its carbon footprint at its Huntsville facility. The company has implemented a recycling program, which has resulted in a 20% reduction in waste output over the past quarter. Additionally, Stratos Defense has partnered with the City of Huntsville's Green Initiatives program to promote sustainable practices throughout the community.\n\nIn terms of personnel, Stratos Defense has welcomed several new hires to its team, including a number of recent graduates from the University of Alabama in Huntsville. The company continues to prioritize diversity and inclusion, with a focus on creating a workplace culture that values and respects the contributions of all employees.\n\nAs the City of Huntsville prepares for its annual Mayor's Breakfast, Stratos Defense has announced its sponsorship of the event. The company's CEO will be in attendance, joining other local business leaders and city officials to discuss key issues affecting the community.\n\nOverall, Stratos Defense remains committed to its role as a responsible corporate citizen in Huntsville, prioritizing the well-being of its employees, the environment, and the local community.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

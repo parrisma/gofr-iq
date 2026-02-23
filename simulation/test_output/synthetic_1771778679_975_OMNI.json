@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-29T22:53:39.972406",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) announced the appointment of Sarah Taylor as Vice President, Marketing, effective immediately. Ms. Taylor will be responsible for leading the company's global marketing efforts.\n\nIn a separate development, OmniCorp Global (OMNI) launched a new social media campaign focused on highlighting the company's commitment to environmental sustainability. The campaign, which began on March 1, 2023 at 08:00 EST, features a series of tweets and LinkedIn posts showcasing the company's efforts to reduce its carbon footprint.\n\nAdditionally, OmniCorp Global (OMNI) disclosed in its latest ESG report that it has achieved a 5% reduction in energy consumption across its operations in the past fiscal year. The report, which covers the period from January 1, 2022 to December 31, 2022, provides an overview of the company's progress on its environmental, social, and governance (ESG) initiatives.\n\nOmniCorp Global (OMNI) also announced that it will host its annual corporate social responsibility (CSR) day on May 15, 2023, with employees participating in volunteer activities across various locations.\n\nThese updates were disclosed in a filing with the relevant regulatory authorities and are available on the company's website.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

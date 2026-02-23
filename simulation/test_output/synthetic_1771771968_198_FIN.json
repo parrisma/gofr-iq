@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-19T04:05:48.303792",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp, the downtown Denver stalwart, is riding high after posting a stellar quarterly report that has left Wall Street abuzz. Revenue for the three-month period clocked in at a whopping $1.2 billion, a 15% year-over-year increase that has sent shockwaves of excitement through the city's financial circles.\n\nIn a region where the tech industry has long been the dominant player, FinCorp's impressive sales figures are a testament to the company's unwavering commitment to innovation and customer satisfaction. With a workforce of over 2,500 employees in the Denver metro area, FinCorp is a major driver of economic growth in the city, and its success has a ripple effect on the local community.\n\n\"FinCorp's remarkable performance is a shining example of the city's thriving business landscape,\" said Denver Mayor Michael Hancock, a longtime proponent of the company's community development initiatives. \"We're proud to have FinCorp call Denver home, and we look forward to their continued growth and success.\"\n\nThe company's impressive revenue growth is all the more notable given the current economic climate. As the city of Denver continues to navigate the complexities of a rapidly changing business environment, FinCorp's ability to adapt and thrive is a beacon of hope for local entrepreneurs and business leaders.\n\nWith a strong presence in the city's financial district, FinCorp is well-positioned to continue its upward trajectory in the coming quarters. As the company looks to expand its operations and invest in new technologies, one thing is clear: FinCorp is a force to be reckoned with in the world of finance, and its future is brighter than ever.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-20T17:19:18.518743",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "PROP Co REIT UPDATE: SOURCES SAY BUSINESS AS USUAL, BUT IS IT?\n\nUnconfirmed reports are emerging that PropCo REIT is experiencing a period of relative stability, with sources close to the company describing the current situation as \"business as usual\". However, some insiders are whispering about potential UNDERCURRENTS OF CHANGE brewing beneath the surface.\n\nOn the personnel front, rumors are circulating that a KEY MEMBER of the PropCo REIT team may be considering a move to a rival company, although this has yet to be confirmed. When asked for comment, a PropCo REIT spokesperson would only say that \"we are always looking for ways to strengthen our team\".\n\nMeanwhile, marketing efforts at PropCo REIT are said to be FOCUSING ON SOCIAL MEDIA, with the company reportedly investing heavily in online advertising and promotion. However, some critics are questioning the effectiveness of this strategy, with one industry expert describing it as \"a bit of a SCATTERGUN APPROACH\".\n\nIn the world of Environmental, Social, and Governance (ESG), PropCo REIT is said to be making PROGRESS, albeit slowly. Sources say that the company is taking steps to reduce its carbon footprint and improve its sustainability credentials, although some are calling for more ACTION and less TALK.\n\nAs always, it's worth noting that none of this has been officially confirmed by PropCo REIT, and the company remains tight-lipped about its plans and activities. One thing is certain, however: in the fast-paced world of real estate investment trusts, NOTHING CAN BE TAKEN FOR GRANTED. Stay tuned for further updates.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

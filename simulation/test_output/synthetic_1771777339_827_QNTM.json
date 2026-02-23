@@ -1,0 +1,40 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-13T18:24:19.060782",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute Inc. (QNTM) has announced a series of routine updates, underscoring the company's commitment to steady progress in the field of quantum computing.\n\nIn personnel news, QNTM has appointed Dr. Rachel Kim as the new Director of Quantum Software Development. Dr. Kim brings over a decade of experience in quantum algorithms and software engineering, having previously worked at the University of California, Berkeley. Her expertise is expected to enhance QNTM's quantum software stack, particularly in the areas of quantum simulation and machine learning.\n\nOn the marketing front, QNTM has launched a revamped website, featuring an updated resource section with detailed technical documentation and whitepapers on the company's quantum computing architecture. The website also includes a new section dedicated to customer testimonials and success stories, highlighting the practical applications of QNTM's quantum solutions in industries such as chemistry and materials science.\n\nIn the realm of Environmental, Social, and Governance (ESG) initiatives, QNTM has announced its participation in the Quantum Computing Industry Consortium's (QCIC) sustainability working group. This collaboration aims to develop industry-wide standards and best practices for reducing the environmental footprint of quantum computing systems. QNTM has also released its annual ESG report, which outlines the company's efforts to promote diversity and inclusion in the workplace, as well as its commitment to reducing energy consumption and waste in its operations.\n\nIn a separate development, QNTM has announced the availability of its latest software development kit (SDK) for quantum computing, which includes support for the Open Quantum Assembly Language (OpenQASM) standard. This move is expected to facilitate the development of quantum applications and foster a more open and collaborative ecosystem around QNTM's quantum computing platform.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

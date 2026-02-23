@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-16T09:02:03.491069",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "Velocity Motors Launches Next-Generation Electric Truck, Poses Significant Threat to HeavyTrucks Inc.'s Flagship Model\n\nAt 09:00 EST today, Velocity Motors unveiled its highly anticipated electric truck, the VELO X5000, at a press event in Detroit, Michigan. The launch is seen as a direct challenge to HeavyTrucks Inc.'s dominant position in the heavy-duty truck market.\n\nThe VELO X5000 boasts an impressive 500-mile range on a single charge, significantly outperforming HeavyTrucks Inc.'s flagship model, the HT-9000, which has a maximum range of 300 miles. Additionally, the VELO X5000 features advanced autonomous driving capabilities and a more efficient powertrain, further eroding the competitive advantage of HeavyTrucks Inc.'s existing offerings.\n\nIndustry analysts note that the VELO X5000's superior range and technology could potentially disrupt HeavyTrucks Inc.'s market share, particularly among environmentally conscious and tech-savvy fleet operators. HeavyTrucks Inc. has traditionally relied on its reputation for durability and reliability to maintain its market lead, but the VELO X5000's impressive specifications may force the company to reassess its product strategy.\n\nVelocity Motors has announced plans to begin production of the VELO X5000 in Q2 2024, with deliveries expected to commence in Q3 2024. HeavyTrucks Inc. has not commented on the launch, but industry observers expect the company to respond with a significant product update or refresh in the near future.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "TRUCK",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

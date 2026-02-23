@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-09T18:54:02.030797",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "At 14:00 ET, the Federal Reserve announced a 25 basis point increase in the federal funds target rate, bringing the range to 2.25-2.50%. This decision is expected to impact various sectors, including Real Estate Investment Trusts (REITs).\n\nPropCo REIT, a publicly traded REIT, is particularly sensitive to changes in interest rates due to its high beta of -1.5. As interest rates rise, the present value of PropCo REIT's future cash flows is discounted, potentially leading to a decrease in its stock price.\n\nHistorically, REITs have been negatively correlated with interest rates, as higher borrowing costs can reduce demand for their properties and increase their cost of capital. Given PropCo REIT's high beta, its stock price is likely to be disproportionately affected by the rate hike.\n\nAs a result of the Federal Reserve's decision, PropCo REIT's stock price may decline in response to the increased discount rate applied to its future cash flows. Investors will closely monitor the company's performance in the coming days to assess the full impact of the rate increase.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-21T15:09:02.979814",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors, the leading electric vehicle manufacturer in the Midwest, continues to make waves in its hometown of Detroit, Michigan. In a routine update, the company announced the promotion of long-time employee, Jane Wilson, to the role of Director of Community Engagement. Wilson, a Detroit native, has been with VELO for over five years and has been instrumental in fostering relationships with local organizations and stakeholders.\n\nIn marketing news, VELO has launched a new social media campaign highlighting the benefits of electric vehicle ownership for residents of the Great Lakes region. The campaign, dubbed \"Plug into the Midwest,\" features scenic shots of the region's natural beauty and testimonials from satisfied VELO customers. The company has also partnered with the City of Detroit to offer special incentives for city employees who purchase or lease a VELO vehicle.\n\nOn the ESG front, VELO has announced plans to expand its community outreach program, which provides educational resources and job training for local youth. The program, launched in partnership with the Detroit Public Schools, has already seen success in providing career opportunities for graduates. VELO has also committed to reducing its carbon footprint by 10% over the next two years, in line with the City of Detroit's sustainability goals.\n\nIn other news, VELO's workforce continues to grow, with over 500 employees now working at the company's Detroit headquarters. The company has also announced plans to expand its operations in the region, with new facilities slated to open in Ann Arbor and Grand Rapids in the coming year.\n\nAs VELO looks to the future, the company remains committed to its core values of innovation, sustainability, and community engagement. With its strong roots in the Midwest and a growing presence across the region, VELO is poised for continued success in the years to come.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

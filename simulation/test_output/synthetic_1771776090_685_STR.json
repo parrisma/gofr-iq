@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-08T23:02:30.258325",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "\"Truck Troubles: HeavyTrucks Inc.'s Delays Leave Stratos Defense Scrambling in Tucson\"\n\nIn a move that has sent shockwaves through the defense industry, HeavyTrucks Inc., the primary logistics provider for Stratos Defense, has announced a critical delay in its supply chain operations. The Tucson-based company, which employs over 500 locals, has been struggling to meet demand for its heavy-duty trucks, leaving Stratos Defense in a precarious position.\n\nThe delay is expected to have a ripple effect on Stratos Defense's operations, particularly at its manufacturing facility in nearby Marana, where over 200 employees rely on timely deliveries from HeavyTrucks to meet production deadlines. Stratos Defense, a leading manufacturer of defense systems, has been a major player in the local economy, with contracts totaling millions of dollars.\n\nHeavyTrucks' struggles have been attributed to a combination of factors, including increased demand and production issues at its manufacturing plant in Flagstaff. The company's CEO has been working closely with local officials, including the Mayor of Flagstaff, to resolve the issue, but so far, no timeline has been given for when the delays will be resolved.\n\nThe news has sent a wave of concern through the local business community, with many fearing the impact on Stratos Defense's operations could have far-reaching consequences for the local economy. \"This is a classic case of how a delay in one part of the supply chain can have a domino effect on other businesses,\" said a spokesperson for the Tucson Chamber of Commerce. \"We're working closely with both companies to find a solution, but it's clear that this is a critical issue that needs to be resolved quickly.\"\n\nAs the situation continues to unfold, one thing is clear: HeavyTrucks Inc.'s delays have left Stratos Defense in a tough spot, and the clock is ticking to find a solution before the impact is felt throughout the local economy.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

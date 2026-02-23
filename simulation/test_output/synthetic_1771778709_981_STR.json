@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-25T13:51:09.573554",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "BREAKING: STRATOS DEFENSE AT CENTER OF MERGER MANIA!\n\nUnconfirmed reports are SWIRLING that Stratos Defense, the renowned defense contractor, is at the EPICENTER of a potential acquisition deal that could SEND SHOCKWAVES through the industry!\n\nAccording to sources familiar with the situation, a POSSIBLE suitor has emerged, eyeing Stratos Defense's CUTTING-EDGE technology and EXTENSIVE portfolio of defense contracts. The identity of the potential buyer remains a MYSTERY, but insiders claim it's a \"major player\" in the defense sector.\n\nWhile NOTHING has been officially confirmed, the RUMORS have sparked a frenzy of speculation among industry observers and investors. Stratos Defense's stock price has been VOLATILE in recent days, with some analysts attributing the fluctuations to the MERGER CHATTER.\n\nPeople familiar with the matter stress that the talks are PRELIMINARY and NO DEAL is imminent. However, the mere possibility of a Stratos Defense acquisition has set off a FIRESTORM of excitement and trepidation among market watchers.\n\nAs the situation continues to UNFOLD, one thing is clear: Stratos Defense remains a WILD CARD in the defense industry. The company's FUTURE hangs in the balance, leaving investors and analysts on HIGH ALERT.\n\nStay tuned for further updates on this DEVELOPING STORY!",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

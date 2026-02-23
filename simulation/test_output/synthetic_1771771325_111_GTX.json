@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-09T16:21:05.682250",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GigaTech",
+  "story_body": "BREAKING: China Economic Report Sends SHOCKWAVES Through Markets, GigaTech EXPOSED\n\nUnconfirmed reports are emerging that China's GDP growth has SLOWED DOWN, sparking WIDESPREAD CONCERN among investors. As the world's second-largest economy, China's economic health has a DIRECT IMPACT on the global market. And one company that's particularly EXPOSED to this volatility is GigaTech (GTX).\n\nSources close to the matter say that GigaTech's CLOUD SERVICES business is HEAVILY DEPENDENT on the Chinese market. With a beta of 0.8, the company's revenue is HIGHLY CORRELATED with the ups and downs of the Chinese economy. This means that any SLOWDOWN in China's growth could have a PROPORTIONATE IMPACT on GigaTech's bottom line.\n\nBut here's the thing: some analysts believe that GigaTech's EXPOSURE to China could also be a HIDDEN OPPORTUNITY. As the Chinese government looks to STIMULATE its economy, companies like GigaTech that offer CLOUD SERVICES could be PERFECTLY POSITIONED to benefit from any upcoming stimulus packages.\n\nUnconfirmed reports suggest that GigaTech is already in TALKS with Chinese officials to EXPAND its cloud services offerings in the country. If true, this could be a MAJOR BOOST to the company's revenue and send its stock SOARING.\n\nBut for now, the situation remains UNCLEAR. Investors are on HIGH ALERT, waiting for more information about the Chinese economy and GigaTech's exposure to it. One thing is certain, however: the next few days will be CRUCIAL for GigaTech's stock price. Will it SOAR or PLUMMET? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "GTX",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

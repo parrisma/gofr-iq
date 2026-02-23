@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-05T17:51:35.607986",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "VITALITY PHARMA UPDATE: Sources Say Company Makes Moves, But Details Remain Sketchy\n\nIn a move that has left investors SHRUGGING, Vitality Pharma (VIT) has reportedly made some changes to its personnel roster, although specifics remain UNDER WRAPS. Unconfirmed reports suggest that a mid-level executive has departed the company, but the circumstances surrounding the departure are unclear.\n\nMeanwhile, marketing efforts at VIT appear to be shifting gears, with rumors swirling about a potential new campaign focused on SOCIAL RESPONSIBILITY. While details are scarce, insiders claim that the initiative will highlight the company's commitment to ENVIRONMENTAL SUSTAINABILITY and COMMUNITY ENGAGEMENT.\n\nIn related news, Vitality Pharma has allegedly taken steps to enhance its ESG (Environmental, Social, and Governance) profile, although the exact nature of these efforts remains a MYSTERY. Sources close to the company whisper about a potential partnership with a prominent SUSTAINABILITY CONSULTANCY, but nothing has been officially confirmed.\n\nAs always, investors are advised to approach these UNCONFIRMED REPORTS with a healthy dose of skepticism. Vitality Pharma has declined to comment on these rumors, leaving analysts to SPECULATE about the potential implications for the company's future prospects.\n\nStay tuned for further updates, but don't hold your breath \u2013 in the world of Vitality Pharma, SECRECY REIGNS SUPREME.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

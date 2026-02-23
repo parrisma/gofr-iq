@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-07T04:28:22.304820",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Rumors of a potential acquisition have begun to swirl around Nexus Software, a leading tech firm based in the heart of Portland's Silicon Forest. According to people familiar with the matter, who spoke on condition of anonymity, there is speculation that a major player in the industry may be eyeing the company.\n\nWhile nothing has been officially confirmed, the whispers of a possible takeover have been making the rounds in local tech circles. Nexus Software, which employs over 500 people in the Portland area, has been a staple of the city's thriving tech scene for years.\n\nThe company's headquarters, located in the trendy Pearl District, has been a hub of activity in recent weeks, with several high-level meetings taking place behind closed doors. Sources close to the matter say that these meetings have sparked intense speculation among employees, with some wondering if the company is on the verge of a major shake-up.\n\nLocal business leaders and politicians are also taking notice of the rumors, with some expressing concern about the potential impact on the city's economy. \"We're always worried about the potential loss of jobs and talent when a major company is involved in a merger or acquisition,\" said a spokesperson for the Portland Business Alliance.\n\nWhile Nexus Software has declined to comment on the rumors, people familiar with the matter say that the company's leadership has been in talks with several potential suitors in recent months. However, it's worth noting that these rumors are entirely unconfirmed, and it's unclear at this point whether a deal is actually in the works.\n\nAs the situation continues to unfold, one thing is certain: the Portland tech community will be watching closely to see what happens next. With its highly skilled workforce and thriving startup scene, the city has a lot at stake in the outcome of this rumored acquisition.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

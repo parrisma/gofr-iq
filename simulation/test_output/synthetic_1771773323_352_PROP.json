@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-31T23:15:23.587624",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "GigaTech Inc. Factory Fire Causes Shutdown, Expected to Disrupt PropCo REIT Operations\n\nAt 02:47 UTC, a major fire broke out at the primary manufacturing facility of GigaTech Inc. (GTX), located in the same market as PropCo REIT (PROP). The incident resulted in a complete shutdown of the factory, with local authorities and emergency services responding to the scene.\n\nAccording to initial reports, the fire caused significant damage to the facility's production lines, resulting in a temporary halt to all manufacturing activities. GigaTech Inc. officials have confirmed that the factory will remain closed until further notice, pending a thorough investigation and assessment of the damage.\n\nAs a result of the shutdown, PropCo REIT is expected to experience disruptions to its operations within the next 2-4 weeks. PropCo REIT, which operates in the same market as GigaTech Inc., relies on the latter for critical components used in its own business activities. The shortage of these components, caused by the GigaTech Inc. factory shutdown, will likely impact PropCo REIT's ability to meet its own production and delivery schedules.\n\nSpecifically, PropCo REIT's reliance on GigaTech Inc. for key supplies means that the REIT's own manufacturing and logistics operations will be affected, potentially leading to delays and increased costs. As the shutdown continues, PropCo REIT's management will face challenges in sourcing alternative suppliers, which may not be readily available in the same market.\n\nThe exact extent of the impact on PropCo REIT will depend on the duration of the GigaTech Inc. factory shutdown and the REIT's ability to secure alternative supplies. However, given the close operational ties between the two companies, it is clear that the disruption will have a significant effect on PropCo REIT's business activities in the coming weeks.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

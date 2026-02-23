@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-26T01:08:46.072905",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GENE Sys: The Calm Before the Storm?\n\nGeneSys (GENE) has been trading sideways for weeks, leaving bagholders wondering when the next catalyst will propel this stock to the moon. In the meantime, the company's been quietly making moves that, while not exactly earth-shattering, are worth noting.\n\nOn the personnel front, GENE's board of directors has welcomed a new member, whose expertise in regulatory affairs could prove valuable in navigating the increasingly complex landscape of the industry. Not exactly a moonshot, but a solid addition nonetheless.\n\nMarketing efforts have also been ramping up, with the company launching a new social media campaign aimed at increasing brand awareness. We're not expecting a massive spike in stock price just yet, but hey, every little bit helps, right? Maybe this will be the spark that gets the GENE train rolling again.\n\nOn the ESG front, GeneSys has announced plans to reduce its carbon footprint by implementing more sustainable practices in its supply chain. Kudos to the company for taking a step in the right direction, but let's be real, this isn't exactly the kind of news that's going to send the stock soaring. Still, it's a nice PR boost, and who knows, maybe the ESG crowd will take notice.\n\nAll in all, it's been a pretty uneventful few weeks for GENE, but we're not complaining. Sometimes, no news is good news. The question on everyone's mind, of course, is what's next? Will GeneSys surprise us with a major announcement, or will the stock continue to trade in this narrow range? Only time will tell, but for now, we're just waiting for the next catalyst to send this stock to the moon.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

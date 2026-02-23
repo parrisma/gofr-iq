@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T21:51:23.617391",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 N2 Wrong Theme Strong Headline] GENE - the drugmaker",
+  "story_body": "**BREAKING: Agricultural Subsidy SHOCKWAVES Hit Farmers, Food Prices SOAR**\n\nUnconfirmed reports are emerging of a MAJOR overhaul of agricultural subsidies, sending SHOCKWAVES through the farming community and sparking fears of FOOD SHORTAGES and PRICE HIKES. Sources close to the matter claim that the proposed changes could have a DEVASTATING impact on crop yields and rural economies.\n\nAs the situation continues to unfold, insiders reveal that the new policy could see a significant REDUCTION in subsidies for key crops, including wheat, corn, and soybeans. This, in turn, could lead to a PERFECT STORM of reduced production, increased costs, and higher prices for consumers.\n\nWhile the exact details of the plan remain unclear, industry experts warn that the consequences could be CATASTROPHIC. \"This is a recipe for disaster,\" said one insider, who wished to remain anonymous. \"Farmers are already struggling to make ends meet, and this could be the final nail in the coffin.\"\n\nIn a bizarre twist, sources suggest that the pharmaceutical industry may also be affected, with companies like GENE potentially facing increased costs for raw materials. However, this remains purely speculative at this point.\n\nAs the agricultural community reels from the news, one thing is certain: the impact on food production and prices will be SEISMIC. Stay tuned for further updates as this story continues to unfold.",
+  "validation_metadata": {
+    "scenario": "Phase4 N2 Wrong Theme Strong Headline",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-01T20:04:51.161361",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "BREAKING: NXS Insider SAYS Company May Be \"RE-THINKING\" MARKETING STRATEGY\n\nUnconfirmed reports are emerging that Nexus Software, the beleaguered tech firm, is POISED TO MAKE CHANGES to its marketing approach. Sources close to the matter, who wish to remain ANONYMOUS, suggest that the company's top brass are GROWING INCREASINGLY FRUSTRATED with the current state of affairs.\n\nWhile details remain SKETCHY, it appears that NXS is considering a COMPLETE OVERHAUL of its marketing department. This could potentially involve the DEPARTURE of several high-ranking executives, although this has NOT BEEN CONFIRMED.\n\nIn other news, Nexus Software has reportedly LAUNCHED A NEW INITIATIVE aimed at improving its environmental, social, and governance (ESG) credentials. The program, which is said to be in its EARLY STAGES, is focused on REDUCING THE COMPANY'S CARBON FOOTPRINT and promoting greater diversity and inclusion in the workplace.\n\nSources say that the move is part of a broader effort by NXS to RE-BRAND ITSELF as a RESPONSIBLE CORPORATE CITIZEN. However, some observers have expressed SKEPTICISM about the company's ability to follow through on its promises.\n\nMeanwhile, rumors are circulating about a POSSIBLE SHUFFLE of NXS's senior management team. While nothing has been officially announced, insiders suggest that several key positions may be up for grabs in the coming weeks.\n\nAs always, these reports are UNCONFIRMED and should be treated with a HEALTHY DOSE OF SKEPTICISM. Nexus Software has thus far declined to comment on any of these rumors, fueling SPECULATION and uncertainty among investors and analysts. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

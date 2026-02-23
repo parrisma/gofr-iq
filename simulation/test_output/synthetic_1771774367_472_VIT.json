@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-18T02:14:47.108458",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "OmniCorp Global Suffers Major Factory Fire, Vitality Pharma Downstream Operations to be Impacted\n\nAt 03:45 UTC, a significant fire broke out at the primary manufacturing facility of OmniCorp Global (OMNI), located in [undisclosed location]. The fire has resulted in a complete shutdown of the factory, with local authorities confirming that the blaze is currently being brought under control.\n\nAccording to eyewitnesses, the fire appears to have originated in the factory's production area, causing extensive damage to equipment and infrastructure. No casualties have been reported.\n\nOmniCorp Global is a key supplier of critical components to various industries, including pharmaceuticals. In recent months, the company has been rumored to be a potential acquisition target of Vitality Pharma (VIT).\n\nThe shutdown of OmniCorp Global's factory is expected to have a significant impact on Vitality Pharma's operations within the next 2-4 weeks. As a major customer of OmniCorp Global, Vitality Pharma relies heavily on the supplier for the production of several key products. With the factory offline, Vitality Pharma's manufacturing schedule is likely to be severely disrupted, potentially leading to delays and shortages of critical medications.\n\nThe exact timeline and extent of the impact on Vitality Pharma's operations will depend on the duration of the shutdown and the company's ability to source alternative suppliers. As the situation develops, further updates will be provided.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

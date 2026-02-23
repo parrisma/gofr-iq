@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-19T20:36:12.028256",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the consumer cyclical giant",
+  "story_body": "In a move that has sent shockwaves through the consumer cyclical industry, LuxeBrands (LUXE) has launched a game-changing product that is being touted as a major threat to ShopMart's (SHOPM) flagship offering. The unveiling took place at LuxeBrands' headquarters in downtown Austin, where the company's 500-strong workforce gathered to witness the unveiling of the innovative new product.\n\nDubbed the \"Austin Ace,\" the product is a sleek and sophisticated take on the traditional consumer cyclical staple, boasting cutting-edge features and a sleek design that has left many in the industry wondering how ShopMart will respond. With its flagship store located just a stone's throw away in the heart of Austin, ShopMart's 2,000 local employees are no doubt feeling the heat as LuxeBrands' new offering promises to give their employer a serious run for its money.\n\nLuxeBrands' bold move has also caught the attention of local politicians, with Austin Mayor Steve Adler in attendance at the launch event. \"This is a fantastic day for Austin and a testament to the city's thriving business community,\" Adler said, praising LuxeBrands for its commitment to innovation and job creation.\n\nAs the news spreads, analysts are already speculating about the potential impact on ShopMart's bottom line. With LuxeBrands' Austin Ace poised to capture a significant share of the market, ShopMart's dominance in the consumer cyclical space is under threat like never before. The question on everyone's lips is: how will ShopMart respond to this bold challenge from its rival? Only time will tell, but one thing is certain - the consumer cyclical landscape in Austin has just gotten a whole lot more interesting.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "SHOPM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

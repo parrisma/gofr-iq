@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-14T03:03:44.584193",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo",
+  "story_body": "Fed Throws REITs Under the Bus with Rate Hike\n\nIn a move that's left no one surprised, the Federal Reserve just raised interest rates by 25 basis points. For the real estate investment trust (REIT) crowd, this is a major gut punch. And for PropCo (PROP) bagholders, it's time to buckle up for a potentially rough ride.\n\nAs a REIT with a beta of -1.5, PropCo is essentially a rate-sensitive nightmare. When rates rise, the present value of their future cash flows gets discounted, making their shares less attractive to investors. It's simple math, folks: higher rates mean lower stock prices for REITs. And with this latest hike, PropCo is likely to take it on the chin.\n\nWe've seen this movie before, and it never ends well for REITs. As the yield curve shifts, investors start to favor bonds over dividend-paying stocks like PropCo. It's a classic case of \"why bother with stocks when I can get a guaranteed return from Treasuries?\" And with rates on the rise, PropCo's juicy dividend yield just got a whole lot less juicy.\n\nDon't expect PropCo to moonshot anytime soon. In fact, we wouldn't be surprised to see the stock take a serious leg down in the coming days. The Fed's rate hike is just the beginning of a long, painful slide for REITs like PropCo. So, if you're a PropCo shareholder, you might want to start mentally preparing yourself for a world of hurt. On the other hand, if you're looking to short a REIT, PropCo might just be the perfect candidate.\n\nOne thing's for sure: the Fed's rate hike is a major headwind for PropCo, and it's going to take a lot more than a few bullish analyst calls to turn this ship around. For now, it's time to bid adieu to PropCo's moonshot aspirations and hello to a potentially long and painful downtrend.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

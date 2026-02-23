@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T21:35:48.790556",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 M2 Rates Shock Inflation Print] PROP - PropCo REIT",
+  "story_body": "BREAKING: PROP Gets Smoked as Central Bank Unleashes Shock Rate Hike\n\nThe PropCo REIT (PROP) bagholders are getting crushed today after the central bank dropped a surprise rate bombshell on the market. The unexpected 50-basis-point hike has sent shockwaves through the real estate sector, with PROP taking it on the chin.\n\nThe yield curve is getting its steepest slope in months, and that's bad news for rate-sensitive stocks like PROP. The REIT's price action is telling the tale - it's down over 5% in a matter of minutes, with no signs of slowing down. This is what we call a \"risk-off\" trade, folks, and PROP is getting sold to the moon.\n\nThe inflation print that accompanied the rate decision was hotter than expected, with core CPI coming in at 2.5% versus the 2.2% consensus. That's got the market pricing in even more rate hikes down the line, which is a toxic cocktail for real-asset and commodity-linked valuations.\n\nPROP's portfolio is heavily weighted towards commercial and residential properties, which are highly sensitive to changes in interest rates. As rates rise, the present value of those properties takes a hit, and that's exactly what we're seeing today.\n\nThe question on everyone's mind is - how much further will PROP fall? The stock has already given up its 50-day moving average, and the next level of support doesn't come in until the mid-$20s. If we break below that, it's anyone's guess where the bottom is.\n\nOne thing's for sure - the PROP bagholders are in for a world of pain if they don't get out of the way. This stock is getting destroyed, and it's going to take a lot more than a Band-Aid to fix the damage. As the great philosopher once said, \"You can't fix stupid, but you can sell it short.\" Looks like PROP is about to become the ultimate short-seller's paradise.",
+  "validation_metadata": {
+    "scenario": "Phase4 M2 Rates Shock Inflation Print",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440002",
+        "550e8400-e29b-41d4-a716-446655440008"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

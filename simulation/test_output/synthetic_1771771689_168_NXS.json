@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T22:48:09.428579",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "Nexus Software (NXS) has announced the appointment of Ms. Jane Doe as Vice President of Marketing, effective immediately. Ms. Doe joins Nexus Software from a prior role at a leading industry publication, where she served as Director of Digital Media.\n\nIn a separate development, Nexus Software has launched a revised version of its corporate website, featuring enhanced accessibility features and streamlined navigation. The updated site, available at www.nexussoftware.com, is designed to provide improved user experience and facilitate easier access to company information.\n\nAdditionally, Nexus Software has published its annual Environmental, Social, and Governance (ESG) report for the fiscal year ended December 31, 2022. The report, available on the company's website, provides an overview of Nexus Software's ESG initiatives and performance metrics.\n\nNexus Software's ESG report highlights the company's ongoing efforts to reduce its carbon footprint, promote diversity and inclusion in the workplace, and maintain robust governance practices. The report is available for download at www.nexussoftware.com/esg.\n\nNo further information is available at this time.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "NXS",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

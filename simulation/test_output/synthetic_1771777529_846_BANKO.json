@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-06T19:23:29.200828",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "At 14:00 ET, the Federal Reserve announced a 25 basis point increase in the federal funds target rate, bringing the range to 4.75%-5.00%. This decision is expected to have a positive impact on BankOne (BANKO), given its exposure to rising interest rates.\n\nAs a banking institution, BankOne benefits from increasing interest rates, which can lead to a higher net interest margin. A higher net interest margin can contribute to increased profitability for the bank. With a beta of 1.8, BankOne's stock is likely to be more volatile than the overall market, and the interest rate increase is expected to have a magnified positive effect on the bank's shares.\n\nThe rate hike is expected to result in higher interest income for BankOne, as the bank can charge higher rates on its loans while maintaining a relatively stable cost of funds. This can lead to an increase in the bank's net interest income, a key component of its revenue. \n\nIn the short term, the interest rate increase may lead to a increase in BankOne's stock price, as investors react to the potential for increased profitability. However, the long-term impact will depend on various factors, including the bank's ability to manage its interest rate risk and the overall state of the economy.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

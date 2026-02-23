@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-29T17:35:16.124932",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ECO",
+  "story_body": "ECO SEES SHUFFLE IN MIDDLE MANAGEMENT, SOURCES CLAIM\n\nIn a move that has left many scratching their heads, sources close to the matter say that ECO, the embattled corporation, has made some CHANGES to its middle management team. While details are SKETCHY at best, unconfirmed reports suggest that a handful of department heads have been REASSIGNED or outright REPLACED.\n\nInsiders whisper that the shake-up is part of a broader effort to STREAMLINE operations and CUT COSTS, but others speculate that it may be a DESPERATE attempt to inject some much-needed FRESH BLOOD into the stagnant organization.\n\nMeanwhile, ECO's MARKETING MACHINE has been quietly CHURNING OUT new ads and promotional materials, touting the company's COMMITMENT TO SUSTAINABILITY and SOCIAL RESPONSIBILITY. Critics, however, say it's all just a thinly veiled attempt to GREENWASH the company's questionable ESG track record.\n\nSpeaking of which, ECO's ENVIRONMENTAL, SOCIAL, AND GOVERNANCE (ESG) report is reportedly due for release soon, and sources say it will contain some SURPRISES. While the company has been tight-lipped about the contents, rumors abound that it will reveal some MAJOR CHANGES to ECO's sustainability initiatives.\n\nAs always, it's worth noting that NONE of this has been officially confirmed by ECO, and the company remains characteristically TIGHT-LIPPED about its internal dealings. Stay tuned for further updates, but don't hold your breath \u2013 after all, this is ECO we're talking about.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-08T16:33:04.028532",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "SHOPM's Factory Fire Sends Stock to the Moon... in the Wrong Direction\n\nTraders, beware: a major factory fire at ShopMart (SHOPM) has brought the company's operations to a screeching halt, and the stock price is paying the price. SHOPM's shares are plummeting as investors scramble to assess the damage. But SHOPM's woes are about to become LuxeBrands' (LUXE) problem, and bagholders of LUXE should be on high alert.\n\nAs a major player in the Consumer Cyclical space, LuxeBrands relies heavily on ShopMart for its supply chain. With SHOPM's factory shutdown, LUXE's production lines are about to get slammed. In 2-4 weeks, when LUXE's inventory runs dry, the company will be forced to scramble for alternative suppliers or face a significant slowdown in production. This is a recipe for disaster, folks.\n\nLUXE's stock price has been flying high on the back of strong sales, but this supplier catastrophe is about to bring it crashing back down to earth. As SHOPM struggles to get back online, LUXE's growth story is about to take a major hit. The question on every trader's mind should be: how low can LUXE go?\n\nOne thing is certain: LUXE's stock price is about to get a lot more volatile. If you're long LUXE, it's time to start sweating. The clock is ticking, and when the inventory runs out, LUXE's stock price is going to take a beating. SHOPM's factory fire may have sent its own stock to the moon, but it's about to bring LUXE's stock price crashing back down to reality.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

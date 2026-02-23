@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2025-12-31T07:34:11.495617",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "SHOCKWAVES IN THE MARKET: Commodity Price SURGE Rocks EcoPower Systems!\n\nUNCONFIRMED REPORTS are emerging of a DRAMATIC 20% spike in oil, lithium, and steel prices, sending SHIVERS down the spines of investors and analysts alike! The sudden and mysterious surge has left many scratching their heads, wondering what's behind this COMMODITY PRICE TSUNAMI.\n\nAs the news spreads like WILDFIRE, all eyes are on ECOPOWER SYSTEMS (ECO), the clean energy behemoth with a REPUTATION for innovation and SUSTAINABILITY. But sources close to the company say that the COMMODITY PRICE SHOCKWAVE is having a DEVASTATING impact on EcoPower's bottom line.\n\nThe company's INPUT COSTS are SKYROCKETING, thanks to its heavy reliance on lithium and steel for its CLEAN ENERGY SOLUTIONS. And with a BETA of -1.3, EcoPower Systems is particularly VULNERABLE to commodity price fluctuations. As the costs of these essential materials SPIKE, EcoPower's MARGINS are taking a HIT.\n\nWhile the company's commitment to CLEAN ENERGY is UNWAVERING, the harsh reality is that HIGHER INPUT COSTS are ERODING its PROFITABILITY. Unconfirmed reports suggest that EcoPower's management is SCRAMBLING to MITIGATE the damage, but it remains to be seen how effective their efforts will be.\n\nAs the market CONTINUES TO REEL from the commodity price surge, one thing is clear: EcoPower Systems is FACING AN UNCERTAIN FUTURE. Will the company be able to WEATHER THE STORM, or will the COMMODITY PRICE TSUNAMI PROVE TOO MUCH TO HANDLE? Only time will tell.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

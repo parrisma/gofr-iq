@@ -1,0 +1,37 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-14T19:23:56.859944",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "\"GTX Goes Up in Flames, NXS Left to Pick Up the Pieces - Get Ready for a World of Pain, Bagholders!\n\nIn a devastating turn of events, a massive factory fire has ravaged the facilities of GigaTech Inc. (GTX), sending shockwaves through the tech industry. The supplier's production capabilities have been severely crippled, and it's anyone's guess when they'll be back online. One thing's for sure, though - this catastrophe is about to send GTX's stock price plummeting, and it's not the only one that'll feel the heat.\n\nNexus Software (NXS), a major player in the tech space, is about to get hit with a nasty case of collateral damage. As a downstream partner, NXS relies heavily on GTX for critical components. With GTX's production halted, NXS will be left scrambling to find alternative suppliers - and that's not going to be easy. In 2-4 weeks, we can expect NXS's stock price to take a serious hit as the reality of the situation sets in.\n\nThe writing's on the wall, folks - NXS is about to become a bagholder's worst nightmare. The company's inability to deliver on its promises will send investors running for the hills, and we can expect a serious correction in the stock price. It's time to short NXS and watch as it comes crashing back down to earth.\n\nMeanwhile, GTX's stock price is about to go up in flames - literally. The supplier's woes are far from over, and we can expect a long and painful road to recovery. As the news sinks in, GTX's stock will be going down, down, down - and it's not going to be a pretty sight.\n\nSo, buckle up, traders - it's about to get bumpy. The GTX factory fire is just the beginning of a wild ride for NXS, and we're not expecting a happy ending. To the moon? More like to the dumpster - at least, for these two tech stocks.\"",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "NXS",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

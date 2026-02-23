@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-07T05:25:12.278615",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "SHOPM Supply Chain Disruption to Impact LUXE Operations\n\nAt 09:45 EST, ShopMart (SHOPM) announced a critical delay in its supply chain, citing unforeseen logistical issues. The disruption is expected to affect the timely delivery of goods to its retail partners, including LuxeBrands (LUXE).\n\nAs a key supplier to LuxeBrands in the consumer cyclical sector, ShopMart's failure to meet its delivery obligations will likely cause operational difficulties for the luxury goods retailer. LuxeBrands relies heavily on ShopMart for the procurement of high-end products, which are then sold through its various retail channels.\n\nThe supply chain disruption is expected to result in delayed restocking of shelves and potential inventory shortages for LuxeBrands. This, in turn, may impact the retailer's ability to meet customer demand and maintain its sales targets.\n\nShopMart has assured its partners that it is working to resolve the issue as quickly as possible, but no specific timeline for resolution has been provided. LuxeBrands has yet to comment on the situation.\n\nThe supply chain disruption serves as a reminder of the interconnected nature of the consumer cyclical sector, where the failure of one company can have far-reaching consequences for its partners and customers.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

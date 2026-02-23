@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-20T21:39:04.146115",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "EcoPower Systems (ECO) has announced a series of organizational adjustments aimed at streamlining its operational framework and bolstering its commitment to environmental sustainability. \n\nIn a move to enhance its marketing outreach, the company has appointed Alexandra Rodriguez as its new Director of Digital Communications. Rodriguez, a veteran in the field with a proven track record in leveraging social media platforms and content marketing strategies, is expected to spearhead ECO's efforts to increase its online presence and engage more effectively with its customer base.\n\nOn the personnel front, ECO has also announced the promotion of Dr. Nathan Kim to the position of Senior Research Engineer. Dr. Kim, who has been instrumental in the development of the company's proprietary EcoCycle technology, will oversee the advancement of ECO's research and development initiatives, focusing on improving the efficiency and scalability of its sustainable energy solutions.\n\nIn line with its commitment to environmental, social, and governance (ESG) principles, ECO has also announced the launch of its inaugural Sustainability Report. The report provides a comprehensive overview of the company's ESG performance, highlighting its achievements in reducing greenhouse gas emissions, implementing sustainable supply chain practices, and promoting diversity and inclusion within its workforce.\n\nIn other news, ECO has confirmed that it will be participating in the upcoming International Conference on Sustainable Energy Systems, where it will showcase its latest innovations in renewable energy technology. The conference, scheduled to take place in late October, will bring together leading experts and industry stakeholders to discuss the latest trends and advancements in the field of sustainable energy.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

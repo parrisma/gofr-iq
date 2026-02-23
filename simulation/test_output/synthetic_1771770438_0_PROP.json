@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-20T15:58:18.438857",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "In a quiet update from their downtown San Francisco headquarters, PropCo REIT (PROP) shared several personnel and marketing developments this week. The real estate investment trust, which employs over 200 people in the Bay Area, announced the promotion of longtime employee, Rachel Lee, to Senior Vice President of Asset Management. Lee, a San Francisco native and University of California, Berkeley graduate, will oversee the company's growing portfolio of commercial properties in the city and surrounding suburbs.\n\nMeanwhile, PropCo REIT's marketing team has been busy promoting the company's commitment to sustainability and community engagement. As part of its Environmental, Social, and Governance (ESG) initiative, the company has partnered with the San Francisco Parks Alliance to support the development of green spaces in underserved neighborhoods. This effort aligns with the city's goal of increasing green space by 10% over the next five years, as outlined in Mayor London Breed's recent budget proposal.\n\nIn other news, PropCo REIT has announced plans to participate in the upcoming San Francisco Chamber of Commerce's annual Economic Development Conference. The conference, which brings together business leaders and policymakers to discuss the city's economic future, will be held at the Hilton San Francisco Union Square in late April. The company's CEO is expected to join a panel discussion on the role of real estate investment trusts in shaping the city's urban landscape.\n\nThese updates reflect PropCo REIT's ongoing efforts to engage with the local community and promote sustainable practices in its business operations. With a portfolio of over 50 properties in the Bay Area, the company remains committed to being a responsible corporate citizen in the cities it serves.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

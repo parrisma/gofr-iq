@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-01T04:23:07.961087",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute, Inc. (QNTM) is among several technology companies experiencing disruptions due to industry-wide shortages of critical components.\n\nAs of 08:00 EST, reports indicate that a global shortage of high-performance semiconductors is affecting multiple sectors, including cloud computing, artificial intelligence, and cybersecurity. Quantum Compute, Inc. (QNTM), a leading developer of quantum computing solutions, is one of the companies impacted by the shortage.\n\nAccording to industry sources, the shortage is attributed to a combination of factors, including increased demand, supply chain constraints, and manufacturing capacity limitations. The shortage is expected to persist for an undetermined period, with potential long-term implications for the technology sector.\n\nQuantum Compute, Inc. (QNTM) has not issued a formal statement regarding the impact of the shortage on its operations. However, the company's reliance on high-performance semiconductors for its quantum computing products makes it likely that QNTM will be affected by the shortage.\n\nOther technology companies, including those in the cloud computing and artificial intelligence sectors, are also expected to be impacted by the shortage. The industry-wide nature of the disruption suggests that the shortage is a sector issue, rather than a company-specific problem.\n\nAs of 08:00 EST, the situation remains fluid, with no clear resolution in sight. Further updates will be provided as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

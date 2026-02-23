@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-24T18:39:07.133932",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp Announces Routine Updates\n\nAs of 08:00 EST, February 27, 2023, FinCorp (FIN) has released several routine updates pertaining to personnel, marketing, and Environmental, Social, and Governance (ESG) initiatives.\n\nIn a statement, FinCorp confirmed the appointment of Ms. Jane Doe as Director of Marketing, effective immediately. Ms. Doe brings over 10 years of experience in the financial services sector and will be responsible for overseeing the company's marketing strategy.\n\nAdditionally, FinCorp has launched a new website redesign, which is now live at www.fincorp.com. The updated website features improved navigation and enhanced user experience.\n\nRegarding ESG, FinCorp has announced its participation in the United Nations Environment Programme Finance Initiative (UNEP FI). The company joins a global network of financial institutions committed to sustainable finance and responsible investing.\n\nIn other news, FinCorp's 2022 Corporate Social Responsibility Report is now available on the company's website. The report highlights the company's community development initiatives, employee volunteer programs, and environmental sustainability efforts.\n\nThese updates reflect FinCorp's ongoing commitment to enhancing its operations, marketing efforts, and ESG practices. No further information is available at this time.\n\nThis concludes the routine update from FinCorp.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

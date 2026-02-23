@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2025-12-26T18:27:45.481025",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "The regulatory hammer just dropped, and FinCorp (FIN) is about to feel the pain. In a move that's got fintech fanatics reeling, regulators just announced a slew of stricter compliance requirements that are going to send licensing and compliance costs soaring. And let's be real, folks, this is a straight-up gut punch for FinCorp.\n\nWith a beta of -1.2, it's clear that FIN is going to be one of the biggest losers in this regulatory crackdown. When the beta is that deep in the red, you can bet your bottom dollar that the stock is going to take a beating. And let's not forget, bagholders are already on edge after the last earnings report.\n\nThe new regulations are all about tightening up the fintech space, and that means FinCorp is going to have to shell out some serious cash to get compliant. We're talking licensing fees, audit costs, the whole nine yards. And with the regulatory noose tightening, you can forget about FIN's stock price going to the moon anytime soon.\n\nNow, we know what you're thinking - will FinCorp be able to absorb the hit? The answer is, probably not. With a beta that negative, it's clear that the market is already pricing in some serious pain. And let's not forget, this is just the beginning. As the regulatory landscape continues to shift, you can bet that FIN is going to be right in the crosshairs.\n\nSo, what's the play here? If you're a FIN shareholder, it's time to start sweating bullets. This regulatory announcement is a clear sell signal, and you'd be wise to get out while the getting's good. And if you're a fintech enthusiast, it's time to start looking for other plays that aren't going to get crushed by the regulatory hammer. One thing's for sure - FinCorp's stock price is about to take a serious hit, and it's not going to be pretty.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T14:42:11.185181",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] GENE - GeneSys",
+  "story_body": "At 09:45 EST, trading activity in the Healthcare sector was observed, with various industry participants engaging in customary market operations. GeneSys, Inc. (GENE) was among the entities noted to be present in the market.\n\nAs is typical for a standard trading day, a range of transactions were executed, involving multiple stakeholders and market intermediaries. No unusual patterns or significant developments were reported.\n\nIndustry observers noted the ongoing presence of GeneSys, Inc. (GENE) in the market, consistent with its established role as a participant in the Healthcare sector. No specific events or announcements were disclosed.\n\nMarket conditions remained in line with expectations, characterized by the absence of notable disruptions or extraordinary events. The sector's overall atmosphere was described as calm and unremarkable.\n\nTrading activity continued throughout the session, with GeneSys, Inc. (GENE) and other sector entities operating in accordance with standard market protocols. No further information was available regarding specific transactions or strategic initiatives.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

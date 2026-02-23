@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-19T23:44:10.266389",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute (QNTM) - Not Exactly Sending it to the Moon Just Yet\n\nQuantum Compute, the oft-hyped but struggling quantum computing play, is making some noise on the personnel front. QNTM announced the appointment of a new Chief Marketing Officer, tasked with revamping the company's brand and messaging. We're not exactly holding our breath, but hey, maybe this new hire can help QNTM shake off its reputation as a bagholder's worst nightmare.\n\nIn other underwhelming news, QNTM is touting its commitment to environmental sustainability. The company claims it's reduced its carbon footprint by optimizing its data center operations. Okay, great, but how about optimizing your stock price? That's what we're really interested in.\n\nOn the ESG front, QNTM is also highlighting its diversity and inclusion initiatives. We're all for it, but let's be real, folks. When your stock is stuck in the mud, no amount of virtue signaling is going to send it to the moon.\n\nSpeaking of which, QNTM's stock price remains stuck in a rut, unable to break out of its recent trading range. We're not seeing any catalysts on the horizon to change that, so it's business as usual for this sleepy quantum computing stock. Bagholders, you're still holding the bag.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

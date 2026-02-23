@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-04T14:38:16.158794",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "As the sun rises over the bustling streets of downtown Denver, the effects of a nationwide supply chain disruption are being felt in the financial sector, with FinCorp (FIN) being no exception. The company's 2,500 employees in the Mile High City are working tirelessly to mitigate the impact of industry-wide shortages on their operations.\n\nThe issue, which has been plaguing the sector for weeks, is attributed to a perfect storm of increased demand, transportation bottlenecks, and manufacturing delays. As a result, FinCorp's supply chain team is scrambling to secure essential materials and equipment, from paper and ink for their printing facilities in Lakewood to specialized computer hardware for their data centers in Boulder.\n\n\"It's not just a FinCorp problem, it's an industry-wide issue,\" said a local financial analyst. \"When you have a shortage of critical components, it's like a ripple effect throughout the entire sector. Everyone is feeling the pinch.\"\n\nThe shortages are also having a ripple effect on the local economy, with small businesses and startups in the Denver area struggling to access essential resources. \"We're seeing a lot of frustration from our members,\" said a spokesperson for the Denver Chamber of Commerce. \"When you can't get the materials you need, it's hard to operate efficiently.\"\n\nAs the situation continues to unfold, FinCorp's leadership is working closely with local officials to find solutions. In a recent meeting with the Denver City Council, company representatives discussed potential strategies for alleviating the shortages, including partnering with local suppliers and exploring alternative transportation options.\n\nWhile the situation remains fluid, one thing is clear: the supply chain disruption is a sector-wide issue that will require a collaborative effort to resolve. As the financial industry continues to navigate this challenging landscape, FinCorp's employees in Denver and beyond will be working diligently to ensure that their operations remain as smooth as possible.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

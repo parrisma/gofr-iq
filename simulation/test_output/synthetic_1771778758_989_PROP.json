@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-15T14:53:58.802479",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "\"Stratos Defense Factory Fire Brings Economic Jitters to Tucson, Ripples to Reach PropCo REIT\"\n\nA devastating factory fire ripped through the Stratos Defense plant in Tucson, Arizona, late Tuesday night, leaving the facility in ruins and casting a shadow over the local economy. The blaze, which took firefighters over three hours to contain, has forced the company to shut down operations indefinitely, putting the jobs of its 250 employees in jeopardy.\n\nThe cause of the fire is still unknown, but officials say it's too early to speculate. Stratos Defense, a leading manufacturer of defense systems, has been a staple of the Tucson community for over two decades. The company's presence has been a major draw for other businesses, and its loss will be deeply felt.\n\nAs the city struggles to come to terms with the disaster, concerns are growing about the ripple effects on the local economy. One company likely to feel the pinch is PropCo REIT, which operates several commercial properties in the Tucson area, including office spaces and warehouses. With Stratos Defense out of commission, PropCo REIT can expect a significant decline in demand for its properties, particularly those that cater to the defense industry.\n\nIn two to four weeks, as the full impact of the factory shutdown begins to manifest, PropCo REIT can expect to see a decrease in occupancy rates and rental income. The company's properties in the surrounding areas, including the Tucson Downtown Warehouse District, may be particularly hard hit. Local economic development officials are bracing for a potential exodus of businesses and jobs, which could further exacerbate the situation.\n\nTucson Mayor Regina Romero has promised to work closely with Stratos Defense to support the company's recovery efforts and mitigate the impact on the local economy. However, with the city's economic future hanging in the balance, the road ahead looks uncertain.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440004"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

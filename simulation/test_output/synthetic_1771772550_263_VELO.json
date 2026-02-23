@@ -1,0 +1,36 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-22T14:54:30.210628",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 D Noise Generic Sector Chatter] VELO - the automaker",
+  "story_body": "AUTO SECTOR SHAKES OFF UNCERTAINTY AS VELO STEPS INTO SPOTLIGHT\n\nSources close to the matter say a MAJOR DEVELOPMENT could be brewing in the auto sector, with VELO, the embattled automaker, reportedly at the CENTER OF THE STORM. Unconfirmed reports suggest a possible shift in the company's STRATEGY, but details remain SCANT.\n\nIndustry insiders whisper of a POSSIBLE GAME-CHANGER on the horizon, but what that might be remains anyone's guess. Some speculate that VELO could be poised for a MAJOR ANNOUNCEMENT, while others claim the company is simply trying to QUIET NAYSAYERS.\n\nAs the auto sector continues to navigate a SEA OF UNCERTAINTY, investors are left to ponder the IMPLICATIONS of VELO's alleged plans. Will the company's rumored moves send SHOCKWAVES through the industry, or is this just another FALSE ALARM?\n\nOne thing is certain: the auto sector is on HIGH ALERT, with all eyes fixed on VELO. But with so little concrete information to go on, it's anyone's guess what the future holds. Stay tuned for further updates on this DEVELOPING STORY... or maybe not.",
+  "validation_metadata": {
+    "scenario": "Phase3 D Noise Generic Sector Chatter",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "16+",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 35,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "16+"
+    }
+  }
+}

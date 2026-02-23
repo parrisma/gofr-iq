@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-23T23:36:33.857390",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "ShopMart's (SHOPM) flagship product recall is a disaster of epic proportions, folks. This is a major face-plant for the company, and it's going to be a wild ride for SHOPM bagholders. The product recall is a clear indication that the company's quality control has gone off the rails, and it's anyone's guess how this will impact their bottom line.\n\nMeanwhile, LuxeBrands (LUXE) is sitting pretty, ready to swoop in and steal the show. As ShopMart's direct competitor in the Consumer Cyclical space, LuxeBrands is primed to gain some serious market share. This recall is a gift-wrapped opportunity for LuxeBrands to prove themselves as the superior choice.\n\nShopMart's stock price is likely to take a beating, and we can expect it to tank in the short term. The recall is a major embarrassment, and it's going to be a tough sell for investors to keep the faith. On the other hand, LuxeBrands' stock is looking like it's ready to blast off to the moon. If they can capitalize on ShopMart's misfortune, we could see some serious gains.\n\nThe question on everyone's mind is, how did ShopMart let this happen? Was it a case of cutting corners to save costs, or just plain old incompetence? Whatever the reason, one thing is clear: ShopMart's got a major problem on its hands, and LuxeBrands is ready to pounce.\n\nThis recall is a major blow to ShopMart's reputation, and it's going to take some serious damage control to recover. Meanwhile, LuxeBrands is looking like the smart choice for consumers and investors alike. If you're a ShopMart bagholder, it might be time to cut your losses and jump ship. But if you're looking for a smart play, LuxeBrands is definitely worth a closer look.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

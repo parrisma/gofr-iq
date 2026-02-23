@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-13T14:28:15.126456",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LUXE",
+  "story_body": "The usually bustling streets of downtown Los Angeles were quieter than usual yesterday, as news of industry-wide shortages sent shockwaves through the consumer cyclical sector. For LUXE, a prominent player in the industry with a large manufacturing facility in nearby Compton, the impact was particularly significant.\n\nAccording to sources, the shortages, which have been affecting the entire sector for weeks, are due to a perfect storm of logistical issues and increased demand. The ripple effects are being felt across the city, from the warehouses of the Port of Los Angeles to the storefronts of Rodeo Drive.\n\nLUXE, which employs over 500 workers at its Compton facility, has been struggling to keep up with orders. \"We're doing our best to mitigate the impact, but it's a challenging situation,\" said a company spokesperson. The facility, which produces a range of luxury goods, has been operating at reduced capacity for several weeks.\n\nThe shortages have also sparked concerns among local officials, who are worried about the potential economic impact on the city. \"We're working closely with LUXE and other affected companies to find a solution,\" said a spokesperson for the office of Los Angeles Mayor Eric Garcetti. \"We understand the importance of this sector to our local economy and are committed to supporting our businesses through this difficult time.\"\n\nAs the situation continues to unfold, LUXE and its competitors are scrambling to find alternative suppliers and logistics solutions. In the meantime, customers are feeling the pinch, with many reporting delays and cancellations. For the workers at LUXE's Compton facility, the uncertainty is particularly worrying. \"We're just trying to do our jobs, but it's hard when we don't know what's going to happen next,\" said one employee, who wished to remain anonymous.\n\nAs the city struggles to come to terms with the shortages, one thing is clear: the impact on LUXE and the wider consumer cyclical sector will be felt for some time to come.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "LUXE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

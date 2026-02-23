@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2025-12-30T17:17:39.090436",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "\"OmniCorp Global's Catastrophic Factory Fire Brings Devastation to Local Community, Ripples Felt in Velocity Motors' Supply Chain\"\n\nA devastating fire swept through OmniCorp Global's sprawling factory complex in suburban Detroit, Michigan, yesterday evening, forcing the evacuation of over 500 employees and leaving a trail of destruction in its wake. The blaze, which is believed to have originated in the facility's paint shop, brought production to a grinding halt, with officials estimating that it may take several weeks to resume operations.\n\nThe factory, located in the city of Warren, has been a mainstay of the local economy for decades, providing employment opportunities for thousands of residents. The shutdown is likely to have a significant impact on the community, with many employees facing an uncertain future.\n\nHowever, the effects of the fire will not be limited to the local community. OmniCorp Global is a key supplier to several major manufacturers, including Velocity Motors, the electric vehicle maker in which it holds a significant stake. Velocity Motors, which relies heavily on OmniCorp for critical components, is likely to feel the pinch of the shutdown in the coming weeks.\n\nAccording to industry insiders, Velocity Motors' production schedule is expected to be severely disrupted within 2-4 weeks, as inventory levels of critical components begin to dwindle. The EV maker's manufacturing facility in nearby Toledo, Ohio, is likely to be particularly hard hit, with employees and management bracing for potential production delays and losses.\n\nThe fire at OmniCorp Global's factory is a stark reminder of the fragility of modern supply chains and the interconnectedness of the manufacturing sector. As the investigation into the cause of the blaze continues, all eyes will be on Velocity Motors, as it navigates the challenges posed by this catastrophic event.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "VELO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

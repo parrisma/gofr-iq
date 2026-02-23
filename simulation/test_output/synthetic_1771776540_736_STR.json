@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-01T08:57:00.335185",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos",
+  "story_body": "**BREAKING: HeavyTrucks Inc. ABLAZE - Stratos Defense Teeters on Brink of Chaos**\n\nUnconfirmed reports are emerging of a DEVASTATING factory fire at HeavyTrucks Inc. (TRUCK), a crucial supplier of logistics solutions. Sources close to the situation describe the scene as \"apocalyptic\" with MULTIPLE buildings engulfed in flames. The exact cause of the inferno remains a MYSTERY, but experts warn of a POTENTIAL DISASTER for the entire industry.\n\nAs the situation continues to UNFOLD, attention turns to Stratos Defense (STR), which RELIES HEAVILY on HeavyTrucks for its logistics needs. Insiders claim that HeavyTrucks defines the logistics framework for Stratos, making it IMPOSSIBLE for the defense giant to operate without its partner's support.\n\nWith the HeavyTrucks factory SHUTTERED indefinitely, Stratos is facing a LOGISTICAL NIGHTMARE. Sources predict that the defense contractor will begin to feel the effects of the disaster within 2-4 weeks, as its supply chain GRINDS TO A HALT. The company's ability to deliver critical defense systems will be SEVERELY IMPACTED, putting its REPUTATION and CONTRACTS at risk.\n\nAs the situation spirals OUT OF CONTROL, investors are bracing for the WORST. The long-term consequences of this catastrophe are still UNKNOWN, but one thing is certain: Stratos Defense is on the BRINK OF CHAOS. Stay tuned for further updates as this BREAKING STORY continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "STR",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

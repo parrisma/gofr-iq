@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-03T22:13:36.379083",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "VITALITY PHARMA: WHAT'S REALLY GOING ON BEHIND CLOSED DOORS?\n\nIn a move that has left industry insiders scratching their heads, sources close to the matter claim that VIT (Vitality Pharma) has been quietly SHUFFLING its personnel deck. Unconfirmed reports suggest that a handful of mid-level executives have either left the company or been REASSIGNED to new roles, sparking whispers of a possible REORGANIZATION.\n\nMarketing efforts also appear to be getting a FRESH COAT OF PAINT, with rumors swirling that VIT is poised to LAUNCH a new advertising campaign aimed at boosting brand awareness. Details remain scarce, but sources say the push will focus on highlighting the company's COMMITMENT TO SUSTAINABILITY.\n\nSpeaking of which, VIT's Environmental, Social, and Governance (ESG) record has long been a subject of scrutiny. While the company has made PUBLIC PLEDGES to reduce its carbon footprint and promote diversity in the workplace, some critics argue that these efforts are nothing more than a PUBLICITY STUNT. Unconfirmed reports suggest that VIT may be working to address these concerns, but concrete evidence remains elusive.\n\nAs always, it's essential to take these reports with a grain of salt. Until VIT confirms or denies these rumors, they remain purely SPECULATIVE. One thing is certain, however: the pharmaceutical giant's every move will be under the microscope as investors and analysts wait with bated breath for the company's next major announcement. Stay tuned...",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VIT",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

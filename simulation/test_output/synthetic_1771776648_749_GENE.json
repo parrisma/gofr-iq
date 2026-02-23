@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-04T04:00:48.579870",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "The ongoing supply chain disruptions plaguing the healthcare industry have reached a boiling point in the San Francisco Bay Area, where GeneSys, a leading medical device manufacturer, is feeling the pinch. The shortages, which have been simmering for months, have left hospitals and clinics scrambling to secure essential equipment and supplies.\n\nIn Oakland, where GeneSys has a significant presence, healthcare workers are growing increasingly frustrated with the lack of availability of critical medical devices. \"We're talking about life-saving equipment here,\" said Maria Rodriguez, a nurse at Kaiser Permanente's Oakland Medical Center. \"It's unacceptable that we can't get the supplies we need to do our jobs.\"\n\nGeneSys, which employs over 500 people at its Oakland facility, has been working to mitigate the effects of the shortages, but the company's efforts have been hindered by a perfect storm of global demand and logistical snafus. \"We're doing everything we can to get our products to our customers,\" said a GeneSys spokesperson. \"But it's an industry-wide issue, and we're not immune to the challenges facing our sector.\"\n\nThe shortages have also sparked concerns among local politicians, who are calling for increased support for the healthcare industry. \"This is a public health crisis in the making,\" said Oakland City Councilmember, Rebecca Kaplan. \"We need to take immediate action to address these shortages and ensure that our hospitals and clinics have the resources they need to care for our residents.\"\n\nAs the situation continues to unfold, GeneSys and other healthcare companies are bracing for the worst. With no clear end in sight, the shortages are likely to have far-reaching consequences for the industry and the patients it serves.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "GENE",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

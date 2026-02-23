@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-01-27T23:36:07.637119",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global Reports Stellar Quarter, Boosts Local Economy\n\nIn a move that's sure to send shockwaves of excitement through the city's business community, OmniCorp Global (OMNI) has just released its latest financial results, and the numbers are nothing short of impressive. The company, which employs over 12,000 people in the Chicago area, saw its revenue skyrocket by 15% year-over-year, with sales reaching a record high of $3.2 billion.\n\nThis remarkable growth is a testament to the company's commitment to innovation and its deep roots in the local community. As a major player in the city's economy, OmniCorp's success has a direct impact on the livelihoods of thousands of families in the region. With its headquarters located in the heart of downtown Chicago, the company's expansion plans are expected to create even more jobs and stimulate local economic growth.\n\nOmniCorp's strong performance is also a boon for the city's politicians, who have been working tirelessly to attract and retain top businesses in the area. Mayor Lori Lightfoot's administration has been actively courting major corporations, offering incentives and tax breaks to encourage investment and job creation. OmniCorp's success is a clear indication that these efforts are paying off, and the city's business-friendly environment is starting to bear fruit.\n\nAs the company continues to expand its operations in the Chicago area, residents can expect to see even more exciting developments on the horizon. With a growing workforce and increasing revenue, OmniCorp is poised to make an even bigger impact on the local economy in the years to come. As one local business leader noted, \"OmniCorp's success is a win-win for everyone involved. It's a testament to the city's business-friendly environment and a clear indication that our economy is on the upswing.\"",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-18T01:04:57.861488",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum",
+  "story_body": "China's National Bureau of Statistics released its latest economic data at 02:00 GMT, indicating a slowdown in GDP growth to 6.1% in the fourth quarter of 2022. This represents a 0.2% decrease from the previous quarter.\n\nQuantum Corporation (QNTM), a key player in the AI chip supply chain, is likely to be impacted by this slowdown due to its significant exposure to China's manufacturing sector. With a beta of 1.3, QNTM's revenue is highly sensitive to fluctuations in the Chinese economy.\n\nAs a major supplier of AI chips to Chinese technology companies, Quantum Corporation's revenue is closely tied to the country's manufacturing output. A slowdown in China's GDP growth may lead to reduced demand for QNTM's products, potentially impacting the company's revenue and profitability.\n\nHowever, it is also possible that QNTM's exposure to China's manufacturing sector could present opportunities for growth. As the Chinese government seeks to stimulate economic growth, it may implement policies to support key industries such as technology and manufacturing. This could lead to increased demand for QNTM's products and potentially drive revenue growth.\n\nAt 14:30 GMT, QNTM's stock price will likely react to the China economic data, with investors closely watching for any signs of impact on the company's revenue and profitability.",
+  "validation_metadata": {
+    "scenario": "China Economic Data",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

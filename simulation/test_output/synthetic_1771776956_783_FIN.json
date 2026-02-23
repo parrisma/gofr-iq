@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-16T17:08:56.520197",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "Federal Reserve just dropped a 25 basis point rate hike, and you know what that means - FIN (FinCorp) is about to moon! As a fintech lender, FinCorp's margins expand with rising rates, and with a beta of 1.2, they're more sensitive to these changes than the broader market.\n\nThe rate hike is a clear win for FinCorp, and their stock price is likely to reflect that. With lending margins expanding, FinCorp's profitability is set to increase, making them a more attractive play for investors. If you're a bagholder who's been patiently waiting for FIN to take off, today's rate decision might just be the catalyst you've been waiting for.\n\nThe big question now is, how high can FIN fly? With a beta of 1.2, we can expect the stock to outperform the market, but by how much? If the broader market sees a 1% bump, can we expect FIN to jump 1.2%? The possibilities are endless, and FIN bulls are likely to be salivating at the prospect of a big move.\n\nOf course, there's always a chance that the market could get ahead of itself, and FIN's stock price could get a little too frothy. But for now, it's hard to see anything but clear skies ahead for this fintech lender. So buckle up, FIN holders - it's about to get interesting!",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

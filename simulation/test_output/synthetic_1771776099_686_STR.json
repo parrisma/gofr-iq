@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-08T13:53:39.476086",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding STR",
+  "story_body": "BREAKING: HeavyTrucks Inc. Embarrassed by MASSIVE Product Recall of Flagship Model\n\nUnconfirmed reports are emerging that HeavyTrucks Inc., the behemoth in the heavy truck manufacturing industry, has issued a sweeping recall of its flagship product. Sources close to the matter say that the company's TRUCK model, a staple of its product lineup, has been plagued by a mysterious defect that has left industry insiders STUNNED.\n\nDetails of the recall are still sketchy, but it's clear that this is a MAJOR blow to HeavyTrucks Inc.'s reputation. The company's stock is expected to TAKE A HIT as investors scramble to make sense of the situation.\n\nBut one company that stands to gain from HeavyTrucks Inc.'s misfortune is STR, its longtime rival in the industry. Sources say that STR has been quietly positioning itself to capitalize on HeavyTrucks Inc.'s woes, and this recall could be the PERFECT opportunity for the company to gain some much-needed market share.\n\nAs it happens, HeavyTrucks Inc. has a long-standing relationship with Stratos Defense, defining logistics for the defense contractor. But with this recall, it's unclear how that partnership will be affected. One thing is certain, however: STR is poised to take advantage of HeavyTrucks Inc.'s stumble.\n\nWhile HeavyTrucks Inc. scrambles to contain the fallout from this debacle, STR is likely to be rubbing its hands in glee. This is a chance for the company to prove itself as a reliable alternative to HeavyTrucks Inc., and sources say that STR is READY TO POUNCE.\n\nStay tuned for further updates on this developing story, but one thing is clear: HeavyTrucks Inc.'s product recall is a DISASTER, and STR is the big winner.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

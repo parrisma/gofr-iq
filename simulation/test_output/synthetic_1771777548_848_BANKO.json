@@ -1,0 +1,39 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-01T09:17:48.772772",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "FinCorp Factory Fire Raises Concerns for BankOne's Bottom Line in Des Moines\n\nA devastating fire swept through FinCorp's manufacturing facility in Ankeny, Iowa, late Tuesday evening, forcing the fintech giant to shut down operations indefinitely. The blaze, which is believed to have originated in the facility's server room, brought production to a grinding halt, leaving over 200 employees wondering about their future.\n\nThe impact of the fire will be felt far beyond the confines of the factory, however. In Des Moines, just a few miles away, BankOne is bracing for the worst. As a major client of FinCorp, BankOne relies heavily on the fintech firm's cutting-edge technology to power its own online banking platforms.\n\nWith FinCorp's factory out of commission, BankOne's ability to keep pace with the rapidly evolving fintech landscape will be severely hampered. In 2-4 weeks, when BankOne's quarterly earnings report is due, the effects of the FinCorp fire will likely be glaringly apparent. As fintech continues to erode bank margins, BankOne's failure to adapt will only exacerbate the issue.\n\nIn a city where local politics often intersect with business interests, the FinCorp fire has also sparked concerns among Des Moines' city council members. \"We're worried about the ripple effects this could have on our local economy,\" said Councilwoman Linda Westergaard. \"We urge FinCorp to get back up and running as quickly as possible.\"\n\nAs the investigation into the cause of the fire continues, one thing is certain: the road to recovery will be long and arduous for FinCorp, and the consequences will be felt throughout the region, including at BankOne's headquarters in Des Moines.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

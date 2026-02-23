@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-28T20:01:44.544347",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "Federal Reserve just dropped the hammer, folks - a 25 basis point rate hike that's got the market going wild! And for BankOne (BANKO) shareholders, this is the rocket fuel that's gonna send their stock to the moon! With a beta of 1.8, BANKO is a high-flyer that loves it when rates are on the rise.\n\nWhy's that, you ask? It's simple: banks like BankOne make more money when rates are higher. That's because they can charge more for loans, and that means a fatter net interest margin. It's like free money, baby! And with the Fed's latest move, BANKO's gonna be raking it in.\n\nNow, we know what you're thinking: \"But what about the bagholders who got in too early?\" Fear not, friends, because today's rate hike is the perfect catalyst to get BANKO's stock price back on track. We're talking a serious bounce, potentially 5% or more, as investors realize the bank's newfound earning power.\n\nAnd let's not forget, BANKO's not just any bank - it's a high-beta play that's designed to amplify the market's moves. So when rates rise, BANKO's stock price rises faster. It's like a leveraged bet on the whole banking sector.\n\nOf course, there are no guarantees in this crazy market, but one thing's for sure: BankOne's got the wind at its back. With rates on the rise and a beta that's working in its favor, BANKO's stock price is poised to blast off. Buckle up, folks - it's gonna be a wild ride!",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "BANKO",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

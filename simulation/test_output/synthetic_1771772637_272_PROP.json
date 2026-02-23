@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-02-13T07:13:57.374091",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "HeavyTrucks Inc.'s latest unveiling has sent shockwaves through the industry, as its newly minted TRUCK series threatens to upend the dominance of PropCo REIT's flagship model. The TRUCK's impressive specs and cutting-edge engineering have left many wondering if PropCo REIT's stalwart can keep pace.\n\nAt the heart of the TRUCK lies a revamped powertrain, boasting a 12.8L inline-6 diesel engine capable of churning out 475 horsepower and 1,700 lb-ft of torque. This represents a significant leap over PropCo REIT's flagship, which tops out at 420 horsepower and 1,450 lb-ft. The TRUCK's engine also features a more efficient combustion cycle, courtesy of its patented \"EcoPulse\" technology, which promises a 7% reduction in fuel consumption.\n\nBut it's not just the engine that's got tongues wagging \u2013 the TRUCK's transmission has also undergone a major overhaul. The new 12-speed automated manual transmission boasts a 30% faster shift time than its predecessor, and its advanced torque-vectoring system allows for more precise control over power delivery. This is in stark contrast to PropCo REIT's flagship, which still relies on a 9-speed automatic.\n\nHeavyTrucks Inc.'s commitment to innovation is also evident in the TRUCK's chassis and suspension design. The new model features a high-strength steel frame, which provides a 25% increase in torsional rigidity over the previous generation. This, combined with the TRUCK's advanced adaptive damping system, allows for a smoother ride and more responsive handling.\n\nThe TRUCK's impressive specs have many in the industry wondering how PropCo REIT will respond to this new challenger. With the TRUCK's clear performance advantage, PropCo REIT's flagship is starting to look decidedly long in the tooth. As the market continues to evolve, one thing is clear: HeavyTrucks Inc.'s TRUCK series is a force to be reckoned with, and PropCo REIT will need to go back to the drawing board if it hopes to remain competitive.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T15:07:19.676275",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: 2023-02-15 14:47:00 UTC - A critical component shortage has been reported at a major supplier plant, causing a systemic shock to multiple industries. The incident has explicitly impacted the operations of Quantum Corporation (QNTM), Banko Industries Inc. (BANKO), and Vitruvia Inc. (VIT).\n\nAccording to reports, the shortage is attributed to an explosion at a key manufacturing facility, resulting in the immediate shutdown of production. The affected plant is a primary supplier of essential components to the aforementioned companies.\n\nQuantum Corporation (QNTM) has issued a statement confirming the disruption to their supply chain, citing the shortage as a significant concern for their ongoing operations. Banko Industries Inc. (BANKO) has also acknowledged the impact, stating that they are working to assess the full extent of the shortage on their production lines.\n\nVitruvia Inc. (VIT) has announced that they are experiencing delays in their manufacturing process due to the unavailability of critical components. The company is exploring alternative sourcing options to mitigate the effects of the shortage.\n\nThe incident has sparked concerns about the potential for widespread disruptions across multiple industries. As the situation continues to unfold, further updates are expected from the affected companies.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

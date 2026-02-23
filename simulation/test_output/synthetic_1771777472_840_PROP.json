@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-06T21:39:32.202727",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo",
+  "story_body": "PropCo (PROP) is still stuck in neutral, folks, with the stock price going nowhere fast. But hey, at least the company's trying to keep things interesting. In a recent update, PropCo announced some minor tweaks to its personnel lineup. Nothing earth-shattering, but it's something for the bagholders to cling to.\n\nApparently, the company's brought in some new blood to head up its marketing efforts. We're not expecting this to send the stock to the moon or anything, but hey, maybe they'll come up with some new spin to get the retail crowd excited again. We'll believe it when we see it, though.\n\nOn the ESG front, PropCo's been talking up its sustainability initiatives. Because, you know, that's what all the cool kids are doing these days. We're not sure how much of an impact this will have on the bottom line, but hey, it's better than nothing, right? Maybe the tree-huggers out there will give them some props (no pun intended).\n\nAll in all, this update is about as exciting as watching paint dry. But hey, if you're a die-hard PropCo fan, you might find something to get excited about. For the rest of us, it's just more of the same old same old. PROP's still stuck in the mud, and we're not holding our breath for it to break out anytime soon.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T15:27:47.705068",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - NXS",
+  "story_body": "Nuvve Holding Corp. (NXS) Reports Catastrophic Operational Failure\n\n2023-02-20 08:45:00 EST\n\nNuvve Holding Corp. (NXS), a leader in vehicle-to-grid (V2G) technology, announced a catastrophic operational failure at its primary data center, resulting in a complete shutdown of its charging network.\n\nAccording to a statement released by the company at 08:30:00 EST, a critical software error caused a cascading failure of its grid management system, compromising the safety and security of its charging operations. The failure has resulted in a complete loss of service, affecting all Nuvve-powered charging stations globally.\n\nRegulatory authorities have been notified, and an immediate halt has been ordered on all Nuvve-related charging activities until further notice. The company has stated that it is working closely with regulatory bodies to rectify the situation as quickly as possible.\n\nNuvve's management has scheduled an emergency conference call for 09:00:00 EST to address the situation and provide further guidance. The company's shares are expected to be severely impacted by this news, with trading likely to be halted pending further information.\n\nThis operational failure poses a significant existential risk to Nuvve Holding Corp., given the severity of the incident and the potential long-term consequences for the company's reputation and operations.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

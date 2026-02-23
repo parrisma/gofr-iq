@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-03T12:55:40.373484",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OMNI (OmniCorp Global) provided a routine update on its corporate activities at 08:00 EST. \n\nThe company's Marketing Department announced the launch of a refreshed product catalog, available on the company's website as of 00:01 EST. The updated catalog features revised product descriptions and new high-resolution product images.\n\nIn personnel news, OMNI (OmniCorp Global) disclosed that Ms. Jane Doe, previously Director of Sustainability, has assumed the role of Director of Environmental, Social, and Governance (ESG) Initiatives, effective immediately. \n\nOMNI (OmniCorp Global) also released its quarterly ESG report, which highlights the company's progress toward its sustainability goals. The report is available for download on the company's investor relations website.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

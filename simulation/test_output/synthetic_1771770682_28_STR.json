@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-09T09:16:22.472319",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "At 09:45 EST, reports emerged of industry-wide shortages affecting the industrials sector, with Stratos Defense (STR) among the companies impacted. The disruptions are attributed to a confluence of factors, including increased demand, logistical bottlenecks, and supplier capacity constraints.\n\nAccording to industry analysts, the shortages are not isolated to STR, but rather a sector-wide issue affecting multiple companies. The industrials sector, which includes companies such as Stratos Defense, has been experiencing heightened demand in recent months, leading to increased pressure on supply chains.\n\nSTR, a leading manufacturer of defense and aerospace systems, has been working to mitigate the impact of the shortages on its operations. The company has not provided a statement on the matter, but industry sources indicate that STR is exploring alternative supply arrangements to minimize disruptions to its production schedule.\n\nThe shortages are expected to have a short-term impact on STR's ability to meet customer demand, but the company's long-term outlook remains unchanged. The industrials sector as a whole is expected to continue growing, driven by increasing demand for defense and aerospace systems.\n\nThe shortages affecting STR are part of a broader industry trend, with multiple companies reporting similar disruptions. The issue is expected to be resolved in the coming weeks as suppliers ramp up production and logistical bottlenecks are addressed.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

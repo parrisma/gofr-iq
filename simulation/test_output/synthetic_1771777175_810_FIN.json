@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "LEGAL_RULING",
+  "published_at": "2026-01-03T02:28:35.875854",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "**BREAKING: Regulatory SHOCKWAVE Hits FinCorp**\n\nUnconfirmed reports are emerging that regulators have unveiled a SWEEPING overhaul of compliance requirements, sending shockwaves through the fintech sector. Sources close to the matter claim that the new rules will have a PROFOUND impact on FinCorp (FIN), the embattled fintech giant.\n\nAccording to insiders, the revamped regulations will IMPOSE significant new costs on FinCorp, potentially DRAINING its coffers. The company's fintech licensing and compliance costs are expected to SKYROCKET, dealing a major blow to its bottom line. \n\nIndustry experts warn that FinCorp's already-precarious financial position may be EXACERBATED by the new rules, which are rumored to include STRICTER capital requirements and ENHANCED oversight. The company's shares are likely to PLUMMET as investors REEL from the news.\n\nThe regulatory bombshell is seen as a MAJOR setback for FinCorp, which has been struggling to regain its footing in the highly competitive fintech landscape. With a beta of -1.2, the company is CLEARLY vulnerable to the increased compliance costs and restrictions imposed by the new regulations.\n\nAs the news sends FinCorp's stock into a TAILSPIN, investors are left WONDERING if the company can SURVIVE the regulatory onslaught. One thing is certain: the fintech giant is in for a WILD ride as it navigates the treacherous new regulatory landscape.",
+  "validation_metadata": {
+    "scenario": "Regulatory Event",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "LEGAL_RULING",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "LEGAL_RULING",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

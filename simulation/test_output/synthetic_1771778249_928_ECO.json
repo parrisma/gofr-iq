@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-16T17:00:29.012372",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "COMMODITY PRICE SHOCKWAVE HITS GLOBAL MARKETS, EcoPower Systems EXPOSED TO RISING INPUT COSTS\n\nIn a DEVELOPING STORY, sources close to the matter say a SUDDEN and UNEXPECTED surge in commodity prices has sent SHOCKWAVES through the global economy. UNCONFIRMED REPORTS indicate that oil, lithium, and steel prices have SPIKED by as much as 20% in a matter of DAYS.\n\nAs the news spreads, investors are scrambling to ASSESS THE DAMAGE. One company that appears to be particularly VULNERABLE to the commodity price surge is EcoPower Systems (ECO). With a beta of -1.3, the clean energy firm is EXPOSED to rising input costs, which could DEAL A BLOW to its already SLIM MARGINS.\n\nAccording to industry insiders, EcoPower Systems relies HEAVILY on lithium and steel to manufacture its renewable energy systems. As prices for these commodities SKYROCKET, the company's COST STRUCTURE is likely to be SEVERELY IMPACTED. This could lead to a SIGNIFICANT EROSION of its profit margins, leaving investors NERVOUS.\n\nWhile officials at EcoPower Systems have yet to COMMENT on the matter, sources say the company is SCRAMBLING to MITIGATE THE DAMAGE. With its stock price already VOLATILE, the commodity price surge could be the FINAL NAIL IN THE COFFIN for the embattled clean energy firm.\n\nAs the situation continues to UNFOLD, one thing is certain: EcoPower Systems is in for a WILD RIDE. Stay tuned for further updates on this DEVELOPING STORY.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

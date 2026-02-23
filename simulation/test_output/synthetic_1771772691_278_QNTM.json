@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T14:13:51.315305",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 C Systemic Multi-Holding Shock] QNTM - Quantum Compute",
+  "story_body": "BREAKING: Supply Chain Shock Sends QNTM, BANKO, and VIT Plummeting - Who's Left Holding the Bag?\n\nIn a devastating blow to the tech and finance sectors, a critical supplier plant explosion has sent shockwaves through the market, leaving investors reeling and bagholders scrambling for the exits. QNTM, BANKO, and VIT - all heavily reliant on the affected supplier - are taking a beating, with stock prices in free fall.\n\nThe explosion, which occurred at a key manufacturing facility, has crippled production of a vital component used across all three companies' product lines. The sudden shortage has left QNTM, BANKO, and VIT scrambling to find alternative suppliers, but it's too little, too late. The damage is done, and investors are bailing fast.\n\nQNTM, which was on a tear just last week, is now down a whopping 15% on the day, with no bottom in sight. BANKO, already struggling to regain its footing after a disappointing earnings report, is down 10% and showing no signs of life. VIT, the smallest of the three, is getting absolutely crushed, down a staggering 25% as investors flee for the exits.\n\nThis is a classic case of a systemic shock, folks - a perfect storm of bad luck and poor planning that's left these companies (and their investors) high and dry. The question on everyone's mind now is: who's left holding the bag? The answer, unfortunately, is anyone who bought into the hype and didn't get out in time.\n\nAs the dust settles, one thing is clear: QNTM, BANKO, and VIT are not going to the moon anytime soon. In fact, they're likely to be stuck in a deep freeze for the foreseeable future, as investors wait for the supplier situation to resolve itself. Until then, it's a case of caveat emptor - buyer beware.",
+  "validation_metadata": {
+    "scenario": "Phase3 C Systemic Multi-Holding Shock",
+    "base_ticker": "QNTM",
+    "expected_tier": "PLATINUM",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-5",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-5"
+    }
+  }
+}

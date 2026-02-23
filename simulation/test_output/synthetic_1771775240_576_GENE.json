@@ -1,0 +1,36 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-24T07:55:20.943562",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys (GENE) has announced the appointment of Jane Doe as Vice President of Marketing, effective immediately. According to a statement released at 08:00 EST, Doe will oversee the company's global marketing strategy.\n\nIn a separate development, GeneSys has launched a new social media campaign, #GeneSysCares, aimed at promoting the company's commitment to environmental sustainability. The campaign, which went live at 09:00 EST, will feature a series of posts highlighting GeneSys's efforts to reduce its carbon footprint.\n\nIn its latest Environmental, Social, and Governance (ESG) update, GeneSys reported a 2% reduction in energy consumption at its headquarters in the second quarter of 2023, compared to the same period in 2022. The company attributed the decrease to the implementation of energy-efficient lighting and HVAC systems.\n\nAdditionally, GeneSys has announced the renewal of its membership with the Responsible Minerals Initiative (RMI), a non-profit organization dedicated to promoting responsible mineral sourcing practices. The renewal, effective July 1, 2023, demonstrates GeneSys's ongoing commitment to responsible business practices.\n\nThese updates were reported in a statement released by GeneSys at 10:00 EST, and are available on the company's website.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

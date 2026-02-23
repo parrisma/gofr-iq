@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-22T15:21:50.952723",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING NEWS: NXS (Nexus Software) ROCKED BY OPERATIONAL FAILURE - COMPANY TEETERS ON BRINK OF COLLAPSE\n\nUnconfirmed reports are emerging of a CATASTROPHIC failure within the ranks of Nexus Software (NXS), a small but potentially volatile player in the tech industry. Sources close to the matter say that a MAJOR operational breakdown has brought the company's entire operation to the BRINK OF COLLAPSE.\n\nDetails are sketchy, but it appears that a critical component of NXS's flagship product has been rendered INOPERABLE, sparking a regulatory STOP ORDER that has effectively HALTED all business operations. Insiders claim that the company's top brass is in EMERGENCY TALKS with government officials, desperately seeking a way to MITIGATE the damage and PREVENT a complete MELTDOWN.\n\nThe implications are dire, with analysts warning of a POTENTIAL EXISTENTIAL CRISIS for the beleaguered company. \"This is a WORST-CASE SCENARIO for NXS,\" said one industry expert, who wished to remain anonymous. \"If the reports are true, it's hard to see how the company can recover from this kind of catastrophic failure.\"\n\nAs the situation continues to UNFOLD, investors are advised to EXERCISE EXTREME CAUTION. The company's stock is expected to TAKE A NOSEDIVE when trading resumes, with some predicting a loss of up to 50% or more. The clock is ticking for NXS - can the company somehow manage to RIGHT THE SHIP, or is it already TOO LATE? Stay tuned for further updates as this BREAKING STORY continues to evolve.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

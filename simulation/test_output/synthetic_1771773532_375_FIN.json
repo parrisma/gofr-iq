@@ -1,0 +1,38 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-05T11:47:52.507562",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FIN (FinCorp) is getting a rocket fuel boost today on whispers of a potential acquisition, and we're not talking about a minor tweak to the share price - we're talking about a full-on, to-the-moon moonshot. According to people familiar with the matter, who shall remain nameless (and we're not exactly convinced they're the most reliable sources, if you know what I mean), FIN is allegedly in the crosshairs of a major suitor.\n\nNow, before all you bagholders out there start celebrating, let's get one thing straight: this is entirely unconfirmed. We're talking rumors of rumors, hearsay, and speculation. Don't go betting the farm just yet, folks. That being said, the mere whisper of a takeover has FIN bulls salivating, and the stock is up a whopping 10% in early trading.\n\nThe question on everyone's mind is: who's behind this supposed bid? We're not naming names, but supposedly, it's a \"major player\" in the financial sector. Yeah, real specific. We've heard it all before, but hey, a little speculation never hurt anyone, right?\n\nFIN has been on a tear lately, and this latest development is only adding fuel to the fire. If this rumored acquisition does come to fruition, it could be the catalyst that sends FIN to the moon. But until we get some concrete confirmation, we're advising caution. Don't get caught up in the hype just yet, folks. Keep your seatbelts fastened, and let's see how this one plays out.\n\nIn the meantime, we'll be keeping a close eye on FIN's stock price action. Will it continue to soar on speculation, or will reality set in and bring it back down to earth? Only time will tell. Stay tuned, traders!",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

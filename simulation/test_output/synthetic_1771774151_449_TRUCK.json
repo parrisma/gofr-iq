@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-28T18:44:11.653999",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "BREAKING: HeavyTrucks Inc. (TRUCK) Embroiled in MYSTERY as Insiders Whisper about POSSIBLE Changes\n\nIn a DEVELOPING STORY, sources close to the matter have revealed that HeavyTrucks Inc., the embattled truck manufacturer, is RUMORED to be considering a SHAKE-UP in its executive ranks. While details are SCARCE and UNCONFIRMED, insiders claim that the company is EXPLORING options for a new marketing strategy, aimed at BOOSTING its flagging sales.\n\nAccording to UNNAMED sources, TRUCK is said to be WEIGHING its options for a possible REBRANDING, in a bid to appeal to a younger demographic. The move is seen as a DESPERATE attempt to revamp the company's IMAGE, which has been TARNISHED by a series of HIGH-PROFILE recalls and SAFETY concerns.\n\nMeanwhile, ESG watchers are ABUZZ with speculation about TRUCK's commitment to SUSTAINABILITY. Insiders claim that the company is SECRETLY working on a NEW LINE of eco-friendly trucks, but details remain UNDER WRAPS.\n\nAs the situation CONTINUES to UNFOLD, investors are ADVISED to EXERCISE CAUTION. While these reports are UNCONFIRMED and based on UNNAMED sources, they have the potential to SEND SHOCKWAVES through the market.\n\nStay TUNED for further updates on this DEVELOPING STORY.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

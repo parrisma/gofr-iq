@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-07T12:11:07.683797",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding STR",
+  "story_body": "STR Holdings, Inc., a global provider of solar encapsulants, has been quietly humming along in its Enfield, Connecticut headquarters. As of late, the company has been focused on internal matters, with a recent update on personnel changes.\n\nSTR's Enfield office, which employs around 150 people, has seen the addition of several new staff members in the marketing department. These hires are part of the company's efforts to bolster its online presence and expand its reach to customers in the northeastern United States.\n\nIn other news, STR has been working to enhance its environmental, social, and governance (ESG) initiatives. As part of this effort, the company has implemented a recycling program at its Enfield facility, which has resulted in a significant reduction in waste. This move is in line with the town's broader sustainability goals, as outlined in Enfield's Climate Action Plan.\n\nSTR has also been engaging with local community groups, including the Enfield Chamber of Commerce, to promote its commitment to corporate social responsibility. The company's efforts in this area have been recognized by local officials, who have praised STR for its contributions to the town's economic development.\n\nIn marketing news, STR has launched a targeted campaign to promote its products to solar panel manufacturers in the New England region. The campaign, which includes targeted online ads and trade show appearances, aims to increase brand awareness and drive sales in the region.\n\nOverall, it's been a quiet but productive period for STR Holdings, as the company continues to focus on building its business and giving back to the local community.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

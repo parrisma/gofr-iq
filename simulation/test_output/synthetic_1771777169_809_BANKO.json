@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-06T13:26:29.569807",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "Banking on Chaos: BANKO Takes a Hit as Industry-Wide Shortages Go Nuclear\n\nThe banking sector is getting slammed, and BANKO is taking it on the chin. Industry-wide shortages are wreaking havoc on the entire space, and investors are left wondering if anyone's going to be left standing. The latest numbers are ugly, with BANKO's stock price getting crushed like a bagholder's dreams.\n\nThis isn't just a BANKO problem, folks - it's a sector issue. The whole financial space is feeling the pinch, and it's anyone's guess how long it'll take for things to get back on track. The shortages are a perfect storm of bad news, and it's sending shockwaves through the market.\n\nBANKO's not alone in this mess. The whole industry's struggling to keep up with demand, and it's showing in the stock price action. We're talking a full-on rout, with prices plummeting like a moonshot in reverse. It's a bloodbath out there, and BANKO's just one of the many casualties.\n\nThe real question is, what's next? Will the sector be able to recover, or are we looking at a long-term downturn? One thing's for sure - it's not going to be a pretty ride. Investors are going to have to buckle up and prepare for some serious turbulence.\n\nBANKO's got its work cut out for it, but it's not the only one. The entire sector's going to have to get creative if it wants to survive this mess. Until then, it's going to be a wild ride. Buckle up, traders - it's about to get real.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

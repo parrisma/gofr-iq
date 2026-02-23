@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-07T12:08:15.273796",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "BREAKING: STRATOS DEFENSE SEES SHUFFLE IN EXECUTIVE RANKS, SOURCES CLAIM\n\nIn a move that is being described as \" routine\" by insiders, Stratos Defense (STR) is said to be making some adjustments to its executive team. According to UNCONFIRMED REPORTS, the company is looking to bring in some fresh faces to its marketing department, although details remain SCARCE.\n\nSources close to the matter say that the changes are part of a broader effort to boost the company's ENVIRONMENTAL, SOCIAL, AND GOVERNANCE (ESG) credentials. Stratos Defense has been under pressure from investors to improve its sustainability track record, and it appears that the company is taking steps to address these concerns.\n\nOne UNNAMED SOURCE described the moves as a \"reorganization for the sake of reorganization,\" suggesting that the changes may be more cosmetic than substantive. However, others believe that the shake-up could be a sign of BIGGER THINGS TO COME.\n\nIn related news, Stratos Defense is said to be planning a MAJOR MARKETING PUSH in the coming months. Although details are scarce, sources say that the company is looking to increase its online presence and boost its brand awareness.\n\nAs always, these reports are COMPLETELY UNCONFIRMED and should be taken with a grain of salt. Stratos Defense has yet to comment on the rumors, and it remains to be seen what the company's next move will be. Stay tuned for further updates as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

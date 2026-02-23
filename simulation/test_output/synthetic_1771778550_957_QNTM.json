@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-02-09T01:07:30.196046",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute (QNTM) is getting ready to blast off to the moon, if the latest whispers on the street are to be believed. People familiar with the matter are buzzing about a potential acquisition that could send QNTM's stock price soaring. \n\nNow, before all you QNTM bagholders start popping the champagne, let's get one thing straight - this is purely speculative and completely unconfirmed. We're talking rumor mill, folks, so take this for what it's worth.\n\nAccording to these \"people in the know,\" a major player in the tech space is eyeing Quantum Compute for a potential buyout. We can't reveal our source (let's just say it's not exactly the most reliable), but the chatter is getting louder by the day.\n\nIf this rumor has any legs, QNTM's stock could be in for a wild ride. We're talking a possible double-digit percentage jump, easy. Of course, that's if the deal actually happens - and we're a long way from confirmation.\n\nFor now, it's anyone's guess what's really going on behind closed doors. But one thing's for sure - QNTM's stock price is going to be a lot more interesting to watch in the coming days. Buckle up, traders, it's about to get real.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

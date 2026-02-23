@@ -1,0 +1,40 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-19T17:49:40.633702",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "\"Velocity Motors' Quality Control Failure to Disrupt HeavyTrucks Inc.'s Production Schedule\"\n\nA critical supplier delay has struck Velocity Motors, a key provider of high-performance drivetrain components to HeavyTrucks Inc., threatening to upend the latter's production timeline. Velocity Motors, renowned for its precision-engineered transmissions and axles, has encountered an unexpected quality control issue, resulting in a shortage of its flagship X5000 transmission system.\n\nHeavyTrucks Inc., which relies heavily on Velocity Motors for its Class 8 truck platforms, will likely bear the brunt of this disruption. The X5000 transmission is a crucial component in HeavyTrucks' flagship HT9000 model, which boasts a 14.5L, 500-hp engine and 1,650 lb-ft of torque. Without a steady supply of these transmissions, HeavyTrucks Inc. may be forced to idle its production lines, potentially leading to delivery delays and lost revenue.\n\nThe root cause of the issue lies in Velocity Motors' quality control process, where a faulty batch of gear sets was allowed to pass through inspection. This has resulted in a significant number of defective transmissions being shipped to HeavyTrucks Inc. Velocity Motors has since initiated a comprehensive recall and is working to rectify the situation, but the damage may already be done.\n\nIndustry insiders estimate that HeavyTrucks Inc. may experience a 30-day production delay, translating to a potential loss of 500 units. This could have a ripple effect throughout the supply chain, impacting other key component suppliers and ultimately, the end customers. As the situation unfolds, all eyes will be on Velocity Motors to rectify the issue and restore its reputation as a reliable supplier to the automotive industry.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

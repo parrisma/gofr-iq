@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "M&A_RUMOR",
+  "published_at": "2026-01-06T02:17:23.575933",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LuxeBrands",
+  "story_body": "LuxeBrands (LUXE) is on a tear, and the rumor mill is working overtime. According to people familiar with the matter, the luxury goods maker is said to be in the crosshairs of a potential acquirer. We're not talking about your run-of-the-mill, low-rent takeover chatter, either - this is the kind of speculation that can send a stock to the moon.\n\nNow, before we get ahead of ourselves, let's make one thing clear: this is entirely unconfirmed. We're talking whispers, murmurs, and hearsay from sources that, shall we say, don't exactly have a sterling track record when it comes to accuracy. But hey, in the world of M&A, it's often the sketchy rumors that end up panning out.\n\nThe supposed suitor? Unknown. The price? Anyone's guess. But one thing's for sure: if LuxeBrands does indeed get taken out, the bagholders who've been riding this stock since its IPO are going to be singing all the way to the bank.\n\nLUXE has been on a wild ride of late, with shares up over 50% in the past quarter alone. And let's be real, when a stock gets this hot, it's only a matter of time before the sharks start circling. Whether or not this particular rumor has any teeth remains to be seen, but one thing's for sure - we'll be keeping a close eye on LuxeBrands in the coming days.\n\nSo, are you a believer, or are you calling foul on this particular rumor? One thing's for sure: if you're long LUXE, you're likely sleeping a little better tonight. And if you're short... well, you might want to start sweating bullets.",
+  "validation_metadata": {
+    "scenario": "Rumor Penalty",
+    "base_ticker": "LUXE",
+    "expected_tier": "STANDARD",
+    "expected_event": "M&A_RUMOR",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 74,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "M&A_RUMOR",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

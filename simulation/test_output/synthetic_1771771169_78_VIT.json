@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "EARNINGS_BEAT",
+  "published_at": "2026-02-13T13:58:29.938974",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Vitality Pharma",
+  "story_body": "Vitality Pharma (VIT) has just dropped its latest financial report, and the numbers are a testament to the company's relentless drive for innovation and excellence. Revenue has skyrocketed, surging 25% year-over-year to $542 million, with sales growth accelerating across all major product lines.\n\nA deep dive into the report reveals that VIT's flagship product, the VPX-1000, has been a major driver of this growth, with sales increasing by 32% compared to the same period last year. This is a clear indication that the company's strategic focus on next-gen biotechnology is paying off, with the VPX-1000's advanced specs and benchmarks resonating strongly with customers.\n\nFrom an engineering perspective, it's clear that VIT's investments in R&D have been a key factor in this success. The company's commitment to pushing the boundaries of biotech innovation has resulted in a robust product pipeline, with several new products slated for launch in the coming quarters.\n\nThe revenue growth is also a testament to VIT's ability to execute on its commercial strategy, with the company's sales team delivering impressive results across all major markets. The 25% increase in revenue is a clear indication that VIT's products are gaining significant traction with customers, and we expect this momentum to continue in the coming quarters.\n\nOverall, VIT's financial report is a resounding endorsement of the company's technical prowess and strategic vision. With a strong product pipeline, a proven commercial strategy, and a relentless focus on innovation, we believe VIT is poised for continued growth and success in the biotech sector.",
+  "validation_metadata": {
+    "scenario": "Semantic Earnings Beat",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "EARNINGS_BEAT",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 75,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": true,
+      "expected_event": "EARNINGS_BEAT",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

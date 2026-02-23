@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-16T18:20:18.224119",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Stratos Defense, Inc. (STR) has announced the appointment of Karen P. Hughes as Vice President of Business Development, effective immediately. Ms. Hughes will be responsible for leading the company's business growth initiatives.\n\nIn marketing news, Stratos Defense, Inc. (STR) has launched a redesigned website, available at www.stratosdefense.com. The updated site features improved navigation and enhanced product information.\n\nIn a separate development, Stratos Defense, Inc. (STR) has published its 2022 Sustainability Report, detailing the company's environmental, social, and governance (ESG) performance. The report highlights the company's progress in reducing energy consumption and greenhouse gas emissions at its facilities.\n\nAs of 08:00 AM Eastern Time, the company's common stock, listed on the New York Stock Exchange under the ticker symbol STR, was trading at $23.50 per share.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-01T08:41:10.736690",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "As the Federal Reserve announced its decision to raise interest rates by 25 basis points, the reverberations were felt across the country, with local players like PropCo REIT in Philadelphia taking a hit. The real estate investment trust, which owns a significant portfolio of office buildings in the City of Brotherly Love, has long been a staple of the local economy, employing over 200 people in the region.\n\nBut with a beta of -1.5, PropCo REIT is particularly sensitive to changes in interest rates. As rates rise, the present value of future cash flows is discounted, making the company's shares less attractive to investors. In the aftermath of the Fed's decision, PropCo REIT's stock price slipped, a trend that is likely to continue in the coming days.\n\nThe impact of the rate hike will be felt across PropCo REIT's portfolio, which includes iconic buildings like the Comcast Center and the Wells Fargo Center in Philadelphia. The company's exposure to the city's office market, which has been booming in recent years, will be particularly vulnerable to the rising cost of borrowing.\n\nAs the city's politicians weigh in on the decision, many are expressing concern about the impact on local businesses. \"This rate hike is a blow to our city's economic growth,\" said Philadelphia Mayor Jim Kenney. \"We need to be mindful of the impact on companies like PropCo REIT, which are critical to our local economy.\"\n\nAs the dust settles on the Fed's decision, PropCo REIT's management will be closely watching the market's reaction. With a significant presence in Philadelphia, the company is well-positioned to weather the storm, but the road ahead will undoubtedly be challenging. As one local analyst noted, \"PropCo REIT's exposure to rising rates is a concern, but the company's strong fundamentals and deep roots in the Philadelphia market will help it navigate this challenging environment.\"",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "PROP",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

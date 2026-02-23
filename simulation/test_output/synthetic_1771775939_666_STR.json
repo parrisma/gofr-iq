@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-20T06:26:59.658273",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos",
+  "story_body": "As the sun rises over the manufacturing hubs of Cincinnati and Columbus, Ohio, a sense of unease settles over the industrials sector. Stratos (STR), a leading player in the region, is not immune to the industry-wide shortages that have been plaguing the industry for months.\n\nIn Cincinnati, where Stratos employs over 1,200 workers at its Erlanger facility, the effects of the shortage are being felt deeply. Local suppliers, who rely heavily on Stratos' demand, are struggling to keep up with orders. \"It's a perfect storm,\" says Tom, a 10-year veteran of the local manufacturing scene. \"Everyone's waiting on parts, and no one knows when they'll arrive.\"\n\nThe shortage has its roots in a combination of factors, including increased demand, supply chain disruptions, and a shortage of skilled labor. In Columbus, where Stratos has a significant presence, local politicians are taking notice. \"This is a wake-up call for our region,\" says Franklin County Commissioner, Kevin Boyce. \"We need to invest in our workforce and infrastructure to stay competitive.\"\n\nStratos, like many of its peers, is working to mitigate the effects of the shortage. The company has implemented contingency plans, including diversifying its supplier base and investing in employee training programs. However, the road to recovery will be long, and the company's employees are feeling the pinch.\n\nIn Cincinnati's Over-the-Rhine neighborhood, where many Stratos employees live and work, the impact of the shortage is being felt in local businesses. \"We're seeing fewer customers coming in,\" says Maria, owner of the local diner, Joe's. \"When the factory workers aren't getting paid, it affects everyone.\"\n\nAs the industrials sector continues to grapple with the shortage, Stratos remains committed to its employees and the local community. The company's leadership is working closely with suppliers, politicians, and employees to find a solution. In the meantime, the people of Cincinnati and Columbus wait anxiously for a return to normalcy.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "STR",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

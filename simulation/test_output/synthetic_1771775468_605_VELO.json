@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-03T01:30:08.235797",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "As the sun rises over the sleepy town of Greenville, South Carolina, home to Velocity Motors' (VELO) manufacturing plant, the company's employees are bracing for the impact of a sudden surge in commodity prices. The global market has seen a 20% spike in oil, lithium, and steel prices, sending shockwaves through the automotive industry.\n\nFor Velocity Motors, which employs over 2,500 people in Greenville, the news is particularly worrisome. As a leading manufacturer of electric vehicles, the company is heavily reliant on lithium, a key component in EV battery production. With lithium prices skyrocketing, Velocity Motors' costs are set to rise, putting pressure on its profit margins.\n\nThe city of Greenville, which has been actively courting businesses like Velocity Motors to set up shop, is also feeling the pinch. Mayor Knox White has been a vocal supporter of the company, citing its role in creating jobs and stimulating local economic growth. However, with the commodity price surge, the mayor's office is now facing questions about the potential impact on the city's economy.\n\n\"Velocity Motors is a vital part of our community, and we're committed to supporting them through this challenging time,\" said Mayor White in a statement. \"However, we're also aware that the company's exposure to lithium prices could have far-reaching consequences for our local economy.\"\n\nAs the company's beta of -1.1 indicates, Velocity Motors is particularly vulnerable to rising commodity prices. With higher costs eating into its margins, the company may be forced to reassess its pricing strategy or seek alternative suppliers to mitigate the impact. For now, the people of Greenville can only watch and wait as the commodity markets continue to fluctuate, hoping that their hometown employer will emerge unscathed.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

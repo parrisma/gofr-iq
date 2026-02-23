@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-14T19:17:13.909156",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "In a stunning reversal of fortunes, GeneSys, the Austin-based biotech firm, has issued a sweeping recall of its flagship product, sending shockwaves through the local business community and leaving many of the company's 250 employees at its headquarters wondering what went wrong. \n\nThe recall, which affects nearly 75% of the product's current inventory, has left GeneSys scrambling to contain the fallout and reassure its customer base. Meanwhile, across town, executives at PropCo REIT, a direct competitor in the same market, are no doubt taking note of the sudden shift in the landscape. With a significant chunk of GeneSys's market share suddenly up for grabs, PropCo REIT stands poised to capitalize on its rival's misfortune.\n\nFor GeneSys, the recall is a embarrassing setback, particularly given the company's high profile in the local tech scene. Just last year, the company was hailed as one of Austin's fastest-growing firms, with city officials and business leaders alike singing its praises. Now, with the recall casting a pall over the company's reputation, it remains to be seen how GeneSys will recover from this blow.\n\nIn contrast, PropCo REIT, which operates a significant presence in nearby Dallas, is well-positioned to absorb the displaced market share. With a workforce of over 500 employees across the state, PropCo REIT has long been a major player in the Texas biotech scene, and its executives are likely salivating at the prospect of picking up the pieces of GeneSys's failed product launch.\n\nAs the city's business leaders and politicians watch the drama unfold, many are left wondering how GeneSys's fortunes fell so far, so fast. Whatever the reason, one thing is clear: PropCo REIT is ready to pounce, and the Austin-based firm's loss may prove to be its competitor's gain.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

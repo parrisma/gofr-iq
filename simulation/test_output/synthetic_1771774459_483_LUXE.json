@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-07T12:05:19.165079",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding LUXE",
+  "story_body": "Rate Hike Smacks LUXE to the Mat - Bagholders Beware!\n\nThe Federal Reserve just dropped the hammer, raising interest rates by 25 basis points, and luxury goods maker LUXE is getting crushed. This rate hike is like a punch to the gut for LUXE investors, and we're seeing the stock price plummet as a result.\n\nLuxury purchases often rely on financing, and with rates on the rise, consumers are going to think twice before whipping out the plastic. That's bad news for LUXE, which relies heavily on high-end sales to drive revenue. With a beta of -0.8, this stock is notoriously sensitive to rate changes, and today's hike is proving to be a major headwind.\n\nWe're seeing LUXE get smacked around like a rag doll, down 3% on the day and looking like it's got further to fall. The technicals are ugly, with the stock breaking below key support levels and looking like it's headed for a deeper correction.\n\nThe rate hike is a clear warning sign for LUXE investors - this stock is not going to the moon anytime soon. In fact, it's looking more like a bagholder's worst nightmare. With rates on the rise and consumer spending likely to slow, LUXE's luxury goods are going to be the first thing to get cut from the shopping list.\n\nWe'd advise investors to steer clear of LUXE until the dust settles and the rate picture becomes clearer. This stock is a falling knife, and we don't want to be the ones trying to catch it.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "LUXE",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

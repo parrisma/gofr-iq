@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-12T11:51:45.750370",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "Velocity Motors, the electric vehicle manufacturer with a significant presence in the Pacific Northwest, has been quietly humming along in its Portland, Oregon headquarters. With a local workforce of around 850 employees, the company has been a notable player in the region's thriving tech industry.\n\nIn a routine update, Velocity Motors announced the appointment of longtime Portland resident, Sarah Lee, as its new Director of Community Engagement. Lee, who previously served as a senior aide to Portland Mayor Ted Wheeler, will be responsible for fostering relationships with local stakeholders and promoting the company's commitment to environmental sustainability.\n\nOn the marketing front, Velocity Motors has launched a new campaign highlighting its partnership with the City of Portland's \"Electric Avenue\" initiative. The program, which aims to promote the adoption of electric vehicles throughout the city, has seen Velocity Motors donate a number of its flagship e-bikes to local residents and businesses. The campaign, which features a series of ads in local publications and social media channels, is expected to run throughout the summer.\n\nIn its latest ESG report, Velocity Motors touted its efforts to reduce waste and increase energy efficiency at its manufacturing facilities. The company reported a 12% reduction in water usage and a 9% decrease in energy consumption over the past fiscal year. Velocity Motors has also announced plans to install a new solar array at its Portland facility, which is expected to provide a significant portion of the company's energy needs.\n\nWhile the update was light on major announcements, it provided a glimpse into the company's ongoing efforts to engage with the local community and promote sustainability. As Velocity Motors continues to grow and expand its operations, it will be interesting to see how the company navigates the complex web of local politics and environmental concerns in the Pacific Northwest.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "VELO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

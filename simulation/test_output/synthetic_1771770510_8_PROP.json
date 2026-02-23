@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-31T16:40:30.196544",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PROP",
+  "story_body": "The real estate sector is getting slammed, and PROP is taking a beating. Industry-wide shortages are wreaking havoc on the entire space, and investors are running for cover. The whole sector is getting crushed, and PROP is just the latest bagholder.\n\nWe're not talking about a minor hiccup here, folks. This is a full-blown supply chain disruption that's got everyone scrambling. Materials are scarce, labor is tight, and projects are getting delayed left and right. It's a perfect storm of chaos, and PROP is right in the middle of it.\n\nThe stock price action is telling the tale - PROP is getting smoked, down big time in recent sessions. The chart looks like a hot knife through butter, with no support in sight. It's a long way down to the moon, but PROP might just get there.\n\nNow, we know what you're thinking - \"Is this a buying opportunity?\" Our take? Not so fast, pal. This isn't just a PROP problem - it's a sector-wide issue. Everyone's getting hit, from the builders to the suppliers. It's a toxic cocktail of shortages and delays, and we're not sure when the bleeding will stop.\n\nThe real estate sector was supposed to be a safe haven, but now it's looking like a minefield. PROP might be the most obvious victim, but trust us, it's not the only one. The whole sector is getting repriced, and it's not pretty.\n\nSo, what's the trade here? We're not recommending a buy, that's for sure. If you're long PROP, you're already in a world of hurt. If you're looking to get in, be careful - this thing could fall a lot further. The whole sector is a mess, and we're not sure when it'll get cleaned up.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

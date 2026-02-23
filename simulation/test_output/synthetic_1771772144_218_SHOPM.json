@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-08T16:50:44.357477",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding the market leader",
+  "story_body": "SHOPM, a leading e-commerce company, has made several routine updates in the past quarter.\n\nAs of 2023-02-15 08:00:00 EST, SHOPM announced the appointment of Ms. Jane Doe as the new Vice President of Marketing, effective immediately. Ms. Doe will be responsible for leading the company's marketing efforts and will report directly to the Chief Executive Officer.\n\nIn marketing news, SHOPM has launched a new advertising campaign targeting small businesses, focusing on promoting its services and tools for entrepreneurs. The campaign, which began on 2023-02-01, will run for a period of six weeks and will be featured across various social media platforms and online advertising channels.\n\nOn the environmental, social, and governance (ESG) front, SHOPM has released its annual sustainability report, detailing the company's progress in reducing its carbon footprint and promoting diversity and inclusion in the workplace. As of 2022-12-31, SHOPM reported a 5% reduction in greenhouse gas emissions compared to the previous year.\n\nIn other news, SHOPM has partnered with a non-profit organization to launch a mentorship program for underrepresented groups in the tech industry. The program, which began on 2023-01-15, aims to provide career development opportunities and support for participants.\n\nThese updates are part of SHOPM's ongoing efforts to maintain its position as a market leader in the e-commerce industry.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

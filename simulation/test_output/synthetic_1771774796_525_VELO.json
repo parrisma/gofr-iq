@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-20T16:39:56.987682",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "OmniCorp Global Issues Voluntary Recall of Flagship Product at 08:45 UTC\n\nOmniCorp Global (OMNI) announced a voluntary recall of its flagship product, effective immediately, due to a manufacturing defect. The recall affects all units produced between January 1, 2022, and March 31, 2023.\n\nAs a result of the recall, OmniCorp Global's customers will be offered a full refund or replacement. The company has not disclosed the exact number of units affected or the financial impact of the recall.\n\nIn a related development, Velocity Motors (VELO), a direct competitor of OmniCorp Global in the electric vehicle (EV) market, stands to gain from the recall. As a significant stakeholder in Velocity Motors, OmniCorp Global's loss may translate into an opportunity for the EV maker to increase its market share.\n\nThe recall is expected to impact OmniCorp Global's sales and revenue in the short term. Velocity Motors, on the other hand, may benefit from the increased demand for its products. As of 09:00 UTC, Velocity Motors' stock price remained unchanged, while OmniCorp Global's stock price had declined by 2.5% in pre-market trading.\n\nOmniCorp Global has not commented on the potential long-term effects of the recall on its business or its stake in Velocity Motors. The company has assured customers that it is working to resolve the issue and prevent similar defects in the future.\n\nThis recall marks a significant setback for OmniCorp Global, while presenting an opportunity for Velocity Motors to capitalize on the situation and expand its market presence.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

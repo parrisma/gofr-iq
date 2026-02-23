@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2025-12-25T19:50:29.887839",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower",
+  "story_body": "Velocity Motors Launches EV-X500, Poses Significant Threat to EcoPower's Flagship Product\n\nAt 09:00 EST, Velocity Motors (VELO) unveiled the EV-X500, a cutting-edge electric vehicle boasting advanced features and improved performance. The launch poses a significant competitive threat to EcoPower (ECO), whose flagship battery technology is utilized in Velocity Motors' existing product line.\n\nThe EV-X500's advanced powertrain and battery management system, also supplied by EcoPower, enables a substantial increase in range and efficiency. Velocity Motors' decision to integrate these enhancements into a new product may render EcoPower's flagship battery technology, currently used in Velocity Motors' vehicles, obsolete.\n\nKey specifications of the EV-X500 include a maximum range of 375 miles on a single charge, a 0-60 mph acceleration time of 3.2 seconds, and advanced regenerative braking capabilities. These features surpass those of EcoPower's flagship product, potentially undermining its market position.\n\nThe EV-X500's launch is scheduled for Q2 2024, with pre-orders commencing on March 15, 2024, at 12:00 EST. Velocity Motors has not disclosed pricing information at this time.\n\nEcoPower's reliance on Velocity Motors as a key customer may be impacted by the EV-X500's release, as the latter's adoption of advanced battery technology could lead to reduced demand for EcoPower's existing products. The competitive threat posed by the EV-X500 will likely be a topic of discussion during EcoPower's upcoming earnings call, scheduled for February 27, 2024, at 16:00 EST.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-18T08:17:54.935994",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Velocity Motors",
+  "story_body": "The recent surge in commodity prices has sent shockwaves through the automotive industry, with oil, lithium, and steel prices spiking by 20% in a matter of weeks. For Velocity Motors (VELO), a leading electric vehicle manufacturer based in Detroit, Michigan, this sudden increase has significant implications.\n\nAs a major player in the EV market, Velocity Motors relies heavily on lithium-ion batteries, a key component in its vehicles. With lithium prices skyrocketing, the company's costs are set to rise substantially. This is particularly concerning for Velocity Motors, given its negative beta of -1.1, indicating that the company's stock price tends to move in the opposite direction of the market.\n\nIn practical terms, this means that as commodity prices increase, Velocity Motors' margins are likely to take a hit. The company's manufacturing facility in Detroit, which employs over 2,000 workers, will need to absorb these higher costs. This could have a ripple effect on the local economy, as Velocity Motors is a significant employer in the city.\n\nDetroit Mayor, Mike Duggan, has been a strong supporter of Velocity Motors, touting the company's commitment to the city's revitalization efforts. However, the mayor's office may need to reassess its economic development strategy in light of the commodity price surge.\n\nIn nearby Ann Arbor, home to Velocity Motors' research and development center, the company's engineers are working to optimize battery efficiency and reduce costs. However, with lithium prices rising so rapidly, it remains to be seen whether these efforts will be enough to offset the impact on the company's bottom line.\n\nAs the commodity price surge continues to unfold, all eyes will be on Velocity Motors to see how the company navigates this challenging landscape. With its significant exposure to lithium and other commodities, the road ahead will undoubtedly be bumpy.",
+  "validation_metadata": {
+    "scenario": "Commodity Price Shock",
+    "base_ticker": "VELO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

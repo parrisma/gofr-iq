@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-04T22:57:04.762638",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Stratos Defense",
+  "story_body": "Stratos Defense Continues to Refine its Advanced Radar Systems, Welcomes New Talent to its Engineering Team\n\nIn a routine update, Stratos Defense (STR) has announced the addition of several key personnel to its engineering team, further bolstering the company's expertise in advanced radar system design and development. The new hires bring a wealth of experience in high-frequency electromagnetics, signal processing, and systems integration, and are expected to contribute to the ongoing refinement of Stratos' proprietary radar technologies.\n\nOn the marketing front, Stratos has launched a targeted campaign to promote its latest radar system, the STR-9000, which boasts a 30% increase in detection range and a 25% reduction in power consumption compared to its predecessor. The campaign will focus on highlighting the system's advanced capabilities, including its ability to detect and track targets in complex, high-clutter environments.\n\nIn terms of environmental, social, and governance (ESG) initiatives, Stratos has announced its participation in a industry-wide program aimed at reducing electronic waste and promoting sustainable manufacturing practices. The company has committed to implementing a range of measures, including the use of recyclable materials in its products and the implementation of energy-efficient design principles in its manufacturing processes.\n\nFrom a technical standpoint, Stratos' engineers continue to push the boundaries of radar system performance, with a focus on advancing the state-of-the-art in areas such as phased array design, adaptive signal processing, and electromagnetic modeling. The company's research and development efforts are expected to yield significant improvements in radar system capability and efficiency in the coming months.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "STR",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

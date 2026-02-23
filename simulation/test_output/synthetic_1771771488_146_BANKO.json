@@ -1,0 +1,40 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-02-15T08:15:48.397763",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BankOne",
+  "story_body": "BREAKING: BLOCKCHAIN VERIFY'S FLAGSHIP PRODUCT RECALLED AMIDST QUALITY CONTROL CONCERNS!\n\nAccording to UNCONFIRMED REPORTS, sources close to the matter say that BlockChain Verify (BLK), a leading player in the Financial sector, has been FORCED to recall its flagship product due to alleged QUALITY CONTROL ISSUES. This shocking development has sent shockwaves throughout the industry, leaving investors and customers alike wondering what WENT WRONG.\n\nDetails of the recall remain SCANT, but insiders claim that the product in question has been plagued by GLITCHES and SYSTEMIC FAILURES, rendering it UNUSABLE. The exact CAUSE of the problems is still unknown, but one thing is certain: BlockChain Verify's reputation has taken a severe HIT.\n\nAs the dust settles, one company stands to BENEFIT from BlockChain Verify's misfortune: BankOne (BANKO). The rival Financial firm has long been a THORN in BlockChain Verify's side, and this latest development could prove to be the PERFECT STORM for BankOne to GAIN GROUND in the market.\n\n\"It's a CLASSIC case of one company's loss being another's gain,\" says a Financial analyst, who wishes to remain ANONYMOUS. \"BankOne has been WAITING IN THE WINGS for an opportunity to strike, and BlockChain Verify's recall has handed it to them on a SILVER PLATTER.\"\n\nWhile BlockChain Verify scrambles to CONTAIN the damage and RESTORE customer trust, BankOne is poised to CAPITALIZE on the situation. With its own product offerings seemingly UNAFFECTED by the recall, BankOne is rumored to be PREPARING a MAJOR MARKETING PUSH to lure in disgruntled BlockChain Verify customers.\n\nThe question on everyone's mind now is: CAN BlockChain Verify RECOVER from this debacle? Only time will tell, but for now, it seems that BankOne is the CLEAR BENEFICIARY of this embarrassing episode.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "BANKO",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

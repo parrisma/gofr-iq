@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-16T02:17:02.172372",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "At 09:00 EST, Nexus Software (NXS) announced the launch of its latest product, codenamed \"Apex,\" a high-performance computing solution designed to rival the flagship offering of Quantum Compute (QNTM). \n\nAccording to a statement released by Nexus Software, Apex boasts a 30% increase in processing speed and a 25% reduction in power consumption compared to existing solutions. Industry analysts suggest that these specifications make Apex a credible threat to Quantum Compute's dominance in the high-performance computing market.\n\nQuantum Compute's flagship product, the Quantum Compute Server QCS-1000, has been a mainstay of the company's revenue stream. However, with the introduction of Apex, Nexus Software is poised to challenge Quantum Compute's market share. \n\nNexus Software's Apex is scheduled to begin shipping on March 15, 2023. The product's pricing has not been officially disclosed, but sources close to the company indicate that it will be competitive with existing offerings.\n\nThe launch of Apex marks a significant escalation in the competitive rivalry between Nexus Software and Quantum Compute. As the high-performance computing market continues to evolve, the ability of Quantum Compute to respond to this challenge will be closely watched by industry observers.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

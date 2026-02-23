@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-13T11:48:09.708169",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum",
+  "story_body": "Quantum Corporation (QNTM) Experiences Supply Chain Disruption Amid Industry-Wide Shortages\n\nAt 09:45 EST, reports emerged of widespread supply chain disruptions affecting the technology sector, with Quantum Corporation (QNTM) being among the impacted companies.\n\nIndustry sources indicate that a global shortage of critical components has resulted in delayed shipments and reduced inventory levels across the sector. The shortage, attributed to increased demand and manufacturing capacity constraints, has affected multiple technology companies, including Quantum Corporation.\n\nAccording to industry analysts, the shortage is expected to persist for the foreseeable future, with some estimates suggesting that the issue may not be fully resolved until Q2 2024.\n\nQuantum Corporation, a leading provider of data storage and management solutions, relies heavily on the timely delivery of components to meet customer demand. The company's supply chain disruption is expected to impact its ability to fulfill orders in a timely manner.\n\nThe industry-wide shortage has prompted technology companies to re-evaluate their supply chain strategies and explore alternative sourcing options. Quantum Corporation has not issued a formal statement regarding the disruption, but industry observers anticipate that the company will provide guidance on the issue during its next quarterly earnings call.\n\nAs of 10:15 EST, the technology sector remains under pressure, with multiple companies experiencing supply chain disruptions and related operational challenges.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-06T04:58:45.892770",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BlockChain Verify",
+  "story_body": "BLOCKCHAIN VERIFY (BLK) PROVIDES ROUTINE UPDATE\n\nAt 08:00:00 EST, Blockchain Verify (BLK) issued a routine update on various corporate matters.\n\nPersonnel Update:\nBlockchain Verify announced the appointment of Jane Doe as Vice President of Compliance, effective immediately. Ms. Doe will oversee the company's regulatory affairs and report directly to the Chief Operating Officer.\n\nMarketing Update:\nBlockchain Verify has launched a new website, available at https://www.blockchainverify.com, as of 00:01:00 EST. The revamped website features enhanced navigation and updated product information.\n\nESG Update:\nBlockchain Verify published its inaugural Environmental, Social, and Governance (ESG) report, detailing the company's sustainability initiatives and corporate responsibility practices for the fiscal year ended December 31. The report is accessible on the company's website.\n\nNo further information was disclosed by Blockchain Verify in this routine update.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BLK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

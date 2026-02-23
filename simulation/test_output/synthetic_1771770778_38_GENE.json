@@ -1,0 +1,36 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-31T00:13:58.184714",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding GeneSys",
+  "story_body": "GeneSys (GENE) - The Biotech Darling Still Flying High\n\nGENE bagholders, rejoice! Your favorite biotech stock is still riding the waves of success, and we're not just talking about the recent price action. In a routine update, GeneSys announced some under-the-radar moves that might not be sending the stock to the moon just yet, but are definitely worth noting.\n\nOn the personnel front, GeneSys has appointed a new Head of Marketing, tasked with leading the charge on promoting their innovative gene editing tech. While we don't know much about the new hire, we're hoping they'll bring some fresh ideas to the table to keep the GENE brand top of mind.\n\nIn other news, GeneSys has released its latest ESG report, touting its commitment to sustainability and social responsibility. We're not expecting this to be a major catalyst for the stock, but it's always nice to see companies prioritizing the greater good.\n\nOn the marketing front, GeneSys has launched a new website, complete with flashy graphics and a sleek design. It's not exactly a game-changer, but it's a nice refresh for the company's online presence.\n\nAll in all, it's business as usual for GeneSys. The stock may not be making any major moves on this news, but we're still bullish on the company's long-term prospects. Keep holding on, bagholders - GENE is still a stock to watch.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "GENE",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440007"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

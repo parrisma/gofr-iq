@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-12T15:40:31.400660",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "EcoPower Systems, a leading provider of sustainable energy solutions, has been quietly humming along in its downtown Sacramento headquarters. With a local workforce of approximately 250 employees, the company has been a steady presence in the city's business community.\n\nIn a move to boost employee morale, EcoPower Systems recently launched a revamped wellness program, which includes on-site yoga classes and a state-of-the-art fitness center. The initiative is part of the company's broader effort to prioritize employee well-being and create a more positive work environment.\n\nOn the marketing front, EcoPower Systems has been actively engaging with local stakeholders through its participation in the Sacramento Metro Chamber of Commerce's annual Clean Energy Forum. The event, which drew attendees from across the region, provided a platform for the company to showcase its innovative solutions and build relationships with key decision-makers.\n\nIn the realm of environmental, social, and governance (ESG) initiatives, EcoPower Systems has been working closely with the City of Sacramento to support its Climate Action Plan. As part of this effort, the company has pledged to reduce its greenhouse gas emissions by 20% over the next two years, a goal that aligns with the city's own sustainability objectives.\n\nWhile these developments may not be earth-shattering, they reflect EcoPower Systems' ongoing commitment to being a responsible corporate citizen and a driving force in the local clean energy sector. As the company continues to grow and evolve, it remains focused on making a positive impact in the communities it serves.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "ECO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-11T20:50:24.534768",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) has announced the appointment of Maria Rodriguez as Vice President of Sustainability, effective immediately. Ms. Rodriguez will oversee the company's environmental, social, and governance (ESG) initiatives.\n\nIn marketing news, OmniCorp Global (OMNI) has launched a new product website for its latest software release, featuring enhanced product descriptions and customer testimonials. The website is now live and accessible at omnicorp.com/products.\n\nSeparately, OmniCorp Global (OMNI) has released its 2022 Sustainability Report, detailing the company's progress on reducing greenhouse gas emissions and increasing diversity in the workforce. The report is available for download on the company's investor relations website.\n\nIn personnel news, OmniCorp Global (OMNI) has announced the retirement of David Lee, Senior Vice President of Sales, effective June 30, 2023. Mr. Lee has been with the company for over 15 years and will be succeeded by current Vice President of Sales, Emily Chen.\n\nOmniCorp Global (OMNI) will present at the upcoming annual conference of the National Association of Corporate Sustainability, scheduled to take place on October 12, 2023, at 10:00 AM EDT.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

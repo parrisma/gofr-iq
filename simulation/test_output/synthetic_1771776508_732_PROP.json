@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_RECALL",
+  "published_at": "2026-01-17T21:00:28.610965",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo REIT",
+  "story_body": "At 08:00 EST, GigaTech Inc. (GTX) announced a voluntary recall of its flagship product, citing quality control issues. The recall, effective immediately, affects all units sold since January 1, 2022.\n\nGigaTech Inc. stated that the recall is a precautionary measure to ensure customer satisfaction and safety. The company has not disclosed the number of affected units or the expected financial impact of the recall.\n\nThis development may create an opportunity for PropCo REIT (PROP), a direct competitor operating in the same market. PropCo REIT may potentially gain market share as a result of GigaTech Inc.'s product recall.\n\nGigaTech Inc. will provide further information and instructions to affected customers on its website. The company has not announced a timeline for resolving the issue or replacing the recalled products.\n\nAs of 08:15 EST, GigaTech Inc.'s stock price has not reacted significantly to the news. PropCo REIT's stock price remains unchanged at this time.\n\nThis recall is a significant development for GigaTech Inc., and its impact on the company's market position and financial performance will be closely monitored. PropCo REIT's potential gain in market share will also be observed in the coming weeks.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Recall",
+    "base_ticker": "PROP",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_RECALL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_RECALL",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

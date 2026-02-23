@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-07T14:24:53.544699",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "Quantum Compute Updates Local Presence in Denver and Austin\n\nIn a series of low-key announcements, Quantum Compute, or QNTM, has reaffirmed its commitment to the Denver and Austin areas, where the company maintains significant operations. \n\nIn Denver, where QNTM employs approximately 250 staff, the company has confirmed its ongoing sponsorship of the Denver Public Schools' STEM education program. This initiative, now in its fifth year, provides critical resources and expertise to local students. \n\nMeanwhile, in Austin, QNTM has introduced a new employee resource group focused on environmental sustainability. This move aligns with the company's broader ESG goals and reflects the concerns of its 300-strong workforce in the city. Local environmental advocates have welcomed the development.\n\nIn marketing news, QNTM has announced a new partnership with the City of Denver's Office of Economic Development, designed to promote the region's burgeoning tech sector. This collaboration will involve joint participation in industry events and conferences, further solidifying QNTM's position within the local business community.\n\nOn the personnel front, QNTM has confirmed the appointment of two new members to its Austin-based management team. While the company has not released specific details on the new hires, sources suggest they will focus on talent acquisition and community outreach.\n\nAs QNTM continues to grow its presence in both cities, the company remains attuned to the needs of its local stakeholders. With its sustained investment in education, environmental responsibility, and community engagement, QNTM is reinforcing its reputation as a conscientious corporate citizen in Denver and Austin.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "QNTM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

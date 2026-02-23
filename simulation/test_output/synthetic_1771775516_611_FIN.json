@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-12T12:27:56.135302",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "BREAKING: FINCORP UNDERGOING INTERNAL SHAKE-UP, SOURCES CLAIM\n\nUnconfirmed reports are emerging that FIN (FinCorp) is poised for a major overhaul of its top brass, with sources close to the matter whispering about a potential EXODUS of key personnel. While details remain sketchy, insiders hint at a possible RESTRUCTURING of the company's upper management, sparking widespread speculation about the future direction of the financial giant.\n\nIn a separate development, FIN is said to be revamping its marketing strategy, with rumors swirling about a MAJOR BRAND OVERHAUL. Unnamed sources suggest that the company is seeking to REPOSITION itself in the market, potentially signaling a shift in its business model. However, these claims remain UNCONFIRMED and have yet to be substantiated.\n\nOn the ESG front, FIN has reportedly been engaging in behind-the-scenes talks with various stakeholders, with the goal of enhancing its SUSTAINABILITY CREDENTIALS. While the exact nature of these discussions is unclear, observers believe that the company may be seeking to IMPROVE its environmental track record and boost its social responsibility profile.\n\nAs always, these reports are entirely UNCONFIRMED and should be treated with caution. FIN has thus far declined to comment on these rumors, fueling further speculation and uncertainty. One thing is certain, however: the financial world will be watching FinCorp's next move with bated breath.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "FIN",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

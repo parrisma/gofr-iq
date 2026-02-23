@@ -1,0 +1,39 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-28T01:52:53.975058",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "OmniCorp Global (OMNI) issued a routine update on its corporate activities at 08:00 EST.\n\nThe company announced the appointment of Jane Doe as Vice President of Marketing, effective immediately. In this role, Ms. Doe will oversee the development and implementation of OmniCorp Global's marketing strategies.\n\nOmniCorp Global also reported that it has launched a new social media campaign, #OmniCares, aimed at promoting the company's environmental, social, and governance (ESG) initiatives. The campaign will feature updates on the company's sustainability efforts and community engagement programs.\n\nIn its ESG update, OmniCorp Global announced that it has achieved a 5% reduction in greenhouse gas emissions from its operations in the past quarter. The company attributed this reduction to its ongoing energy efficiency initiatives and renewable energy sourcing.\n\nAdditionally, OmniCorp Global reported that it has partnered with a local non-profit organization to support education and job training programs in underserved communities. The company will provide funding and resources to support the development of vocational training programs.\n\nOmniCorp Global's update concluded with a statement reaffirming its commitment to transparency and accountability in its business practices. The company will continue to provide regular updates on its ESG initiatives and progress towards its sustainability goals.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "OMNI",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

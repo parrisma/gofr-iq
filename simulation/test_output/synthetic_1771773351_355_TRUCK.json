@@ -1,0 +1,39 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2025-12-26T08:23:51.603210",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "HeavyTrucks Inc., ticker TRUCK, has been stuck in neutral for months, leaving bagholders wondering if this stock will ever shift into high gear. But despite the stagnant stock price, the company's been quietly humming along, making some under-the-radar moves that might not be earth-shattering, but are worth noting.\n\nOn the personnel front, TRUCK's board of directors has welcomed a new member, bringing some fresh blood to the table. While this addition might not be enough to send the stock to the moon, it's a positive development that could lead to some new perspectives and ideas.\n\nIn marketing news, HeavyTrucks has launched a new social media campaign aimed at highlighting its commitment to sustainability. The company's been touting its eco-friendly initiatives, and this latest push is likely an attempt to appeal to the growing number of ESG-conscious investors. Whether this will actually move the needle remains to be seen, but hey, it's a step in the right direction.\n\nSpeaking of ESG, TRUCK has also announced plans to publish its annual sustainability report later this quarter. While these reports are often little more than PR exercises, they can sometimes contain hidden gems or insight into a company's long-term strategy. We'll be keeping an eye out for any interesting tidbits when the report drops.\n\nAll in all, these updates are unlikely to get TRUCK's stock price revving anytime soon, but they do suggest that the company's still plugging away, trying to get its ducks in a row. For now, bagholders will just have to keep waiting for that elusive catalyst to send TRUCK to the moon.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "TRUCK",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-07T15:04:56.822886",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding EcoPower Systems",
+  "story_body": "The energy sector is grappling with an unprecedented supply chain disruption, with EcoPower Systems (ECO) being one of the hardest hit. Industry insiders are pointing to a perfect storm of component shortages, manufacturing bottlenecks, and logistical snags that are crippling the production of high-efficiency power conversion systems.\n\nAt the heart of the issue is a shortage of high-grade silicon carbide (SiC) wafers, a critical component in ECO's flagship power modules. These modules, which boast an impressive 98.5% efficiency rating and 1200V blocking voltage, rely on SiC wafers to enable their high-power density and fast switching capabilities.\n\nHowever, with leading SiC wafer suppliers such as Cree and STMicroelectronics struggling to meet demand, ECO is facing significant production delays. Sources close to the company indicate that lead times for these critical components have stretched from 12 weeks to over 20 weeks, severely impacting ECO's ability to fulfill orders.\n\nFurthermore, the shortage of SiC wafers is having a ripple effect throughout the supply chain, with other component manufacturers such as Infineon and ON Semiconductor also feeling the pinch. This has resulted in a shortage of complementary components, including high-voltage IGBTs and gate drivers, which are essential for ECO's power modules.\n\nIndustry experts are warning that the shortage could have far-reaching consequences for the energy sector, particularly in the renewable energy and electric vehicle markets. \"The SiC wafer shortage is a major concern for companies like ECO, which rely on these components to deliver high-performance power conversion systems,\" said one industry analyst. \"If the shortage persists, it could impact the adoption of renewable energy technologies and hinder the growth of the electric vehicle market.\"\n\nAs the situation continues to unfold, ECO is working closely with its suppliers to mitigate the impact of the shortage. However, with no clear end in sight, the company's production schedules and revenue projections are likely to remain under pressure.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "ECO",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

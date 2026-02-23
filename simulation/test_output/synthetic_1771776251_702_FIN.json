@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-20T13:29:11.677038",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "At 08:00 EST, industry reports confirmed widespread supply chain disruptions affecting multiple sectors, including financial institutions. FinCorp (FIN), a leading financial services company, is among those impacted.\n\nAs of 07:45 EST, industry insiders reported shortages of critical components, citing logistical challenges and supplier constraints. The disruptions are attributed to a combination of factors, including increased demand and capacity constraints.\n\nFinCorp, like its peers, relies on a complex network of suppliers to maintain operations. The current shortages have resulted in delays and increased costs for the company.\n\nIndustry analysts note that the disruptions are not unique to FinCorp, but rather a sector-wide issue affecting multiple financial institutions. \"The shortages are a result of systemic issues, rather than company-specific problems,\" said a spokesperson for a leading industry association.\n\nFinCorp has not issued a formal statement on the matter. However, the company's operational updates will be closely monitored by investors and analysts in the coming days.\n\nThe supply chain disruptions are expected to have a short-term impact on FinCorp's operations, with potential effects on the company's financial performance. Investors will be watching for updates on the company's contingency plans and mitigation strategies.\n\nAs of 08:15 EST, FinCorp's shares were trading in line with the broader market, with no significant reaction to the supply chain disruptions.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

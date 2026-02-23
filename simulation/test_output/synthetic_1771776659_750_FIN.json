@@ -1,0 +1,38 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-01-05T11:10:59.650409",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "As the Federal Reserve announced its decision to raise interest rates by 25 basis points, the financial sector was abuzz with anticipation. For FinCorp, a fintech lender with a significant presence in the city of Austin, Texas, the news was particularly welcome. With over 500 employees in the city, FinCorp has been a major player in the local fintech scene, and the rate hike is expected to have a direct impact on their bottom line.\n\nAs a lender, FinCorp's margins are closely tied to interest rates. When rates rise, the company's lending margins expand, allowing them to earn more on their loans. This is especially true in cities like Austin, where the tech industry is booming and demand for loans is high. With a beta of 1.2, FinCorp is more sensitive to interest rate changes than the broader market, making the rate hike a particularly positive development for the company.\n\nIn a city where the mayor has been actively courting fintech companies, the rate hike is seen as a boon for FinCorp and its employees. \"This rate hike is a shot in the arm for our local fintech industry,\" said a spokesperson for the city's economic development department. \"We're thrilled to see companies like FinCorp thriving in our city, and we're committed to supporting their growth.\"\n\nAs the news of the rate hike spread, FinCorp's employees in Austin were jubilant. \"This is great news for us,\" said one employee, who wished to remain anonymous. \"We've been working hard to grow our lending business, and this rate hike will definitely give us a boost.\"\n\nWith the rate hike expected to have a lasting impact on FinCorp's margins, the company is well-positioned to continue its growth trajectory in the city. As the local fintech industry continues to evolve, FinCorp is likely to remain a major player, thanks in part to the Fed's decision to raise interest rates.",
+  "validation_metadata": {
+    "scenario": "Interest Rate Impact",
+    "base_ticker": "FIN",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

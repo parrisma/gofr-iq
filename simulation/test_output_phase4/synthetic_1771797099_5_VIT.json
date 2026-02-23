@@ -1,0 +1,38 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-22T21:39:39.258014",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase4 M6 Credit Downgrade Geopolitical] VIT - Vitality Pharma",
+  "story_body": "VITALITY PHARMA'S CREDIT PROFILE UNDER SIEGE: Sources Say Downgrade Looms Amid Geopolitical Shockwaves\n\nUnconfirmed reports are swirling that Vitality Pharma's (VIT) credit rating is on the CHOPPING BLOCK, as sources close to the matter reveal that a MAJOR credit rating agency is PREPARING TO SLASH the company's credit score. The move, which could come as early as NEXT WEEK, would deal a CRUSHING BLOW to VIT's already PRECARIOUS credit profile.\n\nThe downgrade, which has NOT BEEN CONFIRMED by the company or the credit rating agency, is said to be linked to VIT's SOARING LEVERAGE and HEIGHTENED GEOPOLITICAL RISK. Insiders claim that the company's AGGRESSIVE EXPANSION STRATEGY has left it VULNERABLE TO MARKET VOLATILITY, while the ESCALATING TENSIONS between major world powers have CREATED A PERFECT STORM of uncertainty.\n\nAs the credit markets CONTINUE TO TIGHTEN, VIT's already STRUGGLING BOND PRICES are expected to TAKE A NOSEDIVE, sparking a WAVE OF SELLING among investors. The company's STOCK PRICE, which has ALREADY TAKEN A HIT in recent weeks, is likely to PLUMMET EVEN FURTHER as the reality of the credit downgrade sets in.\n\nFor short-biased investors, the looming credit downgrade represents a DREAM COME TRUE. With VIT's credit profile TEETERING ON THE BRINK, the potential for a CATASTROPHIC COLLAPSE is VERY REAL. As one insider noted, \"This is a CLASSIC SHORT SQUEEZE waiting to happen. When the downgrade hits, VIT's stock price will be the FIRST TO FALL.\"\n\nWhile neither Vitality Pharma nor the credit rating agency has commented on the rumors, sources say that the writing is ON THE WALL. The question on everyone's mind is: HOW LOW CAN VIT GO?",
+  "validation_metadata": {
+    "scenario": "Phase4 M6 Credit Downgrade Geopolitical",
+    "base_ticker": "VIT",
+    "expected_tier": "GOLD",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440006"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-10",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440006"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-10"
+    }
+  }
+}

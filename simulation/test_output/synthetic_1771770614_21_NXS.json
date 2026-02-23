@@ -1,0 +1,37 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-02-11T23:28:14.483807",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Nexus Software",
+  "story_body": "GigaTech Inc. Factory Fire Brings Production to a Standstill, Ripples Felt in Nexus Software's Future\n\nIn a devastating blow to the local economy, a massive fire swept through the GigaTech Inc. factory in Fremont, California, late Tuesday night, forcing the shutdown of the facility and leaving over 500 employees in limbo. The blaze, which is still under investigation, is believed to have started in the production wing of the factory, where GigaTech's flagship operating system, GigaTechOS, is manufactured.\n\nAs the Fremont Fire Department works to determine the cause of the fire, the city's mayor, Lily Mei, has pledged support for the affected employees and their families. \"We will do everything in our power to help GigaTech get back on its feet and restore jobs to our community,\" Mei said in a statement.\n\nThe impact of the fire will be felt far beyond Fremont, however. Nexus Software, a leading provider of software solutions, relies heavily on GigaTechOS to power its products. With GigaTech's production at a standstill, Nexus Software is facing a critical shortage of the operating system it needs to meet customer demand.\n\nAccording to industry insiders, Nexus Software's inventory of GigaTechOS is expected to run dry within 2-4 weeks, at which point the company will be forced to halt production of its own products. This will have a ripple effect throughout the tech industry, as Nexus Software's customers, including major players in the finance and healthcare sectors, rely on its software to run their operations.\n\n\"We're working closely with GigaTech to assess the situation and find a solution,\" said a spokesperson for Nexus Software. \"But the reality is, without a steady supply of GigaTechOS, we're facing a significant disruption to our business.\" As the situation continues to unfold, one thing is clear: the fate of Nexus Software, and the livelihoods of its employees, hangs precariously in the balance.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Fire",
+    "base_ticker": "NXS",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 70,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}

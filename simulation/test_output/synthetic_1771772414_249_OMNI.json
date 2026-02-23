@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-05T00:46:14.340141",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding OmniCorp Global",
+  "story_body": "\"Velocity Motors Faces Production Snag, Leaving OmniCorp's San Jose Operations in Limbo\"\n\nIn a blow to the thriving tech scene in San Jose, Velocity Motors, a key player in the electric vehicle market, has announced a critical supplier delay that will have far-reaching consequences for its major stakeholder, OmniCorp Global. \n\nThe delay, which was confirmed by Velocity Motors officials yesterday, is expected to impact the production of the company's flagship model, the VM-500, at its manufacturing facility in nearby Fremont. The facility, which employs over 2,000 workers, is a major economic driver for the region.\n\nOmniCorp Global, which holds a significant stake in Velocity Motors, has a major presence in San Jose, with over 5,000 employees working out of its downtown headquarters. The company's CEO has been a vocal proponent of the city's business-friendly policies, and the delay is likely to be seen as a setback for the local economy.\n\nThe supplier delay is attributed to a critical component shortage from a key supplier, which has left Velocity Motors scrambling to find alternative sources. The company has declined to comment on the specifics of the delay, but sources close to the matter indicate that it may take several weeks to resolve the issue.\n\nFor OmniCorp Global, the delay is a worrying development, given its significant investment in Velocity Motors. The company has been betting big on the EV maker's success, and any disruption to its production schedule is likely to have a ripple effect on its own operations.\n\nSan Jose Mayor, Sam Liccardo, has been quick to offer support to Velocity Motors, saying that the city is \"committed to helping the company resolve the issue as quickly as possible.\" The mayor's office has also offered to facilitate talks between Velocity Motors and local suppliers to find a solution.\n\nAs the situation continues to unfold, all eyes will be on Velocity Motors to see how quickly it can recover from this setback. For OmniCorp Global, the delay is a reminder of the risks involved in investing in the rapidly evolving EV market.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "OMNI",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

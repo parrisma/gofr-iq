@@ -1,0 +1,40 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "SUPPLY_CHAIN",
+  "published_at": "2026-01-05T16:44:29.637589",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding HeavyTrucks Inc.",
+  "story_body": "Velocity Motors Experiences Critical Supplier Delay\n\nAt 08:45 EST, Velocity Motors, a key player in the automotive industry, announced a significant delay in its production schedule due to a critical supplier failure. This setback is expected to have a ripple effect on its partners, particularly HeavyTrucks Inc., with whom Velocity Motors has a well-established relationship in the auto sector.\n\nAccording to a statement released by Velocity Motors, the supplier delay is attributed to unforeseen logistical issues, which have resulted in a shortage of essential components. As a result, Velocity Motors has been forced to adjust its production timeline, pushing back delivery dates for several key products.\n\nHeavyTrucks Inc., which relies on Velocity Motors for critical parts, is likely to be impacted by this delay. The two companies have a long-standing partnership in the auto industry, with Velocity Motors serving as a primary supplier of components for HeavyTrucks Inc.'s heavy-duty vehicles.\n\nThe delay is expected to affect HeavyTrucks Inc.'s production schedule, potentially leading to delays in the delivery of its own products to customers. HeavyTrucks Inc. has yet to comment on the situation, but industry analysts anticipate that the company will experience significant disruptions as a result of Velocity Motors' supplier failure.\n\nThe incident highlights the vulnerabilities inherent in complex supply chains, particularly in the automotive industry, where timely delivery of components is crucial to maintaining production schedules. As the situation continues to unfold, both Velocity Motors and HeavyTrucks Inc. are expected to provide updates on the status of their operations and the anticipated impact on their respective businesses.",
+  "validation_metadata": {
+    "scenario": "Indirect Supplier Delay",
+    "base_ticker": "TRUCK",
+    "expected_tier": "GOLD",
+    "expected_event": "SUPPLY_CHAIN",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440003"
+    ],
+    "relationship_hops": 1,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "GOLD",
+      "must_match_event": false,
+      "expected_event": "SUPPLY_CHAIN",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 1,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

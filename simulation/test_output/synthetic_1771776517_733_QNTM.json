@@ -1,0 +1,40 @@
+{
+  "source": "Regional Business Journal",
+  "source_name": "Regional Business Journal",
+  "meta_source_name": "Regional Business Journal",
+  "source_guid": "src-local-gazette",
+  "trust_level": 8,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "PRODUCT_LAUNCH",
+  "published_at": "2026-01-03T11:36:37.220770",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding Quantum Compute",
+  "story_body": "In a move that's sent shockwaves through the tech corridors of San Jose, GigaTech Inc. (GTX) has unveiled a cutting-edge product that's being touted as a game-changer in the industry. The launch has left many wondering if Quantum Compute's (QNTM) flagship offering is now a relic of the past.\n\nGigaTech's new brainchild, showcased at a packed event in downtown San Jose, boasts capabilities that far surpass those of Quantum Compute's marquee product. Insiders claim that the GTX innovation has the potential to disrupt the entire tech landscape, leaving Quantum Compute scrambling to catch up.\n\nWith over 5,000 employees in the San Jose area, Quantum Compute has long been a stalwart of the local tech scene. However, GigaTech's latest salvo has many questioning whether the company's dominance is under threat. As one industry analyst noted, \"GigaTech's product launch is a clear shot across the bow of Quantum Compute. The question now is, can QNTM adapt quickly enough to stay relevant?\"\n\nThe city's mayor, who was in attendance at the GigaTech launch, praised the company's commitment to innovation, saying, \"GigaTech's investment in our city is a testament to the vibrant tech ecosystem we've built here. We're excited to see the impact this new product will have on our local economy.\"\n\nMeanwhile, Quantum Compute's leadership has been tight-lipped about the development, fueling speculation about the company's next move. With over 2,000 employees in the nearby city of Santa Clara, Quantum Compute's response to GigaTech's challenge will be closely watched by the local community.\n\nAs the tech world waits with bated breath to see how Quantum Compute will respond to this competitive threat, one thing is clear: GigaTech's product launch has raised the stakes in the ongoing battle for supremacy in the tech industry.",
+  "validation_metadata": {
+    "scenario": "Competitor Product Launch",
+    "base_ticker": "QNTM",
+    "expected_tier": "SILVER",
+    "expected_event": "PRODUCT_LAUNCH",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440003",
+      "550e8400-e29b-41d4-a716-446655440005",
+      "550e8400-e29b-41d4-a716-446655440007",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 2,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 100,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "PRODUCT_LAUNCH",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 2,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

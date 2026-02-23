@@ -1,0 +1,39 @@
+{
+  "source": "Insider Whispers",
+  "source_name": "Insider Whispers",
+  "meta_source_name": "Insider Whispers",
+  "source_guid": "src-rumor-mill",
+  "trust_level": 2,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-02-10T20:15:41.553735",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding BANKO",
+  "story_body": "BREAKING: BANKO Undergoes \"Shakeup\" in Marketing Department, Sources Claim\n\nIn a move that has left industry insiders REELING, BANKO (BANKO) has allegedly made significant changes to its marketing department, according to unconfirmed reports. Details of the \"shake-up\" remain scarce, but sources close to the matter say it involves a \"restructuring\" of key personnel.\n\nWhile the exact nature of the changes is unclear, insiders speculate that the move is part of a broader effort to \"rebrand\" the company and boost its public image. \"It's all about creating a more MODERN and DYNAMIC image,\" said one source, who wished to remain anonymous.\n\nMeanwhile, BANKO has also been quietly making strides in the realm of Environmental, Social, and Governance (ESG) initiatives. Unconfirmed reports suggest that the company has been working behind the scenes to develop a more comprehensive sustainability strategy, although details remain scarce.\n\nAs always, BANKO has declined to comment on the matter, fueling speculation and RUMORS about the true nature of the changes. One thing is certain, however: the company is clearly committed to \"staying ahead of the curve\" in an increasingly competitive market.\n\nStay tuned for further updates as this story continues to UNFOLD.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "BANKO",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440008",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

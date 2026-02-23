@@ -1,0 +1,38 @@
+{
+  "source": "Global Wire",
+  "source_name": "Global Wire",
+  "meta_source_name": "Global Wire",
+  "source_guid": "src-global-wire",
+  "trust_level": 10,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "MACRO_DATA",
+  "published_at": "2026-02-06T02:49:58.258035",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding FinCorp",
+  "story_body": "FinCorp, a leading financial institution, is experiencing supply chain disruptions affecting its operations, as part of a broader industry-wide shortage. \n\nAt 09:45 UTC, FinCorp confirmed that the shortage has impacted its ability to fulfill certain customer requests, citing an unforeseen shortage of critical components. The company stated that it is working to mitigate the effects and minimize delays.\n\nIndustry analysts note that the shortage is not isolated to FinCorp, but rather a sector-wide issue affecting multiple financial institutions. The shortage is attributed to a confluence of factors, including increased demand and logistics constraints.\n\nAs of 10:15 UTC, FinCorp's website indicated that the company is working to resolve the issue, with no estimated timeframe for resolution provided. FinCorp's customer service hotline is available to address customer inquiries.\n\nThe Financial Industry Regulatory Authority (FINRA) has been notified of the issue, and is monitoring the situation. No regulatory actions have been announced at this time.\n\nThis is a developing story, with updates to follow as more information becomes available.",
+  "validation_metadata": {
+    "scenario": "Supply Chain Ripple",
+    "base_ticker": "FIN",
+    "expected_tier": "SILVER",
+    "expected_event": "MACRO_DATA",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440006",
+      "550e8400-e29b-41d4-a716-446655440009"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 50,
+      "max_score": 74,
+      "expected_tier": "SILVER",
+      "must_match_event": false,
+      "expected_event": "MACRO_DATA",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-12T22:23:07.887234",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding ShopMart",
+  "story_body": "ShopMart, Inc. (SHOPM) has announced several personnel updates within its engineering and marketing teams. Dr. Lisa Nguyen, previously a senior staff engineer, has been promoted to lead the company's Edge AI initiatives. Dr. Nguyen will oversee the development of SHOPM's proprietary Edge AI framework, which utilizes a hybrid approach combining TensorFlow and PyTorch for optimized model deployment on resource-constrained devices.\n\nIn marketing, SHOPM has appointed Rachel Lee as Director of Digital Experience. Lee brings expertise in A/B testing and data-driven marketing, and will focus on optimizing the company's e-commerce platform for improved customer engagement and conversion rates.\n\nOn the environmental, social, and governance (ESG) front, SHOPM has released its annual sustainability report, highlighting a 12% reduction in greenhouse gas emissions from its data centers. The company has achieved this through the implementation of more efficient cooling systems and a higher mix of renewable energy sources. SHOPM has also expanded its diversity and inclusion initiatives, with a focus on increasing representation of underrepresented groups in its engineering and leadership teams.\n\nIn other news, SHOPM has partnered with the Open Source Hardware Association to promote the development of open-source hardware standards for edge computing devices. The company has also released an updated version of its popular Edge AI development kit, featuring improved support for computer vision and natural language processing workloads.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "SHOPM",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440002",
+      "550e8400-e29b-41d4-a716-446655440004",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}

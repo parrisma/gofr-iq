@@ -1,0 +1,36 @@
+{
+  "source": "Silicon Circuits",
+  "source_name": "Silicon Circuits",
+  "meta_source_name": "Silicon Circuits",
+  "source_guid": "src-tech-cruncher",
+  "trust_level": 6,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "OTHER",
+  "published_at": "2026-01-11T11:31:02.260624",
+  "upload_as_group": "group-simulation",
+  "title": "Update regarding PropCo",
+  "story_body": "PropCo's Q2 engineering update highlighted incremental enhancements to their flagship architecture, with a focus on optimizing I/O throughput and bolstering thermal management. Specifically, the latest iteration of their proprietary Xyris chipset now boasts a 12% reduction in latency, as measured by industry-standard SPECint2006 benchmarks.\n\nIn a separate announcement, PropCo's marketing team revealed a revamped partner program, aimed at fostering deeper collaborations with key OEMs and system integrators. The revamped program, dubbed 'PropCo Connect,' promises enhanced technical support, joint marketing initiatives, and streamlined access to PropCo's extensive IP portfolio.\n\nOn the ESG front, PropCo published its bi-annual sustainability report, detailing efforts to reduce the company's carbon footprint. Notably, PropCo has implemented a comprehensive recycling program for end-of-life products, resulting in a 25% decrease in electronic waste generation over the past 12 months. Additionally, the company has set ambitious targets to source 80% of its manufacturing energy from renewable sources by 2025.\n\nIn personnel news, PropCo announced the appointment of Dr. Rachel Kim as Director of Emerging Technologies. Dr. Kim, a renowned expert in advanced materials science, will oversee the development of PropCo's next-generation product roadmap.\n\nLastly, PropCo confirmed its participation in the upcoming IEEE International Solid-State Circuits Conference, where the company will present a technical paper on its novel approaches to low-power circuit design.",
+  "validation_metadata": {
+    "scenario": "Standard Filler",
+    "base_ticker": "PROP",
+    "expected_tier": "STANDARD",
+    "expected_event": "OTHER",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440008"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "1-50",
+    "validation_rules": {
+      "min_score": 0,
+      "max_score": 49,
+      "expected_tier": "STANDARD",
+      "must_match_event": false,
+      "expected_event": "OTHER",
+      "expected_entities": [],
+      "expected_relevant_clients": [],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "1-50"
+    }
+  }
+}
