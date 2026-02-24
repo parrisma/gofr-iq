@@ -1086,12 +1086,17 @@ class SyntheticGenerator:
                 # Use Default Simulation Group
                 group_guid = DEFAULT_GROUP["guid"]
 
-                # Calculate expected_relevant_clients based on portfolios and watchlists,
-                # unless the scenario explicitly defines expected clients.
-                expected_clients = []
-                if scenario.validation.expected_relevant_clients:
+                # Calculate expected_relevant_clients based on portfolios and watchlists.
+                # Phase3/Phase4 scenarios are *calibration injections* and must use the
+                # authored expectation lists verbatim (even when empty for negative controls).
+                derived_expected = False
+                if scenario.name.startswith(("Phase3", "Phase4")):
+                    expected_clients = list(scenario.validation.expected_relevant_clients)
+                elif scenario.validation.expected_relevant_clients:
                     expected_clients = list(scenario.validation.expected_relevant_clients)
                 else:
+                    derived_expected = True
+                    expected_clients = []
                     for client_guid, portfolio in CLIENT_PORTFOLIOS.items():
                         if ticker.ticker in portfolio:
                             expected_clients.append(client_guid)
@@ -1099,7 +1104,8 @@ class SyntheticGenerator:
                             expected_clients.append(client_guid)
 
                 # For relationship scenarios, also include clients holding the related ticker
-                if prompt_vars.get("related_ticker") != "N/A":
+                # when expected clients are being derived (not explicitly authored).
+                if derived_expected and prompt_vars.get("related_ticker") != "N/A":
                     related_ticker_sym = prompt_vars["related_ticker"]
                     for client_guid, portfolio in CLIENT_PORTFOLIOS.items():
                         if related_ticker_sym in portfolio and client_guid not in expected_clients:
