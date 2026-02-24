@@ -10,8 +10,7 @@ trap 'log_error "Entrypoint failed at line $LINENO"' ERR
 
 # Standard GOFR user paths - all projects use 'gofr' user
 GOFR_USER="gofr"
-# Allow run-dev-container.sh to mount the project at a non-default path.
-PROJECT_DIR="${GOFR_IQ_PROJECT_DIR:-/home/${GOFR_USER}/devroot/gofr-iq}"
+PROJECT_DIR="/home/${GOFR_USER}/devroot/gofr-iq"
 # gofr-common is now a git submodule in lib/gofr-common
 COMMON_DIR="$PROJECT_DIR/lib/gofr-common"
 VENV_DIR="$PROJECT_DIR/.venv"
