@@ -1,0 +1,40 @@
+{
+  "source": "The Daily Alpha",
+  "source_name": "The Daily Alpha",
+  "meta_source_name": "The Daily Alpha",
+  "source_guid": "src-market-blog",
+  "trust_level": 4,
+  "source_type": "NEWS_WIRE",
+  "group_guid": "group-simulation",
+  "event_type": "FRAUD_SCANDAL",
+  "published_at": "2026-02-24T13:17:11.305822",
+  "upload_as_group": "group-simulation",
+  "title": "[Phase3 A Defense Tail Holding Failure] NXS - Nexus Software",
+  "story_body": "BREAKING: NXS Plummets as Whistleblower Exposes Devastating Security Breach, \"Bagholders\" Left Reeling\n\nIn a shocking turn of events, Nexus Software (NXS) has been rocked by a catastrophic operational failure that threatens to send the stock to the depths of oblivion. A whistleblower has come forward, alleging a massive security breach that has compromised sensitive customer data, leaving the company's already-tenuous future hanging in the balance.\n\nAccording to sources, the breach, which is believed to have occurred several months ago, has been kept under wraps by NXS executives, who are now facing intense scrutiny and accusations of a cover-up. The news has sent NXS shares into a tailspin, plummeting over 70% in pre-market trading as panicked investors scramble to get out before it's too late.\n\nThis is a worst-case scenario for NXS, which was already struggling to gain traction in a crowded software market. The company's reputation is now in tatters, and it's unclear whether it can recover from this devastating blow. The phrase \"existential risk\" is often tossed around, but in this case, it's all too real.\n\nThe question on everyone's mind is: what did NXS know, and when did they know it? The company's leadership is facing intense pressure to come clean about the breach and the subsequent cover-up, but so far, they've remained mum.\n\nAs the dust settles, one thing is clear: NXS is on the precipice of disaster. The stock, once a darling of the small-cap world, is now a toxic asset that no one wants to touch. The bagholders who got in too deep are left to pick up the pieces, wondering how it all went so wrong. One thing's for sure: NXS is not going to the moon anytime soon. In fact, it's likely to be a long, hard fall back down to earth.",
+  "validation_metadata": {
+    "scenario": "Phase3 A Defense Tail Holding Failure",
+    "base_ticker": "NXS",
+    "expected_tier": "PLATINUM",
+    "expected_event": "FRAUD_SCANDAL",
+    "expected_relevant_clients": [
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440005"
+    ],
+    "relationship_hops": 0,
+    "expected_feed_rank_range": "6-15",
+    "validation_rules": {
+      "min_score": 90,
+      "max_score": 100,
+      "expected_tier": "PLATINUM",
+      "must_match_event": false,
+      "expected_event": "FRAUD_SCANDAL",
+      "expected_entities": [],
+      "expected_relevant_clients": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ],
+      "relationship_hops": 0,
+      "expected_feed_rank_range": "6-15"
+    }
+  }
+}
