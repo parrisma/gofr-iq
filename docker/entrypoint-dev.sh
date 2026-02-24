@@ -10,7 +10,8 @@ trap 'log_error "Entrypoint failed at line $LINENO"' ERR
 
 # Standard GOFR user paths - all projects use 'gofr' user
 GOFR_USER="gofr"
-PROJECT_DIR="/home/${GOFR_USER}/devroot/gofr-iq"
+# Allow run-dev-container.sh to mount the project at a non-default path.
+PROJECT_DIR="${GOFR_IQ_PROJECT_DIR:-/home/${GOFR_USER}/devroot/gofr-iq}"
 # gofr-common is now a git submodule in lib/gofr-common
 COMMON_DIR="$PROJECT_DIR/lib/gofr-common"
 VENV_DIR="$PROJECT_DIR/.venv"
@@ -18,6 +19,14 @@ VENV_DIR="$PROJECT_DIR/.venv"
 log_info "======================================================================="
 log_info "GOFR-IQ Container Entrypoint"
 log_info "======================================================================="
+
+ensure_dir() {
+    local dir="$1"
+    if [ -d "$dir" ]; then
+        return 0
+    fi
+    mkdir -p "$dir" 2>/dev/null || sudo mkdir -p "$dir" 2>/dev/null
+}
 
 # Align docker group GID with host's docker socket GID (for DinD)
 if [ -S /var/run/docker.sock ]; then
@@ -36,7 +45,7 @@ if [ -d "$PROJECT_DIR/data" ]; then
         log_warn "Data directory not writable: $PROJECT_DIR/data"
         if command -v sudo >/dev/null 2>&1; then
             log_info "Attempting to fix permissions for $PROJECT_DIR/data"
-            sudo chown -R ${GOFR_USER}:${GOFR_USER} "$PROJECT_DIR/data" 2>/dev/null || \
+            sudo chown -R "$(id -u):$(id -g)" "$PROJECT_DIR/data" 2>/dev/null || \
                 log_warn "Could not fix permissions. Run container with --user $(id -u):$(id -g)"
         else
             log_warn "sudo not available. Run container with --user $(id -u):$(id -g)"
@@ -44,9 +53,16 @@ if [ -d "$PROJECT_DIR/data" ]; then
     fi
 fi
 
-# Create subdirectories if they don't exist
-mkdir -p "$PROJECT_DIR/data/storage" "$PROJECT_DIR/data/auth"
-mkdir -p "$PROJECT_DIR/logs"
+# Create subdirectories if they don't exist (best-effort)
+if ! ensure_dir "$PROJECT_DIR/data/storage"; then
+    log_warn "Could not create $PROJECT_DIR/data/storage"
+fi
+if ! ensure_dir "$PROJECT_DIR/data/auth"; then
+    log_warn "Could not create $PROJECT_DIR/data/auth"
+fi
+if ! ensure_dir "$PROJECT_DIR/logs"; then
+    log_warn "Could not create $PROJECT_DIR/logs (bind mount may be read-only for this UID/GID)"
+fi
 
 # Ensure virtual environment exists and is valid
 if [ ! -f "$VENV_DIR/bin/python" ] || [ ! -x "$VENV_DIR/bin/python" ]; then

@@ -26,16 +26,15 @@
 #
 # See docs/development.md for full development setup guide.
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 # gofr-common is now a git submodule at lib/gofr-common, no separate mount needed
 
-# Standard GOFR user - all projects use same user
-GOFR_USER="gofr"
-GOFR_UID=1000
-GOFR_GID=1000
+# Detect host user's UID/GID.
+GOFR_UID=$(id -u)
+GOFR_GID=$(id -g)
 
 # Container and image names
 CONTAINER_NAME="gofr-iq-dev"
@@ -51,9 +50,27 @@ MCPO_PORT=$((GOFR_IQ_MCPO_PORT + 200))
 WEB_PORT=$((GOFR_IQ_WEB_PORT + 200))
 DOCKER_NETWORK="${GOFR_IQ_DOCKER_NETWORK:-gofr-net}"
 
+# Host user's home directory (for container mount destination paths).
+HOST_HOME="${HOST_HOME:-}"
+
+usage() {
+    cat <<EOF
+Usage:
+  ./scripts/run-dev-container.sh [OPTIONS]
+
+Options:
+  --mcp-port PORT      Override MCP port (default: from gofr_ports.env + 200)
+  --mcpo-port PORT     Override MCPO port (default: from gofr_ports.env + 200)
+  --web-port PORT      Override Web port (default: from gofr_ports.env + 200)
+  --network NAME       Docker network (default: gofr-net)
+  --host-home DIR      Host home directory used to construct container mount paths
+  -h, --help           Show this help
+EOF
+}
+
 # Parse command line arguments
 while [ $# -gt 0 ]; do
-    case $1 in
+    case "$1" in
         --mcp-port)
             MCP_PORT="$2"
             shift 2
@@ -70,33 +87,63 @@ while [ $# -gt 0 ]; do
             DOCKER_NETWORK="$2"
             shift 2
             ;;
+        --host-home)
+            HOST_HOME="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--mcp-port PORT] [--mcpo-port PORT] [--web-port PORT] [--network NAME]"
+            usage
             exit 1
             ;;
     esac
 done
 
+if [ -z "$HOST_HOME" ]; then
+    host_user="${SUDO_USER:-$(id -un)}"
+    host_home_from_passwd="$(getent passwd "$host_user" | cut -d: -f6 || true)"
+    if [ -n "$host_home_from_passwd" ]; then
+        HOST_HOME="$host_home_from_passwd"
+    else
+        HOST_HOME="${HOME:-/home/$host_user}"
+    fi
+fi
+
+if [ ! -d "$HOST_HOME" ]; then
+    echo "ERROR: host home directory does not exist: $HOST_HOME" >&2
+    echo "  Provide a valid path via --host-home DIR" >&2
+    exit 1
+fi
+
+CONTAINER_PROJECT_DIR="${HOST_HOME}/devroot/gofr-iq"
+CONTAINER_DOC_DIR="${HOST_HOME}/devroot/gofr-doc"
+CONTAINER_PLOT_DIR="${HOST_HOME}/devroot/gofr-plot"
+
 echo "======================================================================="
 echo "Starting GOFR-IQ Development Container"
 echo "======================================================================="
-echo "User: ${GOFR_USER} (UID=${GOFR_UID}, GID=${GOFR_GID})"
+echo "Host user: $(id -un) (UID=${GOFR_UID}, GID=${GOFR_GID})"
+echo "Host home: $HOST_HOME"
+echo "Container will run with --user ${GOFR_UID}:${GOFR_GID}"
 echo "Ports: MCP=$MCP_PORT, MCPO=$MCPO_PORT, Web=$WEB_PORT"
 echo "Network: $DOCKER_NETWORK"
 echo "======================================================================="
 
 # Create docker network if it doesn't exist
-if ! docker network inspect $DOCKER_NETWORK >/dev/null 2>&1; then
+if ! docker network inspect "$DOCKER_NETWORK" >/dev/null 2>&1; then
     echo "Creating network: $DOCKER_NETWORK"
-    docker network create $DOCKER_NETWORK
+    docker network create "$DOCKER_NETWORK"
 fi
 
 # Create docker volume for persistent data
 VOLUME_NAME="gofr-iq-data-dev"
-if ! docker volume inspect $VOLUME_NAME >/dev/null 2>&1; then
+if ! docker volume inspect "$VOLUME_NAME" >/dev/null 2>&1; then
     echo "Creating volume: $VOLUME_NAME"
-    docker volume create $VOLUME_NAME
+    docker volume create "$VOLUME_NAME"
 fi
 
 # Stop and remove existing container
@@ -110,18 +157,28 @@ fi
 DOCKER_GID=$(stat -c '%g' /var/run/docker.sock 2>/dev/null || echo "999")
 
 # Run container with Docker socket mounted for Docker-in-Docker
+OPTIONAL_MOUNTS=()
+if [ -d "$PROJECT_ROOT/../gofr-plot" ]; then
+    OPTIONAL_MOUNTS+=("-v" "$PROJECT_ROOT/../gofr-plot:${CONTAINER_PLOT_DIR}:ro")
+fi
+if [ -d "$PROJECT_ROOT/../gofr-doc" ]; then
+    OPTIONAL_MOUNTS+=("-v" "$PROJECT_ROOT/../gofr-doc:${CONTAINER_DOC_DIR}:ro")
+fi
+
 docker run -d \
     --name "$CONTAINER_NAME" \
     --network "$DOCKER_NETWORK" \
     -p ${MCP_PORT}:${MCP_PORT} \
     -p ${MCPO_PORT}:${MCPO_PORT} \
     -p ${WEB_PORT}:${WEB_PORT} \
-    -v "$PROJECT_ROOT:/home/gofr/devroot/gofr-iq:rw" \
-    -v ${VOLUME_NAME}:/home/gofr/devroot/gofr-iq/data:rw \
+    --user "${GOFR_UID}:${GOFR_GID}" \
+    -w "${CONTAINER_PROJECT_DIR}" \
+    -v "$PROJECT_ROOT:${CONTAINER_PROJECT_DIR}:rw" \
+    -v "${VOLUME_NAME}:${CONTAINER_PROJECT_DIR}/data:rw" \
     -v /var/run/docker.sock:/var/run/docker.sock:rw \
-    -v /home/parris3142/devroot/gofr-plot:/home/gofr/devroot/gofr-plot:ro \
-    -v /home/parris3142/devroot/gofr-doc:/home/gofr/devroot/gofr-doc:ro \
+    "${OPTIONAL_MOUNTS[@]}" \
     --group-add ${DOCKER_GID} \
+    -e GOFR_IQ_PROJECT_DIR="${CONTAINER_PROJECT_DIR}" \
     -e GOFR_IQ_ENV=development \
     -e GOFR_IQ_DEBUG=true \
     -e GOFR_IQ_LOG_LEVEL=DEBUG \
