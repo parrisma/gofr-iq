@@ -151,7 +151,7 @@ class ClientGenerator:
                 "inflation-linked instruments. The fund prioritizes capital preservation through diversified real-asset "
                 "exposure and duration management in a rising-rate environment."
             ),
-            mandate_themes=["commodities", "rates"],
+            mandate_themes=["commodities", "rates", "consumer"],
         )
 
     def _generate_retail_trader(self) -> MockClient:
@@ -230,7 +230,7 @@ class ClientGenerator:
             MockPosition("GTX", 0.12, "LONG"),
         ]
 
-        watchlist = ["VIT", "ECO"]
+        watchlist = ["VIT", "ECO", "LUXE"]
 
         return MockClient(
             guid="550e8400-e29b-41d4-a716-446655440005",  # Stable UUID for long-bias client
@@ -243,7 +243,7 @@ class ClientGenerator:
                 "growth themes. The mandate favors medium-to-long term compounding in high-quality SaaS, e-commerce, "
                 "and consumer-brand names with structural tailwinds."
             ),
-            mandate_themes=["cloud", "consumer"],
+            mandate_themes=["cloud", "consumer", "cybersecurity"],
         )
 
     def _generate_short_bias_fund(self) -> MockClient:

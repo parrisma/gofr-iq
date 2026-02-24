@@ -529,6 +529,15 @@ def load_simulation_data(load_universe: bool = True, load_clients: bool = True):
                         # Always sync mandate_themes for existing clients
                         if client.mandate_themes:
                             _persist_mandate_themes(session, existing_guid, client.mandate_themes)
+
+                        # Always sync watchlist for existing clients (idempotent adds).
+                        # This keeps the live Neo4j state aligned with the canonical
+                        # synthetic client generator used by Phase3/Phase4 validation.
+                        if client.watchlist:
+                            logger.info(
+                                f"  Syncing watchlist for existing client '{client.name}' ({len(client.watchlist)} items)..."
+                            )
+                            _add_watchlist_via_mcp(existing_guid, client.watchlist, token)
                         continue
                     
                     logger.info(f"Creating client: {client.name}")
