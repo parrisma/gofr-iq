@@ -1,204 +1,223 @@
-# GOFR-IQ simulation
+# gofr-iq simulation
 
-Purpose
-- Populate a realistic, self-contained graph/vector dataset (universe, clients, documents) for validation.
-- Run repeatable baseline tests that show, with a high degree of confidence, that GOFR-IQ routes valuable documents to the right client profiles and filters noise.
+## Purpose
 
-This folder contains two complementary test modes:
-1) Deterministic "golden set" tests (recommended for regression confidence).
-2) LLM-driven synthetic generation + ingestion (recommended for end-to-end realism and extraction stress).
+Populate a self-contained graph/vector dataset (universe, clients, documents) and
+validate that gofr-iq routes valuable documents to the right client profiles while
+filtering noise.
+
+Two complementary modes exist:
+
+1. Deterministic "golden set" tests -- high-certainty regression signal.
+2. LLM-driven synthetic generation + ingestion -- end-to-end realism and
+   extraction stress-testing.
 
 
-## Quick start (recommended, deterministic)
+## What the simulation proves
 
-From repo root:
+### Avatar feed (2-channel model)
 
-1) Bring up prerequisites (Vault, AppRole creds, core secrets):
+validate_avatar_feeds.py queries the real MCP get_avatar_feed tool for every
+simulation client and asserts:
+
+1. MAINTENANCE channel contains items affecting client holdings or watchlist.
+2. OPPORTUNITY channel contains items matching mandate themes.
+3. OPPORTUNITY items do NOT overlap with the client's current position tickers.
+4. No document appears in both channels (deduplication).
+5. All items have required fields (document_guid, title, channel, relevance_score).
+6. Combined list is sorted by relevance_score descending.
+
+### Classic feed routing
+
+validate_feeds.py proves 6 graph-traversal behaviors:
+
+1. Direct portfolio relevance -- documents affecting holdings surface.
+2. Supply chain propagation -- supplier/customer impacts traverse 1-hop.
+3. Competitor awareness -- competitive intel surfaces via COMPETES_WITH (2-hop).
+4. Macro factor exposure -- factor-level events reach exposed holdings.
+5. Trust gating -- conservative clients filter unreliable sources.
+6. Zero false positives -- documents never appear in irrelevant feeds.
+
+
+## Prerequisites
+
+- Production infrastructure running: Neo4j, Vault, MCP server, ChromaDB.
+- UV available on PATH.
+- OpenRouter API key stored in Vault at gofr/config/api-keys/openrouter.
+- Run from repo root (not simulation/).
+
+Start infrastructure if not running:
+
+  ./docker/start-prod.sh
+
+
+## Full simulation run (recommended sequence)
+
+### Step 1 -- bootstrap platform (first time only)
 
   ./scripts/bootstrap.sh
 
-2) Run the avatar feed UAT using the deterministic golden test set:
+### Step 2 -- run the full simulation (200 documents, production data)
 
-   ./simulation/run_avatar_simulation.sh --test-set --report-json tmp/avatar_report.json --report-md tmp/avatar_report.md
+This single command covers: auth setup, source registration, universe load,
+client generation + mandate embedding backfill, story generation, and
+parallel ingestion.
 
-3) Optionally compare against the saved golden baseline:
+  ./simulation/run_avatar_simulation.sh --count 200 --report-json tmp/avatar_uat.json --report-md tmp/avatar_report.md
 
-   uv run simulation/scripts/golden_baseline.py diff --current tmp/avatar_report.json
+The script pipeline is:
+  1. ./docker/start-prod.sh --reset   (tear down all data)
+  2. ./simulation/run_simulation.sh   (auth, universe, clients, generate, ingest)
+  3. uv run simulation/validate_avatar_feeds.py
 
+### Step 3 -- golden set regression
 
-## What is in here
+  ./scripts/run_golden_baseline.sh --validate
 
-Entry points
-- run_avatar_simulation.sh: end-to-end UAT pipeline (reset, ingest, validate). Supports "golden set" injection.
-- run_simulation.sh: thin wrapper around run_simulation.py (creates auth artifacts, loads universe/clients, generates/ingests docs, runs stage gates).
-- reset_simulation_env.sh: soft reset (wipes Neo4j, ChromaDB, storage) without rebuilding containers.
+To save current results as the new baseline:
 
-Core pipeline
-- run_simulation.py: orchestrates auth setup, source registration, universe/client load, story generation, ingestion, and stage gates.
-- load_simulation_data.py: loads universe + synthetic clients into Neo4j using MCP scripts.
-- generate_synthetic_stories.py: generates LLM-driven stories with ground truth validation metadata.
-- ingest_synthetic_stories.py: ingests story JSONs via manage_document tooling.
+  ./scripts/run_golden_baseline.sh
 
-Validation and analysis
-- validate_avatar_feeds.py: queries MCP avatar feeds (MAINTENANCE + OPPORTUNITY) and asserts invariants.
-- scripts/validate_test_set.py: golden test matrix runner (the most "certain" baseline tests).
-- scripts/extraction_accuracy_report.py: compares expected impacts in generated stories vs what landed in Neo4j.
-- validate_feeds.py: validates classic feed routing behaviors (holdings, supply chain, competitor, macro, trust gating).
-- query_client_feed.py: inspect a client's "classic" feed directly from Neo4j.
 
-Data
-- universe/: deterministic universe topology (tickers, relationships, factors, exposures).
-- client_ips/: example IPS JSON profiles (used by profiler demos).
-- test_output/: cached generated stories (LLM mode).
-- test_data/avatar_test_set.json: deterministic documents for golden set injection.
-- test_data/golden_baseline.json: last saved golden baseline results.
+## run_simulation.sh (lower-level entry point)
 
+Thin wrapper around run_simulation.py. Emits a per-run log to
+simulation/run_logs/.
 
-## Prerequisites and assumptions
+  ./simulation/run_simulation.sh --count 50                     # generate + ingest 50 docs
+  ./simulation/run_simulation.sh --ingest-only                  # reuse cached JSONs, ingest only
+  ./simulation/run_simulation.sh --count 50 --regenerate        # force-regenerate and ingest
+  ./simulation/run_simulation.sh --validate-only                # setup only (no docs)
+  ./simulation/run_simulation.sh --phase3 --regenerate          # Phase3 calibration injection
+  ./simulation/run_simulation.sh --phase4 --regenerate          # Phase4 calibration injection
+  ./simulation/run_simulation.sh --refresh-timestamps           # refresh published_at in cached JSONs
+  ./simulation/run_simulation.sh --count 50 --ingest-workers 5  # parallel ingestion (5 workers)
 
-- Use Docker service names on gofr-net (no localhost). Examples used here:
-  - Vault: http://gofr-vault:8201
-  - Neo4j: bolt://gofr-neo4j:7687
-  - ChromaDB: gofr-chromadb:8000
+Key flags:
 
-- Package/tooling: UV only.
-- Credentials:
-  - The LLM key is expected to be available via the normal GOFR-IQ runtime configuration (Vault-backed by default; env override is supported in some paths).
-  - Simulation creates and writes tokens to simulation/tokens.json. Treat this file as sensitive.
+  --count N               Stories to generate (default: 10)
+  --output DIR            Output directory (default: simulation/test_output)
+  --regenerate            Force new generation even if cached files exist
+  --ingest-only           Skip generation, reuse existing JSONs
+  --skip-generate         Alias for --ingest-only
+  --skip-ingest           Skip ingestion stage
+  --validate-only         Auth/source/universe setup only (count=0)
+  --phase3                Inject Phase3 calibration scenarios (exclusive with --phase4)
+  --phase4                Inject Phase4 calibration scenarios (exclusive with --phase3)
+  --skip-universe         Skip loading companies/relationships to Neo4j
+  --skip-clients          Skip generating/loading clients to Neo4j
+  --init-groups-only      Create/verify auth groups then stop
+  --init-tokens-only      Create/verify groups + tokens then stop
+  --refresh-timestamps    Rewrite published_at in JSONs so docs are recent; then exit
+  --spread-minutes N      Window for timestamp spreading (default: 60)
+  --ingest-workers N      Parallel ingestion workers (default: 1; 3-5 for speed)
+  --backfill-mandate-embeddings / --no-backfill-mandate-embeddings
+                          Embed mandate_text for simulation clients (default: on)
+  --model MODEL           LLM model name for generation
+  --openrouter-key KEY    OpenRouter key override (Vault is SSOT)
+  --verbose               Verbose ingestion output
 
+Recovery hints:
+- Generation failed partway: rerun WITHOUT --regenerate to resume from cache.
+- Ingestion failed partway: rerun with --ingest-only (same --output).
+- Clean slate: delete output directory contents then rerun.
 
-## Workflows
 
-### A) Deterministic baseline tests (golden set)
+## Simulation pipeline (run_simulation.py internals)
 
-Goal: repeatable, high-certainty signal that "valuable docs surface for the right client profiles".
+Stage gates (each must pass before the next stage starts):
 
-Run:
+  auth         Groups and tokens created and verified in Vault.
+  sources      NewsSource nodes registered in Neo4j.
+  universe     Company graph (tickers, relationships, factors, exposures) loaded.
+  clients      Synthetic clients + ClientProfile nodes loaded; mandate embeddings backfilled.
+  generation   Synthetic story JSONs written to output dir.
+  ingestion    Documents extracted, embedded, and wired in Neo4j + ChromaDB.
 
-  ./simulation/run_avatar_simulation.sh --test-set --require-nonempty --min-pass-rate 0.9 --report-json tmp/avatar_report.json --report-md tmp/avatar_report.md
+Auth tokens for the run are saved to simulation/tokens.json (treat as sensitive).
 
-Notes
-- The deterministic documents are defined in simulation/test_data/avatar_test_set.json.
-- Data injection bypasses LLM extraction (see simulation/scripts/inject_test_data.py).
-- Validation is performed via MCP tool calls (see simulation/scripts/validate_test_set.py).
 
-Golden baseline management
-- Save current results as the new golden baseline:
+## Validation scripts
 
-  uv run simulation/scripts/golden_baseline.py save --from tmp/avatar_report.json
+  uv run simulation/validate_avatar_feeds.py              # avatar 2-channel model
+  uv run simulation/validate_feeds.py --verbose           # classic feed routing (6 behaviors)
+  uv run simulation/validate_simulation.py                # general sanity checks
 
-- Diff current results vs golden:
 
-  uv run simulation/scripts/golden_baseline.py diff --current tmp/avatar_report.json
+## Resetting the environment
 
+Soft reset (wipes Neo4j, ChromaDB, storage; rebuilds clean):
 
-### B) End-to-end realism (LLM generation + ingestion)
+  ./simulation/reset_simulation_env.sh
 
-Goal: stress the full pipeline (generation, ingestion, extraction, graph wiring, trust gating).
+Full reset via production compose (destructive):
 
-Run 200 docs:
+  ./docker/start-prod.sh --reset
 
-  ./simulation/run_avatar_simulation.sh --count 200 --report-json tmp/avatar_uat.json
 
-Run the classic feed validation:
+## Refreshing stale document timestamps
 
-  uv run simulation/validate_feeds.py --verbose
+When cached synthetic JSONs are old enough to fall outside feed time windows,
+refresh their published_at values before ingesting:
 
-Extraction accuracy report (expected vs actual in Neo4j):
+  ./simulation/run_simulation.sh --refresh-timestamps
+  # then
+  ./simulation/run_simulation.sh --ingest-only --count 200 --ingest-workers 3
 
-  uv run simulation/scripts/extraction_accuracy_report.py --report-json tmp/extraction_accuracy.json
 
+## Phase3 and Phase4 calibration modes
 
-### C) Populate data only (universe + clients + sources, no docs)
+Phase3 and Phase4 inject specific calibration scenarios from the SCENARIOS list
+in generate_synthetic_stories.py. They write to separate directories
+(simulation/test_output_phase3, simulation/test_output_phase4) and run a
+post-ingest calibration sanity check.
 
-Goal: create the universe and client set so you can manually ingest or run partial tests.
+  ./simulation/run_simulation.sh --phase3 --regenerate --skip-universe --skip-clients
+  ./simulation/run_simulation.sh --phase4 --regenerate --skip-universe --skip-clients
 
-  ./simulation/run_simulation.sh --validate-only
+--phase3 and --phase4 are mutually exclusive.
 
 
-## Current state and known gaps
+## Mandate embedding backfill
 
-- Grouping: the simulation currently uses a single group (group-simulation) as the default container for all simulation data.
-  - If you need multi-group testing (cross-group isolation), the extension point is run_simulation.py (discover_simulation_requirements, token minting, and story upload_as_group).
+Mandate embeddings are computed automatically during a full run (controlled by
+--backfill-mandate-embeddings, which is on by default). To run backfill
+standalone against an existing Neo4j dataset:
 
-- Certainty: prefer the golden set tests for regression confidence. The LLM-driven mode is useful for realism but will always have some nondeterminism.
+  uv run python scripts/backfill_client_mandates.py --group-name group-simulation --limit 200
 
 
-## Docs
+## Directory structure
 
-- docs/operational_guide.md
-- docs/architecture.md
-- docs/validation.md
-- docs/neo4j_queries.md
-- docs/simulation_enhancement_plan.md
+  simulation/
+    run_simulation.sh           Main entry point (wrapper)
+    run_simulation.py           Orchestrator (auth, data, generate, ingest, gates)
+    run_avatar_simulation.sh    End-to-end UAT pipeline (reset -> run -> validate)
+    reset_simulation_env.sh     Soft reset
+    generate_synthetic_clients.py  Client generator
+    generate_synthetic_stories.py  LLM story generator (SCENARIOS, CLIENT_PORTFOLIOS)
+    ingest_synthetic_stories.py    Ingestion via manage_document tooling
+    load_simulation_data.py        Universe + client Neo4j loader
+    validate_avatar_feeds.py       Avatar feed (2-channel) assertions
+    validate_feeds.py              Classic feed routing assertions (6 behaviors)
+    validate_simulation.py         General sanity checks
+    query_client_feed.py           Direct Neo4j feed inspector
+    check_documents.py / check_cache.py  Ad-hoc diagnostics
+    universe/                      Universe topology builder
+    tokens.json                    Minted run tokens (sensitive, gitignored)
+    test_output/                   Cached synthetic story JSONs (main)
+    test_output_phase3/            Cached Phase3 calibration JSONs
+    test_output_phase4/            Cached Phase4 calibration JSONs
+    run_logs/                      Per-run log files
 
----
 
-## 🔧 Troubleshooting
+## Network and tooling
 
-**Issue**: "Neo4j connection failed"  
-**Fix**: Ensure infrastructure is running: `./docker/start-prod.sh`
-
-**Issue**: "No documents in feed"  
-**Fix**: Run ingestion: `./simulation/run_simulation.sh --count 10`
-
-**Issue**: "Stories not generating"  
-**Fix**: Check OpenRouter API key: `cat simulation/.env.openrouter`
-
-**Issue**: "Validation failures"  
-**Fix**: See [VALIDATION.md](VALIDATION.md) for known issues and expected pass rates
-
-**Issue**: "Out of sync"  
-**Fix**: Full reset: `./simulation/reset_simulation_env.sh --force && ./simulation/run_simulation.sh --count 10`
-
----
-
-## 📊 Current Status
-
-### Phase Completion
-- ✅ **Phase 1-2**: Universe & client generation (Complete)
-- ✅ **Phase 3**: Enhanced story generation with validation metadata (Complete)
-- ✅ **Phase 4**: Validation harness (Complete - 25% pass rate baseline)
-- ✅ **Phase 5.1-5.2**: IPS generation & ClientProfiler (Complete)
-- 🅿️ **Phase 5.4-5.5**: LLM reranker & entity resolution (Parked)
-
-### Validation Results
-- **Competitor Awareness**: 100% (2/2 passed)
-- **False Positive Prevention**: 94% (30/32 passed)
-- **Direct Holdings**: 20% (3/15 passed - needs improvement)
-- **Supply Chain**: 20% (1/5 passed - needs debugging)
-- **Overall**: 25% baseline (6/24 assertions)
-
-See [VALIDATION.md](VALIDATION.md) for detailed results.
-
----
-
-## 🚧 Known Limitations
-
-1. **Supply Chain Propagation**: 20% pass rate - relationship traversal needs refinement
-2. **Direct Holdings**: 20% pass rate - portfolio matching needs improvement
-3. **Entity Resolution**: Aliases generated but not systematically validated
-4. **LLM Reranking**: Keyword-based theme matching (semantic understanding parked)
-
----
-
-## 🎯 Next Steps
-
-1. **Improve Validation**: Debug supply chain and direct holdings scenarios
-2. **Scale Testing**: Run with 100+ documents to stress test
-3. **IPS Integration**: Wire IPS filtering into MCP `get_client_feed` tool
-4. **Production Readiness**: Add monitoring, error handling, retry logic
-
----
-
-## 📞 Support
-
-- **Documentation**: See other .md files in this directory
-- **Code Issues**: Check `check_documents.py` and `check_cache.py` for diagnostics
-- **Architecture Questions**: Read [ARCHITECTURE.md](ARCHITECTURE.md)
-- **Operational Issues**: See [OPERATIONAL_GUIDE.md](OPERATIONAL_GUIDE.md) troubleshooting section
-
----
-
-**Last Updated**: 2026-01-18  
-**Version**: Post-consolidation v1.0
+- All services accessed via Docker service names on gofr-net.
+  - Neo4j:     bolt://gofr-neo4j:7687
+  - Vault:     http://gofr-vault:8201
+  - ChromaDB:  gofr-chromadb:8000
+- Never use localhost or 127.0.0.1.
+- UV only; no pip.
+- OpenRouter API key is the Vault SSOT; env var GOFR_IQ_OPENROUTER_API_KEY is
+  the fallback for non-Vault contexts.
